@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/* 
+ * StageManager initializes maps when starting the StageScene.
+ * It also creates next map for the player. */
+
 public class StageManager : MonoBehaviour
 {
 	public static StageManager Instance { get; private set; }
@@ -14,10 +18,10 @@ public class StageManager : MonoBehaviour
 			Instance = this;
 	}
 
+	// Load assets for the StageScene to be started
 	public void LoadStage()
 	{
-		UserData data = GameManager.Instance.PlayerData;
-		DataManager.Instance.LoadMap(data.currentStage, data.currentMap, data.currentMap + 1);
+		DataManager.Instance.LoadMaps(); // Load two maps asynchronously
     }
 
 	public void OnLoadComplete(GameObject curMap, GameObject nxtMap)

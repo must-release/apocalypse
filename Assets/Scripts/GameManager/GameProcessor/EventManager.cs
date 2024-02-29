@@ -24,10 +24,12 @@ public class EventManager : MonoBehaviour
 		}
 	}
 
+	// Play story Event
 	public void PlayStory(StoryEvent storyEvent)
 	{
-		InputManager.Instance.ChangeState(InputManager.STATE.STORY);
-		DataManager.Instance.LoadStoryText(storyEvent.stageNum, storyEvent.storyNum);
+		GameManager.Instance.PlayerData.currentEvent = storyEvent; // Modify PlayerData's event state to storyEvent
+		InputManager.Instance.ChangeState(InputManager.STATE.STORY); // Change UI to Story mode
+		DataManager.Instance.LoadStoryText(); // Load text of the current story event
 	}
 }
 

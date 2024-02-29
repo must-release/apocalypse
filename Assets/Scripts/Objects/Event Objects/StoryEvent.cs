@@ -9,6 +9,6 @@ public class StoryEvent : ScriptableObject, IEvent
     public IEvent.TYPE EventType { get; set; } = IEvent.TYPE.STORY;
     public IEvent NextEvent { get => (IEvent)nextEvent; set => nextEvent = (Object)value; }
     public Object nextEvent;
-    public int stageNum;
+    public UserData.STAGE stage;
     public int storyNum;
 }

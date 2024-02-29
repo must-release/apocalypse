@@ -20,6 +20,7 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    // Change UI state
     public void ChangeState(STATE state)
     {
         currentUI.EndUI();

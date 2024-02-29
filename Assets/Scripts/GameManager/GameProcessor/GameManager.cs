@@ -6,7 +6,19 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    public UserData PlayerData { get; set; }
+    // Current data of the player
+    private UserData _playerData;
+    public UserData PlayerData
+    {
+        get { return _playerData; }
+
+        // When data is modified, do AutoSave
+        set
+        {
+            _playerData = value;
+            DataManager.Instance.AutoSave(_playerData);
+        }
+    }
 
     private void Awake()
     {

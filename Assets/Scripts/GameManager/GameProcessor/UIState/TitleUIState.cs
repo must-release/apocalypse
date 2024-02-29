@@ -5,6 +5,8 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
+/* Part of InputManager which manages Title UI logic */
+
 public class TitleUIState : MonoBehaviour, IUIState
 {
 	private string titleUIName = "Title UI";
@@ -15,8 +17,10 @@ public class TitleUIState : MonoBehaviour, IUIState
 	// UI Initialization
 	public void StartUI()
 	{
+		// Operate only once
 		if(titleUI == null)
 		{
+			// Find Title UI object
             titleUI = FindObjectOfType<Canvas>().transform.Find(titleUIName);
 			if (titleUI == null)
 			{
@@ -27,26 +31,29 @@ public class TitleUIState : MonoBehaviour, IUIState
 			Transform buttons = titleUI.Find(buttonsName);
             for (int i = 0; i < buttons.childCount; i++)
             {
-                // add ith button to the list
+                // Add ith button to the list
                 buttonList.Add(buttons.GetChild(i).GetComponent<Button>());
             }
 
-			// add event listener to buttons
+			// Add event listener to buttons
 			buttonList[0].onClick.AddListener(onContinueGameClick);
             buttonList[1].onClick.AddListener(OnNewGameClick);
             buttonList[2].onClick.AddListener(OnLoadGameClick);
             buttonList[3].onClick.AddListener(OnSettingsClick);
         }
 
+		// In case of console, select first button
         if (IUIState.isConsole)
             buttonList[0].Select();
 
+		// Active Title UI object
         titleUI.gameObject.SetActive(true);
     }
 
 	public void EndUI()
 	{
-		titleUI.gameObject.SetActive(false);
+        // Inactive Title UI object
+        titleUI.gameObject.SetActive(false);
 	}
 
 	public void Move(float move)
@@ -59,18 +66,17 @@ public class TitleUIState : MonoBehaviour, IUIState
 		Debug.Log("Continue Game");
 	}
 
+	// Start new game
 	private void OnNewGameClick()
 	{
-        // start stage loading
-        UserData startData = new UserData(0, 0, null, 0);
-		GameManager.Instance.PlayerData = startData;
-		StageManager.Instance.LoadStage();
+		/* Start stage loading */
+		GameManager.Instance.PlayerData = DataManager.Instance.CreateUserData(); // Create new game data
+		StageManager.Instance.LoadStage(); // Load stage resources
 
-		// play prologue story event
-		StoryEvent startStory = ScriptableObject.CreateInstance<StoryEvent>();
-		startStory.stageNum = 0;
-		startStory.storyNum = 0;
-        EventManager.Instance.PlayEvent(startStory);
+
+		/* Play prologue story event */
+		StoryEvent prologueStory = DataManager.Instance.CreatePrologueStory(); // Create prologue story event
+        EventManager.Instance.PlayEvent(prologueStory); // Play prologue story event
     }
 
     private void OnLoadGameClick()

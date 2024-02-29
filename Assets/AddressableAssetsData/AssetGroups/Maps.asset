@@ -17,13 +17,13 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: bbb192d43ffd34d8fb0fc1527097ddff
   m_SerializeEntries:
-  - m_GUID: bfa6cf3a54ef54ef086501856952a87b
-    m_Address: Temp/Map0-0
+  - m_GUID: 8cb194ece59d24e609acc52c05ef0a02
+    m_Address: MAP_TEST_0
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ebbef74f4e6ef4c358c80abe10b3f731
-    m_Address: Temp/Map0-1
+  - m_GUID: b4ae9e8a9ccb44c00bf85459bbbd0386
+    m_Address: MAP_TEST_1
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
