@@ -7,22 +7,12 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     // Current data of the player
-    private UserData _playerData;
-    public UserData PlayerData
-    {
-        get { return _playerData; }
-
-        // When data is modified, do AutoSave
-        set
-        {
-            _playerData = value;
-        }
-    }
+    public UserData PlayerData { get; set; }
 
     // Check if current PlayerData is new game data
     public bool IsNewGameData()
     {
-        IEvent curEvent = PlayerData.startingEvent;
+        IEvent curEvent = EventManager.Instance.CurrentEvent;
 
         if (curEvent == null)
         {

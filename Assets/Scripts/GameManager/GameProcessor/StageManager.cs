@@ -52,7 +52,7 @@ public class StageManager : MonoBehaviour
 	// Wait for start story to end
 	IEnumerator AsyncStageLoad()
 	{
-		while(GameManager.Instance.PlayerData.startingEvent != null)
+		while(EventManager.Instance.CurrentEvent != null)
 		{
 			yield return null;
 		}
@@ -66,7 +66,17 @@ public class StageManager : MonoBehaviour
 		// Activates only in StageScene
 		if(scene.name != stageSceneName) { return; }
 
+		// Place assets at the map
 		PlaceMaps();
+		PlaceCharacter();
+
+		// If there is a event to be played, start the event
+		IEvent startingEvent = GameManager.Instance.PlayerData.startingEvent;
+		if(startingEvent != null)
+		{
+			EventManager.Instance.PlayEvent(startingEvent);
+		}
+
     }
 
 
@@ -76,5 +86,10 @@ public class StageManager : MonoBehaviour
         Instantiate(currentMap);
         Instantiate(nextMap);
     }
+
+	public void PlaceCharacter()
+	{
+
+	}
 }
 

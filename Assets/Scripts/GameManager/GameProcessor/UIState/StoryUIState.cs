@@ -66,15 +66,16 @@ public class StoryUIState : MonoBehaviour, IUIState, IStoryInfo
         // reset storyQueue
         storyQueue = null;
 
-        // Change Player event state to null and auto save
-        GameManager.Instance.PlayerData.startingEvent = null;
-
         // Inactive Story UI object
         storyUI.gameObject.SetActive(false);
     }
 
     public void Attack() { NextScript(); }
-    public void Submit() { NextScript(); }
+    public void Submit() { 
+        // Error when start new game with enter button
+        if(storyQueue != null)
+            NextScript(); 
+    }
 
     // Story Text is prepared, so start the story
     public void NextScript()
@@ -82,6 +83,8 @@ public class StoryUIState : MonoBehaviour, IUIState, IStoryInfo
         // Read all story
         if(storyQueue.Count == 0)
         {
+            // Reset last dialogue number to 0
+            GameManager.Instance.PlayerData.lastDialogueNum = 0;
             EventManager.Instance.EventOver();
             return;
         }

@@ -74,7 +74,7 @@ public class DataManager : MonoBehaviour
     // Start loading text of the current story event which player is having 
     public void LoadStoryText()
     {
-        StoryEvent storyEvent = (StoryEvent)GameManager.Instance.PlayerData.startingEvent;
+        StoryEvent storyEvent = (StoryEvent)EventManager.Instance.CurrentEvent;
         string story = "STORY_" + storyEvent.stage.ToString() + '_' + storyEvent.storyNum;
         Addressables.LoadAssetAsync<TextAsset>(story).Completed += OnStoryLoadComplete;
     }

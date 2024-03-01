@@ -40,6 +40,7 @@ public class InputManager : MonoBehaviour
                 currentUI = ControlUIState.Instance;
                 break;
         }
+
         currentUI.StartUI();
     }
 

@@ -11,4 +11,5 @@ public class StoryEvent : ScriptableObject, IEvent
     public Object nextEvent;
     public UserData.STAGE stage;
     public int storyNum;
+    public bool onMap; // If story is played on the map
 }

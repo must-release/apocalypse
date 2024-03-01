@@ -7,6 +7,8 @@ public class EventManager : MonoBehaviour
 {
 	public static EventManager Instance { get; private set; }
 
+	public IEvent CurrentEvent { get; private set; }
+
 	void Awake()
 	{
 		if (Instance == null)
@@ -15,10 +17,13 @@ public class EventManager : MonoBehaviour
 
 	public void PlayEvent(IEvent playingEvent)
 	{
-		switch (playingEvent.EventType)
+        // Set current progressing event to storyEvent
+        CurrentEvent = playingEvent; 
+
+        switch (CurrentEvent.EventType)
 		{
 			case IEvent.TYPE.STORY:
-				PlayStory((StoryEvent)playingEvent);
+				PlayStory((StoryEvent)CurrentEvent);
 				break;
 				
 		}
@@ -26,17 +31,24 @@ public class EventManager : MonoBehaviour
 
 	public void EventOver()
 	{
-		// Reset Player's event information
-		GameManager.Instance.PlayerData.startingEvent = null;
-		GameManager.Instance.PlayerData.lastDialogueNum = 0;
+		// Check if there is next event
+		if(CurrentEvent.NextEvent != null)
+		{
+			PlayEvent(CurrentEvent.NextEvent);
+		}
+		else
+		{
+			// Reset event information
+			CurrentEvent = null;
 
-		InputManager.Instance.ChangeState(InputManager.STATE.CONTROL);
+			// Show Control UI
+            InputManager.Instance.ChangeState(InputManager.STATE.CONTROL);
+        }
 	}
 
 	// Play story Event
 	public void PlayStory(StoryEvent storyEvent)
 	{
-		GameManager.Instance.PlayerData.startingEvent = storyEvent; // Modify PlayerData's event state to storyEvent
 		InputManager.Instance.ChangeState(InputManager.STATE.STORY); // Change UI to Story mode
 		DataManager.Instance.LoadStoryText(); // Load text of the current story event
 	}
