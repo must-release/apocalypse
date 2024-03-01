@@ -8,17 +8,17 @@ public class UserData
 
     public STAGE currentStage;
     public int currentMap;
-    public IEvent currentEvent;
+    public IEvent startingEvent;
     public int lastDialogueNum;
     public CHARACTER lastChar;
     public int playTime;
     public string saveTime;
 
-    public UserData(STAGE curStage, int curMap, IEvent curEvent, int lastDlg, CHARACTER lastChar, int playTime, string saveTime)
+    public UserData(STAGE curStage, int curMap, IEvent startingEvent, int lastDlg, CHARACTER lastChar, int playTime, string saveTime)
     {
         currentStage = curStage;
         currentMap = curMap;
-        currentEvent = curEvent;
+        this.startingEvent = startingEvent;
         lastDialogueNum = lastDlg;
         this.lastChar = lastChar;
         this.playTime = playTime;

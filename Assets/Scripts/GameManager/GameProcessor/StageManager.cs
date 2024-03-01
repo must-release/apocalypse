@@ -14,7 +14,7 @@ public class StageManager : MonoBehaviour
 	private string stageSceneName = "StageScene";
 	private GameObject currentMap;
 	private GameObject nextMap;
-	private GameObject Player;
+	private GameObject player;
 
 	void Awake()
 	{
@@ -52,7 +52,7 @@ public class StageManager : MonoBehaviour
 	// Wait for start story to end
 	IEnumerator AsyncStageLoad()
 	{
-		while(GameManager.Instance.PlayerData.currentEvent != null)
+		while(GameManager.Instance.PlayerData.startingEvent != null)
 		{
 			yield return null;
 		}

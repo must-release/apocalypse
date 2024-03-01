@@ -16,14 +16,13 @@ public class GameManager : MonoBehaviour
         set
         {
             _playerData = value;
-            DataManager.Instance.AutoSave(_playerData);
         }
     }
 
     // Check if current PlayerData is new game data
     public bool IsNewGameData()
     {
-        IEvent curEvent = PlayerData.currentEvent;
+        IEvent curEvent = PlayerData.startingEvent;
 
         if (curEvent == null)
         {

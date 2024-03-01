@@ -67,7 +67,7 @@ public class StoryUIState : MonoBehaviour, IUIState, IStoryInfo
         storyQueue = null;
 
         // Change Player event state to null and auto save
-        GameManager.Instance.PlayerData.currentEvent = null;
+        GameManager.Instance.PlayerData.startingEvent = null;
 
         // Inactive Story UI object
         storyUI.gameObject.SetActive(false);

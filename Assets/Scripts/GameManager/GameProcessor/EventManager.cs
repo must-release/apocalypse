@@ -20,14 +20,14 @@ public class EventManager : MonoBehaviour
 			case IEvent.TYPE.STORY:
 				PlayStory((StoryEvent)playingEvent);
 				break;
-
+				
 		}
 	}
 
 	public void EventOver()
 	{
 		// Reset Player's event information
-		GameManager.Instance.PlayerData.currentEvent = null;
+		GameManager.Instance.PlayerData.startingEvent = null;
 		GameManager.Instance.PlayerData.lastDialogueNum = 0;
 
 		InputManager.Instance.ChangeState(InputManager.STATE.CONTROL);
@@ -36,7 +36,7 @@ public class EventManager : MonoBehaviour
 	// Play story Event
 	public void PlayStory(StoryEvent storyEvent)
 	{
-		GameManager.Instance.PlayerData.currentEvent = storyEvent; // Modify PlayerData's event state to storyEvent
+		GameManager.Instance.PlayerData.startingEvent = storyEvent; // Modify PlayerData's event state to storyEvent
 		InputManager.Instance.ChangeState(InputManager.STATE.STORY); // Change UI to Story mode
 		DataManager.Instance.LoadStoryText(); // Load text of the current story event
 	}
