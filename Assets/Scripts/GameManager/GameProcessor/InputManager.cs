@@ -6,18 +6,21 @@ public class InputManager : MonoBehaviour
     public static InputManager Instance { get; private set; } 
     public enum STATE { TITLE, CONTROL, STORY }
 
-    IUIState currentUI;
+    private IUIState currentUI;
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-
-            // initalize current UI to title UI
-            currentUI = GetComponent<TitleUIState>();
-            currentUI.StartUI();
         }
+    }
+
+    private void Start()
+    {
+        // initalize current UI to title UI
+        currentUI = TitleUIState.Instance;
+        currentUI.StartUI();
     }
 
     // Change UI state
@@ -28,28 +31,33 @@ public class InputManager : MonoBehaviour
         switch (state)
         {
             case STATE.TITLE:
-                currentUI = GetComponent<TitleUIState>();
+                currentUI = TitleUIState.Instance;
                 break;
             case STATE.STORY:
-                currentUI = GetComponent<StoryUIState>();
+                currentUI = StoryUIState.Instance;
+                break;
+            case STATE.CONTROL:
+                currentUI = ControlUIState.Instance;
                 break;
         }
-
         currentUI.StartUI();
     }
 
     private void Update()
     {
-        if (InputHandler.Instance.Move != 0)
-        {
-            Move(InputHandler.Instance.Move);
-        }
+        if (InputHandler.Instance.Move != 0) { Move(InputHandler.Instance.Move);}
+        else { Stop(); }
+
+        if (InputHandler.Instance.Attack) { Attack(); }
+
+        if(InputHandler.Instance.Submit) { Submit(); }
     }
 
-    public void Move(float move)
-    {
-        currentUI.Move(move);
-    }
+    public void Move(float move) { currentUI.Move(move);}
+    public void Stop() { currentUI.Stop(); }
 
+    public void Attack() { currentUI.Attack(); }
+
+    public void Submit() { currentUI.Submit(); }
 }
 

@@ -5,17 +5,42 @@ using System.Collections.Generic;
 
 /* Part of InputManager which manages Story UI logic */
 
-public class StoryUIState : MonoBehaviour, IUIState
+public class StoryUIState : MonoBehaviour, IUIState, IStoryInfo
 {
+
+    /****** Private fields ******/
     private string storyUIName = "Story UI";
     private static Transform storyUI;
+    private List<StoryEntry> storyLog;
+    private Queue<StoryEntry> storyQueue;
 
-    // UI Initialization
-    public void StartUI()
+
+
+    /****** Properties ******/
+    public Queue<StoryEntry> StoryQueue
     {
-        // Operate only once
-        if (storyUI == null)
+        get { return storyQueue; }
+        set
         {
+            storyQueue = value;
+
+            // When new story is loaded, start the script automatically
+            NextScript();
+        }
+    }
+    public int LastDialogueNum { get; set; }
+
+
+
+    /****** Single tone instance ******/
+    public static StoryUIState Instance;
+
+    public void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+
             // Find Title UI object
             storyUI = FindObjectOfType<Canvas>().transform.Find(storyUIName);
             if (storyUI == null)
@@ -23,23 +48,72 @@ public class StoryUIState : MonoBehaviour, IUIState
                 Debug.Log("Story UI Initialization Error");
                 return;
             }
-
-
         }
+    }
 
+    /****** Methods ******/
+
+    // Enter Story UI state
+    public void StartUI()
+    {
         // Active Story UI object
         storyUI.gameObject.SetActive(true);
     }
 
+    // Exit Story UI state
     public void EndUI()
 	{
+        // reset storyQueue
+        storyQueue = null;
+
+        // Change Player event state to null and auto save
+        GameManager.Instance.PlayerData.currentEvent = null;
+
         // Inactive Story UI object
         storyUI.gameObject.SetActive(false);
     }
 
-	public void Move(float move)
-	{
+    public void Attack() { NextScript(); }
+    public void Submit() { NextScript(); }
 
-	}
+    // Story Text is prepared, so start the story
+    public void NextScript()
+    {
+        // Read all story
+        if(storyQueue.Count == 0)
+        {
+            EventManager.Instance.EventOver();
+            return;
+        }
+
+        StoryEntry entry = storyQueue.Dequeue();
+
+        if (entry is Dialogue dialogue)
+        {
+            Debug.Log($"Dialogue: Character: {dialogue.character}, Text: {dialogue.text}, Branch ID: {dialogue.branchId}");
+        }
+        else if (entry is Effect effect)
+        {
+            Debug.Log($"Effect: Action: {effect.action}, Duration: {effect.duration}");
+        }
+        else if (entry is Choice choice)
+        {
+            foreach (var option in choice.options)
+            {
+                Debug.Log($"Choice: Option Text: {option.text}, Branch ID: {option.branchId}");
+            }
+        }
+    }
+
+
+	public void Move(float move) { return; }
+    public void Stop() { return; }
 }
 
+
+// Used to load story info
+public interface IStoryInfo
+{
+    public Queue<StoryEntry> StoryQueue { get; set; }
+    public int LastDialogueNum { get; set; }
+}

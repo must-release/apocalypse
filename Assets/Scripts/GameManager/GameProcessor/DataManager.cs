@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 public class DataManager : MonoBehaviour
@@ -26,7 +27,7 @@ public class DataManager : MonoBehaviour
         DateTime now = DateTime.Now;
         string saveTime = now.ToString("yyyy-MM-dd HH:mm:");
 
-        return new UserData(UserData.STAGE.TEST, 0, null, 0, 0, saveTime);
+        return new UserData(UserData.STAGE.TEST, 0, null, 0, UserData.CHARACTER.HERO, 0, saveTime);
     }
 
     // Called When PlayerData is modified
@@ -64,7 +65,7 @@ public class DataManager : MonoBehaviour
     public StoryEvent CreatePrologueStory()
     {
         StoryEvent prologueStory = ScriptableObject.CreateInstance<StoryEvent>();
-        prologueStory.stage = UserData.STAGE.TEST;
+        prologueStory.stage = UserData.STAGE.TUTORIAL;
         prologueStory.storyNum = 0;
 
         return prologueStory;
@@ -80,33 +81,21 @@ public class DataManager : MonoBehaviour
 
     public void OnStoryLoadComplete(AsyncOperationHandle<TextAsset> story)
     {
+        // Set JsonConvert settings
         var settings = new JsonSerializerSettings
         {
             // Add custom converter
             Converters = new List<JsonConverter> { new StoryEntryConverter() }
         };
 
+        // Convert Json file to StoryEntries object
         string jsonContent = story.Result.text;
         StoryEntries scriptEntries = JsonConvert.DeserializeObject<StoryEntries>(jsonContent, settings);
 
-        foreach (var entry in scriptEntries.entries)
-        {
-            if (entry is Dialogue dialogue)
-            {
-                Debug.Log($"Dialogue: Character: {dialogue.character}, Text: {dialogue.text}, Branch ID: {dialogue.branchId}");
-            }
-            else if (entry is Effect effect)
-            {
-                Debug.Log($"Effect: Action: {effect.action}, Duration: {effect.duration}");
-            }
-            else if (entry is Choice choice)
-            {
-                foreach (var option in choice.options)
-                {
-                    Debug.Log($"Choice: Option Text: {option.text}, Branch ID: {option.branchId}");
-                }
-            }
-        }
+        // Set story which starts at the recent point to the StorUI
+        IStoryInfo storyInfo = StoryUIState.Instance;
+        int lastDlg = GameManager.Instance.PlayerData.lastDialogueNum;
+        storyInfo.StoryQueue = new Queue<StoryEntry>(scriptEntries.entries.Skip(lastDlg));
     }
 
     // Class for converting story json file

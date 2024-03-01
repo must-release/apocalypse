@@ -6,5 +6,8 @@ public interface IUIState
     public void StartUI();
     public void EndUI();
     public void Move(float move);
+    public void Stop();
+    public void Attack();
+    public void Submit();
 }
 

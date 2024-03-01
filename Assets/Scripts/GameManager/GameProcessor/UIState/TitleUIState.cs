@@ -9,39 +9,46 @@ using System.Collections.Generic;
 
 public class TitleUIState : MonoBehaviour, IUIState
 {
+	public static TitleUIState Instance;
+
 	private string titleUIName = "Title UI";
 	private string buttonsName = "Buttons";
 	private static Transform titleUI;
 	private static List<Button> buttonList = new List<Button>();
 
-	// UI Initialization
-	public void StartUI()
-	{
-		// Operate only once
-		if(titleUI == null)
-		{
-			// Find Title UI object
+    public void Awake()
+    {
+        if(Instance == null)
+        {
+            Instance = this;
+
+            // Find Title UI object
             titleUI = FindObjectOfType<Canvas>().transform.Find(titleUIName);
-			if (titleUI == null)
-			{
+            if (titleUI == null)
+            {
                 Debug.Log("Title UI Initialization Error");
-				return;
+                return;
             }
 
-			Transform buttons = titleUI.Find(buttonsName);
+            Transform buttons = titleUI.Find(buttonsName);
             for (int i = 0; i < buttons.childCount; i++)
             {
                 // Add ith button to the list
                 buttonList.Add(buttons.GetChild(i).GetComponent<Button>());
             }
 
-			// Add event listener to buttons
-			buttonList[0].onClick.AddListener(onContinueGameClick);
+            // Add event listener to buttons
+            buttonList[0].onClick.AddListener(onContinueGameClick);
             buttonList[1].onClick.AddListener(OnNewGameClick);
             buttonList[2].onClick.AddListener(OnLoadGameClick);
             buttonList[3].onClick.AddListener(OnSettingsClick);
         }
+    }
 
+
+    // UI Initialization
+    public void StartUI()
+	{
 		// In case of console, select first button
         if (IUIState.isConsole)
             buttonList[0].Select();
@@ -56,11 +63,6 @@ public class TitleUIState : MonoBehaviour, IUIState
         titleUI.gameObject.SetActive(false);
 	}
 
-	public void Move(float move)
-	{
-		return;
-	}
-
 	private void onContinueGameClick()
 	{
 		Debug.Log("Continue Game");
@@ -69,14 +71,20 @@ public class TitleUIState : MonoBehaviour, IUIState
 	// Start new game
 	private void OnNewGameClick()
 	{
-		/* Start stage loading */
-		GameManager.Instance.PlayerData = DataManager.Instance.CreateUserData(); // Create new game data
-		StageManager.Instance.LoadStage(); // Load stage resources
+
+        /* Create new game data */
+        GameManager.Instance.PlayerData = DataManager.Instance.CreateUserData();
 
 
 		/* Play prologue story event */
 		StoryEvent prologueStory = DataManager.Instance.CreatePrologueStory(); // Create prologue story event
         EventManager.Instance.PlayEvent(prologueStory); // Play prologue story event
+
+
+        /* Start stage loading */
+        StageManager.Instance.LoadStage(); // Load stage resources
+
+
     }
 
     private void OnLoadGameClick()
@@ -88,4 +96,9 @@ public class TitleUIState : MonoBehaviour, IUIState
 	{
         Debug.Log("Settings");
     }
+
+    public void Move(float move) { return; }
+    public void Attack() { return; }
+    public void Submit() { return; }
+    public void Stop() { return; }
 }

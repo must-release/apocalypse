@@ -9,9 +9,11 @@ public class InputHandler : MonoBehaviour
 
     public string moveAxisName = "Horizontal";
     public string attackButtonName = "Fire1";
+    public string submitButtonName = "Submit";
 
     public float Move { get; private set; }
     public bool Attack { get; private set; }
+    public bool Submit { get; private set; }
 
     private void Awake()
     {
@@ -23,5 +25,6 @@ public class InputHandler : MonoBehaviour
     {
         Move = Input.GetAxis(moveAxisName);
         Attack = Input.GetButtonDown(attackButtonName);
+        Submit = Input.GetButtonDown(submitButtonName);
     }
 }

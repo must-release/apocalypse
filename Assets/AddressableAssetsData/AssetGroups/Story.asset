@@ -18,7 +18,7 @@ MonoBehaviour:
   m_GUID: c1f577400555e47f3999e986228cb71c
   m_SerializeEntries:
   - m_GUID: e15e5a281f35f4f1ea0b64376af66656
-    m_Address: STORY_TEST_0
+    m_Address: STORY_TUTORIAL_0
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

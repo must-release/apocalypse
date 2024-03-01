@@ -24,6 +24,15 @@ public class EventManager : MonoBehaviour
 		}
 	}
 
+	public void EventOver()
+	{
+		// Reset Player's event information
+		GameManager.Instance.PlayerData.currentEvent = null;
+		GameManager.Instance.PlayerData.lastDialogueNum = 0;
+
+		InputManager.Instance.ChangeState(InputManager.STATE.CONTROL);
+	}
+
 	// Play story Event
 	public void PlayStory(StoryEvent storyEvent)
 	{

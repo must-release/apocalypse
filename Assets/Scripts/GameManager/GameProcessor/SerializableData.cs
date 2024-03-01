@@ -3,21 +3,24 @@ using System.Collections.Generic;
 [System.Serializable]
 public class UserData
 {
-    public enum STAGE { TEST, LIBRARY }
+    public enum STAGE { TEST, TUTORIAL, LIBRARY }
+    public enum CHARACTER { HERO, HEROINE }
 
     public STAGE currentStage;
     public int currentMap;
     public IEvent currentEvent;
     public int lastDialogueNum;
+    public CHARACTER lastChar;
     public int playTime;
     public string saveTime;
 
-    public UserData(STAGE curStage, int curMap, IEvent curEvent, int lastDlg, int playTime, string saveTime)
+    public UserData(STAGE curStage, int curMap, IEvent curEvent, int lastDlg, CHARACTER lastChar, int playTime, string saveTime)
     {
         currentStage = curStage;
         currentMap = curMap;
         currentEvent = curEvent;
         lastDialogueNum = lastDlg;
+        this.lastChar = lastChar;
         this.playTime = playTime;
         this.saveTime = saveTime;
     }
