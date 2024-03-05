@@ -24,9 +24,11 @@ public class StageManager : MonoBehaviour
 		SceneManager.sceneLoaded += OnStageLoaded;
 	}
 
-	// Load assets for the StageScene to be started
+	// Load StageScene
 	public void LoadStage()
 	{
+		SceneManager.LoadScene(stageSceneName);
+
 		DataManager.Instance.LoadMaps(); // Load two maps asynchronously
     }
 

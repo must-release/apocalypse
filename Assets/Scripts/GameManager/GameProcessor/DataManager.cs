@@ -22,12 +22,14 @@ public class DataManager : MonoBehaviour
     /******* Manage User Data ********/
 
     // Create new game data
-    public UserData CreateUserData()
+    public void CreateUserData()
     {
-        DateTime now = DateTime.Now;
-        string saveTime = now.ToString("yyyy-MM-dd HH:mm:");
+        string saveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:"); // Get current time
+        IEvent prologueStory = CreatePrologueStory(); // Create event chain
 
-        return new UserData(UserData.STAGE.TEST, 0, null, 0, UserData.CHARACTER.HERO, 0, saveTime);
+        // Initialize player data
+        GameManager.Instance.PlayerData =
+            new UserData(UserData.STAGE.TEST, 0, prologueStory, 0, UserData.CHARACTER.HERO, 0, saveTime);
     }
 
     // Called When PlayerData is modified
@@ -62,11 +64,21 @@ public class DataManager : MonoBehaviour
 
     /******** Manage Story Data **********/
 
+    // Create prologue story event which have 2 events behind
     public StoryEvent CreatePrologueStory()
     {
+        // Create in-game event
+        InGameEvent prologueInGame = ScriptableObject.CreateInstance<InGameEvent>();
+
+        // Create loading event
+        LoadingEvent loadingEvent = ScriptableObject.CreateInstance<LoadingEvent>();
+        loadingEvent.NextEvent = prologueInGame;
+
+        // Create story event
         StoryEvent prologueStory = ScriptableObject.CreateInstance<StoryEvent>();
         prologueStory.stage = UserData.STAGE.TUTORIAL;
         prologueStory.storyNum = 0;
+        prologueStory.NextEvent = loadingEvent;
 
         return prologueStory;
     }

@@ -73,16 +73,10 @@ public class TitleUIState : MonoBehaviour, IUIState
 	{
 
         /* Create new game data */
-        GameManager.Instance.PlayerData = DataManager.Instance.CreateUserData();
-
-
-		/* Play prologue story event */
-		StoryEvent prologueStory = DataManager.Instance.CreatePrologueStory(); // Create prologue story event
-        EventManager.Instance.PlayEvent(prologueStory); // Play prologue story event
-
+        DataManager.Instance.CreateUserData();
 
         /* Start stage loading */
-        StageManager.Instance.LoadStage(); // Load stage resources
+        StageManager.Instance.LoadStage();
 
 
     }
