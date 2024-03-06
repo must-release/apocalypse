@@ -4,7 +4,7 @@ using System.Collections;
 public class InputManager : MonoBehaviour
 {
     public static InputManager Instance { get; private set; } 
-    public enum STATE { TITLE, CONTROL, STORY }
+    public enum STATE { TITLE, CONTROL, STORY, LOADING }
 
     private IUIState currentUI;
 
@@ -39,6 +39,9 @@ public class InputManager : MonoBehaviour
             case STATE.CONTROL:
                 currentUI = ControlUIState.Instance;
                 break;
+            case STATE.LOADING:
+                currentUI = LoadingUIState.Instance;
+                break;
         }
 
         currentUI.StartUI();
@@ -46,6 +49,8 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
+        currentUI.UpdateUI();
+
         if (InputHandler.Instance.Move != 0) { Move(InputHandler.Instance.Move);}
         else { Stop(); }
 

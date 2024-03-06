@@ -46,7 +46,7 @@ public class TitleUIState : MonoBehaviour, IUIState
     }
 
 
-    // UI Initialization
+    // Enter Title UI state
     public void StartUI()
 	{
 		// In case of console, select first button
@@ -57,6 +57,7 @@ public class TitleUIState : MonoBehaviour, IUIState
         titleUI.gameObject.SetActive(true);
     }
 
+    // Exit Title UI state
 	public void EndUI()
 	{
         // Inactive Title UI object
@@ -65,7 +66,11 @@ public class TitleUIState : MonoBehaviour, IUIState
 
 	private void onContinueGameClick()
 	{
-		Debug.Log("Continue Game");
+        /* Load most recent saved Data */
+        DataManager.Instance.LoadContinueData();
+
+        /* Start stage loading */
+        StageManager.Instance.LoadStage();
 	}
 
 	// Start new game
@@ -91,6 +96,7 @@ public class TitleUIState : MonoBehaviour, IUIState
         Debug.Log("Settings");
     }
 
+    public void UpdateUI() { return; }
     public void Move(float move) { return; }
     public void Attack() { return; }
     public void Submit() { return; }

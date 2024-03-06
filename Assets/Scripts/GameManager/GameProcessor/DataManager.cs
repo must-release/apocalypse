@@ -29,24 +29,42 @@ public class DataManager : MonoBehaviour
 
         // Initialize player data
         GameManager.Instance.PlayerData =
-            new UserData(UserData.STAGE.TEST, 0, prologueStory, 0, UserData.CHARACTER.HERO, 0, saveTime);
+            new UserData(UserData.STAGE.TEST, 0, prologueStory, 0, UserData.CHARACTER.HERO, "00:00", saveTime);
     }
 
-    // Called When PlayerData is modified
-    public void AutoSave(UserData data)
+    // Auto Save data. slot 0 is used for auto save
+    public void AutoSave()
     {
-        string path = Application.persistentDataPath + "/userData_auto" + ".json";
+        // When loading auto save data, next event will be played after the loading event
+        LoadingEvent loading = ScriptableObject.CreateInstance<LoadingEvent>();
+        loading.Initialize(EventManager.Instance.CurrentEvent.NextEvent);
+        UserData data = GameManager.Instance.PlayerData.Copy();
+        data.StartingEvent = loading;
+
+        // Calculate play time
+        
+
+        string path = Application.persistentDataPath + "/userData0.json";
         string json = JsonUtility.ToJson(data);
+
         File.WriteAllText(path, json);
     }
 
-    public void SaveUserData(UserData data, int slotNum)
+    // Save User Data.
+    public void SaveUserData(int slotNum)
     {
+        UserData data = null;
         string path = Application.persistentDataPath + "/userData" + slotNum + ".json";
         string json = JsonUtility.ToJson(data);
         File.WriteAllText(path, json);
     }
 
+    public string CalculatePlayTime(DateTime now, DateTime past)
+    {
+        return null;
+    }
+
+    // Load user data from a specific data slot
     public UserData LoadUserData(int slotNum)
     {
         string path = Application.persistentDataPath + "/userData" + slotNum + ".json";
@@ -59,6 +77,20 @@ public class DataManager : MonoBehaviour
         return null;
     }
 
+    // Load most recent saved Data
+    public void LoadContinueData()
+    {
+        string path = Application.persistentDataPath + "/userData0.json";
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            UserData data = JsonUtility.FromJson<UserData>(json);
+            GameManager.Instance.PlayerData = data;
+        }
+        else
+            Debug.Log("reading continue data failed");
+    }
+
 
 
 
@@ -69,16 +101,19 @@ public class DataManager : MonoBehaviour
     {
         // Create in-game event
         InGameEvent prologueInGame = ScriptableObject.CreateInstance<InGameEvent>();
+        prologueInGame.Initialize(null);
+
+        // Create auto save event
+        AutoSaveEvent saveEvent = ScriptableObject.CreateInstance<AutoSaveEvent>();
+        saveEvent.Initialize(prologueInGame);
 
         // Create loading event
         LoadingEvent loadingEvent = ScriptableObject.CreateInstance<LoadingEvent>();
-        loadingEvent.NextEvent = prologueInGame;
+        loadingEvent.Initialize(saveEvent);
 
         // Create story event
         StoryEvent prologueStory = ScriptableObject.CreateInstance<StoryEvent>();
-        prologueStory.stage = UserData.STAGE.TUTORIAL;
-        prologueStory.storyNum = 0;
-        prologueStory.NextEvent = loadingEvent;
+        prologueStory.Initialize(UserData.STAGE.TUTORIAL, 0, loadingEvent);
 
         return prologueStory;
     }
@@ -145,7 +180,7 @@ public class DataManager : MonoBehaviour
 
 
 
-    /********* Manage Map Data *********/
+    /********* Manage Stage Assets *********/
 
     // Load two maps when starting the game
     public void LoadMaps()
@@ -154,21 +189,22 @@ public class DataManager : MonoBehaviour
         string map1 = "MAP_" + data.currentStage.ToString() + '_' + data.currentMap;
         string map2 = "MAP_" + data.currentStage.ToString() + '_' + (data.currentMap + 1);
 
-        StartCoroutine(AsynLoadMaps(map1, map2));
+        StartCoroutine(AsyncLoadMaps(map1, map2));
     }
 
+    // Load a map while playing the game
     public void LoadMap(int stageNum)
     {
 
     }
 
     // Load two maps asynchronously
-    IEnumerator AsynLoadMaps(string map1, string map2)
+    IEnumerator AsyncLoadMaps(string map1, string map2)
     {
         GameObject firstMap = null, secondMap = null;
 
         // Load first map
-        AsyncOperationHandle<GameObject> first = Addressables.LoadAssetAsync<GameObject>(map1);
+        AsyncOperationHandle<GameObject> first = Addressables.InstantiateAsync(map1);
         yield return first;
         if (first.Status == AsyncOperationStatus.Succeeded)
         {
@@ -176,7 +212,7 @@ public class DataManager : MonoBehaviour
         }
 
         // Load second map
-        AsyncOperationHandle<GameObject> second = Addressables.LoadAssetAsync<GameObject>(map2);
+        AsyncOperationHandle<GameObject> second = Addressables.InstantiateAsync(map2);
         yield return second;
         if (second.Status == AsyncOperationStatus.Succeeded)
         {
@@ -188,7 +224,30 @@ public class DataManager : MonoBehaviour
         if (firstMap == null || secondMap == null)
             Debug.Log("Map Load Error");
         else
-            StageManager.Instance.OnLoadComplete(firstMap, secondMap);
+            StageManager.Instance.OnMapsLoadComplete(firstMap, secondMap);
+    }
+
+    // Start to load player prefab
+    public void LoadPlayer()
+    {
+        string key = "Characters/Player";
+        Addressables.InstantiateAsync(key).Completed += AsyncLoadPlayer;
+    }
+
+    // When player is loaded, return player instance to StageManager
+    public void AsyncLoadPlayer(AsyncOperationHandle<GameObject> playerInstance)
+    {
+        GameObject player = null;
+
+        if(playerInstance.Status == AsyncOperationStatus.Succeeded)
+        {
+            player = playerInstance.Result;
+        }
+
+        if (player == null)
+            Debug.Log("Player Load Error");
+        else
+            StageManager.Instance.onPlayerLoadComplete(player);
     }
 }
 

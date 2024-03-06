@@ -1,10 +1,49 @@
 ﻿using System;
 using UnityEngine;
 
-public interface IEvent
+[System.Serializable]
+public class IEvent : ScriptableObject, ISerializationCallbackReceiver
 {
-    public enum TYPE { STORY, TUTORIAL, IN_GAME, MAP_CHANGE, LOADING };
-    public TYPE EventType { get; set; }
-    public IEvent NextEvent { get; set; }
-}
+    public enum TYPE { STORY, TUTORIAL, IN_GAME, MAP_CHANGE, LOADING, AUTO_SAVE };
 
+    /* Event info which is used when playing game */
+    public int eventType;
+    public TYPE EventType { get { return (TYPE)eventType; } set { eventType = (int)value; } }
+    [System.NonSerialized]
+    public IEvent nextEvent;
+    public IEvent NextEvent { get { return nextEvent; } set { nextEvent = value; } }
+
+
+    /* Event info which is used when saving data */
+    [SerializeField]
+    private string nextEventAssemblyQualifiedName; 
+    [SerializeField]
+    private string nextEventdata;
+
+
+    // Save flawless info of the nextEvent
+    public void OnBeforeSerialize()
+    {
+        if (nextEvent != null)
+        {
+            // Save type of the nextEvent
+            nextEventAssemblyQualifiedName = nextEvent.GetType().AssemblyQualifiedName;
+            // Save Json data of the nextEvent
+            nextEventdata = JsonUtility.ToJson(nextEvent);
+        }
+    }
+
+
+    // Restore data of the nextEvent
+    public void OnAfterDeserialize()
+    {
+        if (!string.IsNullOrEmpty(nextEventAssemblyQualifiedName) && !string.IsNullOrEmpty(nextEventdata))
+        {
+            // Create objects and deserialize data based on stored type information
+            Type eventType = Type.GetType(nextEventAssemblyQualifiedName);
+            IEvent eventInstance = (IEvent)CreateInstance(eventType);
+            JsonUtility.FromJsonOverwrite(nextEventdata, eventInstance);
+            nextEvent = eventInstance;
+        }
+    }
+}

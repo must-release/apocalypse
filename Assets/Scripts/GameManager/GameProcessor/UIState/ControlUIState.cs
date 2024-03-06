@@ -44,6 +44,7 @@ public class ControlUIState : MonoBehaviour, IUIState
         controlUI.gameObject.SetActive(false);
     }
 
+    public void UpdateUI() { return; }
     public void Attack() { return; }
     public void Submit() { return; }
     public void Move(float move) { return; }

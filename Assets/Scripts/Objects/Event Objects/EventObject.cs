@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class EventObject : MonoBehaviour
 {
-    public ScriptableObject playingEvent;
+    public IEvent playingEvent;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        EventManager.Instance.PlayEvent((IEvent)playingEvent);
+        EventManager.Instance.PlayEvent(playingEvent);
     }
 }

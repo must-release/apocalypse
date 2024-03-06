@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d8064386d627487faef2c62815fe6b9, type: 3}
   m_Name: STORY_TEST_1
   m_EditorClassIdentifier: 
-  nextEvent: {fileID: 11400000}
-  stageNum: 0
+  nextEvent: {fileID: 0}
+  stage: 0
   storyNum: 0
+  onMap: 0

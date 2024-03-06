@@ -18,17 +18,26 @@ public class EventManager : MonoBehaviour
 	public void PlayEvent(IEvent playingEvent)
 	{
         // Set current progressing event to storyEvent
-        CurrentEvent = playingEvent; 
+        CurrentEvent = playingEvent;
 
         switch (CurrentEvent.EventType)
 		{
 			case IEvent.TYPE.STORY:
 				PlayStory((StoryEvent)CurrentEvent);
 				break;
-				
+			case IEvent.TYPE.LOADING:
+				ShowLoading();
+				break;
+			case IEvent.TYPE.IN_GAME:
+				PlayInGameEvent((InGameEvent)playingEvent);
+				break;
+			case IEvent.TYPE.AUTO_SAVE:
+				AutoSave();
+				break;
 		}
 	}
 
+	// Current event is over
 	public void EventOver()
 	{
 		// Check if there is next event
@@ -46,11 +55,30 @@ public class EventManager : MonoBehaviour
         }
 	}
 
-	// Play story Event
+	// Play story event
 	public void PlayStory(StoryEvent storyEvent)
 	{
 		InputManager.Instance.ChangeState(InputManager.STATE.STORY); // Change UI to Story mode
 		DataManager.Instance.LoadStoryText(); // Load text of the current story event
+	}
+
+	// Play InGame event
+	public void PlayInGameEvent(InGameEvent inGameEvent)
+	{
+		Debug.Log("play in game event");
+	}
+
+	// Show Loading
+	public void ShowLoading()
+	{
+		InputManager.Instance.ChangeState(InputManager.STATE.LOADING); // Change UI to Loading mode
+	}
+
+	// Auto Save current player data
+	public void AutoSave()
+	{
+		DataManager.Instance.AutoSave();
+		EventOver();
 	}
 }
 

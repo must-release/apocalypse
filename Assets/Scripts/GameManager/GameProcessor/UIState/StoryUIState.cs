@@ -58,6 +58,15 @@ public class StoryUIState : MonoBehaviour, IUIState, IStoryInfo
     {
         // Active Story UI object
         storyUI.gameObject.SetActive(true);
+
+        // Disable stage objects
+        StageManager.Instance.SetStageObjectsActive(false);
+    }
+
+    // Update Story UI state
+    public void UpdateUI()
+    {
+
     }
 
     // Exit Story UI state
@@ -65,6 +74,9 @@ public class StoryUIState : MonoBehaviour, IUIState, IStoryInfo
 	{
         // reset storyQueue
         storyQueue = null;
+
+        // Enable stage objects
+        StageManager.Instance.SetStageObjectsActive(true);
 
         // Inactive Story UI object
         storyUI.gameObject.SetActive(false);
@@ -107,7 +119,6 @@ public class StoryUIState : MonoBehaviour, IUIState, IStoryInfo
             }
         }
     }
-
 
 	public void Move(float move) { return; }
     public void Stop() { return; }

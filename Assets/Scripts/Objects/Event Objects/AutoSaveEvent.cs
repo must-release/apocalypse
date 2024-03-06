@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-[CreateAssetMenu(fileName = "NewInGame", menuName = "Event/InGameEvent", order = 0)]
-public class InGameEvent : IEvent
+[CreateAssetMenu(fileName = "NewAutoSave", menuName = "Event/AutoSaveEvent", order = 0)]
+public class AutoSaveEvent : IEvent
 {
     public void Initialize(IEvent nextEvent)
     {
-        EventType = TYPE.IN_GAME;
+        EventType = TYPE.AUTO_SAVE;
         NextEvent = nextEvent;
     }
 }
