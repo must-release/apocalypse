@@ -4,11 +4,8 @@ using UnityEngine;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "NewInGame", menuName = "Event/InGameEvent", order = 0)]
-public class InGameEvent : IEvent
+public class InGameEvent : EventBase
 {
-    public void Initialize(IEvent nextEvent)
-    {
-        EventType = TYPE.IN_GAME;
-        NextEvent = nextEvent;
-    }
+    // Set event Type on load
+    public void OnEnable() { EventType = TYPE.IN_GAME; }
 }

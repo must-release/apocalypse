@@ -4,11 +4,8 @@ using UnityEngine;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "NewAutoSave", menuName = "Event/AutoSaveEvent", order = 0)]
-public class AutoSaveEvent : IEvent
+public class AutoSaveEvent : EventBase
 {
-    public void Initialize(IEvent nextEvent)
-    {
-        EventType = TYPE.AUTO_SAVE;
-        NextEvent = nextEvent;
-    }
+    // Set event Type on load
+    public void OnEnable() { EventType = TYPE.AUTO_SAVE; }
 }

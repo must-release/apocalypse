@@ -4,11 +4,8 @@ using UnityEngine;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "NewLoading", menuName = "Event/LoadingEvent", order = 0)]
-public class LoadingEvent : IEvent
+public class LoadingEvent : EventBase
 {
-    public void Initialize(IEvent nextEvent)
-    {
-        EventType = TYPE.LOADING;
-        NextEvent = nextEvent;
-    }
+    // Set event Type on load
+    public void OnEnable() { EventType = TYPE.LOADING; }
 }
