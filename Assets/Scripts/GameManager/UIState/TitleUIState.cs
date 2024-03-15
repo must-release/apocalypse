@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 
 /* Part of InputManager which manages Title UI logic */
@@ -13,8 +10,8 @@ public class TitleUIState : MonoBehaviour, IUIState
 
 	private string titleUIName = "Title UI";
 	private string buttonsName = "Buttons";
-	private static Transform titleUI;
-	private static List<Button> buttonList = new List<Button>();
+	private Transform titleUI;
+	private List<Button> buttonList = new List<Button>();
 
     public void Awake()
     {
@@ -64,31 +61,23 @@ public class TitleUIState : MonoBehaviour, IUIState
         titleUI.gameObject.SetActive(false);
 	}
 
+    // Load most recent saved data
 	private void onContinueGameClick()
 	{
         /* Load most recent saved Data */
         DataManager.Instance.LoadContinueData();
-
-        /* Start stage loading */
-        StageManager.Instance.LoadStage();
 	}
 
 	// Start new game
 	private void OnNewGameClick()
 	{
-
         /* Create new game data */
         DataManager.Instance.CreateUserData();
-
-        /* Start stage loading */
-        StageManager.Instance.LoadStage();
-
-
     }
 
     private void OnLoadGameClick()
     {
-        Debug.Log("Load Game");
+        InputManager.Instance.ChangeState(InputManager.STATE.LOAD, false);
     }
 
 	private void OnSettingsClick()

@@ -13,12 +13,9 @@ MonoBehaviour:
   m_Name: Tutorial_1_1_Story
   m_EditorClassIdentifier: 
   eventType: 0
-  nextEvent: {fileID: 11400000, guid: 4f88f075307414da2a7dd22be7c60ff9, type: 2}
-  nextEventAssemblyQualifiedName: LoadingEvent, Assembly-CSharp, Version=0.0.0.0,
-    Culture=neutral, PublicKeyToken=null
-  nextEventdata: '{"eventType":0,"nextEvent":{"instanceID":-3546},"nextEventAssemblyQualifiedName":"AutoSaveEvent,
-    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null","nextEventdata":"{\"eventType\":0,\"nextEvent\":{\"instanceID\":-3724},\"nextEventAssemblyQualifiedName\":\"InGameEvent,
-    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null\",\"nextEventdata\":\"{\\\"eventType\\\":0,\\\"nextEvent\\\":{\\\"instanceID\\\":0},\\\"nextEventAssemblyQualifiedName\\\":\\\"\\\",\\\"nextEventdata\\\":\\\"\\\"}\"}"}'
+  nextEvent: {fileID: 11400000, guid: 138c8de577c8e4b7d99170f10fba0129, type: 2}
+  nextEventAssemblyQualifiedName: 
+  nextEventdata: 
   stage: 1
   storyNum: 0
   onMap: 0

@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public class EventBase : ScriptableObject, ISerializationCallbackReceiver
+public class EventBase : ScriptableObject
 {
     public enum TYPE { STORY, TUTORIAL, IN_GAME, MAP_CHANGE, LOADING, AUTO_SAVE };
 
@@ -15,20 +15,15 @@ public class EventBase : ScriptableObject, ISerializationCallbackReceiver
 
 
     /* Event info which is used when saving data */
-    [SerializeField, HideInInspector]
+    [SerializeField]
     private string nextEventAssemblyQualifiedName; 
-    [SerializeField, HideInInspector]
+    [SerializeField]
     private string nextEventdata;
 
 
-    // Initalize variables
-    public void Initialize(EventBase nextEvent)
-    {
-        NextEvent = nextEvent;
-    }
 
     // Save flawless info of the nextEvent
-    public void OnBeforeSerialize()
+    public void SaveNextEventInfo()
     {
         if (nextEvent != null)
         {
@@ -39,9 +34,8 @@ public class EventBase : ScriptableObject, ISerializationCallbackReceiver
         }
     }
 
-
     // Restore data of the nextEvent
-    public void OnAfterDeserialize()
+    public void RestoreNextEventInfo()
     {
         if (!string.IsNullOrEmpty(nextEventAssemblyQualifiedName) && !string.IsNullOrEmpty(nextEventdata))
         {
@@ -50,6 +44,7 @@ public class EventBase : ScriptableObject, ISerializationCallbackReceiver
             EventBase eventInstance = (EventBase)CreateInstance(eventType);
             JsonUtility.FromJsonOverwrite(nextEventdata, eventInstance);
             nextEvent = eventInstance;
+            nextEvent.RestoreNextEventInfo();
         }
     }
 }

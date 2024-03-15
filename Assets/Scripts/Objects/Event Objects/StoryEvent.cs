@@ -11,12 +11,8 @@ public class StoryEvent : EventBase
     public bool onMap; // If story is played on the map
 
     // Set event Type on load
-    public void OnEnable() { EventType = TYPE.STORY; }
-
-    public void Initialize(UserData.STAGE stage, int storyNum, EventBase nextEvent)
+    public void OnEnable()
     {
-        this.stage = stage;
-        this.storyNum = storyNum;
-        NextEvent = nextEvent;
+        EventType = TYPE.STORY;
     }
 }

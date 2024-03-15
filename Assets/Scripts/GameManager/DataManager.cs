@@ -26,7 +26,7 @@ public class DataManager : MonoBehaviour
 
     /******* Manage User Data ********/
 
-    // Create new game data
+    // Create new game data and start loading stage
     public void CreateUserData()
     {
         string saveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:"); // Get current time
@@ -34,20 +34,25 @@ public class DataManager : MonoBehaviour
         // Initialize player data
         GameManager.Instance.PlayerData =
             new UserData(UserData.STAGE.TEST, 0, prologueEvent, 0, UserData.CHARACTER.HERO, "00:00", saveTime);
+
+        // Start stage loading
+        StageManager.Instance.LoadStage();
     }
 
     // Auto Save data. slot 0 is used for auto save
     public void AutoSaveUserData()
     {
         // When loading auto save data, next event will be played after the loading event
-        LoadingEvent loading = ScriptableObject.CreateInstance<LoadingEvent>();
-        loading.Initialize(EventManager.Instance.NextEvent);
+        EventBase loadingEvent = EventManager.Instance.CreateLoadingEvent(EventManager.Instance.NextEvent);
         UserData data = GameManager.Instance.PlayerData.Copy();
-        data.StartingEvent = loading;
+        data.StartingEvent = loadingEvent;
 
         // Calculate play time
         data.PlayTime = CalculatePlayTime(data.PlayTime, data.SaveTime);
-        
+
+        // Update save time
+        data.SaveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:");
+
         // Save Json file
         string path = Application.persistentDataPath + "/userData0.json";
         string json = JsonUtility.ToJson(data);
@@ -118,7 +123,7 @@ public class DataManager : MonoBehaviour
         return allData;
     }
 
-    // Load most recent saved Data
+    // Load most recent saved data and start loading stage
     public void LoadContinueData()
     {
         List<UserData> allData = LoadAllUserData();
@@ -135,6 +140,9 @@ public class DataManager : MonoBehaviour
             .FirstOrDefault();
 
         GameManager.Instance.PlayerData = mostRecent;
+
+        // Start stage loading
+        StageManager.Instance.LoadStage();
     }
 
 

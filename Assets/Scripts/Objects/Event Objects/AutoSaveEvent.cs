@@ -7,5 +7,8 @@ using UnityEngine;
 public class AutoSaveEvent : EventBase
 {
     // Set event Type on load
-    public void OnEnable() { EventType = TYPE.AUTO_SAVE; }
+    public void OnEnable()
+    {
+        EventType = TYPE.AUTO_SAVE;
+    }
 }

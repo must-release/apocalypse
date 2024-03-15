@@ -7,5 +7,8 @@ using UnityEngine;
 public class InGameEvent : EventBase
 {
     // Set event Type on load
-    public void OnEnable() { EventType = TYPE.IN_GAME; }
+    public void OnEnable()
+    {
+        EventType = TYPE.IN_GAME;
+    }
 }

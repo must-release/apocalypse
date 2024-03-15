@@ -5,7 +5,8 @@ using System.Collections.Generic;
 public class InputManager : MonoBehaviour
 {
     public static InputManager Instance { get; private set; } 
-    public enum STATE { PREVIOUS, TITLE, CONTROL, STORY, LOADING }
+    public enum STATE { PREVIOUS, TITLE, CONTROL, STORY, LOADING, SAVE, LOAD }
+    public STATE SaveOrLoad { get; private set; } // Used to check if it is save or load UI
 
     private IUIState currentUI; // UI using right now
     private Stack<IUIState> savedUIs; // UIs which whill be used again
@@ -50,13 +51,21 @@ public class InputManager : MonoBehaviour
             case STATE.LOADING:
                 currentUI = LoadingUIState.Instance;
                 break;
+            case STATE.SAVE:
+                SaveOrLoad = STATE.SAVE;
+                currentUI = SaveLoadUIState.Instance;
+                break;
+            case STATE.LOAD:
+                SaveOrLoad = STATE.LOAD;
+                currentUI = SaveLoadUIState.Instance;
+                break;
             case STATE.PREVIOUS:
                 if (savedUIs.Count > 0)
                     currentUI = savedUIs.Pop();
                 else
                     Debug.Log("Empty UI Stack");
 
-                // Previous state has already started, thus it doesn't have to start again
+                // Previous state has already started, thus it doesn't have to be started again
                 return;
         }
 

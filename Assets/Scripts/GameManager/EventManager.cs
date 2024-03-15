@@ -19,45 +19,10 @@ public class EventManager : MonoBehaviour
         }
 	}
 
-    // Create prologue event chain
-    public EventBase CreatePrologueEvent()
-    {
-        // Create in-game event
-        InGameEvent prologueInGame = ScriptableObject.CreateInstance<InGameEvent>();
-
-        // Create auto save event
-        AutoSaveEvent saveEvent = ScriptableObject.CreateInstance<AutoSaveEvent>();
-        saveEvent.Initialize(prologueInGame);
-
-        // Create loading event
-        LoadingEvent loadingEvent = ScriptableObject.CreateInstance<LoadingEvent>();
-        loadingEvent.Initialize(saveEvent);
-
-        // Create story event
-        StoryEvent prologueStory = ScriptableObject.CreateInstance<StoryEvent>();
-        prologueStory.Initialize(UserData.STAGE.TUTORIAL, 0, loadingEvent);
-
-        return prologueStory;
-    }
-
 	// Create event
-	public EventBase CreateEvent(EventBase.TYPE eventType, EventBase nextEvent)
+	public EventBase CreateLoadingEvent(EventBase nextEvent)
 	{
-		EventBase created;
-
-		switch (eventType)
-		{
-			case EventBase.TYPE.AUTO_SAVE:
-				created = ScriptableObject.CreateInstance<AutoSaveEvent>();
-				break;
-			case EventBase.TYPE.LOADING:
-				created = ScriptableObject.CreateInstance<LoadingEvent>();
-				break;
-			default:
-				Debug.Log("Event create error");
-				return null;
-
-        }
+		EventBase created = ScriptableObject.CreateInstance<LoadingEvent>();
 		created.NextEvent = nextEvent;
 		return created;
 	}

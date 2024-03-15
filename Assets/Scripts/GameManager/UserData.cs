@@ -65,6 +65,19 @@ public class UserData : ISerializationCallbackReceiver
     {
         if (StartingEvent != null)
         {
+            // Save chained events
+            Stack<EventBase> eventStack = new Stack<EventBase>();
+            EventBase nextEvent = StartingEvent.NextEvent;
+            while(nextEvent != null)
+            {
+                eventStack.Push(nextEvent);
+                nextEvent = nextEvent.NextEvent;
+            }
+            while(eventStack.Count > 0)
+            {
+                eventStack.Pop().SaveNextEventInfo();
+            }
+
             // Create Json data of StartingEvent
             startingEventAssemblyQualifiedName = StartingEvent.GetType().AssemblyQualifiedName;
             startingEventData = JsonUtility.ToJson(StartingEvent);
@@ -81,6 +94,7 @@ public class UserData : ISerializationCallbackReceiver
             EventBase eventInstance = (EventBase)ScriptableObject.CreateInstance(eventType);
             JsonUtility.FromJsonOverwrite(startingEventData, eventInstance);
             StartingEvent = eventInstance;
+            StartingEvent.RestoreNextEventInfo();
         }
     }
 }

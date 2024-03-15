@@ -7,5 +7,8 @@ using UnityEngine;
 public class LoadingEvent : EventBase
 {
     // Set event Type on load
-    public void OnEnable() { EventType = TYPE.LOADING; }
+    public void OnEnable()
+    {
+        EventType = TYPE.LOADING;
+    }
 }

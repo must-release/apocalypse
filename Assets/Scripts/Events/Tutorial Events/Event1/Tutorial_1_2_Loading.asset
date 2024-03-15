@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 319d1fc55ac0543379419bdab501ce85, type: 3}
   m_Name: Tutorial_1_2_Loading
   m_EditorClassIdentifier: 
-  eventType: 0
+  eventType: 4
   nextEvent: {fileID: 11400000, guid: 0820f9c08a031474582345fd994b4197, type: 2}
-  nextEventAssemblyQualifiedName: AutoSaveEvent, Assembly-CSharp, Version=0.0.0.0,
-    Culture=neutral, PublicKeyToken=null
-  nextEventdata: '{"eventType":0,"nextEvent":{"instanceID":-3724},"nextEventAssemblyQualifiedName":"InGameEvent,
-    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null","nextEventdata":"{\"eventType\":0,\"nextEvent\":{\"instanceID\":0},\"nextEventAssemblyQualifiedName\":\"\",\"nextEventdata\":\"\"}"}'
+  nextEventAssemblyQualifiedName: 
+  nextEventdata: 
