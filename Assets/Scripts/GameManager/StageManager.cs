@@ -10,10 +10,11 @@ public class StageManager : MonoBehaviour
 {
 	public static StageManager Instance { get; private set; }
 
-	public bool IsStageReady { get; private set; } = false;
+	public bool IsStageReady { get; set; }
 
 
 	private string stageSceneName = "StageScene";
+	private string titleSceneName = "TitleScene";
 	private string stageObjectsName = "Stage Objects";
 	private string startingPointName = "Starting Point";
 	private float cameraHeight;
@@ -29,19 +30,46 @@ public class StageManager : MonoBehaviour
 		{
             Instance = this;
         }
-
-		SceneManager.sceneLoaded += OnSceneLoaded;
 	}
 
-	// Load StageScene
-	public void LoadStage() { SceneManager.LoadScene(stageSceneName); }
+    private void Start()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
 
-
-	// When StageScene is loaded, start event and initialize assets
-	public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    // Load StageScene
+    public void LoadStage()
 	{
-		// Activated only in StageScene
-		if(scene.name != stageSceneName) { return; }
+		IsStageReady = false;
+		SceneManager.LoadScene(stageSceneName);
+	}
+
+	// Exit StageScene
+	public void ExitStage() { StartCoroutine(LoadTitleSceneAsync()); }
+    IEnumerator LoadTitleSceneAsync()
+    {
+		IsStageReady = false;
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(titleSceneName);
+
+		// Play loading
+		InputManager.Instance.ChangeState(InputManager.STATE.LOADING, true);
+
+        // wait until loading is complete
+        while (!asyncLoad.isDone)
+        {
+			yield return null;
+        }
+
+		// Show Title UI
+		InputManager.Instance.ChangeState(InputManager.STATE.TITLE, true);
+    }
+
+
+    // When StageScene is loaded, start event and initialize assets
+    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+	{
+        // Activated only in StageScene
+        if (scene.name != stageSceneName) { return; }
 
         // Get Camera size
         cameraHeight = 2f * Camera.main.orthographicSize;
@@ -89,8 +117,8 @@ public class StageManager : MonoBehaviour
 		PlaceMaps();
 		PlaceCharacter();
 
-		// Alarm that stage is ready
-		IsStageReady = true;
+        // Alarm that stage scene is ready
+        IsStageReady = true;
 	}
 
 	// Place Maps at the right Place
@@ -118,7 +146,8 @@ public class StageManager : MonoBehaviour
 	// Active/Inactive Stage Objects gameobject
 	public void SetStageObjectsActive(bool control)
 	{
-		stageObjects.SetActive(control);
+		if(stageObjects)
+			stageObjects.SetActive(control);
 	}
 
 }

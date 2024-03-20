@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 /* Part of InputManager which manages Title UI logic */
 
 public class TitleUIState : MonoBehaviour, IUIState
 {
 	public static TitleUIState Instance;
-
-	private string titleUIName = "Title UI";
+    private string titleUIName = "Title UI";
 	private string buttonsName = "Buttons";
 	private Transform titleUI;
 	private List<Button> buttonList = new List<Button>();
@@ -20,7 +20,7 @@ public class TitleUIState : MonoBehaviour, IUIState
             Instance = this;
 
             // Find Title UI object
-            titleUI = FindObjectOfType<Canvas>().transform.Find(titleUIName);
+            titleUI = transform.Find(titleUIName);
             if (titleUI == null)
             {
                 Debug.Log("Title UI Initialization Error");
@@ -46,7 +46,7 @@ public class TitleUIState : MonoBehaviour, IUIState
     // Enter Title UI state
     public void StartUI()
 	{
-		// In case of console, select first button
+        // In case of console, select first button
         if (IUIState.isConsole)
             buttonList[0].Select();
 
@@ -75,6 +75,7 @@ public class TitleUIState : MonoBehaviour, IUIState
         DataManager.Instance.CreateUserData();
     }
 
+    // Load saved game
     private void OnLoadGameClick()
     {
         InputManager.Instance.ChangeState(InputManager.STATE.LOAD, false);

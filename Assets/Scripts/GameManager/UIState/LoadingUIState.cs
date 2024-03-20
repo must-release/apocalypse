@@ -12,7 +12,7 @@ public class LoadingUIState : MonoBehaviour, IUIState
     public static LoadingUIState Instance;
 
     private string loadingUIName = "Loading UI";
-    private static Transform loadingUI;
+    private Transform loadingUI;
 
     public void Awake()
     {
@@ -21,7 +21,7 @@ public class LoadingUIState : MonoBehaviour, IUIState
             Instance = this;
 
             // Find Title UI object
-            loadingUI = FindObjectOfType<Canvas>().transform.Find(loadingUIName);
+            loadingUI = transform.Find(loadingUIName);
             if (loadingUI == null)
             {
                 Debug.Log("Loading UI Initialization Error");
@@ -33,6 +33,13 @@ public class LoadingUIState : MonoBehaviour, IUIState
     // Enter Loading UI state
     public void StartUI()
     {
+        // if Stage asset load is complete, don't start loading
+        if (StageManager.Instance.IsStageReady)
+        {
+            EventManager.Instance.EventOver();
+            return;
+        }
+
         // Active Loading UI object
         loadingUI.gameObject.SetActive(true);
 

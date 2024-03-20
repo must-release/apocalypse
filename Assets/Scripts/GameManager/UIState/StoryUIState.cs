@@ -9,8 +9,8 @@ public class StoryUIState : MonoBehaviour, IUIState, IStoryInfo
 {
 
     /****** Private fields ******/
-    private string storyUIName = "Story UI";
-    private static Transform storyUI;
+    private string storyUIName = "Story Player";
+    private Transform storyUI;
     private List<StoryEntry> storyLog;
     private Queue<StoryEntry> storyQueue;
 
@@ -28,7 +28,7 @@ public class StoryUIState : MonoBehaviour, IUIState, IStoryInfo
             NextScript();
         }
     }
-    public int LastDialogueNum { get; set; }
+    public int LastDialogueNum { get; set; } = 0;
 
 
 
@@ -42,7 +42,7 @@ public class StoryUIState : MonoBehaviour, IUIState, IStoryInfo
             Instance = this;
 
             // Find Title UI object
-            storyUI = FindObjectOfType<Canvas>().transform.Find(storyUIName);
+            storyUI = transform.Find(storyUIName);
             if (storyUI == null)
             {
                 Debug.Log("Story UI Initialization Error");
@@ -97,11 +97,14 @@ public class StoryUIState : MonoBehaviour, IUIState, IStoryInfo
         {
             // Reset last dialogue number to 0
             GameManager.Instance.PlayerData.LastDialogueNumber = 0;
+            LastDialogueNum = 0;
+
             EventManager.Instance.EventOver();
             return;
         }
 
         StoryEntry entry = storyQueue.Dequeue();
+        LastDialogueNum++;
 
         if (entry is Dialogue dialogue)
         {
@@ -123,17 +126,10 @@ public class StoryUIState : MonoBehaviour, IUIState, IStoryInfo
     // Pause game and show Pause UI
     public void Cancel()
     {
-
+        // Change to Pause UI
+        InputManager.Instance.ChangeState(InputManager.STATE.PAUSE, false);
     }
 
-	public void Move(float move) { return; }
+    public void Move(float move) { return; }
     public void Stop() { return; }
-}
-
-
-// Used to load story info
-public interface IStoryInfo
-{
-    public Queue<StoryEntry> StoryQueue { get; set; }
-    public int LastDialogueNum { get; set; }
 }

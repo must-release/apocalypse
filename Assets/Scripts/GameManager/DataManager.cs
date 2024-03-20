@@ -15,8 +15,7 @@ public class DataManager : MonoBehaviour
 {
     public static DataManager Instance { get; private set; }
     public EventBase prologueEvent;
-
-    private const int SLOT_NUM = 18;
+    public const int SLOT_NUM = 18;
 
     private void Awake()
     {
@@ -29,14 +28,14 @@ public class DataManager : MonoBehaviour
     // Create new game data and start loading stage
     public void CreateUserData()
     {
-        string saveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:"); // Get current time
+        string saveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm"); // Get current time
 
         // Initialize player data
-        GameManager.Instance.PlayerData =
+        UserData startData =
             new UserData(UserData.STAGE.TEST, 0, prologueEvent, 0, UserData.CHARACTER.HERO, "00:00", saveTime);
 
-        // Start stage loading
-        StageManager.Instance.LoadStage();
+        // Load new Game
+        SetGameLoadData(startData);
     }
 
     // Auto Save data. slot 0 is used for auto save
@@ -47,25 +46,70 @@ public class DataManager : MonoBehaviour
         UserData data = GameManager.Instance.PlayerData.Copy();
         data.StartingEvent = loadingEvent;
 
-        // Calculate play time
-        data.PlayTime = CalculatePlayTime(data.PlayTime, data.SaveTime);
-
-        // Update save time
-        data.SaveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:");
-
-        // Save Json file
-        string path = Application.persistentDataPath + "/userData0.json";
-        string json = JsonUtility.ToJson(data);
-        File.WriteAllText(path, json);
+        // Capture Screenshot and save data
+        StartCoroutine(CaptureScreenshotAndSave(data, 0));
     }
 
     // Save User Data.
     public void SaveUserData(int slotNum)
     {
-        UserData data = null;
+        // When loading save data, current event will be played after the loading event
+        EventBase loadingEvent = EventManager.Instance.CreateLoadingEvent(EventManager.Instance.CurrentEvent);
+        UserData data = GameManager.Instance.PlayerData.Copy();
+        data.StartingEvent = loadingEvent;
+
+        // Set story dialogue number, which show last text again
+        IStoryInfo storyInfo = StoryUIState.Instance;
+        data.LastDialogueNumber = storyInfo.LastDialogueNum - 1;
+
+        // Capture Screenshot and save data
+        StartCoroutine(CaptureScreenshotAndSave(data, slotNum));
+    }
+
+    // Capture a screenshot of current game
+    private IEnumerator CaptureScreenshotAndSave(UserData data, int slotNum)
+    {
+        // Wait for a frame to end before taking a screenshot
+        yield return new WaitForEndOfFrame();
+
+        // Create RenderTexture which has equal a equal with screen
+        RenderTexture renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
+        Texture2D screenShot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+
+        // Set current rendered content to RenderTexture
+        RenderTexture.active = renderTexture;
+        Camera.main.targetTexture = renderTexture;
+        Camera.main.Render();
+
+        // Copy pixel info from RenderTexture to Texture2D
+        screenShot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+        screenShot.Apply();
+
+        // Reset RenderTexture and Camera settings
+        Camera.main.targetTexture = null;
+        RenderTexture.active = null;
+        Destroy(renderTexture);
+
+        // Set screenshot image
+        data.ScreenShotImage = screenShot;
+        Destroy(screenShot);
+
+        // Calculate play time
+        data.PlayTime = CalculatePlayTime(data.PlayTime, data.SaveTime);
+
+        // Update save time
+        data.SaveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+
+        // Save Json file
         string path = Application.persistentDataPath + "/userData" + slotNum + ".json";
         string json = JsonUtility.ToJson(data);
         File.WriteAllText(path, json);
+
+        // Update Save UI
+        if (slotNum > 0)
+        {
+            InputManager.Instance.ChangeState(InputManager.STATE.SAVE, true);
+        }
     }
 
     // Calculate play time
@@ -139,7 +183,15 @@ public class DataManager : MonoBehaviour
             })
             .FirstOrDefault();
 
-        GameManager.Instance.PlayerData = mostRecent;
+        // Load game
+        SetGameLoadData(mostRecent);
+    }
+
+    // Load game with given data
+    public void SetGameLoadData(UserData data)
+    {
+        // Set current player data
+        GameManager.Instance.PlayerData = data;
 
         // Start stage loading
         StageManager.Instance.LoadStage();
@@ -262,6 +314,7 @@ public class DataManager : MonoBehaviour
     // Start to load player prefab
     public void LoadPlayer()
     {
+
         string key = "Characters/Player";
         Addressables.InstantiateAsync(key).Completed += AsyncLoadPlayer;
     }

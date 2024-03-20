@@ -3,6 +3,7 @@ using System.Collections;
 using System;
 using UnityEngine;
 
+
 [System.Serializable]
 public class UserData : ISerializationCallbackReceiver
 {
@@ -31,6 +32,36 @@ public class UserData : ISerializationCallbackReceiver
     [SerializeField]
     private string saveTime;
     public string SaveTime { get { return saveTime; } set { saveTime = value; } }
+
+    [SerializeField]
+    private string screenShotImage;
+    public Texture2D ScreenShotImage
+    {
+        get
+        {
+            byte[] imageBytes = Convert.FromBase64String(screenShotImage);
+
+            // convert byte array to Texture2D
+            Texture2D texture = new Texture2D(2, 2); // Initial size doesn't matter, LoadImage resizes it
+            if (texture.LoadImage(imageBytes))
+            {
+                // Convert Texture2D to Sprite
+                return texture;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        set
+        {
+            // Get PNG data
+            byte[] imageBytes = value.EncodeToPNG();
+
+            // Convert PNG data to Base64 string
+            screenShotImage = Convert.ToBase64String(imageBytes);
+        }
+    }
 
     // Used for game
     [System.NonSerialized]

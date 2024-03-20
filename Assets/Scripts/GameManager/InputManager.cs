@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class InputManager : MonoBehaviour
 {
     public static InputManager Instance { get; private set; } 
-    public enum STATE { PREVIOUS, TITLE, CONTROL, STORY, LOADING, SAVE, LOAD }
+    public enum STATE { PREVIOUS, TITLE, CONTROL, STORY, EMPTY, LOADING, SAVE, LOAD, PAUSE }
     public STATE SaveOrLoad { get; private set; } // Used to check if it is save or load UI
 
     private IUIState currentUI; // UI using right now
@@ -33,13 +33,20 @@ public class InputManager : MonoBehaviour
     {
         // If endPrevious is false, save previous UI
         if (endPrevious)
+        {
             currentUI.EndUI();
+        }
         else
             savedUIs.Push(currentUI);
 
         switch (state)
         {
             case STATE.TITLE:
+                // When going back to title, exit every previous UIs
+                while (savedUIs.Count > 0)
+                {
+                    savedUIs.Pop().EndUI();
+                }
                 currentUI = TitleUIState.Instance;
                 break;
             case STATE.STORY:
@@ -49,7 +56,15 @@ public class InputManager : MonoBehaviour
                 currentUI = ControlUIState.Instance;
                 break;
             case STATE.LOADING:
+                // When loading, exit every previous UIs
+                while(savedUIs.Count > 0)
+                {
+                    savedUIs.Pop().EndUI();
+                }
                 currentUI = LoadingUIState.Instance;
+                break;
+            case STATE.EMPTY:
+                currentUI = EmptyUIState.Instance;
                 break;
             case STATE.SAVE:
                 SaveOrLoad = STATE.SAVE;
@@ -59,14 +74,15 @@ public class InputManager : MonoBehaviour
                 SaveOrLoad = STATE.LOAD;
                 currentUI = SaveLoadUIState.Instance;
                 break;
+            case STATE.PAUSE:
+                currentUI = PauseUIState.Instance;
+                break;
             case STATE.PREVIOUS:
                 if (savedUIs.Count > 0)
                     currentUI = savedUIs.Pop();
                 else
                     Debug.Log("Empty UI Stack");
-
-                // Previous state has already started, thus it doesn't have to be started again
-                return;
+                break;
         }
 
         currentUI.StartUI();

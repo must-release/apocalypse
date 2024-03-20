@@ -42,12 +42,17 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            DontDestroyOnLoad(FindObjectOfType<Canvas>().gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
+    }
+
+    // Prevent multiple audio listener or EventSystem
+    private void Start()
+    {
+        GameObject.Find("Main Camera").GetComponent<AudioListener>().enabled = true;
     }
 
 }

@@ -53,8 +53,8 @@ public class EventManager : MonoBehaviour
 	// Current event is over
 	public void EventOver()
 	{
-		// Check if there is next event
-		if(NextEvent != null)
+        // Check if there is next event
+        if (NextEvent != null)
 		{
 			PlayEvent(NextEvent);
 		}
@@ -63,7 +63,7 @@ public class EventManager : MonoBehaviour
 			// Reset event information
 			CurrentEvent = null;
 
-			// Show Control UI
+            // Show Control UI
             InputManager.Instance.ChangeState(InputManager.STATE.CONTROL, true);
         }
 	}
@@ -78,7 +78,9 @@ public class EventManager : MonoBehaviour
 	// Play InGame event
 	private void PlayInGameEvent()
 	{
-		Debug.Log("play in game event");
+        InputManager.Instance.ChangeState(InputManager.STATE.EMPTY, true); // Empty UI
+        Debug.Log("play in game event");
+		EventOver();
 	}
 
 	// Show Loading

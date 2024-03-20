@@ -6,8 +6,7 @@ public class ControlUIState : MonoBehaviour, IUIState
 {
     /****** Private fields ******/
     private string controlUIName = "Control UI";
-    private static Transform controlUI;
-
+    private Transform controlUI;
 
     /****** Single tone instance ******/
     public static ControlUIState Instance;
@@ -19,7 +18,7 @@ public class ControlUIState : MonoBehaviour, IUIState
             Instance = this;
 
             // Find Title UI object
-            controlUI = FindObjectOfType<Canvas>().transform.Find(controlUIName);
+            controlUI = transform.Find(controlUIName);
             if (controlUI == null)
             {
                 Debug.Log("Control UI Initialization Error");
@@ -46,7 +45,8 @@ public class ControlUIState : MonoBehaviour, IUIState
 
     public void Cancel()
     {
-
+        // Change to Pause UI
+        InputManager.Instance.ChangeState(InputManager.STATE.PAUSE, false);
     }
     public void UpdateUI() { return; }
     public void Attack() { return; }
