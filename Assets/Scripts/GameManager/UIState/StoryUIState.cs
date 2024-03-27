@@ -127,7 +127,7 @@ public class StoryUIState : MonoBehaviour, IUIState, IStoryInfo
     public void Cancel()
     {
         // Change to Pause UI
-        InputManager.Instance.ChangeState(InputManager.STATE.PAUSE, false);
+        UIManager.Instance.ChangeState(UIManager.STATE.PAUSE, false);
     }
 
     public void Move(float move) { return; }

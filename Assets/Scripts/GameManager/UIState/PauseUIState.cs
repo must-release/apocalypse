@@ -77,19 +77,19 @@ public class PauseUIState : MonoBehaviour, IUIState
     public void Cancel()
     {
         // Change to previous state
-        InputManager.Instance.ChangeState(InputManager.STATE.PREVIOUS, true);
+        UIManager.Instance.ChangeState(UIManager.STATE.PREVIOUS, true);
     }
 
     private void OnSaveButtonClick()
     {
         // Open Save UI
-        InputManager.Instance.ChangeState(InputManager.STATE.SAVE, false);
+        UIManager.Instance.ChangeState(UIManager.STATE.SAVE, false);
     }
 
     private void OnLoadButtonClick()
     {
         // Open Load UI
-        InputManager.Instance.ChangeState(InputManager.STATE.LOAD, false);
+        UIManager.Instance.ChangeState(UIManager.STATE.LOAD, false);
     }
 
     private void OnSettingsButtonClick()
@@ -100,7 +100,7 @@ public class PauseUIState : MonoBehaviour, IUIState
     // Go back to title scene
     private void OnTitleButtonClick()
     {
-        StageManager.Instance.ExitStage();
+        StageManager.Instance.GoTitle();
     }
 
     public void UpdateUI() { return; }

@@ -45,14 +45,14 @@ public class StageManager : MonoBehaviour
 	}
 
 	// Exit StageScene
-	public void ExitStage() { StartCoroutine(LoadTitleSceneAsync()); }
+	public void GoTitle() { StartCoroutine(LoadTitleSceneAsync()); }
     IEnumerator LoadTitleSceneAsync()
     {
 		IsStageReady = false;
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(titleSceneName);
 
-		// Play loading
-		InputManager.Instance.ChangeState(InputManager.STATE.LOADING, true);
+        // Play loading
+        UIManager.Instance.ChangeState(UIManager.STATE.LOADING, true);
 
         // wait until loading is complete
         while (!asyncLoad.isDone)
@@ -60,8 +60,8 @@ public class StageManager : MonoBehaviour
 			yield return null;
         }
 
-		// Show Title UI
-		InputManager.Instance.ChangeState(InputManager.STATE.TITLE, true);
+        // Show Title UI
+        UIManager.Instance.ChangeState(UIManager.STATE.TITLE, true);
     }
 
 

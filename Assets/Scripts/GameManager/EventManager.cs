@@ -64,21 +64,21 @@ public class EventManager : MonoBehaviour
 			CurrentEvent = null;
 
             // Show Control UI
-            InputManager.Instance.ChangeState(InputManager.STATE.CONTROL, true);
+            UIManager.Instance.ChangeState(UIManager.STATE.CONTROL, true);
         }
 	}
 
 	// Play story event
 	private void PlayStory()
 	{
-		InputManager.Instance.ChangeState(InputManager.STATE.STORY, true); // Change UI to Story mode
+        UIManager.Instance.ChangeState(UIManager.STATE.STORY, true); // Change UI to Story mode
 		DataManager.Instance.LoadStoryText(); // Load text of the current story event
 	}
 
 	// Play InGame event
 	private void PlayInGameEvent()
 	{
-        InputManager.Instance.ChangeState(InputManager.STATE.EMPTY, true); // Empty UI
+        UIManager.Instance.ChangeState(UIManager.STATE.EMPTY, true); // Empty UI
         Debug.Log("play in game event");
 		EventOver();
 	}
@@ -86,7 +86,7 @@ public class EventManager : MonoBehaviour
 	// Show Loading
 	private void ShowLoading()
 	{
-        InputManager.Instance.ChangeState(InputManager.STATE.LOADING, true); // Change UI to Loading mode
+        UIManager.Instance.ChangeState(UIManager.STATE.LOADING, true); // Change UI to Loading mode
 	}
 
 	// Auto Save current player data

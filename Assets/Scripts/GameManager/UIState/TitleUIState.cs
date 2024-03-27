@@ -78,7 +78,7 @@ public class TitleUIState : MonoBehaviour, IUIState
     // Load saved game
     private void OnLoadGameClick()
     {
-        InputManager.Instance.ChangeState(InputManager.STATE.LOAD, false);
+        UIManager.Instance.ChangeState(UIManager.STATE.LOAD, false);
     }
 
 	private void OnSettingsClick()

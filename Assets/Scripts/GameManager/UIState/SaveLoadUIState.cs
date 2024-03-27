@@ -77,7 +77,7 @@ public class SaveLoadUIState : MonoBehaviour, IUIState
         confirmButton.onClick.RemoveAllListeners();
 
         // Check if it is load or save
-        if (InputManager.Instance.SaveOrLoad == InputManager.STATE.SAVE)
+        if (UIManager.Instance.CurrentState == UIManager.STATE.SAVE)
         {
             confirmText.text = "Save Data?";
             labelText.text = "SAVE";
@@ -94,15 +94,19 @@ public class SaveLoadUIState : MonoBehaviour, IUIState
         dataList = DataManager.Instance.LoadAllUserData();
         LoadDataSlots();
 
-        // Active Title UI object
+        // Active SaveLoad UI object
         saveLoadUI.gameObject.SetActive(true);
     }
 
     // Exit Title UI state
     public void EndUI()
     {
-        // Inactive Title UI object
+        // Inactive SaveLoad UI object
         saveLoadUI.gameObject.SetActive(false);
+
+        // Reset UI objects & Info
+        currentPage = 1;
+        pageNumberText.text = currentPage + "/" + (DataManager.SLOT_NUM / slots.childCount);
     }
 
     // return to previous UI
@@ -115,7 +119,7 @@ public class SaveLoadUIState : MonoBehaviour, IUIState
             slotList[0].slotButton.Select();
         }
         else
-            InputManager.Instance.ChangeState(InputManager.STATE.PREVIOUS, true);
+            UIManager.Instance.ChangeState(UIManager.STATE.PREVIOUS, true);
     }
 
     // Load saved data of the selected slot
@@ -139,7 +143,7 @@ public class SaveLoadUIState : MonoBehaviour, IUIState
         // In case of console, select first button
         if (IUIState.isConsole)
         {
-            if(InputManager.Instance.SaveOrLoad == InputManager.STATE.SAVE && currentPage == 1)
+            if(UIManager.Instance.CurrentState == UIManager.STATE.SAVE && currentPage == 1)
             {
                 slotList[1].slotButton.Select();
             }
@@ -248,7 +252,7 @@ public class SaveLoadUIState : MonoBehaviour, IUIState
                 slotText.text = "AUTO";
 
                 // Can not save at auto save slot
-                if(InputManager.Instance.SaveOrLoad == InputManager.STATE.SAVE)
+                if(UIManager.Instance.CurrentState == UIManager.STATE.SAVE)
                 {
                     slotButton.interactable = false;
                 }
@@ -259,13 +263,14 @@ public class SaveLoadUIState : MonoBehaviour, IUIState
             }
             else
             {
+                slotButton.interactable = true;
                 slotText.text = "SLOT " + idx;
             }
         }
 
         private void OnSlotClick()
         {
-            if (slotData == null && InputManager.Instance.SaveOrLoad == InputManager.STATE.LOAD)
+            if (slotData == null && UIManager.Instance.CurrentState == UIManager.STATE.LOAD)
                 return;
             Instance.confirmPanel.gameObject.SetActive(true);
             Instance.selectedSlot = this;

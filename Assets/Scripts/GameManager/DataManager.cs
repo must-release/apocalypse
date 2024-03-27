@@ -108,7 +108,7 @@ public class DataManager : MonoBehaviour
         // Update Save UI
         if (slotNum > 0)
         {
-            InputManager.Instance.ChangeState(InputManager.STATE.SAVE, true);
+            UIManager.Instance.ChangeState(UIManager.STATE.SAVE, true);
         }
     }
 

@@ -46,7 +46,7 @@ public class ControlUIState : MonoBehaviour, IUIState
     public void Cancel()
     {
         // Change to Pause UI
-        InputManager.Instance.ChangeState(InputManager.STATE.PAUSE, false);
+        UIManager.Instance.ChangeState(UIManager.STATE.PAUSE, false);
     }
     public void UpdateUI() { return; }
     public void Attack() { return; }
