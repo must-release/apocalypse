@@ -69,6 +69,11 @@ public class LoadingUIState : MonoBehaviour, IUIState
         loadingUI.gameObject.SetActive(false);
     }
 
+    public UIManager.STATE GetState()
+    {
+        return UIManager.STATE.LOADING;
+    }
+
     public void Move(float move) { return; }
     public void Attack() { return; }
     public void Submit() { return; }

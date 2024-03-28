@@ -5,12 +5,11 @@ using System.Collections.Generic;
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
-    public enum STATE { PREVIOUS, TITLE, CONTROL, STORY, EMPTY, LOADING, SAVE, LOAD, PAUSE }
+    public enum STATE { TITLE, CONTROL, STORY, EMPTY, LOADING, SAVE, LOAD, PAUSE }
     public STATE CurrentState { get; private set; } // Used to check if it is save or load UI
 
     private IUIState currentUI; // UI using right now
     private Stack<IUIState> savedUIs; // UIs which will be used again
-    private Stack<STATE> savedStates; // States which will be used again 
 
     private void Awake()
     {
@@ -28,7 +27,6 @@ public class UIManager : MonoBehaviour
         currentUI.StartUI();
 
         savedUIs = new Stack<IUIState>();
-        savedStates = new Stack<STATE>();
     }
 
     // Change UI state.
@@ -42,10 +40,8 @@ public class UIManager : MonoBehaviour
         else
         {
             savedUIs.Push(currentUI);
-            savedStates.Push(CurrentState);
         }
 
-        CurrentState = state;
         switch (state)
         {
             case STATE.TITLE:
@@ -54,7 +50,6 @@ public class UIManager : MonoBehaviour
                 {
                     savedUIs.Pop().EndUI();
                 }
-                savedStates.Clear();
                 currentUI = TitleUIState.Instance;
                 break;
             case STATE.STORY:
@@ -69,7 +64,6 @@ public class UIManager : MonoBehaviour
                 {
                     savedUIs.Pop().EndUI();
                 }
-                savedStates.Clear();
                 currentUI = LoadingUIState.Instance;
                 break;
             case STATE.EMPTY:
@@ -84,18 +78,26 @@ public class UIManager : MonoBehaviour
             case STATE.PAUSE:
                 currentUI = PauseUIState.Instance;
                 break;
-            case STATE.PREVIOUS:
-                if (savedUIs.Count > 0)
-                {
-                    currentUI = savedUIs.Pop();
-                    CurrentState = savedStates.Pop();
-                }
-                else
-                    Debug.Log("Empty UI Stack");
-                break;
         }
 
+        CurrentState = state;
         currentUI.StartUI();
+    }
+
+    // Change to previous UI state
+    public void ChangeToPreviousState()
+    {
+        STATE nextState;
+
+        if (savedUIs.Count > 0)
+        {
+            nextState = savedUIs.Pop().GetState();
+            ChangeState(nextState, true);
+        }
+        else
+            Debug.Log("Empty UI Stack");
+
+        return;
     }
 
     private void Update()

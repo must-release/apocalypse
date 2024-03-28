@@ -86,6 +86,11 @@ public class TitleUIState : MonoBehaviour, IUIState
         Debug.Log("Settings");
     }
 
+    public UIManager.STATE GetState()
+    {
+        return UIManager.STATE.TITLE;
+    }
+
     public void UpdateUI() { return; }
     public void Move(float move) { return; }
     public void Attack() { return; }

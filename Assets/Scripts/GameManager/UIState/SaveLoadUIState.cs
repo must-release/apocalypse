@@ -17,6 +17,8 @@ public class SaveLoadUIState : MonoBehaviour, IUIState
     private string slotsName = "Slots";
     private string confirmPanelName = "Confirm Panel";
 
+    private UIManager.STATE myState;
+
     private Transform saveLoadUI;
     private TextMeshProUGUI labelText;
     private TextMeshProUGUI pageNumberText;
@@ -82,12 +84,14 @@ public class SaveLoadUIState : MonoBehaviour, IUIState
             confirmText.text = "Save Data?";
             labelText.text = "SAVE";
             confirmButton.onClick.AddListener(SaveAtSelectedSlot);
+            myState = UIManager.STATE.SAVE;
         }
         else
         {
             confirmText.text = "Load Data?";
             labelText.text = "LOAD";
             confirmButton.onClick.AddListener(LoadSavedData);
+            myState = UIManager.STATE.LOAD;
         }
 
         // Set Slot Info
@@ -119,7 +123,7 @@ public class SaveLoadUIState : MonoBehaviour, IUIState
             slotList[0].slotButton.Select();
         }
         else
-            UIManager.Instance.ChangeState(UIManager.STATE.PREVIOUS, true);
+            UIManager.Instance.ChangeToPreviousState();
     }
 
     // Load saved data of the selected slot
@@ -191,6 +195,11 @@ public class SaveLoadUIState : MonoBehaviour, IUIState
 
         // Updata data slots
         LoadDataSlots();
+    }
+
+    public UIManager.STATE GetState()
+    {
+        return myState;
     }
 
     public void UpdateUI() { return; }

@@ -6,6 +6,7 @@ public interface IUIState
     public void StartUI();
     public void UpdateUI();
     public void EndUI();
+    public UIManager.STATE GetState();
     public void Move(float move);
     public void Stop();
     public void Attack();

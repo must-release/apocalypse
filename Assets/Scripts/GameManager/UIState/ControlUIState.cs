@@ -48,6 +48,12 @@ public class ControlUIState : MonoBehaviour, IUIState
         // Change to Pause UI
         UIManager.Instance.ChangeState(UIManager.STATE.PAUSE, false);
     }
+
+    public UIManager.STATE GetState()
+    {
+        return UIManager.STATE.CONTROL;
+    }
+
     public void UpdateUI() { return; }
     public void Attack() { return; }
     public void Submit() { return; }

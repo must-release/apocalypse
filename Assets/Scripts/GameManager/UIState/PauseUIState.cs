@@ -77,7 +77,7 @@ public class PauseUIState : MonoBehaviour, IUIState
     public void Cancel()
     {
         // Change to previous state
-        UIManager.Instance.ChangeState(UIManager.STATE.PREVIOUS, true);
+        UIManager.Instance.ChangeToPreviousState();
     }
 
     private void OnSaveButtonClick()
@@ -101,6 +101,11 @@ public class PauseUIState : MonoBehaviour, IUIState
     private void OnTitleButtonClick()
     {
         StageManager.Instance.GoTitle();
+    }
+
+    public UIManager.STATE GetState()
+    {
+        return UIManager.STATE.PAUSE;
     }
 
     public void UpdateUI() { return; }

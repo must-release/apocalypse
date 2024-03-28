@@ -29,6 +29,12 @@ public class EmptyUIState : MonoBehaviour, IUIState
     public void Cancel()
     {
     }
+
+    public UIManager.STATE GetState()
+    {
+        return UIManager.STATE.EMPTY;
+    }
+
     public void UpdateUI() { return; }
     public void Attack() { return; }
     public void Submit() { return; }

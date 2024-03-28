@@ -130,6 +130,11 @@ public class StoryUIState : MonoBehaviour, IUIState, IStoryInfo
         UIManager.Instance.ChangeState(UIManager.STATE.PAUSE, false);
     }
 
+    public UIManager.STATE GetState()
+    {
+        return UIManager.STATE.STORY;
+    }
+
     public void Move(float move) { return; }
     public void Stop() { return; }
 }
