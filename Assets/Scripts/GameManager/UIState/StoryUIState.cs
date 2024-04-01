@@ -25,6 +25,7 @@ public class StoryUIState : MonoBehaviour, IUIState, IStoryInfo
             storyQueue = value;
 
             // When new story is loaded, start the script automatically
+            LastDialogueNum--; // Don't count first script
             NextScript();
         }
     }
@@ -83,17 +84,16 @@ public class StoryUIState : MonoBehaviour, IUIState, IStoryInfo
     }
 
     public void Attack() { NextScript(); }
-    public void Submit() { 
-        // Error when start new game with enter button
-        if(storyQueue != null)
-            NextScript(); 
-    }
+    public void Submit() { NextScript(); }
 
-    // Story Text is prepared, so start the story
+    // Read next story entry
     public void NextScript()
     {
+        // Check if storyQueue is ready
+        if (storyQueue == null) return;
+
         // Read all story
-        if(storyQueue.Count == 0)
+        if (storyQueue.Count == 0)
         {
             // Reset last dialogue number to 0
             GameManager.Instance.PlayerData.LastDialogueNumber = 0;

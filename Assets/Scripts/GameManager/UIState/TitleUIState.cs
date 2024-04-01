@@ -64,15 +64,21 @@ public class TitleUIState : MonoBehaviour, IUIState
     // Load most recent saved data
 	private void onContinueGameClick()
 	{
-        /* Load most recent saved Data */
+        // Load most recent saved Data
         DataManager.Instance.LoadContinueData();
+
+        // Start loading recent data
+        StageManager.Instance.LoadStage();
 	}
 
 	// Start new game
 	private void OnNewGameClick()
 	{
-        /* Create new game data */
-        DataManager.Instance.CreateUserData();
+        // Create new game data
+        DataManager.Instance.CreateNewGameData();
+
+        // Start loading new game
+        StageManager.Instance.LoadStage();
     }
 
     // Load saved game

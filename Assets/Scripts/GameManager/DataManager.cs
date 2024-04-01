@@ -25,8 +25,8 @@ public class DataManager : MonoBehaviour
 
     /******* Manage User Data ********/
 
-    // Create new game data and start loading stage
-    public void CreateUserData()
+    // Create new game data and set it to current data
+    public void CreateNewGameData()
     {
         string saveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm"); // Get current time
 
@@ -34,8 +34,8 @@ public class DataManager : MonoBehaviour
         UserData startData =
             new UserData(UserData.STAGE.TEST, 0, prologueEvent, 0, UserData.CHARACTER.HERO, "00:00", saveTime);
 
-        // Load new Game
-        SetGameLoadData(startData);
+        // Set current player data
+        GameManager.Instance.PlayerData = startData;
     }
 
     // Auto Save data. slot 0 is used for auto save
@@ -60,7 +60,7 @@ public class DataManager : MonoBehaviour
 
         // Set story dialogue number, which show last text again
         IStoryInfo storyInfo = StoryUIState.Instance;
-        data.LastDialogueNumber = storyInfo.LastDialogueNum - 1;
+        data.LastDialogueNumber = storyInfo.LastDialogueNum;
 
         // Capture Screenshot and save data
         StartCoroutine(CaptureScreenshotAndSave(data, slotNum));
@@ -72,43 +72,44 @@ public class DataManager : MonoBehaviour
         // Wait for a frame to end before taking a screenshot
         yield return new WaitForEndOfFrame();
 
-        // Create RenderTexture which has equal a equal with screen
-        RenderTexture renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
-        Texture2D screenShot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
-
-        // Set current rendered content to RenderTexture
-        RenderTexture.active = renderTexture;
-        Camera.main.targetTexture = renderTexture;
-        Camera.main.Render();
-
-        // Copy pixel info from RenderTexture to Texture2D
-        screenShot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
-        screenShot.Apply();
-
-        // Reset RenderTexture and Camera settings
-        Camera.main.targetTexture = null;
-        RenderTexture.active = null;
-        Destroy(renderTexture);
-
-        // Set screenshot image
-        data.ScreenShotImage = screenShot;
-        Destroy(screenShot);
-
-        // Calculate play time
-        data.PlayTime = CalculatePlayTime(data.PlayTime, data.SaveTime);
-
-        // Update save time
-        data.SaveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
-
-        // Save Json file
-        string path = Application.persistentDataPath + "/userData" + slotNum + ".json";
-        string json = JsonUtility.ToJson(data);
-        File.WriteAllText(path, json);
-
-        // Update Save UI
-        if (slotNum > 0)
+        /******* Capture Screenshot *********/
         {
-            UIManager.Instance.ChangeState(UIManager.STATE.SAVE, true);
+            // Create RenderTexture which has equal a equal with screen
+            RenderTexture renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
+            Texture2D screenShot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+
+            // Set current rendered content to RenderTexture
+            RenderTexture.active = renderTexture;
+            Camera.main.targetTexture = renderTexture;
+            Camera.main.Render();
+
+            // Copy pixel info from RenderTexture to Texture2D
+            screenShot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+            screenShot.Apply();
+
+            // Reset RenderTexture and Camera settings
+            Camera.main.targetTexture = null;
+            RenderTexture.active = null;
+            Destroy(renderTexture);
+
+            // Set screenshot image
+            data.ScreenShotImage = screenShot;
+            Destroy(screenShot);
+        }
+
+
+        /******* Save User Data *********/
+        {
+            // Calculate play time
+            data.PlayTime = CalculatePlayTime(data.PlayTime, data.SaveTime);
+
+            // Update save time
+            data.SaveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+
+            // Save Json file
+            string path = Application.persistentDataPath + "/userData" + slotNum + ".json";
+            string json = JsonUtility.ToJson(data);
+            File.WriteAllText(path, json);
         }
     }
 
@@ -145,7 +146,7 @@ public class DataManager : MonoBehaviour
     }
 
     // Load every user data
-    public List<UserData> LoadAllUserData()
+    public List<UserData> GetAllUserData()
     {
         List<UserData> allData = new List<UserData>();
 
@@ -170,7 +171,7 @@ public class DataManager : MonoBehaviour
     // Load most recent saved data and start loading stage
     public void LoadContinueData()
     {
-        List<UserData> allData = LoadAllUserData();
+        List<UserData> allData = GetAllUserData();
 
         // Parse string to DateTime by using DateTime.TryParseExact method
         // Use "yyyy-MM-dd HH:mm" format and CultureInfo.InvariantCulture
@@ -183,20 +184,9 @@ public class DataManager : MonoBehaviour
             })
             .FirstOrDefault();
 
-        // Load game
-        SetGameLoadData(mostRecent);
-    }
-
-    // Load game with given data
-    public void SetGameLoadData(UserData data)
-    {
         // Set current player data
-        GameManager.Instance.PlayerData = data;
-
-        // Start stage loading
-        StageManager.Instance.LoadStage();
+        GameManager.Instance.PlayerData = mostRecent;
     }
-
 
 
 
@@ -335,4 +325,3 @@ public class DataManager : MonoBehaviour
             StageManager.Instance.onPlayerLoadComplete(player);
     }
 }
-

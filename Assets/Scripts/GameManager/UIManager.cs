@@ -87,11 +87,9 @@ public class UIManager : MonoBehaviour
     // Change to previous UI state
     public void ChangeToPreviousState()
     {
-        STATE nextState;
-
         if (savedUIs.Count > 0)
         {
-            nextState = savedUIs.Pop().GetState();
+            STATE nextState = savedUIs.Pop().GetState();
             ChangeState(nextState, true);
         }
         else

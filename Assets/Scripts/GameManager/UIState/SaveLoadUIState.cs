@@ -95,8 +95,8 @@ public class SaveLoadUIState : MonoBehaviour, IUIState
         }
 
         // Set Slot Info
-        dataList = DataManager.Instance.LoadAllUserData();
-        LoadDataSlots();
+        dataList = DataManager.Instance.GetAllUserData();
+        SetDataSlots();
 
         // Active SaveLoad UI object
         saveLoadUI.gameObject.SetActive(true);
@@ -129,19 +129,22 @@ public class SaveLoadUIState : MonoBehaviour, IUIState
     // Load saved data of the selected slot
     private void LoadSavedData()
     {
-        DataManager.Instance.SetGameLoadData(selectedSlot.slotData);
+        // Set PlayerData and start loading stage
+        GameManager.Instance.PlayerData = selectedSlot.slotData;
+        StageManager.Instance.LoadStage();
+
         selectedSlot = null;
         Instance.confirmPanel.gameObject.SetActive(false);
     }
 
-    // Load user data to data slots
-    private void LoadDataSlots()
+    // Load user data and set to data slots
+    private void SetDataSlots()
     {
         int addNum = (currentPage - 1) * slots.childCount;
 
         for (int i = 0; i < slots.childCount; i++)
         {
-            slotList[i].setSlotInfo(dataList[i + addNum], i + addNum);
+            slotList[i].SetSlotInfo(dataList[i + addNum], i + addNum);
         }
 
         // In case of console, select first button
@@ -166,6 +169,9 @@ public class SaveLoadUIState : MonoBehaviour, IUIState
         selectedSlot = null;
         Instance.confirmPanel.gameObject.SetActive(false);
         slotList[0].slotButton.Select();
+
+        // Update Save UI
+        UIManager.Instance.ChangeState(UIManager.STATE.SAVE, true);
     }
 
     // On next page button click
@@ -180,7 +186,7 @@ public class SaveLoadUIState : MonoBehaviour, IUIState
         pageNumberText.text = currentPage + "/" + (DataManager.SLOT_NUM / slots.childCount);
 
         // Update data slots
-        LoadDataSlots();
+        SetDataSlots();
     }
 
     private void OnPreviousButtonClick()
@@ -194,7 +200,7 @@ public class SaveLoadUIState : MonoBehaviour, IUIState
         pageNumberText.text = currentPage + "/" + (DataManager.SLOT_NUM / slots.childCount);
 
         // Updata data slots
-        LoadDataSlots();
+        SetDataSlots();
     }
 
     public UIManager.STATE GetState()
@@ -231,7 +237,7 @@ public class SaveLoadUIState : MonoBehaviour, IUIState
             slotButton.onClick.AddListener(OnSlotClick);
         }
 
-        public void setSlotInfo(UserData data, int idx)
+        public void SetSlotInfo(UserData data, int idx)
         {
             if (data!=null)
             {
