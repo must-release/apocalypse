@@ -9,7 +9,7 @@ public class StoryUIState : MonoBehaviour, IUIState, IStoryInfo
 {
 
     /****** Private fields ******/
-    private string storyUIName = "Story Player";
+    private string storyUIName = "Story UI";
     private Transform storyUI;
     private List<StoryEntry> storyLog;
     private Queue<StoryEntry> storyQueue;

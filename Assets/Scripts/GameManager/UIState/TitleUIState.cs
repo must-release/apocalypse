@@ -74,6 +74,9 @@ public class TitleUIState : MonoBehaviour, IUIState
 	// Start new game
 	private void OnNewGameClick()
 	{
+        // Prevent wrong submit action
+        InputManager.Instance.SubmitLock = true;
+
         // Create new game data
         DataManager.Instance.CreateNewGameData();
 

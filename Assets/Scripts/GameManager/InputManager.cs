@@ -6,6 +6,8 @@ public class InputManager : MonoBehaviour
 {
     public static InputManager Instance { get; private set; }
 
+    public bool SubmitLock { get; set; } = false; // Lock submit button
+
     private void Awake()
     {
         if (Instance == null)
@@ -16,12 +18,19 @@ public class InputManager : MonoBehaviour
     private void Update()
     {
         /* UI Input */
-        if (InputHandler.Instance.Move != 0) { UIManager.Instance.Move(InputHandler.Instance.Move);}
+        if (InputHandler.Instance.Move != 0) { UIManager.Instance.Move(InputHandler.Instance.Move); }
         else { UIManager.Instance.Stop(); }
 
         if (InputHandler.Instance.Attack) { UIManager.Instance.Attack(); }
 
-        if (InputHandler.Instance.Submit) { UIManager.Instance.Submit(); }
+        if (InputHandler.Instance.Submit)
+        {
+            // When there is a lock, unlock it and skip the submit action
+            if (SubmitLock)
+                SubmitLock = false;
+            else
+                UIManager.Instance.Submit();
+        }
 
         if (InputHandler.Instance.Cancel) { UIManager.Instance.Cancel(); }
 

@@ -40,7 +40,7 @@ public class PauseUIState : MonoBehaviour, IUIState
             }
 
             // Add event listener to buttons
-            buttonList[0].onClick.AddListener(Cancel);
+            buttonList[0].onClick.AddListener(OnResumeButtonClick);
             buttonList[1].onClick.AddListener(OnSaveButtonClick);
             buttonList[2].onClick.AddListener(OnLoadButtonClick);
             buttonList[3].onClick.AddListener(OnSettingsButtonClick);
@@ -76,6 +76,15 @@ public class PauseUIState : MonoBehaviour, IUIState
 
     public void Cancel()
     {
+        // Change to previous state
+        UIManager.Instance.ChangeToPreviousState();
+    }
+
+    public void OnResumeButtonClick()
+    {
+        // Prevent wrong submit action
+        InputManager.Instance.SubmitLock = true;
+
         // Change to previous state
         UIManager.Instance.ChangeToPreviousState();
     }

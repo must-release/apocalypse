@@ -282,7 +282,7 @@ public class SaveLoadUIState : MonoBehaviour, IUIState
                 slotText.text = "SLOT " + idx;
             }
         }
-
+    
         private void OnSlotClick()
         {
             if (slotData == null && UIManager.Instance.CurrentState == UIManager.STATE.LOAD)
