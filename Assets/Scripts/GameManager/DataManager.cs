@@ -9,7 +9,6 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
-using UnityEditor;
 
 public class DataManager : MonoBehaviour
 {
@@ -59,8 +58,7 @@ public class DataManager : MonoBehaviour
         data.StartingEvent = loadingEvent;
 
         // Set story dialogue number, which show last text again
-        IStoryInfo storyInfo = StoryUIState.Instance;
-        data.LastDialogueNumber = storyInfo.LastDialogueNum;
+        data.ReadDialogueCount = StoryManager.Instance.ReadDialogueCount;
 
         // Capture Screenshot and save data
         StartCoroutine(CaptureScreenshotAndSave(data, slotNum));
@@ -110,6 +108,12 @@ public class DataManager : MonoBehaviour
             string path = Application.persistentDataPath + "/userData" + slotNum + ".json";
             string json = JsonUtility.ToJson(data);
             File.WriteAllText(path, json);
+        }
+
+        // if it's not autosave, refresh UI
+        if(slotNum != 0)
+        {
+            UIManager.Instance.RefreshState();
         }
     }
 
@@ -195,8 +199,7 @@ public class DataManager : MonoBehaviour
     // Start loading text of the current story event which player is having 
     public void LoadStoryText()
     {
-        StoryEvent storyEvent = (StoryEvent)EventManager.Instance.CurrentEvent;
-        string story = "STORY_" + storyEvent.stage.ToString() + '_' + storyEvent.storyNum;
+        string story = EventManager.Instance.CurrentEvent.GetEventInfo<string>();
         Addressables.LoadAssetAsync<TextAsset>(story).Completed += OnStoryLoadComplete;
     }
 
@@ -213,10 +216,8 @@ public class DataManager : MonoBehaviour
         string jsonContent = story.Result.text;
         StoryEntries scriptEntries = JsonConvert.DeserializeObject<StoryEntries>(jsonContent, settings);
 
-        // Set story which starts at the recent point to the StorUI
-        IStoryInfo storyInfo = StoryUIState.Instance;
-        int lastDlg = GameManager.Instance.PlayerData.LastDialogueNumber;
-        storyInfo.StoryQueue = new Queue<StoryEntry>(scriptEntries.entries.Skip(lastDlg));
+        // Set story info
+        StoryManager.Instance.SetStoryInfo(scriptEntries.entries);
     }
 
     // Class for converting story json file

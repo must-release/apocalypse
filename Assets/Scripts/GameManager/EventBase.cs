@@ -1,10 +1,11 @@
 ﻿using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class EventBase : ScriptableObject
 {
-    public enum TYPE { STORY, TUTORIAL, IN_GAME, MAP_CHANGE, LOADING, AUTO_SAVE };
+    public enum TYPE { STORY, TUTORIAL, IN_GAME, MAP_CHANGE, LOADING, AUTO_SAVE, UI_CHANGE };
 
     /* Event info which is used when playing game */
     [HideInInspector]
@@ -15,12 +16,16 @@ public class EventBase : ScriptableObject
 
 
     /* Event info which is used when saving data */
-    [SerializeField]
+    [SerializeField, HideInInspector]
     private string nextEventAssemblyQualifiedName; 
-    [SerializeField]
+    [SerializeField, HideInInspector]
     private string nextEventdata;
 
-
+    // Return important info of the event
+    public virtual T GetEventInfo<T>()
+    {
+        return default;
+    }
 
     // Save flawless info of the nextEvent
     public void SaveNextEventInfo()

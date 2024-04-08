@@ -111,6 +111,7 @@ public class SaveLoadUIState : MonoBehaviour, IUIState
         // Reset UI objects & Info
         currentPage = 1;
         pageNumberText.text = currentPage + "/" + (DataManager.SLOT_NUM / slots.childCount);
+        previousButton.gameObject.SetActive(false);
     }
 
     // return to previous UI
@@ -171,7 +172,7 @@ public class SaveLoadUIState : MonoBehaviour, IUIState
         slotList[0].slotButton.Select();
 
         // Update Save UI
-        UIManager.Instance.ChangeState(UIManager.STATE.SAVE, true);
+        StartUI();
     }
 
     // On next page button click

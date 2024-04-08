@@ -2,35 +2,27 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 /* Part of InputManager which manages Story UI logic */
 
-public class StoryUIState : MonoBehaviour, IUIState, IStoryInfo
+public class StoryUIState : MonoBehaviour, IUIState, StoryObserver
 {
 
     /****** Private fields ******/
     private string storyUIName = "Story UI";
+    private string characterName = "Character";
+    private string dialogueBoxName = "Dialogue Box";
+    private string nameTextName = "Name Text";
+    private string dialogueTextName = "Dialogue Text";
+    private string choicePanelName = "Choice Panel";
     private Transform storyUI;
-    private List<StoryEntry> storyLog;
-    private Queue<StoryEntry> storyQueue;
-
-
-
-    /****** Properties ******/
-    public Queue<StoryEntry> StoryQueue
-    {
-        get { return storyQueue; }
-        set
-        {
-            storyQueue = value;
-
-            // When new story is loaded, start the script automatically
-            LastDialogueNum--; // Don't count first script
-            NextScript();
-        }
-    }
-    public int LastDialogueNum { get; set; } = 0;
-
+    private GameObject character;
+    private TextMeshProUGUI nameText;
+    private TextMeshProUGUI dialogueText;
+    private Transform choicePanel;
+    private List<ChoiceOption> choiceOptionList;
+    public float textSpeed = 0.1f; // Speed of the dialogue text
 
 
     /****** Single tone instance ******/
@@ -49,10 +41,27 @@ public class StoryUIState : MonoBehaviour, IUIState, IStoryInfo
                 Debug.Log("Story UI Initialization Error");
                 return;
             }
+            character = storyUI.Find(characterName).gameObject;
+            nameText = storyUI.Find(dialogueBoxName).Find(nameTextName).GetComponent<TextMeshProUGUI>();
+            dialogueText = storyUI.Find(dialogueBoxName).Find(dialogueTextName).GetComponent<TextMeshProUGUI>();
+            choicePanel = storyUI.Find(choicePanelName);
+            choiceOptionList = new List<ChoiceOption>();
+            for(int i = 0; i < choicePanel.childCount; i++)
+            {
+                choiceOptionList.Add(new ChoiceOption(choicePanel.GetChild(i)));
+            }
         }
     }
 
-    /****** Methods ******/
+    public void Start()
+    {
+        // Add this object as an observer of the story manager
+        StoryManager.Instance.AddObserver(this);
+    }
+
+
+
+    /****** UI Methods ******/
 
     // Enter Story UI state
     public void StartUI()
@@ -72,10 +81,7 @@ public class StoryUIState : MonoBehaviour, IUIState, IStoryInfo
 
     // Exit Story UI state
     public void EndUI()
-	{
-        // reset storyQueue
-        storyQueue = null;
-
+    {
         // Enable stage objects
         StageManager.Instance.SetStageObjectsActive(true);
 
@@ -83,45 +89,9 @@ public class StoryUIState : MonoBehaviour, IUIState, IStoryInfo
         storyUI.gameObject.SetActive(false);
     }
 
-    public void Attack() { NextScript(); }
-    public void Submit() { NextScript(); }
+    public void Attack() { PlayNextScript(); }
+    public void Submit() { PlayNextScript(); }
 
-    // Read next story entry
-    public void NextScript()
-    {
-        // Check if storyQueue is ready
-        if (storyQueue == null) return;
-
-        // Read all story
-        if (storyQueue.Count == 0)
-        {
-            // Reset last dialogue number to 0
-            GameManager.Instance.PlayerData.LastDialogueNumber = 0;
-            LastDialogueNum = 0;
-
-            EventManager.Instance.EventOver();
-            return;
-        }
-
-        StoryEntry entry = storyQueue.Dequeue();
-        LastDialogueNum++;
-
-        if (entry is Dialogue dialogue)
-        {
-            Debug.Log($"Dialogue: Character: {dialogue.character}, Text: {dialogue.text}, Branch ID: {dialogue.branchId}");
-        }
-        else if (entry is Effect effect)
-        {
-            Debug.Log($"Effect: Action: {effect.action}, Duration: {effect.duration}");
-        }
-        else if (entry is Choice choice)
-        {
-            foreach (var option in choice.options)
-            {
-                Debug.Log($"Choice: Option Text: {option.text}, Branch ID: {option.branchId}");
-            }
-        }
-    }
 
     // Pause game and show Pause UI
     public void Cancel()
@@ -137,4 +107,132 @@ public class StoryUIState : MonoBehaviour, IUIState, IStoryInfo
 
     public void Move(float move) { return; }
     public void Stop() { return; }
+
+
+
+
+    /******* Story Player Methods *******/
+
+    // Show first story script When new story is loaded
+    public void StoryUpdated()
+    {
+        StoryEntry entry = StoryManager.Instance.GetNextEntry();
+        if (entry == null)
+        {
+            Debug.Log("Story Load error");
+            return;
+        }
+        ShowStoryEntry(entry);
+    }
+
+    // Play next script on the screen
+    public void PlayNextScript()
+    {
+        StoryEntry entry = StoryManager.Instance.GetNextEntry();
+        if (entry == null)
+        {
+            return;
+        }
+        StoryManager.Instance.ReadDialogueCount++;
+        ShowStoryEntry(entry);
+    }
+
+    // Show story entry on the screen
+    public void ShowStoryEntry(StoryEntry entry)
+    {
+        if (entry is Dialogue dialogue)
+        {
+            ShowDialogue(dialogue);
+        }
+        else if (entry is Choice choice)
+        {
+            ShowChoice(choice);
+        }
+        else if (entry is Effect effect)
+        {
+            PlayEffect(effect);
+            Debug.Log($"Effect: Action: {effect.action}, Duration: {effect.duration}");
+        }
+    }
+
+
+    /******* Show dialogue on the screen ********/
+
+    public void ShowDialogue(Dialogue dialogue)
+    {
+        if(dialogue.branchId == "common")
+        {
+            StoryManager.Instance.CurrentStoryBranch = "common";
+        }
+        else if(dialogue.branchId != StoryManager.Instance.CurrentStoryBranch)
+        {
+            // Skip dialogue of the different branch, and play next script
+            PlayNextScript();
+        }
+
+        nameText.text = dialogue.character;
+        StartCoroutine(TypeSentece(dialogue.text));
+    }
+
+    public IEnumerator TypeSentece(string sentence)
+    {
+        dialogueText.text = ""; // Initialize Text
+        foreach (char letter in sentence.ToCharArray())
+        {
+            dialogueText.text += letter; // Add letters one by one
+            yield return new WaitForSeconds(textSpeed); // Wait before next letter
+        }
+    }
+
+
+    /****** Show Choice UI on the screen ******/
+
+    // class for choice option
+    class ChoiceOption
+    {
+        Transform optionObject;
+        Button optionButton;
+        TextMeshProUGUI optionText;
+        string branchId;
+
+        public ChoiceOption(Transform optionObject)
+        {
+            this.optionObject = optionObject;
+            optionButton = optionObject.GetComponent<Button>();
+            optionButton.onClick.AddListener(OnOptionClick);
+            optionText = optionObject.GetChild(0).GetComponent<TextMeshProUGUI>();
+        }
+
+        // Set option info
+        public void SetOption(Option option)
+        {
+            optionText.text = option.text;
+            branchId = option.branchId;
+        }
+
+        public void OnOptionClick()
+        {
+            Instance.choicePanel.gameObject.SetActive(false);
+            StoryManager.Instance.CurrentStoryBranch = branchId; // Change current branchId according to the selected option
+        }
+    }
+
+    public void ShowChoice(Choice choice)
+    {
+        choicePanel.gameObject.SetActive(true);
+
+        for(int i = 0; i<choice.options.Count; i++)
+        {
+            choiceOptionList[i].SetOption(choice.options[i]);
+        }
+    }
+
+
+
+    /******** Play screen effect ********/
+    public void PlayEffect(Effect effect)
+    {
+
+    }
+
 }

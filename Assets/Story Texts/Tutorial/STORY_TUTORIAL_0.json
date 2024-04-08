@@ -1,7 +1,7 @@
 ﻿{
-    "entries":
-    [
+    "entries": [
         {
+            "branchId": "common",
             "type": "dialogue",
             "character": "NPC 이름",
             "text": "안녕하세요, 모험가님."
@@ -35,6 +35,12 @@
             "type": "dialogue",
             "character": "플레이어",
             "text": "지금은 조금 바쁘네요."
+        },
+        {
+            "branchId": "common",
+            "type": "dialogue",
+            "character": "NPC 이름",
+            "text": "네."
         }
     ]
 }

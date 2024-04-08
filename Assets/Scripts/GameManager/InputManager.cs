@@ -7,6 +7,7 @@ public class InputManager : MonoBehaviour
     public static InputManager Instance { get; private set; }
 
     public bool SubmitLock { get; set; } = false; // Lock submit button
+    public bool AttackLock { get; set; } = false; // Lock attack button
 
     private void Awake()
     {
@@ -21,7 +22,10 @@ public class InputManager : MonoBehaviour
         if (InputHandler.Instance.Move != 0) { UIManager.Instance.Move(InputHandler.Instance.Move); }
         else { UIManager.Instance.Stop(); }
 
-        if (InputHandler.Instance.Attack) { UIManager.Instance.Attack(); }
+        if (InputHandler.Instance.Attack)
+        {
+            UIManager.Instance.Attack();
+        }
 
         if (InputHandler.Instance.Submit)
         {

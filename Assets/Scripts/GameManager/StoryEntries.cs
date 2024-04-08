@@ -41,10 +41,3 @@ public class StoryEntries
 {
     public List<StoryEntry> entries;
 }
-
-// Used to load story info
-public interface IStoryInfo
-{
-    public Queue<StoryEntry> StoryQueue { get; set; }
-    public int LastDialogueNum { get; set; }
-}

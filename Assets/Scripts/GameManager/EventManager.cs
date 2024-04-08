@@ -47,6 +47,9 @@ public class EventManager : MonoBehaviour
 			case EventBase.TYPE.AUTO_SAVE:
 				AutoSave();
 				break;
+			case EventBase.TYPE.UI_CHANGE:
+				ChangeUI();
+				break;
 		}
 	}
 
@@ -62,9 +65,6 @@ public class EventManager : MonoBehaviour
 		{
 			// Reset event information
 			CurrentEvent = null;
-
-            // Show Control UI
-            UIManager.Instance.ChangeState(UIManager.STATE.CONTROL, true);
         }
 	}
 
@@ -96,6 +96,12 @@ public class EventManager : MonoBehaviour
 		EventOver();
 	}
 
+	// Change UI state
+	private void ChangeUI()
+	{
+		UIManager.STATE ui = CurrentEvent.GetEventInfo<UIManager.STATE>();
+		UIManager.Instance.ChangeState(ui, true);
+	}
 
 }
 

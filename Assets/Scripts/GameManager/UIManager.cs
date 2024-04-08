@@ -98,6 +98,12 @@ public class UIManager : MonoBehaviour
         return;
     }
 
+    // Refresh current UI
+    public void RefreshState()
+    {
+        currentUI.StartUI();
+    }
+
     private void Update()
     {
         currentUI.UpdateUI();

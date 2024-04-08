@@ -82,8 +82,9 @@ public class PauseUIState : MonoBehaviour, IUIState
 
     public void OnResumeButtonClick()
     {
-        // Prevent wrong submit action
-        InputManager.Instance.SubmitLock = true;
+        // Prevent wrong submit action. Only in console
+        if(IUIState.isConsole)
+            InputManager.Instance.SubmitLock = true;
 
         // Change to previous state
         UIManager.Instance.ChangeToPreviousState();

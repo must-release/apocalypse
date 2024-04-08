@@ -19,8 +19,8 @@ public class UserData : ISerializationCallbackReceiver
     public int CurrentMap { get { return currentMap; } set { currentMap = value; } }
 
     [SerializeField]
-    private int lastDialogueNumber;
-    public int LastDialogueNumber { get { return lastDialogueNumber; } set { lastDialogueNumber = value; } }
+    private int readDialogueCount;
+    public int ReadDialogueCount { get { return readDialogueCount; } set { readDialogueCount = value; } }
 
     private int lastCharacter;
     public CHARACTER LastCharacter { get { return (CHARACTER)lastCharacter; } set { lastCharacter = (int)value; } }
@@ -75,12 +75,12 @@ public class UserData : ISerializationCallbackReceiver
     private string startingEventData;
 
 
-    public UserData(STAGE curStage, int curMap, EventBase startingEvent, int lastDlg, CHARACTER lastChar, string playTime, string saveTime)
+    public UserData(STAGE curStage, int curMap, EventBase startingEvent, int readDlg, CHARACTER lastChar, string playTime, string saveTime)
     {
         CurrentStage = curStage;
         CurrentMap = curMap;
         StartingEvent = startingEvent;
-        LastDialogueNumber = lastDlg;
+        readDialogueCount = readDlg;
         LastCharacter = lastChar;
         PlayTime = playTime;
         SaveTime = saveTime;
@@ -88,7 +88,7 @@ public class UserData : ISerializationCallbackReceiver
 
     public UserData Copy()
     {
-        return new UserData(CurrentStage, CurrentMap, StartingEvent, LastDialogueNumber, LastCharacter, PlayTime, SaveTime);
+        return new UserData(CurrentStage, CurrentMap, StartingEvent, readDialogueCount, LastCharacter, PlayTime, SaveTime);
     }
 
     // Save info of the startingEvent
