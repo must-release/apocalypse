@@ -1,7 +1,7 @@
 ﻿using System;
 public interface IUIState
 {
-    public static bool isConsole = true;
+    public static bool isConsole = false;
 
     public void StartUI();
     public void UpdateUI();

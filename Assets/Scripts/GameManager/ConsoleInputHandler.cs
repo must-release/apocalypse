@@ -1,26 +1,25 @@
+﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+using Unity.VisualScripting;
 
-public class InputHandler : MonoBehaviour
+public class ConsoleInputHandler : MonoBehaviour, InputHandler
 {
-    public static InputHandler Instance { get; private set; }
-
     public string moveAxisName = "Horizontal";
     public string attackButtonName = "Fire1";
     public string submitButtonName = "Submit";
     public string cancelButtonName = "Cancel";
 
-    public float Move { get; private set; }
-    public bool Attack { get; private set; }
-    public bool Submit { get; private set; }
-    public bool Cancel { get; private set; }
+    public float Move { get; set; }
+    public bool Attack { get; set; }
+    public bool Submit { get; set; }
+    public bool Cancel { get; set; }
 
-    private void Awake()
+    public void Awake()
     {
-        if (Instance == null)
-            Instance = this;
+        if (InputHandler.Instance == null && IUIState.isConsole)
+        {
+            InputHandler.Instance = this;
+        }
     }
 
     private void Update()
@@ -31,3 +30,4 @@ public class InputHandler : MonoBehaviour
         Cancel = Input.GetButtonDown(cancelButtonName);
     }
 }
+

@@ -64,6 +64,10 @@ public class TitleUIState : MonoBehaviour, IUIState
     // Load most recent saved data
 	private void onContinueGameClick()
 	{
+        // Prevent wrong submit action in console
+        if (IUIState.isConsole)
+            InputManager.Instance.SubmitLock = true;
+
         // Load most recent saved Data
         DataManager.Instance.LoadContinueData();
 
@@ -74,8 +78,10 @@ public class TitleUIState : MonoBehaviour, IUIState
 	// Start new game
 	private void OnNewGameClick()
 	{
-        // Prevent wrong submit action
-        InputManager.Instance.SubmitLock = true;
+
+        // Prevent wrong submit action in console
+        if(IUIState.isConsole)
+            InputManager.Instance.SubmitLock = true;
 
         // Create new game data
         DataManager.Instance.CreateNewGameData();

@@ -60,7 +60,6 @@ public class StoryUIState : MonoBehaviour, IUIState, StoryObserver
     }
 
 
-
     /****** UI Methods ******/
 
     // Enter Story UI state
@@ -89,8 +88,69 @@ public class StoryUIState : MonoBehaviour, IUIState, StoryObserver
         storyUI.gameObject.SetActive(false);
     }
 
+    // Show first story script When new story is loaded
+    public void StoryUpdated()
+    {
+        StoryEntry entry = StoryManager.Instance.GetNextEntry();
+        if (entry == null)
+        {
+            Debug.Log("Story initial load error");
+            return;
+        }
+        ShowStoryEntry(entry);
+    }
+
     public void Attack() { PlayNextScript(); }
     public void Submit() { PlayNextScript(); }
+
+
+    // Play next script on the screen
+    public void PlayNextScript()
+    {
+        // If StoryPlayer is now playing certain entry
+        if(StoryPlayer.Instance.PlayingEntries.Count > 0)
+        {
+            // Complete playing that story entry right away
+            StoryPlayer.Instance.CompletePlaying();
+            return;
+        }
+
+        // Check if there is available entry
+        StoryEntry entry = StoryManager.Instance.GetNextEntry();
+        if (entry == null)
+        {
+            return;
+        }
+
+        // Increase read count and show entry on the screen
+        StoryManager.Instance.ReadDialogueCount++;
+        ShowStoryEntry(entry);
+    }
+
+    // Show story entry on the screen
+    public void ShowStoryEntry(StoryEntry entry)
+    {
+        if (entry is Dialogue dialogue)
+        {
+            if(!StoryPlayer.Instance.ShowDialogue(dialogue, nameText, dialogueText))
+            {
+                PlayNextScript();
+            }
+        }
+        else if (entry is Choice choice)
+        {
+            ShowChoice(choice);
+        }
+        else if (entry is Effect effect)
+        {
+            StoryPlayer.Instance.PlayEffect(effect);
+            Debug.Log($"Effect: Action: {effect.action}, Duration: {effect.duration}");
+        }
+        else
+        {
+            Debug.Log("story entry error: no such entry");
+        }
+    }
 
 
     // Pause game and show Pause UI
@@ -108,81 +168,6 @@ public class StoryUIState : MonoBehaviour, IUIState, StoryObserver
     public void Move(float move) { return; }
     public void Stop() { return; }
 
-
-
-
-    /******* Story Player Methods *******/
-
-    // Show first story script When new story is loaded
-    public void StoryUpdated()
-    {
-        StoryEntry entry = StoryManager.Instance.GetNextEntry();
-        if (entry == null)
-        {
-            Debug.Log("Story Load error");
-            return;
-        }
-        ShowStoryEntry(entry);
-    }
-
-    // Play next script on the screen
-    public void PlayNextScript()
-    {
-        StoryEntry entry = StoryManager.Instance.GetNextEntry();
-        if (entry == null)
-        {
-            return;
-        }
-        StoryManager.Instance.ReadDialogueCount++;
-        ShowStoryEntry(entry);
-    }
-
-    // Show story entry on the screen
-    public void ShowStoryEntry(StoryEntry entry)
-    {
-        if (entry is Dialogue dialogue)
-        {
-            ShowDialogue(dialogue);
-        }
-        else if (entry is Choice choice)
-        {
-            ShowChoice(choice);
-        }
-        else if (entry is Effect effect)
-        {
-            PlayEffect(effect);
-            Debug.Log($"Effect: Action: {effect.action}, Duration: {effect.duration}");
-        }
-    }
-
-
-    /******* Show dialogue on the screen ********/
-
-    public void ShowDialogue(Dialogue dialogue)
-    {
-        if(dialogue.branchId == "common")
-        {
-            StoryManager.Instance.CurrentStoryBranch = "common";
-        }
-        else if(dialogue.branchId != StoryManager.Instance.CurrentStoryBranch)
-        {
-            // Skip dialogue of the different branch, and play next script
-            PlayNextScript();
-        }
-
-        nameText.text = dialogue.character;
-        StartCoroutine(TypeSentece(dialogue.text));
-    }
-
-    public IEnumerator TypeSentece(string sentence)
-    {
-        dialogueText.text = ""; // Initialize Text
-        foreach (char letter in sentence.ToCharArray())
-        {
-            dialogueText.text += letter; // Add letters one by one
-            yield return new WaitForSeconds(textSpeed); // Wait before next letter
-        }
-    }
 
 
     /****** Show Choice UI on the screen ******/
@@ -208,15 +193,29 @@ public class StoryUIState : MonoBehaviour, IUIState, StoryObserver
         {
             optionText.text = option.text;
             branchId = option.branchId;
+            optionObject.gameObject.SetActive(true);
         }
 
+        // Inactive button object
+        public void SetButtonInactive()
+        {
+            optionObject.gameObject.SetActive(false);
+        }
+
+        // Inactive all option buttons and set current story branch according to the branchId of the option
         public void OnOptionClick()
         {
+            for (int i = 0; i < Instance.choiceOptionList.Count; i++)
+            {
+                Instance.choiceOptionList[i].SetButtonInactive();
+            }
             Instance.choicePanel.gameObject.SetActive(false);
             StoryManager.Instance.CurrentStoryBranch = branchId; // Change current branchId according to the selected option
+            Instance.PlayNextScript();
         }
     }
 
+    // Show Choice panel on the screen
     public void ShowChoice(Choice choice)
     {
         choicePanel.gameObject.SetActive(true);
@@ -225,14 +224,6 @@ public class StoryUIState : MonoBehaviour, IUIState, StoryObserver
         {
             choiceOptionList[i].SetOption(choice.options[i]);
         }
-    }
-
-
-
-    /******** Play screen effect ********/
-    public void PlayEffect(Effect effect)
-    {
-
     }
 
 }

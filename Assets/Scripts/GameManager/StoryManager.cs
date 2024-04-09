@@ -57,18 +57,6 @@ public class StoryManager : MonoBehaviour
             return null;
         }
     }
-
-    // Play next script on the screen
-    public void PlayNextScript()
-    {
-        StoryEntry entry = GetNextEntry();
-        if (entry == null)
-        {
-            return;
-        }
-        ReadDialogueCount++;
-        StoryPlayer.Instance.ShowStoryEntry(entry);
-    }
 }
 
 public interface StoryObserver

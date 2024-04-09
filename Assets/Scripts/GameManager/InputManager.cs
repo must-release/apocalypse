@@ -16,6 +16,8 @@ public class InputManager : MonoBehaviour
             Instance = this;
         }
     }
+
+
     private void Update()
     {
         /* UI Input */
@@ -25,6 +27,7 @@ public class InputManager : MonoBehaviour
         if (InputHandler.Instance.Attack)
         {
             UIManager.Instance.Attack();
+            InputHandler.Instance.Attack = false; // Reset Attack after handling
         }
 
         if (InputHandler.Instance.Submit)
@@ -47,3 +50,12 @@ public class InputManager : MonoBehaviour
     }
 }
 
+public interface InputHandler
+{
+    public static InputHandler Instance { get; protected set; }
+
+    public float Move { get; set; }
+    public bool Attack { get; set; }
+    public bool Submit { get; set; }
+    public bool Cancel { get; set; }
+}
