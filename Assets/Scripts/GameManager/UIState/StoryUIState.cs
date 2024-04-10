@@ -123,7 +123,7 @@ public class StoryUIState : MonoBehaviour, IUIState, StoryObserver
         }
 
         // Increase read count and show entry on the screen
-        StoryManager.Instance.ReadDialogueCount++;
+        StoryManager.Instance.ReadEntryCount++;
         ShowStoryEntry(entry);
     }
 
@@ -192,7 +192,7 @@ public class StoryUIState : MonoBehaviour, IUIState, StoryObserver
         public void SetOption(Option option)
         {
             optionText.text = option.text;
-            branchId = option.branchId;
+            branchId = option.routeId;
             optionObject.gameObject.SetActive(true);
         }
 

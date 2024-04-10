@@ -31,7 +31,7 @@ public class DataManager : MonoBehaviour
 
         // Initialize player data
         UserData startData =
-            new UserData(UserData.STAGE.TEST, 0, prologueEvent, 0, UserData.CHARACTER.HERO, "00:00", saveTime);
+            new UserData(UserData.STAGE.TEST, 0, prologueEvent, 0, 0, UserData.CHARACTER.HERO, "00:00", saveTime);
 
         // Set current player data
         GameManager.Instance.PlayerData = startData;
@@ -57,8 +57,9 @@ public class DataManager : MonoBehaviour
         UserData data = GameManager.Instance.PlayerData.Copy();
         data.StartingEvent = loadingEvent;
 
-        // Set story dialogue number, which show last text again
-        data.ReadDialogueCount = StoryManager.Instance.ReadDialogueCount;
+        // Set story dialogue number, which shows last text again
+        data.ReadBlockCount = StoryManager.Instance.ReadBlockCount;
+        data.ReadEntryCount = StoryManager.Instance.ReadEntryCount;
 
         // Capture Screenshot and save data
         StartCoroutine(CaptureScreenshotAndSave(data, slotNum));
@@ -214,10 +215,10 @@ public class DataManager : MonoBehaviour
 
         // Convert Json file to StoryEntries object
         string jsonContent = story.Result.text;
-        StoryEntries scriptEntries = JsonConvert.DeserializeObject<StoryEntries>(jsonContent, settings);
+        StoryBlocks storyBlocks = JsonConvert.DeserializeObject<StoryBlocks>(jsonContent, settings);
 
         // Set story info
-        StoryManager.Instance.SetStoryInfo(scriptEntries.entries);
+        StoryManager.Instance.SetStoryInfo(storyBlocks.blocks);
     }
 
     // Class for converting story json file
@@ -230,24 +231,28 @@ public class DataManager : MonoBehaviour
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            JObject item = JObject.Load(reader);
-            switch (item["type"].Value<string>())
+            JObject jo = JObject.Load(reader);
+            switch (jo["type"].Value<string>())
             {
                 case "dialogue":
-                    return item.ToObject<Dialogue>(serializer);
+                    return jo.ToObject<Dialogue>(serializer);
                 case "effect":
-                    return item.ToObject<Effect>(serializer);
+                    return jo.ToObject<Effect>(serializer);
                 case "choice":
-                    return item.ToObject<Choice>(serializer);
+                    return jo.ToObject<Choice>(serializer);
                 default:
-                    throw new NotImplementedException($"Unrecognized type: {item["type"].Value<string>()}");
+                    throw new Exception("Unknown type");
             }
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            // Serialize back if necessary. You might not need this if you only deserialize.
             throw new NotImplementedException();
+        }
+
+        public override bool CanWrite
+        {
+            get { return false; }
         }
     }
 

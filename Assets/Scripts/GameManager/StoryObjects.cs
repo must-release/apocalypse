@@ -11,7 +11,6 @@ public class StoryEntry
 [System.Serializable]
 public class Dialogue : StoryEntry
 {
-    public string branchId; // For story branch
     public string character;
     public string text;
 }
@@ -33,11 +32,18 @@ public class Choice : StoryEntry
 public class Option
 {
     public string text;
-    public string branchId;
+    public string routeId;
 }
 
 [System.Serializable]
-public class StoryEntries
+public class StoryBlock
 {
+    public string branchId;
     public List<StoryEntry> entries;
+}
+
+[System.Serializable]
+public class StoryBlocks
+{
+    public List<StoryBlock> blocks;
 }

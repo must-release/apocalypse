@@ -7,9 +7,11 @@ public class StoryManager : MonoBehaviour
 	public static StoryManager Instance { get; private set; }
 
     private List<StoryObserver> observerList; // Observers which observes story queue
-    private Queue<StoryEntry> storyQueue = null;
+    private Queue<StoryBlock> storyBlockQueue = null;
+    private Queue<StoryEntry> storyEntryQueue = null;
 
-    public int ReadDialogueCount { get; set; } = 0;
+    public int ReadBlockCount { get; set; } = 0;
+    public int ReadEntryCount { get; set; } = 0;
     public string CurrentStoryBranch { get; set; }
 
 
@@ -29,10 +31,14 @@ public class StoryManager : MonoBehaviour
     }
 
     // Set story information
-    public void SetStoryInfo(List<StoryEntry> storyEntries)
+    public void SetStoryInfo(List<StoryBlock> storyBlocks)
     {
-        ReadDialogueCount = GameManager.Instance.PlayerData.ReadDialogueCount;
-        storyQueue = new Queue<StoryEntry>(storyEntries.Skip(ReadDialogueCount));
+        // Restore saved story point
+        ReadBlockCount = GameManager.Instance.PlayerData.ReadBlockCount;
+        ReadEntryCount = GameManager.Instance.PlayerData.ReadEntryCount;
+        storyBlockQueue = new Queue<StoryBlock>(storyBlocks.Skip(ReadBlockCount));
+        CurrentStoryBranch = storyBlockQueue.Peek().branchId; // Set current branch id
+        storyEntryQueue = new Queue<StoryEntry>(storyBlockQueue.Dequeue().entries.Skip(ReadEntryCount));
 
         // Notify observers about the update
         observerList.ForEach((obj) => obj.StoryUpdated());
@@ -42,19 +48,40 @@ public class StoryManager : MonoBehaviour
     public StoryEntry GetNextEntry()
     {
         // Check if story queue is empty
-        if (storyQueue == null)
+        if (storyEntryQueue == null)
             return null;
 
-        if (storyQueue.Count > 0)
-            return storyQueue.Dequeue();
+        if (storyEntryQueue.Count > 0)
+            return storyEntryQueue.Dequeue(); // Return next story entry
         else
         {
-            // Reset read dialogue number to 0
-            GameManager.Instance.PlayerData.ReadDialogueCount = 0;
-            ReadDialogueCount = 0;
+            if(storyBlockQueue.Count > 0) // Move to next story block
+            {
+                // player read all entries in previous story block
+                StoryBlock nextBlock = storyBlockQueue.Dequeue();
+                ReadBlockCount++;
 
-            EventManager.Instance.EventOver();
-            return null;
+                // Play next story block when it is common or is same with current story branch
+                if (nextBlock.branchId == "common" || nextBlock.branchId == CurrentStoryBranch)
+                {
+                    CurrentStoryBranch = nextBlock.branchId;
+                    storyEntryQueue = new Queue<StoryEntry>(nextBlock.entries);
+                    return storyEntryQueue.Dequeue();
+                }
+                else // Skip to next block
+                {
+                    return GetNextEntry();
+                }
+            }
+            else // End Story event
+            {
+                // Reset read dialogue number to 0
+                GameManager.Instance.PlayerData.ReadBlockCount = ReadBlockCount = 0;
+                GameManager.Instance.PlayerData.ReadEntryCount = ReadEntryCount = 0;
+
+                EventManager.Instance.EventOver();
+                return null;
+            }
         }
     }
 }

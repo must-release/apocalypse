@@ -12,15 +12,19 @@ public class UserData : ISerializationCallbackReceiver
 
     [SerializeField]
     private int currentStage;
-    public STAGE CurrentStage { get { return (STAGE)currentMap; } set { currentStage = (int)value; } }
+    public STAGE CurrentStage { get { return (STAGE)currentStage; } set { currentStage = (int)value; } }
 
     [SerializeField]
     private int currentMap;
     public int CurrentMap { get { return currentMap; } set { currentMap = value; } }
 
     [SerializeField]
-    private int readDialogueCount;
-    public int ReadDialogueCount { get { return readDialogueCount; } set { readDialogueCount = value; } }
+    private int readBlockCount;
+    public int ReadBlockCount { get { return readBlockCount; } set { readBlockCount = value; } }
+
+    [SerializeField]
+    private int readEntryCount;
+    public int ReadEntryCount { get { return readEntryCount; } set { readEntryCount = value; } }
 
     private int lastCharacter;
     public CHARACTER LastCharacter { get { return (CHARACTER)lastCharacter; } set { lastCharacter = (int)value; } }
@@ -75,12 +79,14 @@ public class UserData : ISerializationCallbackReceiver
     private string startingEventData;
 
 
-    public UserData(STAGE curStage, int curMap, EventBase startingEvent, int readDlg, CHARACTER lastChar, string playTime, string saveTime)
+    public UserData(STAGE curStage, int curMap, EventBase startingEvent,
+        int readBlockCnt, int readEntryCnt, CHARACTER lastChar, string playTime, string saveTime)
     {
         CurrentStage = curStage;
         CurrentMap = curMap;
         StartingEvent = startingEvent;
-        readDialogueCount = readDlg;
+        ReadBlockCount = readBlockCnt;
+        ReadEntryCount = readEntryCnt;
         LastCharacter = lastChar;
         PlayTime = playTime;
         SaveTime = saveTime;
@@ -88,7 +94,7 @@ public class UserData : ISerializationCallbackReceiver
 
     public UserData Copy()
     {
-        return new UserData(CurrentStage, CurrentMap, StartingEvent, readDialogueCount, LastCharacter, PlayTime, SaveTime);
+        return new UserData(CurrentStage, CurrentMap, StartingEvent, readBlockCount, readEntryCount, LastCharacter, PlayTime, SaveTime);
     }
 
     // Save info of the startingEvent

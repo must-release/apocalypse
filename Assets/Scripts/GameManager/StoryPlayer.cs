@@ -49,15 +49,6 @@ public class StoryPlayer : MonoBehaviour
 
     public bool ShowDialogue(Dialogue dialogue, TMP_Text nameText, TMP_Text dlogText)
     {
-        if (dialogue.branchId == "common")
-        {
-            StoryManager.Instance.CurrentStoryBranch = "common";
-        }
-        else if (dialogue.branchId != StoryManager.Instance.CurrentStoryBranch)
-        {
-            return false; // If branchId of the input dialogue is different from current story branch, return false
-        }
-
         PlayingEntries.Add(dialogue); // Add input entry into the playing entry list
         dialogueTextMapping[dialogue] = dlogText; // Add dialogue - TMP_Text mapping
 
