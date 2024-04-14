@@ -69,7 +69,7 @@ public class StoryUIState : MonoBehaviour, IUIState, StoryObserver
         storyUI.gameObject.SetActive(true);
 
         // Disable stage objects
-        StageManager.Instance.SetStageObjectsActive(false);
+        GameSceneManager.Instance.SetStageObjectsActive(false);
     }
 
     // Update Story UI state
@@ -82,16 +82,17 @@ public class StoryUIState : MonoBehaviour, IUIState, StoryObserver
     public void EndUI()
     {
         // Enable stage objects
-        StageManager.Instance.SetStageObjectsActive(true);
+        GameSceneManager.Instance.SetStageObjectsActive(true);
 
         // Inactive Story UI object
+        choicePanel.gameObject.SetActive(false);
         storyUI.gameObject.SetActive(false);
     }
 
     // Show first story script When new story is loaded
     public void StoryUpdated()
     {
-        StoryEntry entry = StoryManager.Instance.GetNextEntry();
+        StoryEntry entry = StoryManager.Instance.GetFirstEntry();
         if (entry == null)
         {
             Debug.Log("Story initial load error");
@@ -111,7 +112,7 @@ public class StoryUIState : MonoBehaviour, IUIState, StoryObserver
         if(StoryPlayer.Instance.PlayingEntries.Count > 0)
         {
             // Complete playing that story entry right away
-            StoryPlayer.Instance.CompletePlaying();
+            StoryPlayer.Instance.CompleteDialogue();
             return;
         }
 
@@ -122,8 +123,6 @@ public class StoryUIState : MonoBehaviour, IUIState, StoryObserver
             return;
         }
 
-        // Increase read count and show entry on the screen
-        StoryManager.Instance.ReadEntryCount++;
         ShowStoryEntry(entry);
     }
 
@@ -139,6 +138,7 @@ public class StoryUIState : MonoBehaviour, IUIState, StoryObserver
         }
         else if (entry is Choice choice)
         {
+            // Show choice modal
             ShowChoice(choice);
         }
         else if (entry is Effect effect)
@@ -192,7 +192,7 @@ public class StoryUIState : MonoBehaviour, IUIState, StoryObserver
         public void SetOption(Option option)
         {
             optionText.text = option.text;
-            branchId = option.routeId;
+            branchId = option.branchId;
             optionObject.gameObject.SetActive(true);
         }
 

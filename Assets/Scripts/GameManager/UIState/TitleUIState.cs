@@ -72,13 +72,12 @@ public class TitleUIState : MonoBehaviour, IUIState
         DataManager.Instance.LoadContinueData();
 
         // Start loading recent data
-        StageManager.Instance.LoadStage();
+        GameSceneManager.Instance.LoadStage();
 	}
 
 	// Start new game
 	private void OnNewGameClick()
 	{
-
         // Prevent wrong submit action in console
         if(IUIState.isConsole)
             InputManager.Instance.SubmitLock = true;
@@ -87,7 +86,7 @@ public class TitleUIState : MonoBehaviour, IUIState
         DataManager.Instance.CreateNewGameData();
 
         // Start loading new game
-        StageManager.Instance.LoadStage();
+        GameSceneManager.Instance.LoadStage();
     }
 
     // Load saved game

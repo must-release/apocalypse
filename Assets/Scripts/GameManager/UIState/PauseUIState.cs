@@ -110,7 +110,7 @@ public class PauseUIState : MonoBehaviour, IUIState
     // Go back to title scene
     private void OnTitleButtonClick()
     {
-        StageManager.Instance.GoTitle();
+        GameSceneManager.Instance.GoTitle();
     }
 
     public UIManager.STATE GetState()

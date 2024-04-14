@@ -200,10 +200,9 @@ public class DataManager : MonoBehaviour
     // Start loading text of the current story event which player is having 
     public void LoadStoryText()
     {
-        string story = EventManager.Instance.CurrentEvent.GetEventInfo<string>();
-        Addressables.LoadAssetAsync<TextAsset>(story).Completed += OnStoryLoadComplete;
+        string storyInfo = EventManager.Instance.CurrentEvent.GetEventInfo<string>();
+        Addressables.LoadAssetAsync<TextAsset>(storyInfo).Completed += OnStoryLoadComplete;
     }
-
     private void OnStoryLoadComplete(AsyncOperationHandle<TextAsset> story)
     {
         // Set JsonConvert settings
@@ -300,11 +299,11 @@ public class DataManager : MonoBehaviour
         }
 
 
-        // Return two loaded maps to the StageManager
+        // Return two loaded maps to the GameSceneManager
         if (firstMap == null || secondMap == null)
             Debug.Log("Map Load Error");
         else
-            StageManager.Instance.OnMapsLoadComplete(firstMap, secondMap);
+            GameSceneManager.Instance.OnMapsLoadComplete(firstMap, secondMap);
     }
 
     // Start to load player prefab
@@ -315,7 +314,7 @@ public class DataManager : MonoBehaviour
         Addressables.InstantiateAsync(key).Completed += AsyncLoadPlayer;
     }
 
-    // When player is loaded, return player instance to StageManager
+    // When player is loaded, return player instance to GameSceneManager
     private void AsyncLoadPlayer(AsyncOperationHandle<GameObject> playerInstance)
     {
         GameObject player = null;
@@ -328,6 +327,6 @@ public class DataManager : MonoBehaviour
         if (player == null)
             Debug.Log("Player Load Error");
         else
-            StageManager.Instance.onPlayerLoadComplete(player);
+            GameSceneManager.Instance.onPlayerLoadComplete(player);
     }
 }

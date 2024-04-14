@@ -34,7 +34,7 @@ public class LoadingUIState : MonoBehaviour, IUIState
     public void StartUI()
     {
         // if Stage asset load is complete, don't start loading
-        if (StageManager.Instance.IsStageReady)
+        if (GameSceneManager.Instance.IsStageReady)
         {
             EventManager.Instance.EventOver();
             return;
@@ -44,7 +44,7 @@ public class LoadingUIState : MonoBehaviour, IUIState
         loadingUI.gameObject.SetActive(true);
 
         // Disable stage objects
-        StageManager.Instance.SetStageObjectsActive(false);
+        GameSceneManager.Instance.SetStageObjectsActive(false);
     }
 
 
@@ -52,7 +52,7 @@ public class LoadingUIState : MonoBehaviour, IUIState
     public void UpdateUI()
     {
         // if Stage asset load is complete, end loading
-        if (StageManager.Instance.IsStageReady)
+        if (GameSceneManager.Instance.IsStageReady)
         {
             EventManager.Instance.EventOver();
         }
@@ -63,7 +63,7 @@ public class LoadingUIState : MonoBehaviour, IUIState
     public void EndUI()
     {
         // Enable stage objects
-        StageManager.Instance.SetStageObjectsActive(true);
+        GameSceneManager.Instance.SetStageObjectsActive(true);
 
         // Inactive Title UI object
         loadingUI.gameObject.SetActive(false);

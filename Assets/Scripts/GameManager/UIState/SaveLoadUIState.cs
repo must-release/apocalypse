@@ -132,7 +132,7 @@ public class SaveLoadUIState : MonoBehaviour, IUIState
     {
         // Set PlayerData and start loading stage
         GameManager.Instance.PlayerData = selectedSlot.slotData;
-        StageManager.Instance.LoadStage();
+        GameSceneManager.Instance.LoadStage();
 
         selectedSlot = null;
         Instance.confirmPanel.gameObject.SetActive(false);
@@ -170,9 +170,6 @@ public class SaveLoadUIState : MonoBehaviour, IUIState
         selectedSlot = null;
         Instance.confirmPanel.gameObject.SetActive(false);
         slotList[0].slotButton.Select();
-
-        // Update Save UI
-        StartUI();
     }
 
     // On next page button click

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class StoryEntry
 {
     public string type;
+    public bool savePoint = true;
 }
 
 [System.Serializable]
@@ -25,6 +26,7 @@ public class Effect : StoryEntry
 [System.Serializable]
 public class Choice : StoryEntry
 {
+    public Dialogue prevDialogue;
     public List<Option> options;
 }
 
@@ -32,7 +34,7 @@ public class Choice : StoryEntry
 public class Option
 {
     public string text;
-    public string routeId;
+    public string branchId;
 }
 
 [System.Serializable]

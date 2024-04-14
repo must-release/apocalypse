@@ -16,6 +16,6 @@ MonoBehaviour:
   nextEvent: {fileID: 11400000, guid: 138c8de577c8e4b7d99170f10fba0129, type: 2}
   nextEventAssemblyQualifiedName: 
   nextEventdata: 
-  stage: 1
+  stage: 2
   storyNum: 0
   onMap: 0

@@ -30,7 +30,7 @@ public class EventManager : MonoBehaviour
 	// Play input event 
     public void PlayEvent(EventBase playingEvent)
 	{
-        // Set current progressing event to storyEvent
+        // Set current progressing event to input Event
         CurrentEvent = playingEvent;
 
         switch (CurrentEvent.EventType)

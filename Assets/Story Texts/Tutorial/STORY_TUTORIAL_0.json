@@ -18,11 +18,11 @@
                     "options": [
                         {
                             "text": "안녕하세요.",
-                            "routeId": "positiveResponse"
+                            "branchId": "positiveResponse"
                         },
                         {
                             "text": "지금은 바빠요.",
-                            "routeId": "negativeResponse"
+                            "branchId": "negativeResponse"
                         }
                     ]
                 }
