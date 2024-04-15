@@ -108,22 +108,20 @@ public class StoryUIState : MonoBehaviour, IUIState, StoryObserver
     // Play next script on the screen
     public void PlayNextScript()
     {
-        // If StoryPlayer is now playing certain entry
+        // Check If StoryPlayer is now playing certain entry
         if(StoryPlayer.Instance.PlayingEntries.Count > 0)
         {
             // Complete playing that story entry right away
             StoryPlayer.Instance.CompleteDialogue();
-            return;
         }
-
-        // Check if there is available entry
-        StoryEntry entry = StoryManager.Instance.GetNextEntry();
-        if (entry == null)
+        else
         {
-            return;
-        }
+            // Check if there is available entry
+            StoryEntry entry = StoryManager.Instance.GetNextEntry();
+            if (entry == null) return;
 
-        ShowStoryEntry(entry);
+            ShowStoryEntry(entry);
+        }
     }
 
     // Show story entry on the screen
