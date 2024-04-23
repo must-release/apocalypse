@@ -10,21 +10,21 @@ public class StoryPlayer : MonoBehaviour
 
 
     /****** Public Fields ******/
-    public List<StoryEntry> PlayingEntries { get; private set; }
+    public List<Dialogue> PlayingDialgoueEntries { get; private set; }
+    public int NonDialogueEntryCount { get; private set; } = 0;
 
 
     /****** Private fields ******/
-    private Dictionary<Dialogue, TMP_Text> dialogueTextMapping; // Used when mapping dialogue entry to target text field
-    private Coroutine dialogueCoroutine;
-    private float textSpeed = 0.05f; // Speed of the dialogue text
+    private Dictionary<Dialogue, Coroutine> dialogueCoroutineMapping; // Used when mapping dialogue entry to playing coroutine
+    private float textInterval = 0.05f; // Speed of the dialogue text
 
     public void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            PlayingEntries = new List<StoryEntry>();
-            dialogueTextMapping = new Dictionary<Dialogue, TMP_Text>();
+            PlayingDialgoueEntries = new List<Dialogue>();
+            dialogueCoroutineMapping = new Dictionary<Dialogue, Coroutine>();
         }
     }
 
@@ -32,22 +32,18 @@ public class StoryPlayer : MonoBehaviour
     public void StopPlaying()
     {
         StopAllCoroutines();
-        dialogueTextMapping.Clear();
-        dialogueCoroutine = null;
-        PlayingEntries.Clear();
+        dialogueCoroutineMapping.Clear();
+        PlayingDialgoueEntries.Clear();
     }
 
     /******* Show dialogue on the screen ********/
 
-    public bool ShowDialogue(Dialogue dialogue, TMP_Text nameText, TMP_Text dlogText)
+    public void PlayDialogue(Dialogue dialogue, TMP_Text nameText, TMP_Text dlogText)
     {
-        PlayingEntries.Add(dialogue); // Add input entry into the playing entry list
-        dialogueTextMapping[dialogue] = dlogText; // Add dialogue - TMP_Text mapping
-
         nameText.text = dialogue.character;
-        dialogueCoroutine = StartCoroutine(TypeSentece(dialogue, dlogText));
 
-        return true;
+        PlayingDialgoueEntries.Add(dialogue); // Add input entry into the playing entry list
+        dialogueCoroutineMapping[dialogue] = StartCoroutine(TypeSentece(dialogue, dlogText)); // Save entry's coroutine
     }
 
     IEnumerator TypeSentece(Dialogue dialogue, TMP_Text dlogText)
@@ -56,45 +52,47 @@ public class StoryPlayer : MonoBehaviour
         foreach (char letter in dialogue.text.ToCharArray())
         {
             dlogText.text += letter; // Add letters one by one
-            yield return new WaitForSeconds(textSpeed); // Wait before next letter
+            yield return new WaitForSeconds(textInterval); // Wait before next letter
         }
-        PlayingEntries.Remove(dialogue);
-        dialogueTextMapping.Remove(dialogue);
-        dialogueCoroutine = null;
+        dialogueCoroutineMapping.Remove(dialogue);
+        PlayingDialgoueEntries.Remove(dialogue);
     }
 
-    // Complete first playing dialogue immediately
-    public void CompleteDialogue()
+    // Complete dialogue immediately
+    public void CompleteDialogue(Dialogue dialogue, TMP_Text nameText, TMP_Text dlogText)
     {
-        Dialogue dialogue = null;
-
-        // Chech if there is only dialogue entry in the list
-        foreach (StoryEntry entry in PlayingEntries)
-        {
-            if (entry is Dialogue dlog)
-            {
-                dialogue = dlog;
-            }
-            else
-            {
-                return;
-            }
-        }
-
-        if (dialogueTextMapping.TryGetValue(dialogue, out TMP_Text dlogText))
+        // If dialogue was being played
+        if (dialogueCoroutineMapping.TryGetValue(dialogue, out Coroutine dialogueCoroutine))
         {
             StopCoroutine(dialogueCoroutine); // Complete current dialogue
-            dlogText.text = dialogue.text; // Set total text immediately
-            PlayingEntries.Remove(dialogue);
-            dialogueTextMapping.Remove(dialogue);
+            dialogueCoroutineMapping.Remove(dialogue);
+            PlayingDialgoueEntries.Remove(dialogue);
         }
+
+        // Set total text immediately
+        nameText.text = dialogue.character;
+        dlogText.text = dialogue.text; 
     }
 
 
     /******** Play screen effect ********/
     public void PlayEffect(Effect effect)
     {
-
+        NonDialogueEntryCount++;
+        StartCoroutine(PlayingEffect());
     }
+
+    IEnumerator PlayingEffect()
+    {
+
+        Debug.Log("Playing effect");
+
+        yield return new WaitForSeconds(1f);
+
+        Debug.Log("Effect over");
+
+        NonDialogueEntryCount--;
+    }
+
 }
 

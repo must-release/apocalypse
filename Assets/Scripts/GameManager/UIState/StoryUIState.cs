@@ -108,11 +108,22 @@ public class StoryUIState : MonoBehaviour, IUIState, StoryObserver
     // Play next script on the screen
     public void PlayNextScript()
     {
-        // Check If StoryPlayer is now playing certain entry
-        if(StoryPlayer.Instance.PlayingEntries.Count > 0)
+        // Check If StoryPlayer is now playing non-dialogue entry
+        if(StoryPlayer.Instance.NonDialogueEntryCount > 0)
         {
-            // Complete playing that story entry right away
-            StoryPlayer.Instance.CompleteDialogue();
+            return; // Wait for non-dialogue entry to end
+        }
+        else if (StoryPlayer.Instance.PlayingDialgoueEntries.Count > 0)
+        {
+            if(StoryPlayer.Instance.PlayingDialgoueEntries.Count > 1)
+            {
+                Debug.Log("Error: multiple dialogue at the list");
+                return;
+            }
+
+            // Complete current playing dialogue entry
+            Dialogue dialogue = StoryPlayer.Instance.PlayingDialgoueEntries[0];
+            StoryPlayer.Instance.CompleteDialogue(dialogue, nameText, dialogueText);
         }
         else
         {
@@ -129,10 +140,7 @@ public class StoryUIState : MonoBehaviour, IUIState, StoryObserver
     {
         if (entry is Dialogue dialogue)
         {
-            if(!StoryPlayer.Instance.ShowDialogue(dialogue, nameText, dialogueText))
-            {
-                PlayNextScript();
-            }
+            StoryPlayer.Instance.PlayDialogue(dialogue, nameText, dialogueText);
         }
         else if (entry is Choice choice)
         {
