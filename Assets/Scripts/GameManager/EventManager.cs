@@ -101,6 +101,7 @@ public class EventManager : MonoBehaviour
 	{
 		UIManager.STATE ui = CurrentEvent.GetEventInfo<UIManager.STATE>();
 		UIManager.Instance.ChangeState(ui, true);
+		EventOver();
 	}
 
 }

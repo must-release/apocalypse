@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class KeyBoardInputHandler : MonoBehaviour, InputHandler
 {
-
     public string moveAxisName = "Horizontal";
     public string submitButtonName = "Submit";
     public string cancelButtonName = "Cancel";
