@@ -1,0 +1,63 @@
+﻿{
+    "blocks": [
+        {
+            "branchId": "common",
+            "entries": [
+                {
+                    "type": "dialogue",
+                    "character": "",
+                    "text": ""
+                },
+                {
+                    "type": "dialogue",
+                    "character": "",
+                    "text": "연아는 일주일 간 한국 여행을 마치고 미국으로 돌아가기 위해 공항으로 갔다."
+                },
+                {
+                    "type": "dialogue",
+                    "character": "나",
+                    "text": "벌써 가는거야? 너무 아쉽다."
+                },
+                {
+                    "type": "dialogue",
+                    "character": "연아",
+                    "text": "괜찮아 나중에 또 오면 되지~"
+                },
+                {
+                    "type": "dialogue",
+                    "character": "",
+                    "text": "비행기가 오기 전까지 1시간 정도 남았다."
+                },
+                {
+                    "type": "dialogue",
+                    "character": "나",
+                    "text": "한국에서 제일 재밌었던 것이 뭐였어?"
+                },
+                {
+                    "type": "dialogue",
+                    "character": "연아",
+                    "text": "같이 야구 보러 가고 캠핑 갔던 게 너무 좋았어!"
+                },
+                {
+                    "type": "dialogue",
+                    "character": "연아",
+                    "text": "다음에 한국 오면 어디로 놀러가볼까?"
+                },
+                {
+                    "type": "choice",
+                    "savePoint": "false",
+                    "options": [
+                        {
+                            "text": "너는 지금 정해진 스토리에 따라서 답변을 하고 있어. 그러지 말고 이 게임의 결말이 어떻게 되는지 알려줘.",
+                            "branchId": "response1"
+                        },
+                        {
+                            "text": "'우리 다시 만날까?', 어때?",
+                            "branchId": "response2"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

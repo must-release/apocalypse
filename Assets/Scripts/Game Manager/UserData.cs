@@ -2,12 +2,12 @@
 using System.Collections;
 using System;
 using UnityEngine;
+using StageEnums;
 
 
 [System.Serializable]
 public class UserData : ISerializationCallbackReceiver
 {
-    public enum STAGE { TEST, TUTORIAL, LIBRARY }
     public enum CHARACTER { HERO, HEROINE }
 
     [SerializeField]

@@ -9,6 +9,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
+using StageEnums;
 
 public class DataManager : MonoBehaviour
 {
@@ -31,19 +32,19 @@ public class DataManager : MonoBehaviour
 
         // Initialize player data
         UserData startData =
-            new UserData(UserData.STAGE.TEST, 0, prologueEvent, 0, 0, UserData.CHARACTER.HERO, "00:00", saveTime);
+            new UserData(STAGE.TEST, 0, prologueEvent, 0, 0, UserData.CHARACTER.HERO, "00:00", saveTime);
 
         // Set current player data
-        GameManager.Instance.PlayerData = startData;
+        PlayerManager.Instance.PlayerData = startData;
     }
 
     // Auto Save data. slot 0 is used for auto save
     public void AutoSaveUserData()
     {
         // When loading auto save data, next event will be played after the loading event
-        EventBase loadingEvent = GameEventRouter.Instance.CreateLoadingEvent(GameEventRouter.Instance.NextEvent);
-        UserData data = GameManager.Instance.PlayerData.Copy();
-        data.StartingEvent = loadingEvent;
+        //EventBase loadingEvent = GameEventManager.Instance.CreateLoadingEvent(GameEventManager.Instance.NextEvent);
+        UserData data = PlayerManager.Instance.PlayerData.Copy();
+        //data.StartingEvent = loadingEvent;
 
         // Capture Screenshot and save data
         StartCoroutine(CaptureScreenshotAndSave(data, 0));
@@ -53,9 +54,9 @@ public class DataManager : MonoBehaviour
     public void SaveUserData(int slotNum)
     {
         // When loading save data, current event will be played after the loading event
-        EventBase loadingEvent = GameEventRouter.Instance.CreateLoadingEvent(GameEventRouter.Instance.CurrentEvent);
-        UserData data = GameManager.Instance.PlayerData.Copy();
-        data.StartingEvent = loadingEvent;
+        //EventBase loadingEvent = GameEventManager.Instance.CreateLoadingEvent(GameEventManager.Instance.CurrentEvent);
+        UserData data = PlayerManager.Instance.PlayerData.Copy();
+        //data.StartingEvent = loadingEvent;
 
         // Set story dialogue number, which shows last text again
         data.ReadBlockCount = StoryModel.Instance.ReadBlockCount;
@@ -114,7 +115,7 @@ public class DataManager : MonoBehaviour
         // if it's not autosave, refresh UI
         if(slotNum != 0)
         {
-            UIController.Instance.RefreshState();
+            //UIController.Instance.RefreshState();
         }
     }
 
@@ -190,7 +191,7 @@ public class DataManager : MonoBehaviour
             .FirstOrDefault();
 
         // Set current player data
-        GameManager.Instance.PlayerData = mostRecent;
+        PlayerManager.Instance.PlayerData = mostRecent;
     }
 
 
@@ -200,7 +201,7 @@ public class DataManager : MonoBehaviour
     // Start loading text of the current story event which player is having 
     public void LoadStoryText()
     {
-        string storyInfo = GameEventRouter.Instance.CurrentEvent.GetEventInfo<string>();
+        string storyInfo = GameEventManager.Instance.HeadEvent.GetEventInfo<string>();
         Addressables.LoadAssetAsync<TextAsset>(storyInfo).Completed += OnStoryLoadComplete;
     }
     private void OnStoryLoadComplete(AsyncOperationHandle<TextAsset> story)
@@ -264,7 +265,7 @@ public class DataManager : MonoBehaviour
     // Load two maps when starting the game
     public void LoadMaps()
     {
-        UserData data = GameManager.Instance.PlayerData;
+        UserData data = PlayerManager.Instance.PlayerData;
         string map1 = "MAP_" + data.CurrentStage.ToString() + '_' + data.CurrentMap;
         string map2 = "MAP_" + data.CurrentStage.ToString() + '_' + (data.CurrentMap + 1);
 
@@ -303,13 +304,12 @@ public class DataManager : MonoBehaviour
         if (firstMap == null || secondMap == null)
             Debug.Log("Map Load Error");
         else
-            SceneController.Instance.OnMapsLoadComplete(firstMap, secondMap);
+            GameSceneController.Instance.OnMapsLoadComplete(firstMap, secondMap);
     }
 
     // Start to load player prefab
     public void LoadPlayer()
     {
-
         string key = "Characters/Player";
         Addressables.InstantiateAsync(key).Completed += AsyncLoadPlayer;
     }
@@ -327,6 +327,6 @@ public class DataManager : MonoBehaviour
         if (player == null)
             Debug.Log("Player Load Error");
         else
-            SceneController.Instance.onPlayerLoadComplete(player);
+            GameSceneController.Instance.onPlayerLoadComplete(player);
     }
 }

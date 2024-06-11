@@ -23,7 +23,42 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8ec58782634d54f5295a02ebe82fb55c
+    m_Address: STORY_LIBRARY_1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 347a06e175ba24140a0e8edad92920ab
     m_Address: STORY_LIBRARY_0
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 01088bd94c1c1418694796d55594a5c1
+    m_Address: INITIAL_STORY
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1f18a8706ea784d7ebaa25b47838c8fd
+    m_Address: INITIAL_STORY_KOREAN
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2aeb5e9f02a8843848950254465873f0
+    m_Address: INITIAL_STORY_AMERICAN
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ea8f390ac58f5433ab2ed1bedcedee67
+    m_Address: STORY_EVENT_0
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 86509d7473d5a4987938cdb39dda28b1
+    m_Address: STORY_EVENT_1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b5c199c147ac94c458a33312b813e9bd
+    m_Address: STORY_EVENT_2
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

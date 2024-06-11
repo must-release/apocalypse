@@ -1,12 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class StoryModel : MonoBehaviour
 {
 	public static StoryModel Instance { get; private set; }
 
-    private List<StoryObserver> observerList; // Observers which observes story queue
     private Queue<StoryBlock> storyBlockQueue = null;
     private Queue<StoryEntry> storyEntryQueue = null;
     private int readEntryCountBuffer = 0;
@@ -14,6 +18,7 @@ public class StoryModel : MonoBehaviour
     public int ReadBlockCount { get; set; } = 0;
     public int ReadEntryCount { get; set; } = 0;
     public string CurrentStoryBranch { get; set; }
+    public Queue<StoryEntry> storyEntryBuffer = new Queue<StoryEntry>();
 
 
     private void Awake()
@@ -21,30 +26,46 @@ public class StoryModel : MonoBehaviour
         if(Instance == null)
         {
             Instance = this;
-            observerList = new List<StoryObserver>();
         }
     }
 
-    // Add new observer to the list
-    public void AddObserver(StoryObserver newObserver)
+    // Start loading text of the current story event which player is having 
+    public void LoadStoryText(string storyInfo, int readBlockCount, int readEntryCount)
     {
-        observerList.Add(newObserver);
+        // Restore saved story point
+        ReadBlockCount = readBlockCount;
+        ReadEntryCount = readEntryCount;
+
+        // Load Story Texts
+        Addressables.LoadAssetAsync<TextAsset>(storyInfo).Completed += OnStoryLoadComplete;
+    }
+    private void OnStoryLoadComplete(AsyncOperationHandle<TextAsset> story)
+    {
+        // Set JsonConvert settings
+        var settings = new JsonSerializerSettings
+        {
+            // Add custom converter
+            Converters = new List<JsonConverter> { new StoryEntryConverter() }
+        };
+
+        // Convert Json file to StoryEntries object
+        string jsonContent = story.Result.text;
+        StoryBlocks storyBlocks = JsonConvert.DeserializeObject<StoryBlocks>(jsonContent, settings);
+
+        // Set story info
+        SetStoryInfo(storyBlocks.blocks);
     }
 
     // Set story information
     public void SetStoryInfo(List<StoryBlock> storyBlocks)
     {
-        // Restore saved story point
-        ReadBlockCount = GameManager.Instance.PlayerData.ReadBlockCount;
-        ReadEntryCount = GameManager.Instance.PlayerData.ReadEntryCount;
         storyBlockQueue = new Queue<StoryBlock>(storyBlocks.Skip(ReadBlockCount));
         StoryBlock firstBlock = storyBlockQueue.Dequeue(); // Get first story block
         CurrentStoryBranch = firstBlock.branchId; // Set current branch id according to the first story block
         storyEntryQueue = new Queue<StoryEntry>(firstBlock.entries.Skip(ReadEntryCount));
 
-
-        // Notify observers about the update
-        observerList.ForEach((obj) => obj.StoryUpdated());
+        // Story is now ready
+        StoryController.Instance.StartScript();
     }
 
     // Return first story entry
@@ -56,6 +77,11 @@ public class StoryModel : MonoBehaviour
     // Return next story entry in the queue.
     public StoryEntry GetNextEntry()
     {
+        if(storyEntryBuffer.Count > 0)
+        {
+            return storyEntryBuffer.Dequeue();
+        }
+
         // Check if story queue is empty
         if (storyEntryQueue == null)
             return null;
@@ -97,17 +123,47 @@ public class StoryModel : MonoBehaviour
             else // End Story event
             {
                 // Reset read dialogue number to 0
-                GameManager.Instance.PlayerData.ReadBlockCount = ReadBlockCount = 0;
-                GameManager.Instance.PlayerData.ReadEntryCount = ReadEntryCount = readEntryCountBuffer = 0;
+                PlayerManager.Instance.PlayerData.ReadBlockCount = ReadBlockCount = 0;
+                PlayerManager.Instance.PlayerData.ReadEntryCount = ReadEntryCount = readEntryCountBuffer = 0;
 
-                GameEventRouter.Instance.EventOver();
+                //GameEventManager.Instance.TerminateEvent();
                 return null;
             }
         }
     }
-}
 
-public interface StoryObserver
-{
-    public void StoryUpdated();
+    // Class for converting story json file
+    class StoryEntryConverter : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            return (objectType == typeof(StoryEntry));
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            JObject jo = JObject.Load(reader);
+            switch (jo["type"].Value<string>())
+            {
+                case "dialogue":
+                    return jo.ToObject<Dialogue>(serializer);
+                case "effect":
+                    return jo.ToObject<Effect>(serializer);
+                case "choice":
+                    return jo.ToObject<Choice>(serializer);
+                default:
+                    throw new Exception("Unknown type");
+            }
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool CanWrite
+        {
+            get { return false; }
+        }
+    }
 }
