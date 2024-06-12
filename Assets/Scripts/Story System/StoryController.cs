@@ -94,19 +94,6 @@ public class StoryController : MonoBehaviour
     // Play next script on the screen
     public void PlayNextScript()
     {
-        if (isWaitingResponse)
-        {
-            nameText.text = "";
-            dialogueText.text = "Loading";
-            return;
-        }
-
-        if (isRegenerate && StoryModel.Instance.storyEntryBuffer.Count == 0)
-        {
-            GameEventProducer.Instance.GenerateShowChoiceEvent();
-            return;
-        }
-
         // Check If StoryPlayer is now playing non-dialogue entry
         if (DialoguePlayer.Instance.NonDialogueEntryCount > 0)
         {
@@ -126,6 +113,19 @@ public class StoryController : MonoBehaviour
         }
         else
         {
+            if (isWaitingResponse)
+            {
+                nameText.text = "";
+                dialogueText.text = "Loading";
+                return;
+            }
+
+            if (isRegenerate && StoryModel.Instance.storyEntryBuffer.Count == 0)
+            {
+                GameEventProducer.Instance.GenerateShowChoiceEvent();
+                return;
+            }
+
 
             // Check if there is available entry
             StoryEntry entry = StoryModel.Instance.GetNextEntry();
@@ -144,7 +144,8 @@ public class StoryController : MonoBehaviour
         Dialogue inputDialogue = new Dialogue();
         inputDialogue.character = "나";
         inputDialogue.text = optionText;
-        DialoguePlayer.Instance.PlayDialogue(inputDialogue, nameText, dialogueText);
+        StoryModel.Instance.storyEntryBuffer.Enqueue(inputDialogue);
+        PlayNextScript();
 
         GetResponse(inputDialogue);
     }
@@ -162,14 +163,18 @@ public class StoryController : MonoBehaviour
         isWaitingResponse = false;
         isRegenerate = regenerate;
 
-        // Split the string by newline characters
-        string[] lines = response.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+        // Split the string by newline characters and remove empty entries
+        string[] lines = response.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
         // Convert the array to a list
         var linesList = lines.ToList();
 
         foreach (var line in linesList)
         {
+            // Skip empty lines, just in case
+            if (string.IsNullOrWhiteSpace(line))
+                continue;
+
             Dialogue responseDialogue = new Dialogue();
             responseDialogue.character = "연아";
             responseDialogue.text = line;

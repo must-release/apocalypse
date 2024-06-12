@@ -11,11 +11,12 @@ public class MemoryAPI : MonoBehaviour
 {
 	public static MemoryAPI Instance;
 
-    public static string UserID = "user4350";
-    public static string saveURL = "http://ec2-54-153-172-184.ap-southeast-2.compute.amazonaws.com:8080/memory/save";
-    public static string initURL = "http://ec2-54-153-172-184.ap-southeast-2.compute.amazonaws.com:8080/memory/init";
-    public static string responseURL = "http://ec2-54-153-172-184.ap-southeast-2.compute.amazonaws.com:8080/response/generate";
-    public static string reflectURL = "http://ec2-54-153-172-184.ap-southeast-2.compute.amazonaws.com:8080/memory/reflect";
+    public static string UserID = "user4352";
+    public static string baseURL = "http://sw.uos.ac.kr:8080/";
+    public static string saveURL = baseURL+ "memory/save";
+    public static string initURL = baseURL + "memory/init";
+    public static string responseURL = baseURL + "response/generate";
+    public static string reflectURL = baseURL + "memory/reflect";
     
 
     private void Awake()
@@ -29,8 +30,8 @@ public class MemoryAPI : MonoBehaviour
     private void Start()
     {
         // Load inital Story
-        //Addressables.LoadAssetAsync<TextAsset>("INITIAL_STORY_KOREAN").Completed += OnInitStoryLoadComplete;
-        Addressables.LoadAssetAsync<TextAsset>("INITIAL_STORY_AMERICAN").Completed += OnInitStoryLoadComplete;
+        Addressables.LoadAssetAsync<TextAsset>("INITIAL_STORY_KOREAN").Completed += OnInitStoryLoadComplete;
+        //Addressables.LoadAssetAsync<TextAsset>("INITIAL_STORY_AMERICAN").Completed += OnInitStoryLoadComplete;
     }
     private void OnInitStoryLoadComplete(AsyncOperationHandle<TextAsset> story)
     {
