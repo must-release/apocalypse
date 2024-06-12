@@ -35,8 +35,8 @@ public class MemoryAPI : MonoBehaviour
         UserID = "User" + System.DateTime.Now.ToString("yyyyMMddHHmmss", CultureInfo.InvariantCulture);
 
         // Load inital Story
-        //Addressables.LoadAssetAsync<TextAsset>("INITIAL_STORY_KOREAN").Completed += OnInitStoryLoadComplete;
-        Addressables.LoadAssetAsync<TextAsset>("INITIAL_STORY_AMERICAN").Completed += OnInitStoryLoadComplete;
+        Addressables.LoadAssetAsync<TextAsset>("INITIAL_STORY_KOREAN").Completed += OnInitStoryLoadComplete;
+        //Addressables.LoadAssetAsync<TextAsset>("INITIAL_STORY_AMERICAN").Completed += OnInitStoryLoadComplete;
     }
     private void OnInitStoryLoadComplete(AsyncOperationHandle<TextAsset> story)
     {
@@ -147,9 +147,10 @@ public class MemoryAPI : MonoBehaviour
 
         if(responseCount == StoryController.MAX_RESPONSE_COUNT)
         {
-            memory.instruction = "Instruct : 너는 지금 지성과 대화 중이고, 지성이 말한 마지막 대사와 대화 맥락을 고려하여 적절히 대화를 마무리하는 답변을 말해야 한다." +
+            memory.instruction = "Instruct : 너는 지금 지성과 대화 중이고, 대화 맥락을 고려하여 자연스럽게 대화를 마무리하는 답변을 말해야 한다." +
             "<이전 대화내용>에는 지금까지 지성과 나눈 대화와 상황이 순서대로 기록되어 있다." +
-            "답변을 생성할 때 <연아의 기억>을 반영한다. index가 낮을 수록 최근 기억이고, priority가 높을 수록 우선적으로 참고해야할 기억이다. " +
+            "답변을 할 때 < 이전 대화내용 > 에 있는 지성의 마지막 대사를 반복하지 않는다." +
+            "답변을 할 때 <연아의 기억>을 반영한다. index가 높을 수록 최근 기억이고, priority가 높을 수록 우선적으로 참고해야할 기억이다. " +
             "생성된 답변은 <연아의 기억>에 있는 기억들과 일관성을 가져야 한다." +
             "여러 문장으로 답변할 경우 각 문장을 개행한다.";
         }
@@ -239,9 +240,10 @@ class ResponseMemory
     public string playTime;
     public float importance;
     public int count;
-    public string instruction = "Instruct : 너는 지금 지성과 대화 중이고, 지성이 말한 마지막 대사와 대화 맥락을 고려하여 적절한 답변을 말해야 한다." +
+    public string instruction = "Instruct : 너는 지금 지성과 대화 중이고, 대화 맥락을 고려하여 적절한 답변을 말해야 한다." +
         "<이전 대화내용>에는 지금까지 지성과 나눈 대화와 상황이 순서대로 기록되어 있다." +
-        "답변을 할 때 <연아의 기억>을 반영한다. index가 낮을 수록 최근 기억이고, priority가 높을 수록 우선적으로 참고해야할 기억이다. " +
+        "답변을 할 때 <이전 대화내용>에 있는 지성의 마지막 대사를 반복하지 않는다." +
+        "답변을 할 때 <연아의 기억>을 반영한다. index가 높을 수록 최근 기억이고, priority가 높을 수록 우선적으로 참고해야할 기억이다. " +
         "답변은 <연아의 기억>에 있는 기억들과 일관성을 가져야 한다." +
         "여러 문장으로 답변할 경우 각 문장을 개행한다.";
 }
