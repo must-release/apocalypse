@@ -163,6 +163,9 @@ public class StoryUIController : MonoBehaviour, IUIContoller
 
         // Reset input field
         inputField.text = "";
+        inputField.caretPosition = 0;
+        inputField.selectionAnchorPosition = 0;
+        inputField.selectionFocusPosition = 0;
 
         // Turn off choice UI
         inputOption.gameObject.SetActive(false);

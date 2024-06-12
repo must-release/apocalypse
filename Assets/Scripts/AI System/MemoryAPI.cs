@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Globalization;
 using System.Text;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
@@ -11,7 +13,7 @@ public class MemoryAPI : MonoBehaviour
 {
 	public static MemoryAPI Instance;
 
-    public static string UserID = "user4352";
+    public static string UserID;
     public static string baseURL = "http://sw.uos.ac.kr:8080/";
     public static string saveURL = baseURL+ "memory/save";
     public static string initURL = baseURL + "memory/init";
@@ -29,6 +31,9 @@ public class MemoryAPI : MonoBehaviour
 
     private void Start()
     {
+        // Generate a unique UserID for testing
+        UserID = "User" + System.DateTime.Now.ToString("yyyyMMddHHmmss", CultureInfo.InvariantCulture);
+
         // Load inital Story
         Addressables.LoadAssetAsync<TextAsset>("INITIAL_STORY_KOREAN").Completed += OnInitStoryLoadComplete;
         //Addressables.LoadAssetAsync<TextAsset>("INITIAL_STORY_AMERICAN").Completed += OnInitStoryLoadComplete;
@@ -37,6 +42,16 @@ public class MemoryAPI : MonoBehaviour
     {
         // Convert the object to JSON format
         string jsonData = story.Result.text;
+
+        // Parse JSON data
+        JObject jsonObject = JObject.Parse(jsonData);
+
+        // Update the userId in the JSON object
+        jsonObject["userId"] = UserID;
+
+        // Convert the JSON object back to a string
+        jsonData = jsonObject.ToString();
+
         StartCoroutine(InitMemoryCoroutine(jsonData));
     }
     IEnumerator InitMemoryCoroutine(string jsonData)
