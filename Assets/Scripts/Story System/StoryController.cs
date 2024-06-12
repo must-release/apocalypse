@@ -14,6 +14,7 @@ public class StoryController : MonoBehaviour
     public bool isWaitingResponse = false;
     public bool isRegenerate = false;
     public int responseCount = 0;
+    public const int MAX_RESPONSE_COUNT = 4;
 
     private string storyScreenName = "Story Screen";
     private string characterName = "Character";
@@ -154,13 +155,15 @@ public class StoryController : MonoBehaviour
     {
         isWaitingResponse = true;
         responseCount++;
+        if (responseCount >= MAX_RESPONSE_COUNT) isRegenerate = false;
+        else isRegenerate = true;
+
         MemoryAPI.Instance.ResponseMemory(inputDialogue, responseCount);
     }
 
-    public void ShowResponse(string response, bool regenerate)
+    public void ShowResponse(string response)
     {
         isWaitingResponse = false;
-        isRegenerate = regenerate;
 
         // Split the string by newline characters and remove empty entries
         string[] lines = response.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
