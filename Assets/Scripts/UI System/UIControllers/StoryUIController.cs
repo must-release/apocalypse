@@ -153,6 +153,7 @@ public class StoryUIController : MonoBehaviour, IUIContoller
         //}
 
         inputOption.gameObject.SetActive(true);
+        inputField.ActivateInputField();
     }
 
     // When player write input choice
@@ -170,6 +171,7 @@ public class StoryUIController : MonoBehaviour, IUIContoller
         // Turn off choice UI
         inputOption.gameObject.SetActive(false);
         choicePanel.gameObject.SetActive(false);
+        inputField.DeactivateInputField();
     }
 
 }

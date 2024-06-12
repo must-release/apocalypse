@@ -35,8 +35,8 @@ public class MemoryAPI : MonoBehaviour
         UserID = "User" + System.DateTime.Now.ToString("yyyyMMddHHmmss", CultureInfo.InvariantCulture);
 
         // Load inital Story
-        Addressables.LoadAssetAsync<TextAsset>("INITIAL_STORY_KOREAN").Completed += OnInitStoryLoadComplete;
-        //Addressables.LoadAssetAsync<TextAsset>("INITIAL_STORY_AMERICAN").Completed += OnInitStoryLoadComplete;
+        //Addressables.LoadAssetAsync<TextAsset>("INITIAL_STORY_KOREAN").Completed += OnInitStoryLoadComplete;
+        Addressables.LoadAssetAsync<TextAsset>("INITIAL_STORY_AMERICAN").Completed += OnInitStoryLoadComplete;
     }
     private void OnInitStoryLoadComplete(AsyncOperationHandle<TextAsset> story)
     {
@@ -93,6 +93,7 @@ public class MemoryAPI : MonoBehaviour
         SaveMemory memory = new SaveMemory();
         memory.userId = UserID;
         memory.isDescription = false;
+
         if(dialogue.character.Equals("나"))
             memory.content = "지성이 " + dialogue.text + "라고 말했다.";
         else if(dialogue.character.Equals("연아"))
@@ -102,6 +103,7 @@ public class MemoryAPI : MonoBehaviour
             memory.content = dialogue.text;
             memory.isDescription = true;
         }
+
         memory.playTime = "00:00";
         memory.importance = 0.5f;
 
@@ -172,6 +174,9 @@ public class MemoryAPI : MonoBehaviour
         }
     }
 
+
+
+
     public void Reflect()
     {
         StartCoroutine(ReflectCoroutine());
@@ -226,6 +231,10 @@ class ResponseMemory
     public string playTime;
     public float importance;
     public int count;
+    //public string instruction = "Instruct : <이전 대화내용>에서 지성이 말한 마지막 대사에 대해 적절한 답변을 생성한다. " +
+    //    "답변을 생성할 때 <연아의 기억>을 반영한다. index가 낮을 수록 최근의 기억이고, priority가 높을 수록 우선적으로 참고해야할 기억이다. " +
+    //    "생성된 답변은 <연아의 기억>에 있는 기억들과 일관성을 가져야 한다." +
+    //    "여러 문장으로 답변할 경우 개행 문자로 구분한다.";
 }
 
 [System.Serializable]

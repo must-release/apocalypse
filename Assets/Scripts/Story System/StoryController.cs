@@ -154,7 +154,6 @@ public class StoryController : MonoBehaviour
     {
         isWaitingResponse = true;
         responseCount++;
-        MemoryAPI.Instance.SaveMemory(inputDialogue);
         MemoryAPI.Instance.ResponseMemory(inputDialogue, responseCount);
     }
 
