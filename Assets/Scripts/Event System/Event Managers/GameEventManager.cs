@@ -127,7 +127,7 @@ public class GameEventManager : MonoBehaviour
 	// Play story event
 	IEnumerator PlayStory(StoryEvent storyEvent)
 	{
-        UIController.Instance.ChangeUI(BASEUI.STORY); // Change UI to Story UI
+        UIController.Instance.ChangeBaseUI(BASEUI.STORY); // Change UI to Story UI
 
         // Start Story according to event info
         string storyInfo = "STORY_" + storyEvent.stage.ToString() + '_' + storyEvent.storyNum;
@@ -194,7 +194,7 @@ public class GameEventManager : MonoBehaviour
 	// Change UI state
 	private void ChangeUI()
 	{
-		UIController.STATE ui = HeadEvent.GetEventInfo<UIController.STATE>();
+		//UIController.STATE ui = HeadEvent.GetEventInfo<UIController.STATE>();
 		//UIController.Instance.ChangeUI(ui);
 		//TerminateEvent();
 	}
@@ -202,7 +202,7 @@ public class GameEventManager : MonoBehaviour
 	// Show Choice UI
 	private void ShowChoice(ShowChoiceEvent showChoiceEvent)
 	{
-		UIController.Instance.TurnOnSubUI(SUBUI.CHOICE);
+		UIController.Instance.TurnSubUIOn(SUBUI.CHOICE);
 
 		StartCoroutine(TerminateEvent(showChoiceEvent, true, true));
 	}

@@ -32,10 +32,10 @@ public class MemoryAPI : MonoBehaviour
     private void Start()
     {
         // Generate a unique UserID for testing
-        UserID = "User" + System.DateTime.Now.ToString("yyyyMMddHHmmss", CultureInfo.InvariantCulture);
+        // UserID = "User" + System.DateTime.Now.ToString("yyyyMMddHHmmss", CultureInfo.InvariantCulture);
 
         // Load inital Story
-        Addressables.LoadAssetAsync<TextAsset>("INITIAL_STORY_KOREAN").Completed += OnInitStoryLoadComplete;
+        //Addressables.LoadAssetAsync<TextAsset>("INITIAL_STORY_KOREAN").Completed += OnInitStoryLoadComplete;
         //Addressables.LoadAssetAsync<TextAsset>("INITIAL_STORY_AMERICAN").Completed += OnInitStoryLoadComplete;
     }
     private void OnInitStoryLoadComplete(AsyncOperationHandle<TextAsset> story)
@@ -132,12 +132,12 @@ public class MemoryAPI : MonoBehaviour
 
 
 
-    public void ResponseMemory(Dialogue dialogue,int responseCount)
+    public void GenerateResponse(Dialogue dialogue,int responseCount)
     {
-        StartCoroutine(ResponseMemoryCoroutine(dialogue, responseCount));
+        StartCoroutine(GenerateResponseCoroutine(dialogue, responseCount));
     }
 
-    IEnumerator ResponseMemoryCoroutine(Dialogue dialogue, int responseCount)
+    IEnumerator GenerateResponseCoroutine(Dialogue dialogue, int responseCount)
     {
         ResponseMemory memory = new ResponseMemory();
         memory.userId = UserID;
@@ -195,7 +195,7 @@ public class MemoryAPI : MonoBehaviour
     {
         Reflect reflect = new Reflect();
         reflect.userId = UserID;
-
+        
         // Convert the object to JSON format
         string jsonData = JsonUtility.ToJson(reflect);
 

@@ -3,7 +3,7 @@
 namespace UIEnums
 {
     public enum BASEUI { TITLE, CONTROL, STORY, CUTSCENE, LOADING }
-    public enum SUBUI { PAUSE, SAVE, LOAD, CHOICE }
+    public enum SUBUI { NONE, PAUSE, SAVE, LOAD, CHOICE, PREFERENCE, KEYSETTINGS }
 }
 
 namespace StageEnums

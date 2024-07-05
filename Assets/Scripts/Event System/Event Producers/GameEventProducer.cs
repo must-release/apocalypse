@@ -5,7 +5,7 @@ using UIEnums;
 using StageEnums;
 
 /*
- * EventHandler which creates the game event stream
+ * EventProducer which creates the game event stream
  */
 
 public class GameEventProducer : MonoBehaviour
@@ -21,7 +21,7 @@ public class GameEventProducer : MonoBehaviour
     }
 
     // Generate new game event stream
-    public void GenerateNewGameEvent()
+    public void GenerateNewGameEventStream()
     {
         // First, create user data(load initial data)
         DataLoadEvent dataLoadEvent = ScriptableObject.CreateInstance<DataLoadEvent>();
@@ -73,35 +73,40 @@ public class GameEventProducer : MonoBehaviour
         //cutsceneEvent.NextEvent = uiChangeEvent;
 
         // Handle generated event stream
-        HandleGeneratedEvent(dataLoadEvent);
+        HandleGeneratedEventChain(dataLoadEvent);
     }
 
 
     // Generate load game event stream. If there is no parameter, load recent game
-    public void GenerateLoadGameEvent(int slotNum = int.MaxValue)
+    public void GenerateLoadGameEventStream(int slotNum = int.MaxValue)
+    {
+
+    }
+
+    public void GenerateSaveGameEventStream(int slotNUm)
     {
 
     }
 
     // Generate show choice event stream
-    public void GenerateShowChoiceEvent()
+    public void GenerateShowChoiceEventStream()
     {
         ShowChoiceEvent showChoiceEvent = ScriptableObject.CreateInstance<ShowChoiceEvent>();
 
-        HandleGeneratedEvent(showChoiceEvent);
+        HandleGeneratedEventChain(showChoiceEvent);
     }
 
     // Generate select choice event stream
-    public void GenerateSelectChoiceEvent(string text)
+    public void GenerateSelectChoiceEventStream(string text)
     {
         SelectChoiceEvent selectChoiceEvent = ScriptableObject.CreateInstance<SelectChoiceEvent>();
         selectChoiceEvent.optionText = text;
 
-        HandleGeneratedEvent(selectChoiceEvent);
+        HandleGeneratedEventChain(selectChoiceEvent);
     }
 
     // Handle generated game event to GameEventRouter
-    private void HandleGeneratedEvent(EventBase generated)
+    private void HandleGeneratedEventChain(EventBase generated)
     {
         // If generated event is compatible, play event chian
         if (EventChecker.Instance.CheckEventCompatibility(generated))

@@ -26,6 +26,7 @@ public class PlayerManager : MonoBehaviour
     private void Start()
     {
         GameObject.Find("Main Camera").GetComponent<AudioListener>().enabled = true;
+
     }
 
 }

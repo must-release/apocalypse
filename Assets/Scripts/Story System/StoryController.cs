@@ -123,7 +123,7 @@ public class StoryController : MonoBehaviour
 
             if (isRegenerate && StoryModel.Instance.storyEntryBuffer.Count == 0)
             {
-                GameEventProducer.Instance.GenerateShowChoiceEvent();
+                GameEventProducer.Instance.GenerateShowChoiceEventStream();
                 return;
             }
 
@@ -158,7 +158,7 @@ public class StoryController : MonoBehaviour
         if (responseCount >= MAX_RESPONSE_COUNT) isRegenerate = false;
         else isRegenerate = true;
 
-        MemoryAPI.Instance.ResponseMemory(inputDialogue, responseCount);
+        MemoryAPI.Instance.GenerateResponse(inputDialogue, responseCount);
     }
 
     public void ShowResponse(string response)
@@ -196,7 +196,7 @@ public class StoryController : MonoBehaviour
         else if (entry is Choice choice)
         {
             // Generate show choice event stream
-            GameEventProducer.Instance.GenerateShowChoiceEvent();
+            GameEventProducer.Instance.GenerateShowChoiceEventStream();
         }
         else if (entry is Effect effect)
         {

@@ -1,17 +1,22 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using UnityEngine.EventSystems;
+using UIEnums;
 
-/* Part of InputManager which manages Title UI logic */
+/* Part of UIController which manages Title UI logic */
 
 public class TitleUIController : MonoBehaviour, IUIContoller
 {
-	public static TitleUIController Instance;
+    /****** Private fields ******/
     private string titleUIName = "Title UI";
 	private string buttonsName = "Buttons";
 	private Transform titleUI;
 	private List<Button> buttonList = new List<Button>();
+
+
+    /****** Single tone instance ******/
+    public static TitleUIController Instance;
+
 
     public void Awake()
     {
@@ -38,57 +43,48 @@ public class TitleUIController : MonoBehaviour, IUIContoller
             buttonList[0].onClick.AddListener(onContinueGameClick);
             buttonList[1].onClick.AddListener(OnNewGameClick);
             buttonList[2].onClick.AddListener(OnLoadGameClick);
-            buttonList[3].onClick.AddListener(OnSettingsClick);
+            buttonList[3].onClick.AddListener(OnPreferenceClick);
         }
     }
 
+    /****** Methods ******/
 
-    // Enter Title UI state
+    // Enter Title UI
     public void StartUI()
 	{
 		// Active Title UI object
         titleUI.gameObject.SetActive(true);
     }
 
-    // Exit Title UI state
+    // Exit Title UI
 	public void EndUI()
 	{
         // Inactive Title UI object
         titleUI.gameObject.SetActive(false);
 	}
 
-    // Load most recent saved data
 	private void onContinueGameClick()
 	{
-
-        // Load most recent saved Data
-        DataManager.Instance.LoadContinueData();
-
-        // Start loading recent data
-        //GameSceneController.Instance.LoadGameScene()
+        // Generate Load game event stream, but load most recent saved data
+        GameEventProducer.Instance.GenerateLoadGameEventStream();
 	}
 
-	// Start new game
 	private void OnNewGameClick()
 	{
         // Generate new game event stream
-        GameEventProducer.Instance.GenerateNewGameEvent();
+        GameEventProducer.Instance.GenerateNewGameEventStream();
     }
 
-    // Load saved game
     private void OnLoadGameClick()
     {
-        //UIController.Instance.ChangeState(UIController.STATE.LOAD, false);
+        // Turn Load UI On
+        UIController.Instance.TurnSubUIOn(SUBUI.LOAD);
     }
 
-	private void OnSettingsClick()
+	private void OnPreferenceClick()
 	{
-        Debug.Log("Settings");
-    }
-
-    public UIController.STATE GetState()
-    {
-        return UIController.STATE.TITLE;
+        // Turn Preference UI On
+        UIController.Instance.TurnSubUIOn(SUBUI.PREFERENCE);
     }
 
     public void UpdateUI() { return; }

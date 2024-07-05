@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 
-/* Part of InputManager which manages Story UI logic */
+/* Part of UIController which manages Story UI logic */
 
 public class StoryUIController : MonoBehaviour, IUIContoller
 {
@@ -55,30 +55,25 @@ public class StoryUIController : MonoBehaviour, IUIContoller
 
     /****** UI Methods ******/
 
-    // Enter Story UI state
+    // Enter Story UI
     public void StartUI()
     {
         // Active Story UI object
         storyUI.gameObject.SetActive(true);
     }
 
-    // Update Story UI state
+    // Update Story UI
     public void UpdateUI()
     {
 
     }
 
-    // Exit Story UI state
+    // Exit Story UI
     public void EndUI()
     {
         // Inactive Story UI object
-        choicePanel.gameObject.SetActive(false);
         storyUI.gameObject.SetActive(false);
     }
-
-
-    public void Attack() { }//PlayNextScript(); }
-    public void Submit() { }//PlayNextScript(); }
 
 
     // Pause game and show Pause UI
@@ -88,13 +83,10 @@ public class StoryUIController : MonoBehaviour, IUIContoller
         //UIController.Instance.ChangeState(UIController.STATE.PAUSE, false);
     }
 
-    public UIController.STATE GetState()
-    {
-        return UIController.STATE.STORY;
-    }
-
     public void Move(float move) { return; }
     public void Stop() { return; }
+    public void Attack() { }
+    public void Submit() { }
 
 
 
@@ -160,7 +152,7 @@ public class StoryUIController : MonoBehaviour, IUIContoller
     public void SubmitInputChoice()
     {
         // Generate select choice event
-        GameEventProducer.Instance.GenerateSelectChoiceEvent(inputField.text);
+        GameEventProducer.Instance.GenerateSelectChoiceEventStream(inputField.text);
 
         // Reset input field
         inputField.text = "";
@@ -173,5 +165,4 @@ public class StoryUIController : MonoBehaviour, IUIContoller
         choicePanel.gameObject.SetActive(false);
         inputField.DeactivateInputField();
     }
-
 }
