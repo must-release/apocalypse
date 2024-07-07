@@ -48,6 +48,7 @@ public class PreferenceUIController : MonoBehaviour, IUIContoller
 
     public void Cancel()
     {
+
     }
 
     public void UpdateUI() { return; }
