@@ -57,9 +57,5 @@ public class LoadingUIController : MonoBehaviour, IUIContoller
         loadingUI.gameObject.SetActive(false);
     }
 
-    public void Move(float move) { return; }
-    public void Attack() { return; }
-    public void Submit() { return; }
-    public void Stop() { return; }
     public void Cancel() { return; }
 }

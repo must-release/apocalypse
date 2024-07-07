@@ -146,10 +146,6 @@ public class UIController : MonoBehaviour
         curUIController.UpdateUI();
     }
 
-    public void Move(float move) { curUIController.Move(move); }
-    public void Stop() { curUIController.Stop(); }
-    public void Attack() { curUIController.Attack(); }
-    public void Submit() { curUIController.Submit(); }
     public void Cancel() { curUIController.Cancel(); }
 }
 
@@ -158,9 +154,5 @@ public interface IUIContoller
     public void StartUI();
     public void UpdateUI();
     public void EndUI();
-    public void Move(float move);
-    public void Stop();
-    public void Attack();
-    public void Submit();
     public void Cancel();
 }

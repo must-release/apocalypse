@@ -88,9 +88,5 @@ public class TitleUIController : MonoBehaviour, IUIContoller
     }
 
     public void UpdateUI() { return; }
-    public void Move(float move) { return; }
-    public void Attack() { return; }
-    public void Submit() { return; }
-    public void Stop() { return; }
     public void Cancel() { return; }
 }

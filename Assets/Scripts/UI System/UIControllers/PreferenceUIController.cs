@@ -52,9 +52,5 @@ public class PreferenceUIController : MonoBehaviour, IUIContoller
     }
 
     public void UpdateUI() { return; }
-    public void Attack() { return; }
-    public void Submit() { return; }
-    public void Move(float move) { return; }
-    public void Stop() { return; }
 }
 

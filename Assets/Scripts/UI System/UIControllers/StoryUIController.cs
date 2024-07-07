@@ -83,11 +83,6 @@ public class StoryUIController : MonoBehaviour, IUIContoller
         //UIController.Instance.ChangeState(UIController.STATE.PAUSE, false);
     }
 
-    public void Move(float move) { return; }
-    public void Stop() { return; }
-    public void Attack() { }
-    public void Submit() { }
-
 
 
     /****** Show Choice UI on the screen ******/
