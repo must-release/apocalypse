@@ -47,7 +47,5 @@ public class CutsceneUIController : MonoBehaviour, IUIContoller
     public void Cancel()
     {
     }
-
-    public void UpdateUI() { return; }
 }
 

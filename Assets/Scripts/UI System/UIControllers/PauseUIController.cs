@@ -40,10 +40,10 @@ public class PauseUIController : MonoBehaviour, IUIContoller
             }
 
             // Add event listener to buttons
-            buttonList[0].onClick.AddListener(OnResumeButtonClick);
+            buttonList[0].onClick.AddListener(Cancel);
             buttonList[1].onClick.AddListener(OnSaveButtonClick);
             buttonList[2].onClick.AddListener(OnLoadButtonClick);
-            buttonList[3].onClick.AddListener(OnSettingsButtonClick);
+            buttonList[3].onClick.AddListener(OnPreferenceButtonClick);
             buttonList[4].onClick.AddListener(OnTitleButtonClick);
         }
     }
@@ -70,16 +70,10 @@ public class PauseUIController : MonoBehaviour, IUIContoller
         Time.timeScale = 1f;
     }
 
+    // Cancel Pause UI. Return to previous UI
     public void Cancel()
     {
-        // Change to previous state
-        //UIController.Instance.ChangeToPreviousState();
-    }
-
-    public void OnResumeButtonClick()
-    {
-        // Change to previous state
-        //UIController.Instance.ChangeToPreviousState();
+        UIController.Instance.TurnSubUIOff(SUBUI.PAUSE);
     }
 
     // Open Save UI
@@ -88,15 +82,16 @@ public class PauseUIController : MonoBehaviour, IUIContoller
         UIController.Instance.TurnSubUIOn(SUBUI.SAVE);
     }
 
+    // Open Load UI
     private void OnLoadButtonClick()
     {
-        // Open Load UI
-        //UIController.Instance.ChangeState(UIController.STATE.LOAD, false);
+        UIController.Instance.TurnSubUIOn(SUBUI.LOAD);
     }
 
-    private void OnSettingsButtonClick()
+    // Open Preference UI
+    private void OnPreferenceButtonClick()
     {
-        Debug.Log("settings click");
+        UIController.Instance.TurnSubUIOn(SUBUI.PREFERENCE);
     }
 
     // Go back to title scene
@@ -104,6 +99,4 @@ public class PauseUIController : MonoBehaviour, IUIContoller
     {
         GameSceneController.Instance.GoTitle();
     }
-
-    public void UpdateUI() { return; }
 }

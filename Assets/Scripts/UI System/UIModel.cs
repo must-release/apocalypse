@@ -9,6 +9,8 @@ public class UIModel : MonoBehaviour
 
     public BASEUI CurrentBaseUI { get; set; } // Base UI using right now
     public SUBUI CurrentSubUI { get; private set; }  // SubUI using right now
+    public List<string> ChoiceList { get; set; } // Choice option list
+    public string SelectedChoice { get; set; } // Selected choice option
 
     private Stack<SUBUI> savedSubUIs; // Sub UIs which are stacked
 

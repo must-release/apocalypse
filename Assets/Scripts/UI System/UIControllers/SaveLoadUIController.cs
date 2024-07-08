@@ -128,7 +128,7 @@ public class SaveLoadUIController : MonoBehaviour, IUIContoller
         previousButton.gameObject.SetActive(false);
     }
 
-    // return to previous UI
+    // Cancel SaveLoad UI. Return to previous UI
     public void Cancel()
     {
         if (confirmPanel.gameObject.activeInHierarchy) // check if confirm panel is on.
@@ -214,6 +214,4 @@ public class SaveLoadUIController : MonoBehaviour, IUIContoller
         // Updata data slots
         SetDataSlots();
     }
-
-    public void UpdateUI() { return; }
 }

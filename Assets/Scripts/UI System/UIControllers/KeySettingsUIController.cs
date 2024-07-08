@@ -49,11 +49,5 @@ public class KeySettingsUIController : MonoBehaviour, IUIContoller
     public void Cancel()
     {
     }
-
-    public void UpdateUI() { return; }
-    public void Attack() { return; }
-    public void Submit() { return; }
-    public void Move(float move) { return; }
-    public void Stop() { return; }
 }
 

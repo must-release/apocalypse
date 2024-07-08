@@ -48,7 +48,5 @@ public class ControlUIController : MonoBehaviour, IUIContoller
         // Change to Pause UI
         //UIController.Instance.ChangeState(UIController.STATE.PAUSE, false);
     }
-
-    public void UpdateUI() { return; }
 }
 

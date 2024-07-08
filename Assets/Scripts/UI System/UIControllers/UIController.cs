@@ -95,10 +95,25 @@ public class UIController : MonoBehaviour
     }
 
     // Get current UI. Return both base UI and sub UI
-    private (BASEUI, SUBUI) GetCurrentUI()
+    public (BASEUI, SUBUI) GetCurrentUI()
     {
         return (UIModel.Instance.CurrentBaseUI, UIModel.Instance.CurrentSubUI);
     }
+
+    // Set choice info
+    public void SetChoiceInfo(List<string> choiceList)
+    {
+        UIModel.Instance.ChoiceList = choiceList;
+    }
+
+    // Get selected choice
+    public string GetSelectedChoice()
+    {
+        return UIModel.Instance.SelectedChoice;
+    }
+
+    // Cancel current UI
+    public void CancelCurrentUI() { curUIController.Cancel(); }
 
     // Set UI controller according to parameter base UI
     private void SetUIController(BASEUI baseUI)
@@ -139,20 +154,11 @@ public class UIController : MonoBehaviour
                 break;
         }
     }
-
-
-    private void Update()
-    {
-        curUIController.UpdateUI();
-    }
-
-    public void Cancel() { curUIController.Cancel(); }
 }
 
 public interface IUIContoller
 {
     public void StartUI();
-    public void UpdateUI();
     public void EndUI();
     public void Cancel();
 }

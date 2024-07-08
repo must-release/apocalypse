@@ -21,25 +21,25 @@ public class InputEventRouter : MonoBehaviour
     private void Update()
     {
         /* UI Input */
-        if (InputHandler.Instance.Move != 0) { UIController.Instance.Move(InputHandler.Instance.Move); }
-        else { UIController.Instance.Stop(); }
+        //if (InputHandler.Instance.Move != 0) { UIController.Instance.Move(InputHandler.Instance.Move); }
+        //else { UIController.Instance.Stop(); }
 
-        if (InputHandler.Instance.Attack)
-        {
-            UIController.Instance.Attack();
-            InputHandler.Instance.Attack = false; // Reset Attack after handling
-        }
+        //if (InputHandler.Instance.Attack)
+        //{
+        //    UIController.Instance.Attack();
+        //    InputHandler.Instance.Attack = false; // Reset Attack after handling
+        //}
 
-        if (InputHandler.Instance.Submit)
-        {
-            // When there is a lock, unlock it and skip the submit action
-            if (SubmitLock)
-                SubmitLock = false;
-            else
-                UIController.Instance.Submit();
-        }
+        //if (InputHandler.Instance.Submit)
+        //{
+        //    // When there is a lock, unlock it and skip the submit action
+        //    if (SubmitLock)
+        //        SubmitLock = false;
+        //    else
+        //        UIController.Instance.Submit();
+        //}
 
-        if (InputHandler.Instance.Cancel) { UIController.Instance.Cancel(); }
+        //if (InputHandler.Instance.Cancel) { UIController.Instance.Cancel(); }
 
 
         ///* Character Input */

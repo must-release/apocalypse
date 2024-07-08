@@ -50,7 +50,5 @@ public class PreferenceUIController : MonoBehaviour, IUIContoller
     {
 
     }
-
-    public void UpdateUI() { return; }
 }
 

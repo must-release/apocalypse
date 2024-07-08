@@ -87,6 +87,5 @@ public class TitleUIController : MonoBehaviour, IUIContoller
         UIController.Instance.TurnSubUIOn(SUBUI.PREFERENCE);
     }
 
-    public void UpdateUI() { return; }
     public void Cancel() { return; }
 }

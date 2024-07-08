@@ -1960,7 +1960,7 @@ GameObject:
   - component: {fileID: 882932833}
   - component: {fileID: 882932832}
   m_Layer: 0
-  m_Name: Choice Panel
+  m_Name: Choice UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1973,7 +1973,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 882932830}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1982,7 +1982,7 @@ RectTransform:
   - {fileID: 1569839914}
   - {fileID: 2108368492}
   - {fileID: 742687708}
-  m_Father: {fileID: 1061987668}
+  m_Father: {fileID: 8262039481509302404}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2059,7 +2059,6 @@ RectTransform:
   m_Children:
   - {fileID: 425413963}
   - {fileID: 1837375361}
-  - {fileID: 882932831}
   - {fileID: 267273229}
   m_Father: {fileID: 8262039481509302404}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -17877,13 +17876,14 @@ RectTransform:
   m_Children:
   - {fileID: 3994711121533450759}
   - {fileID: 8024781562920293239}
-  - {fileID: 4771979460480411913}
   - {fileID: 1061987668}
   - {fileID: 1882635526}
-  - {fileID: 2674877375573901023}
+  - {fileID: 882932831}
   - {fileID: 2057101602181149937}
+  - {fileID: 2674877375573901023}
   - {fileID: 3610326094204325926}
   - {fileID: 13410801664194747}
+  - {fileID: 4771979460480411913}
   m_Father: {fileID: 7831773975838573780}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
