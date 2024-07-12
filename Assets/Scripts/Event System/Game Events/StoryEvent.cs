@@ -19,16 +19,4 @@ public class StoryEvent : EventBase
     {
         EventType = TYPE.STORY;
     }
-
-    public override T GetEventInfo<T>()
-    {
-        // Check generic type
-        if (typeof(T) == typeof(string))
-        {
-            // Return story info
-            object story = "STORY_" + stage.ToString() + '_' + storyNum;
-            return (T)story;
-        }
-        return default(T);
-    }
 }

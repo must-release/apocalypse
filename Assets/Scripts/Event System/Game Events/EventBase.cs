@@ -16,9 +16,6 @@ public class EventBase : ScriptableObject
     public EventBase NextEvent { get { return nextEvent; } set { nextEvent = value; } }
     public EventBase parentEvent;
     public EventBase ParentEvent { get { return parentEvent; } set { parentEvent = value; } }
-    public EventBase childEvent;
-    public EventBase ChildEvent { get { return childEvent; } set { childEvent = value; } }
-
 
     /* Event info which is used when saving data */
     [SerializeField, HideInInspector]
@@ -26,14 +23,8 @@ public class EventBase : ScriptableObject
     [SerializeField, HideInInspector]
     private string nextEventdata;
 
-    // Return important info of the event
-    public virtual T GetEventInfo<T>()
-    {
-        return default;
-    }
-
     // Check compatibiliry with parent event
-    public virtual bool CheckCompatibility(EventBase headEvent)
+    public virtual bool CheckCompatibility(EventBase parentEvent)
     {
         return default;
     }

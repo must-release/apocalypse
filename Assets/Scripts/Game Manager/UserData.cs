@@ -3,13 +3,12 @@ using System.Collections;
 using System;
 using UnityEngine;
 using StageEnums;
+using CharacterEums;
 
 
 [System.Serializable]
 public class UserData : ISerializationCallbackReceiver
 {
-    public enum CHARACTER { HERO, HEROINE }
-
     [SerializeField]
     private int currentStage;
     public STAGE CurrentStage { get { return (STAGE)currentStage; } set { currentStage = (int)value; } }

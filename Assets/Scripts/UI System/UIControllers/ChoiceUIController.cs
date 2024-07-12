@@ -55,6 +55,9 @@ public class ChoiceUIController : MonoBehaviour, IUIContoller
     {
         // Active Choice UI object
         choiceUI.gameObject.SetActive(true);
+
+        // Set Choice UI
+        SetChoiceUI();
     }
 
     // Exit Choice UI state
@@ -68,6 +71,7 @@ public class ChoiceUIController : MonoBehaviour, IUIContoller
 
         // Turn off choice UI
         inputOption.gameObject.SetActive(false);
+        choiceOptionList.ForEach((option) => option.SetOptionInactive());
         choiceUI.gameObject.SetActive(false);
         inputField.DeactivateInputField();
     }
@@ -75,6 +79,25 @@ public class ChoiceUIController : MonoBehaviour, IUIContoller
     public void Cancel()
     {
 
+    }
+
+    // Set Choice UI
+    public void SetChoiceUI()
+    {
+        // Get choice info
+        List<string> choiceList = UIModel.Instance.ChoiceList;
+
+        if(choiceList == null) // Enable input option
+        {
+            inputOption.gameObject.SetActive(true);
+        }
+        else // Enable choice options
+        {
+            for(int i = 0; i < choiceOptionList.Count; i++)
+            {
+                choiceOptionList[i].SetOption(choiceList[i]);
+            }
+        }
     }
 
     // Process selected choice option

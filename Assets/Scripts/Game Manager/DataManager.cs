@@ -10,6 +10,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
 using StageEnums;
+using CharacterEums;
 
 public class DataManager : MonoBehaviour
 {
@@ -32,7 +33,7 @@ public class DataManager : MonoBehaviour
 
         // Initialize player data
         UserData startData =
-            new UserData(STAGE.TEST, 0, prologueEvent, 0, 0, UserData.CHARACTER.HERO, "00:00", saveTime);
+            new UserData(STAGE.TEST, 0, prologueEvent, 0, 0, CHARACTER.HERO, "00:00", saveTime);
 
         // Set current player data
         PlayerManager.Instance.PlayerData = startData;
@@ -201,8 +202,8 @@ public class DataManager : MonoBehaviour
     // Start loading text of the current story event which player is having 
     public void LoadStoryText()
     {
-        string storyInfo = GameEventManager.Instance.HeadEvent.GetEventInfo<string>();
-        Addressables.LoadAssetAsync<TextAsset>(storyInfo).Completed += OnStoryLoadComplete;
+        //string storyInfo = GameEventManager.Instance.HeadEvent.GetEventInfo<string>();
+        //Addressables.LoadAssetAsync<TextAsset>(storyInfo).Completed += OnStoryLoadComplete;
     }
     private void OnStoryLoadComplete(AsyncOperationHandle<TextAsset> story)
     {

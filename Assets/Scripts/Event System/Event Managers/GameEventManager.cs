@@ -33,7 +33,6 @@ public class GameEventManager : MonoBehaviour
         // Set relationship if there is current event
         if (HeadEvent)
         {
-            HeadEvent.ChildEvent = childEvent;
             childEvent.ParentEvent = HeadEvent;
         }
     }
@@ -82,7 +81,7 @@ public class GameEventManager : MonoBehaviour
         // Wait child event chain to be terminated
         if (checkChild)
 		{
-			while (terminatingEvent.ChildEvent)
+			while (HeadEvent != terminatingEvent)
 			{
 				yield return null;
 			}
@@ -103,7 +102,6 @@ public class GameEventManager : MonoBehaviour
 			// Update event relationship. Update child event of the parent event.
 			if (terminatingEvent.ParentEvent)
 			{
-				terminatingEvent.ParentEvent.ChildEvent = terminatingEvent.NextEvent;
 				terminatingEvent.NextEvent.ParentEvent = terminatingEvent.ParentEvent;
 			}
 
@@ -114,7 +112,6 @@ public class GameEventManager : MonoBehaviour
             // Update event relationship. Delete child event of the parent event
             if (terminatingEvent.ParentEvent)
             {
-				terminatingEvent.ParentEvent.ChildEvent = null; // Child event chain is terminated
 				HeadEvent = terminatingEvent.ParentEvent; // Now resume the parent event chain
             }
 			else

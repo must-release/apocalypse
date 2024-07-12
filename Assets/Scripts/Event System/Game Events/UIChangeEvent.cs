@@ -14,16 +14,4 @@ public class UIChangeEvent : EventBase
     {
         EventType = TYPE.UI_CHANGE;
     }
-
-    public override T GetEventInfo<T>()
-    {
-        // Check generic type
-        if (typeof(T) == typeof(BASEUI))
-        {
-            // Return UI state
-            object ui = changingUI;
-            return (T)ui;
-        }
-        return default(T);
-    }
 }

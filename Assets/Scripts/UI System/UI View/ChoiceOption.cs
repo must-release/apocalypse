@@ -27,6 +27,7 @@ class ChoiceOption
     // Inactive button object
     public void SetOptionInactive()
     {
+        optionText.text = null;
         optionObject.gameObject.SetActive(false);
     }
 }

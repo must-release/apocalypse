@@ -84,27 +84,9 @@ public class SaveLoadUIController : MonoBehaviour, IUIContoller
     // Enter SaveLoad UI
     public void StartUI()
     {
-        // Reset confirm button function
-        confirmButton.onClick.RemoveAllListeners();
-
-        // Check if it is load or save
+        // Get current UI state and set UI objects
         saveOrLoad = UIModel.Instance.CurrentSubUI;
-        if (saveOrLoad == SUBUI.SAVE)
-        {
-            confirmText.text = "Save Data?";
-            labelText.text = "SAVE";
-            confirmButton.onClick.AddListener(SaveAtSelectedSlot);
-        }
-        else if (saveOrLoad == SUBUI.LOAD)
-        {
-            confirmText.text = "Load Data?";
-            labelText.text = "LOAD";
-            confirmButton.onClick.AddListener(LoadSavedData);
-        }
-        else
-        {
-            Debug.Log("SubUI error: must be save or load");
-        }
+        SetSaveLoadUI();
 
         // Set Slot Info
         dataList = DataManager.Instance.GetAllUserData();
@@ -121,11 +103,7 @@ public class SaveLoadUIController : MonoBehaviour, IUIContoller
         saveLoadUI.gameObject.SetActive(false);
 
         // Reset UI objects & Info
-        selectedSlot = null;
-        currentPage = 1;
-        saveOrLoad = SUBUI.NONE;
-        pageNumberText.text = currentPage + "/" + (DataManager.SLOT_NUM / slots.childCount);
-        previousButton.gameObject.SetActive(false);
+        ResetUISettings();
     }
 
     // Cancel SaveLoad UI. Return to previous UI
@@ -138,6 +116,27 @@ public class SaveLoadUIController : MonoBehaviour, IUIContoller
         else // Turn save load UI off
         {
             UIController.Instance.TurnSubUIOff(saveOrLoad);
+        }
+    }
+
+    // Set SaveLoad UI objects
+    private void SetSaveLoadUI()
+    {
+        if (saveOrLoad == SUBUI.SAVE)
+        {
+            confirmText.text = "Save Data?";
+            labelText.text = "SAVE";
+            confirmButton.onClick.AddListener(SaveAtSelectedSlot);
+        }
+        else if (saveOrLoad == SUBUI.LOAD)
+        {
+            confirmText.text = "Load Data?";
+            labelText.text = "LOAD";
+            confirmButton.onClick.AddListener(LoadSavedData);
+        }
+        else
+        {
+            Debug.Log("SubUI error: must be save or load");
         }
     }
 
@@ -213,5 +212,16 @@ public class SaveLoadUIController : MonoBehaviour, IUIContoller
 
         // Updata data slots
         SetDataSlots();
+    }
+
+    // Reset UI objects & Info
+    private void ResetUISettings()
+    {
+        selectedSlot = null;
+        currentPage = 1;
+        saveOrLoad = SUBUI.NONE;
+        pageNumberText.text = currentPage + "/" + (DataManager.SLOT_NUM / slots.childCount);
+        previousButton.gameObject.SetActive(false);
+        confirmButton.onClick.RemoveAllListeners();
     }
 }

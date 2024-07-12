@@ -8,5 +8,10 @@ namespace UIEnums
 
 namespace StageEnums
 {
-    public enum STAGE { TEST, TUTORIAL, LIBRARY, EVENT }
+    public enum STAGE { TEST, PROLOGUE, LIBRARY, EVENT }
+}
+
+namespace CharacterEums
+{
+    public enum CHARACTER { HERO, HEROINE }
 }
