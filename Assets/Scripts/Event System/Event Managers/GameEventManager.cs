@@ -7,7 +7,7 @@ public class GameEventManager : MonoBehaviour
 {
 	public static GameEventManager Instance { get; private set; }
 
-	public EventBase HeadEvent { get; private set; }
+	public EventBase EventPointer { get; private set; }
 
 	void Awake()
 	{
@@ -31,9 +31,9 @@ public class GameEventManager : MonoBehaviour
     private void SetRelationship(EventBase childEvent)
     {
         // Set relationship if there is current event
-        if (HeadEvent)
+        if (EventPointer)
         {
-            childEvent.ParentEvent = HeadEvent;
+            childEvent.ParentEvent = EventPointer;
         }
     }
 
@@ -41,9 +41,9 @@ public class GameEventManager : MonoBehaviour
     private void PlayEvent(EventBase playingEvent)
 	{
 		// Update head event
-		HeadEvent = playingEvent;
+		EventPointer = playingEvent;
 
-        switch (HeadEvent.EventType)
+        switch (EventPointer.EventType)
 		{
 			case EventBase.TYPE.STORY:
 				StartCoroutine(PlayStory((StoryEvent)playingEvent));
@@ -81,7 +81,7 @@ public class GameEventManager : MonoBehaviour
         // Wait child event chain to be terminated
         if (checkChild)
 		{
-			while (HeadEvent != terminatingEvent)
+			while (EventPointer != terminatingEvent)
 			{
 				yield return null;
 			}
@@ -112,11 +112,11 @@ public class GameEventManager : MonoBehaviour
             // Update event relationship. Delete child event of the parent event
             if (terminatingEvent.ParentEvent)
             {
-				HeadEvent = terminatingEvent.ParentEvent; // Now resume the parent event chain
+				EventPointer = terminatingEvent.ParentEvent; // Now resume the parent event chain
             }
 			else
 			{
-				HeadEvent = null; // Every event is terminated
+				EventPointer = null; // Every event is terminated
 			}
         }
     }

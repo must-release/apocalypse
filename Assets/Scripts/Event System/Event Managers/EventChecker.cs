@@ -17,7 +17,7 @@ public class EventChecker : MonoBehaviour
     // Check compatibility of the input event with current event
     public bool CheckEventCompatibility(EventBase checkingEvent)
     {
-        EventBase headEvent = GameEventManager.Instance.HeadEvent;
+        EventBase headEvent = GameEventManager.Instance.EventPointer;
         bool result = checkingEvent.CheckCompatibility(headEvent);
 
         return result;

@@ -73,7 +73,7 @@ public class GameEventProducer : MonoBehaviour
 
     }
 
-    // Generate show choice event stream
+    // Generate- show choice event stream
     public void GenerateShowChoiceEventStream()
     {
         ShowChoiceEvent showChoiceEvent = ScriptableObject.CreateInstance<ShowChoiceEvent>();
