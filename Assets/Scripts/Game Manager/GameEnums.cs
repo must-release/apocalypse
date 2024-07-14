@@ -15,3 +15,12 @@ namespace CharacterEums
 {
     public enum CHARACTER { HERO, HEROINE }
 }
+
+namespace EventEnums
+{
+    public enum EVENT_TYPE
+    {
+        STORY, TUTORIAL, CUTSCENE, MAP_CHANGE, UI_CHANGE,
+        DATA_SAVE, DATA_LOAD, SCENE_LOAD, SCENE_ACTIVATE, CHOICE
+    };
+}

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UIEnums;
+using EventEnums;
 
 
 public class GameEventManager : MonoBehaviour
@@ -45,32 +46,26 @@ public class GameEventManager : MonoBehaviour
 
         switch (EventPointer.EventType)
 		{
-			case EventBase.TYPE.STORY:
+			case EVENT_TYPE.STORY:
 				StartCoroutine(PlayStory((StoryEvent)playingEvent));
 				break;
-			case EventBase.TYPE.CUTSCENE:
+			case EVENT_TYPE.CUTSCENE:
 				PlayInGameEvent();
 				break;
-			case EventBase.TYPE.SCENE_LOAD:
+			case EVENT_TYPE.SCENE_LOAD:
 				LoadGameScene((SceneLoadEvent)playingEvent);
 				break;
-            case EventBase.TYPE.SCENE_ACTIVATE:
+            case EVENT_TYPE.SCENE_ACTIVATE:
                 ShowLoading();
                 break;
-            case EventBase.TYPE.DATA_LOAD:
+            case EVENT_TYPE.DATA_LOAD:
 				LoadGameData((DataLoadEvent)playingEvent);
 				break;
-            case EventBase.TYPE.DATA_SAVE:
+            case EVENT_TYPE.DATA_SAVE:
 				AutoSave();
 				break;
-			case EventBase.TYPE.UI_CHANGE:
+			case EVENT_TYPE.UI_CHANGE:
 				ChangeUI();
-				break;
-			case EventBase.TYPE.SHOW_CHOICE:
-				ShowChoice((ShowChoiceEvent)playingEvent);
-				break;
-			case EventBase.TYPE.SELECT_CHOICE:
-				SelectChoice((SelectChoiceEvent)playingEvent);
 				break;
         }
 	}
@@ -90,7 +85,7 @@ public class GameEventManager : MonoBehaviour
         // Additional action
         switch (terminatingEvent.EventType)
 		{
-			case EventBase.TYPE.STORY:
+			case EVENT_TYPE.STORY:
 				StoryController.Instance.FinishStory(); // End Story Mode
 				break;
 		}
@@ -197,20 +192,12 @@ public class GameEventManager : MonoBehaviour
 	}
 
 	// Show Choice UI
-	private void ShowChoice(ShowChoiceEvent showChoiceEvent)
+	private void ShowChoice(ChoiceEvent showChoiceEvent)
 	{
 		UIController.Instance.TurnSubUIOn(SUBUI.CHOICE);
 
 		StartCoroutine(TerminateEvent(showChoiceEvent, true, true));
 	}
-
-	// Notify selected choice option to the story system
-	private void SelectChoice(SelectChoiceEvent selectChoiceEvent)
-	{
-		StartCoroutine(TerminateEvent(selectChoiceEvent, true, true));
-
-		StoryController.Instance.ApplySelectedChoice(selectChoiceEvent.optionText);
-    }
 
 }
 

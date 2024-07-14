@@ -1,7 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using StageEnums;
+using UIEnums;
+using EventEnums;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "NewStory", menuName = "Event/StoryEvent", order = 0)]
@@ -17,6 +17,6 @@ public class StoryEvent : EventBase
     // Set event Type on load
     public void OnEnable()
     {
-        EventType = TYPE.STORY;
+        EventType = EVENT_TYPE.STORY;
     }
 }

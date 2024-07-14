@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UIEnums;
+using EventEnums;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "NewSceneLoad", menuName = "Event/SceneLoadEvent", order = 0)]
@@ -10,7 +11,7 @@ public class SceneLoadEvent : EventBase
     // Set event Type on load
     public void OnEnable()
     {
-        EventType = TYPE.SCENE_LOAD;
+        EventType = EVENT_TYPE.SCENE_LOAD;
     }
 }
 

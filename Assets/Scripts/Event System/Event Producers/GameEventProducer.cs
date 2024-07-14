@@ -65,29 +65,43 @@ public class GameEventProducer : MonoBehaviour
     // Generate load game event stream. If there is no parameter, load recent game
     public void GenerateLoadGameEventStream(int slotNum = int.MaxValue)
     {
+        // First, load data of the selected slot
+        DataLoadEvent dataLoadEvent = ScriptableObject.CreateInstance<DataLoadEvent>();
+        if(slotNum == int.MaxValue)
+        {
+            dataLoadEvent.isContinueGame = true; // load recent game
+        }
 
+        // Second, load stage scene asynchronously
+        SceneLoadEvent sceneLoadEvent = ScriptableObject.CreateInstance<SceneLoadEvent>();
+        sceneLoadEvent.sceneName = "StageScene";
+        dataLoadEvent.NextEvent = sceneLoadEvent;
+
+        // Third, Activate scene
+        SceneActivateEvent sceneActivateEvent = ScriptableObject.CreateInstance<SceneActivateEvent>();
+        sceneLoadEvent.NextEvent = sceneActivateEvent;
+
+        // Handle generated event stream
+        HandleGeneratedEventChain(dataLoadEvent);
     }
 
-    public void GenerateSaveGameEventStream(int slotNUm)
-    {
 
+    // Generate save event stream
+    public void GenerateSaveGameEventStream(int slotNum)
+    {
+        DataSaveEvent dataSaveEvent = ScriptableObject.CreateInstance<DataSaveEvent>();
+        dataSaveEvent.slotNum = slotNum;
+
+        HandleGeneratedEventChain(dataSaveEvent);
     }
 
-    // Generate- show choice event stream
-    public void GenerateShowChoiceEventStream()
+    // Generate choice event stream
+    public void GenerateChoiceEventStream(List<string> choiceList)
     {
-        ShowChoiceEvent showChoiceEvent = ScriptableObject.CreateInstance<ShowChoiceEvent>();
+        ChoiceEvent choiceEvent = ScriptableObject.CreateInstance<ChoiceEvent>();
+        choiceEvent.choiceList = choiceList;
 
-        HandleGeneratedEventChain(showChoiceEvent);
-    }
-
-    // Generate select choice event stream
-    public void GenerateSelectChoiceEventStream(string text)
-    {
-        SelectChoiceEvent selectChoiceEvent = ScriptableObject.CreateInstance<SelectChoiceEvent>();
-        selectChoiceEvent.optionText = text;
-
-        HandleGeneratedEventChain(selectChoiceEvent);
+        HandleGeneratedEventChain(choiceEvent);
     }
 
     // Handle generated game event to GameEventManager

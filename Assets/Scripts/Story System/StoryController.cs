@@ -123,7 +123,7 @@ public class StoryController : MonoBehaviour
 
             if (isRegenerate && StoryModel.Instance.storyEntryBuffer.Count == 0)
             {
-                GameEventProducer.Instance.GenerateShowChoiceEventStream();
+                GameEventProducer.Instance.GenerateChoiceEventStream(null);
                 return;
             }
 
@@ -195,8 +195,11 @@ public class StoryController : MonoBehaviour
         }
         else if (entry is Choice choice)
         {
+            // Extracting the text values from the options
+            List<string> optionTexts = choice.options.Select(option => option.text).ToList();
+
             // Generate show choice event stream
-            GameEventProducer.Instance.GenerateShowChoiceEventStream();
+            GameEventProducer.Instance.GenerateChoiceEventStream(optionTexts);
         }
         else if (entry is Effect effect)
         {

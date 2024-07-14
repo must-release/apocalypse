@@ -1,6 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UIEnums;
+using EventEnums;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "NewDataSave", menuName = "Event/DataSaveEvent", order = 0)]
@@ -11,6 +11,6 @@ public class DataSaveEvent : EventBase
     // Set event Type on load
     public void OnEnable()
     {
-        EventType = TYPE.DATA_SAVE;
+        EventType = EVENT_TYPE.DATA_SAVE;
     }
 }

@@ -1,17 +1,15 @@
 ﻿using System;
 using UnityEngine;
-using System.Collections.Generic;
+using EventEnums;
+using UIEnums;
 
 [System.Serializable]
 public class EventBase : ScriptableObject
 {
-    public enum TYPE { STORY, TUTORIAL, CUTSCENE, MAP_CHANGE, UI_CHANGE,
-        DATA_SAVE, DATA_LOAD, SCENE_LOAD, SCENE_ACTIVATE, SHOW_CHOICE, SELECT_CHOICE };
-
     /* Event info which is used when playing game */
     [HideInInspector]
     public int eventType;
-    public TYPE EventType { get { return (TYPE)eventType; } set { eventType = (int)value; } }
+    public EVENT_TYPE EventType { get { return (EVENT_TYPE)eventType; } set { eventType = (int)value; } }
     public EventBase nextEvent;
     public EventBase NextEvent { get { return nextEvent; } set { nextEvent = value; } }
     public EventBase parentEvent;
@@ -23,8 +21,8 @@ public class EventBase : ScriptableObject
     [SerializeField, HideInInspector]
     private string nextEventdata;
 
-    // Check compatibiliry with parent event
-    public virtual bool CheckCompatibility(EventBase parentEvent)
+    // Check compatibiliry with parent event and current UI
+    public virtual bool CheckCompatibility(EventBase parentEvent, (BASEUI, SUBUI) currentUI)
     {
         return default;
     }

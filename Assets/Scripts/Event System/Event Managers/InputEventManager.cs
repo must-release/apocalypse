@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class InputEventRouter : MonoBehaviour
+public class InputEventManager : MonoBehaviour
 {
-    public static InputEventRouter Instance { get; private set; }
+    public static InputEventManager Instance { get; private set; }
 
     public bool SubmitLock { get; set; } = false; // Lock submit button
     public bool AttackLock { get; set; } = false; // Lock attack button

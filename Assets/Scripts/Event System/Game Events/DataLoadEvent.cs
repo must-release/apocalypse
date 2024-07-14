@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UIEnums;
+using EventEnums;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "NewDataLoad", menuName = "Event/DataLoadEvent", order = 0)]
@@ -12,17 +14,17 @@ public class DataLoadEvent : EventBase
     // Set event Type on load
     public void OnEnable()
     {
-        EventType = TYPE.DATA_LOAD;
+        EventType = EVENT_TYPE.DATA_LOAD;
     }
 
     // Check compatibility with current event
-    public override bool CheckCompatibility(EventBase headEvent)
+    public override bool CheckCompatibility(EventBase parentEvent, (BASEUI, SUBUI) currentUI)
     {
-        if(headEvent == null) // Can be played when there is no event playing
+        if(parentEvent == null) // Can be played when there is no event playing
         {
             return true;
         }
-        else if(headEvent.EventType == TYPE.STORY) // Can be played when story event is playing
+        else if(parentEvent.EventType == EVENT_TYPE.STORY) // Can be played when story event is playing
         {
             return true;
         }
