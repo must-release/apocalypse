@@ -5,7 +5,7 @@ using EventEnums;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "NewChoice", menuName = "Event/ChoiceEvent", order = 0)]
-public class ChoiceEvent : EventBase
+public class ChoiceEvent : GameEvent
 {
     public List<string> choiceList;
     public string selectedChoice;
@@ -18,7 +18,7 @@ public class ChoiceEvent : EventBase
     }
 
     // Check compatibility with current event
-    public override bool CheckCompatibility(EventBase parentEvent, (BASEUI, SUBUI) currentUI)
+    public override bool CheckCompatibility(GameEvent parentEvent, (BASEUI, SUBUI) currentUI)
     {
         if (parentEvent.EventType == EVENT_TYPE.STORY) // Can be played when story event is playing
         {

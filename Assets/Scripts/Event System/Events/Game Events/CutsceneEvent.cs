@@ -4,7 +4,7 @@ using EventEnums;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "NewCutscene", menuName = "Event/CutsceneEvent", order = 0)]
-public class CutsceneEvent : EventBase
+public class CutsceneEvent : GameEvent
 {
     // Set event Type on load
     public void OnEnable()

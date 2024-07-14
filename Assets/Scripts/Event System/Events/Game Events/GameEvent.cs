@@ -4,16 +4,16 @@ using EventEnums;
 using UIEnums;
 
 [System.Serializable]
-public class EventBase : ScriptableObject
+public class GameEvent : ScriptableObject
 {
     /* Event info which is used when playing game */
     [HideInInspector]
     public int eventType;
     public EVENT_TYPE EventType { get { return (EVENT_TYPE)eventType; } set { eventType = (int)value; } }
-    public EventBase nextEvent;
-    public EventBase NextEvent { get { return nextEvent; } set { nextEvent = value; } }
-    public EventBase parentEvent;
-    public EventBase ParentEvent { get { return parentEvent; } set { parentEvent = value; } }
+    public GameEvent nextEvent;
+    public GameEvent NextEvent { get { return nextEvent; } set { nextEvent = value; } }
+    public GameEvent parentEvent;
+    public GameEvent ParentEvent { get { return parentEvent; } set { parentEvent = value; } }
 
     /* Event info which is used when saving data */
     [SerializeField, HideInInspector]
@@ -22,7 +22,7 @@ public class EventBase : ScriptableObject
     private string nextEventdata;
 
     // Check compatibiliry with parent event and current UI
-    public virtual bool CheckCompatibility(EventBase parentEvent, (BASEUI, SUBUI) currentUI)
+    public virtual bool CheckCompatibility(GameEvent parentEvent, (BASEUI, SUBUI) currentUI)
     {
         return default;
     }
@@ -46,7 +46,7 @@ public class EventBase : ScriptableObject
         {
             // Create objects and deserialize data based on stored type information
             Type eventType = Type.GetType(nextEventAssemblyQualifiedName);
-            EventBase eventInstance = (EventBase)CreateInstance(eventType);
+            GameEvent eventInstance = (GameEvent)CreateInstance(eventType);
             JsonUtility.FromJsonOverwrite(nextEventdata, eventInstance);
             nextEvent = eventInstance;
             nextEvent.RestoreNextEventInfo();

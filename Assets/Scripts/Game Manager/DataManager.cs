@@ -15,7 +15,7 @@ using CharacterEums;
 public class DataManager : MonoBehaviour
 {
     public static DataManager Instance { get; private set; }
-    public EventBase prologueEvent;
+    public GameEvent prologueEvent;
     public const int SLOT_NUM = 18;
 
     private void Awake()

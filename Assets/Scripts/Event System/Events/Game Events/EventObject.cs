@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EventObject : MonoBehaviour
 {
-    public EventBase playingEvent;
+    public GameEvent playingEvent;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

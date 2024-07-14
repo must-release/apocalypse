@@ -5,7 +5,7 @@ using EventEnums;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "NewDataLoad", menuName = "Event/DataLoadEvent", order = 0)]
-public class DataLoadEvent : EventBase
+public class DataLoadEvent : GameEvent
 {
     public int slotNum; // Number of the data slot to load data
     public bool isNewGame = false; // If true, create new game data
@@ -18,7 +18,7 @@ public class DataLoadEvent : EventBase
     }
 
     // Check compatibility with current event
-    public override bool CheckCompatibility(EventBase parentEvent, (BASEUI, SUBUI) currentUI)
+    public override bool CheckCompatibility(GameEvent parentEvent, (BASEUI, SUBUI) currentUI)
     {
         if(parentEvent == null) // Can be played when there is no event playing
         {

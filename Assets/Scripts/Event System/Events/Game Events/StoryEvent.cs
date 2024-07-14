@@ -5,7 +5,7 @@ using EventEnums;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "NewStory", menuName = "Event/StoryEvent", order = 0)]
-public class StoryEvent : EventBase
+public class StoryEvent : GameEvent
 {
     public STAGE stage;
     public int storyNum;

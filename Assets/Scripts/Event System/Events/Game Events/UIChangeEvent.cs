@@ -6,7 +6,7 @@ using EventEnums;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "NewUIChange", menuName = "Event/UIChange", order = 0)]
-public class UIChangeEvent : EventBase
+public class UIChangeEvent : GameEvent
 {
     public BASEUI changingUI;
 

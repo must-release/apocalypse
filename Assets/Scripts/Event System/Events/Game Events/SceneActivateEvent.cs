@@ -4,7 +4,7 @@ using EventEnums;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "NewSceneActivate", menuName = "Event/SceneActivateEvent", order = 0)]
-public class SceneActivateEvent : EventBase
+public class SceneActivateEvent : GameEvent
 {
     // Set event Type on load
     public void OnEnable()

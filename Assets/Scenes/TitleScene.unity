@@ -1113,7 +1113,6 @@ GameObject:
   - component: {fileID: 425413963}
   - component: {fileID: 425413965}
   - component: {fileID: 425413964}
-  - component: {fileID: 425413966}
   m_Layer: 0
   m_Name: Click Panel
   m_TagString: Untagged
@@ -1178,18 +1177,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 425413962}
   m_CullTransparentMesh: 1
---- !u!114 &425413966
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 425413962}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf24be50738b34a80a2ecbca6af0a9f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &547497237
 GameObject:
   m_ObjectHideFlags: 0
@@ -2114,8 +2101,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1126031225}
+  - component: {fileID: 1126031230}
   - component: {fileID: 1126031228}
   - component: {fileID: 1126031227}
+  - component: {fileID: 1126031231}
   - component: {fileID: 1126031229}
   m_Layer: 0
   m_Name: Event System
@@ -2173,6 +2162,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8875be39e16d9491995bb2c458c75d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1126031230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1126031224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6441cf25dc76244c699607760a1c9cd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1126031231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1126031224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53e1cac74c7744ecebeaefb48e767207, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1276712878
@@ -10691,6 +10704,7 @@ GameObject:
   - component: {fileID: 7831773975838573783}
   - component: {fileID: 7831773975838573782}
   - component: {fileID: 7831773975838573781}
+  - component: {fileID: 7831773975838573785}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -17323,6 +17337,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5434e7630e7e54c5d81f726be59b13a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFullScreen: 0
+  resolution: {x: 0, y: 0}
+  bgmVolume: 0
+  soundEffectVolume: 0
 --- !u!114 &7831773975838573782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17360,6 +17378,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prologueEvent: {fileID: 0}
+--- !u!114 &7831773975838573785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4344240009286854645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5434e7630e7e54c5d81f726be59b13a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isFullScreen: 0
+  resolution: {x: 0, y: 0}
+  bgmVolume: 0
+  soundEffectVolume: 0
 --- !u!1 &7832408577194687163
 GameObject:
   m_ObjectHideFlags: 0

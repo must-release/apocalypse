@@ -105,7 +105,7 @@ public class GameEventProducer : MonoBehaviour
     }
 
     // Handle generated game event to GameEventManager
-    private void HandleGeneratedEventChain(EventBase generated)
+    private void HandleGeneratedEventChain(GameEvent generated)
     {
         // If generated event is compatible, play event chian
         if (EventChecker.Instance.CheckEventCompatibility(generated))

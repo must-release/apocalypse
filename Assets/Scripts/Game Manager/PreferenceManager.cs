@@ -9,10 +9,11 @@ public class PreferenceManager : MonoBehaviour
     private List<PreferenceObserver> observerList; // Observers which observes setting parameters
 
     // Settings parameters
-    private bool isFullScreen;
-    private Vector2 resolution;
-    private float bgmVolume;
-    private float soundEffectVolume;
+    public bool isFullScreen;
+    public Vector2 resolution;
+    public float bgmVolume;
+    public float soundEffectVolume;
+    public KeySettings keySettings;
 
     private void Awake()
     {
@@ -20,19 +21,20 @@ public class PreferenceManager : MonoBehaviour
         {
             Instance = this;
             observerList = new List<PreferenceObserver>();
+            keySettings = new KeySettings();
         }
     }
 
     private void Start()
     {
-        // Initialize every preference observers
-        observerList.ForEach((observer) => observer.PreferenceUpdated());
+        
     }
 
     // Add new observer to the list
     public void AddObserver(PreferenceObserver newObserver)
     {
         observerList.Add(newObserver);
+        newObserver.PreferenceUpdated(); // Immediately update the new observer
     }
 }
 

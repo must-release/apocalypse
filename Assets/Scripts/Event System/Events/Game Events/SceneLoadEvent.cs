@@ -4,7 +4,7 @@ using EventEnums;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "NewSceneLoad", menuName = "Event/SceneLoadEvent", order = 0)]
-public class SceneLoadEvent : EventBase
+public class SceneLoadEvent : GameEvent
 {
     public string sceneName; // if null, load scene according to user data
 

@@ -4,7 +4,7 @@ using EventEnums;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "NewDataSave", menuName = "Event/DataSaveEvent", order = 0)]
-public class DataSaveEvent : EventBase
+public class DataSaveEvent : GameEvent
 {
     public int slotNum; // if 0 auto save, else save in slot
 

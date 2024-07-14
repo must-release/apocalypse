@@ -8,7 +8,7 @@ public class GameEventManager : MonoBehaviour
 {
 	public static GameEventManager Instance { get; private set; }
 
-	public EventBase EventPointer { get; private set; }
+	public GameEvent EventPointer { get; private set; }
 
 	void Awake()
 	{
@@ -19,7 +19,7 @@ public class GameEventManager : MonoBehaviour
 	}
 
 	// Start Event Chain
-	public void StartEventChain(EventBase firstEvent)
+	public void StartEventChain(GameEvent firstEvent)
 	{
         // Set parent-child relationship to first event and head event
         SetRelationship(firstEvent);
@@ -29,7 +29,7 @@ public class GameEventManager : MonoBehaviour
     }
 
     // Set parent-child relationship of the event
-    private void SetRelationship(EventBase childEvent)
+    private void SetRelationship(GameEvent childEvent)
     {
         // Set relationship if there is current event
         if (EventPointer)
@@ -39,7 +39,7 @@ public class GameEventManager : MonoBehaviour
     }
 
     // Play event 
-    private void PlayEvent(EventBase playingEvent)
+    private void PlayEvent(GameEvent playingEvent)
 	{
 		// Update head event
 		EventPointer = playingEvent;
@@ -71,7 +71,7 @@ public class GameEventManager : MonoBehaviour
 	}
 
 	// Terminate event
-	IEnumerator TerminateEvent(EventBase terminatingEvent, bool checkChild, bool playNextEvent)
+	IEnumerator TerminateEvent(GameEvent terminatingEvent, bool checkChild, bool playNextEvent)
 	{
         // Wait child event chain to be terminated
         if (checkChild)
