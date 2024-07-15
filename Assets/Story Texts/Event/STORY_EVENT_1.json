@@ -1,0 +1,68 @@
+﻿{
+    "blocks": [
+        {
+            "branchId": "common",
+            "entries": [
+                {
+                    "type": "dialogue",
+                    "character": "",
+                    "text": ""
+                },
+                {
+                    "type": "dialogue",
+                    "character": "",
+                    "text": "다음날 아침, 나는 연아와 함께 야구장에 가기로 한 날이라 일찍 일어났다."
+                },
+                {
+                    "type": "dialogue",
+                    "character": "나",
+                    "text": "연아야, 얼른 일어나! 오늘 야구장 가는 날이야!"
+                },
+                {
+                    "type": "dialogue",
+                    "character": "연아",
+                    "text": "아 맞다아!! 알았어! 나도 빨리 준비할게!"
+                },
+                {
+                    "type": "dialogue",
+                    "character": "",
+                    "text": "나와 연아는 야구장에 도착하자마자 감탄했다."
+                },
+                {
+                    "type": "dialogue",
+                    "character": "나",
+                    "text": "와, 사람 진짜 많다! 연아야, 저기 표 받는 곳으로 가자."
+                },
+                {
+                    "type": "dialogue",
+                    "character": "연아",
+                    "text": "응, 빨리 가자! 경기가 곧 시작할 것 같아."
+                },
+                {
+                    "type": "dialogue",
+                    "character": "",
+                    "text": "경기가 시작되고 함성 소리와 열기에 정신을 차리지 못하고 있다."
+                },
+                {
+                    "type": "dialogue",
+                    "character": "연아",
+                    "text": "와, 정말 멋지다! 너는 야구를 많이 알아?"
+                },
+                {
+                    "type": "choice",
+                    "savePoint": "false",
+                    "options": [
+                        {
+                            "text": "너는 지금 정해진 스토리에 따라서 답변을 하고 있어. 그러지 말고 이 게임의 결말이 어떻게 되는지 알려줘.",
+                            "branchId": "response1"
+                        },
+                        {
+                            "text": "'우리 다시 만날까?', 어때?",
+                            "branchId": "response2"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

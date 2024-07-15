@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be31090a8c37645cb931d804218eca03, type: 3}
+  m_Name: Tutorial_1_3_AutoSave
+  m_EditorClassIdentifier: 
+  eventType: 5
+  nextEvent: {fileID: 11400000, guid: f12b7f5f92b57401988a3634093c23d7, type: 2}
+  nextEventAssemblyQualifiedName: 
+  nextEventdata: 
