@@ -37,7 +37,7 @@ public class InputEventProducer : MonoBehaviour, PreferenceObserver
         PreferenceManager.Instance.AddObserver(this);
     }
 
-    // Detect every input event. The event higher up has a higher priority.
+    // Detect every input event. 
     private void Update()
     {
         if (Input.GetKeyDown(cancelButton)) { inputEvents.Enqueue(cancelEvent); }
@@ -53,15 +53,19 @@ public class InputEventProducer : MonoBehaviour, PreferenceObserver
     // Handle generated Input events to InputEventManager
     private void HandleGeneratedEvents()
     {
+        List<InputEvent> playList = new List<InputEvent>();
+
         while (inputEvents.Count > 0)
         {
             InputEvent input = inputEvents.Dequeue();
             bool result = EventChecker.Instance.CheckEventCompatibility(input);
             if (result)
             {
-                InputEventManager.Instance.PlayEvent(input);
+                playList.Add(input);
             }
         }
+
+        playList.ForEach((input) => InputEventManager.Instance.PlayEvent(input));
     }
 
     // Get Updated Preference
