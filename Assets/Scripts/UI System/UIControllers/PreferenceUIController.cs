@@ -54,6 +54,12 @@ public class PreferenceUIController : MonoBehaviour, IUIContoller
         }
     }
 
+    public void Start()
+    {
+        
+    }
+
+
     /****** Methods ******/
 
     private void Update()
@@ -81,6 +87,8 @@ public class PreferenceUIController : MonoBehaviour, IUIContoller
     {
         // Activate preference UI object
         preferenceUI.gameObject.SetActive(true);
+
+
     }
 
     // Exit Preference UI state

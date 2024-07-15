@@ -73,7 +73,7 @@ public class InputEventProducer : MonoBehaviour, PreferenceObserver
     // Get Updated Preference
     public void PreferenceUpdated()
     {
-        KeySettings keySettings = PreferenceManager.Instance.keySettings;
+        KeySettings keySettings = PreferenceManager.Instance.KeySettingInfo;
 
         cancelButton = keySettings.cancelButton;
         pauseButton = keySettings.pauseButton;

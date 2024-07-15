@@ -9,11 +9,8 @@ public class PreferenceManager : MonoBehaviour
     private List<PreferenceObserver> observerList; // Observers which observes setting parameters
 
     // Settings parameters
-    public bool isFullScreen;
-    public Vector2 resolution;
-    public float bgmVolume;
-    public float soundEffectVolume;
-    public KeySettings keySettings;
+    public PreferenceSettings PreferenceSettingInfo { get; private set; }
+    public KeySettings KeySettingInfo { get; private set; }
 
     private void Awake()
     {
@@ -21,7 +18,8 @@ public class PreferenceManager : MonoBehaviour
         {
             Instance = this;
             observerList = new List<PreferenceObserver>();
-            keySettings = new KeySettings();
+            PreferenceSettingInfo = new PreferenceSettings();
+            KeySettingInfo = new KeySettings();
         }
     }
 
@@ -30,15 +28,44 @@ public class PreferenceManager : MonoBehaviour
         
     }
 
+    public void ChangePreference(PreferenceSettings preference)
+    {
+        PreferenceSettingInfo = preference;
+        observerList.ForEach((observer) => observer.PreferenceUpdated());
+    }
+
+    public void ChangeKeySettings(KeySettings keySettings)
+    {
+        KeySettingInfo = keySettings;
+        observerList.ForEach((observer) => observer.PreferenceUpdated());
+    }
+
     // Add new observer to the list
     public void AddObserver(PreferenceObserver newObserver)
     {
         observerList.Add(newObserver);
         newObserver.PreferenceUpdated(); // Immediately update the new observer
     }
+
+
 }
 
 public interface PreferenceObserver
 {
     public void PreferenceUpdated();
+}
+
+public class PreferenceSettings
+{
+    public bool isFullScreen = true;
+    public Vector2 resolution;
+    public float bgmVolume;
+    public float soundEffectVolume;
+}
+
+public class KeySettings
+{
+    public KeyCode cancelButton = KeyCode.Escape;
+    public KeyCode pauseButton = KeyCode.Escape;
+    public KeyCode confirmButton = KeyCode.Return;
 }
