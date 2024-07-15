@@ -34,12 +34,15 @@ public class ControlUIController : MonoBehaviour, IUIContoller
     {
         // Active Story UI object
         controlUI.gameObject.SetActive(true);
+<<<<<<< HEAD
 
         // Get current player data
         UserData playerData = PlayerManager.Instance.PlayerData;
 
         // Set Control UI
         SetControlUIs(playerData);
+=======
+>>>>>>> origin/minjung
     }
 
     // Exit Control UI state
@@ -54,10 +57,13 @@ public class ControlUIController : MonoBehaviour, IUIContoller
         // Change to Pause UI
         //UIController.Instance.ChangeState(UIController.STATE.PAUSE, false);
     }
+<<<<<<< HEAD
 
     private void SetControlUIs(UserData playerData)
     {
 
     }
+=======
+>>>>>>> origin/minjung
 }
 
