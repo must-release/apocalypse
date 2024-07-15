@@ -11,6 +11,9 @@ public class InputEventProducer : MonoBehaviour, PreferenceObserver
     public static InputEventProducer Instance { get; private set; }
 
     private Queue<InputEvent> inputEvents;
+    private CancelEvent cancelEvent;
+    private PauseEvent pauseEvent;
+    private ConfirmEvent confirmEvent;
 
     private KeyCode cancelButton;
     private KeyCode pauseButton;
@@ -22,6 +25,9 @@ public class InputEventProducer : MonoBehaviour, PreferenceObserver
         {
             Instance = this;
             inputEvents = new Queue<InputEvent>();
+            cancelEvent = new CancelEvent();
+            pauseEvent = new PauseEvent();
+            confirmEvent = new ConfirmEvent();
         }
     }
 
@@ -34,20 +40,11 @@ public class InputEventProducer : MonoBehaviour, PreferenceObserver
     // Detect every input event. The event higher up has a higher priority.
     private void Update()
     {
-        if (Input.GetKeyDown(cancelButton))
-        {
-            inputEvents.Enqueue(new CancelEvent());
-        }
+        if (Input.GetKeyDown(cancelButton)) { inputEvents.Enqueue(cancelEvent); }
 
-        if (Input.GetKeyDown(pauseButton))
-        {
-            inputEvents.Enqueue(new PauseEvent());
-        }
+        if (Input.GetKeyDown(pauseButton)) { inputEvents.Enqueue(pauseEvent); }
 
-        if (Input.GetKeyDown(confirmButton))
-        {
-            inputEvents.Enqueue(new ConfirmEvent());
-        }
+        if (Input.GetKeyDown(confirmButton)) { inputEvents.Enqueue(confirmEvent); }
 
         // Handle every generated input event
         HandleGeneratedEvents();
@@ -65,7 +62,6 @@ public class InputEventProducer : MonoBehaviour, PreferenceObserver
                 InputEventManager.Instance.PlayEvent(input);
             }
         }
-        InputEventManager.Instance.EventPointer = null;
     }
 
     // Get Updated Preference
