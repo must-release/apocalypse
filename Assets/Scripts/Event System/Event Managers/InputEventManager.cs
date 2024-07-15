@@ -6,22 +6,27 @@ public class InputEventManager : MonoBehaviour
 {
     public static InputEventManager Instance { get; private set; }
 
-    public InputEvent EventPointer { get; set; }
+    public List<InputEvent> EventList { get; set; }
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
+            EventList = new List<InputEvent>();
         }
     }
 
     public void PlayEvent(InputEvent playingEvent)
     {
-        playingEvent.ParentEvent = EventPointer;
-        EventPointer = playingEvent;
+        EventList.Add(playingEvent);
 
         playingEvent.PlayEvent();
+    }
+
+    public void TerminateEvent(InputEvent terminatingEvent)
+    {
+        EventList.Remove(terminatingEvent);
     }
     
 }

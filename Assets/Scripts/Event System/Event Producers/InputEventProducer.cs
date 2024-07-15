@@ -11,6 +11,7 @@ public class InputEventProducer : MonoBehaviour, PreferenceObserver
     public static InputEventProducer Instance { get; private set; }
 
     private Queue<InputEvent> inputEvents;
+    private List<InputEvent> playingEvents;
     private CancelEvent cancelEvent;
     private PauseEvent pauseEvent;
     private ConfirmEvent confirmEvent;
@@ -25,6 +26,7 @@ public class InputEventProducer : MonoBehaviour, PreferenceObserver
         {
             Instance = this;
             inputEvents = new Queue<InputEvent>();
+            playingEvents = new List<InputEvent>();
             cancelEvent = new CancelEvent();
             pauseEvent = new PauseEvent();
             confirmEvent = new ConfirmEvent();
@@ -53,7 +55,6 @@ public class InputEventProducer : MonoBehaviour, PreferenceObserver
     // Handle generated Input events to InputEventManager
     private void HandleGeneratedEvents()
     {
-        List<InputEvent> playList = new List<InputEvent>();
 
         while (inputEvents.Count > 0)
         {
@@ -61,11 +62,12 @@ public class InputEventProducer : MonoBehaviour, PreferenceObserver
             bool result = EventChecker.Instance.CheckEventCompatibility(input);
             if (result)
             {
-                playList.Add(input);
+                playingEvents.Add(input);
             }
         }
 
-        playList.ForEach((input) => InputEventManager.Instance.PlayEvent(input));
+        playingEvents.ForEach((input) => InputEventManager.Instance.PlayEvent(input));
+        playingEvents.Clear();
     }
 
     // Get Updated Preference

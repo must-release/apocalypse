@@ -27,9 +27,9 @@ public class EventChecker : MonoBehaviour
     // Check compatibility of the new input event with current event
     public bool CheckEventCompatibility(InputEvent checkingEvent)
     {
-        InputEvent parentEvent = InputEventManager.Instance.EventPointer;
+        List<InputEvent> eventList = InputEventManager.Instance.EventList;
         var currentUI = UIController.Instance.GetCurrentUI();
-        bool result = checkingEvent.CheckCompatibility(parentEvent, currentUI);
+        bool result = checkingEvent.CheckCompatibility(eventList, currentUI);
 
         return result;
     }
