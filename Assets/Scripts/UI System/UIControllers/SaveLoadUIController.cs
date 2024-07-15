@@ -84,33 +84,9 @@ public class SaveLoadUIController : MonoBehaviour, IUIContoller
     // Enter SaveLoad UI
     public void StartUI()
     {
-<<<<<<< HEAD
         // Get current UI state and set UI objects
         saveOrLoad = UIModel.Instance.CurrentSubUI;
         SetSaveLoadUI();
-=======
-        // Reset confirm button function
-        confirmButton.onClick.RemoveAllListeners();
-
-        // Check if it is load or save
-        saveOrLoad = UIModel.Instance.CurrentSubUI;
-        if (saveOrLoad == SUBUI.SAVE)
-        {
-            confirmText.text = "Save Data?";
-            labelText.text = "SAVE";
-            confirmButton.onClick.AddListener(SaveAtSelectedSlot);
-        }
-        else if (saveOrLoad == SUBUI.LOAD)
-        {
-            confirmText.text = "Load Data?";
-            labelText.text = "LOAD";
-            confirmButton.onClick.AddListener(LoadSavedData);
-        }
-        else
-        {
-            Debug.Log("SubUI error: must be save or load");
-        }
->>>>>>> origin/minjung
 
         // Set Slot Info
         dataList = DataManager.Instance.GetAllUserData();
@@ -127,15 +103,7 @@ public class SaveLoadUIController : MonoBehaviour, IUIContoller
         saveLoadUI.gameObject.SetActive(false);
 
         // Reset UI objects & Info
-<<<<<<< HEAD
         ResetUISettings();
-=======
-        selectedSlot = null;
-        currentPage = 1;
-        saveOrLoad = SUBUI.NONE;
-        pageNumberText.text = currentPage + "/" + (DataManager.SLOT_NUM / slots.childCount);
-        previousButton.gameObject.SetActive(false);
->>>>>>> origin/minjung
     }
 
     // Cancel SaveLoad UI. Return to previous UI
@@ -151,7 +119,6 @@ public class SaveLoadUIController : MonoBehaviour, IUIContoller
         }
     }
 
-<<<<<<< HEAD
     // Set SaveLoad UI objects
     private void SetSaveLoadUI()
     {
@@ -173,8 +140,6 @@ public class SaveLoadUIController : MonoBehaviour, IUIContoller
         }
     }
 
-=======
->>>>>>> origin/minjung
     // Load user data and set to data slots
     private void SetDataSlots()
     {
@@ -248,7 +213,6 @@ public class SaveLoadUIController : MonoBehaviour, IUIContoller
         // Updata data slots
         SetDataSlots();
     }
-<<<<<<< HEAD
 
     // Reset UI objects & Info
     private void ResetUISettings()
@@ -260,6 +224,4 @@ public class SaveLoadUIController : MonoBehaviour, IUIContoller
         previousButton.gameObject.SetActive(false);
         confirmButton.onClick.RemoveAllListeners();
     }
-=======
->>>>>>> origin/minjung
 }

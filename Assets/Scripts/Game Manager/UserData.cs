@@ -3,20 +3,12 @@ using System.Collections;
 using System;
 using UnityEngine;
 using StageEnums;
-<<<<<<< HEAD
 using CharacterEums;
-=======
->>>>>>> origin/minjung
 
 
 [System.Serializable]
 public class UserData : ISerializationCallbackReceiver
 {
-<<<<<<< HEAD
-=======
-    public enum CHARACTER { HERO, HEROINE }
-
->>>>>>> origin/minjung
     [SerializeField]
     private int currentStage;
     public STAGE CurrentStage { get { return (STAGE)currentStage; } set { currentStage = (int)value; } }
@@ -76,13 +68,8 @@ public class UserData : ISerializationCallbackReceiver
 
     // Used for game
     [System.NonSerialized]
-<<<<<<< HEAD
     public GameEvent startingEvent;
     public GameEvent StartingEvent { get { return startingEvent; } set { startingEvent = value; } }
-=======
-    public EventBase startingEvent;
-    public EventBase StartingEvent { get { return startingEvent; } set { startingEvent = value; } }
->>>>>>> origin/minjung
 
     // Used for serialization
     [SerializeField]
@@ -90,12 +77,7 @@ public class UserData : ISerializationCallbackReceiver
     [SerializeField]
     private string startingEventData;
 
-
-<<<<<<< HEAD
     public UserData(STAGE curStage, int curMap, GameEvent startingEvent,
-=======
-    public UserData(STAGE curStage, int curMap, EventBase startingEvent,
->>>>>>> origin/minjung
         int readBlockCnt, int readEntryCnt, CHARACTER lastChar, string playTime, string saveTime)
     {
         CurrentStage = curStage;
@@ -119,13 +101,8 @@ public class UserData : ISerializationCallbackReceiver
         if (StartingEvent != null)
         {
             // Save chained events
-<<<<<<< HEAD
             Stack<GameEvent> eventStack = new Stack<GameEvent>();
             GameEvent nextEvent = StartingEvent.NextEvent;
-=======
-            Stack<EventBase> eventStack = new Stack<EventBase>();
-            EventBase nextEvent = StartingEvent.NextEvent;
->>>>>>> origin/minjung
             while(nextEvent != null)
             {
                 eventStack.Push(nextEvent);
@@ -149,11 +126,7 @@ public class UserData : ISerializationCallbackReceiver
         {
             // Restore Starting event
             Type eventType = Type.GetType(startingEventAssemblyQualifiedName);
-<<<<<<< HEAD
             GameEvent eventInstance = (GameEvent)ScriptableObject.CreateInstance(eventType);
-=======
-            EventBase eventInstance = (EventBase)ScriptableObject.CreateInstance(eventType);
->>>>>>> origin/minjung
             JsonUtility.FromJsonOverwrite(startingEventData, eventInstance);
             StartingEvent = eventInstance;
             StartingEvent.RestoreNextEventInfo();

@@ -1,12 +1,8 @@
 using UnityEngine;
-<<<<<<< HEAD
-using System.Collections;
-=======
 using UnityEngine.UI;
 using System.Collections.Generic;
 using UIEnums;
 using System;
->>>>>>> origin/minjung
 
 /* Part of UIController which manages Preference UI logic */
 
@@ -39,14 +35,11 @@ public class KeySettingsUIController : MonoBehaviour, IUIContoller
 
     /****** Methods ******/
 
-<<<<<<< HEAD
-=======
     //private void Update()
     //{
     //    Return();
     //}
 
->>>>>>> origin/minjung
     // Enter Key Settings UI state
     public void StartUI()
     {
@@ -61,8 +54,6 @@ public class KeySettingsUIController : MonoBehaviour, IUIContoller
         keySettingsUI.gameObject.SetActive(false);
     }
 
-<<<<<<< HEAD
-=======
     //public void Return()
     //{
     //    if (Input.GetKeyDown(KeyCode.Backspace))
@@ -71,7 +62,6 @@ public class KeySettingsUIController : MonoBehaviour, IUIContoller
     //    }
     //}
 
->>>>>>> origin/minjung
     public void Cancel()
     {
     }

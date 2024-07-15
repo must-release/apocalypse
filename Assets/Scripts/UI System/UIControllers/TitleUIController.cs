@@ -2,10 +2,7 @@
 using UnityEngine.UI;
 using System.Collections.Generic;
 using UIEnums;
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/minjung
 /* Part of UIController which manages Title UI logic */
 
 public class TitleUIController : MonoBehaviour, IUIContoller
@@ -43,11 +40,7 @@ public class TitleUIController : MonoBehaviour, IUIContoller
             }
 
             // Add event listener to buttons
-            buttonList[0].onClick.AddListener(onContinueGameClick);
-<<<<<<< HEAD
-=======
-            // 이거 왜 여기만 소문자임;
->>>>>>> origin/minjung
+            buttonList[0].onClick.AddListener(OnContinueGameClick);
             buttonList[1].onClick.AddListener(OnNewGameClick);
             buttonList[2].onClick.AddListener(OnLoadGameClick);
             buttonList[3].onClick.AddListener(OnPreferenceClick);
@@ -70,7 +63,7 @@ public class TitleUIController : MonoBehaviour, IUIContoller
         titleUI.gameObject.SetActive(false);
 	}
 
-	private void onContinueGameClick()
+	private void OnContinueGameClick()
 	{
         // Generate Load game event stream, but load most recent saved data
         GameEventProducer.Instance.GenerateLoadGameEventStream();

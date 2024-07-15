@@ -14,7 +14,6 @@ public class EventChecker : MonoBehaviour
         }
     }
 
-<<<<<<< HEAD
     // Check compatibility of the new game event with current event
     public bool CheckEventCompatibility(GameEvent checkingEvent)
     {
@@ -31,13 +30,6 @@ public class EventChecker : MonoBehaviour
         InputEvent parentEvent = InputEventManager.Instance.EventPointer;
         var currentUI = UIController.Instance.GetCurrentUI();
         bool result = checkingEvent.CheckCompatibility(parentEvent, currentUI);
-=======
-    // Check compatibility of the input event with current event
-    public bool CheckEventCompatibility(EventBase checkingEvent)
-    {
-        EventBase headEvent = GameEventManager.Instance.HeadEvent;
-        bool result = checkingEvent.CheckCompatibility(headEvent);
->>>>>>> origin/minjung
 
         return result;
     }

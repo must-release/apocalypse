@@ -27,10 +27,7 @@ class ChoiceOption
     // Inactive button object
     public void SetOptionInactive()
     {
-<<<<<<< HEAD
         optionText.text = null;
-=======
->>>>>>> origin/minjung
         optionObject.gameObject.SetActive(false);
     }
 }

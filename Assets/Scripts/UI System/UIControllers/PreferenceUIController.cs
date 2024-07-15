@@ -1,13 +1,9 @@
 using UnityEngine;
-<<<<<<< HEAD
-using System.Collections;
-
-=======
 using UnityEngine.UI;
 using System.Collections.Generic;
 using UIEnums;
 using System;
->>>>>>> origin/minjung
+
 /* Part of UIController which manages Preference UI logic */
 
 public class PreferenceUIController : MonoBehaviour, IUIContoller
@@ -15,42 +11,28 @@ public class PreferenceUIController : MonoBehaviour, IUIContoller
 
     /****** Private fields ******/
     private string preferenceUIName = "Preference UI";
-<<<<<<< HEAD
-    private Transform preferenceUI;
-
-=======
     private string buttonsName = "Buttons";
     private Transform preferenceUI;
     private List<Button> buttonList = new List<Button>();
->>>>>>> origin/minjung
 
     /****** Single tone instance ******/
     public static PreferenceUIController Instance;
 
-<<<<<<< HEAD
-=======
-    //ÀúÀåµÈ ¼³Á¤À» ¹Þ¾Æ¿Í¼­ ÇÒ´çÇÏ´Â ±â´ÉÀ» Ãß°¡
 
->>>>>>> origin/minjung
     public void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
 
-<<<<<<< HEAD
-            // Find cutscene UI object
-=======
+
             // Find Preference UI object
->>>>>>> origin/minjung
             preferenceUI = transform.Find(preferenceUIName);
             if (preferenceUI == null)
             {
                 Debug.Log("Preference UI Initialization Error");
                 return;
             }
-<<<<<<< HEAD
-=======
 
             Transform buttons = preferenceUI.Find(buttonsName);
             for (int i = 0; i < buttons.childCount; i++)
@@ -68,22 +50,18 @@ public class PreferenceUIController : MonoBehaviour, IUIContoller
             buttonList[4].onClick.AddListener(ConfirmButton);
 
 
-            //ÀÓ½Ã
             buttonList[0].Select();
->>>>>>> origin/minjung
         }
     }
 
     /****** Methods ******/
 
-<<<<<<< HEAD
-=======
     private void Update()
     {
         Return();
     }
 
-    // ¾îµð±îÁö³ª ÀÓ½Ã
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ó½ï¿½
     private void Return()
     {
         if (UIModel.Instance.CurrentSubUI == SUBUI.PREFERENCE && Input.GetKeyDown(KeyCode.Backspace))
@@ -98,7 +76,6 @@ public class PreferenceUIController : MonoBehaviour, IUIContoller
 
     }
 
->>>>>>> origin/minjung
     // Enter Preference UI state
     public void StartUI()
     {
@@ -113,15 +90,8 @@ public class PreferenceUIController : MonoBehaviour, IUIContoller
         preferenceUI.gameObject.SetActive(false);
     }
 
-<<<<<<< HEAD
-    public void Cancel()
-    {
 
-    }
-}
-
-=======
-    // È®ÀÎ , ÃÊ±âÈ­ ui´Â ¾î¶»°Ô ¸¸µé°ÍÀÎ°¡
+    // È®ï¿½ï¿½ , ï¿½Ê±ï¿½È­ uiï¿½ï¿½ ï¿½î¶»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î°ï¿½
     private void OnWindowScreenButton()
     {
         Screen.fullScreenMode = FullScreenMode.Windowed;
@@ -134,13 +104,13 @@ public class PreferenceUIController : MonoBehaviour, IUIContoller
     }
     private void ConfirmButton()
     {
-        Debug.Log("ÀúÀåÇÏ½Ã°Ú½À´Ï±î?");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½Ï½Ã°Ú½ï¿½ï¿½Ï±ï¿½?");
     }
     private void OnResetButton()
     {
-        Debug.Log("¼³Á¤À» ÃÊ±âÈ­ ÇÏ½Ã°Ú½À´Ï±î?");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­ ï¿½Ï½Ã°Ú½ï¿½ï¿½Ï±ï¿½?");
 
-        //ÀÓ½Ã
+        //ï¿½Ó½ï¿½
         buttonList[0].Select();
     }
     private void OnMovetoKeySettingsButton()
@@ -152,4 +122,3 @@ public class PreferenceUIController : MonoBehaviour, IUIContoller
         
     }
 }
->>>>>>> origin/minjung
