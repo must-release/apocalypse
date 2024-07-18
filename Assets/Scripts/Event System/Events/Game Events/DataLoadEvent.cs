@@ -17,19 +17,61 @@ public class DataLoadEvent : GameEvent
         EventType = EVENT_TYPE.DATA_LOAD;
     }
 
-    // Check compatibility with current event
+    // Check compatibility with current event and UI
     public override bool CheckCompatibility(GameEvent parentEvent, (BASEUI, SUBUI) currentUI)
     {
-        if(parentEvent == null) // Can be played when there is no event playing
-        {
-            return true;
-        }
-        else if(parentEvent.EventType == EVENT_TYPE.STORY) // Can be played when story event is playing
+        // Can be played when current base UI is title or load
+        if (currentUI.Item1 == BASEUI.TITLE || currentUI.Item2 == SUBUI.LOAD)
         {
             return true;
         }
         else
             return false;
+    }
+
+    // Play Data Load Event
+    public override void PlayEvent()
+    {
+        if (isNewGame) // Create new game data
+        {
+            DataManager.Instance.CreateNewGameData();
+        }
+        else // Load game data
+        {
+            if (isContinueGame) DataManager.Instance.LoadRecentData();
+            else DataManager.Instance.LoadGameData(slotNum);
+
+            // Get starting event
+            GameEvent startingEvent = PlayerManager.Instance.PlayerData.StartingEvent;
+
+            // Apply starting event
+            if(startingEvent == null) // When there is no starting event, concat UI change event to current event chain
+            {
+                UIChangeEvent uiEvent = CreateInstance<UIChangeEvent>();
+                uiEvent.changingUI = BASEUI.CONTROL;
+                ConcatEvent(uiEvent);
+            }
+            else // When there is starting event, concat it to current event chain
+            {
+                ConcatEvent(startingEvent);
+            }
+        }
+
+        // Terminate data load event and play next event
+        GameEventManager.Instance.TerminateGameEvent(this);
+    }
+
+    // Concat starting event to current event chain
+    public void ConcatEvent(GameEvent startingEvent)
+    {
+        GameEvent lastEvent = this;
+
+        while (lastEvent.nextEvent != null)
+        {
+            lastEvent = lastEvent.nextEvent;
+        }
+
+        lastEvent.NextEvent = startingEvent;
     }
 }
 

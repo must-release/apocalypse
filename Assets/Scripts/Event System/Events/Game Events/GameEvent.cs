@@ -27,6 +27,18 @@ public class GameEvent : ScriptableObject
         return default;
     }
 
+    // Play this game event
+    public virtual void PlayEvent()
+    {
+        return;
+    }
+
+    // Terminate this game event
+    public virtual void TerminateEvent()
+    {
+        return;
+    }
+
     // Save flawless info of the nextEvent
     public void SaveNextEventInfo()
     {

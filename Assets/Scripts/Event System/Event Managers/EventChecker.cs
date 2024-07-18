@@ -21,6 +21,11 @@ public class EventChecker : MonoBehaviour
         var currentUI = UIController.Instance.GetCurrentUI();
         bool result = checkingEvent.CheckCompatibility(parentEvent, currentUI);
 
+        if (!result)
+        {
+            Debug.Log("Not compatible :" + checkingEvent.EventType.ToString());
+        }
+
         return result;
     }
 

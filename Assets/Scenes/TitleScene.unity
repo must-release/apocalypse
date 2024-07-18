@@ -15044,7 +15044,6 @@ GameObject:
   - component: {fileID: 7831773975838573783}
   - component: {fileID: 7831773975838573782}
   - component: {fileID: 7831773975838573781}
-  - component: {fileID: 7831773975838573785}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -18628,10 +18627,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5434e7630e7e54c5d81f726be59b13a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isFullScreen: 0
-  resolution: {x: 0, y: 0}
-  bgmVolume: 0
-  soundEffectVolume: 0
 --- !u!114 &7831773975838573782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18669,22 +18664,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prologueEvent: {fileID: 0}
---- !u!114 &7831773975838573785
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4344240009286854645}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5434e7630e7e54c5d81f726be59b13a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isFullScreen: 0
-  resolution: {x: 0, y: 0}
-  bgmVolume: 0
-  soundEffectVolume: 0
 --- !u!1 &7832408577194687163
 GameObject:
   m_ObjectHideFlags: 0

@@ -21,90 +21,69 @@ public class GameEventManager : MonoBehaviour
 	// Start Event Chain
 	public void StartEventChain(GameEvent firstEvent)
 	{
-        // Set parent-child relationship to first event and head event
-        SetRelationship(firstEvent);
-
-        // play first event
-		PlayEvent(firstEvent);
-    }
-
-    // Set parent-child relationship of the event
-    private void SetRelationship(GameEvent childEvent)
-    {
-        // Set relationship if there is current event
+        // Set parent-child relationship to first event and pointed event
         if (EventPointer)
         {
-            childEvent.ParentEvent = EventPointer;
+            firstEvent.ParentEvent = EventPointer;
         }
+
+        // play first event
+        PlayGameEvent(firstEvent);
     }
 
-    // Play event 
-    private void PlayEvent(GameEvent playingEvent)
+    // Play game event 
+    private void PlayGameEvent(GameEvent playingEvent)
 	{
-		// Update head event
-		EventPointer = playingEvent;
+		// Update event pointer
+ 		EventPointer = playingEvent;
 
-        switch (EventPointer.EventType)
-		{
-			case EVENT_TYPE.STORY:
-				StartCoroutine(PlayStory((StoryEvent)playingEvent));
-				break;
-			case EVENT_TYPE.CUTSCENE:
-				PlayInGameEvent();
-				break;
-			case EVENT_TYPE.SCENE_LOAD:
-				LoadGameScene((SceneLoadEvent)playingEvent);
-				break;
-            case EVENT_TYPE.SCENE_ACTIVATE:
-                ShowLoading();
-                break;
-            case EVENT_TYPE.DATA_LOAD:
-				LoadGameData((DataLoadEvent)playingEvent);
-				break;
-            case EVENT_TYPE.DATA_SAVE:
-				AutoSave();
-				break;
-			case EVENT_TYPE.UI_CHANGE:
-				ChangeUI();
-				break;
-        }
+		// Play event
+		playingEvent.PlayEvent();
 	}
 
-	// Terminate event
-	IEnumerator TerminateEvent(GameEvent terminatingEvent, bool checkChild, bool playNextEvent)
+
+    // Terminate target game event
+    public void TerminateGameEvent(GameEvent terminatingEvent, bool succeeding = false)
 	{
-        // Wait child event chain to be terminated
-        if (checkChild)
+		StartCoroutine(AsyncTerminateEvent(terminatingEvent, succeeding));
+	}
+	IEnumerator AsyncTerminateEvent(GameEvent terminatingEvent, bool succeeding)
+	{
+		// Check if succeeding is on progress
+        if (succeeding)
 		{
-			while (EventPointer != terminatingEvent)
-			{
-				yield return null;
-			}
-		}
+            // Terminate target game event
+            terminatingEvent.TerminateEvent();
 
-        // Additional action
-        switch (terminatingEvent.EventType)
+			// End this coroutine
+			yield break;
+        }
+        else // Wait child event chain to be terminated
+        {
+            while (EventPointer != terminatingEvent)
+            {
+                yield return null;
+            }
+
+            // Terminate target game event
+            terminatingEvent.TerminateEvent();
+        }
+
+
+        // Check if there is next event
+        if (terminatingEvent.NextEvent)
 		{
-			case EVENT_TYPE.STORY:
-				StoryController.Instance.FinishStory(); // End Story Mode
-				break;
-		}
-
-
-        // Check if there is next event and play next
-        if (terminatingEvent.NextEvent && playNextEvent)
-		{
-			// Update event relationship. Update child event of the parent event.
+			// Update event relationship. Update parent event of the child event.
 			if (terminatingEvent.ParentEvent)
 			{
 				terminatingEvent.NextEvent.ParentEvent = terminatingEvent.ParentEvent;
 			}
 
-			PlayEvent(terminatingEvent.NextEvent);
+			PlayGameEvent(terminatingEvent.NextEvent);
 		}
 		else
 		{
-            // Update event relationship. Delete child event of the parent event
+            // Update event relationship.Set EventPointer to parent event
             if (terminatingEvent.ParentEvent)
             {
 				EventPointer = terminatingEvent.ParentEvent; // Now resume the parent event chain
@@ -132,7 +111,7 @@ public class GameEventManager : MonoBehaviour
 		}
 
 		// Terminate story event
-		StartCoroutine(TerminateEvent(storyEvent, true, true));
+		//StartCoroutine(TerminateEvent(storyEvent, true, true));
 	}
 
 	// Play InGame event
@@ -155,25 +134,7 @@ public class GameEventManager : MonoBehaviour
 		// Load scene asynchronously
 		GameSceneController.Instance.LoadGameScene(sceneLoadEvent.sceneName);
 
-		StartCoroutine(TerminateEvent(sceneLoadEvent, true, true));
-	}
-
-
-	// Load game data from local, or create new game data
-	private void LoadGameData(DataLoadEvent dataLoadEvent)
-	{
-		if(dataLoadEvent.isNewGame) // create new game data
-		{
-			DataManager.Instance.CreateNewGameData();
-		}
-		else
-		{
-			
-		}
-
-
-		// Terminate data load event and play next event
-		StartCoroutine(TerminateEvent(dataLoadEvent, true, true));
+		//StartCoroutine(TerminateEvent(sceneLoadEvent, true, true));
 	}
 
 	// Auto Save current player data
@@ -196,7 +157,7 @@ public class GameEventManager : MonoBehaviour
 	{
 		UIController.Instance.TurnSubUIOn(SUBUI.CHOICE);
 
-		StartCoroutine(TerminateEvent(showChoiceEvent, true, true));
+		//StartCoroutine(TerminateEvent(showChoiceEvent, true, true));
 	}
 }
 

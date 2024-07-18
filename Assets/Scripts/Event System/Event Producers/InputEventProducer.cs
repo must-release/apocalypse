@@ -10,26 +10,28 @@ public class InputEventProducer : MonoBehaviour, PreferenceObserver
 {
     public static InputEventProducer Instance { get; private set; }
 
-    private Queue<InputEvent> inputEvents;
+    private List<InputEvent> inputEvents;
+    private Queue<InputEvent> incomingEvents;
     private List<InputEvent> playingEvents;
+
+    // Input events
     private CancelEvent cancelEvent;
     private PauseEvent pauseEvent;
     private ConfirmEvent confirmEvent;
-
-    private KeyCode cancelButton;
-    private KeyCode pauseButton;
-    private KeyCode confirmButton;
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            inputEvents = new Queue<InputEvent>();
+            inputEvents = new List<InputEvent>();
+            incomingEvents = new Queue<InputEvent>();
             playingEvents = new List<InputEvent>();
-            cancelEvent = new CancelEvent();
-            pauseEvent = new PauseEvent();
-            confirmEvent = new ConfirmEvent();
+
+            // Pool input Events
+            inputEvents.Add(cancelEvent = new CancelEvent());
+            inputEvents.Add(pauseEvent = new PauseEvent());
+            inputEvents.Add(confirmEvent = new ConfirmEvent());
         }
     }
 
@@ -38,15 +40,17 @@ public class InputEventProducer : MonoBehaviour, PreferenceObserver
         // Input event producer observes preference manager
         PreferenceManager.Instance.AddObserver(this);
     }
-
-    // Detect every input event. 
+ 
     private void Update()
     {
-        if (Input.GetKeyDown(cancelButton)) { inputEvents.Enqueue(cancelEvent); }
 
-        if (Input.GetKeyDown(pauseButton)) { inputEvents.Enqueue(pauseEvent); }
-
-        if (Input.GetKeyDown(confirmButton)) { inputEvents.Enqueue(confirmEvent); }
+        // Detect every input event.
+        inputEvents.ForEach((inputEvent) => {
+            if (Input.GetKeyDown(inputEvent.eventButton))
+            {
+                incomingEvents.Enqueue(inputEvent);
+            }
+        });
 
         // Handle every generated input event
         HandleGeneratedEvents();
@@ -55,10 +59,10 @@ public class InputEventProducer : MonoBehaviour, PreferenceObserver
     // Handle generated Input events to InputEventManager
     private void HandleGeneratedEvents()
     {
-
-        while (inputEvents.Count > 0)
+        // Add playable events in playingEvents list
+        while (incomingEvents.Count > 0)
         {
-            InputEvent input = inputEvents.Dequeue();
+            InputEvent input = incomingEvents.Dequeue();
             bool result = EventChecker.Instance.CheckEventCompatibility(input);
             if (result)
             {
@@ -66,7 +70,8 @@ public class InputEventProducer : MonoBehaviour, PreferenceObserver
             }
         }
 
-        playingEvents.ForEach((input) => InputEventManager.Instance.PlayEvent(input));
+        // Play playable events
+        playingEvents.ForEach((input) => InputEventManager.Instance.PlayInputEvent(input));
         playingEvents.Clear();
     }
 
@@ -75,9 +80,9 @@ public class InputEventProducer : MonoBehaviour, PreferenceObserver
     {
         KeySettings keySettings = PreferenceManager.Instance.KeySettingInfo;
 
-        cancelButton = keySettings.cancelButton;
-        pauseButton = keySettings.pauseButton;
-        confirmButton = keySettings.confirmButton;
+        cancelEvent.eventButton = keySettings.cancelButton;
+        pauseEvent.eventButton = keySettings.pauseButton;
+        confirmEvent.eventButton = keySettings.confirmButton;
     }
 }
 

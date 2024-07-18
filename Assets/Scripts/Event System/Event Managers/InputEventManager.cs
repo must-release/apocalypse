@@ -17,7 +17,7 @@ public class InputEventManager : MonoBehaviour
         }
     }
 
-    public void PlayEvent(InputEvent playingEvent)
+    public void PlayInputEvent(InputEvent playingEvent)
     {
         EventList.Add(playingEvent);
 

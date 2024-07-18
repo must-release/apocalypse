@@ -175,14 +175,34 @@ public class DataManager : MonoBehaviour
         return allData;
     }
 
-    // Load most recent saved data and start loading stage
-    public void LoadContinueData()
+    // Load specific game slot data
+    public void LoadGameData(int slotNum)
+    {
+        UserData loadData = null;
+
+        string path = Application.persistentDataPath + "/userData" + slotNum + ".json";
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            loadData = JsonUtility.FromJson<UserData>(json);
+        }
+        else
+        {
+            Debug.Log("Trying to read empty slot");
+        }
+
+        // Set current player data
+        PlayerManager.Instance.PlayerData = loadData;
+    }
+
+    // Load recent saved data
+    public void LoadRecentData()
     {
         List<UserData> allData = GetAllUserData();
 
         // Parse string to DateTime by using DateTime.TryParseExact method
         // Use "yyyy-MM-dd HH:mm" format and CultureInfo.InvariantCulture
-        UserData mostRecent = allData
+        UserData recentData = allData
             .Where(u => u != null && !string.IsNullOrWhiteSpace(u.SaveTime))
             .OrderByDescending(u =>
             {
@@ -192,7 +212,7 @@ public class DataManager : MonoBehaviour
             .FirstOrDefault();
 
         // Set current player data
-        PlayerManager.Instance.PlayerData = mostRecent;
+        PlayerManager.Instance.PlayerData = recentData;
     }
 
 
