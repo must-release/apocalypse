@@ -22,14 +22,16 @@ public class GameEventManager : MonoBehaviour
 	public void StartEventChain(GameEvent firstEvent)
 	{
         // Set parent-child relationship to first event and pointed event
-        if (EventPointer)
-        {
-            firstEvent.ParentEvent = EventPointer;
-        }
+        SetRelationship(EventPointer, firstEvent);
 
         // play first event
         PlayGameEvent(firstEvent);
     }
+
+	private void SetRelationship(GameEvent parentEvent, GameEvent childEvent)
+	{
+		childEvent.ParentEvent = parentEvent;
+	}
 
     // Play game event 
     private void PlayGameEvent(GameEvent playingEvent)
@@ -74,24 +76,15 @@ public class GameEventManager : MonoBehaviour
         if (terminatingEvent.NextEvent)
 		{
 			// Update event relationship. Update parent event of the child event.
-			if (terminatingEvent.ParentEvent)
-			{
-				terminatingEvent.NextEvent.ParentEvent = terminatingEvent.ParentEvent;
-			}
+			SetRelationship(terminatingEvent.ParentEvent, terminatingEvent.NextEvent);
 
+			// Play next event
 			PlayGameEvent(terminatingEvent.NextEvent);
 		}
 		else
 		{
-            // Update event relationship.Set EventPointer to parent event
-            if (terminatingEvent.ParentEvent)
-            {
-				EventPointer = terminatingEvent.ParentEvent; // Now resume the parent event chain
-            }
-			else
-			{
-				EventPointer = null; // Every event is terminated
-			}
+            // Set EventPointer to parent event
+			EventPointer = terminatingEvent.ParentEvent;
         }
     }
 
