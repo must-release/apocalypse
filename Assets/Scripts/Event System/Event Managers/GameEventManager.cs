@@ -28,6 +28,7 @@ public class GameEventManager : MonoBehaviour
         PlayGameEvent(firstEvent);
     }
 
+	// Set parent-chile relationship
 	private void SetRelationship(GameEvent parentEvent, GameEvent childEvent)
 	{
 		childEvent.ParentEvent = parentEvent;
@@ -43,6 +44,11 @@ public class GameEventManager : MonoBehaviour
 		playingEvent.PlayEvent();
 	}
 
+	// Play coroutine for game events, which are scriptable objects
+    public void StartCoroutineForGameEvents(IEnumerator coroutine)
+    {
+        StartCoroutine(coroutine);
+    }
 
     // Terminate target game event
     public void TerminateGameEvent(GameEvent terminatingEvent, bool succeeding = false)
@@ -75,11 +81,17 @@ public class GameEventManager : MonoBehaviour
         // Check if there is next event
         if (terminatingEvent.NextEvent)
 		{
-			// Update event relationship. Update parent event of the child event.
-			SetRelationship(terminatingEvent.ParentEvent, terminatingEvent.NextEvent);
+            // Check compatibility of the next event
+            if (!EventChecker.Instance.CheckEventCompatibility(terminatingEvent.NextEvent, terminatingEvent.ParentEvent))
+            {
+                yield break;
+            }
 
-			// Play next event
-			PlayGameEvent(terminatingEvent.NextEvent);
+            // Update event relationship. Update parent event of the child event.
+            SetRelationship(terminatingEvent.ParentEvent, terminatingEvent.NextEvent);
+
+            // Play next event
+            PlayGameEvent(terminatingEvent.NextEvent);
 		}
 		else
 		{
@@ -107,20 +119,6 @@ public class GameEventManager : MonoBehaviour
 		//StartCoroutine(TerminateEvent(storyEvent, true, true));
 	}
 
-	// Play InGame event
-	private void PlayInGameEvent()
-	{
-        //UIController.Instance.ChangeState(UIController.STATE.EMPTY, true); // Empty UI
-        Debug.Log("play in game event");
-		//TerminateEvent();
-	}
-
-	// Show Loading
-	private void ShowLoading()
-	{
-        //UIController.Instance.ChangeState(UIController.STATE.LOADING, true); // Change UI to Loading mode
-	}
-
 	// Load scene
 	private void LoadGameScene(SceneLoadEvent sceneLoadEvent)
 	{
@@ -128,13 +126,6 @@ public class GameEventManager : MonoBehaviour
 		GameSceneController.Instance.LoadGameScene(sceneLoadEvent.sceneName);
 
 		//StartCoroutine(TerminateEvent(sceneLoadEvent, true, true));
-	}
-
-	// Auto Save current player data
-	private void AutoSave()
-	{
-		DataManager.Instance.AutoSaveUserData();
-		//TerminateEvent();
 	}
 
 	// Change UI state

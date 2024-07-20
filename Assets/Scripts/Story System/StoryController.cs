@@ -211,5 +211,13 @@ public class StoryController : MonoBehaviour
             Debug.Log("story entry error: no such entry");
         }
     }
+
+    public void UpdateStoryProgressInfo()
+    {
+        UserData userData = PlayerManager.Instance.PlayerData;
+
+        userData.ReadBlockCount = StoryModel.Instance.ReadBlockCount;
+        userData.ReadEntryCount = StoryModel.Instance.ReadEntryCount;
+    }
 }
 

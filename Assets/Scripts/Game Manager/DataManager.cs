@@ -15,8 +15,8 @@ using CharacterEums;
 public class DataManager : MonoBehaviour
 {
     public static DataManager Instance { get; private set; }
-    public GameEvent prologueEvent;
     public const int SLOT_NUM = 18;
+    public bool IsSaving { get; private set; }
 
     private void Awake()
     {
@@ -33,7 +33,7 @@ public class DataManager : MonoBehaviour
 
         // Initialize player data
         UserData startData =
-            new UserData(STAGE.TEST, 0, prologueEvent, 0, 0, CHARACTER.HERO, "00:00", saveTime);
+            new UserData(STAGE.TEST, 0, null, 0, 0, CHARACTER.HERO, "00:00", saveTime);
 
         // Set current player data
         PlayerManager.Instance.PlayerData = startData;
@@ -54,14 +54,11 @@ public class DataManager : MonoBehaviour
     // Save User Data.
     public void SaveUserData(int slotNum)
     {
-        // When loading save data, current event will be played after the loading event
-        //EventBase loadingEvent = GameEventManager.Instance.CreateLoadingEvent(GameEventManager.Instance.CurrentEvent);
-        UserData data = PlayerManager.Instance.PlayerData.Copy();
-        //data.StartingEvent = loadingEvent;
+        // start saving
+        IsSaving = true;
 
-        // Set story dialogue number, which shows last text again
-        data.ReadBlockCount = StoryModel.Instance.ReadBlockCount;
-        data.ReadEntryCount = StoryModel.Instance.ReadEntryCount;
+        // Get current Data
+        UserData data = PlayerManager.Instance.PlayerData.Copy();
 
         // Capture Screenshot and save data
         StartCoroutine(CaptureScreenshotAndSave(data, slotNum));
@@ -113,11 +110,8 @@ public class DataManager : MonoBehaviour
             File.WriteAllText(path, json);
         }
 
-        // if it's not autosave, refresh UI
-        if(slotNum != 0)
-        {
-            //UIController.Instance.RefreshState();
-        }
+        // Finsih Saving
+        IsSaving = false;  
     }
 
     // Calculate play time
