@@ -10,7 +10,7 @@ public class GameSceneController : MonoBehaviour
 {
 	public static GameSceneController Instance { get; private set; }
 
-	public bool IsStageReady { get; set; }
+	public bool IsSceneLoading { get; set; }
 
 
 	private string stageSceneName = "StageScene";
@@ -45,11 +45,16 @@ public class GameSceneController : MonoBehaviour
 		GameSceneView.Instance.PlaceGameObjects(); // Place game objects at the right position
 	}
 
+	public void ActivateGameScene()
+	{
+
+	}
+
 	// Exit StageScene
 	public void GoTitle() { StartCoroutine(LoadTitleSceneAsync()); }
     IEnumerator LoadTitleSceneAsync()
     {
-		IsStageReady = false;
+		IsSceneLoading = false;
         DialoguePlayer.Instance.StopPlaying();
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(titleSceneName);
 
@@ -120,7 +125,7 @@ public class GameSceneController : MonoBehaviour
 		PlaceCharacter();
 
         // Alarm that stage scene is ready
-        IsStageReady = true;
+        IsSceneLoading = true;
 	}
 
 	// Place Maps at the right Place

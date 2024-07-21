@@ -212,12 +212,10 @@ public class StoryController : MonoBehaviour
         }
     }
 
-    public void UpdateStoryProgressInfo()
+    // Get current story progress info
+    public (int, int) GetStoryProgressInfo()
     {
-        UserData userData = PlayerManager.Instance.PlayerData;
-
-        userData.ReadBlockCount = StoryModel.Instance.ReadBlockCount;
-        userData.ReadEntryCount = StoryModel.Instance.ReadEntryCount;
+        return (StoryModel.Instance.ReadBlockCount, StoryModel.Instance.ReadEntryCount);
     }
 }
 

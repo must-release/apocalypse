@@ -100,48 +100,17 @@ public class GameEventManager : MonoBehaviour
         }
     }
 
-	// Play story event
-	IEnumerator PlayStory(StoryEvent storyEvent)
-	{
-        UIController.Instance.ChangeBaseUI(BASEUI.STORY); // Change UI to Story UI
+    // Succeed every parent event
+    public void SucceedParentEvents(GameEvent parentEvent)
+    {
+        GameEvent _parentEvent = parentEvent;
 
-        // Start Story according to event info
-        string storyInfo = "STORY_" + storyEvent.stage.ToString() + '_' + storyEvent.storyNum;
-        StoryController.Instance.StartStory(storyInfo, storyEvent.readBlockCount, storyEvent.readEntryCount);
+        do
+        {
+            TerminateGameEvent(_parentEvent, true);
 
-		// Wait for story to end
-		while (StoryController.Instance.IsStoryPlaying)
-		{
-			yield return null;
-		}
-
-		// Terminate story event
-		//StartCoroutine(TerminateEvent(storyEvent, true, true));
-	}
-
-	// Load scene
-	private void LoadGameScene(SceneLoadEvent sceneLoadEvent)
-	{
-		// Load scene asynchronously
-		GameSceneController.Instance.LoadGameScene(sceneLoadEvent.sceneName);
-
-		//StartCoroutine(TerminateEvent(sceneLoadEvent, true, true));
-	}
-
-	// Change UI state
-	private void ChangeUI()
-	{
-		//UIController.STATE ui = HeadEvent.GetEventInfo<UIController.STATE>();
-		//UIController.Instance.ChangeUI(ui);
-		//TerminateEvent();
-	}
-
-	// Show Choice UI
-	private void ShowChoice(ChoiceEvent showChoiceEvent)
-	{
-		UIController.Instance.TurnSubUIOn(SUBUI.CHOICE);
-
-		//StartCoroutine(TerminateEvent(showChoiceEvent, true, true));
-	}
+            _parentEvent = _parentEvent.ParentEvent;
+        } while (_parentEvent);
+    }
 }
 
