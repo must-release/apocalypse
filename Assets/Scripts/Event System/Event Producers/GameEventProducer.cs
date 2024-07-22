@@ -53,7 +53,7 @@ public class GameEventProducer : MonoBehaviour
         dataSaveEvent.NextEvent = cutsceneEvent;
 
         // Finally, change ui to control ui
-        UIChangeEvent uiChangeEvent = ScriptableObject.CreateInstance<UIChangeEvent>();
+        ChangeUIEvent uiChangeEvent = ScriptableObject.CreateInstance<ChangeUIEvent>();
         uiChangeEvent.changingUI = BASEUI.CONTROL;
         cutsceneEvent.NextEvent = uiChangeEvent;
 

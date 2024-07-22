@@ -13,6 +13,7 @@ public class CutsceneEvent : GameEvent
         EventType = EVENT_TYPE.CUTSCENE;
     }
 
+    // Check compatibility with current event and UI
     public override bool CheckCompatibility(GameEvent parentEvent, (BASEUI, SUBUI) currentUI)
     {
         // Can be played when there is no event playing

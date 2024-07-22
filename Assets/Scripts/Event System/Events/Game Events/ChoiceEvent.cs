@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UIEnums;
 using EventEnums;
+using System.Collections;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "NewChoice", menuName = "Event/ChoiceEvent", order = 0)]
@@ -26,5 +27,31 @@ public class ChoiceEvent : GameEvent
         }
         else
             return false;
+    }
+
+    // Play Choice event
+    public override void PlayEvent()
+    {
+        // Use GameEventManger to start coroutine
+        GameEventManager.Instance.StartCoroutineForGameEvents(PlayEventCoroutine());
+    }
+    IEnumerator PlayEventCoroutine()
+    {
+        // Set choice info and turn UI to choice UI
+        UIController.Instance.SetChoiceInfo(choiceList);
+        UIController.Instance.TurnSubUIOn(SUBUI.CHOICE);
+
+        // Wait while current UI is Choice UI
+        while (UIController.Instance.GetCurrentUI().Item2 == SUBUI.CHOICE)
+        {
+            yield return null;
+        }
+
+        // Get selected choice and process it
+        selectedChoice = UIController.Instance.GetSelectedChoice();
+        StoryController.Instance.ProcessSelectedChoice(selectedChoice);
+
+        // Terminate choice event
+        GameEventManager.Instance.TerminateGameEvent(this);
     }
 }

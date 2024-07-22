@@ -139,8 +139,8 @@ public class StoryController : MonoBehaviour
         }
     }
 
-    // Apply selected choice
-    public void ApplySelectedChoice(string optionText)
+    // Process selected choice
+    public void ProcessSelectedChoice(string optionText)
     {
         Dialogue inputDialogue = new Dialogue();
         inputDialogue.character = "나";

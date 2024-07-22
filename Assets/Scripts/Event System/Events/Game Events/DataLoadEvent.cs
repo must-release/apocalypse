@@ -47,7 +47,7 @@ public class DataLoadEvent : GameEvent
             // Apply starting event
             if(startingEvent == null) // When there is no starting event, concat UI change event to current event chain
             {
-                UIChangeEvent uiEvent = CreateInstance<UIChangeEvent>();
+                ChangeUIEvent uiEvent = CreateInstance<ChangeUIEvent>();
                 uiEvent.changingUI = BASEUI.CONTROL;
                 ConcatEvent(uiEvent);
             }
