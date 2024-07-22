@@ -17,6 +17,7 @@ public class InputEventManager : MonoBehaviour
         }
     }
 
+    // Play input event
     public void PlayInputEvent(InputEvent playingEvent)
     {
         EventList.Add(playingEvent);
@@ -24,9 +25,12 @@ public class InputEventManager : MonoBehaviour
         playingEvent.PlayEvent();
     }
 
-    public void TerminateEvent(InputEvent terminatingEvent)
+    // Terminate target event
+    public void TerminateInputEvent(InputEvent terminatingEvent)
     {
         EventList.Remove(terminatingEvent);
+
+        terminatingEvent.TerminateEvent();
     }
     
 }

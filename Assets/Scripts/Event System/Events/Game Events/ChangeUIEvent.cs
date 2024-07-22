@@ -37,6 +37,6 @@ public class ChangeUIEvent : GameEvent
         UIController.Instance.ChangeBaseUI(changingUI); 
 
         // Terminate change UI event
-        GameEventManager.Instance.TerminateGameEvent(this);
+        GameEventManager.Instance.TerminateGameEvent(this); 
     }
 }

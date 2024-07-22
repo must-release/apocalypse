@@ -6,7 +6,7 @@ using EventEnums;
 
 public class CancelEvent : InputEvent
 {
-    // Check compatibiliry with parent event and current UI
+    // Check compatibiliry with event list and current UI
     public override bool CheckCompatibility(List<InputEvent> eventList, (BASEUI, SUBUI) currentUI)
     {
         bool isEventListEmpty = eventList.Count == 0;
@@ -18,7 +18,10 @@ public class CancelEvent : InputEvent
     // Play cancel event
     public override void PlayEvent()
     {
+        // Cancel current UI
         UIController.Instance.CancelCurrentUI();
-        InputEventManager.Instance.TerminateEvent(this);
+
+        // Terminate cancel event
+        InputEventManager.Instance.TerminateInputEvent(this);
     }
 }

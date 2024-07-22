@@ -20,4 +20,10 @@ public class InputEvent
     {
         return;
     }
+
+    // Terminate this input event
+    public virtual void TerminateEvent() 
+    {
+        return;
+    }
 }
