@@ -67,5 +67,5 @@ public class KeySettings
 {
     public KeyCode cancelButton = KeyCode.Escape;
     public KeyCode pauseButton = KeyCode.Escape;
-    public KeyCode confirmButton = KeyCode.Return;
+    public KeyCode nextScriptButton = KeyCode.Return;
 }

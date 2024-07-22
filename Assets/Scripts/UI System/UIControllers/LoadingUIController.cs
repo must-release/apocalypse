@@ -42,6 +42,13 @@ public class LoadingUIController : MonoBehaviour, IUIContoller
         loadingUI.gameObject.SetActive(true);
     }
 
+
+    // Update Loading UI
+    public void UpdateUI()
+    {
+
+    }
+
     // Exit Loading UI
     public void EndUI()
     {

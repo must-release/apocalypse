@@ -43,6 +43,13 @@ public class StoryUIController : MonoBehaviour, IUIContoller
         storyUI.gameObject.SetActive(true);
     }
 
+
+    // Update Story UI
+    public void UpdateUI()
+    {
+
+    }
+
     // Exit Story UI
     public void EndUI()
     {

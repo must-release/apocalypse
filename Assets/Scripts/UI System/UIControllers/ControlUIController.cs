@@ -42,6 +42,12 @@ public class ControlUIController : MonoBehaviour, IUIContoller
         SetControlUIs(playerData);
     }
 
+    // Update Control UI
+    public void UpdateUI()
+    {
+
+    }
+
     // Exit Control UI state
     public void EndUI()
     {

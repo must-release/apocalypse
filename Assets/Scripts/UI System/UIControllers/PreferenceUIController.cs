@@ -91,6 +91,13 @@ public class PreferenceUIController : MonoBehaviour, IUIContoller
 
     }
 
+
+    // Update Preference UI
+    public void UpdateUI()
+    {
+
+    }
+
     // Exit Preference UI state
     public void EndUI()
     {

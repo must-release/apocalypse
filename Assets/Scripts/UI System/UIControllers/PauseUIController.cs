@@ -60,6 +60,13 @@ public class PauseUIController : MonoBehaviour, IUIContoller
         pauseUI.gameObject.SetActive(true);
     }
 
+
+    // Update Pause UI
+    public void UpdateUI()
+    {
+
+    }
+
     // Exit Pause UI
     public void EndUI()
     {

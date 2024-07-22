@@ -47,6 +47,13 @@ public class KeySettingsUIController : MonoBehaviour, IUIContoller
         keySettingsUI.gameObject.SetActive(true);
     }
 
+
+    // Update Key Settings UI
+    public void UpdateUI()
+    {
+
+    }
+
     // Exit Key Settings UI state
     public void EndUI()
     {

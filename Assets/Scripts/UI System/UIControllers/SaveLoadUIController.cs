@@ -79,6 +79,14 @@ public class SaveLoadUIController : MonoBehaviour, IUIContoller
         }
     }
 
+    // Initialize SaveLoad UI
+    public void Start()
+    {
+        // Set Slot Info
+        dataList = DataManager.Instance.GetAllUserData();
+        SetDataSlots();
+    }
+
     /****** Methods ******/
 
     // Enter SaveLoad UI
@@ -88,12 +96,17 @@ public class SaveLoadUIController : MonoBehaviour, IUIContoller
         saveOrLoad = UIModel.Instance.CurrentSubUI;
         SetSaveLoadUI();
 
+        // Active SaveLoad UI object
+        saveLoadUI.gameObject.SetActive(true);
+    }
+
+
+    // Update SaveLoad UI
+    public void UpdateUI()
+    {
         // Set Slot Info
         dataList = DataManager.Instance.GetAllUserData();
         SetDataSlots();
-
-        // Active SaveLoad UI object
-        saveLoadUI.gameObject.SetActive(true);
     }
 
     // Exit SaveLoad UI

@@ -39,6 +39,13 @@ public class SavingUIController : MonoBehaviour, IUIContoller
         savingUI.gameObject.SetActive(true);
     }
 
+
+    // Update Saving UI
+    public void UpdateUI()
+    {
+
+    }
+
     // Exit Saving UI state
     public void EndUI()
     {

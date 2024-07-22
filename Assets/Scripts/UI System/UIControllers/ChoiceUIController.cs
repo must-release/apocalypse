@@ -60,6 +60,12 @@ public class ChoiceUIController : MonoBehaviour, IUIContoller
         SetChoiceUI();
     }
 
+    // Update Choice UI
+    public void UpdateUI()
+    {
+        
+    }
+
     // Exit Choice UI state
     public void EndUI()
     {

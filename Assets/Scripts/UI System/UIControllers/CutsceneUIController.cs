@@ -37,6 +37,13 @@ public class CutsceneUIController : MonoBehaviour, IUIContoller
         cutsceneUI.gameObject.SetActive(true);
     }
 
+
+    // Update Cutscene UI
+    public void UpdateUI()
+    {
+
+    }
+
     // Exit Cutscene UI state
     public void EndUI()
     {

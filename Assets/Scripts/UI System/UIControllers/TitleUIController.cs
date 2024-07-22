@@ -56,8 +56,15 @@ public class TitleUIController : MonoBehaviour, IUIContoller
         titleUI.gameObject.SetActive(true);
     }
 
+
+    // Update Title UI
+    public void UpdateUI()
+    {
+
+    }
+
     // Exit Title UI
-	public void EndUI()
+    public void EndUI()
 	{
         // Inactive Title UI object
         titleUI.gameObject.SetActive(false);

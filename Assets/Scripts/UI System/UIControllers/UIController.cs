@@ -75,8 +75,8 @@ public class UIController : MonoBehaviour
             // Set previous sub UI to current UI controller
             SetUIController(UIModel.Instance.CurrentSubUI);
 
-            // Start Sub UI
-            curUIController.StartUI();
+            // Update Sub UI
+            curUIController.UpdateUI();
         }
     }
 
@@ -159,6 +159,7 @@ public class UIController : MonoBehaviour
 public interface IUIContoller
 {
     public void StartUI();
+    public void UpdateUI();
     public void EndUI();
     public void Cancel();
 }
