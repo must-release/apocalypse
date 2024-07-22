@@ -1,16 +1,15 @@
-using UnityEngine;
-using StageEnums;
-using UIEnums;
-using EventEnums;
+using System.Collections;
 using System.Collections.Generic;
+using UIEnums;
+using UnityEngine;
 
-public class PauseEvent : InputEvent
+public class NextScriptEvent : InputEvent
 {
     // Check compatibiliry with event list and current UI
     public override bool CheckCompatibility(List<InputEvent> eventList, (BASEUI, SUBUI) currentUI)
     {
         bool isEventListEmpty = eventList.Count == 0;
-        bool isValidUI = currentUI.Item1 == BASEUI.CONTROL || currentUI.Item1 == BASEUI.STORY || currentUI.Item2 == SUBUI.CHOICE;
+        bool isValidUI = currentUI.Item1 == BASEUI.STORY;
 
         return isEventListEmpty && isValidUI;
     }
@@ -18,8 +17,8 @@ public class PauseEvent : InputEvent
     // Play pause event
     public override void PlayEvent()
     {
-        // Turn sub UI on
-        UIController.Instance.TurnSubUIOn(SUBUI.PAUSE);
+        // Play next story script
+        StoryController.Instance.PlayNextScript();
 
         // Terminate pause event
         InputEventManager.Instance.TerminateInputEvent(this);

@@ -17,7 +17,6 @@ public class InputEventProducer : MonoBehaviour, PreferenceObserver
     // Input events
     private CancelEvent cancelEvent;
     private PauseEvent pauseEvent;
-    private ConfirmEvent confirmEvent;
 
     private void Awake()
     {
@@ -31,7 +30,6 @@ public class InputEventProducer : MonoBehaviour, PreferenceObserver
             // Pool input Events
             inputEvents.Add(cancelEvent = new CancelEvent());
             inputEvents.Add(pauseEvent = new PauseEvent());
-            inputEvents.Add(confirmEvent = new ConfirmEvent());
         }
     }
 
@@ -82,7 +80,6 @@ public class InputEventProducer : MonoBehaviour, PreferenceObserver
 
         cancelEvent.eventButton = keySettings.cancelButton;
         pauseEvent.eventButton = keySettings.pauseButton;
-        confirmEvent.eventButton = keySettings.confirmButton;
     }
 }
 
