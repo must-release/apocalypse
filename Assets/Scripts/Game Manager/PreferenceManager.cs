@@ -6,7 +6,10 @@ public class PreferenceManager : MonoBehaviour
 {
     public static PreferenceManager Instance { get; private set; }
 
-    private List<PreferenceObserver> observerList; // Observers which observes setting parameters
+    // Observers which observes setting parameters
+    private List<PreferenceObserver> preferenceObservers;
+    private List<KeySettingObserver> keySettingObservers;
+
 
     // Settings parameters
     public PreferenceSettings PreferenceSettingInfo { get; private set; }
@@ -17,7 +20,8 @@ public class PreferenceManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            observerList = new List<PreferenceObserver>();
+            preferenceObservers = new List<PreferenceObserver>();
+            keySettingObservers = new List<KeySettingObserver>();
             PreferenceSettingInfo = new PreferenceSettings();
             KeySettingInfo = new KeySettings();
         }
@@ -31,28 +35,37 @@ public class PreferenceManager : MonoBehaviour
     public void ChangePreference(PreferenceSettings preference)
     {
         PreferenceSettingInfo = preference;
-        observerList.ForEach((observer) => observer.PreferenceUpdated());
+        preferenceObservers.ForEach((observer) => observer.PreferenceUpdated());
     }
 
     public void ChangeKeySettings(KeySettings keySettings)
     {
         KeySettingInfo = keySettings;
-        observerList.ForEach((observer) => observer.PreferenceUpdated());
+        keySettingObservers.ForEach((observer) => observer.KeySettingUpdated());
     }
 
     // Add new observer to the list
     public void AddObserver(PreferenceObserver newObserver)
     {
-        observerList.Add(newObserver);
+        preferenceObservers.Add(newObserver);
         newObserver.PreferenceUpdated(); // Immediately update the new observer
     }
-
+    public void AddObserver(KeySettingObserver newObserver)
+    {
+        keySettingObservers.Add(newObserver);
+        newObserver.KeySettingUpdated(); // Immediately update the new observer
+    }
 
 }
 
 public interface PreferenceObserver
 {
     public void PreferenceUpdated();
+}
+
+public interface KeySettingObserver
+{
+    public void KeySettingUpdated();
 }
 
 public class PreferenceSettings
