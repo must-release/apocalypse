@@ -277,50 +277,6 @@ public class DataManager : MonoBehaviour
 
     /********* Manage Stage Assets *********/
 
-    // Load two maps when starting the game
-    public void LoadMaps()
-    {
-        UserData data = PlayerManager.Instance.PlayerData;
-        string map1 = "MAP_" + data.CurrentStage.ToString() + '_' + data.CurrentMap;
-        string map2 = "MAP_" + data.CurrentStage.ToString() + '_' + (data.CurrentMap + 1);
-
-        StartCoroutine(AsyncLoadMaps(map1, map2));
-    }
-
-    // Load a map while playing the game
-    public void LoadMap(int stageNum)
-    {
-
-    }
-
-    // Load two maps asynchronously
-    IEnumerator AsyncLoadMaps(string map1, string map2)
-    {
-        GameObject firstMap = null, secondMap = null;
-
-        // Load first map
-        AsyncOperationHandle<GameObject> first = Addressables.InstantiateAsync(map1);
-        yield return first;
-        if (first.Status == AsyncOperationStatus.Succeeded)
-        {
-            firstMap = first.Result;
-        }
-
-        // Load second map
-        AsyncOperationHandle<GameObject> second = Addressables.InstantiateAsync(map2);
-        yield return second;
-        if (second.Status == AsyncOperationStatus.Succeeded)
-        {
-            secondMap = second.Result;
-        }
-
-
-        // Return two loaded maps to the GameSceneManager
-        if (firstMap == null || secondMap == null)
-            Debug.Log("Map Load Error");
-        else
-            GameSceneController.Instance.OnMapsLoadComplete(firstMap, secondMap);
-    }
 
     // Start to load player prefab
     public void LoadPlayer()
@@ -341,7 +297,7 @@ public class DataManager : MonoBehaviour
 
         if (player == null)
             Debug.Log("Player Load Error");
-        else
-            GameSceneController.Instance.onPlayerLoadComplete(player);
+        //else
+        //    GameSceneController.Instance.onPlayerLoadComplete(player);
     }
 }

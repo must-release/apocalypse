@@ -24,13 +24,13 @@ public class GameSceneView : MonoBehaviour
         // Wait for scene assets to be loaded
         while (true)
         {
-            SceneAssets assets = GameSceneManager.Instance.GetLoadedAssets();
-            if (assets != null)
-            {
-                if (assets.IsAssetReady()) break;
-            }
+            //SceneAssets assets = GameSceneManager.Instance.GetLoadedAssets();
+            //if (assets != null)
+            //{
+            //    if (assets.IsAssetReady()) break;
+            //}
 
-            yield return null;
+            //yield return null;
         }
 
 

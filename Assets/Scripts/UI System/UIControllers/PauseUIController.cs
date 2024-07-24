@@ -104,6 +104,6 @@ public class PauseUIController : MonoBehaviour, IUIContoller
     // Go back to title scene
     private void OnTitleButtonClick()
     {
-        GameSceneController.Instance.GoTitle();
+
     }
 }

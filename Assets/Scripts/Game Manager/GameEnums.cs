@@ -24,3 +24,8 @@ namespace EventEnums
         DATA_SAVE, DATA_LOAD, SCENE_LOAD, SCENE_ACTIVATE, CHOICE
     };
 }
+
+namespace SceneEnums
+{
+    public enum SCENE { TITLE, STAGE, BOSS }
+}

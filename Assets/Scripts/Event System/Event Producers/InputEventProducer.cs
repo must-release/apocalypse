@@ -6,7 +6,7 @@ using System.Collections.Generic;
  * EventProducer which creates the input event stream
  */
 
-public class InputEventProducer : MonoBehaviour, PreferenceObserver
+public class InputEventProducer : MonoBehaviour, KeySettingsObserver
 {
     public static InputEventProducer Instance { get; private set; }
 
@@ -38,7 +38,7 @@ public class InputEventProducer : MonoBehaviour, PreferenceObserver
     private void Start()
     {
         // Input event producer observes preference manager
-        PreferenceManager.Instance.AddObserver(this);
+        SettingsManager.Instance.AddObserver(this);
     }
  
     private void Update()
@@ -76,9 +76,9 @@ public class InputEventProducer : MonoBehaviour, PreferenceObserver
     }
 
     // Get Updated Preference
-    public void PreferenceUpdated()
+    public void KeySettingsUpdated()
     {
-        KeySettings keySettings = PreferenceManager.Instance.KeySettingInfo;
+        KeySettings keySettings = SettingsManager.Instance.KeySettingsInfo;
 
         cancelEvent.eventButton = keySettings.cancelButton;
         pauseEvent.eventButton = keySettings.pauseButton;

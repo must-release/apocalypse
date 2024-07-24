@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using UIEnums;
 using EventEnums;
+using SceneEnums;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "NewSceneLoad", menuName = "Event/SceneLoadEvent", order = 0)]
 public class SceneLoadEvent : GameEvent
 {
-    public string sceneName; // if null, load scene according to user data
+    private int loadingScene;
+    public SCENE LoadingScene { get { return (SCENE)loadingScene; }  set { loadingScene = (int)value;  } }
 
     // Set event Type on load
     public void OnEnable()
@@ -30,7 +32,7 @@ public class SceneLoadEvent : GameEvent
     public override void PlayEvent()
     {
         // Load scene asynchronously
-        GameSceneController.Instance.LoadGameScene(sceneName);
+        GameSceneController.Instance.LoadGameScene(LoadingScene);
 
         // Terminate scene load event and play next event
         GameEventManager.Instance.TerminateGameEvent(this);

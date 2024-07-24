@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UIEnums;
 using StageEnums;
+using SceneEnums;
 
 /*
  * EventProducer which creates the game event stream
@@ -29,7 +30,7 @@ public class GameEventProducer : MonoBehaviour
 
         // Second, load stage scene asynchronously
         SceneLoadEvent sceneLoadEvent = ScriptableObject.CreateInstance<SceneLoadEvent>();
-        sceneLoadEvent.sceneName = "StageScene";
+        sceneLoadEvent.LoadingScene = SCENE.STAGE;
         dataLoadEvent.NextEvent = sceneLoadEvent;
 
         // Third, play prologue story
@@ -74,7 +75,7 @@ public class GameEventProducer : MonoBehaviour
 
         // Second, load stage scene asynchronously
         SceneLoadEvent sceneLoadEvent = ScriptableObject.CreateInstance<SceneLoadEvent>();
-        sceneLoadEvent.sceneName = "StageScene";
+        sceneLoadEvent.LoadingScene = SCENE.STAGE;
         dataLoadEvent.NextEvent = sceneLoadEvent;
 
         // Third, Activate scene
