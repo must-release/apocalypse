@@ -13,11 +13,6 @@ public class GameSceneController : MonoBehaviour
 
 	public bool IsSceneLoading { get; set; }
 
-	private string stageObjectsName = "Stage Objects";
-	private string startingPointName = "Starting Point";
-	private GameObject stageObjects;
-	private GameObject player;
-
 	void Awake()
 	{
 		if (Instance == null)
@@ -27,10 +22,7 @@ public class GameSceneController : MonoBehaviour
 	}
 
     // Load game scene
-    public void LoadGameScene(SCENE loadingScene)
-	{
-		StartCoroutine(AsyncLoadGameScene(loadingScene));
-	}
+    public void LoadGameScene(SCENE loadingScene) { StartCoroutine(AsyncLoadGameScene(loadingScene)); }
 	IEnumerator AsyncLoadGameScene(SCENE loadingScene)
 	{
         // Start scene loading
@@ -43,9 +35,8 @@ public class GameSceneController : MonoBehaviour
 		// Load Assets
 	    yield return GameSceneModel.Instance.LoadAssets();
 
-        // Place assets
-        //PlaceMaps();
-        //PlaceCharacter();
+		// Place assets
+		GameSceneView.Instance.PlaceSceneObjects();
 
         // Complete scene loading
         IsSceneLoading = false;
@@ -55,27 +46,5 @@ public class GameSceneController : MonoBehaviour
 	{
 
 	}
-
-	//// Place Maps at the right Place
-	//public void PlaceMaps()
-	//{
-	//	Vector2 curMapSize = currentMap.GetComponent<BoxCollider2D>().size;
-	//	Vector2 nextMapSize = nextMap.GetComponent<BoxCollider2D>().size;
-	//	Vector3 playerPos = currentMap.transform.Find(startingPointName).transform.position;
-
- //       // Place maps based on there left corner.
- //       currentMap.transform.position =
-	//		new Vector3((curMapSize.x - cameraWidth) / 2, (curMapSize.y - cameraHeight) / 2);
-	//	nextMap.transform.position =
-	//		new Vector3(curMapSize.x - (cameraWidth - nextMapSize.x) / 2, (nextMapSize.y - cameraHeight) / 2);
- //   }
-
-	//// Place character at the starting point of the current map
-	//public void PlaceCharacter()
-	//{
-	//	Vector3 playerPos = currentMap.transform.Find(startingPointName).transform.position;
-
-	//	player.transform.position = playerPos;
-	//}
 }
 

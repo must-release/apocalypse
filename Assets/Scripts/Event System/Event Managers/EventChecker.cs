@@ -15,10 +15,8 @@ public class EventChecker : MonoBehaviour
     }
 
     // Check compatibility of the new game event with parent event
-    public bool CheckEventCompatibility(GameEvent checkingEvent, GameEvent parentEvent = null)
+    public bool CheckEventCompatibility(GameEvent checkingEvent, GameEvent parentEvent)
     {
-        if (parentEvent == null) parentEvent = GameEventManager.Instance.EventPointer;
-
         var currentUI = UIController.Instance.GetCurrentUI();
         bool result = checkingEvent.CheckCompatibility(parentEvent, currentUI);
 
@@ -27,7 +25,14 @@ public class EventChecker : MonoBehaviour
             Debug.Log("Not compatible :" + checkingEvent.EventType.ToString());
         }
 
+
         return result;
+    }
+
+    // Check compatibility of the new game event and EventPointer
+    public bool CheckEventCompatibility(GameEvent checkingEvent)
+    {
+        return CheckEventCompatibility(checkingEvent, GameEventManager.Instance.EventPointer);
     }
 
     // Check compatibility of the new input event with current event

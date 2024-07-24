@@ -21,6 +21,38 @@ public class GameEventProducer : MonoBehaviour
         }
     }
 
+    public void Start()
+    {
+        // When game starts, play splash screen
+        GenerateSplashScreenEventStream();
+    }
+
+    // Generate splash screent event stream
+    private void GenerateSplashScreenEventStream()
+    {
+        // First, set UI to splash scren UI
+        ChangeUIEvent changeUIEvent = ScriptableObject.CreateInstance<ChangeUIEvent>();
+        changeUIEvent.changingUI = BASEUI.SPLASH_SCREEN;
+
+        // Second, load title scene asynchronously
+        SceneLoadEvent sceneLoadEvent = ScriptableObject.CreateInstance<SceneLoadEvent>();
+        sceneLoadEvent.LoadingScene = SCENE.TITLE;
+        changeUIEvent.NextEvent = sceneLoadEvent;
+
+        // Third, Activate scene
+        SceneActivateEvent sceneActivateEvent = ScriptableObject.CreateInstance<SceneActivateEvent>();
+        sceneLoadEvent.NextEvent = sceneActivateEvent;
+
+        // Finally, change UI to title UI
+        ChangeUIEvent uiChangeEvent = ScriptableObject.CreateInstance<ChangeUIEvent>();
+        uiChangeEvent.changingUI = BASEUI.TITLE;
+        sceneActivateEvent.NextEvent = uiChangeEvent;
+
+        // Handle generated event stream
+        HandleGeneratedEventChain(changeUIEvent);
+    }
+
+
     // Generate new game event stream
     public void GenerateNewGameEventStream()
     {

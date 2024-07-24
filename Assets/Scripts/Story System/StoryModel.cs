@@ -123,8 +123,8 @@ public class StoryModel : MonoBehaviour
             else // End Story event
             {
                 // Reset read dialogue number to 0
-                PlayerManager.Instance.PlayerData.ReadBlockCount = ReadBlockCount = 0;
-                PlayerManager.Instance.PlayerData.ReadEntryCount = ReadEntryCount = readEntryCountBuffer = 0;
+                ReadBlockCount = 0;
+                ReadEntryCount = readEntryCountBuffer = 0;
 
                 //GameEventManager.Instance.TerminateEvent();
                 return null;

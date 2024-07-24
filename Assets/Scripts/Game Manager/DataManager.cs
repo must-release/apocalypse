@@ -33,22 +33,10 @@ public class DataManager : MonoBehaviour
 
         // Initialize player data
         UserData startData =
-            new UserData(STAGE.TEST, 0, null, 0, 0, CHARACTER.HERO, "00:00", saveTime);
+            new UserData(STAGE.TEST, 0, null, CHARACTER.HERO, "00:00", saveTime);
 
         // Set current player data
         PlayerManager.Instance.PlayerData = startData;
-    }
-
-    // Auto Save data. slot 0 is used for auto save
-    public void AutoSaveUserData()
-    {
-        // When loading auto save data, next event will be played after the loading event
-        //EventBase loadingEvent = GameEventManager.Instance.CreateLoadingEvent(GameEventManager.Instance.NextEvent);
-        UserData data = PlayerManager.Instance.PlayerData.Copy();
-        //data.StartingEvent = loadingEvent;
-
-        // Capture Screenshot and save data
-        StartCoroutine(CaptureScreenshotAndSave(data, 0));
     }
 
     // Save User Data.
@@ -207,97 +195,5 @@ public class DataManager : MonoBehaviour
 
         // Set current player data
         PlayerManager.Instance.PlayerData = recentData;
-    }
-
-
-
-    /******** Manage Story Data **********/
-
-    // Start loading text of the current story event which player is having 
-    public void LoadStoryText()
-    {
-        //string storyInfo = GameEventManager.Instance.HeadEvent.GetEventInfo<string>();
-        //Addressables.LoadAssetAsync<TextAsset>(storyInfo).Completed += OnStoryLoadComplete;
-    }
-    private void OnStoryLoadComplete(AsyncOperationHandle<TextAsset> story)
-    {
-        // Set JsonConvert settings
-        var settings = new JsonSerializerSettings
-        {
-            // Add custom converter
-            Converters = new List<JsonConverter> { new StoryEntryConverter() }
-        };
-
-        // Convert Json file to StoryEntries object
-        string jsonContent = story.Result.text;
-        StoryBlocks storyBlocks = JsonConvert.DeserializeObject<StoryBlocks>(jsonContent, settings);
-
-        // Set story info
-        StoryModel.Instance.SetStoryInfo(storyBlocks.blocks);
-    }
-
-    // Class for converting story json file
-    class StoryEntryConverter : JsonConverter
-    {
-        public override bool CanConvert(Type objectType)
-        {
-            return (objectType == typeof(StoryEntry));
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            JObject jo = JObject.Load(reader);
-            switch (jo["type"].Value<string>())
-            {
-                case "dialogue":
-                    return jo.ToObject<Dialogue>(serializer);
-                case "effect":
-                    return jo.ToObject<Effect>(serializer);
-                case "choice":
-                    return jo.ToObject<Choice>(serializer);
-                default:
-                    throw new Exception("Unknown type");
-            }
-        }
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool CanWrite
-        {
-            get { return false; }
-        }
-    }
-
-
-
-
-
-    /********* Manage Stage Assets *********/
-
-
-    // Start to load player prefab
-    public void LoadPlayer()
-    {
-        string key = "Characters/Player";
-        Addressables.InstantiateAsync(key).Completed += AsyncLoadPlayer;
-    }
-
-    // When player is loaded, return player instance to GameSceneManager
-    private void AsyncLoadPlayer(AsyncOperationHandle<GameObject> playerInstance)
-    {
-        GameObject player = null;
-
-        if(playerInstance.Status == AsyncOperationStatus.Succeeded)
-        {
-            player = playerInstance.Result;
-        }
-
-        if (player == null)
-            Debug.Log("Player Load Error");
-        //else
-        //    GameSceneController.Instance.onPlayerLoadComplete(player);
     }
 }

@@ -20,7 +20,8 @@ public class SceneLoadEvent : GameEvent
     public override bool CheckCompatibility(GameEvent parentEvent, (BASEUI, SUBUI) currentUI)
     {
         // Can be played when current base UI is title, pause or load
-        if (currentUI.Item1 == BASEUI.TITLE || currentUI.Item2 == SUBUI.PAUSE || currentUI.Item2 == SUBUI.LOAD )
+        if (currentUI.Item1 == BASEUI.TITLE || currentUI.Item1 == BASEUI.SPLASH_SCREEN ||
+            currentUI.Item2 == SUBUI.PAUSE || currentUI.Item2 == SUBUI.LOAD )
         {
             return true;
         }

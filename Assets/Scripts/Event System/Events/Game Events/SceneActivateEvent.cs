@@ -48,8 +48,9 @@ public class SceneActivateEvent : GameEvent
             yield break;
         }
 
-        // Change to Loading UI
-        UIController.Instance.ChangeBaseUI(BASEUI.LOADING);
+        // If it's not splash screen, change to Loading UI
+        if(UIController.Instance.GetCurrentUI().Item1 != BASEUI.SPLASH_SCREEN)
+            UIController.Instance.ChangeBaseUI(BASEUI.LOADING);
 
         // Wait for loading to end
         while (GameSceneController.Instance.IsSceneLoading)

@@ -29,4 +29,9 @@ public class PlayerManager : MonoBehaviour
 
     }
 
+    // Get current stage & map info which player is in
+    public (string, int) GetCurrentStageMapInfo()
+    {
+        return (PlayerData.CurrentStage.ToString(), PlayerData.CurrentMap);
+    }
 }

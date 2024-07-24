@@ -52,7 +52,7 @@ public class LoadingUIController : MonoBehaviour, IUIContoller
     // Exit Loading UI
     public void EndUI()
     {
-        // Inactive Title UI object
+        // Inactive Loading UI object
         loadingUI.gameObject.SetActive(false);
     }
 

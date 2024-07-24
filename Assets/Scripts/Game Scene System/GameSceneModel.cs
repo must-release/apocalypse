@@ -11,25 +11,22 @@ public class GameSceneModel : MonoBehaviour
     public static GameSceneModel Instance;
 
     public SCENE CurrentScene { get; private set; }
-    public GameObject StageObjects { get; private set; }
-    public GameObject Player { get; private set; }
-    
-    private string stageObjectsName = "Stage Objects";
-    private GameObject currentMap;
-    private GameObject nextMap;
-    private float cameraHeight;
-    private float cameraWidth;
+    public GameObject SceneObjects { get; private set; }
+    public Transform Player { get; private set; }
+    public Queue<MapInfo> Maps { get; private set; }
+
+    private string sceneObjectsName = "Scene Objects"; // In game scene, Scene Objects must exist
+    private int mapCount = 4; // Capacity of map queue
+
 
     private void Awake()
     {
-        Instance = this;
-    }
-
-    private void Start()
-    {
-        // Get Camera size
-        cameraHeight = 2f * Camera.main.orthographicSize;
-        cameraWidth = cameraHeight * Camera.main.aspect;
+        if (Instance == null)
+        {
+            Instance = this;
+            SceneObjects = transform.Find(sceneObjectsName).gameObject;
+            Maps = new Queue<MapInfo>();
+        }
     }
 
     // Asyncronously load scene
@@ -43,6 +40,13 @@ public class GameSceneModel : MonoBehaviour
     // Load Assets
     public Coroutine LoadAssets() 
     {
+        // Destory all previous scene objects
+        foreach (Transform child in SceneObjects.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        Maps.Clear();
+
         switch (CurrentScene)
         {
             case SCENE.TITLE:
@@ -58,25 +62,18 @@ public class GameSceneModel : MonoBehaviour
     // Load stage scene assets
     IEnumerator LoadStageAssets()
     {
-        // Find container of the stage objects 
-        StageObjects = GameObject.Find(stageObjectsName);
+        // Get map data
+        var mapData = PlayerManager.Instance.GetCurrentStageMapInfo();
+        string map1 = "MAP_" + mapData.Item1 + '_' + mapData.Item2;
+        string map2 = "MAP_" + mapData.Item1 + '_' + (mapData.Item2 + 1);
 
+        // Load first map
+        yield return StartCoroutine(LoadMap(map1));
 
-        /****** Load Maps ******/
-        {
-            UserData data = PlayerManager.Instance.PlayerData;
-            string map1 = "MAP_" + data.CurrentStage.ToString() + '_' + data.CurrentMap;
-            string map2 = "MAP_" + data.CurrentStage.ToString() + '_' + (data.CurrentMap + 1);
+        // Load second map
+        yield return StartCoroutine(LoadMap(map2));
 
-            // Load first map
-            yield return StartCoroutine(LoadMap(map1, result => currentMap = result));
-
-            // Load second map
-            yield return StartCoroutine(LoadMap(map2, result => nextMap = result));
-        }
-
-
-        /***** Load Player Prefab *****/
+        // Load player objects
         yield return LoadPlayer();
     }
 
@@ -86,34 +83,44 @@ public class GameSceneModel : MonoBehaviour
         yield break;
     }
 
-    IEnumerator LoadMap(string map, System.Action<GameObject> onComplete)
+    // Load map and execute onComplete delegate
+    IEnumerator LoadMap(string map)
     {
 
         AsyncOperationHandle<GameObject> loadingMap = Addressables.InstantiateAsync(map);
         yield return loadingMap;
         if (loadingMap.Status == AsyncOperationStatus.Succeeded)
         {
+            // Load map in inactive state
             GameObject loadedMap = loadingMap.Result;
             loadedMap.SetActive(false);
-            loadedMap.transform.parent = StageObjects.transform;
-            onComplete?.Invoke(loadedMap);
+
+            // Check if the Maps queue is at its maximum capacity
+            if (Maps.Count >= mapCount)
+            {
+                Destroy(Maps.Dequeue().map); // Remove the oldest map
+            }
+            Maps.Enqueue(new MapInfo(loadedMap));
+
+            // Add map to the Scene objects
+            loadedMap.transform.parent = SceneObjects.transform;
         }
         else
         {
             Debug.LogError("Failed to load the map: " + map);
-            onComplete?.Invoke(null);
         }
     }
 
+    // Load player prefab
     IEnumerator LoadPlayer()
     {
         AsyncOperationHandle<GameObject> player = Addressables.InstantiateAsync("Characters/Player");
         yield return player;
         if (player.Status == AsyncOperationStatus.Succeeded)
         {
-            Player = player.Result;
-            Player.SetActive(false);
-            Player.transform.parent = StageObjects.transform;
+            Player = player.Result.transform;
+            Player.gameObject.SetActive(false);
+            Player.parent = SceneObjects.transform;
         }
         else
         {
@@ -137,3 +144,17 @@ public class GameSceneModel : MonoBehaviour
     }
 }
 
+// Contains map info
+public class MapInfo
+{
+    public Transform map;
+    public Vector2 size;
+    public Vector3 startingPoint;
+
+    public MapInfo(GameObject map)
+    {
+        this.map = map.transform;
+        size = map.GetComponent<BoxCollider2D>().size;
+        startingPoint = map.transform.Find("Starting Point").transform.position;
+    }
+}

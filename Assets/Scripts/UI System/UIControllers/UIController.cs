@@ -18,18 +18,10 @@ public class UIController : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        // initalize current UI to title UI
-        UIModel.Instance.CurrentBaseUI = BASEUI.TITLE;
-        SetUIController(BASEUI.TITLE);
-        curUIController.StartUI();
-    }
-
     // Change Base UI.
     public void ChangeBaseUI(BASEUI baseUI)
     {
-        curUIController.EndUI();
+        curUIController?.EndUI();
 
         UIModel.Instance.CurrentBaseUI = baseUI;
         SetUIController(baseUI);
@@ -120,6 +112,9 @@ public class UIController : MonoBehaviour
     {
         switch (baseUI)
         {
+            case BASEUI.SPLASH_SCREEN:
+                curUIController = SplashScreenUIController.Instance;
+                break;
             case BASEUI.TITLE:
                 curUIController = TitleUIController.Instance;
                 break;
