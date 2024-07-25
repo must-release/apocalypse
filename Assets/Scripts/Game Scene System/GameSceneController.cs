@@ -42,9 +42,14 @@ public class GameSceneController : MonoBehaviour
         IsSceneLoading = false;
     }
 
+	// Activate loaded game scene
 	public void ActivateGameScene()
 	{
+		// Reset utility tools
+		UtilityManager.Instance.ResetUtilityTools();
 
+		// Activate loaded scene objects
+		GameSceneModel.Instance.SetActiveSceneObjects(true);
 	}
 }
 

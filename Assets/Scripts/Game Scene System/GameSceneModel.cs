@@ -29,6 +29,15 @@ public class GameSceneModel : MonoBehaviour
         }
     }
 
+    // Activate or inactivate every scene objects
+    public void SetActiveSceneObjects(bool value)
+    {
+        foreach (Transform child in SceneObjects.transform)
+        {
+            child.gameObject.SetActive(value);
+        }
+    }
+
     // Asyncronously load scene
     public AsyncOperation AsyncLoadScene(SCENE loadingScene)
     {

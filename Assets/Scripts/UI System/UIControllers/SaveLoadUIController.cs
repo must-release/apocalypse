@@ -235,6 +235,7 @@ public class SaveLoadUIController : MonoBehaviour, IUIContoller
         saveOrLoad = SUBUI.NONE;
         pageNumberText.text = currentPage + "/" + (DataManager.SLOT_NUM / slots.childCount);
         previousButton.gameObject.SetActive(false);
+        nextButton.gameObject.SetActive(true);
         confirmButton.onClick.RemoveAllListeners();
     }
 }
