@@ -47,7 +47,7 @@ public class StoryEvent : GameEvent
 
         // Start Story
         string story = "STORY_" + stage.ToString() + '_' + storyNum;
-        StoryController.Instance.StartStory(story, readBlockCount, readEntryCount);
+        yield return StoryController.Instance.StartStory(story, readBlockCount, readEntryCount);
 
         // Wait for story to end
         while (StoryController.Instance.IsStoryPlaying)

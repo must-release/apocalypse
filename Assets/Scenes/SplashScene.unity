@@ -203,10 +203,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game Manager
       objectReference: {fileID: 0}
-    - target: {fileID: 1897536436648679597, guid: 3d65792c29f2740bb949cd81b71f5da2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2374493198853975076, guid: 3d65792c29f2740bb949cd81b71f5da2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -247,9 +243,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5858010991342992133, guid: 3d65792c29f2740bb949cd81b71f5da2, type: 3}
-      propertyPath: m_Color.a
-      value: 0
+    - target: {fileID: 5933428058029786196, guid: 3d65792c29f2740bb949cd81b71f5da2, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 193a38564eaf045fbaac51cfca5c0f92, type: 2}
+    - target: {fileID: 5933428058029786196, guid: 3d65792c29f2740bb949cd81b71f5da2, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

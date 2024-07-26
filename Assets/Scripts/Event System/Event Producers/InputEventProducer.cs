@@ -13,6 +13,8 @@ public class InputEventProducer : MonoBehaviour, KeySettingsObserver
     private List<InputEvent> inputEvents;
     private Queue<InputEvent> incomingEvents;
     private List<InputEvent> playingEvents;
+    private bool inputLock;
+    private GameObject clickPreventPanel;
 
     // Input events
     private CancelEvent cancelEvent;
@@ -27,6 +29,8 @@ public class InputEventProducer : MonoBehaviour, KeySettingsObserver
             inputEvents = new List<InputEvent>();
             incomingEvents = new Queue<InputEvent>();
             playingEvents = new List<InputEvent>();
+            inputLock = false;
+            clickPreventPanel = GameObject.Find("Click Prevent Panel");
 
             // Pool input Events
             inputEvents.Add(cancelEvent = new CancelEvent());
@@ -43,6 +47,10 @@ public class InputEventProducer : MonoBehaviour, KeySettingsObserver
  
     private void Update()
     {
+        if (inputLock)
+        {
+            return;
+        }
 
         // Detect every input event.
         inputEvents.ForEach((inputEvent) => {
@@ -74,6 +82,14 @@ public class InputEventProducer : MonoBehaviour, KeySettingsObserver
         playingEvents.ForEach((input) => InputEventManager.Instance.PlayInputEvent(input));
         playingEvents.Clear();
     }
+
+    // Lock or Unlock input
+    public void LockInput(bool value)
+    {
+        inputLock = value;
+        clickPreventPanel.SetActive(value);
+    }
+
 
     // Get Updated Preference
     public void KeySettingsUpdated()

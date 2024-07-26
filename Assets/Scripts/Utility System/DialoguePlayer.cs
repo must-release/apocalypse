@@ -16,6 +16,12 @@ public class DialoguePlayer : MonoBehaviour, IUtilityTool
     private Dictionary<Dialogue, Coroutine> dialogueCoroutineMapping; // Used when mapping dialogue entry to playing coroutine
     private float textInterval = 0.05f; // Speed of the dialogue text
 
+    public void Awake()
+    {
+        PlayingDialgoueEntries = new List<Dialogue>();
+        dialogueCoroutineMapping = new Dictionary<Dialogue, Coroutine>();
+    }
+
     public void Start()
     {
         UtilityManager.Instance.AddUtilityTool(this);

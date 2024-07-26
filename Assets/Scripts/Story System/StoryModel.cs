@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using System.Collections;
 
 public class StoryModel : MonoBehaviour
 {
@@ -30,16 +31,16 @@ public class StoryModel : MonoBehaviour
     }
 
     // Start loading text of the current story event which player is having 
-    public void LoadStoryText(string storyInfo, int readBlockCount, int readEntryCount)
+    public Coroutine LoadStoryText(string storyInfo, int readBlockCount, int readEntryCount)
     {
         // Restore saved story point
         ReadBlockCount = readBlockCount;
         ReadEntryCount = readEntryCount;
 
         // Load Story Texts
-        Addressables.LoadAssetAsync<TextAsset>(storyInfo).Completed += OnStoryLoadComplete;
+        return StartCoroutine(AsyncLoadStoryText(storyInfo));
     }
-    private void OnStoryLoadComplete(AsyncOperationHandle<TextAsset> story)
+    IEnumerator AsyncLoadStoryText(string storyInfo)
     {
         // Set JsonConvert settings
         var settings = new JsonSerializerSettings
@@ -47,6 +48,10 @@ public class StoryModel : MonoBehaviour
             // Add custom converter
             Converters = new List<JsonConverter> { new StoryEntryConverter() }
         };
+
+        // Load story
+        AsyncOperationHandle<TextAsset> story = Addressables.LoadAssetAsync<TextAsset>(storyInfo);
+        yield return story;
 
         // Convert Json file to StoryEntries object
         string jsonContent = story.Result.text;
@@ -64,8 +69,6 @@ public class StoryModel : MonoBehaviour
         CurrentStoryBranch = firstBlock.branchId; // Set current branch id according to the first story block
         storyEntryQueue = new Queue<StoryEntry>(firstBlock.entries.Skip(ReadEntryCount));
 
-        // Story is now ready
-        StoryController.Instance.StartScript();
     }
 
     // Return first story entry

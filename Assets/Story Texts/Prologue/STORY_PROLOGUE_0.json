@@ -23,6 +23,10 @@
                         {
                             "text": "지금은 바빠요.",
                             "branchId": "negativeResponse"
+                        },
+                        {
+                            "text": "네.",
+                            "branchId": "negativeResponse"
                         }
                     ]
                 }

@@ -9,7 +9,7 @@ public class StoryController : MonoBehaviour
 {
     public static StoryController Instance;
 
-    public bool IsStoryPlaying { get; private set; } = false;
+    public bool IsStoryPlaying { get; private set; }
     public float textSpeed = 0.1f; // Speed of the dialogue text
     public bool isWaitingResponse = false;
     public bool isRegenerate = false;
@@ -25,6 +25,7 @@ public class StoryController : MonoBehaviour
     private GameObject character;
     private TextMeshProUGUI nameText;
     private TextMeshProUGUI dialogueText;
+    private DialoguePlayer dialoguePlayer;
 
     public void Awake()
     {
@@ -57,7 +58,11 @@ public class StoryController : MonoBehaviour
     }
 
     // Start Story Mode with given info
-    public void StartStory(string storyInfo, int readBlockCount, int readEntryCount)
+    public Coroutine StartStory(string storyInfo, int readBlockCount, int readEntryCount)
+    {
+        return StartCoroutine(StartStoryCoroutine(storyInfo, readBlockCount, readEntryCount));
+    }
+    IEnumerator StartStoryCoroutine(string storyInfo, int readBlockCount, int readEntryCount)
     {
         // Set Story Playing true
         IsStoryPlaying = true;
@@ -65,18 +70,18 @@ public class StoryController : MonoBehaviour
         // Activate Story Screen
         storyScreen.gameObject.SetActive(true);
 
-        // Load Story Text according to the Info
-        StoryModel.Instance.LoadStoryText(storyInfo, readBlockCount, readEntryCount);
-    }
+        // Get dialogue player
+        dialoguePlayer = UtilityManager.Instance.GetUtilityTool<DialoguePlayer>();
 
-    // Show first story script When new story is loaded
-    public void StartScript()
-    {
+        // Load Story Text according to the Info
+        yield return StoryModel.Instance.LoadStoryText(storyInfo, readBlockCount, readEntryCount);
+
+        // Show first story script When new story is loaded
         StoryEntry entry = StoryModel.Instance.GetFirstEntry();
         if (entry == null)
         {
             Debug.Log("Story initial load error");
-            return;
+            yield break;
         }
         ShowStoryEntry(entry);
     }
@@ -86,6 +91,11 @@ public class StoryController : MonoBehaviour
     {
         // Inactivate Story Screen
         storyScreen.gameObject.SetActive(false);
+
+        // Give dialogue player back
+        UtilityManager.Instance.GiveUtilityBack(dialoguePlayer);
+        dialoguePlayer = null;
+
         responseCount = 0;
         MemoryAPI.Instance.Reflect();
     }
@@ -94,17 +104,17 @@ public class StoryController : MonoBehaviour
     // Play next script on the screen
     public void PlayNextScript()
     {
-        if (DialoguePlayer.Instance.PlayingDialgoueEntries.Count > 0)
+        if (dialoguePlayer.PlayingDialgoueEntries.Count > 0)
         {
-            if (DialoguePlayer.Instance.PlayingDialgoueEntries.Count > 1)
+            if (dialoguePlayer.PlayingDialgoueEntries.Count > 1)
             {
                 Debug.Log("Error: multiple dialogue at the list");
                 return;
             }
 
             // Complete current playing dialogue entry
-            Dialogue dialogue = DialoguePlayer.Instance.PlayingDialgoueEntries[0];
-            DialoguePlayer.Instance.CompleteDialogue(dialogue, nameText, dialogueText);
+            Dialogue dialogue = dialoguePlayer.PlayingDialgoueEntries[0];
+            dialoguePlayer.CompleteDialogue(dialogue, nameText, dialogueText);
         }
         else
         {
@@ -184,8 +194,8 @@ public class StoryController : MonoBehaviour
     {
         if (entry is Dialogue dialogue)
         {
-            DialoguePlayer.Instance.PlayDialogue(dialogue, nameText, dialogueText);
-            MemoryAPI.Instance.SaveMemory(dialogue);
+            dialoguePlayer.PlayDialogue(dialogue, nameText, dialogueText);
+            //MemoryAPI.Instance.SaveMemory(dialogue);
         }
         else if (entry is Choice choice)
         {

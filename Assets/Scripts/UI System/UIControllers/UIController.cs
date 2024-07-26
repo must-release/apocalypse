@@ -33,7 +33,7 @@ public class UIController : MonoBehaviour
     public void TurnSubUIOn(SUBUI subUI)
     {
         // Stack sub UI
-        UIModel.Instance.PushNewSubUI(subUI); 
+        UIModel.Instance.PushNewSubUI(subUI);
 
         // Set current UI Controller to sub UI
         SetUIController(subUI);
@@ -128,6 +128,9 @@ public class UIController : MonoBehaviour
             case BASEUI.LOADING:
                 curUIController = LoadingUIController.Instance;
                 break;
+            default:
+                Debug.Log("No such baseUIController");
+                break;
         }
     }
 
@@ -147,6 +150,12 @@ public class UIController : MonoBehaviour
                 break;
             case SUBUI.KEYSETTINGS:
                 curUIController = KeySettingsUIController.Instance;
+                break;
+            case SUBUI.CHOICE:
+                curUIController = ChoiceUIController.Instance;
+                break;
+            default:
+                Debug.Log("No such subUIController");
                 break;
         }
     }
