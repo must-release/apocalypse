@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UIEnums;
 using UnityEngine;
 
 public class EventChecker : MonoBehaviour
@@ -17,8 +18,8 @@ public class EventChecker : MonoBehaviour
     // Check compatibility of the new game event with parent event
     public bool CheckEventCompatibility(GameEvent checkingEvent, GameEvent parentEvent)
     {
-        var currentUI = UIController.Instance.GetCurrentUI();
-        bool result = checkingEvent.CheckCompatibility(parentEvent, currentUI);
+        UIController.Instance.GetCurrentUI(out BASEUI baseUI, out SUBUI subUI);
+        bool result = checkingEvent.CheckCompatibility(parentEvent, baseUI, subUI);
 
         if (!result)
         {
@@ -39,8 +40,8 @@ public class EventChecker : MonoBehaviour
     public bool CheckEventCompatibility(InputEvent checkingEvent)
     {
         List<InputEvent> eventList = InputEventManager.Instance.EventList;
-        var currentUI = UIController.Instance.GetCurrentUI();
-        bool result = checkingEvent.CheckCompatibility(eventList, currentUI);
+        UIController.Instance.GetCurrentUI(out BASEUI baseUI, out SUBUI subUI);
+        bool result = checkingEvent.CheckCompatibility(eventList, baseUI, subUI);
 
         return result;
     }

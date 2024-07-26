@@ -16,10 +16,10 @@ public class DataSaveEvent : GameEvent
     }
 
     // Check compatibility with current event and UI
-    public override bool CheckCompatibility(GameEvent parentEvent, (BASEUI, SUBUI) currentUI)
+    public override bool CheckCompatibility(GameEvent parentEvent, BASEUI baseUI, SUBUI subUI)
     {
         // Can be played when current base UI is loading or save
-        if (currentUI.Item1 == BASEUI.LOADING || currentUI.Item2 == SUBUI.SAVE)
+        if (baseUI == BASEUI.LOADING || subUI == SUBUI.SAVE)
         {
             return true;
         }

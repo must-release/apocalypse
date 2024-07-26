@@ -6,10 +6,10 @@ using UnityEngine;
 public class NextScriptEvent : InputEvent
 {
     // Check compatibiliry with event list and current UI
-    public override bool CheckCompatibility(List<InputEvent> eventList, (BASEUI, SUBUI) currentUI)
+    public override bool CheckCompatibility(List<InputEvent> eventList, BASEUI baseUI, SUBUI subUI)
     {
         bool isEventListEmpty = eventList.Count == 0;
-        bool isValidUI = currentUI.Item1 == BASEUI.STORY;
+        bool isValidUI = baseUI == BASEUI.STORY;
 
         return isEventListEmpty && isValidUI;
     }

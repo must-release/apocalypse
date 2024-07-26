@@ -14,7 +14,7 @@ public class SceneActivateEvent : GameEvent
     }
 
     // Check compatibility with current event and UI
-    public override bool CheckCompatibility(GameEvent parentEvent, (BASEUI, SUBUI) currentUI)
+    public override bool CheckCompatibility(GameEvent parentEvent, BASEUI baseUI, SUBUI subUI)
     {
         // Can be played when current base UI is loading or save
         if (parentEvent == null || parentEvent.EventType == EVENT_TYPE.STORY || parentEvent.EventType == EVENT_TYPE.CHOICE)
@@ -49,7 +49,8 @@ public class SceneActivateEvent : GameEvent
         }
 
         // If it's not splash screen, change to Loading UI
-        if(UIController.Instance.GetCurrentUI().Item1 != BASEUI.SPLASH_SCREEN)
+        UIController.Instance.GetCurrentUI(out BASEUI baseUI, out SUBUI subUI);
+        if(baseUI != BASEUI.SPLASH_SCREEN)
             UIController.Instance.ChangeBaseUI(BASEUI.LOADING);
 
         // Wait for loading to end

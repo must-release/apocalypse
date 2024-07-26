@@ -25,7 +25,6 @@ public class StoryController : MonoBehaviour
     private GameObject character;
     private TextMeshProUGUI nameText;
     private TextMeshProUGUI dialogueText;
-    private Transform choicePanel;
 
     public void Awake()
     {
@@ -95,12 +94,7 @@ public class StoryController : MonoBehaviour
     // Play next script on the screen
     public void PlayNextScript()
     {
-        // Check If StoryPlayer is now playing non-dialogue entry
-        if (DialoguePlayer.Instance.NonDialogueEntryCount > 0)
-        {
-            return; // Wait for non-dialogue entry to end
-        }
-        else if (DialoguePlayer.Instance.PlayingDialgoueEntries.Count > 0)
+        if (DialoguePlayer.Instance.PlayingDialgoueEntries.Count > 0)
         {
             if (DialoguePlayer.Instance.PlayingDialgoueEntries.Count > 1)
             {
@@ -203,7 +197,6 @@ public class StoryController : MonoBehaviour
         }
         else if (entry is Effect effect)
         {
-            DialoguePlayer.Instance.PlayEffect(effect);
             Debug.Log($"Effect: Action: {effect.action}, Duration: {effect.duration}");
         }
         else

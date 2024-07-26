@@ -7,10 +7,10 @@ using EventEnums;
 public class CancelEvent : InputEvent
 {
     // Check compatibiliry with event list and current UI
-    public override bool CheckCompatibility(List<InputEvent> eventList, (BASEUI, SUBUI) currentUI)
+    public override bool CheckCompatibility(List<InputEvent> eventList, BASEUI baseUI, SUBUI subUI)
     {
         bool isEventListEmpty = eventList.Count == 0;
-        bool isInvalidSubUI = currentUI.Item2 == SUBUI.NONE || currentUI.Item2 == SUBUI.CHOICE || currentUI.Item2 == SUBUI.SAVING;
+        bool isInvalidSubUI = subUI == SUBUI.NONE || subUI == SUBUI.CHOICE || subUI == SUBUI.SAVING;
 
         return isEventListEmpty && !isInvalidSubUI;
     }

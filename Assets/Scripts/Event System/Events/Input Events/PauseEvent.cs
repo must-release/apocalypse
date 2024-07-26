@@ -7,10 +7,10 @@ using System.Collections.Generic;
 public class PauseEvent : InputEvent
 {
     // Check compatibiliry with event list and current UI
-    public override bool CheckCompatibility(List<InputEvent> eventList, (BASEUI, SUBUI) currentUI)
+    public override bool CheckCompatibility(List<InputEvent> eventList, BASEUI baseUI, SUBUI subUI)
     {
         bool isEventListEmpty = eventList.Count == 0;
-        bool isValidUI = currentUI.Item1 == BASEUI.CONTROL || currentUI.Item1 == BASEUI.STORY || currentUI.Item2 == SUBUI.CHOICE;
+        bool isValidUI = baseUI == BASEUI.CONTROL || baseUI == BASEUI.STORY || subUI == SUBUI.CHOICE;
 
         return isEventListEmpty && isValidUI;
     }

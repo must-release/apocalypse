@@ -9,7 +9,7 @@ public class InputEvent
     public KeyCode eventButton;
 
     // Check compatibiliry with parent event and current UI
-    public virtual bool CheckCompatibility(List<InputEvent> eventList, (BASEUI, SUBUI) currentUI)
+    public virtual bool CheckCompatibility(List<InputEvent> eventList, BASEUI baseUI, SUBUI subUI)
     {
         return default;
     }

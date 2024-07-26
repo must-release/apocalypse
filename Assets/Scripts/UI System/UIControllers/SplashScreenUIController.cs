@@ -38,9 +38,6 @@ public class SplashScreenUIController : MonoBehaviour, IUIContoller
     {
         // Active splash screen UI object
         splashScreenUI.gameObject.SetActive(true);
-
-        // Stop current thread for 2 seconds. Must be fixed.
-        Thread.Sleep(2000);
     }
 
 

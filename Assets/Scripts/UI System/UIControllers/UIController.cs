@@ -87,9 +87,10 @@ public class UIController : MonoBehaviour
     }
 
     // Get current UI. Return both base UI and sub UI
-    public (BASEUI, SUBUI) GetCurrentUI()
+    public void GetCurrentUI(out BASEUI baseUI, out SUBUI subUI)
     {
-        return (UIModel.Instance.CurrentBaseUI, UIModel.Instance.CurrentSubUI);
+        baseUI = UIModel.Instance.CurrentBaseUI;
+        subUI = UIModel.Instance.CurrentSubUI;
     }
 
     // Set choice info

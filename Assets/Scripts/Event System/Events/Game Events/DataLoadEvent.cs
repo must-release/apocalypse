@@ -18,10 +18,10 @@ public class DataLoadEvent : GameEvent
     }
 
     // Check compatibility with current event and UI
-    public override bool CheckCompatibility(GameEvent parentEvent, (BASEUI, SUBUI) currentUI)
+    public override bool CheckCompatibility(GameEvent parentEvent, BASEUI baseUI, SUBUI subUI)
     {
         // Can be played when current base UI is title or load
-        if (currentUI.Item1 == BASEUI.TITLE || currentUI.Item2 == SUBUI.LOAD)
+        if (baseUI == BASEUI.TITLE || subUI == SUBUI.LOAD)
         {
             return true;
         }

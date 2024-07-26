@@ -72,9 +72,9 @@ public class GameSceneModel : MonoBehaviour
     IEnumerator LoadStageAssets()
     {
         // Get map data
-        var mapData = PlayerManager.Instance.GetCurrentStageMapInfo();
-        string map1 = "MAP_" + mapData.Item1 + '_' + mapData.Item2;
-        string map2 = "MAP_" + mapData.Item1 + '_' + (mapData.Item2 + 1);
+        PlayerManager.Instance.GetCurrentStageMapInfo(out string stage, out int map);
+        string map1 = "MAP_" + stage + '_' + map;
+        string map2 = "MAP_" + stage + '_' + (map + 1);
 
         // Load first map
         yield return StartCoroutine(LoadMap(map1));

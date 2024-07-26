@@ -21,7 +21,7 @@ public class StoryEvent : GameEvent
     }
 
     // Check compatibility with current event and UI
-    public override bool CheckCompatibility(GameEvent parentEvent, (BASEUI, SUBUI) currentUI)
+    public override bool CheckCompatibility(GameEvent parentEvent, BASEUI baseUI, SUBUI subUI)
     {
         // Can be played only when there is no event playing
         if (parentEvent == null)
