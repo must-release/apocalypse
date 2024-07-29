@@ -19,7 +19,7 @@ public class StoryModel : MonoBehaviour
     public int ReadBlockCount { get; set; } = 0;
     public int ReadEntryCount { get; set; } = 0;
     public string CurrentStoryBranch { get; set; }
-    public Queue<StoryEntry> storyEntryBuffer = new Queue<StoryEntry>();
+    public Queue<StoryEntry> storyEntryBuffer;
 
 
     private void Awake()
@@ -27,6 +27,7 @@ public class StoryModel : MonoBehaviour
         if(Instance == null)
         {
             Instance = this;
+            storyEntryBuffer = new Queue<StoryEntry>();
         }
     }
 
