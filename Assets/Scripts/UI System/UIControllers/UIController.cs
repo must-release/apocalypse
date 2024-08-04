@@ -49,6 +49,8 @@ public class UIController : MonoBehaviour
         if (UIModel.Instance.CurrentSubUI != subUI || subUI == SUBUI.NONE)
         {
             Debug.Log("Sub UI Mismatch");
+            Debug.Log(subUI);
+            Debug.Log(UIModel.Instance.CurrentSubUI);
             return;
         }
 
@@ -128,6 +130,9 @@ public class UIController : MonoBehaviour
             case BASEUI.LOADING:
                 curUIController = LoadingUIController.Instance;
                 break;
+            case BASEUI.CUTSCENE:
+                curUIController = CutsceneUIController.Instance;
+                break;
             default:
                 Debug.Log("No such baseUIController");
                 break;
@@ -143,6 +148,7 @@ public class UIController : MonoBehaviour
                 SetUIController(UIModel.Instance.CurrentBaseUI);
                 break;
             case SUBUI.LOAD:
+            case SUBUI.SAVE:
                 curUIController = SaveLoadUIController.Instance;
                 break;
             case SUBUI.PREFERENCE:
@@ -153,6 +159,12 @@ public class UIController : MonoBehaviour
                 break;
             case SUBUI.CHOICE:
                 curUIController = ChoiceUIController.Instance;
+                break;
+            case SUBUI.SAVING:
+                curUIController = SavingUIController.Instance;
+                break;
+            case SUBUI.PAUSE:
+                curUIController = PauseUIController.Instance;
                 break;
             default:
                 Debug.Log("No such subUIController");

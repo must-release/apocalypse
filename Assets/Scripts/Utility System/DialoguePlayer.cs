@@ -12,10 +12,13 @@ public class DialoguePlayer : MonoBehaviour, IUtilityTool
     /****** Public Fields ******/
     public List<Dialogue> PlayingDialgoueEntries { get; private set; }
 
+
     /****** Private fields ******/
     private Dictionary<Dialogue, Coroutine> dialogueCoroutineMapping; // Used when mapping dialogue entry to playing coroutine
     private float textInterval = 0.05f; // Speed of the dialogue text
 
+
+    /****** Methods ******/
     public void Awake()
     {
         PlayingDialgoueEntries = new List<Dialogue>();
@@ -27,7 +30,7 @@ public class DialoguePlayer : MonoBehaviour, IUtilityTool
         UtilityManager.Instance.AddUtilityTool(this);
     }
 
-    // Stop all playing story entries
+    // Stop all dialouges
     public void ResetTool()
     {
         StopAllCoroutines();

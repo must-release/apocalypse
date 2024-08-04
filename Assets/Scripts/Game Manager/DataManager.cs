@@ -1,10 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.IO;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -18,6 +14,8 @@ public class DataManager : MonoBehaviour
     public const int SLOT_NUM = 18;
     public bool IsSaving { get; private set; }
 
+    private UserData currentData;
+
     private void Awake()
     {
         if (Instance == null)
@@ -29,77 +27,86 @@ public class DataManager : MonoBehaviour
     // Create new game data and set it to current data
     public void CreateNewGameData()
     {
+        // Initialize Info
         string saveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm"); // Get current time
+        STAGE curStage = STAGE.TEST;
+        int curMap = 0;
+        GameEvent startingEvent = null;
+        CHARACTER lastChar = CHARACTER.HERO;
+        string playTime = "00:00";
 
-        // Initialize player data
-        UserData startData =
-            new UserData(STAGE.TEST, 0, null, CHARACTER.HERO, "00:00", saveTime);
+        // Initialize current data
+        currentData = new UserData(curStage, curMap, startingEvent, lastChar, playTime, saveTime);
 
-        // Set current player data
-        PlayerManager.Instance.PlayerData = startData;
+        // Set player data
+        PlayerManager.Instance.SetPlayerData(curStage, curMap, lastChar);
     }
 
     // Save User Data.
-    public void SaveUserData(int slotNum)
+    public void SaveUserData(GameEvent startingEvent, int slotNum, bool takeScreenShot)
+    {
+        StartCoroutine(AsyncSaveUserData(startingEvent, slotNum, takeScreenShot));
+    }
+    private IEnumerator AsyncSaveUserData(GameEvent startingEvent, int slotNum, bool takeScreenShot)
     {
         // start saving
         IsSaving = true;
 
-        // Get current Data
-        UserData data = PlayerManager.Instance.PlayerData.Copy();
+        // Update current data according to player data
+        PlayerManager.Instance.GetPlayerData(out STAGE stage, out int map, out CHARACTER character);
+        currentData.UpdatePlayerData(stage, map, character);
 
-        // Capture Screenshot and save data
-        StartCoroutine(CaptureScreenshotAndSave(data, slotNum));
-    }
-
-    // Capture a screenshot of current game
-    private IEnumerator CaptureScreenshotAndSave(UserData data, int slotNum)
-    {
-        // Wait for a frame to end before taking a screenshot
+        // Wait for a frame before taking a screenshot
         yield return new WaitForEndOfFrame();
 
-        /******* Capture Screenshot *********/
+        // Take screenshot
+        if (takeScreenShot)
         {
-            // Create RenderTexture which has equal a equal with screen
-            RenderTexture renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
-            Texture2D screenShot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
-
-            // Set current rendered content to RenderTexture
-            RenderTexture.active = renderTexture;
-            Camera.main.targetTexture = renderTexture;
-            Camera.main.Render();
-
-            // Copy pixel info from RenderTexture to Texture2D
-            screenShot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
-            screenShot.Apply();
-
-            // Reset RenderTexture and Camera settings
-            Camera.main.targetTexture = null;
-            RenderTexture.active = null;
-            Destroy(renderTexture);
-
-            // Set screenshot image
-            data.ScreenShotImage = screenShot;
+            Texture2D screenShot = CaptureScreenShot();
+            currentData.ScreenShotImage = screenShot;
             Destroy(screenShot);
         }
 
+        // Calculate play time
+        currentData.PlayTime = CalculatePlayTime(currentData.PlayTime, currentData.SaveTime);
 
-        /******* Save User Data *********/
-        {
-            // Calculate play time
-            data.PlayTime = CalculatePlayTime(data.PlayTime, data.SaveTime);
+        // Update save time
+        currentData.SaveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
 
-            // Update save time
-            data.SaveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+        // Set starting event
+        currentData.StartingEvent = startingEvent;
 
-            // Save Json file
-            string path = Application.persistentDataPath + "/userData" + slotNum + ".json";
-            string json = JsonUtility.ToJson(data);
-            File.WriteAllText(path, json);
-        }
+        // Save Json file
+        string path = Application.persistentDataPath + "/userData" + slotNum + ".json";
+        string json = JsonUtility.ToJson(currentData);
+        File.WriteAllText(path, json);
 
         // Finsih Saving
         IsSaving = false;  
+    }
+
+    // Capture current screenshot
+    private Texture2D CaptureScreenShot()
+    {
+        // Create RenderTexture which has equal a equal with screen
+        RenderTexture renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
+        Texture2D screenShot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+
+        // Set current rendered content to RenderTexture
+        RenderTexture.active = renderTexture;
+        Camera.main.targetTexture = renderTexture;
+        Camera.main.Render();
+
+        // Copy pixel info from RenderTexture to Texture2D
+        screenShot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+        screenShot.Apply();
+
+        // Reset RenderTexture and Camera settings
+        Camera.main.targetTexture = null;
+        RenderTexture.active = null;
+        Destroy(renderTexture);
+
+        return screenShot;
     }
 
     // Calculate play time
@@ -157,34 +164,34 @@ public class DataManager : MonoBehaviour
         return allData;
     }
 
-    // Load specific game slot data
-    public void LoadGameData(int slotNum)
+    // Load specific game slot data and return starting event
+    public GameEvent LoadGameData(int slotNum)
     {
-        UserData loadData = null;
-
         string path = Application.persistentDataPath + "/userData" + slotNum + ".json";
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path);
-            loadData = JsonUtility.FromJson<UserData>(json);
+            currentData = JsonUtility.FromJson<UserData>(json);
         }
         else
         {
             Debug.Log("Trying to read empty slot");
         }
 
-        // Set current player data
-        PlayerManager.Instance.PlayerData = loadData;
+        // Set player data
+        PlayerManager.Instance.SetPlayerData(currentData.CurrentStage, currentData.CurrentMap, currentData.LastCharacter);
+
+        return currentData.StartingEvent;
     }
 
-    // Load recent saved data
-    public void LoadRecentData()
+    // Load recent saved data and return starting event
+    public GameEvent LoadRecentData()
     {
         List<UserData> allData = GetAllUserData();
 
         // Parse string to DateTime by using DateTime.TryParseExact method
         // Use "yyyy-MM-dd HH:mm" format and CultureInfo.InvariantCulture
-        UserData recentData = allData
+        currentData = allData
             .Where(u => u != null && !string.IsNullOrWhiteSpace(u.SaveTime))
             .OrderByDescending(u =>
             {
@@ -193,7 +200,9 @@ public class DataManager : MonoBehaviour
             })
             .FirstOrDefault();
 
-        // Set current player data
-        PlayerManager.Instance.PlayerData = recentData;
+        // Set player data
+        PlayerManager.Instance.SetPlayerData(currentData.CurrentStage, currentData.CurrentMap, currentData.LastCharacter);
+
+        return currentData.StartingEvent;
     }
 }

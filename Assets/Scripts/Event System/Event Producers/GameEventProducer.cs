@@ -114,7 +114,8 @@ public class GameEventProducer : MonoBehaviour
     {
         // First, load data of the selected slot
         DataLoadEvent dataLoadEvent = ScriptableObject.CreateInstance<DataLoadEvent>();
-        if(slotNum == int.MaxValue)
+        dataLoadEvent.slotNum = slotNum;
+        if (slotNum == int.MaxValue)
         {
             dataLoadEvent.isContinueGame = true; // load recent game
         }
@@ -143,7 +144,7 @@ public class GameEventProducer : MonoBehaviour
     }
 
     // Generate choice event stream
-    public void GenerateChoiceEventStream(List<string> choiceList)
+    public void GenerateChoiceEventStream(List<string> choiceList = null)
     {
         ChoiceEvent choiceEvent = ScriptableObject.CreateInstance<ChoiceEvent>();
         choiceEvent.choiceList = choiceList;

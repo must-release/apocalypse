@@ -12,6 +12,12 @@ public class StoryEntry
 [System.Serializable]
 public class Dialogue : StoryEntry
 {
+    public Dialogue(string character, string text)
+    {
+        this.character = character;
+        this.text = text;
+    }
+
     public string character;
     public string text;
 }

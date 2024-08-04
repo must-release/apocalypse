@@ -9,7 +9,7 @@ public class NextScriptEvent : InputEvent
     public override bool CheckCompatibility(List<InputEvent> eventList, BASEUI baseUI, SUBUI subUI)
     {
         bool isEventListEmpty = eventList.Count == 0;
-        bool isValidUI = baseUI == BASEUI.STORY;
+        bool isValidUI = baseUI == BASEUI.STORY && subUI != SUBUI.CHOICE;
 
         return isEventListEmpty && isValidUI;
     }

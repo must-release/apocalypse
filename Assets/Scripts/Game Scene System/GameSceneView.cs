@@ -84,6 +84,6 @@ public class GameSceneView : MonoBehaviour
     // Place player at the starting point of the current map
     private void PlacePlayer(MapInfo spawnMap)
     {
-        GameSceneModel.Instance.Player.position = spawnMap.startingPoint;
+        GameSceneModel.Instance.Player.position = spawnMap.startingPoint.position;
     }
 }

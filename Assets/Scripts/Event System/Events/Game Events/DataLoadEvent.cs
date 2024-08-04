@@ -21,7 +21,7 @@ public class DataLoadEvent : GameEvent
     public override bool CheckCompatibility(GameEvent parentEvent, BASEUI baseUI, SUBUI subUI)
     {
         // Can be played when current base UI is title or load
-        if (baseUI == BASEUI.TITLE || subUI == SUBUI.LOAD)
+        if (parentEvent == null || parentEvent.EventType == EVENT_TYPE.STORY || parentEvent.EventType == EVENT_TYPE.CHOICE)
         {
             return true;
         }
@@ -38,11 +38,10 @@ public class DataLoadEvent : GameEvent
         }
         else // Load game data
         {
-            if (isContinueGame) DataManager.Instance.LoadRecentData();
-            else DataManager.Instance.LoadGameData(slotNum);
-
-            // Get starting event
-            GameEvent startingEvent = PlayerManager.Instance.PlayerData.StartingEvent;
+            // Load data and get starting event
+            GameEvent startingEvent = isContinueGame?
+                DataManager.Instance.LoadRecentData():
+                DataManager.Instance.LoadGameData(slotNum);
 
             // Apply starting event
             if(startingEvent == null) // When there is no starting event, concat UI change event to current event chain

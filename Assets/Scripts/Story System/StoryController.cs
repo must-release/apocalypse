@@ -12,7 +12,7 @@ public class StoryController : MonoBehaviour
     public bool IsStoryPlaying { get; private set; }
     public float textSpeed = 0.1f; // Speed of the dialogue text
     public bool isWaitingResponse = false;
-    public bool isRegenerate = false;
+    public bool isChatting = false;
     public int responseCount = 0;
     public const int MAX_RESPONSE_COUNT = 4;
 
@@ -43,17 +43,6 @@ public class StoryController : MonoBehaviour
             character = storyScreen.Find(characterName).gameObject;
             nameText = storyScreen.Find(dialogueBoxName).Find(nameTextName).GetComponent<TextMeshProUGUI>();
             dialogueText = storyScreen.Find(dialogueBoxName).Find(dialogueTextName).GetComponent<TextMeshProUGUI>();
-        }
-    }
-
-    public void Update()
-    {
-        if(StoryModel.Instance.storyEntryBuffer.Count > 0)
-        {
-            if(dialogueText.text == "Loading")
-            {
-                PlayNextScript();
-            }
         }
     }
 
@@ -97,7 +86,7 @@ public class StoryController : MonoBehaviour
         dialoguePlayer = null;
 
         responseCount = 0;
-        MemoryAPI.Instance.Reflect();
+        //MemoryAPI.Instance.Reflect();
     }
 
 
@@ -109,7 +98,6 @@ public class StoryController : MonoBehaviour
             if (dialoguePlayer.PlayingDialgoueEntries.Count > 1)
             {
                 Debug.Log("Error: multiple dialogue at the list");
-                return;
             }
 
             // Complete current playing dialogue entry
@@ -118,55 +106,89 @@ public class StoryController : MonoBehaviour
         }
         else
         {
-            if (isWaitingResponse)
+            if (isWaitingResponse) // Waiting for AI's response
             {
                 nameText.text = "";
                 dialogueText.text = "Loading";
-                return;
             }
-
-            if (isRegenerate && StoryModel.Instance.storyEntryBuffer.Count == 0)
+            else if (isChatting && StoryModel.Instance.StoryEntryBuffer.Count == 0) // Continue chating
             {
-                GameEventProducer.Instance.GenerateChoiceEventStream(null);
-                return;
+                GameEventProducer.Instance.GenerateChoiceEventStream();
             }
-
-
-            // Check if there is available entry
-            StoryEntry entry = StoryModel.Instance.GetNextEntry();
-            if (entry == null)
+            else
             {
-                IsStoryPlaying = false;
+                // Check if there is available entry
+                StoryEntry entry = StoryModel.Instance.GetNextEntry();
+                if (entry == null)
+                {
+                    // Story is over
+                    IsStoryPlaying = false;
+                }
+                else
+                {
+                    // Show Story Entry
+                    ShowStoryEntry(entry);
+                }
             }
-
-            ShowStoryEntry(entry);
         }
     }
 
-    // Process selected choice
-    public void ProcessSelectedChoice(string optionText)
+    // Show story entry on the screen
+    public void ShowStoryEntry(StoryEntry entry)
     {
-        Dialogue inputDialogue = new Dialogue();
-        inputDialogue.character = "나";
-        inputDialogue.text = optionText;
-        StoryModel.Instance.storyEntryBuffer.Enqueue(inputDialogue);
+        if (entry is Dialogue dialogue)
+        {
+            dialoguePlayer.PlayDialogue(dialogue, nameText, dialogueText);
+            //MemoryAPI.Instance.SaveMemory(dialogue);
+        }
+        else if (entry is Choice choice)
+        {
+            // Save processing choice
+            StoryModel.Instance.ProcessingChoice = choice;
+
+            // Extracting the text values from the options
+            List<string> optionTexts = choice.options.Select(option => option.text).ToList();
+
+            // Generate show choice event stream
+            GameEventProducer.Instance.GenerateChoiceEventStream(optionTexts);
+        }
+        else
+        {
+            Debug.Log("story entry error: no such entry");
+        }
+    }
+
+
+    // Process selected choice
+    public void ProcessSelectedChoice(string optionText, bool generateResponse)
+    {
+        // Play selected choice option
+        Dialogue inputDialogue = new Dialogue("나", optionText);
+        StoryModel.Instance.StoryEntryBuffer.Enqueue(inputDialogue);
         PlayNextScript();
 
-        GetResponse(inputDialogue);
+        if (generateResponse) // Generate response of AI
+        {
+            StartCoroutine(GetResponse(inputDialogue));
+        }
+        else // Set current branch info
+        {
+            StoryModel.Instance.SetCurrentBranch(optionText);
+        }
     }
 
-    public void GetResponse(Dialogue inputDialogue)
+    // Get response of the AI Character
+    IEnumerator GetResponse(Dialogue inputDialogue)
     {
+        // Set response settings
         isWaitingResponse = true;
         responseCount++;
-        if (responseCount >= MAX_RESPONSE_COUNT) isRegenerate = false;
-        else isRegenerate = true;
+        if (responseCount >= MAX_RESPONSE_COUNT) isChatting = false;
+        else isChatting = true;
 
-        MemoryAPI.Instance.GenerateResponse(inputDialogue, responseCount);
-    }
-
-    public void ShowResponse(string response)
-    {
+        // Get response
+        yield return MemoryAPI.Instance.GenerateResponse(inputDialogue, isChatting);
+        string response = MemoryAPI.Instance.Response;
         isWaitingResponse = false;
 
         // Split the string by newline characters and remove empty entries
@@ -181,37 +203,15 @@ public class StoryController : MonoBehaviour
             if (string.IsNullOrWhiteSpace(line))
                 continue;
 
-            Dialogue responseDialogue = new Dialogue();
-            responseDialogue.character = "연아";
-            responseDialogue.text = line;
+            // Prepare response
+            Dialogue responseDialogue = new Dialogue("연아", line);
+            StoryModel.Instance.StoryEntryBuffer.Enqueue(responseDialogue);
+        }
 
-            StoryModel.Instance.storyEntryBuffer.Enqueue(responseDialogue);
-        }
-    }
-
-    // Show story entry on the screen
-    public void ShowStoryEntry(StoryEntry entry)
-    {
-        if (entry is Dialogue dialogue)
+        // If dialogue text is loading, auto play response
+        if (dialogueText.text.Equals("Loading"))
         {
-            dialoguePlayer.PlayDialogue(dialogue, nameText, dialogueText);
-            //MemoryAPI.Instance.SaveMemory(dialogue);
-        }
-        else if (entry is Choice choice)
-        {
-            // Extracting the text values from the options
-            List<string> optionTexts = choice.options.Select(option => option.text).ToList();
-
-            // Generate show choice event stream
-            GameEventProducer.Instance.GenerateChoiceEventStream(optionTexts);
-        }
-        else if (entry is Effect effect)
-        {
-            Debug.Log($"Effect: Action: {effect.action}, Duration: {effect.duration}");
-        }
-        else
-        {
-            Debug.Log("story entry error: no such entry");
+            PlayNextScript();
         }
     }
 

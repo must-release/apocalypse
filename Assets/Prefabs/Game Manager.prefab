@@ -373,6 +373,7 @@ GameObject:
   - component: {fileID: 8983697034654676118}
   - component: {fileID: 3613114641521286640}
   - component: {fileID: 3760698951726739374}
+  - component: {fileID: 8825734382537364637}
   m_Layer: 5
   m_Name: UI System
   m_TagString: Untagged
@@ -628,6 +629,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 275ae62055bd943449023d36e33a9c61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8825734382537364637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 234601453372501135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f48857f7f25e841d5805f8b0bcef070b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &321702380188351658
@@ -1062,6 +1075,7 @@ GameObject:
   - component: {fileID: 7804073232143026550}
   - component: {fileID: 8966378586444422900}
   - component: {fileID: 533310181925406187}
+  - component: {fileID: 6805509408642173569}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -1089,6 +1103,7 @@ Transform:
   - {fileID: 163118746313400536}
   - {fileID: 3358264827250436564}
   - {fileID: 8803260049842769159}
+  - {fileID: 5801506756640530622}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7804073232143026550
@@ -1125,6 +1140,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5434e7630e7e54c5d81f726be59b13a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6805509408642173569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 632332070771007598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a9a7193cf9f74601941074833a5cca1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &677013569113443743
@@ -7080,7 +7107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textSpeed: 0.1
   isWaitingResponse: 0
-  isRegenerate: 0
+  isChatting: 0
   responseCount: 0
 --- !u!114 &6483904006108405615
 MonoBehaviour:
@@ -7948,6 +7975,50 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &3882106793128070650
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5801506756640530622}
+  - component: {fileID: 8818029070109070420}
+  m_Layer: 0
+  m_Name: Game Play System
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5801506756640530622
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3882106793128070650}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2374493198853975076}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8818029070109070420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3882106793128070650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb1e986a5d8cf5d4b92c6b6bb6e5334f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3899998822070797390
 GameObject:
   m_ObjectHideFlags: 0
@@ -8741,7 +8812,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Option 3
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 193a38564eaf045fbaac51cfca5c0f92, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -8805,7 +8876,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &4098224825573963372

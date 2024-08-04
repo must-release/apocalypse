@@ -45,6 +45,9 @@ public class SceneActivateEvent : GameEvent
         if (!GameSceneController.Instance.IsSceneLoading)
         {
             GameSceneController.Instance.ActivateGameScene();
+
+            // Terminate scene activate event and play next event
+            GameEventManager.Instance.TerminateGameEvent(this);
             yield break;
         }
 

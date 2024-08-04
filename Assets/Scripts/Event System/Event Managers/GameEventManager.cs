@@ -45,9 +45,9 @@ public class GameEventManager : MonoBehaviour
 	}
 
 	// Play coroutine for game events, which are scriptable objects
-    public void StartCoroutineForGameEvents(IEnumerator coroutine)
+    public Coroutine StartCoroutineForGameEvents(IEnumerator coroutine)
     {
-        StartCoroutine(coroutine);
+        return StartCoroutine(coroutine);
     }
 
     // Terminate target game event

@@ -8,6 +8,7 @@ using System.Collections;
 public class DataSaveEvent : GameEvent
 {
     public int slotNum; // if 0 auto save, else save in slot
+    private bool takeScreenShot = false;
 
     // Set event Type on load
     public void OnEnable()
@@ -44,6 +45,7 @@ public class DataSaveEvent : GameEvent
         // Turn Saving UI on
         UIController.Instance.TurnSubUIOn(SUBUI.SAVING);
 
+        // When saving during story mode
         if (ParentEvent && ParentEvent.EventType == EVENT_TYPE.STORY)
         {
             // Get current story progress info
@@ -51,10 +53,14 @@ public class DataSaveEvent : GameEvent
 
             // Update StoryEvent
             (ParentEvent as StoryEvent).UpdateStoryProgress(storyInfo);
+
+            // Take screen shot when saving
+            takeScreenShot = true;
         }
 
         // Save user data
-        DataManager.Instance.SaveUserData(slotNum);
+        GameEvent startingEvent = GetStartingEvent();
+        DataManager.Instance.SaveUserData(startingEvent, slotNum, takeScreenShot);
 
         // Wait while saving
         while (DataManager.Instance.IsSaving)
@@ -67,6 +73,23 @@ public class DataSaveEvent : GameEvent
 
         // Terminate data save event and play next event
         GameEventManager.Instance.TerminateGameEvent(this);
+    }
+
+    private GameEvent GetStartingEvent()
+    {
+        if(ParentEvent == null)
+        {
+            return NextEvent;
+        }
+        else
+        {
+            GameEvent root = ParentEvent;
+            while(root.ParentEvent != null)
+            {
+                root = root.ParentEvent;
+            }
+            return root;
+        }
     }
 
     // Terminate data save event

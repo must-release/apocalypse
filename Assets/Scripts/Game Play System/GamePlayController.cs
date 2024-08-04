@@ -10,7 +10,10 @@ public class GamePlayController : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
+        if(Instance == null)
+        {
+            Instance = this;
+        }
     }
 
     public void PlayCutscene()

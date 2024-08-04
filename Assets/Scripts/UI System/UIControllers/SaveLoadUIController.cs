@@ -167,6 +167,9 @@ public class SaveLoadUIController : MonoBehaviour, IUIContoller
     // Load saved data of the selected slot
     private void LoadSavedData()
     {
+        // Get slot number
+        int slotNum = selectedSlot.slotNumber;
+
         // Close confirm panel
         confirmPanel.gameObject.SetActive(false);
 
@@ -174,7 +177,7 @@ public class SaveLoadUIController : MonoBehaviour, IUIContoller
         UIController.Instance.TurnEverySubUIOff();
 
         // Generate Load Game Event Stream. Load data of the selected slot
-        GameEventProducer.Instance.GenerateLoadGameEventStream(selectedSlot.slotNumber);
+        GameEventProducer.Instance.GenerateLoadGameEventStream(slotNum);
     }
 
     // Save current player data at the selected slot

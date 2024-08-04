@@ -158,12 +158,12 @@ public class MapInfo
 {
     public Transform map;
     public Vector2 size;
-    public Vector3 startingPoint;
+    public Transform startingPoint;
 
     public MapInfo(GameObject map)
     {
         this.map = map.transform;
         size = map.GetComponent<BoxCollider2D>().size;
-        startingPoint = map.transform.Find("Starting Point").transform.position;
+        startingPoint = map.transform.Find("Starting Point");
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 using EventEnums;
 using UIEnums;
 
-[System.Serializable]
+[Serializable]
 public class GameEvent : ScriptableObject
 {
     /* Event info which is used when playing game */

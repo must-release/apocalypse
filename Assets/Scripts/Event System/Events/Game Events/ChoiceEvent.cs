@@ -11,6 +11,7 @@ public class ChoiceEvent : GameEvent
     public List<string> choiceList;
     public string selectedChoice;
 
+    private Coroutine choiceCoroutine;
 
     // Set event Type on load
     public void OnEnable()
@@ -33,26 +34,28 @@ public class ChoiceEvent : GameEvent
     public override void PlayEvent()
     {
         // Use GameEventManger to start coroutine
-        GameEventManager.Instance.StartCoroutineForGameEvents(PlayEventCoroutine());
+        choiceCoroutine = GameEventManager.Instance.StartCoroutineForGameEvents(PlayEventCoroutine());
     }
     IEnumerator PlayEventCoroutine()
     {
-        // Set choice info and turn UI to choice UI
+        // Set choice info and switch to choice UI
         UIController.Instance.SetChoiceInfo(choiceList);
         UIController.Instance.TurnSubUIOn(SUBUI.CHOICE);
 
-        // Wait while current UI is Choice UI
-        UIController.Instance.GetCurrentUI(out BASEUI baseUI, out SUBUI subUI);
-        while (subUI == SUBUI.CHOICE)
+        // Wait while the current UI is Choice UI
+        yield return new WaitUntil(() =>
         {
-            yield return null;
-        }
+            UIController.Instance.GetCurrentUI(out _, out SUBUI subUI);
+            return subUI == SUBUI.NONE;
+        });
 
-        // Get selected choice and process it
-        selectedChoice = UIController.Instance.GetSelectedChoice();
-        StoryController.Instance.ProcessSelectedChoice(selectedChoice);
+        // Get the selected choice and process it
+        var selectedChoice = UIController.Instance.GetSelectedChoice();
+        bool generateResponse = choiceList == null;
 
-        // Terminate choice event
+        StoryController.Instance.ProcessSelectedChoice(selectedChoice, generateResponse);
+
+        // Terminate the choice event
         GameEventManager.Instance.TerminateGameEvent(this);
     }
 }
