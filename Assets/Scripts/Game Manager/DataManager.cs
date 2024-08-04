@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using StageEnums;
 using CharacterEums;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class DataManager : MonoBehaviour
 {
@@ -15,11 +17,36 @@ public class DataManager : MonoBehaviour
     public bool IsSaving { get; private set; }
 
     private UserData currentData;
+    private Dictionary<STAGE, Texture2D> StageProfileImage;
 
     private void Awake()
     {
         if (Instance == null)
+        {
             Instance = this;
+
+            // Load stage profile image
+            StageProfileImage = new Dictionary<STAGE, Texture2D>();
+            LoadStageProfile();
+        }
+    }
+
+    private void LoadStageProfile()
+    {
+        string rootKey = "Stage Profiles/";
+        string test = rootKey + STAGE.TEST.ToString();
+
+        Addressables.LoadAssetAsync<Texture2D>(test).Completed += (AsyncOperationHandle<Texture2D> img) =>
+        {
+            if (img.Status == AsyncOperationStatus.Succeeded)
+            {
+                StageProfileImage.Add(STAGE.TEST, img.Result);
+            }
+            else
+            {
+                Debug.LogError("Failed to load addressable asset: " + test);
+            }
+        };
     }
 
     /******* Manage User Data ********/
@@ -59,12 +86,16 @@ public class DataManager : MonoBehaviour
         // Wait for a frame before taking a screenshot
         yield return new WaitForEndOfFrame();
 
-        // Take screenshot
-        if (takeScreenShot)
+
+        if (takeScreenShot) // Take screenshot of story screen
         {
             Texture2D screenShot = CaptureScreenShot();
             currentData.ScreenShotImage = screenShot;
             Destroy(screenShot);
+        }
+        else // Set stage profile image
+        {
+            currentData.ScreenShotImage = StageProfileImage[currentData.CurrentStage];
         }
 
         // Calculate play time
