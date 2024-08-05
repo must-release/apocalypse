@@ -26,9 +26,9 @@ public class SettingsManager : MonoBehaviour
             LoadSettings();
             PrintCurrentSettings();
 
-            KeySettingInfo.cancelButton = KeyCode.P;
-            KeySettingInfo.confirmButton = KeyCode.End;
-            KeySettingInfo.pauseButton = KeyCode.K;
+            KeySettingInfo.cancelButton = KeyCode.Escape;
+            KeySettingInfo.confirmButton = KeyCode.Return;
+            KeySettingInfo.pauseButton = KeyCode.Escape;
 
             ChangeKeySettings(KeySettingInfo);
             PrintCurrentSettings();
