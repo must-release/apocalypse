@@ -25,12 +25,12 @@ public class UserData : ISerializationCallbackReceiver
     [SerializeField] private string saveTime;
     public string SaveTime { get { return saveTime; } set { saveTime = value; } }
 
-    [SerializeField] private string screenShotImage;
-    public Texture2D ScreenShotImage
+    [SerializeField] private string slotImage;
+    public Texture2D SlotImage
     {
         get
         {
-            byte[] imageBytes = Convert.FromBase64String(screenShotImage);
+            byte[] imageBytes = Convert.FromBase64String(slotImage);
 
             // convert byte array to Texture2D
             Texture2D texture = new Texture2D(2, 2); // Initial size doesn't matter, LoadImage resizes it
@@ -50,7 +50,7 @@ public class UserData : ISerializationCallbackReceiver
             byte[] imageBytes = value.EncodeToPNG();
 
             // Convert PNG data to Base64 string
-            screenShotImage = Convert.ToBase64String(imageBytes);
+            slotImage = Convert.ToBase64String(imageBytes);
         }
     }
 

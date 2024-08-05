@@ -72,7 +72,7 @@ public class GameSceneModel : MonoBehaviour
     IEnumerator LoadStageAssets()
     {
         // Get map data
-        PlayerManager.Instance.GetCurrentStageMapInfo(out string stage, out int map);
+        PlayerManager.Instance.GetStageMapInfo(out string stage, out int map);
         string map1 = "MAP_" + stage + '_' + map;
         string map2 = "MAP_" + stage + '_' + (map + 1);
 

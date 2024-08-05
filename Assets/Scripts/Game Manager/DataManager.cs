@@ -17,7 +17,7 @@ public class DataManager : MonoBehaviour
     public bool IsSaving { get; private set; }
 
     private UserData currentData;
-    private Dictionary<STAGE, Texture2D> StageProfileImage;
+    private Dictionary<STAGE, Texture2D> stageSlotmage;
 
     private void Awake()
     {
@@ -25,22 +25,23 @@ public class DataManager : MonoBehaviour
         {
             Instance = this;
 
-            // Load stage profile image
-            StageProfileImage = new Dictionary<STAGE, Texture2D>();
-            LoadStageProfile();
+            // Load stage slot image
+            LoadStageImage();
         }
     }
 
-    private void LoadStageProfile()
+    // Load stage slot image and save it to dictionary
+    private void LoadStageImage()
     {
-        string rootKey = "Stage Profiles/";
+        stageSlotmage = new Dictionary<STAGE, Texture2D>();
+        string rootKey = "Stage Slot Image/";
         string test = rootKey + STAGE.TEST.ToString();
 
         Addressables.LoadAssetAsync<Texture2D>(test).Completed += (AsyncOperationHandle<Texture2D> img) =>
         {
             if (img.Status == AsyncOperationStatus.Succeeded)
             {
-                StageProfileImage.Add(STAGE.TEST, img.Result);
+                stageSlotmage.Add(STAGE.TEST, img.Result);
             }
             else
             {
@@ -90,12 +91,12 @@ public class DataManager : MonoBehaviour
         if (takeScreenShot) // Take screenshot of story screen
         {
             Texture2D screenShot = CaptureScreenShot();
-            currentData.ScreenShotImage = screenShot;
+            currentData.SlotImage = screenShot;
             Destroy(screenShot);
         }
-        else // Set stage profile image
+        else // Set stage slot image
         {
-            currentData.ScreenShotImage = StageProfileImage[currentData.CurrentStage];
+            currentData.SlotImage = stageSlotmage[currentData.CurrentStage];
         }
 
         // Calculate play time

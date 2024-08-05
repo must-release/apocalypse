@@ -28,10 +28,10 @@ class DataSlot
         if (data != null) // When there is data
         {
             slotData = data;
-            if (data.ScreenShotImage != null)
+            if (data.SlotImage != null)
             {
-                screenShot.sprite = Sprite.Create(data.ScreenShotImage,
-                    new Rect(0.0f, 0.0f, data.ScreenShotImage.width, data.ScreenShotImage.height), new Vector2(0.5f, 0.5f), 100.0f);
+                screenShot.sprite = Sprite.Create(data.SlotImage,
+                    new Rect(0.0f, 0.0f, data.SlotImage.width, data.SlotImage.height), new Vector2(0.5f, 0.5f), 100.0f);
 
             }
             saveTimeText.text = "Save Time: " + data.SaveTime;

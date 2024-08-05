@@ -35,7 +35,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     // Get current stage & map info where player is playing.
-    public void GetCurrentStageMapInfo(out string stage, out int map)
+    public void GetStageMapInfo(out string stage, out int map)
     {
         stage = Stage.ToString();
         map = Map;
