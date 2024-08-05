@@ -8,16 +8,15 @@ using System;
 
 public class PreferenceUIController : MonoBehaviour, IUIContoller
 {
-
     /****** Private fields ******/
     private string preferenceUIName = "Preference UI";
-    private string buttonsName = "Buttons";
     private Transform preferenceUI;
-    private List<Button> buttonList = new List<Button>();
+    private Transform preferenceScroll;
+    private Transform content;
+    private List<Button> contentButtons = new List<Button>();
 
     /****** Single tone instance ******/
     public static PreferenceUIController Instance;
-
 
     public void Awake()
     {
@@ -25,108 +24,129 @@ public class PreferenceUIController : MonoBehaviour, IUIContoller
         {
             Instance = this;
 
-
             // Find Preference UI object
             preferenceUI = transform.Find(preferenceUIName);
             if (preferenceUI == null)
             {
-                Debug.Log("Preference UI Initialization Error");
+                Debug.LogError("Preference UI Initialization Error");
                 return;
             }
 
-            Transform buttons = preferenceUI.Find(buttonsName);
-            for (int i = 0; i < buttons.childCount; i++)
+            // Find Preference Scroll object
+            preferenceScroll = preferenceUI.Find("PreferenceScroll");
+            if (preferenceScroll == null)
             {
-                // Add ith button to the list
-                buttonList.Add(buttons.GetChild(i).GetComponent<Button>());
+                Debug.LogError("Preference Scroll Initialization Error");
+                return;
             }
 
+            // Find Content through Viewport
+            Transform viewport = preferenceScroll.Find("Viewport");
+            if (viewport == null)
+            {
+                Debug.LogError("Viewport Initialization Error");
+                return;
+            }
 
-            // Add event listener to buttons
-            buttonList[0].onClick.AddListener(OnWindowScreenButton);
-            buttonList[1].onClick.AddListener(OnFullScreenButton);
-            buttonList[2].onClick.AddListener(OnMovetoKeySettingsButton);
-            buttonList[3].onClick.AddListener(OnResetButton);
-            buttonList[4].onClick.AddListener(ConfirmButton);
+            content = viewport.Find("Content");
+            if (content == null)
+            {
+                Debug.LogError("Content Initialization Error");
+                return;
+            }
 
+            // Find all buttons under Content
+            Button[] buttons = content.GetComponentsInChildren<Button>();
+            foreach (Button button in buttons)
+            {
+                contentButtons.Add(button);
+            }
 
-            buttonList[0].Select();
+            // Add event listeners to buttons by order
+            if (contentButtons.Count > 0) contentButtons[0].onClick.AddListener(OnWindowScreenButton);
+            if (contentButtons.Count > 1) contentButtons[1].onClick.AddListener(OnFullScreenButton);
+            if (contentButtons.Count > 2) contentButtons[2].onClick.AddListener(OnMovetoKeySettingsButton);
+            // Add more if necessary
+
+            // Find and set up Reset and Confirm buttons in Preference UI
+            Button resetButton = preferenceUI.Find("Buttons/Reset Button")?.GetComponent<Button>();
+            if (resetButton != null)
+            {
+                resetButton.onClick.AddListener(OnResetButton);
+            }
+
+            Button confirmButton = preferenceUI.Find("Buttons/Confirm Button")?.GetComponent<Button>();
+            if (confirmButton != null)
+            {
+                confirmButton.onClick.AddListener(OnConfirmButton);
+            }
         }
     }
 
     public void Start()
     {
-        
-    }
 
+    }
 
     /****** Methods ******/
 
     private void Update()
     {
-        Return();
-    }
-
-    // �������� �ӽ�
-    private void Return()
-    {
-        if (UIModel.Instance.CurrentSubUI == SUBUI.PREFERENCE && Input.GetKeyDown(KeyCode.Backspace))
-        {
-            UIController.Instance.TurnSubUIOff(SUBUI.PREFERENCE);
-        }
-        else if
-            (UIModel.Instance.CurrentSubUI == SUBUI.KEYSETTINGS && Input.GetKeyDown(KeyCode.Backspace))
-        {
-            UIController.Instance.TurnSubUIOff(SUBUI.KEYSETTINGS);
-        }
-
     }
 
     // Enter Preference UI state
     public void StartUI()
     {
-        // Activate preference UI object
-        preferenceUI.gameObject.SetActive(true);
-
-
+        if (preferenceUI != null)
+        {
+            preferenceUI.gameObject.SetActive(true);
+        }
     }
 
     // Exit Preference UI state
     public void EndUI()
     {
-        // Inactivate preference UI object
-        preferenceUI.gameObject.SetActive(false);
+        if (preferenceUI != null)
+        {
+            preferenceUI.gameObject.SetActive(false);
+        }
     }
 
-
-    // Ȯ�� , �ʱ�ȭ ui�� ��� ������ΰ�
     private void OnWindowScreenButton()
     {
+        Debug.Log("Window Screen Button Clicked");
         Screen.fullScreenMode = FullScreenMode.Windowed;
-        Debug.Log("Screen mode changed to: Windowed");
     }
+
     private void OnFullScreenButton()
     {
+        Debug.Log("Full Screen Button Clicked");
         Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
-        Debug.Log("Screen mode changed to: Fullscreen");
     }
-    private void ConfirmButton()
+
+    private void OnConfirmButton()
     {
-        Debug.Log("�����Ͻðڽ��ϱ�?");
+        Debug.Log("Confirm Button Clicked");
     }
+
     private void OnResetButton()
     {
-        Debug.Log("������ �ʱ�ȭ �Ͻðڽ��ϱ�?");
-
-        //�ӽ�
-        buttonList[0].Select();
+        Debug.Log("Reset Button Clicked");
     }
+
     private void OnMovetoKeySettingsButton()
     {
+        Debug.Log("Move to Key Settings Button Clicked");
         UIController.Instance.TurnSubUIOn(SUBUI.KEYSETTINGS);
     }
+
     public void Cancel()
     {
-        
+        Debug.Log("Cancel");
+        UIController.Instance.TurnSubUIOff(SUBUI.PREFERENCE);
+    }
+
+    private void Return()
+    {
     }
 }

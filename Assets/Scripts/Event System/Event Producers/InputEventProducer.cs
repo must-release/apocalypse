@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
+
 /*
  * EventProducer which creates the input event stream
  */
@@ -73,11 +74,24 @@ public class InputEventProducer : MonoBehaviour, PreferenceObserver
     // Get Updated Preference
     public void PreferenceUpdated()
     {
-        KeySettings keySettings = PreferenceManager.Instance.KeySettingInfo;
+        PreferenceManager.KeySettings keySettings = PreferenceManager.Instance.KeySettingInfo;
 
-        cancelButton = keySettings.cancelButton;
-        pauseButton = keySettings.pauseButton;
-        confirmButton = keySettings.confirmButton;
+
+        if (keySettings != null)
+        {
+            cancelButton = keySettings.cancelButton;
+            pauseButton = keySettings.pauseButton;
+            confirmButton = keySettings.confirmButton;
+
+            // Debug.Log("Key Settings updated:");
+            // Debug.Log("Cancel: " + cancelButton);
+            // Debug.Log("Pause: " + pauseButton);
+            // Debug.Log("Confirm: " + confirmButton);
+        }
+        else
+        {
+            Debug.LogError("Failed to load key settings.");
+        }
     }
 }
 
