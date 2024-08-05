@@ -60,6 +60,13 @@ public class PauseUIController : MonoBehaviour, IUIContoller
         pauseUI.gameObject.SetActive(true);
     }
 
+
+    // Update Pause UI
+    public void UpdateUI()
+    {
+
+    }
+
     // Exit Pause UI
     public void EndUI()
     {
@@ -97,6 +104,6 @@ public class PauseUIController : MonoBehaviour, IUIContoller
     // Go back to title scene
     private void OnTitleButtonClick()
     {
-        GameSceneController.Instance.GoTitle();
+
     }
 }

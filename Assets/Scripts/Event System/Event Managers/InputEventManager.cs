@@ -17,16 +17,20 @@ public class InputEventManager : MonoBehaviour
         }
     }
 
-    public void PlayEvent(InputEvent playingEvent)
+    // Play input event
+    public void PlayInputEvent(InputEvent playingEvent)
     {
         EventList.Add(playingEvent);
 
         playingEvent.PlayEvent();
     }
 
-    public void TerminateEvent(InputEvent terminatingEvent)
+    // Terminate target event
+    public void TerminateInputEvent(InputEvent terminatingEvent)
     {
         EventList.Remove(terminatingEvent);
+
+        terminatingEvent.TerminateEvent();
     }
     
 }

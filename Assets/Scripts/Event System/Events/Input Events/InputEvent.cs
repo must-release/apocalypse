@@ -6,10 +6,10 @@ using UIEnums;
 [System.Serializable]
 public class InputEvent
 {
-    public InputEvent ParentEvent { get; set; }
+    public KeyCode eventButton;
 
     // Check compatibiliry with parent event and current UI
-    public virtual bool CheckCompatibility(List<InputEvent> eventList, (BASEUI, SUBUI) currentUI)
+    public virtual bool CheckCompatibility(List<InputEvent> eventList, BASEUI baseUI, SUBUI subUI)
     {
         return default;
     }
@@ -17,6 +17,12 @@ public class InputEvent
 
     // Play this input event
     public virtual void PlayEvent()
+    {
+        return;
+    }
+
+    // Terminate this input event
+    public virtual void TerminateEvent() 
     {
         return;
     }

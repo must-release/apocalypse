@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 using UIEnums;
 using EventEnums;
 
@@ -11,4 +12,43 @@ public class CutsceneEvent : GameEvent
     {
         EventType = EVENT_TYPE.CUTSCENE;
     }
+
+    // Check compatibility with current event and UI
+    public override bool CheckCompatibility(GameEvent parentEvent, BASEUI baseUI, SUBUI subUI)
+    {
+        // Can be played when there is no event playing
+        if (parentEvent == null)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    // Play cutscene event
+    public override void PlayEvent()
+    {
+        // Use GameEventManger to start coroutine
+        GameEventManager.Instance.StartCoroutineForGameEvents(PlayEventCoroutine());
+    }
+    IEnumerator PlayEventCoroutine()
+    {
+        // Change to cutscene UI
+        UIController.Instance.ChangeBaseUI(BASEUI.CUTSCENE);
+
+        // Play cutscene
+        GamePlayController.Instance.PlayCutscene();
+
+        // Wait for cutscene to end
+        while (GamePlayController.Instance.IsCutscenePlaying)
+        {
+            yield return null;
+        }
+
+        // Terminate cutscene event
+        GameEventManager.Instance.TerminateGameEvent(this);
+    }
+
 }

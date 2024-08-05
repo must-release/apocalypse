@@ -1,32 +1,43 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using StageEnums;
+using CharacterEums;
 
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
 
     // Current data of the player
-    public UserData PlayerData { get; set; }
+    public STAGE Stage { get; private set; }
+    public int Map { get; private set; }
+    public CHARACTER Character { get; private set; }
+    
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
         }
     }
 
-    // Prevent multiple audio listener
-    private void Start()
+    public void SetPlayerData(STAGE stage, int map, CHARACTER character)
     {
-        GameObject.Find("Main Camera").GetComponent<AudioListener>().enabled = true;
-
+        Stage = stage;
+        Map = map;
+        Character = character;
     }
 
+    public void GetPlayerData(out STAGE stage, out int map, out CHARACTER character)
+    {
+        stage = Stage;
+        map = Map;
+        character = Character;
+    }
+
+    // Get current stage & map info where player is playing.
+    public void GetStageMapInfo(out string stage, out int map)
+    {
+        stage = Stage.ToString();
+        map = Map;
+    }
 }

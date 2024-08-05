@@ -17,19 +17,60 @@ public class DataLoadEvent : GameEvent
         EventType = EVENT_TYPE.DATA_LOAD;
     }
 
-    // Check compatibility with current event
-    public override bool CheckCompatibility(GameEvent parentEvent, (BASEUI, SUBUI) currentUI)
+    // Check compatibility with current event and UI
+    public override bool CheckCompatibility(GameEvent parentEvent, BASEUI baseUI, SUBUI subUI)
     {
-        if(parentEvent == null) // Can be played when there is no event playing
-        {
-            return true;
-        }
-        else if(parentEvent.EventType == EVENT_TYPE.STORY) // Can be played when story event is playing
+        // Can be played when current base UI is title or load
+        if (parentEvent == null || parentEvent.EventType == EVENT_TYPE.STORY || parentEvent.EventType == EVENT_TYPE.CHOICE)
         {
             return true;
         }
         else
             return false;
+    }
+
+    // Play Data Load Event
+    public override void PlayEvent()
+    {
+        if (isNewGame) // Create new game data
+        {
+            DataManager.Instance.CreateNewGameData();
+        }
+        else // Load game data
+        {
+            // Load data and get starting event
+            GameEvent startingEvent = isContinueGame?
+                DataManager.Instance.LoadRecentData():
+                DataManager.Instance.LoadGameData(slotNum);
+
+            // Apply starting event
+            if(startingEvent == null) // When there is no starting event, concat UI change event to current event chain
+            {
+                ChangeUIEvent uiEvent = CreateInstance<ChangeUIEvent>();
+                uiEvent.changingUI = BASEUI.CONTROL;
+                ConcatEvent(uiEvent);
+            }
+            else // When there is starting event, concat it to current event chain
+            {
+                ConcatEvent(startingEvent);
+            }
+        }
+
+        // Terminate data load event and play next event
+        GameEventManager.Instance.TerminateGameEvent(this);
+    }
+
+    // Concat starting event to current event chain
+    public void ConcatEvent(GameEvent startingEvent)
+    {
+        GameEvent lastEvent = this;
+
+        while (lastEvent.nextEvent != null)
+        {
+            lastEvent = lastEvent.nextEvent;
+        }
+
+        lastEvent.NextEvent = startingEvent;
     }
 }
 

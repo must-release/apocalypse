@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UIEnums;
 using EventEnums;
+using System.Collections;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "NewChoice", menuName = "Event/ChoiceEvent", order = 0)]
@@ -10,6 +11,7 @@ public class ChoiceEvent : GameEvent
     public List<string> choiceList;
     public string selectedChoice;
 
+    private Coroutine choiceCoroutine;
 
     // Set event Type on load
     public void OnEnable()
@@ -18,7 +20,7 @@ public class ChoiceEvent : GameEvent
     }
 
     // Check compatibility with current event
-    public override bool CheckCompatibility(GameEvent parentEvent, (BASEUI, SUBUI) currentUI)
+    public override bool CheckCompatibility(GameEvent parentEvent, BASEUI baseUI, SUBUI subUI)
     {
         if (parentEvent.EventType == EVENT_TYPE.STORY) // Can be played when story event is playing
         {
@@ -26,5 +28,34 @@ public class ChoiceEvent : GameEvent
         }
         else
             return false;
+    }
+
+    // Play Choice event
+    public override void PlayEvent()
+    {
+        // Use GameEventManger to start coroutine
+        choiceCoroutine = GameEventManager.Instance.StartCoroutineForGameEvents(PlayEventCoroutine());
+    }
+    IEnumerator PlayEventCoroutine()
+    {
+        // Set choice info and switch to choice UI
+        UIController.Instance.SetChoiceInfo(choiceList);
+        UIController.Instance.TurnSubUIOn(SUBUI.CHOICE);
+
+        // Wait while the current UI is Choice UI
+        yield return new WaitUntil(() =>
+        {
+            UIController.Instance.GetCurrentUI(out _, out SUBUI subUI);
+            return subUI == SUBUI.NONE;
+        });
+
+        // Get the selected choice and process it
+        var selectedChoice = UIController.Instance.GetSelectedChoice();
+        bool generateResponse = choiceList == null;
+
+        StoryController.Instance.ProcessSelectedChoice(selectedChoice, generateResponse);
+
+        // Terminate the choice event
+        GameEventManager.Instance.TerminateGameEvent(this);
     }
 }

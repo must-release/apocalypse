@@ -3,7 +3,7 @@ using UnityEngine;
 using EventEnums;
 using UIEnums;
 
-[System.Serializable]
+[Serializable]
 public class GameEvent : ScriptableObject
 {
     /* Event info which is used when playing game */
@@ -22,9 +22,21 @@ public class GameEvent : ScriptableObject
     private string nextEventdata;
 
     // Check compatibiliry with parent event and current UI
-    public virtual bool CheckCompatibility(GameEvent parentEvent, (BASEUI, SUBUI) currentUI)
+    public virtual bool CheckCompatibility(GameEvent parentEvent, BASEUI baseUI, SUBUI subUI)
     {
         return default;
+    }
+
+    // Play this game event
+    public virtual void PlayEvent()
+    {
+        return;
+    }
+
+    // Terminate this game event
+    public virtual void TerminateEvent()
+    {
+        return;
     }
 
     // Save flawless info of the nextEvent

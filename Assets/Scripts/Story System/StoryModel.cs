@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using System.Collections;
 
 public class StoryModel : MonoBehaviour
 {
@@ -17,8 +18,9 @@ public class StoryModel : MonoBehaviour
 
     public int ReadBlockCount { get; set; } = 0;
     public int ReadEntryCount { get; set; } = 0;
-    public string CurrentStoryBranch { get; set; }
-    public Queue<StoryEntry> storyEntryBuffer = new Queue<StoryEntry>();
+    public string CurrentStoryBranch { get; private set; }
+    public Queue<StoryEntry> StoryEntryBuffer { get; set; }
+    public Choice ProcessingChoice { get; set; }
 
 
     private void Awake()
@@ -26,20 +28,21 @@ public class StoryModel : MonoBehaviour
         if(Instance == null)
         {
             Instance = this;
+            StoryEntryBuffer = new Queue<StoryEntry>();
         }
     }
 
     // Start loading text of the current story event which player is having 
-    public void LoadStoryText(string storyInfo, int readBlockCount, int readEntryCount)
+    public Coroutine LoadStoryText(string storyInfo, int readBlockCount, int readEntryCount)
     {
         // Restore saved story point
         ReadBlockCount = readBlockCount;
         ReadEntryCount = readEntryCount;
 
         // Load Story Texts
-        Addressables.LoadAssetAsync<TextAsset>(storyInfo).Completed += OnStoryLoadComplete;
+        return StartCoroutine(AsyncLoadStoryText(storyInfo));
     }
-    private void OnStoryLoadComplete(AsyncOperationHandle<TextAsset> story)
+    IEnumerator AsyncLoadStoryText(string storyInfo)
     {
         // Set JsonConvert settings
         var settings = new JsonSerializerSettings
@@ -47,6 +50,10 @@ public class StoryModel : MonoBehaviour
             // Add custom converter
             Converters = new List<JsonConverter> { new StoryEntryConverter() }
         };
+
+        // Load story
+        AsyncOperationHandle<TextAsset> story = Addressables.LoadAssetAsync<TextAsset>(storyInfo);
+        yield return story;
 
         // Convert Json file to StoryEntries object
         string jsonContent = story.Result.text;
@@ -57,15 +64,13 @@ public class StoryModel : MonoBehaviour
     }
 
     // Set story information
-    public void SetStoryInfo(List<StoryBlock> storyBlocks)
+    private void SetStoryInfo(List<StoryBlock> storyBlocks)
     {
         storyBlockQueue = new Queue<StoryBlock>(storyBlocks.Skip(ReadBlockCount));
         StoryBlock firstBlock = storyBlockQueue.Dequeue(); // Get first story block
         CurrentStoryBranch = firstBlock.branchId; // Set current branch id according to the first story block
         storyEntryQueue = new Queue<StoryEntry>(firstBlock.entries.Skip(ReadEntryCount));
 
-        // Story is now ready
-        StoryController.Instance.StartScript();
     }
 
     // Return first story entry
@@ -77,23 +82,18 @@ public class StoryModel : MonoBehaviour
     // Return next story entry in the queue.
     public StoryEntry GetNextEntry()
     {
-        if(storyEntryBuffer.Count > 0)
+        if(StoryEntryBuffer.Count > 0) // return buffered entry
         {
-            return storyEntryBuffer.Dequeue();
+            return StoryEntryBuffer.Dequeue();
         }
-
-        // Check if story queue is empty
-        if (storyEntryQueue == null)
-            return null;
-
-        if (storyEntryQueue.Count > 0) // Get next entry from the storyEntryQueue
+        else if (storyEntryQueue.Count > 0) // Get next entry from the storyEntryQueue
         {
             StoryEntry nextEntry = storyEntryQueue.Dequeue();
             readEntryCountBuffer++;
 
             if (nextEntry.savePoint) // If next entry is save point, update ReadEntryCount
             {
-                ReadEntryCount = ReadEntryCount + readEntryCountBuffer;
+                ReadEntryCount += readEntryCountBuffer;
                 readEntryCountBuffer = 0;
             }
 
@@ -123,11 +123,26 @@ public class StoryModel : MonoBehaviour
             else // End Story event
             {
                 // Reset read dialogue number to 0
-                PlayerManager.Instance.PlayerData.ReadBlockCount = ReadBlockCount = 0;
-                PlayerManager.Instance.PlayerData.ReadEntryCount = ReadEntryCount = readEntryCountBuffer = 0;
-
-                //GameEventManager.Instance.TerminateEvent();
+                ReadBlockCount = 0;
+                ReadEntryCount = readEntryCountBuffer = 0;
+                
                 return null;
+            }
+        }
+    }
+
+    // Set current branch according to selected choice option
+    public void SetCurrentBranch(string optionText)
+    {
+        if (ProcessingChoice != null && ProcessingChoice.options != null)
+        {
+            foreach (var option in ProcessingChoice.options)
+            {
+                if (option.text.Equals(optionText))
+                {
+                    CurrentStoryBranch = option.branchId;
+                    break;
+                }
             }
         }
     }

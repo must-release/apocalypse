@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UIEnums;
 using StageEnums;
+using SceneEnums;
+using ScreenEffectEnums;
 
 /*
  * EventProducer which creates the game event stream
@@ -20,6 +22,51 @@ public class GameEventProducer : MonoBehaviour
         }
     }
 
+    public void Start()
+    {
+        // When game starts, play splash screen
+        StartCoroutine(GenerateSplashScreenEventStream());
+    }
+
+    // Generate splash screent event stream
+    IEnumerator GenerateSplashScreenEventStream()
+    {
+        // Wait for a frame
+        yield return null;
+
+        // First, set UI to splash scren UI
+        ChangeUIEvent changeUIEvent = ScriptableObject.CreateInstance<ChangeUIEvent>();
+        changeUIEvent.changingUI = BASEUI.SPLASH_SCREEN;
+
+        // Second, load title scene asynchronously
+        SceneLoadEvent sceneLoadEvent = ScriptableObject.CreateInstance<SceneLoadEvent>();
+        sceneLoadEvent.LoadingScene = SCENE.TITLE;
+        changeUIEvent.NextEvent = sceneLoadEvent;
+
+        // Third, Activate scene
+        SceneActivateEvent sceneActivateEvent = ScriptableObject.CreateInstance<SceneActivateEvent>();
+        sceneLoadEvent.NextEvent = sceneActivateEvent;
+
+        // Fourth, show fade out effect
+        ScreenEffectEvent fadeOutEvent = ScriptableObject.CreateInstance<ScreenEffectEvent>();
+        fadeOutEvent.screenEffect = SCREEN_EFFECT.FADE_OUT;
+        sceneActivateEvent.NextEvent = fadeOutEvent;
+
+        // Fifth, change UI to title UI
+        ChangeUIEvent uiChangeEvent = ScriptableObject.CreateInstance<ChangeUIEvent>();
+        uiChangeEvent.changingUI = BASEUI.TITLE;
+        fadeOutEvent.NextEvent = uiChangeEvent;
+
+        // Finall, show fade in effect
+        ScreenEffectEvent fadeInEvent = ScriptableObject.CreateInstance<ScreenEffectEvent>();
+        fadeInEvent.screenEffect = SCREEN_EFFECT.FADE_IN;
+        uiChangeEvent.NextEvent = fadeInEvent;
+
+        // Handle generated event stream
+        HandleGeneratedEventChain(changeUIEvent);
+    }
+
+
     // Generate new game event stream
     public void GenerateNewGameEventStream()
     {
@@ -29,7 +76,7 @@ public class GameEventProducer : MonoBehaviour
 
         // Second, load stage scene asynchronously
         SceneLoadEvent sceneLoadEvent = ScriptableObject.CreateInstance<SceneLoadEvent>();
-        sceneLoadEvent.sceneName = "StageScene";
+        sceneLoadEvent.LoadingScene = SCENE.STAGE;
         dataLoadEvent.NextEvent = sceneLoadEvent;
 
         // Third, play prologue story
@@ -53,7 +100,7 @@ public class GameEventProducer : MonoBehaviour
         dataSaveEvent.NextEvent = cutsceneEvent;
 
         // Finally, change ui to control ui
-        UIChangeEvent uiChangeEvent = ScriptableObject.CreateInstance<UIChangeEvent>();
+        ChangeUIEvent uiChangeEvent = ScriptableObject.CreateInstance<ChangeUIEvent>();
         uiChangeEvent.changingUI = BASEUI.CONTROL;
         cutsceneEvent.NextEvent = uiChangeEvent;
 
@@ -67,14 +114,15 @@ public class GameEventProducer : MonoBehaviour
     {
         // First, load data of the selected slot
         DataLoadEvent dataLoadEvent = ScriptableObject.CreateInstance<DataLoadEvent>();
-        if(slotNum == int.MaxValue)
+        dataLoadEvent.slotNum = slotNum;
+        if (slotNum == int.MaxValue)
         {
             dataLoadEvent.isContinueGame = true; // load recent game
         }
 
         // Second, load stage scene asynchronously
         SceneLoadEvent sceneLoadEvent = ScriptableObject.CreateInstance<SceneLoadEvent>();
-        sceneLoadEvent.sceneName = "StageScene";
+        sceneLoadEvent.LoadingScene = SCENE.STAGE;
         dataLoadEvent.NextEvent = sceneLoadEvent;
 
         // Third, Activate scene
@@ -96,7 +144,7 @@ public class GameEventProducer : MonoBehaviour
     }
 
     // Generate choice event stream
-    public void GenerateChoiceEventStream(List<string> choiceList)
+    public void GenerateChoiceEventStream(List<string> choiceList = null)
     {
         ChoiceEvent choiceEvent = ScriptableObject.CreateInstance<ChoiceEvent>();
         choiceEvent.choiceList = choiceList;

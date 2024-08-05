@@ -6,11 +6,11 @@ using EventEnums;
 
 public class CancelEvent : InputEvent
 {
-    // Check compatibiliry with parent event and current UI
-    public override bool CheckCompatibility(List<InputEvent> eventList, (BASEUI, SUBUI) currentUI)
+    // Check compatibiliry with event list and current UI
+    public override bool CheckCompatibility(List<InputEvent> eventList, BASEUI baseUI, SUBUI subUI)
     {
         bool isEventListEmpty = eventList.Count == 0;
-        bool isInvalidSubUI = currentUI.Item2 == SUBUI.NONE || currentUI.Item2 == SUBUI.CHOICE || currentUI.Item2 == SUBUI.SAVING;
+        bool isInvalidSubUI = subUI == SUBUI.NONE || subUI == SUBUI.CHOICE || subUI == SUBUI.SAVING;
 
         return isEventListEmpty && !isInvalidSubUI;
     }
@@ -18,7 +18,10 @@ public class CancelEvent : InputEvent
     // Play cancel event
     public override void PlayEvent()
     {
+        // Cancel current UI
         UIController.Instance.CancelCurrentUI();
-        InputEventManager.Instance.TerminateEvent(this);
+
+        // Terminate cancel event
+        InputEventManager.Instance.TerminateInputEvent(this);
     }
 }

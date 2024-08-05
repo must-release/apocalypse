@@ -9,40 +9,28 @@ using CharacterEums;
 [System.Serializable]
 public class UserData : ISerializationCallbackReceiver
 {
-    [SerializeField]
-    private int currentStage;
+
+    [SerializeField] private int currentStage;
     public STAGE CurrentStage { get { return (STAGE)currentStage; } set { currentStage = (int)value; } }
 
-    [SerializeField]
-    private int currentMap;
+    [SerializeField] private int currentMap;
     public int CurrentMap { get { return currentMap; } set { currentMap = value; } }
 
-    [SerializeField]
-    private int readBlockCount;
-    public int ReadBlockCount { get { return readBlockCount; } set { readBlockCount = value; } }
-
-    [SerializeField]
-    private int readEntryCount;
-    public int ReadEntryCount { get { return readEntryCount; } set { readEntryCount = value; } }
-
-    private int lastCharacter;
+    [SerializeField] private int lastCharacter;
     public CHARACTER LastCharacter { get { return (CHARACTER)lastCharacter; } set { lastCharacter = (int)value; } }
 
-    [SerializeField]
-    private string playTime;
+    [SerializeField] private string playTime;
     public string PlayTime { get { return playTime; } set { playTime = value; } }
 
-    [SerializeField]
-    private string saveTime;
+    [SerializeField] private string saveTime;
     public string SaveTime { get { return saveTime; } set { saveTime = value; } }
 
-    [SerializeField]
-    private string screenShotImage;
-    public Texture2D ScreenShotImage
+    [SerializeField] private string slotImage;
+    public Texture2D SlotImage
     {
         get
         {
-            byte[] imageBytes = Convert.FromBase64String(screenShotImage);
+            byte[] imageBytes = Convert.FromBase64String(slotImage);
 
             // convert byte array to Texture2D
             Texture2D texture = new Texture2D(2, 2); // Initial size doesn't matter, LoadImage resizes it
@@ -62,37 +50,34 @@ public class UserData : ISerializationCallbackReceiver
             byte[] imageBytes = value.EncodeToPNG();
 
             // Convert PNG data to Base64 string
-            screenShotImage = Convert.ToBase64String(imageBytes);
+            slotImage = Convert.ToBase64String(imageBytes);
         }
     }
 
     // Used for game
-    [System.NonSerialized]
-    public GameEvent startingEvent;
+    [NonSerialized] public GameEvent startingEvent;
     public GameEvent StartingEvent { get { return startingEvent; } set { startingEvent = value; } }
 
     // Used for serialization
-    [SerializeField]
-    private string startingEventAssemblyQualifiedName;
-    [SerializeField]
-    private string startingEventData;
+    [SerializeField] private string startingEventAssemblyQualifiedName;
+    [SerializeField] private string startingEventData;
 
-    public UserData(STAGE curStage, int curMap, GameEvent startingEvent,
-        int readBlockCnt, int readEntryCnt, CHARACTER lastChar, string playTime, string saveTime)
+    public UserData(STAGE curStage, int curMap, GameEvent startingEvent, CHARACTER lastChar, string playTime, string saveTime)
     {
         CurrentStage = curStage;
         CurrentMap = curMap;
         StartingEvent = startingEvent;
-        ReadBlockCount = readBlockCnt;
-        ReadEntryCount = readEntryCnt;
         LastCharacter = lastChar;
         PlayTime = playTime;
         SaveTime = saveTime;
     }
 
-    public UserData Copy()
+    // Update user data
+    public void UpdatePlayerData(STAGE stage, int map, CHARACTER character)
     {
-        return new UserData(CurrentStage, CurrentMap, StartingEvent, readBlockCount, readEntryCount, LastCharacter, PlayTime, SaveTime);
+        CurrentStage = stage;
+        CurrentMap = map;
+        LastCharacter = character;
     }
 
     // Save info of the startingEvent
@@ -102,11 +87,11 @@ public class UserData : ISerializationCallbackReceiver
         {
             // Save chained events
             Stack<GameEvent> eventStack = new Stack<GameEvent>();
-            GameEvent nextEvent = StartingEvent.NextEvent;
-            while(nextEvent != null)
+            GameEvent savingEvent = StartingEvent;
+            while(savingEvent != null)
             {
-                eventStack.Push(nextEvent);
-                nextEvent = nextEvent.NextEvent;
+                eventStack.Push(savingEvent);
+                savingEvent = savingEvent.NextEvent;
             }
             while(eventStack.Count > 0)
             {

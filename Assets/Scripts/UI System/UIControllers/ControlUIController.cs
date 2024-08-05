@@ -35,11 +35,14 @@ public class ControlUIController : MonoBehaviour, IUIContoller
         // Active Story UI object
         controlUI.gameObject.SetActive(true);
 
-        // Get current player data
-        UserData playerData = PlayerManager.Instance.PlayerData;
+        // Set Control UI according to player data
+        SetControlUIs();
+    }
 
-        // Set Control UI
-        SetControlUIs(playerData);
+    // Update Control UI
+    public void UpdateUI()
+    {
+
     }
 
     // Exit Control UI state
@@ -55,7 +58,7 @@ public class ControlUIController : MonoBehaviour, IUIContoller
         //UIController.Instance.ChangeState(UIController.STATE.PAUSE, false);
     }
 
-    private void SetControlUIs(UserData playerData)
+    private void SetControlUIs()
     {
 
     }

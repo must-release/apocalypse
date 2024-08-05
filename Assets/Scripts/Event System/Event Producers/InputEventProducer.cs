@@ -7,47 +7,59 @@ using System.Collections.Generic;
  * EventProducer which creates the input event stream
  */
 
-public class InputEventProducer : MonoBehaviour, PreferenceObserver
+public class InputEventProducer : MonoBehaviour, KeySettingsObserver
 {
     public static InputEventProducer Instance { get; private set; }
 
-    private Queue<InputEvent> inputEvents;
+    private List<InputEvent> inputEvents;
+    private Queue<InputEvent> incomingEvents;
     private List<InputEvent> playingEvents;
+    private bool inputLock;
+    private GameObject clickPreventPanel;
+
+    // Input events
     private CancelEvent cancelEvent;
     private PauseEvent pauseEvent;
-    private ConfirmEvent confirmEvent;
-
-    private KeyCode cancelButton;
-    private KeyCode pauseButton;
-    private KeyCode confirmButton;
+    private NextScriptEvent nextScriptEvent;
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            inputEvents = new Queue<InputEvent>();
+            inputEvents = new List<InputEvent>();
+            incomingEvents = new Queue<InputEvent>();
             playingEvents = new List<InputEvent>();
-            cancelEvent = new CancelEvent();
-            pauseEvent = new PauseEvent();
-            confirmEvent = new ConfirmEvent();
+            inputLock = false;
+            clickPreventPanel = GameObject.Find("Click Prevent Panel");
+
+            // Pool input Events
+            inputEvents.Add(cancelEvent = new CancelEvent());
+            inputEvents.Add(pauseEvent = new PauseEvent());
+            inputEvents.Add(nextScriptEvent = new NextScriptEvent());
         }
     }
 
     private void Start()
     {
         // Input event producer observes preference manager
-        PreferenceManager.Instance.AddObserver(this);
+        SettingsManager.Instance.AddObserver(this);
     }
-
-    // Detect every input event. 
+ 
     private void Update()
     {
-        if (Input.GetKeyDown(cancelButton)) { inputEvents.Enqueue(cancelEvent); }
+        if (inputLock)
+        {
+            return;
+        }
 
-        if (Input.GetKeyDown(pauseButton)) { inputEvents.Enqueue(pauseEvent); }
-
-        if (Input.GetKeyDown(confirmButton)) { inputEvents.Enqueue(confirmEvent); }
+        // Detect every input event.
+        inputEvents.ForEach((inputEvent) => {
+            if (Input.GetKeyDown(inputEvent.eventButton))
+            {
+                incomingEvents.Enqueue(inputEvent);
+            }
+        });
 
         // Handle every generated input event
         HandleGeneratedEvents();
@@ -56,10 +68,10 @@ public class InputEventProducer : MonoBehaviour, PreferenceObserver
     // Handle generated Input events to InputEventManager
     private void HandleGeneratedEvents()
     {
-
-        while (inputEvents.Count > 0)
+        // Add playable events in playingEvents list
+        while (incomingEvents.Count > 0)
         {
-            InputEvent input = inputEvents.Dequeue();
+            InputEvent input = incomingEvents.Dequeue();
             bool result = EventChecker.Instance.CheckEventCompatibility(input);
             if (result)
             {
@@ -67,31 +79,40 @@ public class InputEventProducer : MonoBehaviour, PreferenceObserver
             }
         }
 
-        playingEvents.ForEach((input) => InputEventManager.Instance.PlayEvent(input));
+        // Play playable events
+        playingEvents.ForEach((input) => InputEventManager.Instance.PlayInputEvent(input));
         playingEvents.Clear();
     }
 
-    // Get Updated Preference
-    public void PreferenceUpdated()
+    // Lock or Unlock input
+    public void LockInput(bool value)
     {
-        PreferenceManager.KeySettings keySettings = PreferenceManager.Instance.KeySettingInfo;
+        inputLock = value;
+        clickPreventPanel.SetActive(value);
+    }
 
 
-        if (keySettings != null)
-        {
-            cancelButton = keySettings.cancelButton;
-            pauseButton = keySettings.pauseButton;
-            confirmButton = keySettings.confirmButton;
+    // Get Updated Preference
+    public void KeySettingsUpdated()
+    {
+        // PreferenceManager.KeySettings keySettings = PreferenceManager.Instance.KeySettingInfo;
 
-            // Debug.Log("Key Settings updated:");
-            // Debug.Log("Cancel: " + cancelButton);
-            // Debug.Log("Pause: " + pauseButton);
-            // Debug.Log("Confirm: " + confirmButton);
-        }
-        else
-        {
-            Debug.LogError("Failed to load key settings.");
-        }
+
+        // if (keySettings != null)
+        // {
+        //     cancelButton = keySettings.cancelButton;
+        //     pauseButton = keySettings.pauseButton;
+        //     confirmButton = keySettings.confirmButton;
+
+        //     // Debug.Log("Key Settings updated:");
+        //     // Debug.Log("Cancel: " + cancelButton);
+        //     // Debug.Log("Pause: " + pauseButton);
+        //     // Debug.Log("Confirm: " + confirmButton);
+        // }
+        // else
+        // {
+        //     Debug.LogError("Failed to load key settings.");
+        // }
     }
 }
 

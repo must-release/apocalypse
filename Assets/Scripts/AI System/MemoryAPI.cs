@@ -13,6 +13,8 @@ public class MemoryAPI : MonoBehaviour
 {
 	public static MemoryAPI Instance;
 
+    public string Response { get; private set; }
+
     public static string UserID;
     public static string baseURL = "http://sw.uos.ac.kr:8080/";
     public static string saveURL = baseURL+ "memory/save";
@@ -132,12 +134,12 @@ public class MemoryAPI : MonoBehaviour
 
 
 
-    public void GenerateResponse(Dialogue dialogue,int responseCount)
+    public Coroutine GenerateResponse(Dialogue dialogue, bool isChatting)
     {
-        StartCoroutine(GenerateResponseCoroutine(dialogue, responseCount));
+        return StartCoroutine(GenerateResponseCoroutine(dialogue, isChatting));
     }
 
-    IEnumerator GenerateResponseCoroutine(Dialogue dialogue, int responseCount)
+    IEnumerator GenerateResponseCoroutine(Dialogue dialogue, bool isChating)
     {
         ResponseMemory memory = new ResponseMemory();
         memory.userId = UserID;
@@ -145,7 +147,7 @@ public class MemoryAPI : MonoBehaviour
         memory.playTime = "00:00";
         memory.importance = 0.5f;
 
-        if(responseCount == StoryController.MAX_RESPONSE_COUNT)
+        if(!isChating)
         {
             memory.instruction = "Instruct : 너는 지금 지성과 대화 중이고, 지성이 말한 마지막 대사와 대화 맥락을 고려하여 자연스럽게 대화를 마무리해야 한다." +
             "<이전 대화내용>에는 지금까지 지성과 나눈 대화와 상황이 순서대로 기록되어 있다." +
@@ -172,15 +174,13 @@ public class MemoryAPI : MonoBehaviour
         if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
         {
             UnityEngine.Debug.Log("Error: " + webRequest.error);
-            StoryController.Instance.ShowResponse("오류");
+            Response = "error";
         }
         else
         {
             UnityEngine.Debug.Log("Received: " + webRequest.downloadHandler.text);
             // Deserialize the JSON response
-            ResponseData response = JsonUtility.FromJson<ResponseData>(webRequest.downloadHandler.text);
-
-            StoryController.Instance.ShowResponse(response.content);
+            Response = JsonUtility.FromJson<ResponseData>(webRequest.downloadHandler.text).content;
         }
     }
 

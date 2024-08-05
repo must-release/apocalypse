@@ -79,6 +79,14 @@ public class SaveLoadUIController : MonoBehaviour, IUIContoller
         }
     }
 
+    // Initialize SaveLoad UI
+    public void Start()
+    {
+        // Set Slot Info
+        dataList = DataManager.Instance.GetAllUserData();
+        SetDataSlots();
+    }
+
     /****** Methods ******/
 
     // Enter SaveLoad UI
@@ -88,12 +96,17 @@ public class SaveLoadUIController : MonoBehaviour, IUIContoller
         saveOrLoad = UIModel.Instance.CurrentSubUI;
         SetSaveLoadUI();
 
+        // Active SaveLoad UI object
+        saveLoadUI.gameObject.SetActive(true);
+    }
+
+
+    // Update SaveLoad UI
+    public void UpdateUI()
+    {
         // Set Slot Info
         dataList = DataManager.Instance.GetAllUserData();
         SetDataSlots();
-
-        // Active SaveLoad UI object
-        saveLoadUI.gameObject.SetActive(true);
     }
 
     // Exit SaveLoad UI
@@ -154,6 +167,9 @@ public class SaveLoadUIController : MonoBehaviour, IUIContoller
     // Load saved data of the selected slot
     private void LoadSavedData()
     {
+        // Get slot number
+        int slotNum = selectedSlot.slotNumber;
+
         // Close confirm panel
         confirmPanel.gameObject.SetActive(false);
 
@@ -161,7 +177,7 @@ public class SaveLoadUIController : MonoBehaviour, IUIContoller
         UIController.Instance.TurnEverySubUIOff();
 
         // Generate Load Game Event Stream. Load data of the selected slot
-        GameEventProducer.Instance.GenerateLoadGameEventStream(selectedSlot.slotNumber);
+        GameEventProducer.Instance.GenerateLoadGameEventStream(slotNum);
     }
 
     // Save current player data at the selected slot
@@ -222,6 +238,7 @@ public class SaveLoadUIController : MonoBehaviour, IUIContoller
         saveOrLoad = SUBUI.NONE;
         pageNumberText.text = currentPage + "/" + (DataManager.SLOT_NUM / slots.childCount);
         previousButton.gameObject.SetActive(false);
+        nextButton.gameObject.SetActive(true);
         confirmButton.onClick.RemoveAllListeners();
     }
 }

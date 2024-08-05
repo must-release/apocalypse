@@ -18,18 +18,10 @@ public class UIController : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        // initalize current UI to title UI
-        UIModel.Instance.CurrentBaseUI = BASEUI.TITLE;
-        SetUIController(BASEUI.TITLE);
-        curUIController.StartUI();
-    }
-
     // Change Base UI.
     public void ChangeBaseUI(BASEUI baseUI)
     {
-        curUIController.EndUI();
+        curUIController?.EndUI();
 
         UIModel.Instance.CurrentBaseUI = baseUI;
         SetUIController(baseUI);
@@ -41,7 +33,7 @@ public class UIController : MonoBehaviour
     public void TurnSubUIOn(SUBUI subUI)
     {
         // Stack sub UI
-        UIModel.Instance.PushNewSubUI(subUI); 
+        UIModel.Instance.PushNewSubUI(subUI);
 
         // Set current UI Controller to sub UI
         SetUIController(subUI);
@@ -57,6 +49,8 @@ public class UIController : MonoBehaviour
         if (UIModel.Instance.CurrentSubUI != subUI || subUI == SUBUI.NONE)
         {
             Debug.Log("Sub UI Mismatch");
+            Debug.Log(subUI);
+            Debug.Log(UIModel.Instance.CurrentSubUI);
             return;
         }
 
@@ -75,8 +69,8 @@ public class UIController : MonoBehaviour
             // Set previous sub UI to current UI controller
             SetUIController(UIModel.Instance.CurrentSubUI);
 
-            // Start Sub UI
-            curUIController.StartUI();
+            // Update Sub UI
+            curUIController.UpdateUI();
         }
     }
 
@@ -95,9 +89,10 @@ public class UIController : MonoBehaviour
     }
 
     // Get current UI. Return both base UI and sub UI
-    public (BASEUI, SUBUI) GetCurrentUI()
+    public void GetCurrentUI(out BASEUI baseUI, out SUBUI subUI)
     {
-        return (UIModel.Instance.CurrentBaseUI, UIModel.Instance.CurrentSubUI);
+        baseUI = UIModel.Instance.CurrentBaseUI;
+        subUI = UIModel.Instance.CurrentSubUI;
     }
 
     // Set choice info
@@ -120,6 +115,9 @@ public class UIController : MonoBehaviour
     {
         switch (baseUI)
         {
+            case BASEUI.SPLASH_SCREEN:
+                curUIController = SplashScreenUIController.Instance;
+                break;
             case BASEUI.TITLE:
                 curUIController = TitleUIController.Instance;
                 break;
@@ -131,6 +129,12 @@ public class UIController : MonoBehaviour
                 break;
             case BASEUI.LOADING:
                 curUIController = LoadingUIController.Instance;
+                break;
+            case BASEUI.CUTSCENE:
+                curUIController = CutsceneUIController.Instance;
+                break;
+            default:
+                Debug.Log("No such baseUIController");
                 break;
         }
     }
@@ -144,6 +148,7 @@ public class UIController : MonoBehaviour
                 SetUIController(UIModel.Instance.CurrentBaseUI);
                 break;
             case SUBUI.LOAD:
+            case SUBUI.SAVE:
                 curUIController = SaveLoadUIController.Instance;
                 break;
             case SUBUI.PREFERENCE:
@@ -152,6 +157,18 @@ public class UIController : MonoBehaviour
             case SUBUI.KEYSETTINGS:
                 curUIController = KeySettingsUIController.Instance;
                 break;
+            case SUBUI.CHOICE:
+                curUIController = ChoiceUIController.Instance;
+                break;
+            case SUBUI.SAVING:
+                curUIController = SavingUIController.Instance;
+                break;
+            case SUBUI.PAUSE:
+                curUIController = PauseUIController.Instance;
+                break;
+            default:
+                Debug.Log("No such subUIController");
+                break;
         }
     }
 }
@@ -159,6 +176,7 @@ public class UIController : MonoBehaviour
 public interface IUIContoller
 {
     public void StartUI();
+    public void UpdateUI();
     public void EndUI();
     public void Cancel();
 }

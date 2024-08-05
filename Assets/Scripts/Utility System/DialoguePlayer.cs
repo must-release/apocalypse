@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 
-public class DialoguePlayer : MonoBehaviour
+public class DialoguePlayer : MonoBehaviour, IUtilityTool
 {
     /****** Single tone instance ******/
     public static DialoguePlayer Instance;
@@ -11,32 +11,32 @@ public class DialoguePlayer : MonoBehaviour
 
     /****** Public Fields ******/
     public List<Dialogue> PlayingDialgoueEntries { get; private set; }
-    public int NonDialogueEntryCount { get; private set; } = 0;
 
 
     /****** Private fields ******/
     private Dictionary<Dialogue, Coroutine> dialogueCoroutineMapping; // Used when mapping dialogue entry to playing coroutine
     private float textInterval = 0.05f; // Speed of the dialogue text
 
+
+    /****** Methods ******/
     public void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            PlayingDialgoueEntries = new List<Dialogue>();
-            dialogueCoroutineMapping = new Dictionary<Dialogue, Coroutine>();
-        }
+        PlayingDialgoueEntries = new List<Dialogue>();
+        dialogueCoroutineMapping = new Dictionary<Dialogue, Coroutine>();
     }
 
-    // Stop all playing story entries
-    public void StopPlaying()
+    public void Start()
+    {
+        UtilityManager.Instance.AddUtilityTool(this);
+    }
+
+    // Stop all dialouges
+    public void ResetTool()
     {
         StopAllCoroutines();
         dialogueCoroutineMapping.Clear();
         PlayingDialgoueEntries.Clear();
     }
-
-    /******* Show dialogue on the screen ********/
 
     public void PlayDialogue(Dialogue dialogue, TMP_Text nameText, TMP_Text dlogText)
     {
@@ -73,26 +73,5 @@ public class DialoguePlayer : MonoBehaviour
         nameText.text = dialogue.character;
         dlogText.text = dialogue.text; 
     }
-
-
-    /******** Play screen effect ********/
-    public void PlayEffect(Effect effect)
-    {
-        NonDialogueEntryCount++;
-        StartCoroutine(PlayingEffect());
-    }
-
-    IEnumerator PlayingEffect()
-    {
-
-        Debug.Log("Playing effect");
-
-        yield return new WaitForSeconds(1f);
-
-        Debug.Log("Effect over");
-
-        NonDialogueEntryCount--;
-    }
-
 }
 

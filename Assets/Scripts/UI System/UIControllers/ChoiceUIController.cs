@@ -60,14 +60,20 @@ public class ChoiceUIController : MonoBehaviour, IUIContoller
         SetChoiceUI();
     }
 
+    // Update Choice UI
+    public void UpdateUI()
+    {
+        
+    }
+
     // Exit Choice UI state
     public void EndUI()
     {
         // Reset input field
         inputField.text = "";
-        inputField.caretPosition = 0;
-        inputField.selectionAnchorPosition = 0;
-        inputField.selectionFocusPosition = 0;
+        //inputField.caretPosition = 0;
+        //inputField.selectionAnchorPosition = 0;
+        //inputField.selectionFocusPosition = 0;
 
         // Turn off choice UI
         inputOption.gameObject.SetActive(false);
