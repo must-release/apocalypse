@@ -95,24 +95,24 @@ public class InputEventProducer : MonoBehaviour, KeySettingsObserver
     // Get Updated Preference
     public void KeySettingsUpdated()
     {
-        // PreferenceManager.KeySettings keySettings = PreferenceManager.Instance.KeySettingInfo;
+        KeySettings keySettings = SettingsManager.Instance.KeySettingInfo;
 
 
-        // if (keySettings != null)
-        // {
-        //     cancelButton = keySettings.cancelButton;
-        //     pauseButton = keySettings.pauseButton;
-        //     confirmButton = keySettings.confirmButton;
+        if (keySettings != null)
+        {
+            cancelEvent.eventButton = keySettings.cancelButton;
+            pauseEvent.eventButton = keySettings.pauseButton;
+            nextScriptEvent.eventButton = keySettings.confirmButton;
 
-        //     // Debug.Log("Key Settings updated:");
-        //     // Debug.Log("Cancel: " + cancelButton);
-        //     // Debug.Log("Pause: " + pauseButton);
-        //     // Debug.Log("Confirm: " + confirmButton);
-        // }
-        // else
-        // {
-        //     Debug.LogError("Failed to load key settings.");
-        // }
+            // Debug.Log("Key Settings updated:");
+            // Debug.Log("Cancel: " + cancelButton);
+            // Debug.Log("Pause: " + pauseButton);
+            // Debug.Log("Confirm: " + confirmButton);
+        }
+        else
+        {
+            Debug.LogError("Failed to load key settings.");
+        }
     }
 }
 
