@@ -29,7 +29,7 @@ public class SettingsManager : MonoBehaviour
             KeySettingInfo.cancelButton = KeyCode.Escape;
             KeySettingInfo.confirmButton = KeyCode.Return;
             KeySettingInfo.pauseButton = KeyCode.Escape;
-
+            
             ChangeKeySettings(KeySettingInfo);
             PrintCurrentSettings();
 
@@ -182,6 +182,7 @@ public class SettingsManager : MonoBehaviour
         KeySettingInfo = newKeySettingInfo;
         SaveSettings();
         keySettingsObservers.ForEach((observer) => observer.KeySettingsUpdated());
+        PrintCurrentSettings();
         //Debug.Log("Key settings have been updated.");
     }
 
