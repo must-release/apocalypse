@@ -20,67 +20,67 @@ public class PreferenceUIController : MonoBehaviour, IUIContoller
 
     public void Awake()
     {
-        // if (Instance == null)
-        // {
-        //     Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
 
-        //     // Find Preference UI object
-        //     preferenceUI = transform.Find(preferenceUIName);
-        //     if (preferenceUI == null)
-        //     {
-        //         Debug.LogError("Preference UI Initialization Error");
-        //         return;
-        //     }
+            // Find Preference UI object
+            preferenceUI = transform.Find(preferenceUIName);
+            if (preferenceUI == null)
+            {
+                Debug.LogError("Preference UI Initialization Error");
+                return;
+            }
 
-        //     // Find Preference Scroll object
-        //     preferenceScroll = preferenceUI.Find("PreferenceScroll");
-        //     if (preferenceScroll == null)
-        //     {
-        //         Debug.LogError("Preference Scroll Initialization Error");
-        //         return;
-        //     }
+            // Find Preference Scroll object
+            preferenceScroll = preferenceUI.Find("PreferenceScroll");
+            if (preferenceScroll == null)
+            {
+                Debug.LogError("Preference Scroll Initialization Error");
+                return;
+            }
 
-        //     // Find Content through Viewport
-        //     Transform viewport = preferenceScroll.Find("Viewport");
-        //     if (viewport == null)
-        //     {
-        //         Debug.LogError("Viewport Initialization Error");
-        //         return;
-        //     }
+            // Find Content through Viewport
+            Transform viewport = preferenceScroll.Find("Viewport");
+            if (viewport == null)
+            {
+                Debug.LogError("Viewport Initialization Error");
+                return;
+            }
 
-        //     content = viewport.Find("Content");
-        //     if (content == null)
-        //     {
-        //         Debug.LogError("Content Initialization Error");
-        //         return;
-        //     }
+            content = viewport.Find("Content");
+            if (content == null)
+            {
+                Debug.LogError("Content Initialization Error");
+                return;
+            }
 
-        //     // Find all buttons under Content
-        //     Button[] buttons = content.GetComponentsInChildren<Button>();
-        //     foreach (Button button in buttons)
-        //     {
-        //         contentButtons.Add(button);
-        //     }
+            // Find all buttons under Content
+            Button[] buttons = content.GetComponentsInChildren<Button>();
+            foreach (Button button in buttons)
+            {
+                contentButtons.Add(button);
+            }
 
-        //     // Add event listeners to buttons by order
-        //     if (contentButtons.Count > 0) contentButtons[0].onClick.AddListener(OnWindowScreenButton);
-        //     if (contentButtons.Count > 1) contentButtons[1].onClick.AddListener(OnFullScreenButton);
-        //     if (contentButtons.Count > 2) contentButtons[2].onClick.AddListener(OnMovetoKeySettingsButton);
-        //     // Add more if necessary
+            // Add event listeners to buttons by order
+            if (contentButtons.Count > 0) contentButtons[0].onClick.AddListener(OnWindowScreenButton);
+            if (contentButtons.Count > 1) contentButtons[1].onClick.AddListener(OnFullScreenButton);
+            if (contentButtons.Count > 2) contentButtons[2].onClick.AddListener(OnMovetoKeySettingsButton);
+            // Add more if necessary
 
-        //     // Find and set up Reset and Confirm buttons in Preference UI
-        //     Button resetButton = preferenceUI.Find("Buttons/Reset Button")?.GetComponent<Button>();
-        //     if (resetButton != null)
-        //     {
-        //         resetButton.onClick.AddListener(OnResetButton);
-        //     }
+            // Find and set up Reset and Confirm buttons in Preference UI
+            Button resetButton = preferenceUI.Find("Buttons/Reset Button")?.GetComponent<Button>();
+            if (resetButton != null)
+            {
+                resetButton.onClick.AddListener(OnResetButton);
+            }
 
-        //     Button confirmButton = preferenceUI.Find("Buttons/Confirm Button")?.GetComponent<Button>();
-        //     if (confirmButton != null)
-        //     {
-        //         confirmButton.onClick.AddListener(OnConfirmButton);
-        //     }
-        // }
+            Button confirmButton = preferenceUI.Find("Buttons/Confirm Button")?.GetComponent<Button>();
+            if (confirmButton != null)
+            {
+                confirmButton.onClick.AddListener(OnConfirmButton);
+            }
+        }
     }
 
     public void Start()
