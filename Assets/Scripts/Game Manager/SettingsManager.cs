@@ -200,52 +200,52 @@ public class SettingsManager : MonoBehaviour
     public void PrintCurrentSettings()
     {
 
-        string preferenceSettingsPath = Application.persistentDataPath + "/PreferenceSettingInfo.json";
-        string keySettingsPath = Application.persistentDataPath + "/KeySettingInfo.json";
+        // string preferenceSettingsPath = Application.persistentDataPath + "/PreferenceSettingInfo.json";
+        // string keySettingsPath = Application.persistentDataPath + "/KeySettingInfo.json";
 
-        if (File.Exists(preferenceSettingsPath))
-        {
-            try
-            {
-                string preferenceSettingsJson = File.ReadAllText(preferenceSettingsPath);
-                PreferenceSettings preferenceSettings = JsonUtility.FromJson<PreferenceSettings>(preferenceSettingsJson);
-                Debug.Log("Current Preference Settings:");
-                Debug.Log($"FullScreen: {preferenceSettings.isFullScreen}");
-                Debug.Log($"Resolution: {preferenceSettings.resolutionWidth} x {preferenceSettings.resolutionHeight}");
-                Debug.Log($"BGM Volume: {preferenceSettings.bgmVolume}");
-                Debug.Log($"Sound Effect Volume: {preferenceSettings.soundEffectVolume}");
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("Error reading Preference Settings: " + e.Message);
-            }
-        }
-        else
-        {
-            Debug.LogWarning("Preference settings file not found.");
-        }
+        // if (File.Exists(preferenceSettingsPath))
+        // {
+        //     try
+        //     {
+        //         string preferenceSettingsJson = File.ReadAllText(preferenceSettingsPath);
+        //         PreferenceSettings preferenceSettings = JsonUtility.FromJson<PreferenceSettings>(preferenceSettingsJson);
+        //         Debug.Log("Current Preference Settings:");
+        //         Debug.Log($"FullScreen: {preferenceSettings.isFullScreen}");
+        //         Debug.Log($"Resolution: {preferenceSettings.resolutionWidth} x {preferenceSettings.resolutionHeight}");
+        //         Debug.Log($"BGM Volume: {preferenceSettings.bgmVolume}");
+        //         Debug.Log($"Sound Effect Volume: {preferenceSettings.soundEffectVolume}");
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         Debug.LogError("Error reading Preference Settings: " + e.Message);
+        //     }
+        // }
+        // else
+        // {
+        //     Debug.LogWarning("Preference settings file not found.");
+        // }
 
-        if (File.Exists(keySettingsPath))
-        {
-            try
-            {
-                string keySettingsJson = File.ReadAllText(keySettingsPath);
-                Debug.Log($"Read Key Settings JSON: {keySettingsJson}"); // JSON 문자열 출력
-                KeySettings keySettings = JsonUtility.FromJson<KeySettings>(keySettingsJson);
-                Debug.Log("Current Key Settings:");
-                Debug.Log($"Cancel Button: {keySettings.cancelButton}");
-                Debug.Log($"Pause Button: {keySettings.pauseButton}");
-                Debug.Log($"Confirm Button: {keySettings.confirmButton}");
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("Error reading Key Settings: " + e.Message);
-            }
-        }
-        else
-        {
-            Debug.LogWarning("Key settings file not found.");
-        }
+        // if (File.Exists(keySettingsPath))
+        // {
+        //     try
+        //     {
+        //         string keySettingsJson = File.ReadAllText(keySettingsPath);
+        //         Debug.Log($"Read Key Settings JSON: {keySettingsJson}"); // JSON 문자열 출력
+        //         KeySettings keySettings = JsonUtility.FromJson<KeySettings>(keySettingsJson);
+        //         Debug.Log("Current Key Settings:");
+        //         Debug.Log($"Cancel Button: {keySettings.cancelButton}");
+        //         Debug.Log($"Pause Button: {keySettings.pauseButton}");
+        //         Debug.Log($"Confirm Button: {keySettings.confirmButton}");
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         Debug.LogError("Error reading Key Settings: " + e.Message);
+        //     }
+        // }
+        // else
+        // {
+        //     Debug.LogWarning("Key settings file not found.");
+        // }
     }
 }
 

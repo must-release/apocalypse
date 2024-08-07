@@ -125,12 +125,32 @@ public class GameEventProducer : MonoBehaviour
         sceneLoadEvent.LoadingScene = SCENE.STAGE;
         dataLoadEvent.NextEvent = sceneLoadEvent;
 
-        // Third, Activate scene
+        // Third, Activate scene 
         SceneActivateEvent sceneActivateEvent = ScriptableObject.CreateInstance<SceneActivateEvent>();
         sceneLoadEvent.NextEvent = sceneActivateEvent;
 
         // Handle generated event stream
         HandleGeneratedEventChain(dataLoadEvent);
+    }
+
+    // Generate scene change event. Load certain scene and change it to current scene
+    public void GenerateChangeSceneEventStream(SCENE scene)
+    {
+        // First, load stage scene asynchronously
+        SceneLoadEvent sceneLoadEvent = ScriptableObject.CreateInstance<SceneLoadEvent>();
+        sceneLoadEvent.LoadingScene = scene;
+
+        // Second, Activate scene 
+        SceneActivateEvent sceneActivateEvent = ScriptableObject.CreateInstance<SceneActivateEvent>();
+        sceneLoadEvent.NextEvent = sceneActivateEvent;
+
+        // Third, Change UI according to scene
+        ChangeUIEvent changeUIEvent = ScriptableObject.CreateInstance<ChangeUIEvent>();
+        changeUIEvent.changingUI = scene == SCENE.TITLE? BASEUI.TITLE : BASEUI.CONTROL;
+        sceneActivateEvent.NextEvent = changeUIEvent;
+
+        // Handle generated event stream
+        HandleGeneratedEventChain(sceneLoadEvent);
     }
 
 

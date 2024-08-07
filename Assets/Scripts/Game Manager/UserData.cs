@@ -102,6 +102,11 @@ public class UserData : ISerializationCallbackReceiver
             startingEventAssemblyQualifiedName = StartingEvent.GetType().AssemblyQualifiedName;
             startingEventData = JsonUtility.ToJson(StartingEvent);
         }
+        else
+        {
+            startingEventAssemblyQualifiedName = null;
+            startingEventData = null;
+        }
     }
 
     // Restore data of the startingEvent

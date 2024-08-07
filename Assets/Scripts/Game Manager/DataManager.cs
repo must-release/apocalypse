@@ -114,7 +114,7 @@ public class DataManager : MonoBehaviour
         File.WriteAllText(path, json);
 
         // Finsih Saving
-        IsSaving = false;  
+        IsSaving = false;
     }
 
     // Capture current screenshot

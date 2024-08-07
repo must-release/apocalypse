@@ -36,9 +36,9 @@ public class SceneActivateEvent : GameEvent
     IEnumerator PlayEventCoroutine()
     {
         // Succeed parent events
-        if(ParentEvent)
+        if(parentEvent)
         {
-            GameEventManager.Instance.SucceedParentEvents(ParentEvent);
+            GameEventManager.Instance.SucceedParentEvents(ref parentEvent);
         }
 
         // If scene is already loaded
@@ -52,7 +52,7 @@ public class SceneActivateEvent : GameEvent
         }
 
         // If it's not splash screen, change to Loading UI
-        UIController.Instance.GetCurrentUI(out BASEUI baseUI, out SUBUI subUI);
+        UIController.Instance.GetCurrentUI(out BASEUI baseUI, out _);
         if(baseUI != BASEUI.SPLASH_SCREEN)
             UIController.Instance.ChangeBaseUI(BASEUI.LOADING);
 

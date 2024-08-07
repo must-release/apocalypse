@@ -53,7 +53,7 @@ public class UIController : MonoBehaviour
             Debug.Log(UIModel.Instance.CurrentSubUI);
             return;
         }
-
+                    
         // End current Sub UI
         curUIController.EndUI();
         UIModel.Instance.PopCurrentSubUI();

@@ -11,8 +11,9 @@ public class PauseEvent : InputEvent
     {
         bool isEventListEmpty = eventList.Count == 0;
         bool isValidUI = baseUI == BASEUI.CONTROL || baseUI == BASEUI.STORY || subUI == SUBUI.CHOICE;
+        bool isInvalidUI = subUI == SUBUI.PAUSE; 
 
-        return isEventListEmpty && isValidUI;
+        return isEventListEmpty && isValidUI && !isInvalidUI;
     }
 
     // Play pause event
