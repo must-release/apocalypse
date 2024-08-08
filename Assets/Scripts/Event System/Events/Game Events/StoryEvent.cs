@@ -46,8 +46,10 @@ public class StoryEvent : GameEvent
         UIController.Instance.ChangeBaseUI(BASEUI.STORY);
 
         // Start Story
+        InputEventProducer.Instance.LockInput(true);
         string story = "STORY_" + stage.ToString() + '_' + storyNum;
         yield return StoryController.Instance.StartStory(story, readBlockCount, readEntryCount);
+        InputEventProducer.Instance.LockInput(false);
 
         // Wait for story to end
         while (StoryController.Instance.IsStoryPlaying)

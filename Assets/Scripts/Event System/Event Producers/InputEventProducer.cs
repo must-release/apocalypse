@@ -50,7 +50,8 @@ public class InputEventProducer : MonoBehaviour, KeySettingsObserver
     {
         if (inputLock)
         {
-            return;
+            Debug.Log("Input is locked."); 
+            return; 
         }
 
         // Detect every input event.
