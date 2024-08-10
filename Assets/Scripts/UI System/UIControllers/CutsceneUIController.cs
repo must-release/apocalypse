@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UIEnums;
 
-public class CutsceneUIController : MonoBehaviour, IUIContoller
+public class CutsceneUIController : MonoBehaviour, IUIController
 {
 
     /****** Private fields ******/
@@ -26,6 +27,12 @@ public class CutsceneUIController : MonoBehaviour, IUIContoller
                 return;
             }
         }
+    }
+
+    public void Start()
+    {
+        // Add current UI controller
+        UIController.Instance.AddUIController(BASEUI.CUTSCENE, Instance);
     }
 
     /****** Methods ******/

@@ -1,12 +1,9 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+using UIEnums;
 
 /* Part of UIController which manages Story UI logic */
 
-public class StoryUIController : MonoBehaviour, IUIContoller
+public class StoryUIController : MonoBehaviour, IUIController
 {
 
     /****** Private fields ******/
@@ -33,6 +30,11 @@ public class StoryUIController : MonoBehaviour, IUIContoller
         }
     }
 
+    public void Start()
+    {
+        // Add current UI controller
+        UIController.Instance.AddUIController(BASEUI.STORY, Instance);
+    }
 
     /****** UI Methods ******/
 

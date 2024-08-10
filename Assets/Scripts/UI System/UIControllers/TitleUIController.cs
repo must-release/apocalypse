@@ -5,7 +5,7 @@ using UIEnums;
 
 /* Part of UIController which manages Title UI logic */
 
-public class TitleUIController : MonoBehaviour, IUIContoller
+public class TitleUIController : MonoBehaviour, IUIController
 {
     /****** Private fields ******/
     private string titleUIName = "Title UI";
@@ -45,6 +45,12 @@ public class TitleUIController : MonoBehaviour, IUIContoller
             buttonList[2].onClick.AddListener(OnLoadGameClick);
             buttonList[3].onClick.AddListener(OnPreferenceClick);
         }
+    }
+
+    public void Start()
+    {
+        // Add current UI controller
+        UIController.Instance.AddUIController(BASEUI.TITLE, Instance);
     }
 
     /****** Methods ******/

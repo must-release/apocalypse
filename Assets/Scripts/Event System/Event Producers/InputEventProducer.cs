@@ -15,6 +15,7 @@ public class InputEventProducer : MonoBehaviour, KeySettingsObserver
     private Queue<InputEvent> incomingEvents;
     private List<InputEvent> playingEvents;
     private bool inputLock;
+    private Transform eventCanvas;
     private GameObject clickPreventPanel;
 
     // Input events
@@ -31,7 +32,8 @@ public class InputEventProducer : MonoBehaviour, KeySettingsObserver
             incomingEvents = new Queue<InputEvent>();
             playingEvents = new List<InputEvent>();
             inputLock = false;
-            clickPreventPanel = GameObject.Find("Click Prevent Panel");
+            eventCanvas = transform.Find("Event Canvas");
+            clickPreventPanel = eventCanvas.Find("Click Prevent Panel").gameObject;
 
             // Pool input Events
             inputEvents.Add(cancelEvent = new CancelEvent());
@@ -50,7 +52,6 @@ public class InputEventProducer : MonoBehaviour, KeySettingsObserver
     {
         if (inputLock)
         {
-            Debug.Log("Input is locked."); 
             return; 
         }
 

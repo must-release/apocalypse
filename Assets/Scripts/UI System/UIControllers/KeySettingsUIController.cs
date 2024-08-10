@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UIEnums;
 using System;
 
-public class KeySettingsUIController : MonoBehaviour, IUIContoller
+public class KeySettingsUIController : MonoBehaviour, IUIController
 {
     /****** Private fields ******/
     private string keySettingsUIName = "Key Settings UI";
@@ -80,6 +80,9 @@ public class KeySettingsUIController : MonoBehaviour, IUIContoller
     {
         // Load existing settings from SettingsManager
         LoadExistingKeySettings();
+        
+        // Add current UI conroller
+        UIController.Instance.AddUIController(SUBUI.KEYSETTINGS, Instance);
     }
 
     private void AssignButtonListeners()

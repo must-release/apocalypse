@@ -7,7 +7,7 @@ using UIEnums;
 
 /* Part of UIContoller which manages SaveLoad SubUI logic */
 
-public class SaveLoadUIController : MonoBehaviour, IUIContoller
+public class SaveLoadUIController : MonoBehaviour, IUIController
 {
     /****** Private fields ******/
     private string saveLoadUIName = "SaveLoad UI";
@@ -85,6 +85,10 @@ public class SaveLoadUIController : MonoBehaviour, IUIContoller
         // Set Slot Info
         dataList = DataManager.Instance.GetAllUserData();
         SetDataSlots();
+
+        // Add current UI controller, both save and load
+        UIController.Instance.AddUIController(SUBUI.SAVE, Instance);
+        UIController.Instance.AddUIController(SUBUI.LOAD, Instance);
     }
 
     /****** Methods ******/

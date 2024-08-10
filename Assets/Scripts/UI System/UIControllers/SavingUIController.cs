@@ -1,9 +1,10 @@
 using UnityEngine;
 using System.Collections;
+using UIEnums;
 
 /* Part of UIController which manages Saving UI logic */
 
-public class SavingUIController : MonoBehaviour, IUIContoller
+public class SavingUIController : MonoBehaviour, IUIController
 {
 
     /****** Private fields ******/
@@ -28,6 +29,12 @@ public class SavingUIController : MonoBehaviour, IUIContoller
                 return;
             }
         }
+    }
+
+    public void Start()
+    {
+        // Add current UI controller
+        UIController.Instance.AddUIController(SUBUI.SAVING, Instance);
     }
 
     /****** Methods ******/
