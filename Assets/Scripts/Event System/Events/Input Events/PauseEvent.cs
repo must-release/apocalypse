@@ -10,10 +10,10 @@ public class PauseEvent : InputEvent
     public override bool CheckCompatibility(List<InputEvent> eventList, BASEUI baseUI, SUBUI subUI)
     {
         bool isEventListEmpty = eventList.Count == 0;
-        bool isValidUI = baseUI == BASEUI.CONTROL || baseUI == BASEUI.STORY || subUI == SUBUI.CHOICE;
-        bool isInvalidUI = subUI == SUBUI.PAUSE; 
+        bool isValidBaseUI = baseUI == BASEUI.CONTROL || baseUI == BASEUI.STORY;
+        bool isValidSubUI = subUI == SUBUI.CHOICE || subUI == SUBUI.NONE;
 
-        return isEventListEmpty && isValidUI && !isInvalidUI;
+        return isEventListEmpty && isValidBaseUI && isValidSubUI;
     }
 
     // Play pause event

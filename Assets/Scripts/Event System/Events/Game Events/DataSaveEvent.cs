@@ -45,14 +45,18 @@ public class DataSaveEvent : GameEvent
         // Turn Saving UI on
         UIController.Instance.TurnSubUIOn(SUBUI.SAVING);
 
+
         // When saving during story mode
-        if (ParentEvent && ParentEvent.EventType == EVENT_TYPE.STORY)
+        if (ParentEvent && (ParentEvent.EventType == EVENT_TYPE.STORY || ParentEvent.EventType == EVENT_TYPE.CHOICE))
         {
             // Get current story progress info
             var storyInfo = StoryController.Instance.GetStoryProgressInfo();
 
             // Update StoryEvent
-            (ParentEvent as StoryEvent).UpdateStoryProgress(storyInfo);
+            if (ParentEvent is StoryEvent)
+                (ParentEvent as StoryEvent).UpdateStoryProgress(storyInfo);
+            else
+                (ParentEvent.ParentEvent as StoryEvent).UpdateStoryProgress(storyInfo);
 
             // Take screen shot when saving
             takeScreenShot = true;

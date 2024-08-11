@@ -19,12 +19,12 @@ public class UIModel : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            savedSubUIs = new Stack<SUBUI>();
         }
     }
 
     public void Start()
     {
-        savedSubUIs = new Stack<SUBUI>();
     }
 
     // Push new sub UI in the stack

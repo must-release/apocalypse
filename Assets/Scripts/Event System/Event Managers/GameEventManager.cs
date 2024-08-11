@@ -2,7 +2,7 @@
 using System.Collections;
 using UIEnums;
 using EventEnums;
-
+using System.Collections.Generic;
 
 public class GameEventManager : MonoBehaviour
 {
@@ -10,11 +10,14 @@ public class GameEventManager : MonoBehaviour
 
 	public GameEvent EventPointer { get; private set; }
 
+    private List<Coroutine> gameEventCoroutines;
+
 	void Awake()
 	{
 		if (Instance == null)
 		{
             Instance = this;
+            gameEventCoroutines = new List<Coroutine>();
         }
 	}
 
@@ -47,7 +50,16 @@ public class GameEventManager : MonoBehaviour
 	// Play coroutine for game events, which are scriptable objects
     public Coroutine StartCoroutineForGameEvents(IEnumerator coroutine)
     {
-        return StartCoroutine(coroutine);
+        Coroutine eventCoroutine = StartCoroutine(coroutine);
+        gameEventCoroutines.Add(eventCoroutine);
+        return eventCoroutine;
+    }
+
+    // End coroutine for game events, which are scriptable objects
+    public void EndCoroutineForGameEvents(Coroutine coroutine)
+    {
+        StopCoroutine(coroutine);
+        gameEventCoroutines.Remove(coroutine);
     }
 
     // Terminate target game event

@@ -103,6 +103,7 @@ public class UIController : MonoBehaviour
     public void SetChoiceInfo(List<string> choiceList)
     {
         UIModel.Instance.ChoiceList = choiceList;
+        UIModel.Instance.SelectedChoice = null;
     }
 
     // Get selected choice
