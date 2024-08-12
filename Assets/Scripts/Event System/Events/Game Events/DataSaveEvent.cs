@@ -38,25 +38,22 @@ public class DataSaveEvent : GameEvent
     public override void PlayEvent()
     {
         // Use GameEventManger to start coroutine
-        GameEventManager.Instance.StartCoroutineForGameEvents(PlayEventCoroutine());
+        GameEventManager.Instance.StartCoroutine(PlayEventCoroutine());
     }
-    IEnumerator PlayEventCoroutine()
+    public override IEnumerator PlayEventCoroutine()
     {
         // Turn Saving UI on
         UIController.Instance.TurnSubUIOn(SUBUI.SAVING);
 
-
         // When saving during story mode
-        if (ParentEvent && (ParentEvent.EventType == EVENT_TYPE.STORY || ParentEvent.EventType == EVENT_TYPE.CHOICE))
+        GameEvent rootEvent = GetRootEvent();
+        if (rootEvent?.EventType == EVENT_TYPE.STORY)
         {
             // Get current story progress info
             var storyInfo = StoryController.Instance.GetStoryProgressInfo();
 
             // Update StoryEvent
-            if (ParentEvent is StoryEvent)
-                (ParentEvent as StoryEvent).UpdateStoryProgress(storyInfo);
-            else
-                (ParentEvent.ParentEvent as StoryEvent).UpdateStoryProgress(storyInfo);
+            (rootEvent as StoryEvent).UpdateStoryProgress(storyInfo);
 
             // Take screen shot when saving
             takeScreenShot = true;
@@ -81,9 +78,22 @@ public class DataSaveEvent : GameEvent
 
     private GameEvent GetStartingEvent()
     {
-        if(ParentEvent == null)
+        GameEvent startingEvent = GetRootEvent();
+        if(startingEvent == null)
         {
             return NextEvent;
+        }
+        else
+        {
+            return startingEvent;
+        }
+    }
+
+    private GameEvent GetRootEvent()
+    {            
+        if(ParentEvent == null)
+        {
+            return null;
         }
         else
         {
@@ -101,7 +111,7 @@ public class DataSaveEvent : GameEvent
     {
         if (DataManager.Instance.IsSaving)
         {
-            Debug.Log("Terminate error: data is not saved yet!");
+            Debug.LogError("Terminate error: data is not saved yet!");
         }
     }
 }

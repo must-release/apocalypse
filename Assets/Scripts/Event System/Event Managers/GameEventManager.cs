@@ -10,14 +10,11 @@ public class GameEventManager : MonoBehaviour
 
 	public GameEvent EventPointer { get; private set; }
 
-    private List<Coroutine> gameEventCoroutines;
-
 	void Awake()
 	{
 		if (Instance == null)
 		{
             Instance = this;
-            gameEventCoroutines = new List<Coroutine>();
         }
 	}
 
@@ -46,21 +43,6 @@ public class GameEventManager : MonoBehaviour
 		// Play event
 		playingEvent.PlayEvent();
 	}
-
-	// Play coroutine for game events, which are scriptable objects
-    public Coroutine StartCoroutineForGameEvents(IEnumerator coroutine)
-    {
-        Coroutine eventCoroutine = StartCoroutine(coroutine);
-        gameEventCoroutines.Add(eventCoroutine);
-        return eventCoroutine;
-    }
-
-    // End coroutine for game events, which are scriptable objects
-    public void EndCoroutineForGameEvents(Coroutine coroutine)
-    {
-        StopCoroutine(coroutine);
-        gameEventCoroutines.Remove(coroutine);
-    }
 
     // Terminate target game event
     public void TerminateGameEvent(GameEvent terminatingEvent, bool succeeding = false)

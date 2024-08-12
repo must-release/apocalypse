@@ -31,9 +31,9 @@ public class SceneActivateEvent : GameEvent
     public override void PlayEvent()
     {
         // Use GameEventManger to start coroutine
-        GameEventManager.Instance.StartCoroutineForGameEvents(PlayEventCoroutine());
+        GameEventManager.Instance.StartCoroutine(PlayEventCoroutine());
     }
-    IEnumerator PlayEventCoroutine()
+    public override IEnumerator PlayEventCoroutine()
     {
         // Succeed parent events
         if(parentEvent)
@@ -41,25 +41,19 @@ public class SceneActivateEvent : GameEvent
             GameEventManager.Instance.SucceedParentEvents(ref parentEvent);
         }
 
-        // If scene is already loaded
-        if (!GameSceneController.Instance.IsSceneLoading)
+        // If scene is still loading
+        if (GameSceneController.Instance.IsSceneLoading)
         {
-            GameSceneController.Instance.ActivateGameScene();
+            // If it's not splash screen, change to Loading UI
+            UIController.Instance.GetCurrentUI(out BASEUI baseUI, out _);
+            if(baseUI != BASEUI.SPLASH_SCREEN)
+                UIController.Instance.ChangeBaseUI(BASEUI.LOADING);
 
-            // Terminate scene activate event and play next event
-            GameEventManager.Instance.TerminateGameEvent(this);
-            yield break;
-        }
-
-        // If it's not splash screen, change to Loading UI
-        UIController.Instance.GetCurrentUI(out BASEUI baseUI, out _);
-        if(baseUI != BASEUI.SPLASH_SCREEN)
-            UIController.Instance.ChangeBaseUI(BASEUI.LOADING);
-
-        // Wait for loading to end
-        while (GameSceneController.Instance.IsSceneLoading)
-        {
-            yield return null;
+            // Wait for loading to end
+            while (GameSceneController.Instance.IsSceneLoading)
+            {
+                yield return null;
+            }
         }
 
         // Activate game scene
@@ -74,7 +68,7 @@ public class SceneActivateEvent : GameEvent
     {
         if (GameSceneController.Instance.IsSceneLoading)
         {
-            Debug.Log("Terminate error: scene is not loaded yet!");
+            Debug.LogError("Terminate error: scene is not loaded yet!");
         }
     }
 }

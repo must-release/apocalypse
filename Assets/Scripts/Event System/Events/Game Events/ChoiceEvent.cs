@@ -34,9 +34,9 @@ public class ChoiceEvent : GameEvent
     public override void PlayEvent()
     {
         // Use GameEventManger to start coroutine
-        choiceCoroutine = GameEventManager.Instance.StartCoroutineForGameEvents(PlayEventCoroutine());
+        choiceCoroutine = GameEventManager.Instance.StartCoroutine(PlayEventCoroutine());
     }
-    IEnumerator PlayEventCoroutine()
+    public override IEnumerator PlayEventCoroutine()
     {
         // Set choice info and switch to choice UI
         UIController.Instance.SetChoiceInfo(choiceList);
@@ -60,6 +60,6 @@ public class ChoiceEvent : GameEvent
     // Terminate choice event
     public override void TerminateEvent()
     {
-        GameEventManager.Instance.EndCoroutineForGameEvents(choiceCoroutine);
+        GameEventManager.Instance.StopCoroutine(choiceCoroutine);
     }
 }
