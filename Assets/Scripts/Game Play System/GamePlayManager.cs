@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GamePlayController : MonoBehaviour
+public class GamePlayManager : MonoBehaviour
 {
-    public static GamePlayController Instance;
+    public static GamePlayManager Instance;
 
     public bool IsCutscenePlaying { get; private set; }
 
