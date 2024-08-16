@@ -1,9 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using UIEnums;
-using System.Buffers.Text;
-using System;
 
 public class UIController : MonoBehaviour
 {
@@ -12,7 +9,19 @@ public class UIController : MonoBehaviour
     private IUIController curUIController; // UIController using right now
     private Dictionary<BASEUI, IUIController> baseUIDictionary;
     private Dictionary<SUBUI, IUIController> subUIDictionary;
-    
+
+    // Story panel clicked info
+    private bool isStoryPanelClicked;
+    public bool IsStoryPanelClicked
+    {
+        get 
+        {
+            bool _clicked = isStoryPanelClicked;
+            isStoryPanelClicked = false;
+            return _clicked; 
+        }
+        set { isStoryPanelClicked = value; }
+    }
 
     private void Awake()
     {
@@ -21,6 +30,7 @@ public class UIController : MonoBehaviour
             Instance = this;
             baseUIDictionary = new Dictionary<BASEUI, IUIController>();
             subUIDictionary = new Dictionary<SUBUI, IUIController>();
+            isStoryPanelClicked = false;
         }
     }
 

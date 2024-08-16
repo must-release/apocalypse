@@ -4,8 +4,19 @@ using UIEnums;
 using EventEnums;
 using System.Collections.Generic;
 
-public class PauseEvent : InputEvent
+public class PauseEvent : InputEvent, KeySettingsObserver
 {
+    public void Start()
+    {
+        SettingsManager.Instance.AddObserver(this);
+    }
+
+    // Update key binding
+    public void KeySettingsUpdated()
+    {
+        eventButton = SettingsManager.Instance.KeySettingInfo.pauseButton;
+    }
+
     // Check compatibiliry with event list and current UI
     public override bool CheckCompatibility(List<InputEvent> eventList, BASEUI baseUI, SUBUI subUI)
     {

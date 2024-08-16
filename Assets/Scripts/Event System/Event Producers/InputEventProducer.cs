@@ -7,68 +7,74 @@ using System.Collections.Generic;
  * EventProducer which creates the input event stream
  */
 
-public class InputEventProducer : MonoBehaviour, KeySettingsObserver
+public class InputEventProducer : MonoBehaviour
 {
     public static InputEventProducer Instance { get; private set; }
 
-    private List<InputEvent> inputEvents;
+    private List<InputEvent> inputEventsPool;
     private Queue<InputEvent> incomingEvents;
     private List<InputEvent> playingEvents;
     private bool inputLock;
     private Transform eventCanvas;
+    private Transform inputEvents;
     private GameObject clickPreventPanel;
 
-    // Input events
-    private CancelEvent cancelEvent;
-    private PauseEvent pauseEvent;
-    private NextScriptEvent nextScriptEvent;
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            inputEvents = new List<InputEvent>();
+            inputEventsPool = new List<InputEvent>();
             incomingEvents = new Queue<InputEvent>();
             playingEvents = new List<InputEvent>();
             inputLock = false;
             eventCanvas = transform.Find("Event Canvas");
+            inputEvents = transform.Find("Input Events");
             clickPreventPanel = eventCanvas.Find("Click Prevent Panel").gameObject;
 
             // Pool input Events
-            inputEvents.Add(cancelEvent = new CancelEvent());
-            inputEvents.Add(pauseEvent = new PauseEvent());
-            inputEvents.Add(nextScriptEvent = new NextScriptEvent());
+            for(int i = 0;  i < inputEvents.childCount; i++)
+            {
+                inputEventsPool.Add(inputEvents.GetChild(i).GetComponent<InputEvent>());
+            }
         }
-    }
-
-    private void Start()
-    {
-        // Input event producer observes preference manager
-        SettingsManager.Instance.AddObserver(this);
     }
  
     private void Update()
     {
-        if (inputLock)
-        {
-            return; 
-        }
+        // Check input lock
+        if (inputLock) { return; }
 
-        // Detect every input event.
-        inputEvents.ForEach((inputEvent) => {
-            if (Input.GetKeyDown(inputEvent.eventButton))
+        // Detect incoming inputs
+        DetectInputEvents();
+
+        // Check compatibility of detected input events
+        CheckInputEvents();
+
+        // Handle playable input events
+        HandleInputEvents();
+    }
+
+    // Lock or Unlock input
+    public void LockInput(bool value)
+    {
+        inputLock = value;
+        clickPreventPanel.SetActive(value);
+    }
+
+    // Detect every input event.
+    private void DetectInputEvents()
+    {
+        inputEventsPool.ForEach((inputEvent) => {
+            if (inputEvent.DetectInput())
             {
                 incomingEvents.Enqueue(inputEvent);
             }
         });
-
-        // Handle every generated input event
-        HandleGeneratedEvents();
     }
 
-    // Handle generated Input events to InputEventManager
-    private void HandleGeneratedEvents()
+    private void CheckInputEvents()
     {
         // Add playable events in playingEvents list
         while (incomingEvents.Count > 0)
@@ -80,41 +86,13 @@ public class InputEventProducer : MonoBehaviour, KeySettingsObserver
                 playingEvents.Add(input);
             }
         }
+    }
 
-        // Play playable events
+    // Handle every playable input event
+    private void HandleInputEvents()
+    {
         playingEvents.ForEach((input) => InputEventManager.Instance.PlayInputEvent(input));
         playingEvents.Clear();
-    }
-
-    // Lock or Unlock input
-    public void LockInput(bool value)
-    {
-        inputLock = value;
-        clickPreventPanel.SetActive(value);
-    }
-
-
-    // Get Updated Preference
-    public void KeySettingsUpdated()
-    {
-        KeySettings keySettings = SettingsManager.Instance.KeySettingInfo;
-
-
-        if (keySettings != null)
-        {
-            cancelEvent.eventButton = keySettings.cancelButton;
-            pauseEvent.eventButton = keySettings.pauseButton;
-            nextScriptEvent.eventButton = keySettings.confirmButton;
-
-            // Debug.Log("Key Settings updated:");
-            // Debug.Log("Cancel: " + cancelButton);
-            // Debug.Log("Pause: " + pauseButton);
-            // Debug.Log("Confirm: " + confirmButton);
-        }
-        else
-        {
-            Debug.LogError("Failed to load key settings.");
-        }
     }
 }
 
