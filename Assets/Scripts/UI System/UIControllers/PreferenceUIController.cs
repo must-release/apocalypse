@@ -153,7 +153,4 @@ public class PreferenceUIController : MonoBehaviour, IUIContoller
         UIController.Instance.TurnSubUIOff(SUBUI.PREFERENCE);
     }
 
-    private void Return()
-    {
-    }
 }

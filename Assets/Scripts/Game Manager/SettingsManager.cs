@@ -29,6 +29,7 @@ public class SettingsManager : MonoBehaviour
             KeySettingInfo.cancelButton = KeyCode.Escape;
             KeySettingInfo.confirmButton = KeyCode.Return;
             KeySettingInfo.pauseButton = KeyCode.Escape;
+
             
             ChangeKeySettings(KeySettingInfo);
             PrintCurrentSettings();
@@ -75,7 +76,18 @@ public class SettingsManager : MonoBehaviour
             {
                 cancelButton = KeyCode.Escape,
                 pauseButton = KeyCode.Escape,
-                confirmButton = KeyCode.Return
+                confirmButton = KeyCode.Return,
+                UpButton = KeyCode.W,
+                RightButton = KeyCode.D,
+                LeftButton = KeyCode.A,
+                DownButton = KeyCode.S,
+                AttackButton = KeyCode.Mouse0,
+                AimButton = KeyCode.Mouse1,
+                SpecialAttackButton = KeyCode.Mouse2,
+                TagButton = KeyCode.Tab,
+                AssistAttackButton = KeyCode.Q,
+                InteractionButton = KeyCode.E,
+                JumpButton = KeyCode.Space,
             };
 
             SaveSettings();
@@ -276,4 +288,15 @@ public class KeySettings
     public KeyCode cancelButton;
     public KeyCode pauseButton;
     public KeyCode confirmButton;
+    public KeyCode UpButton;
+    public KeyCode RightButton;
+    public KeyCode LeftButton;
+    public KeyCode DownButton;
+    public KeyCode JumpButton;
+    public KeyCode AttackButton;
+    public KeyCode AssistAttackButton;
+    public KeyCode AimButton;
+    public KeyCode SpecialAttackButton;
+    public KeyCode TagButton;
+    public KeyCode InteractionButton;
 }
