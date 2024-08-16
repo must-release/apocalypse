@@ -34,10 +34,15 @@ public class InputEventProducer : MonoBehaviour
             clickPreventPanel = eventCanvas.Find("Click Prevent Panel").gameObject;
 
             // Pool input Events
-            for(int i = 0;  i < inputEvents.childCount; i++)
-            {
-                inputEventsPool.Add(inputEvents.GetChild(i).GetComponent<InputEvent>());
-            }
+            PoolInputEvents();
+        }
+    }
+
+    private void PoolInputEvents()
+    {
+        for (int i = 0; i < inputEvents.childCount; i++)
+        {
+            inputEventsPool.Add(inputEvents.GetChild(i).GetComponent<InputEvent>());
         }
     }
  
