@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UIEnums;
 using TMPro;
 
-public class ChoiceUIController : MonoBehaviour, IUIContoller
+public class ChoiceUIController : MonoBehaviour, IUIController
 {
     /****** Private fields ******/
     private string choicelUIName = "Choice UI";
@@ -46,6 +46,12 @@ public class ChoiceUIController : MonoBehaviour, IUIContoller
             inputOptionSubmitButton.onClick.AddListener(()=>OnChoiceSelect(choiceUI.childCount));
             inputField = inputOption.Find(inputFieldName).GetComponent<TMP_InputField>();
         }
+    }
+
+    public void Start()
+    {
+        // Add current UI controller
+        UIController.Instance.AddUIController(SUBUI.CHOICE, Instance);
     }
 
     /****** Methods ******/

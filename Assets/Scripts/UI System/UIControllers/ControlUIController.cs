@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UIEnums;
 
-public class ControlUIController : MonoBehaviour, IUIContoller
+public class ControlUIController : MonoBehaviour, IUIController
 {
     /****** Private fields ******/
     private string controlUIName = "Control UI";
@@ -25,6 +26,12 @@ public class ControlUIController : MonoBehaviour, IUIContoller
                 return;
             }
         }
+    }
+
+    public void Start()
+    {
+        // Add current UI controller
+        UIController.Instance.AddUIController(BASEUI.CONTROL, Instance);
     }
 
     /****** Methods ******/

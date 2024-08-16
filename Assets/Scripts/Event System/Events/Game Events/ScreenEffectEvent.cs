@@ -27,9 +27,9 @@ public class ScreenEffectEvent : GameEvent
     public override void PlayEvent()
     {
         // Use GameEventManger to start coroutine
-        GameEventManager.Instance.StartCoroutineForGameEvents(PlayEventCoroutine());
+        GameEventManager.Instance.StartCoroutine(PlayEventCoroutine());
     }
-    IEnumerator PlayEventCoroutine()
+    public override IEnumerator PlayEventCoroutine()
     {
         ScreenEffecter screenEffecter = UtilityManager.Instance.GetUtilityTool<ScreenEffecter>();
 

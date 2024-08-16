@@ -6,7 +6,7 @@ using UIEnums;
 
 /* Part of UIController which manages Pause UI logic */
 
-public class PauseUIController : MonoBehaviour, IUIContoller
+public class PauseUIController : MonoBehaviour, IUIController
 {
     /****** Private fields ******/
     private string pauseUIName = "Pause UI";
@@ -53,6 +53,12 @@ public class PauseUIController : MonoBehaviour, IUIContoller
             confirmBox.Find(confirmButtonName).GetComponent<Button>().onClick.AddListener(ReturnToTitle);
             confirmBox.Find(cancelButtonName).GetComponent<Button>().onClick.AddListener(Cancel);
         }
+    }
+
+    public void Start()
+    {
+        // Add current UI controller
+        UIController.Instance.AddUIController(SUBUI.PAUSE, Instance);
     }
 
     /****** Methods ******/

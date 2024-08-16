@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using UIEnums;
 using UnityEngine;
 
 /* Part of UIController which manages Title UI logic */
 
-public class SplashScreenUIController : MonoBehaviour, IUIContoller
+public class SplashScreenUIController : MonoBehaviour, IUIController
 {
     /****** Private fields ******/
     private string splashScreenUIName = "Splash Screen UI";
@@ -29,6 +30,12 @@ public class SplashScreenUIController : MonoBehaviour, IUIContoller
                 return;
             }
         }
+    }
+
+    public void Start()
+    {
+        // Add current UI controller
+        UIController.Instance.AddUIController(BASEUI.SPLASH_SCREEN, Instance);
     }
 
     /****** UI Methods ******/

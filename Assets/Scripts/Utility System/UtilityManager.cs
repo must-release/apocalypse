@@ -44,6 +44,7 @@ public class UtilityManager : MonoBehaviour
     {
         if (utility != null && activeUtilities.Contains(utility))
         {
+            utility.ResetTool();
             activeUtilities.Remove(utility);
         }
     }

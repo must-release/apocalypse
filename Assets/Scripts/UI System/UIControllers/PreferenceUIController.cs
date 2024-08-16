@@ -6,7 +6,7 @@ using System;
 
 /* Part of UIController which manages Preference UI logic */
 
-public class PreferenceUIController : MonoBehaviour, IUIContoller
+public class PreferenceUIController : MonoBehaviour, IUIController
 {
     /****** Private fields ******/
     private string preferenceUIName = "Preference UI";
@@ -82,10 +82,10 @@ public class PreferenceUIController : MonoBehaviour, IUIContoller
             }
         }
     }
-
     public void Start()
     {
-
+        // Add current UI controller
+        UIController.Instance.AddUIController(SUBUI.PREFERENCE, Instance);
     }
 
     /****** Methods ******/

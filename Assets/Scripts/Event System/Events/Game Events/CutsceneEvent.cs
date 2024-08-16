@@ -7,6 +7,8 @@ using EventEnums;
 [CreateAssetMenu(fileName = "NewCutscene", menuName = "Event/CutsceneEvent", order = 0)]
 public class CutsceneEvent : GameEvent
 {
+    private Coroutine cutsceneCoroutine;
+
     // Set event Type on load
     public void OnEnable()
     {
@@ -31,18 +33,18 @@ public class CutsceneEvent : GameEvent
     public override void PlayEvent()
     {
         // Use GameEventManger to start coroutine
-        GameEventManager.Instance.StartCoroutineForGameEvents(PlayEventCoroutine());
+        cutsceneCoroutine = GameEventManager.Instance.StartCoroutine(PlayEventCoroutine());
     }
-    IEnumerator PlayEventCoroutine()
+    public override IEnumerator PlayEventCoroutine()
     {
         // Change to cutscene UI
         UIController.Instance.ChangeBaseUI(BASEUI.CUTSCENE);
 
         // Play cutscene
-        GamePlayController.Instance.PlayCutscene();
+        GamePlayManager.Instance.PlayCutscene();
 
         // Wait for cutscene to end
-        while (GamePlayController.Instance.IsCutscenePlaying)
+        while (GamePlayManager.Instance.IsCutscenePlaying)
         {
             yield return null;
         }
@@ -51,4 +53,9 @@ public class CutsceneEvent : GameEvent
         GameEventManager.Instance.TerminateGameEvent(this);
     }
 
+    // Terminate cutscene event
+    public override void TerminateEvent()
+    {
+        GameEventManager.Instance.StopCoroutine(cutsceneCoroutine);
+    }
 }

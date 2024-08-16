@@ -4,10 +4,11 @@ using UnityEngine.EventSystems;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using UIEnums;
 
 /* Part of UIController which manages Title UI logic */
 
-public class LoadingUIController : MonoBehaviour, IUIContoller
+public class LoadingUIController : MonoBehaviour, IUIController
 {
     /****** Private fields ******/
     private string loadingUIName = "Loading UI";
@@ -31,6 +32,12 @@ public class LoadingUIController : MonoBehaviour, IUIContoller
                 return;
             }
         }
+    }
+
+    public void Start()
+    {
+        // Add current UI controller
+        UIController.Instance.AddUIController(BASEUI.LOADING, Instance);
     }
 
     /****** UI Methods ******/

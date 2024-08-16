@@ -2,6 +2,7 @@
 using UnityEngine;
 using EventEnums;
 using UIEnums;
+using System.Collections;
 
 [Serializable]
 public class GameEvent : ScriptableObject
@@ -31,6 +32,11 @@ public class GameEvent : ScriptableObject
     public virtual void PlayEvent()
     {
         return;
+    }
+
+    public virtual IEnumerator PlayEventCoroutine()
+    {
+        return default;
     }
 
     // Terminate this game event

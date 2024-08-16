@@ -14,6 +14,8 @@ public class StoryEvent : GameEvent
     public int readEntryCount;
     public bool onMap; // If story is played on the map
 
+    private Coroutine storyCoroutine;
+
     // Set event Type on load
     public void OnEnable()
     {
@@ -38,16 +40,18 @@ public class StoryEvent : GameEvent
     public override void PlayEvent()
     {
         // Use GameEventManger to start coroutine
-        GameEventManager.Instance.StartCoroutineForGameEvents(PlayEventCoroutine());
+        storyCoroutine = GameEventManager.Instance.StartCoroutine(PlayEventCoroutine());
     }
-    IEnumerator PlayEventCoroutine()
+    public override IEnumerator PlayEventCoroutine()
     {
         // Change to story UI
         UIController.Instance.ChangeBaseUI(BASEUI.STORY);
 
         // Start Story
+        InputEventProducer.Instance.LockInput(true);
         string story = "STORY_" + stage.ToString() + '_' + storyNum;
         yield return StoryController.Instance.StartStory(story, readBlockCount, readEntryCount);
+        InputEventProducer.Instance.LockInput(false);
 
         // Wait for story to end
         while (StoryController.Instance.IsStoryPlaying)
@@ -71,5 +75,8 @@ public class StoryEvent : GameEvent
     {
         // Tell StoryController to finish story
         StoryController.Instance.FinishStory();
+
+        // Stop story coroutine
+        GameEventManager.Instance.StopCoroutine(storyCoroutine);
     }
 }

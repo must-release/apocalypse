@@ -2,7 +2,7 @@
 using System.Collections;
 using UIEnums;
 using EventEnums;
-
+using System.Collections.Generic;
 
 public class GameEventManager : MonoBehaviour
 {
@@ -43,12 +43,6 @@ public class GameEventManager : MonoBehaviour
 		// Play event
 		playingEvent.PlayEvent();
 	}
-
-	// Play coroutine for game events, which are scriptable objects
-    public Coroutine StartCoroutineForGameEvents(IEnumerator coroutine)
-    {
-        return StartCoroutine(coroutine);
-    }
 
     // Terminate target game event
     public void TerminateGameEvent(GameEvent terminatingEvent, bool succeeding = false)

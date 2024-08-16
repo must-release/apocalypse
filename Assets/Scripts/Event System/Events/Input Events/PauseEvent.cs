@@ -4,16 +4,27 @@ using UIEnums;
 using EventEnums;
 using System.Collections.Generic;
 
-public class PauseEvent : InputEvent
+public class PauseEvent : InputEvent, KeySettingsObserver
 {
+    public void Start()
+    {
+        SettingsManager.Instance.AddObserver(this);
+    }
+
+    // Update key binding
+    public void KeySettingsUpdated()
+    {
+        eventButton = SettingsManager.Instance.KeySettingInfo.pauseButton;
+    }
+
     // Check compatibiliry with event list and current UI
     public override bool CheckCompatibility(List<InputEvent> eventList, BASEUI baseUI, SUBUI subUI)
     {
         bool isEventListEmpty = eventList.Count == 0;
-        bool isValidUI = baseUI == BASEUI.CONTROL || baseUI == BASEUI.STORY || subUI == SUBUI.CHOICE;
-        bool isInvalidUI = subUI == SUBUI.PAUSE; 
+        bool isValidBaseUI = baseUI == BASEUI.CONTROL || baseUI == BASEUI.STORY;
+        bool isValidSubUI = subUI == SUBUI.CHOICE || subUI == SUBUI.NONE;
 
-        return isEventListEmpty && isValidUI && !isInvalidUI;
+        return isEventListEmpty && isValidBaseUI && isValidSubUI;
     }
 
     // Play pause event
