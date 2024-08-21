@@ -26,9 +26,9 @@ public class SettingsManager : MonoBehaviour
             LoadSettings();
             PrintCurrentSettings();
 
-            KeySettingInfo.cancelButton = KeyCode.Escape;
-            KeySettingInfo.confirmButton = KeyCode.Return;
-            KeySettingInfo.pauseButton = KeyCode.Escape;
+            KeySettingInfo.cancelButton = new GameButton("Cancel", KeyCode.Escape);
+            KeySettingInfo.confirmButton = new GameButton("Confirm", KeyCode.Return);
+            KeySettingInfo.pauseButton = new GameButton("Pause", KeyCode.Escape);
 
             
             ChangeKeySettings(KeySettingInfo);
@@ -42,7 +42,7 @@ public class SettingsManager : MonoBehaviour
         try
         {
             string preferenceSettingsJson = JsonUtility.ToJson(PreferenceSettingInfo);
-            string keySettingsJson = JsonUtility.ToJson(KeySettingInfo);
+            string keySettingsJson = JsonUtility.ToJson(KeySettingInfo, true);
 
             string preferenceSettingsPath = Application.persistentDataPath + "/PreferenceSettingInfo.json";
             string keySettingsPath = Application.persistentDataPath + "/KeySettingInfo.json";
@@ -74,20 +74,20 @@ public class SettingsManager : MonoBehaviour
 
             KeySettingInfo = new KeySettings
             {
-                cancelButton = KeyCode.Escape,
-                pauseButton = KeyCode.Escape,
-                confirmButton = KeyCode.Return,
-                UpButton = KeyCode.W,
-                RightButton = KeyCode.D,
-                LeftButton = KeyCode.A,
-                DownButton = KeyCode.S,
-                AttackButton = KeyCode.Mouse0,
-                AimButton = KeyCode.Mouse1,
-                SpecialAttackButton = KeyCode.Mouse2,
-                TagButton = KeyCode.Tab,
-                AssistAttackButton = KeyCode.Q,
-                InteractionButton = KeyCode.E,
-                JumpButton = KeyCode.Space,
+                cancelButton = new GameButton("Cancel", KeyCode.Escape),
+                pauseButton = new GameButton("Pause", KeyCode.Escape),
+                confirmButton = new GameButton("Confirm", KeyCode.Return),
+                upButton = new GameButton("Up", KeyCode.W),
+                RightButton = new GameButton("Right", KeyCode.D),
+                LeftButton = new GameButton("Left", KeyCode.A),
+                DownButton = new GameButton("Down", KeyCode.S),
+                AttackButton = new GameButton("Attack", KeyCode.Mouse0),
+                AimButton = new GameButton("Aim", KeyCode.Mouse1),
+                SpecialAttackButton = new GameButton("Special Attack", KeyCode.Mouse2),
+                TagButton = new GameButton("Tag", KeyCode.Tab),
+                AssistAttackButton = new GameButton("Assist Attack", KeyCode.Q),
+                InteractionButton = new GameButton("Interaction", KeyCode.E),
+                JumpButton = new GameButton("Jump", KeyCode.Space),
             };
 
             SaveSettings();
@@ -283,20 +283,33 @@ public class PreferenceSettings
 }
 
 [System.Serializable]
+public class GameButton
+{
+    public string buttonName;
+    public KeyCode buttonKeyCode;
+
+    public GameButton(string buttonName, KeyCode buttonKeyCode)
+    {
+        this.buttonName = buttonName;
+        this.buttonKeyCode = buttonKeyCode;
+    }
+}
+
+[System.Serializable]
 public class KeySettings
 {
-    public KeyCode cancelButton;
-    public KeyCode pauseButton;
-    public KeyCode confirmButton;
-    public KeyCode UpButton;
-    public KeyCode RightButton;
-    public KeyCode LeftButton;
-    public KeyCode DownButton;
-    public KeyCode JumpButton;
-    public KeyCode AttackButton;
-    public KeyCode AssistAttackButton;
-    public KeyCode AimButton;
-    public KeyCode SpecialAttackButton;
-    public KeyCode TagButton;
-    public KeyCode InteractionButton;
+    public GameButton cancelButton;
+    public GameButton pauseButton;
+    public GameButton confirmButton;
+    public GameButton upButton;
+    public GameButton RightButton;
+    public GameButton LeftButton;
+    public GameButton DownButton;
+    public GameButton JumpButton;
+    public GameButton AttackButton;
+    public GameButton AssistAttackButton;
+    public GameButton AimButton;
+    public GameButton SpecialAttackButton;
+    public GameButton TagButton;
+    public GameButton InteractionButton;
 }
