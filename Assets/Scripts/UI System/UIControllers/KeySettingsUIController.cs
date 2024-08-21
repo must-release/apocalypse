@@ -86,7 +86,10 @@ public class KeySettingsUIController : MonoBehaviour, IUIController
     // Load existing key settings from SettingsManager
     private void LoadExistingKeySettings()
     {
+        // Load key settings
         var keySettings = SettingsManager.Instance.KeySettingInfo;
+
+        // Create and initialize Key Box objects according to the settings
         FieldInfo[] fields = keySettings.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
         for (int i = 0; i < fields.Length; i++)
         {
@@ -95,7 +98,7 @@ public class KeySettingsUIController : MonoBehaviour, IUIController
             // Instantiate a new keyBox if it's not the first iteration
             GameObject newKeyBox = i > 0 ? Instantiate(keyBox, content) : keyBox;
 
-            // Set the name of the new key box
+            // Set the name of the new key box and key text
             newKeyBox.name = gameButton.buttonName + keyBoxPath;
             newKeyBox.transform.Find("Key Text").GetComponent<TextMeshProUGUI>().text = gameButton.buttonName;
 
