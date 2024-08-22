@@ -329,7 +329,7 @@ public class KeySettingsUIController : MonoBehaviour, IUIController
         switch (keyCode)
         {
             case KeyCode.Mouse0:
-                return "left Click";
+                return "Left Click";
             case KeyCode.Mouse1:
                 return "Right Click";
             case KeyCode.Mouse2:

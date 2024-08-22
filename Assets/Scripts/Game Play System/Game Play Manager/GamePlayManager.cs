@@ -16,15 +16,19 @@ public class GamePlayManager : MonoBehaviour
         }
     }
 
-    public void PlayCutscene()
-    {
-        StartCoroutine(CutsceneCoroutine());
-    }
+    // Play Cutscene
+    public void PlayCutscene() { StartCoroutine(CutsceneCoroutine()); }
     IEnumerator CutsceneCoroutine()
     {
         IsCutscenePlaying = true;
         Debug.Log("Playing cutscene");
         yield return new WaitForSeconds(3);
         IsCutscenePlaying = false;
+    }
+
+    // Control player character
+    public void ControlPlayerCharacter(ControlInfo controlInfo)
+    {
+
     }
 }
