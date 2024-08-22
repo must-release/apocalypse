@@ -78,16 +78,16 @@ public class SettingsManager : MonoBehaviour
                 pauseButton = new GameButton("Pause", KeyCode.Escape),
                 confirmButton = new GameButton("Confirm", KeyCode.Return),
                 upButton = new GameButton("Up", KeyCode.W),
-                RightButton = new GameButton("Right", KeyCode.D),
-                LeftButton = new GameButton("Left", KeyCode.A),
-                DownButton = new GameButton("Down", KeyCode.S),
-                AttackButton = new GameButton("Attack", KeyCode.Mouse0),
-                AimButton = new GameButton("Aim", KeyCode.Mouse1),
-                SpecialAttackButton = new GameButton("Special Attack", KeyCode.Mouse2),
-                TagButton = new GameButton("Tag", KeyCode.Tab),
-                AssistAttackButton = new GameButton("Assist Attack", KeyCode.Q),
-                InteractionButton = new GameButton("Interaction", KeyCode.E),
-                JumpButton = new GameButton("Jump", KeyCode.Space),
+                rightButton = new GameButton("Right", KeyCode.D),
+                leftButton = new GameButton("Left", KeyCode.A),
+                downButton = new GameButton("Down", KeyCode.S),
+                attackButton = new GameButton("Attack", KeyCode.Mouse0),
+                aimButton = new GameButton("Aim", KeyCode.Mouse1),
+                specialAttackButton = new GameButton("Special Attack", KeyCode.Mouse2),
+                tagButton = new GameButton("Tag", KeyCode.Tab),
+                assistAttackButton = new GameButton("Assist Attack", KeyCode.Q),
+                interactionButton = new GameButton("Interaction", KeyCode.E),
+                jumpButton = new GameButton("Jump", KeyCode.Space),
             };
 
             SaveSettings();
@@ -302,14 +302,14 @@ public class KeySettings
     public GameButton pauseButton;
     public GameButton confirmButton;
     public GameButton upButton;
-    public GameButton RightButton;
-    public GameButton LeftButton;
-    public GameButton DownButton;
-    public GameButton JumpButton;
-    public GameButton AttackButton;
-    public GameButton AssistAttackButton;
-    public GameButton AimButton;
-    public GameButton SpecialAttackButton;
-    public GameButton TagButton;
-    public GameButton InteractionButton;
+    public GameButton rightButton;
+    public GameButton leftButton;
+    public GameButton downButton;
+    public GameButton jumpButton;
+    public GameButton attackButton;
+    public GameButton assistAttackButton;
+    public GameButton aimButton;
+    public GameButton specialAttackButton;
+    public GameButton tagButton;
+    public GameButton interactionButton;
 }

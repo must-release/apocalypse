@@ -358,5 +358,4 @@ public class KeySettingsUIController : MonoBehaviour, IUIController
                 return keyCode.ToString();
         }
     }
-
 }
