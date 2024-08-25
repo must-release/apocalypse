@@ -55,10 +55,7 @@ public class GameSceneController : MonoBehaviour
 	// Get Player Transform
 	public Transform FindPlayerTransform()
 	{
-		if(GameSceneModel.Instance.CurrentScene != SCENE.TITLE)
-			return GameSceneModel.Instance.Player;
-		else
-			return null;
+		return GameSceneModel.Instance.Player;
 	}
 }
 
