@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using CharacterEums;
 using UnityEngine;
 
 public class GamePlayManager : MonoBehaviour
@@ -24,6 +25,12 @@ public class GamePlayManager : MonoBehaviour
         Debug.Log("Playing cutscene");
         yield return new WaitForSeconds(3);
         IsCutscenePlaying = false;
+    }
+
+    // Initialize Player transform, info
+    public void InitializePlayer(Transform player, CHARACTER character)
+    {
+
     }
 
     // Control player character
