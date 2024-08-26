@@ -62,7 +62,7 @@ public class SceneActivateEvent : GameEvent
         if(player != null)
         {
             CHARACTER character = PlayerManager.Instance.Character;
-            GamePlayManager.Instance.InitializePlayer(player, character);
+            GamePlayManager.Instance.InitializePlayerCharacter(player, character);
         }
 
         // Activate game scene

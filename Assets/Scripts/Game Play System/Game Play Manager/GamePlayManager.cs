@@ -28,9 +28,9 @@ public class GamePlayManager : MonoBehaviour
     }
 
     // Initialize Player transform, info
-    public void InitializePlayer(Transform player, CHARACTER character)
+    public void InitializePlayerCharacter(Transform player, CHARACTER character)
     {
-
+        CharacterManager.Instance.SetPlayerCharacter(player, character);
     }
 
     // Control player character
