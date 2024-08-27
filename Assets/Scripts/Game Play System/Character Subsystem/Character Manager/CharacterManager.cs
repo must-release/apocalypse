@@ -30,4 +30,10 @@ public class CharacterManager : MonoBehaviour
         // Set player State
         playerController.SetPlayerState(who);
     }
+
+    // Execute control of the character
+    public void ExecuteCharacterControl()
+    {
+
+    }
 }

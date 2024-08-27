@@ -14,6 +14,7 @@ namespace StageEnums
 namespace CharacterEums
 {
     public enum CHARACTER { HERO, HEROINE }
+    public enum  CHARACTER_STATE { IDLE, TAGGING }
 }
 
 namespace EventEnums
