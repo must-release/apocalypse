@@ -31,11 +31,14 @@ public class GamePlayManager : MonoBehaviour
     public void InitializePlayerCharacter(Transform player, CHARACTER character)
     {
         CharacterManager.Instance.SetPlayerCharacter(player, character);
+
+        CameraController.Instance.AttachCamera(player, 0.1f);
     }
 
     // Control player character
     public void ControlPlayerCharacter(ControlInfo controlInfo)
     {
-
+        // Control player
+        CharacterManager.Instance.ExecutePlayerControl(controlInfo);
     }
 }

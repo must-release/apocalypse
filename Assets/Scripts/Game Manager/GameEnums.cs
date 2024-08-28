@@ -14,7 +14,8 @@ namespace StageEnums
 namespace CharacterEums
 {
     public enum CHARACTER { HERO, HEROINE }
-    public enum  CHARACTER_STATE { IDLE, TAGGING }
+    public enum CHARACTER_LOWER_STATE { IDLE, RUNNING, JUMPING, CLIMBING, TAGGING, DAMAGED }
+    public enum CHARACTER_UPPER_STATE { DISABLED, IDLE, RUNNING, JUMPING, LOOKING_UP, AIMING, ATTACKING, TOP_ATTACKING }
 }
 
 namespace EventEnums

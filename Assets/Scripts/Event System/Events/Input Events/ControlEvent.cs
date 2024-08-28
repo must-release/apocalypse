@@ -46,18 +46,21 @@ public class ControlEvent : InputEvent, KeySettingsObserver
     // Set control info according to pressed keys
     private bool SetControlInfo()
     {
-        if (Input.GetKey(upButton)) controlInfo.move += new Vector2(0, 1);
-        if (Input.GetKey(rightButton)) controlInfo.move += new Vector2(1, 0);
-        if (Input.GetKey(leftButton)) controlInfo.move += new Vector2(-1, 0);
-        if (Input.GetKey(downButton)) controlInfo.move += new Vector2(0, -1);
-        if (Input.GetKeyDown(jumpButton)) controlInfo.jump = true;
-        if (Input.GetKeyDown(attackButton)) controlInfo.attack = true;
-        if (Input.GetKeyDown(assistAttackButton)) controlInfo.assistAttack = true;
-        if (Input.GetKeyDown(specialAttackButton)) controlInfo.specialAttack = true;
-        if (Input.GetKeyDown(tagButton)) controlInfo.tag = true;
+        int temp = controlInfo.move;
+        controlInfo.move = 0;
+        if (Input.GetKey(rightButton)) controlInfo.move += 1;
+        if (Input.GetKey(leftButton)) controlInfo.move -= 1;
+        controlInfo.stop = temp != 0 && controlInfo.move == 0;
+        if (Input.GetKey(upButton)) controlInfo.upDown += 1;
+        if (Input.GetKey(downButton)) controlInfo.upDown += -1;
+        controlInfo.jump = Input.GetKeyDown(jumpButton);
+        controlInfo.attack = Input.GetKeyDown(attackButton);
+        controlInfo.assistAttack = Input.GetKeyDown(assistAttackButton);
+        controlInfo.specialAttack = Input.GetKeyDown(specialAttackButton);
+        controlInfo.tag = Input.GetKeyDown(tagButton);
 
-        return (controlInfo.move != Vector2.zero) || controlInfo.jump || controlInfo.assistAttack 
-            || controlInfo.specialAttack || controlInfo.tag;
+        return (controlInfo.move != 0) || controlInfo.stop || (controlInfo.upDown != 0) || controlInfo.jump || 
+            controlInfo.assistAttack || controlInfo.specialAttack || controlInfo.tag;
     }
 
     // Set aim info according to mouse position
@@ -86,9 +89,6 @@ public class ControlEvent : InputEvent, KeySettingsObserver
     {
         // Contorl player character according to control info
         GamePlayManager.Instance.ControlPlayerCharacter(controlInfo);
-
-        // Reset control info
-        controlInfo.Reset();
 
         // Terminate pause event
         InputEventManager.Instance.TerminateInputEvent(this);

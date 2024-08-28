@@ -8820,6 +8820,7 @@ GameObject:
   - component: {fileID: 5801506756640530622}
   - component: {fileID: 8818029070109070420}
   - component: {fileID: 1477098513816456262}
+  - component: {fileID: 8877140075692366385}
   m_Layer: 0
   m_Name: Game Play System
   m_TagString: Untagged
@@ -8864,6 +8865,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 762706a5d69e24f239d6e48889494351, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8877140075692366385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3882106793128070650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95c29f7039eaed34ab8a9c5cb5f0b5f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3899998822070797390

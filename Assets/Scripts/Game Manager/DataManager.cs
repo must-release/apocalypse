@@ -56,9 +56,9 @@ public class DataManager : MonoBehaviour
     public void CreateNewGameData()
     {
         // Initialize Info
-        string saveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm"); // Get current time
+        string saveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); // Get current time
         STAGE curStage = STAGE.TEST;
-        int curMap = 0;
+        int curMap = 2;
         GameEvent startingEvent = null;
         CHARACTER lastChar = CHARACTER.HERO;
         string playTime = "00:00";
@@ -103,7 +103,7 @@ public class DataManager : MonoBehaviour
         currentData.PlayTime = CalculatePlayTime(currentData.PlayTime, currentData.SaveTime);
 
         // Update save time
-        currentData.SaveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+        currentData.SaveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
         // Set starting event
         currentData.StartingEvent = startingEvent;
@@ -148,7 +148,7 @@ public class DataManager : MonoBehaviour
 
         // Parse save time
         DateTime saveDateTime;
-        if (!DateTime.TryParseExact(saveTime, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out saveDateTime))
+        if (!DateTime.TryParseExact(saveTime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out saveDateTime))
         {
             Console.WriteLine("Save time format is incorrect.");
             return existingPlayTime;
@@ -227,7 +227,7 @@ public class DataManager : MonoBehaviour
             .Where(u => u != null && !string.IsNullOrWhiteSpace(u.SaveTime))
             .OrderByDescending(u =>
             {
-                DateTime.TryParseExact(u.SaveTime, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate);
+                DateTime.TryParseExact(u.SaveTime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate);
                 return parsedDate;
             })
             .FirstOrDefault();

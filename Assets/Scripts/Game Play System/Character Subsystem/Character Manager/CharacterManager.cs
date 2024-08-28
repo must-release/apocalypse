@@ -8,32 +8,83 @@ public class CharacterManager : MonoBehaviour
     public static CharacterManager Instance;
 
     private PlayerController playerController;
+    private Dictionary<string, ICharacter> actorDictionary;
 
     private void Awake()
     {
         if(Instance == null)
         {
             Instance = this;
+            actorDictionary = new Dictionary<string, ICharacter>();
         }
     }
 
     // Set player character transform, info
-    public void SetPlayerCharacter(Transform transform, CHARACTER who)
+    public void SetPlayerCharacter(Transform player, CHARACTER who)
     {
         // Find player controller
-         playerController = transform.GetComponent<PlayerController>();
+        playerController = player.GetComponent<PlayerController>();
          if(playerController == null)
          {
             Debug.LogError("Falied to find PlayerController");
          }
 
         // Set player State
-        playerController.SetPlayerState(who);
+        playerController.SetPlayer(who);
     }
 
-    // Execute control of the character
-    public void ExecuteCharacterControl()
+    // Add cutscene actor to the dictionary
+    public void SetActorCharacter(string actorName, Transform actor)
     {
-
+        ICharacter character = actor.GetComponent<ICharacter>();
+        actorDictionary.Add(actorName, character);
     }
+
+    // Reset actor dictionary
+    public void ClearActorCharacters()
+    {
+        actorDictionary.Clear();
+    }
+
+    // Execute control of the player character
+    public void ExecutePlayerControl(ControlInfo controlInfo)
+    {
+        if (playerController == null)
+        {
+            Debug.LogError("playerController not initialied");
+        }
+        playerController.ControlCharacter(controlInfo);
+    }
+
+    // Execute control of the actor character
+    public void ExecuteActorControl(ControlInfo controlInfo, string actorName)
+    {
+        if(actorDictionary.ContainsKey(actorName))
+        {
+            actorDictionary[actorName].ControlCharacter(controlInfo);
+        }
+        else
+        {
+            Debug.LogError("No such actor: " + actorName);
+        }
+    }
+
+    public Vector3 GetPlayerPosition()
+    {
+        if(playerController != null)
+        {
+            return playerController.transform.position;
+        }
+        else
+        {
+            Debug.LogError("playerController is not initiallized");
+            return Vector3.zero;
+        }
+    }
+
+}
+
+public interface ICharacter
+{
+    public void ControlCharacter(ControlInfo controlInfo);
 }
