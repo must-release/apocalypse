@@ -2,6 +2,7 @@
 using System.Collections;
 using UIEnums;
 using EventEnums;
+using CharacterEums;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "NewSceneActivate", menuName = "Event/SceneActivateEvent", order = 0)]
@@ -54,6 +55,14 @@ public class SceneActivateEvent : GameEvent
             {
                 yield return null;
             }
+        }
+
+        // Initialize player character for game play
+        Transform player = GameSceneController.Instance.FindPlayerTransform();
+        if(player != null)
+        {
+            CHARACTER character = PlayerManager.Instance.Character;
+            GamePlayManager.Instance.InitializePlayerCharacter(player, character);
         }
 
         // Activate game scene

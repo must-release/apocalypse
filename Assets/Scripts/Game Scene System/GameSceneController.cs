@@ -51,5 +51,11 @@ public class GameSceneController : MonoBehaviour
 		// Activate loaded scene objects
 		GameSceneModel.Instance.SetActiveSceneObjects(true);
 	}
+
+	// Get Player Transform
+	public Transform FindPlayerTransform()
+	{
+		return GameSceneModel.Instance.Player;
+	}
 }
 

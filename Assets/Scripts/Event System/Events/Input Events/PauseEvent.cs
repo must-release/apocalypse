@@ -14,7 +14,7 @@ public class PauseEvent : InputEvent, KeySettingsObserver
     // Update key binding
     public void KeySettingsUpdated()
     {
-        eventButton = SettingsManager.Instance.KeySettingInfo.pauseButton;
+        eventButton = SettingsManager.Instance.KeySettingInfo.pauseButton.buttonKeyCode;
     }
 
     // Check compatibiliry with event list and current UI

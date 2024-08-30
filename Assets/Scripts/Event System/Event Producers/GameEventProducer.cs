@@ -36,7 +36,7 @@ public class GameEventProducer : MonoBehaviour
 
         // First, set UI to splash scren UI
         ChangeUIEvent changeUIEvent = ScriptableObject.CreateInstance<ChangeUIEvent>();
-        changeUIEvent.changingUI = BASEUI.CONTROL; //BASEUI.SPLASH_SCREEN;
+        changeUIEvent.changingUI = BASEUI.TITLE; //BASEUI.SPLASH_SCREEN;
 
         // // Second, load title scene asynchronously
         // SceneLoadEvent sceneLoadEvent = ScriptableObject.CreateInstance<SceneLoadEvent>();

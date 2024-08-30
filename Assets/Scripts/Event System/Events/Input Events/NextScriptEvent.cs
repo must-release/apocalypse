@@ -14,7 +14,7 @@ public class NextScriptEvent : InputEvent, KeySettingsObserver
     // Update key binding
     public void KeySettingsUpdated()
     {
-        eventButton = SettingsManager.Instance.KeySettingInfo.confirmButton;
+        eventButton = SettingsManager.Instance.KeySettingInfo.confirmButton.buttonKeyCode;
     }
 
     // Detect if event button is pressed or panel is clicked

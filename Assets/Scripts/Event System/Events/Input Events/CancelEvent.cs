@@ -14,7 +14,7 @@ public class CancelEvent : InputEvent, KeySettingsObserver
     // Update key binding
     public void KeySettingsUpdated()
     {
-        eventButton = SettingsManager.Instance.KeySettingInfo.cancelButton;
+        eventButton = SettingsManager.Instance.KeySettingInfo.cancelButton.buttonKeyCode;
     }
 
     // Check compatibiliry with event list and current UI
