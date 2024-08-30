@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class TempPlayerController : MonoBehaviour
 {
-    public float moveSpeed = 5f; // ÇÃ·¹ÀÌ¾î ÀÌµ¿ ¼Óµµ
-    public float jumpForce = 10f; // Á¡ÇÁ Èû
-    public Transform groundCheck; // ¹Ù´Ú Ã¼Å©¸¦ À§ÇÑ À§Ä¡
-    public float groundCheckRadius = 0.2f; // ¹Ù´Ú Ã¼Å©¸¦ À§ÇÑ ¿øÀÇ ¹ÝÁö¸§
-    public LayerMask groundLayer; // ¹Ù´Ú Ã¼Å©¸¦ À§ÇÑ ·¹ÀÌ¾î
-    public float fallMultiplier = 2.5f; // ÇÏ°­ ½Ã Ãß°¡ Èû
+    public float moveSpeed = 5f; // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ìµï¿½ ï¿½Óµï¿½
+    public float jumpForce = 10f; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+    public Transform groundCheck; // ï¿½Ù´ï¿½ Ã¼Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡
+    public float groundCheckRadius = 0.2f; // ï¿½Ù´ï¿½ Ã¼Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public LayerMask groundLayer; // ï¿½Ù´ï¿½ Ã¼Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¾ï¿½
+    public float fallMultiplier = 2.5f; // ï¿½Ï°ï¿½ ï¿½ï¿½ ï¿½ß°ï¿½ ï¿½ï¿½
 
     private Rigidbody2D rb;
     private bool isGrounded;
@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
 
-        // ÇÏ°­ ½Ã Ãß°¡ÀûÀÎ ÈûÀ» °¡ÇÔ
+        // ï¿½Ï°ï¿½ ï¿½ï¿½ ï¿½ß°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (rb.velocity.y < 0)
         {
             rb.velocity += Vector2.down * fallMultiplier * Time.deltaTime;

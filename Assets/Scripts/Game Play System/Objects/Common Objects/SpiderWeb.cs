@@ -1,69 +1,69 @@
-using System.Collections;
-using UnityEngine;
+// using System.Collections;
+// using UnityEngine;
 
-public class SpiderWeb : MonoBehaviour
-{
-    public float slowDownFactor = 0.5f;  // ¼Óµµ¸¦ ¾ó¸¶³ª ´À¸®°Ô ÇÒÁö ºñÀ²·Î ¼³Á¤
-    public float gravityScaleFactor = 0.5f;  // Áß·Â ½ºÄÉÀÏÀ» ¾ó¸¶³ª ÁÙÀÏÁö ¼³Á¤
-    private float originalGravityScale;
-    private float originalMoveSpeed;
+// public class SpiderWeb : MonoBehaviour
+// {
+//     public float slowDownFactor = 0.5f;  // ï¿½Óµï¿½ï¿½ï¿½ ï¿½ó¸¶³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+//     public float gravityScaleFactor = 0.5f;  // ï¿½ß·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ó¸¶³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+//     private float originalGravityScale;
+//     private float originalMoveSpeed;
 
-    void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
-            PlayerController playerController = collision.gameObject.GetComponent<PlayerController>();
+//     void OnTriggerEnter2D(Collider2D collision)
+//     {
+//         if (collision.gameObject.CompareTag("Player"))
+//         {
+//             Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
+//             PlayerController playerController = collision.gameObject.GetComponent<PlayerController>();
 
-            if (rb != null && playerController != null)
-            {
-                // ¿ø·¡ÀÇ Áß·Â ½ºÄÉÀÏ°ú ÀÌµ¿ ¼Óµµ¸¦ ÀúÀå
-                originalGravityScale = rb.gravityScale;
-                originalMoveSpeed = playerController.moveSpeed;
+//             if (rb != null && playerController != null)
+//             {
+//                 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ìµï¿½ ï¿½Óµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+//                 originalGravityScale = rb.gravityScale;
+//                 originalMoveSpeed = playerController.moveSpeed;
 
-                // Áß·Â ½ºÄÉÀÏ°ú ÀÌµ¿ ¼Óµµ¸¦ ÁÙ¿© °Å¹ÌÁÙÀÇ ¿µÇâÀ» ÁÜ
-                rb.gravityScale *= gravityScaleFactor;
-                playerController.moveSpeed *= slowDownFactor;
+//                 // ï¿½ß·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ìµï¿½ ï¿½Óµï¿½ï¿½ï¿½ ï¿½Ù¿ï¿½ ï¿½Å¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+//                 rb.gravityScale *= gravityScaleFactor;
+//                 playerController.moveSpeed *= slowDownFactor;
 
-                // Á¡ÇÁ Áß Áß·Â ½ºÄÉÀÏÀÌ ºñÁ¤»óÀûÀ¸·Î ³·¾ÆÁöÁö ¾Êµµ·Ï Áß·Â ½ºÄÉÀÏ Á¶Á¤
-                playerController.SetGravityScale(originalGravityScale);
-            }
-        }
-    }
+//                 // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ß·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Êµï¿½ï¿½ï¿½ ï¿½ß·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+//                 playerController.SetGravityScale(originalGravityScale);
+//             }
+//         }
+//     }
 
-    void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
-            PlayerController playerController = collision.gameObject.GetComponent<PlayerController>();
+//     void OnTriggerExit2D(Collider2D collision)
+//     {
+//         if (collision.gameObject.CompareTag("Player"))
+//         {
+//             Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
+//             PlayerController playerController = collision.gameObject.GetComponent<PlayerController>();
 
-            if (rb != null && playerController != null)
-            {
-                // Áß·Â ½ºÄÉÀÏÀ» ¿ø·¡´ë·Î º¹±¸ (Á¡ÁøÀûÀ¸·Î)
-                StartCoroutine(RestoreGravity(rb));
+//             if (rb != null && playerController != null)
+//             {
+//                 // ï¿½ß·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+//                 StartCoroutine(RestoreGravity(rb));
 
-                // ÀÌµ¿ ¼Óµµ¸¦ Áï½Ã ¿ø·¡ ¼Óµµ·Î º¹±¸
-                playerController.moveSpeed = originalMoveSpeed;
+//                 // ï¿½Ìµï¿½ ï¿½Óµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+//                 playerController.moveSpeed = originalMoveSpeed;
 
-                // ÇÃ·¹ÀÌ¾îÀÇ Á¡ÇÁ Áß Áß·Â ½ºÄÉÀÏµµ ¿ø·¡ °ªÀ¸·Î º¹±¸
-                playerController.SetGravityScale(originalGravityScale);
-            }
-        }
-    }
+//                 // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ß·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+//                 playerController.SetGravityScale(originalGravityScale);
+//             }
+//         }
+//     }
 
-    private IEnumerator RestoreGravity(Rigidbody2D rb)
-    {
-        float elapsedTime = 0f;
-        float restoreDuration = 1f;  // Áß·Â º¹±¸¿¡ °É¸®´Â ½Ã°£
+//     private IEnumerator RestoreGravity(Rigidbody2D rb)
+//     {
+//         float elapsedTime = 0f;
+//         float restoreDuration = 1f;  // ï¿½ß·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½É¸ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½
 
-        while (elapsedTime < restoreDuration)
-        {
-            rb.gravityScale = Mathf.Lerp(rb.gravityScale, originalGravityScale, elapsedTime / restoreDuration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
+//         while (elapsedTime < restoreDuration)
+//         {
+//             rb.gravityScale = Mathf.Lerp(rb.gravityScale, originalGravityScale, elapsedTime / restoreDuration);
+//             elapsedTime += Time.deltaTime;
+//             yield return null;
+//         }
 
-        rb.gravityScale = originalGravityScale;  // ¿ÏÀüÈ÷ º¹±¸
-    }
-}
+//         rb.gravityScale = originalGravityScale;  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+//     }
+// }
