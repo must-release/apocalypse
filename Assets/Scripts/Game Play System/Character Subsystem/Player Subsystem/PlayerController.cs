@@ -78,7 +78,10 @@ public class PlayerController : MonoBehaviour, ICharacter
     // Control player's upper body
     private void ControlUpperBody(ControlInfo controlInfo)
     {
-        if(controlInfo.push || controlInfo.tag || controlInfo.hangingPosition != 0)
+        CHARACTER_LOWER_STATE lowerState = LowerState.GetState();
+
+        if (lowerState == CHARACTER_LOWER_STATE.PUSHING || lowerState == CHARACTER_LOWER_STATE.TAGGING ||
+            lowerState == CHARACTER_LOWER_STATE.CLIMBING)
         {
             UpperState.Disable();
         }

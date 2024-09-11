@@ -39,7 +39,7 @@ public interface IPlayerUpperState
     public void Jump();
     public void Aim(Vector3 aim);
     public void Attack();
-    public void LookUp(bool loopUp);
+    public void LookUp(bool lookUp);
     public void OnAir();
     public void OnGround();
     public void Tag();
