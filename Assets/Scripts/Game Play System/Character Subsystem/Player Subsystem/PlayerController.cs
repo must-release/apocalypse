@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour, ICharacter
 
     public void Update()
     {
+        // Update player's state
         LowerState?.UpdateState();
         UpperState?.UpdateState();
     }
@@ -50,30 +51,47 @@ public class PlayerController : MonoBehaviour, ICharacter
 
         // Set initial state
         LowerState = lowerStateDictionary[CHARACTER_LOWER_STATE.IDLE];
-
-
     }
 
     // Control player according to the control info
     public void ControlCharacter(ControlInfo controlInfo)
     {
-        if(controlInfo.move != 0)
-        {
-            LowerState.Move(controlInfo.move);
-        }
-        else if(controlInfo.stop)
-        {
-            LowerState.Stop();
-        }
+        // First, control lower body. Next, control upper body
+        ControlLowerBody(controlInfo);
+        ControlUpperBody(controlInfo);
+    }
 
-        if (controlInfo.jump)
-        {
-            LowerState.Jump();
-        }
+    // Control player's lower body
+    private void ControlLowerBody(ControlInfo controlInfo)
+    {
+        if (controlInfo.push) LowerState.Push(controlInfo.push);
+        if (controlInfo.move != 0) LowerState.Move(controlInfo.move);
+        else if (controlInfo.stop) LowerState.Stop();
+        if (controlInfo.jump) LowerState.Jump();
+        if (controlInfo.tag) LowerState.Tag();
+        if (controlInfo.aim != Vector3.zero) LowerState.Aim(true);
+        else LowerState.Aim(false);
+        if (controlInfo.upDown != 0 ) LowerState.UpDown(controlInfo.upDown);
+        if (controlInfo.hangingPosition != 0) LowerState.Hang(controlInfo.hangingPosition);
+    }
 
-        if (controlInfo.tag)
+    // Control player's upper body
+    private void ControlUpperBody(ControlInfo controlInfo)
+    {
+        if(controlInfo.push || controlInfo.tag || controlInfo.hangingPosition != 0)
         {
-            LowerState.Tag();
+            UpperState.Disable();
+        }
+        else
+        {
+            UpperState.Enable();
+            if (controlInfo.move != 0) UpperState.Move();
+            else if (controlInfo.stop) UpperState.Stop();
+            if (controlInfo.jump) UpperState.Jump();
+            UpperState.Aim(controlInfo.aim);
+            if (controlInfo.upDown > 0) UpperState.LookUp(true);
+            else UpperState.LookUp(false);
+            if (controlInfo.attack) UpperState.Attack();
         }
     }
 
@@ -103,27 +121,6 @@ public class PlayerController : MonoBehaviour, ICharacter
         UpperState.StartState();
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if(collision.gameObject.CompareTag("Ground"))
-        {
-            if(collision.gameObject == standingGround)
-            {
-                LowerState.OnAir();
-                standingGround = null;
-            }
-        }
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            LowerState.OnGround();
-            standingGround = collision.gameObject;
-        }
-    }
-
     public void AddLowerState(CHARACTER_LOWER_STATE stateKey, IPlayerLowerState state)
     {
         if (!lowerStateDictionary.ContainsKey(stateKey))
@@ -139,45 +136,26 @@ public class PlayerController : MonoBehaviour, ICharacter
             upperStateDictionary[stateKey] = state;
         }
     }
-}
 
-public interface IPlayer
-{
-    public void ShowCharacter(bool value);
-}
+    /********** Detect Collision **********/
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if(collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            if(collision.gameObject == standingGround)
+            {
+                LowerState.OnAir();
+                standingGround = null;
+            }
+        }
+    }
 
-public interface IPlayerLowerState
-{
-    public CHARACTER_LOWER_STATE GetState();
-    public void StartState();
-    public void UpdateState();
-    public void EndState();
-
-    public void Move(int move);
-    public void Stop();
-    public void UpDown(int upDown);
-    public void Jump();
-    public void Aim();
-    public void OnAir();
-    public void OnGround();
-    public void Tag();
-    public void Damaged();
-}
-
-public interface IPlayerUpperState
-{
-    public CHARACTER_UPPER_STATE GetState();
-    public void StartState();
-    public void UpdateState();
-    public void EndState();
-    public void Move(int move);
-    public void Stop();
-    public void Disable();
-    public void Enable();
-    public void Jump();
-    public void Aim();
-    public void OnAir();
-    public void OnGround();
-    public void Tag();
-    public void Damaged();
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            LowerState.OnGround();
+            standingGround = collision.gameObject;
+        }
+    } 
 }

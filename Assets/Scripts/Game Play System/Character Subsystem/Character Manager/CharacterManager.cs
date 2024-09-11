@@ -81,7 +81,6 @@ public class CharacterManager : MonoBehaviour
             return Vector3.zero;
         }
     }
-
 }
 
 public interface ICharacter

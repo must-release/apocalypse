@@ -55,7 +55,7 @@ public class RunningLowerState : MonoBehaviour, IPlayerLowerState
         playerController.ChangeLowerState(CHARACTER_LOWER_STATE.IDLE);
     }
 
-    public void UpDown(int upDown)
+    public void Climb(int upDown)
     {
 
     }
@@ -66,7 +66,7 @@ public class RunningLowerState : MonoBehaviour, IPlayerLowerState
         playerRigid.velocity = new Vector2(playerRigid.velocity.x, playerController.JumpingSpeed);
     }
 
-    public void Aim()
+    public void Aim(bool isAiming)
     {
 
     }
@@ -87,4 +87,7 @@ public class RunningLowerState : MonoBehaviour, IPlayerLowerState
     }
 
     public void OnGround() { return; }
+    public void Push(bool push) {return;}
+    public void UpDown(int upDown) {return;}
+    public void Hang(float hangingPos) {return;}
 }

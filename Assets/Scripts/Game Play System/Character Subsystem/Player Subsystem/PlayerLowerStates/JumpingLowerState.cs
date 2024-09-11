@@ -55,12 +55,12 @@ public class JumpingLowerState : MonoBehaviour, IPlayerLowerState
         playerRigid.velocity = new Vector2(0, playerRigid.velocity.y);
     }
 
-    public void UpDown(int upDown)
+    public void Climb(int upDown)
     {
 
     }
 
-    public void Aim()
+    public void Aim(bool isAiming)
     {
 
     }
@@ -83,4 +83,7 @@ public class JumpingLowerState : MonoBehaviour, IPlayerLowerState
     public void Jump() { return; }
 
     public void OnAir() { return; }
+    public void Push(bool push) {return;}
+    public void UpDown(int upDown) {return;}
+    public void Hang(float hangingPos) {return;}
 }

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IdleLowerState : MonoBehaviour, IPlayerLowerState
+public class AimingLowerState : MonoBehaviour, IPlayerLowerState
 {
     private Transform playerTransform;
     private PlayerController playerController;

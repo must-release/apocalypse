@@ -46,17 +46,27 @@ public class ControlEvent : InputEvent, KeySettingsObserver
     // Set control info according to pressed keys
     private bool SetControlInfo()
     {
+        // Set move & stop control
         int temp = controlInfo.move;
         controlInfo.move = 0;
         if (Input.GetKey(rightButton)) controlInfo.move += 1;
         if (Input.GetKey(leftButton)) controlInfo.move -= 1;
         controlInfo.stop = temp != 0 && controlInfo.move == 0;
-        if (Input.GetKey(upButton)) controlInfo.upDown += 1;
-        if (Input.GetKey(downButton)) controlInfo.upDown += -1;
+
+        // Set lookUp & climb control
+        controlInfo.upDown = 0;
+        if(Input.GetKey(upButton)) controlInfo.upDown += 1;
+        if(Input.GetKey(downButton)) controlInfo.upDown -= 1;
+
+        // Set jump control
         controlInfo.jump = Input.GetKeyDown(jumpButton);
+
+        // Set attack control
         controlInfo.attack = Input.GetKeyDown(attackButton);
         controlInfo.assistAttack = Input.GetKeyDown(assistAttackButton);
         controlInfo.specialAttack = Input.GetKeyDown(specialAttackButton);
+
+        // Set tag control
         controlInfo.tag = Input.GetKeyDown(tagButton);
 
         return (controlInfo.move != 0) || controlInfo.stop || (controlInfo.upDown != 0) || controlInfo.jump || 
@@ -87,7 +97,7 @@ public class ControlEvent : InputEvent, KeySettingsObserver
     // Play pause event
     public override void PlayEvent()
     {
-        // Contorl player character according to control info
+        // Control player character according to control info
         GamePlayManager.Instance.ControlPlayerCharacter(controlInfo);
 
         // Terminate pause event
