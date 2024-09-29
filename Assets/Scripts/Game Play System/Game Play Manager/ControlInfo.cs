@@ -2,10 +2,9 @@ using UnityEngine;
 
 public class ControlInfo
 {
+    // Input Control
     public int move;
-    public bool push;
     public bool stop;
-    public float hangingPosition;
     public int upDown;
     public bool jump;
     public bool attack;
@@ -13,4 +12,11 @@ public class ControlInfo
     public Vector3 aim;
     public bool specialAttack;
     public bool tag;
+    public bool tryInteract;
+
+    // Object Control
+    public bool climb;
+    public bool push;
+    public bool interact;
+
 }

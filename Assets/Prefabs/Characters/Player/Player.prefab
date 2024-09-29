@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 472802589428508414}
   - component: {fileID: 5599774064272922189}
   - component: {fileID: 7078589395153798833}
+  - component: {fileID: 1348946517842069816}
   m_Layer: 0
   m_Name: Lower State
   m_TagString: Untagged
@@ -114,6 +115,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ee2662d22200794897cc8507f0823a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1348946517842069816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 733912380070404862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50a1daf2dbe2043c0bfcf7154eb378e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3645786124481219758
@@ -271,7 +284,7 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 3836751109032054554}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 3b5ec1c8816844bc1ae3be0109981749, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -294,8 +307,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 3, y: 8}
+  m_Offset: {x: 0, y: -0.14268637}
+  m_Size: {x: 3, y: 7.714629}
   m_Direction: 0
 --- !u!50 &6248926791922391508
 Rigidbody2D:

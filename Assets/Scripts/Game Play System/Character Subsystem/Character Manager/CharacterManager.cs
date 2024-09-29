@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using CharacterEums;
 using UnityEngine;
@@ -8,14 +7,14 @@ public class CharacterManager : MonoBehaviour
     public static CharacterManager Instance;
 
     private PlayerController playerController;
-    private Dictionary<string, ICharacter> actorDictionary;
+    private Dictionary<string, CharacterBase> actorDictionary;
 
     private void Awake()
     {
         if(Instance == null)
         {
             Instance = this;
-            actorDictionary = new Dictionary<string, ICharacter>();
+            actorDictionary = new Dictionary<string, CharacterBase>();
         }
     }
 
@@ -36,7 +35,7 @@ public class CharacterManager : MonoBehaviour
     // Add cutscene actor to the dictionary
     public void SetActorCharacter(string actorName, Transform actor)
     {
-        ICharacter character = actor.GetComponent<ICharacter>();
+        CharacterBase character = actor.GetComponent<CharacterBase>();
         actorDictionary.Add(actorName, character);
     }
 
@@ -81,9 +80,4 @@ public class CharacterManager : MonoBehaviour
             return Vector3.zero;
         }
     }
-}
-
-public interface ICharacter
-{
-    public void ControlCharacter(ControlInfo controlInfo);
 }

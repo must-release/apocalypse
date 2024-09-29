@@ -71,11 +71,11 @@ public class TaggingLowerState : MonoBehaviour, IPlayerLowerState
 
     public void Tag() { return; }
     public void Move(int move) { return; }
-    public void Climb(int upDown) { return; }
+    public void Climb(bool climb) { return; }
     public void Jump() { return; }
     public void Aim(bool isAiming) { return; }
     public void Stop() { return; }
     public void Push(bool push) {return;}
     public void UpDown(int upDown) {return;}
-    public void Hang(float hangingPos) {return;}
+    public void Climb() {return;}
 }

@@ -17,7 +17,7 @@ public interface IPlayerLowerState
     public void Push(bool push);
     public void Stop();
     public void UpDown(int upDown);
-    public void Hang(float hangingPos);
+    public void Climb(bool climb);
     public void Jump();
     public void Aim(bool isAiming);
     public void OnAir();

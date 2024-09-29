@@ -36,24 +36,9 @@ public class IdleLowerState : MonoBehaviour, IPlayerLowerState
 
     }
 
-    public void Move(int move)
-    {
-        playerController.ChangeLowerState(CHARACTER_LOWER_STATE.RUNNING);
-    }
-
-    public void Climb(int upDown)
-    {
-
-    }
-
     public void Jump()
     {
-        // jump player
         playerRigid.velocity = new Vector2(playerRigid.velocity.x, playerController.JumpingSpeed);
-    }
-    public void Aim(bool isAiming)
-    {
-
     }
 
     public void OnAir()
@@ -61,14 +46,32 @@ public class IdleLowerState : MonoBehaviour, IPlayerLowerState
         playerController.ChangeLowerState(CHARACTER_LOWER_STATE.JUMPING);
     }
 
+    public void Aim(bool isAiming)
+    {
+        if (isAiming)
+        {
+            playerController.ChangeLowerState(CHARACTER_LOWER_STATE.AIMING);
+        }
+    }
+
+    public void Move(int move)
+    {
+        playerController.ChangeLowerState(CHARACTER_LOWER_STATE.RUNNING);
+    }
+
+    public void Damaged()
+    {
+        playerController.ChangeLowerState(CHARACTER_LOWER_STATE.DAMAGED);
+    }
+
     public void Tag()
     {
         playerController.ChangeLowerState(CHARACTER_LOWER_STATE.TAGGING);
     }
 
-    public void Damaged()
+    public void Climb(bool climb)
     {
-
+        if (climb) playerController.ChangeLowerState(CHARACTER_LOWER_STATE.CLIMBING);
     }
 
     public void OnGround() { return; }
@@ -76,5 +79,4 @@ public class IdleLowerState : MonoBehaviour, IPlayerLowerState
     public void Stop() { return; }
     public void Push(bool push) {return;}
     public void UpDown(int upDown) {return;}
-    public void Hang(float hangingPos) {return;}
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class InteractableObject : MonoBehaviour
+public class LegacyInteractableObject : MonoBehaviour
 {
     public float interactionRadius = 3f; 
     private bool isPlayerNearby = false; 

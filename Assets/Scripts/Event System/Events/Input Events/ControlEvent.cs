@@ -8,7 +8,7 @@ public class ControlEvent : InputEvent, KeySettingsObserver
 {
     private KeyCode 
     upButton, rightButton, leftButton, downButton, jumpButton, attackButton, 
-    assistAttackButton, aimButton, specialAttackButton, tagButton;
+    assistAttackButton, aimButton, specialAttackButton, tagButton, interactButton;
 
     private ControlInfo controlInfo;
 
@@ -33,6 +33,7 @@ public class ControlEvent : InputEvent, KeySettingsObserver
         aimButton = keySettings.aimButton.buttonKeyCode;
         specialAttackButton = keySettings.specialAttackButton.buttonKeyCode;
         tagButton = keySettings.tagButton.buttonKeyCode;
+        interactButton = keySettings.interactionButton.buttonKeyCode;
     }
 
     // Detect if event button is pressed or panel is clicked
@@ -47,16 +48,18 @@ public class ControlEvent : InputEvent, KeySettingsObserver
     private bool SetControlInfo()
     {
         // Set move & stop control
-        int temp = controlInfo.move;
+        int prevMove = controlInfo.move;
         controlInfo.move = 0;
         if (Input.GetKey(rightButton)) controlInfo.move += 1;
         if (Input.GetKey(leftButton)) controlInfo.move -= 1;
-        controlInfo.stop = temp != 0 && controlInfo.move == 0;
+        controlInfo.stop = prevMove != 0 && controlInfo.move == 0;
 
-        // Set lookUp & climb control
+        // Set lookUp & climb & stop control
+        int prevUpDown = controlInfo.upDown;
         controlInfo.upDown = 0;
         if(Input.GetKey(upButton)) controlInfo.upDown += 1;
         if(Input.GetKey(downButton)) controlInfo.upDown -= 1;
+        bool applyUpDown = controlInfo.upDown != 0 || prevUpDown != 0;
 
         // Set jump control
         controlInfo.jump = Input.GetKeyDown(jumpButton);
@@ -69,8 +72,11 @@ public class ControlEvent : InputEvent, KeySettingsObserver
         // Set tag control
         controlInfo.tag = Input.GetKeyDown(tagButton);
 
-        return (controlInfo.move != 0) || controlInfo.stop || (controlInfo.upDown != 0) || controlInfo.jump || 
-            controlInfo.assistAttack || controlInfo.specialAttack || controlInfo.tag;
+        // Try interact control
+        controlInfo.tryInteract = Input.GetKeyDown(interactButton);
+
+        return (controlInfo.move != 0) || controlInfo.stop || applyUpDown || controlInfo.jump || 
+            controlInfo.assistAttack || controlInfo.specialAttack || controlInfo.tag || controlInfo.tryInteract;
     }
 
     // Set aim info according to mouse position

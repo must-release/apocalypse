@@ -55,14 +55,9 @@ public class JumpingLowerState : MonoBehaviour, IPlayerLowerState
         playerRigid.velocity = new Vector2(0, playerRigid.velocity.y);
     }
 
-    public void Climb(int upDown)
+    public void Damaged()
     {
-
-    }
-
-    public void Aim(bool isAiming)
-    {
-
+        playerController.ChangeLowerState(CHARACTER_LOWER_STATE.DAMAGED);
     }
 
     public void OnGround()
@@ -70,14 +65,16 @@ public class JumpingLowerState : MonoBehaviour, IPlayerLowerState
         playerController.ChangeLowerState(CHARACTER_LOWER_STATE.IDLE);
     }
 
+    public void Aim(bool isAiming) { return; }
+
     public void Tag()
     {
 
     }
 
-    public void Damaged()
+    public void Climb(bool climb) 
     {
-
+        if (climb) playerController.ChangeLowerState(CHARACTER_LOWER_STATE.CLIMBING);
     }
 
     public void Jump() { return; }
@@ -85,5 +82,4 @@ public class JumpingLowerState : MonoBehaviour, IPlayerLowerState
     public void OnAir() { return; }
     public void Push(bool push) {return;}
     public void UpDown(int upDown) {return;}
-    public void Hang(float hangingPos) {return;}
 }

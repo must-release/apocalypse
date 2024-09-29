@@ -41,7 +41,7 @@ public class AimingLowerState : MonoBehaviour, IPlayerLowerState
         playerController.ChangeLowerState(CHARACTER_LOWER_STATE.RUNNING);
     }
 
-    public void Climb(int upDown)
+    public void Climb(bool climb)
     {
 
     }
@@ -76,5 +76,4 @@ public class AimingLowerState : MonoBehaviour, IPlayerLowerState
     public void Stop() { return; }
     public void Push(bool push) {return;}
     public void UpDown(int upDown) {return;}
-    public void Hang(float hangingPos) {return;}
 }
