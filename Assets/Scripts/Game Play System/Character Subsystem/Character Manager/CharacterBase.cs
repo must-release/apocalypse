@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public abstract class CharacterBase : MonoBehaviour
@@ -8,8 +9,16 @@ public abstract class CharacterBase : MonoBehaviour
 
     protected List<InteractionObject> interactableObjects = new List<InteractionObject>();
     protected List<InteractionObject> interactingObjects = new List<InteractionObject>();
-    public abstract void ControlCharacter(ControlInfo controlInfo);
 
+
+    /***** Abstract Functions *****/
+    public abstract void ControlCharacter(ControlInfo controlInfo);
+    public abstract void OnAir();
+    public abstract void OnGround();
+
+
+
+    /***** Object Interaction Functions *****/
     public void RecognizeInteractionObject(InteractionObject obj)
     {
         bool notInteractable = !interactableObjects.Contains(obj);
@@ -59,5 +68,42 @@ public abstract class CharacterBase : MonoBehaviour
                 interactableObjects.RemoveAt(i);
             }
         }
+    }
+
+
+    /********** Detect Collision **********/
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if(collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            if(collision.gameObject == StandingGround)
+            {
+                StandingGround = null;
+                if(isActiveAndEnabled)
+                    StartCoroutine(OnAirDelay());
+            }
+        }
+    }
+    IEnumerator OnAirDelay()
+    {
+        yield return new WaitForSeconds(0.05f);
+        if(StandingGround == null) OnAir();
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if ((collision.gameObject.layer == LayerMask.NameToLayer("Ground")) && StandingOnGround(collision))
+        {
+            OnGround();
+            StandingGround = collision.gameObject;
+        }
+    } 
+
+    private bool StandingOnGround(Collision2D collision)
+    {
+        Vector2 normal = collision.contacts[0].normal;
+        float angle = Vector2.Angle(normal, Vector2.up);
+        if(angle > 45) return false;
+        else return true;
     }
 }

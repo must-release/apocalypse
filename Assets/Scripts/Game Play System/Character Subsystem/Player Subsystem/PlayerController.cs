@@ -62,6 +62,13 @@ public class PlayerController : CharacterBase
         //ControlUpperBody(controlInfo);
     }
 
+    // Called once when player is on air
+    public override void OnAir() { LowerState.OnAir(); }
+
+
+    // Called once when player is on ground
+    public override void OnGround() { LowerState.OnGround(); }
+
     // Control player's lower body
     private void ControlLowerBody(ControlInfo controlInfo)
     {
@@ -143,40 +150,5 @@ public class PlayerController : CharacterBase
         {
             upperStateDictionary[stateKey] = state;
         }
-    }
-
-    /********** Detect Collision **********/
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if(collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-        {
-            if(collision.gameObject == StandingGround)
-            {
-                StandingGround = null;
-                StartCoroutine(OnAirDelay());
-            }
-        }
-    }
-    IEnumerator OnAirDelay()
-    {
-        yield return new WaitForSeconds(0.05f);
-        if(StandingGround == null) LowerState.OnAir();
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if ((collision.gameObject.layer == LayerMask.NameToLayer("Ground")) && StandingOnGround(collision))
-        {
-            LowerState.OnGround();
-            StandingGround = collision.gameObject;
-        }
-    } 
-
-    private bool StandingOnGround(Collision2D collision)
-    {
-        Vector2 normal = collision.contacts[0].normal;
-        float angle = Vector2.Angle(normal, Vector2.up);
-        if(angle > 45) return false;
-        else return true;
     }
 }
