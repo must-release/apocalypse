@@ -38,4 +38,5 @@ public class NormalInfectee : EnemyController
     public override void ControlCharacter(ControlInfo controlInfo) { return; }
     public override void OnAir() { return; }
     public override void OnGround() { return ;}
+    public override void OnDamaged() { return; }
 }

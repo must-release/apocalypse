@@ -18,6 +18,11 @@ namespace CharacterEums
     public enum CHARACTER_UPPER_STATE { DISABLED, IDLE, RUNNING, JUMPING, LOOKING_UP, AIMING, ATTACKING, TOP_ATTACKING }
 }
 
+namespace WeaponEnums
+{
+    public enum WEAPON_TYPE { BULLET, GRANADE }
+}
+
 namespace EventEnums
 {
     public enum EVENT_TYPE

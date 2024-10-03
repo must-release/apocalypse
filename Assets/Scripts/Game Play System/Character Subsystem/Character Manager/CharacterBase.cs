@@ -15,6 +15,7 @@ public abstract class CharacterBase : MonoBehaviour
     public abstract void ControlCharacter(ControlInfo controlInfo);
     public abstract void OnAir();
     public abstract void OnGround();
+    public abstract void OnDamaged();
 
 
 

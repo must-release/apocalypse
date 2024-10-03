@@ -67,6 +67,8 @@ public abstract class EnemyController : CharacterBase
                 Debug.LogError("Unknown Player Exiting from Detect Range");
         }
     }
+
+    
 }
 
 

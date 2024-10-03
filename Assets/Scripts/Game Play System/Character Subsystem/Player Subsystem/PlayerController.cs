@@ -65,9 +65,10 @@ public class PlayerController : CharacterBase
     // Called once when player is on air
     public override void OnAir() { LowerState.OnAir(); }
 
-
     // Called once when player is on ground
     public override void OnGround() { LowerState.OnGround(); }
+
+    public override void OnDamaged() { LowerState.Damaged(); }
 
     // Control player's lower body
     private void ControlLowerBody(ControlInfo controlInfo)
