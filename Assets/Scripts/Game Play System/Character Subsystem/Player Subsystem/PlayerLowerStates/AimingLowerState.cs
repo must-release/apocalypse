@@ -16,10 +16,11 @@ public class AimingLowerState : MonoBehaviour, IPlayerLowerState
         playerTransform = transform.parent.parent;
         playerController = playerTransform.GetComponent<PlayerController>();
         playerRigid = playerTransform.GetComponent<Rigidbody2D>();
-        playerController.AddLowerState(CHARACTER_LOWER_STATE.IDLE, this);
+        playerController.AddLowerState(CHARACTER_LOWER_STATE.AIMING, this);
     }
 
-    public CHARACTER_LOWER_STATE GetState() { return CHARACTER_LOWER_STATE.IDLE; }
+    public CHARACTER_LOWER_STATE GetState() { return CHARACTER_LOWER_STATE.AIMING; }
+    public bool DisableUpperBody() { return false; }
 
     public void StartState()
     {
@@ -35,44 +36,17 @@ public class AimingLowerState : MonoBehaviour, IPlayerLowerState
     {
 
     }
-
-    public void Move(int move)
-    {
-        playerController.ChangeLowerState(CHARACTER_LOWER_STATE.RUNNING);
-    }
-
-    public void Climb(bool climb)
-    {
-
-    }
-
-    public void Jump()
-    {
-        // jump player
-        playerRigid.velocity = new Vector2(playerRigid.velocity.x, playerController.JumpingSpeed);
-    }
-    public void Aim(bool isAiming)
-    {
-
-    }
-
-    public void OnAir()
-    {
-        playerController.ChangeLowerState(CHARACTER_LOWER_STATE.JUMPING);
-    }
-
-    public void Tag()
-    {
-        playerController.ChangeLowerState(CHARACTER_LOWER_STATE.TAGGING);
-    }
-
+    public void Aim(bool isAiming) { if(!isAiming) playerController.ChangeLowerState(CHARACTER_LOWER_STATE.IDLE);}
+    public void OnAir() { playerController.ChangeLowerState(CHARACTER_LOWER_STATE.JUMPING); }
     public void Damaged()
     {
 
     }
-
+    public void Move(int move) { return; }
+    public void Climb(bool climb) { return; }
+    public void Jump() {return;}
+    public void Tag() { return; }
     public void OnGround() { return; }
-
     public void Stop() { return; }
     public void Push(bool push) {return;}
     public void UpDown(int upDown) {return;}

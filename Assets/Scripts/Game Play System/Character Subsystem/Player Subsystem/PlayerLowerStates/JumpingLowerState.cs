@@ -19,11 +19,12 @@ public class JumpingLowerState : MonoBehaviour, IPlayerLowerState
     }
 
     public CHARACTER_LOWER_STATE GetState() { return CHARACTER_LOWER_STATE.JUMPING; }
+    public bool DisableUpperBody() { return false; }
 
     public void StartState()
     {
-        if (playerTransform.localScale.x > 0) movingDirection = -1;
-        else movingDirection = 1;
+        if (playerTransform.localScale.x > 0) movingDirection = 1;
+        else movingDirection = -1;
     }
 
     public void UpdateState()

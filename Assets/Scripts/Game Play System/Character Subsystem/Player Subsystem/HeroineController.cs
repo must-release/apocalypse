@@ -4,18 +4,25 @@ using UnityEngine;
 
 public class HeroineController : MonoBehaviour, IPlayer
 {
+    public bool IsLoaded {get; set;}
     // Show or hide character object
     public void ShowCharacter(bool value)
     {
         gameObject.SetActive(value);
     }
 
-    public Coroutine TagIn()
+    public void RotateUpperBody(float rotateAngle)
     {
-        return null;
+        
     }
-    public Coroutine TagOut()
+
+    public void RotateUpperBody(Vector3 target)
     {
-        return null;
+        
+    }
+
+    public float Attack()
+    {
+        return 0;
     }
 }

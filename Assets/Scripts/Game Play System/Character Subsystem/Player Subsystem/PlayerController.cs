@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using CharacterEums;
 using UnityEngine;
 
-public class PlayerController : CharacterBase
+public class PlayerController : CharacterBase, SceneObejct
 {
     public float MovingSpeed { get; private set; } = 8f;
     public float JumpingSpeed { get; private set; } = 15f;
@@ -20,8 +20,10 @@ public class PlayerController : CharacterBase
 
     private Rigidbody2D playerRigid;
 
-    private void Awake()
+    protected override void InitializeCharacter()
     {
+        base.InitializeCharacter();
+
         playerRigid = GetComponent<Rigidbody2D>();
         playerRigid.gravityScale = Gravity;
         CharacterHeight = GetComponent<CapsuleCollider2D>().size.y * transform.localScale.y;
@@ -43,6 +45,11 @@ public class PlayerController : CharacterBase
         UpperState?.UpdateState();
     }
 
+    public bool IsLoaded()
+    {
+        return playerDictionary[CHARACTER.HERO].IsLoaded; // && playerDictionary[CHARACTER.HEROINE].IsLoaded
+    }
+
     // Set player according to the info
     public void SetPlayer(CHARACTER character)
     {
@@ -51,6 +58,7 @@ public class PlayerController : CharacterBase
 
         // Set initial state
         LowerState = lowerStateDictionary[CHARACTER_LOWER_STATE.IDLE];
+        UpperState = upperStateDictionary[CHARACTER_UPPER_STATE.IDLE];
     }
 
     // Control player according to the control info
@@ -59,16 +67,8 @@ public class PlayerController : CharacterBase
         // First, control interactable obejcts. Next, control lower body. Lastly, control upper body.
         ControlInteractionObjects(controlInfo);
         ControlLowerBody(controlInfo);
-        //ControlUpperBody(controlInfo);
+        ControlUpperBody(controlInfo);
     }
-
-    // Called once when player is on air
-    public override void OnAir() { LowerState.OnAir(); }
-
-    // Called once when player is on ground
-    public override void OnGround() { LowerState.OnGround(); }
-
-    public override void OnDamaged() { LowerState.Damaged(); }
 
     // Control player's lower body
     private void ControlLowerBody(ControlInfo controlInfo)
@@ -78,8 +78,7 @@ public class PlayerController : CharacterBase
         else if (controlInfo.stop) LowerState.Stop();
         if (controlInfo.jump) LowerState.Jump();
         if (controlInfo.tag) LowerState.Tag();
-        if (controlInfo.aim != Vector3.zero) LowerState.Aim(true);
-        else LowerState.Aim(false);
+        LowerState.Aim(controlInfo.aim != Vector3.zero);
         LowerState.UpDown(controlInfo.upDown);
 
         // Change player state according to the object control info
@@ -89,11 +88,8 @@ public class PlayerController : CharacterBase
 
     // Control player's upper body
     private void ControlUpperBody(ControlInfo controlInfo)
-    {
-        CHARACTER_LOWER_STATE lowerState = LowerState.GetState();
-
-        if (lowerState == CHARACTER_LOWER_STATE.PUSHING || lowerState == CHARACTER_LOWER_STATE.TAGGING ||
-            lowerState == CHARACTER_LOWER_STATE.CLIMBING)
+    {   
+        if (LowerState.DisableUpperBody())
         {
             UpperState.Disable();
         }
@@ -106,8 +102,31 @@ public class PlayerController : CharacterBase
             UpperState.Aim(controlInfo.aim);
             if (controlInfo.upDown > 0) UpperState.LookUp(true);
             else UpperState.LookUp(false);
-            if (controlInfo.attack) UpperState.Attack();
+            if (controlInfo.attack) 
+            {
+                UpperState.Attack();
+            }
         }
+    }
+
+    // Called once when player is on air
+    public override void OnAir()
+    { 
+        LowerState.OnAir();
+        UpperState.OnAir();
+    }
+
+    // Called once when player is on ground
+    public override void OnGround() 
+    { 
+        LowerState.OnGround();
+        UpperState.OnGround();
+    }
+
+    public override void OnDamaged() 
+    { 
+        LowerState.Damaged(); 
+        UpperState.Disable();
     }
 
     // Change player character
@@ -122,8 +141,7 @@ public class PlayerController : CharacterBase
     // Change player's lower body state
     public void ChangeLowerState(CHARACTER_LOWER_STATE state)
     {
-
-        Debug.Log(LowerState.GetState().ToString() + " -> " + state.ToString());
+        Debug.Log("Lower : " + LowerState.GetState().ToString() + " -> " + state.ToString());
         LowerState.EndState();
         LowerState = lowerStateDictionary[state];
         LowerState.StartState();
@@ -132,6 +150,7 @@ public class PlayerController : CharacterBase
     // Change player's upper body state
     public void ChangeUpperState(CHARACTER_UPPER_STATE state)
     {
+        Debug.Log("Uppper : " + UpperState.GetState().ToString() + " -> " + state.ToString());
         UpperState.EndState();
         UpperState = upperStateDictionary[state];
         UpperState.StartState();

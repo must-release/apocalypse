@@ -6,18 +6,25 @@ public class Bullet : WeaponBase
     private Rigidbody2D rb;
     private float fireSpeed;
 
-    private void Awake() 
+    protected override void InitializeWeapon() 
     {
+        base.InitializeWeapon();
         DamagePlayer = false;
         WeaponType = WEAPON_TYPE.BULLET;
 
         rb = GetComponent<Rigidbody2D>();
-        fireSpeed = 12;
+        rb.gravityScale = 0;
+        fireSpeed = 30;
     }
 
-    public override void Fire(Vector2 direction)
+    public override void Fire(Vector3 direction)
     {
         base.Fire(direction);
-        rb.velocity = direction * fireSpeed;
+        rb.velocity = direction.normalized * fireSpeed;
+    }
+
+    public override void Aim(Vector3 startPos, Vector3 direction)
+    {
+
     }
 }

@@ -1,9 +1,7 @@
-using CharacterEums;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using CharacterEums;
 
-public class IdleUpperState : MonoBehaviour, IPlayerUpperState
+public class JumpingUpperState : MonoBehaviour, IPlayerUpperState
 {
     private Transform playerTransform;
     private PlayerController playerController;
@@ -14,10 +12,10 @@ public class IdleUpperState : MonoBehaviour, IPlayerUpperState
     {
         playerTransform = transform.parent.parent;
         playerController = playerTransform.GetComponent<PlayerController>();
-        playerController.AddUpperState(CHARACTER_UPPER_STATE.IDLE, this);
+        playerController.AddUpperState(CHARACTER_UPPER_STATE.JUMPING, this);
     }
 
-    public CHARACTER_UPPER_STATE GetState() { return CHARACTER_UPPER_STATE.IDLE; }
+    public CHARACTER_UPPER_STATE GetState() { return CHARACTER_UPPER_STATE.JUMPING; }
 
     public void StartState()
     {
@@ -32,17 +30,13 @@ public class IdleUpperState : MonoBehaviour, IPlayerUpperState
 
     }
     public void Disable() { playerController.ChangeUpperState(CHARACTER_UPPER_STATE.DISABLED); }
-    public void Move() { playerController.ChangeUpperState(CHARACTER_UPPER_STATE.RUNNING); }
-    public void Jump() { playerController.ChangeUpperState(CHARACTER_UPPER_STATE.JUMPING); }
-    public void OnAir() { playerController.ChangeUpperState(CHARACTER_UPPER_STATE.JUMPING); }
+    public void OnGround() { playerController.ChangeUpperState(CHARACTER_UPPER_STATE.IDLE); }
     public void LookUp(bool lookUp) { if(lookUp) playerController.ChangeUpperState(CHARACTER_UPPER_STATE.LOOKING_UP);}
-    public void Aim(Vector3 aim)
-    {
-        if (aim != Vector3.zero && playerController.StandingGround != null)
-            playerController.ChangeUpperState(CHARACTER_UPPER_STATE.AIMING);
-    }
     public void Attack() { playerController.ChangeUpperState(CHARACTER_UPPER_STATE.ATTACKING); }
+    public void Aim(Vector3 aim) { return; }
     public void Stop() { return; }
-    public void OnGround() { return; }
+    public void Move() { return; }
+    public void Jump() { return; }
+    public void OnAir() { return; }
     public void Enable() {return;}
 }

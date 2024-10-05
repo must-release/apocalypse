@@ -10,8 +10,9 @@ public abstract class EnemyController : CharacterBase
     protected float attackRange = 1;
 
     // Initialize ememy character
-    private void Awake() 
+    protected override void InitializeCharacter() 
     { 
+        base.InitializeCharacter();
         InitializeEnemy();
         SetDetectRange();
     }
@@ -34,7 +35,7 @@ public abstract class EnemyController : CharacterBase
         BoxCollider2D rangeColider = gameObject.AddComponent<BoxCollider2D>();
         rangeColider.size = detectRange;
         rangeColider.offset = rangeOffset;
-        rangeColider.isTrigger = true;
+        rangeColider.isTrigger = true; 
     }
 
     // Check distance between player and enemy

@@ -20,6 +20,7 @@ public class IdleLowerState : MonoBehaviour, IPlayerLowerState
     }
 
     public CHARACTER_LOWER_STATE GetState() { return CHARACTER_LOWER_STATE.IDLE; }
+    public bool DisableUpperBody() { return false; }
 
     public void StartState()
     {
@@ -39,6 +40,7 @@ public class IdleLowerState : MonoBehaviour, IPlayerLowerState
     public void Jump()
     {
         playerRigid.velocity = new Vector2(playerRigid.velocity.x, playerController.JumpingSpeed);
+        playerController.ChangeLowerState(CHARACTER_LOWER_STATE.JUMPING);
     }
 
     public void OnAir()

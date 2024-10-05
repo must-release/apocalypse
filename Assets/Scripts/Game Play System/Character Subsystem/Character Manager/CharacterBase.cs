@@ -17,6 +17,11 @@ public abstract class CharacterBase : MonoBehaviour
     public abstract void OnGround();
     public abstract void OnDamaged();
 
+    private void Awake() { InitializeCharacter(); }
+    protected virtual void InitializeCharacter()
+    {
+        gameObject.layer = LayerMask.NameToLayer("Character");
+    }
 
 
     /***** Object Interaction Functions *****/

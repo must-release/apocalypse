@@ -12,9 +12,18 @@ public abstract class WeaponBase : MonoBehaviour
 
     private Coroutine visibilityCheckCoroutine;
 
-    public virtual void Fire(Vector2 direction)
+    public virtual void Fire(Vector3 direction)
     {
         gameObject.SetActive(true);
+        transform.localRotation = Quaternion.FromToRotation(Vector3.right, direction);
+    }
+
+    public abstract void Aim(Vector3 startPos, Vector3 direction);
+
+    private void Awake() { InitializeWeapon(); }
+    protected virtual void InitializeWeapon()
+    {
+        gameObject.layer = LayerMask.NameToLayer("Weapon");
     }
 
     private void Update() { WeaponUpdate();}
@@ -43,13 +52,14 @@ public abstract class WeaponBase : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private void OnCollisionEnter2D(Collision2D other) 
+    private void OnTriggerEnter2D(Collider2D other) 
     {
         if(other.transform.TryGetComponent(out CharacterBase character))
         {
-            if ((character.CompareTag("player") && DamagePlayer) || !DamagePlayer)
+            if (character.CompareTag("Player") == DamagePlayer)
             {
                 character.OnDamaged();
+                gameObject.SetActive(false);
             }
         }
     }

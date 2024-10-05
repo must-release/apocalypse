@@ -19,6 +19,7 @@ public class ClimbingLowerState : MonoBehaviour, IPlayerLowerState
     }
 
     public CHARACTER_LOWER_STATE GetState() { return CHARACTER_LOWER_STATE.CLIMBING; }
+    public bool DisableUpperBody() { return true; }
 
     public void StartState()
     {

@@ -128,6 +128,10 @@ public class GameSceneModel : MonoBehaviour
         if (player.Status == AsyncOperationStatus.Succeeded)
         {
             Player = player.Result.transform;
+            if (Player.TryGetComponent(out SceneObejct sceneObejct))
+            {
+                yield return new WaitUntil(sceneObejct.IsLoaded);
+            }
             Player.gameObject.SetActive(false);
             Player.parent = SceneObjects.transform;
         }

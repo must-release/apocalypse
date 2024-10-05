@@ -19,11 +19,12 @@ public class RunningLowerState : MonoBehaviour, IPlayerLowerState
     }
 
     public CHARACTER_LOWER_STATE GetState() { return CHARACTER_LOWER_STATE.RUNNING; }
+    public bool DisableUpperBody() { return false; }
 
     public void StartState()
     {
-        if (playerTransform.localScale.x > 0) movingDirection = -1;
-        else movingDirection = 1;
+        if (playerTransform.localScale.x > 0) movingDirection = 1;
+        else movingDirection = -1;
     }
 
     public void UpdateState()
@@ -58,6 +59,7 @@ public class RunningLowerState : MonoBehaviour, IPlayerLowerState
     public void Jump()
     {
         playerRigid.velocity = new Vector2(playerRigid.velocity.x, playerController.JumpingSpeed);
+        playerController.ChangeLowerState(CHARACTER_LOWER_STATE.JUMPING);
     }
 
     public void OnAir()

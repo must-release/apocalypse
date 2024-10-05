@@ -75,20 +75,24 @@ public class ControlEvent : InputEvent, KeySettingsObserver
         // Try interact control
         controlInfo.tryInteract = Input.GetKeyDown(interactButton);
 
-        return (controlInfo.move != 0) || controlInfo.stop || applyUpDown || controlInfo.jump || 
+        return (controlInfo.move != 0) || controlInfo.stop || applyUpDown || controlInfo.jump || controlInfo.attack ||
             controlInfo.assistAttack || controlInfo.specialAttack || controlInfo.tag || controlInfo.tryInteract;
     }
 
     // Set aim info according to mouse position
     private bool SetAimControlInfo()
     {
+        Vector3 prevAim = controlInfo.aim;
         if (Input.GetKey(aimButton))
         {
             Vector3 mousePosition = Input.mousePosition; 
             controlInfo.aim = Camera.main.ScreenToWorldPoint(mousePosition);
-            return true;
         }
-        else return false;
+        else
+        {
+            controlInfo.aim = Vector3.zero;
+        }
+        return prevAim != Vector3.zero || controlInfo.aim != Vector3.zero;
     }
 
     // Check compatibiliry with event list and current UI

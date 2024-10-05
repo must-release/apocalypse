@@ -28,6 +28,7 @@ public class TaggingLowerState : MonoBehaviour, IPlayerLowerState
     }
 
     public CHARACTER_LOWER_STATE GetState() { return CHARACTER_LOWER_STATE.TAGGING; }
+    public bool DisableUpperBody() { return false; }
 
     public void StartState()
     {

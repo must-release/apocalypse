@@ -11,17 +11,17 @@ public class WeaponFactory : MonoBehaviour
 
     private void Awake() 
     {
-        if (Instance = null)
+        if (Instance == null)
         {
             Instance = this;
         }
     }
 
-    public Coroutine PoolWeapons(WEAPON_TYPE weapon, List<WeaponBase> weapons, int poolNum)
+    public Coroutine PoolWeapons(WEAPON_TYPE weapon, Queue<WeaponBase> weapons, int poolNum)
     {
         return StartCoroutine(AsyncPoolWeapons(weapon,weapons,poolNum));
     }
-    IEnumerator AsyncPoolWeapons(WEAPON_TYPE weapon, List<WeaponBase> weapons, int poolNum)
+    IEnumerator AsyncPoolWeapons(WEAPON_TYPE weapon, Queue<WeaponBase> weapons, int poolNum)
     {
         string weaponPath = "WEAPON_" + weapon.ToString();
         AsyncOperationHandle<GameObject> loadingWeapon = Addressables.InstantiateAsync(weaponPath);
@@ -33,11 +33,11 @@ public class WeaponFactory : MonoBehaviour
             loadedWeapon.SetActive(false);
 
             // Copy weapons
-            weapons.Add(loadedWeapon.GetComponent<WeaponBase>());
+            weapons.Enqueue(loadedWeapon.GetComponent<WeaponBase>());
             for (int i = 0; i < poolNum - 1; i++)
             {
                 GameObject weaponCopy = Instantiate(loadedWeapon);
-                weapons.Add(weaponCopy.GetComponent<WeaponBase>());
+                weapons.Enqueue(weaponCopy.GetComponent<WeaponBase>());
             }
         }
         else
