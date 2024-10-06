@@ -7,6 +7,7 @@ public interface IPlayer
     public void ShowCharacter(bool value);
     public void RotateUpperBody(float rotateAngle);
     public void RotateUpperBody(Vector3 target);
+    public void Aim(bool value);
     public float Attack(); // Execute attack and return attack cool time
 }
 

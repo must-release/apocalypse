@@ -5,6 +5,7 @@ using UnityEngine;
 public class HeroineController : MonoBehaviour, IPlayer
 {
     public bool IsLoaded {get; set;}
+    public bool IsAiming { set{}}
     // Show or hide character object
     public void ShowCharacter(bool value)
     {
@@ -19,6 +20,11 @@ public class HeroineController : MonoBehaviour, IPlayer
     public void RotateUpperBody(Vector3 target)
     {
         
+    }
+
+    public void Aim(bool value)
+    {
+
     }
 
     public float Attack()

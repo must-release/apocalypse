@@ -7,6 +7,7 @@ public class AimingUpperState : MonoBehaviour, IPlayerUpperState
     private PlayerController playerController;
     private Vector3 aimingPosition;
     private int direction;
+    private bool fixedUpdateFlag;
 
     // Start is called before the first frame update
 
@@ -21,7 +22,7 @@ public class AimingUpperState : MonoBehaviour, IPlayerUpperState
 
     public void StartState()
     {
-
+        fixedUpdateFlag = true;
     }
     public void UpdateState()
     {
@@ -30,9 +31,15 @@ public class AimingUpperState : MonoBehaviour, IPlayerUpperState
             playerTransform.localScale.y, playerTransform.localScale.z);
         playerController.CurrentPlayer.RotateUpperBody(aimingPosition);
     }
+    private void FixedUpdate() 
+    {   
+        if(fixedUpdateFlag) playerController.CurrentPlayer.Aim(true);
+    }
+
     public void EndState()
     {
-
+        playerController.CurrentPlayer.Aim(false);
+        fixedUpdateFlag = false;
     }
     public void Disable() { playerController.ChangeUpperState(CHARACTER_UPPER_STATE.DISABLED); }
     public void OnAir() { playerController.ChangeUpperState(CHARACTER_UPPER_STATE.JUMPING); }

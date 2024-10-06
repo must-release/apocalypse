@@ -10,23 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Weapons
+  m_Name: Aiming Dots
   m_EditorClassIdentifier: 
-  m_GroupName: Weapons
+  m_GroupName: Aiming Dots
   m_Data:
     m_SerializedData: []
-  m_GUID: 9baaba126a96541dc99dc5e899f8353f
-  m_SerializeEntries:
-  - m_GUID: 5b4c77301741f42a9a928370b2f7b18d
-    m_Address: WEAPON_BULLET
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 44f4ba2d9722d45938f232218644072c
-    m_Address: AIMING_DOT_BULLET
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_GUID: 7b2bbbca388674c2cb74c157e0256a9d
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 0018d54b9f5f74640839669867571db9, type: 2}
   m_SchemaSet:

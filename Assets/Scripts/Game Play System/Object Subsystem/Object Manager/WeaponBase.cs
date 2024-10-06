@@ -9,6 +9,7 @@ public abstract class WeaponBase : MonoBehaviour
 
     public bool DamagePlayer {get; protected set;}
     public WEAPON_TYPE WeaponType {get; protected set;}
+    public float FireSpeed {get; protected set;}
 
     private Coroutine visibilityCheckCoroutine;
 
@@ -17,8 +18,6 @@ public abstract class WeaponBase : MonoBehaviour
         gameObject.SetActive(true);
         transform.localRotation = Quaternion.FromToRotation(Vector3.right, direction);
     }
-
-    public abstract void Aim(Vector3 startPos, Vector3 direction);
 
     private void Awake() { InitializeWeapon(); }
     protected virtual void InitializeWeapon()
@@ -59,8 +58,12 @@ public abstract class WeaponBase : MonoBehaviour
             if (character.CompareTag("Player") == DamagePlayer)
             {
                 character.OnDamaged();
-                gameObject.SetActive(false);
             }
+        }
+
+        if(!other.isTrigger)
+        {
+            gameObject.SetActive(false);
         }
     }
 }

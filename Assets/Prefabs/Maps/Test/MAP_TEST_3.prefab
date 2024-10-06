@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 2391822187607646318}
   - component: {fileID: 4849078414322123066}
   - component: {fileID: 9194234676169553716}
+  - component: {fileID: 1449804392560360298}
   m_Layer: 6
   m_Name: Platform2
   m_TagString: Untagged
@@ -214,6 +215,33 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 33.608204, y: 1.6265621}
   m_EdgeRadius: 0
+--- !u!50 &1449804392560360298
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 596515505275375675}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 1
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 0
 --- !u!1 &2106973755987422563
 GameObject:
   m_ObjectHideFlags: 0
@@ -560,6 +588,7 @@ GameObject:
   - component: {fileID: 2199737639158585186}
   - component: {fileID: 7841756840577437678}
   - component: {fileID: 7339980047721307901}
+  - component: {fileID: 6691681391925678514}
   m_Layer: 6
   m_Name: Platform1
   m_TagString: Untagged
@@ -679,6 +708,33 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 33.608204, y: 1.6265621}
   m_EdgeRadius: 0
+--- !u!50 &6691681391925678514
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9168994392540576539}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 1
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 0
 --- !u!1001 &457052433932975112
 PrefabInstance:
   m_ObjectHideFlags: 0
