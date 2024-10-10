@@ -80,7 +80,7 @@ public class GameSceneModel : MonoBehaviour
         yield return StartCoroutine(LoadMap(map1));
 
         // Load second map
-        yield return StartCoroutine(LoadMap(map2));
+        //yield return StartCoroutine(LoadMap(map2));
 
         // Load player objects
         yield return LoadPlayer();
@@ -167,7 +167,7 @@ public class MapInfo
     public MapInfo(GameObject map)
     {
         this.map = map.transform;
-        size = map.GetComponent<BoxCollider2D>().size;
+        //size = map.GetComponent<BoxCollider2D>().size;
         startingPoint = map.transform.Find("Starting Point");
     }
 }
