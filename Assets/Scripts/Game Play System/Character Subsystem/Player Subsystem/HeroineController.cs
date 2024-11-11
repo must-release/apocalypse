@@ -6,6 +6,14 @@ public class HeroineController : MonoBehaviour, IPlayer
 {
     public bool IsLoaded {get; set;}
     public bool IsAiming { set{}}
+
+    private void Start() { StartCoroutine(LoadWeaponsAndDots()); }
+    public IEnumerator LoadWeaponsAndDots()
+    {
+        yield return null;
+        IsLoaded = true;
+    }
+
     // Show or hide character object
     public void ShowCharacter(bool value)
     {

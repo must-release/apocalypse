@@ -46,28 +46,28 @@ public class WeaponFactory : MonoBehaviour
         }
     }
 
-    public Coroutine PoolAimingDots(WEAPON_TYPE weapon, List<AimingDot> aimingDots, int poolNum)
+    public Coroutine PoolAimingDots(WEAPON_TYPE weapon, List<GameObject> aimingDots, int poolNum)
     {
         return StartCoroutine(AsyncPoolAimingDots(weapon,aimingDots,poolNum));
     }
-    IEnumerator AsyncPoolAimingDots(WEAPON_TYPE weapon, List<AimingDot> aimingDots, int poolNum)
+    IEnumerator AsyncPoolAimingDots(WEAPON_TYPE weapon, List<GameObject> aimingDots, int poolNum)
     {
         string aimingDotsPath = "AIMING_DOT_" + weapon.ToString();
         AsyncOperationHandle<GameObject> loadingDot = Addressables.InstantiateAsync(aimingDotsPath);
         yield return loadingDot;
         if (loadingDot.Status == AsyncOperationStatus.Succeeded)
         {
-            // Load Weapon in inactive state
+            // Load dots in inactive state
             GameObject loadedDot = loadingDot.Result;
             loadedDot.SetActive(false);
 
-            // Copy weapons
-            aimingDots.Add(loadedDot.GetComponent<AimingDot>());
+            // Copy dots
+            aimingDots.Add(loadedDot);
             for (int i = 0; i < poolNum - 1; i++)
             {
-                GameObject weaponCopy = Instantiate(loadedDot);
-                aimingDots.Add(weaponCopy.GetComponent<AimingDot>());
-                aimingDots[i].NextDot = aimingDots[i+1];
+                GameObject dotCopy = Instantiate(loadedDot);
+                aimingDots.Add(dotCopy);
+                aimingDots[i].GetComponent<AimingDot>().NextDot = aimingDots[i+1].GetComponent<AimingDot>();
             }
         }
         else

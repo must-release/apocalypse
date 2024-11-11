@@ -28,7 +28,7 @@ public class TaggingLowerState : MonoBehaviour, IPlayerLowerState
     }
 
     public CHARACTER_LOWER_STATE GetState() { return CHARACTER_LOWER_STATE.TAGGING; }
-    public bool DisableUpperBody() { return false; }
+    public bool DisableUpperBody() { return true; }
 
     public void StartState()
     {
@@ -37,6 +37,9 @@ public class TaggingLowerState : MonoBehaviour, IPlayerLowerState
 
         // Change player character
         playerController.ChangeCharacter(playerController.CurrentCharacter == CHARACTER.HERO ? CHARACTER.HEROINE : CHARACTER.HERO);
+    
+        // Reset Time
+        time = 0f;
     }
 
     public void UpdateState()
@@ -57,17 +60,14 @@ public class TaggingLowerState : MonoBehaviour, IPlayerLowerState
 
     public void EndState()
     {
-        time = 0f;
-    }
-
-    public void Damaged()
-    {
-
+        
     }
 
     public void OnAir() { isOnAir = true; }
 
     public void OnGround() { isOnAir = false; }
+
+    public void Damaged() { playerController.ChangeLowerState(CHARACTER_LOWER_STATE.DAMAGED); }
 
 
     public void Tag() { return; }

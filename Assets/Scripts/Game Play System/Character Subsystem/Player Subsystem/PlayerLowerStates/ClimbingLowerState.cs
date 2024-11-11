@@ -9,6 +9,9 @@ public class ClimbingLowerState : MonoBehaviour, IPlayerLowerState
     private PlayerController playerController;
     private Rigidbody2D playerRigid;
     private float climbingSpeed = 5f;
+    private float climbUpHeight = 0.1f;
+    private float climbDownHeight;
+    
 
     public void Start()
     {
@@ -16,6 +19,8 @@ public class ClimbingLowerState : MonoBehaviour, IPlayerLowerState
         playerController = playerTransform.GetComponent<PlayerController>();
         playerRigid = playerTransform.GetComponent<Rigidbody2D>();
         playerController.AddLowerState(CHARACTER_LOWER_STATE.CLIMBING, this);
+
+        climbDownHeight = playerController.CharacterHeight / 2 + 0.2f;
     }
 
     public CHARACTER_LOWER_STATE GetState() { return CHARACTER_LOWER_STATE.CLIMBING; }
@@ -24,6 +29,8 @@ public class ClimbingLowerState : MonoBehaviour, IPlayerLowerState
     public void StartState()
     {
         playerRigid.gravityScale = 0;
+
+        MoveNearToClimbingObject();
     }
 
     public void UpdateState()
@@ -41,26 +48,26 @@ public class ClimbingLowerState : MonoBehaviour, IPlayerLowerState
     {
         playerRigid.velocity =  Vector2.up * upDown * climbingSpeed;
     }
+    
     public void Climb(bool climb)
     {
         if(!climb)
         {
             if(playerRigid.velocity.y > 0)
             {
+                // Move player on the upside of the ladder
                 playerTransform.position += Vector3.up * playerController.CharacterHeight / 2;
+                playerController.ChangeLowerState(CHARACTER_LOWER_STATE.IDLE);
             }
-            playerController.ChangeLowerState(CHARACTER_LOWER_STATE.IDLE);
+            else
+            {
+                // Climbed down the climing object
+                if(playerController.StandingGround)
+                    playerController.ChangeLowerState(CHARACTER_LOWER_STATE.IDLE);
+                else
+                    playerController.ChangeLowerState(CHARACTER_LOWER_STATE.JUMPING);
+            }
         }
-    }
-
-    public void Move(int move)
-    {
-        return;
-    }
-
-    public void Stop()
-    {
-        return;
     }
 
     public void Jump()
@@ -71,30 +78,34 @@ public class ClimbingLowerState : MonoBehaviour, IPlayerLowerState
         playerController.ChangeLowerState(CHARACTER_LOWER_STATE.JUMPING);
     }
 
-    public void Aim(bool isAiming)
-    {
+    public void Damaged() { playerController.ChangeLowerState(CHARACTER_LOWER_STATE.DAMAGED); }
 
+    // Move character near the climbing object
+    private void MoveNearToClimbingObject()
+    {
+        Transform climbingObject = playerController.CurrentControlInfo.climbingObject.transform;
+
+        // Climbing up
+        if(playerController.CurrentControlInfo.upDown > 0)
+        {
+            playerTransform.position = new Vector3(climbingObject.position.x,
+                playerTransform.position.y + climbUpHeight, playerTransform.position.z);
+        }
+        // Climbing down
+        else
+        {
+            playerTransform.position = new Vector3(climbingObject.position.x,
+                playerTransform.position.y - climbDownHeight, playerTransform.position.z);
+        }
     }
 
-    public void OnAir()
-    {
-        
-    }
 
-    public void Tag()
-    {
-
-    }
-
-    public void Damaged()
-    {
-
-    }
-
-    public void OnGround()
-    {
-        playerController.ChangeLowerState(CHARACTER_LOWER_STATE.IDLE);
-    }
-
-    public void Push(bool push) {return;}
+    /***** Inavailable State Change *****/
+    public void Move(int move) { return; }
+    public void Stop() { return; }
+    public void Aim(bool isAiming) { return; }
+    public void OnAir() { return; }
+    public void OnGround(){ return; }
+    public void Tag() { return; }
+    public void Push(bool push) { return; }
 }

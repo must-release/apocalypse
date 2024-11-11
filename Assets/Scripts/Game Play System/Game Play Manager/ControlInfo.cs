@@ -16,6 +16,7 @@ public class ControlInfo
 
     // Object Control
     public bool climb;
+    public GameObject climbingObject;
     public bool push;
     public bool interact;
 

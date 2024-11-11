@@ -1,9 +1,11 @@
 using UnityEngine;
 using CharacterEums;
+using System.Collections;
 
 public interface IPlayer
 {
     public bool IsLoaded {get; set;}
+    public IEnumerator LoadWeaponsAndDots();
     public void ShowCharacter(bool value);
     public void RotateUpperBody(float rotateAngle);
     public void RotateUpperBody(Vector3 target);

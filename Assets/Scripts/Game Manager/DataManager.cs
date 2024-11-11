@@ -58,7 +58,7 @@ public class DataManager : MonoBehaviour
         // Initialize Info
         string saveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); // Get current time
         STAGE curStage = STAGE.TEST;
-        int curMap = 2;
+        int curMap = 3;
         GameEvent startingEvent = null;
         CHARACTER lastChar = CHARACTER.HERO;
         string playTime = "00:00";

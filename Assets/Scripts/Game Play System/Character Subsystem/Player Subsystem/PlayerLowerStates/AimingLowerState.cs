@@ -38,10 +38,8 @@ public class AimingLowerState : MonoBehaviour, IPlayerLowerState
     }
     public void Aim(bool isAiming) { if(!isAiming) playerController.ChangeLowerState(CHARACTER_LOWER_STATE.IDLE);}
     public void OnAir() { playerController.ChangeLowerState(CHARACTER_LOWER_STATE.JUMPING); }
-    public void Damaged()
-    {
-
-    }
+    public void Damaged() { playerController.ChangeLowerState(CHARACTER_LOWER_STATE.DAMAGED); }
+    
     public void Move(int move) { return; }
     public void Climb(bool climb) { return; }
     public void Jump() {return;}

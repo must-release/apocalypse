@@ -11,6 +11,7 @@ public class PlayerController : CharacterBase, SceneObejct
 
     public IPlayer CurrentPlayer { get; private set; }
     public CHARACTER CurrentCharacter { get; private set; }
+    public ControlInfo CurrentControlInfo {get; private set; }
     public IPlayerLowerState LowerState { get; private set; }
     public IPlayerUpperState UpperState { get; private set; }
 
@@ -47,7 +48,7 @@ public class PlayerController : CharacterBase, SceneObejct
 
     public bool IsLoaded()
     {
-        return playerDictionary[CHARACTER.HERO].IsLoaded; // && playerDictionary[CHARACTER.HEROINE].IsLoaded
+        return playerDictionary[CHARACTER.HERO].IsLoaded; // && playerDictionary[CHARACTER.HEROINE].IsLoaded;
     }
 
     // Set player according to the info
@@ -64,6 +65,9 @@ public class PlayerController : CharacterBase, SceneObejct
     // Control player according to the control info
     public override void ControlCharacter(ControlInfo controlInfo)
     {
+        // Set control info of current frame
+        CurrentControlInfo = controlInfo; 
+
         // First, control interactable obejcts. Next, control lower body. Lastly, control upper body.
         ControlInteractionObjects(controlInfo);
         ControlLowerBody(controlInfo);
@@ -102,10 +106,7 @@ public class PlayerController : CharacterBase, SceneObejct
             UpperState.Aim(controlInfo.aim);
             if (controlInfo.upDown > 0) UpperState.LookUp(true);
             else UpperState.LookUp(false);
-            if (controlInfo.attack) 
-            {
-                UpperState.Attack();
-            }
+            if (controlInfo.attack) UpperState.Attack();
         }
     }
 
@@ -158,17 +159,11 @@ public class PlayerController : CharacterBase, SceneObejct
 
     public void AddLowerState(CHARACTER_LOWER_STATE stateKey, IPlayerLowerState state)
     {
-        if (!lowerStateDictionary.ContainsKey(stateKey))
-        {
-            lowerStateDictionary[stateKey] = state;
-        }
+        if (!lowerStateDictionary.ContainsKey(stateKey)) lowerStateDictionary[stateKey] = state;
     }
 
     public void AddUpperState(CHARACTER_UPPER_STATE stateKey, IPlayerUpperState state)
     {
-        if (!upperStateDictionary.ContainsKey(stateKey))
-        {
-            upperStateDictionary[stateKey] = state;
-        }
+        if (!upperStateDictionary.ContainsKey(stateKey)) upperStateDictionary[stateKey] = state;
     }
 }

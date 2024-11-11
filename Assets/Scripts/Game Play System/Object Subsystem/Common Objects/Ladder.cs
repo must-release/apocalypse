@@ -3,11 +3,12 @@ using UnityEngine;
 public class Ladder : InteractionObject
 {   
     Transform ladderGround;
-    float climbUpHeight = 0.1f;
+    Transform bottom;
 
     private void Start() 
     {
         ladderGround = transform.Find("Ground");
+        bottom = transform.Find("Bottom");
     }
 
     // Check if ladder object can be interacted, and set object control info
@@ -25,44 +26,41 @@ public class Ladder : InteractionObject
         }
     }
 
+    // Start interaction between character and ladder
     public override void StartInteraction(CharacterBase target, ControlInfo controlInfo)
     {
         base.StartInteraction(target, controlInfo);
 
-        // Turn off ground object
-        ladderGround.gameObject.SetActive(false);
+        // Ignore collision between ladder ground and character
+        Physics2D.IgnoreCollision(target.GetComponent<Collider2D>(), 
+            ladderGround.GetComponent<Collider2D>(), true);
 
-        // Move character near the ladder
-        if(controlInfo.upDown > 0)
-        {
-            target.transform.position = new Vector3(transform.position.x,
-                target.transform.position.y + climbUpHeight, target.transform.position.z);
-        }
-        else
-        {
-            target.transform.position = new Vector3(transform.position.x,
-                ladderGround.position.y - target.CharacterHeight / 4, target.transform.position.z);
-        }
+        // Set current ladder as a climbing object
+        controlInfo.climbingObject = gameObject;
     }
 
+    // Check if ladder object and character can still interact, and set object control info
     public override bool CheckInteractingControl(CharacterBase character, ControlInfo controlInfo)
     {
         if (!base.CheckInteractingControl(character, controlInfo)) return false;
 
-        if (character.transform.position.y > ladderGround.position.y || character.StandingGround
-            || controlInfo.jump)
+        if (character.transform.position.y > ladderGround.position.y || 
+            character.transform.position.y < bottom.position.y ||
+            character.StandingGround || controlInfo.jump)
         {
             return controlInfo.climb = false;
         }
         else return true;
     }
 
+    // End interaction between character and ladder
     public override void EndInteraction(CharacterBase target, ControlInfo controlInfo)
     {
         base.EndInteraction(target, controlInfo);
 
-        // Turn on ground object
-        ladderGround.gameObject.SetActive(true);
+        // Enable collision check between ladder ground and character
+        Physics2D.IgnoreCollision(target.GetComponent<Collider2D>(), 
+            ladderGround.GetComponent<Collider2D>(), false);
     }
 
 

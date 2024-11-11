@@ -7,7 +7,7 @@ public class HeroController : MonoBehaviour, IPlayer
 {
     public bool IsLoaded {get; set;}
     private Queue<WeaponBase> weapons;
-    private List<AimingDot> aimingDots;
+    private List<GameObject> aimingDots;
     private int weaponCount;
     private int aimingDotsNum;
     private Transform shootingPointPivot;
@@ -16,7 +16,7 @@ public class HeroController : MonoBehaviour, IPlayer
 
     private void Awake() {
         weapons = new Queue<WeaponBase>();
-        aimingDots = new List<AimingDot>();
+        aimingDots = new List<GameObject>();
         weaponCount = 20;
         aimingDotsNum = 40;
         IsLoaded = false;
@@ -26,7 +26,7 @@ public class HeroController : MonoBehaviour, IPlayer
     }
 
     private void Start() { StartCoroutine(LoadWeaponsAndDots()); }
-    IEnumerator LoadWeaponsAndDots()
+    public IEnumerator LoadWeaponsAndDots()
     {
         yield return WeaponFactory.Instance.PoolWeapons(WEAPON_TYPE.BULLET, weapons, weaponCount);
         yield return WeaponFactory.Instance.PoolAimingDots(WEAPON_TYPE.BULLET, aimingDots, aimingDotsNum);

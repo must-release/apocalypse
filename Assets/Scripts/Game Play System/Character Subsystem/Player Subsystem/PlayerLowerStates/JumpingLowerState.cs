@@ -66,20 +66,14 @@ public class JumpingLowerState : MonoBehaviour, IPlayerLowerState
         playerController.ChangeLowerState(CHARACTER_LOWER_STATE.IDLE);
     }
 
-    public void Aim(bool isAiming) { return; }
-
-    public void Tag()
-    {
-
-    }
-
     public void Climb(bool climb) 
     {
         if (climb) playerController.ChangeLowerState(CHARACTER_LOWER_STATE.CLIMBING);
     }
 
+    public void Aim(bool isAiming) { return; }
+    public void Tag() { return; }
     public void Jump() { return; }
-
     public void OnAir() { return; }
     public void Push(bool push) {return;}
     public void UpDown(int upDown) {return;}
