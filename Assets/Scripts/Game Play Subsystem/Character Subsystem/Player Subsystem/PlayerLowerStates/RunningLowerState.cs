@@ -15,10 +15,10 @@ public class RunningLowerState : MonoBehaviour, IPlayerLowerState
         playerTransform = transform.parent.parent;
         playerController = playerTransform.GetComponent<PlayerController>();
         playerRigid = playerTransform.GetComponent<Rigidbody2D>();
-        playerController.AddLowerState(CHARACTER_LOWER_STATE.RUNNING, this);
+        playerController.AddLowerState(PLAYER_LOWER_STATE.RUNNING, this);
     }
 
-    public CHARACTER_LOWER_STATE GetState() { return CHARACTER_LOWER_STATE.RUNNING; }
+    public PLAYER_LOWER_STATE GetState() { return PLAYER_LOWER_STATE.RUNNING; }
     public bool DisableUpperBody() { return false; }
 
     public void StartState()
@@ -53,41 +53,41 @@ public class RunningLowerState : MonoBehaviour, IPlayerLowerState
 
     public void Stop()
     {
-        playerController.ChangeLowerState(CHARACTER_LOWER_STATE.IDLE);
+        playerController.ChangeLowerState(PLAYER_LOWER_STATE.IDLE);
     }
 
     public void Jump()
     {
         playerRigid.velocity = new Vector2(playerRigid.velocity.x, playerController.JumpingSpeed);
-        playerController.ChangeLowerState(CHARACTER_LOWER_STATE.JUMPING);
+        playerController.ChangeLowerState(PLAYER_LOWER_STATE.JUMPING);
     }
 
     public void OnAir()
     {
-        playerController.ChangeLowerState(CHARACTER_LOWER_STATE.JUMPING);
+        playerController.ChangeLowerState(PLAYER_LOWER_STATE.JUMPING);
     }
 
     public void Aim(bool isAiming)
     {
         if (isAiming)
         {
-            playerController.ChangeLowerState(CHARACTER_LOWER_STATE.AIMING);
+            playerController.ChangeLowerState(PLAYER_LOWER_STATE.AIMING);
         }
     }
 
     public void Tag()
     {
-        playerController.ChangeLowerState(CHARACTER_LOWER_STATE.TAGGING);
+        playerController.ChangeLowerState(PLAYER_LOWER_STATE.TAGGING);
     }
 
     public void Damaged()
     {
-        playerController.ChangeLowerState(CHARACTER_LOWER_STATE.DAMAGED);
+        playerController.ChangeLowerState(PLAYER_LOWER_STATE.DAMAGED);
     }
 
     public void Climb(bool climb) 
     {
-        if (climb) playerController.ChangeLowerState(CHARACTER_LOWER_STATE.CLIMBING);
+        if (climb) playerController.ChangeLowerState(PLAYER_LOWER_STATE.CLIMBING);
     }
 
     public void OnGround() { return; }

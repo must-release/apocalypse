@@ -12,10 +12,10 @@ public class JumpingUpperState : MonoBehaviour, IPlayerUpperState
     {
         playerTransform = transform.parent.parent;
         playerController = playerTransform.GetComponent<PlayerController>();
-        playerController.AddUpperState(CHARACTER_UPPER_STATE.JUMPING, this);
+        playerController.AddUpperState(PLAYER_UPPER_STATE.JUMPING, this);
     }
 
-    public CHARACTER_UPPER_STATE GetState() { return CHARACTER_UPPER_STATE.JUMPING; }
+    public PLAYER_UPPER_STATE GetState() { return PLAYER_UPPER_STATE.JUMPING; }
 
     public void StartState()
     {
@@ -25,14 +25,17 @@ public class JumpingUpperState : MonoBehaviour, IPlayerUpperState
     {
 
     }
-    public void EndState()
+    public void EndState(PLAYER_UPPER_STATE _)
     {
 
     }
-    public void Disable() { playerController.ChangeUpperState(CHARACTER_UPPER_STATE.DISABLED); }
-    public void OnGround() { playerController.ChangeUpperState(CHARACTER_UPPER_STATE.IDLE); }
-    public void LookUp(bool lookUp) { if(lookUp) playerController.ChangeUpperState(CHARACTER_UPPER_STATE.LOOKING_UP);}
-    public void Attack() { playerController.ChangeUpperState(CHARACTER_UPPER_STATE.ATTACKING); }
+    public void Disable() { playerController.ChangeUpperState(PLAYER_UPPER_STATE.DISABLED); }
+    public void OnGround() { playerController.ChangeUpperState(PLAYER_UPPER_STATE.IDLE); }
+    public void LookUp(bool lookUp) { if(lookUp) playerController.ChangeUpperState(PLAYER_UPPER_STATE.LOOKING_UP);}
+    public void Attack() { playerController.ChangeUpperState(PLAYER_UPPER_STATE.ATTACKING); }
+
+
+    /***** Inavailable State Change *****/
     public void Aim(Vector3 aim) { return; }
     public void Stop() { return; }
     public void Move() { return; }

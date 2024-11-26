@@ -61,7 +61,7 @@ public class SceneActivateEvent : GameEvent
         Transform player = GameSceneController.Instance.FindPlayerTransform();
         if(player != null)
         {
-            CHARACTER character = PlayerManager.Instance.Character;
+            PLAYER character = PlayerManager.Instance.Character;
             GamePlayManager.Instance.InitializePlayerCharacter(player, character);
         }
 

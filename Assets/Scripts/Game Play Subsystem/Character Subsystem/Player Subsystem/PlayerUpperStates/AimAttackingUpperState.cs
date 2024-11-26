@@ -13,44 +13,60 @@ public class AimAttackingUpperState : MonoBehaviour, IPlayerUpperState
     {
         playerTransform = transform.parent.parent;
         playerController = playerTransform.GetComponent<PlayerController>();
-        playerController.AddUpperState(CHARACTER_UPPER_STATE.AIM_ATTACKING, this);
+        playerController.AddUpperState(PLAYER_UPPER_STATE.AIM_ATTACKING, this);
     }
 
-    public CHARACTER_UPPER_STATE GetState() { return CHARACTER_UPPER_STATE.AIM_ATTACKING; }
+    public PLAYER_UPPER_STATE GetState() { return PLAYER_UPPER_STATE.AIM_ATTACKING; }
 
     public void StartState()
     {
         attackCoolTime = playerController.CurrentPlayer.Attack();
     }
+
     public void UpdateState()
     {
+        // Wait for attacking animation
         attackCoolTime -= Time.deltaTime;
         if (attackCoolTime < 0)
         {
-            playerController.ChangeUpperState(CHARACTER_UPPER_STATE.AIMING);
+            playerController.ChangeUpperState(PLAYER_UPPER_STATE.AIMING);
         }
 
-        direction = aimingPosition.x > playerTransform.position.x ? 1 : -1;
-        playerTransform.localScale = new Vector3(direction * Mathf.Abs(playerTransform.localScale.x),
-            playerTransform.localScale.y, playerTransform.localScale.z);
+        // Set player's looking direction
+        SetDirection();
+
+        // Rotate upper body toward the aiming position
         playerController.CurrentPlayer.RotateUpperBody(aimingPosition);
     }
-    public void EndState()
-    {
 
+    public void EndState(PLAYER_UPPER_STATE nextState)
+    {
+        // Recover player's upper body rotation when not aiming or attacking
+        if (nextState != PLAYER_UPPER_STATE.AIMING && nextState != PLAYER_UPPER_STATE.AIM_ATTACKING)
+            playerController.CurrentPlayer.RotateUpperBody(0);
     }
-    public void Disable() { playerController.ChangeUpperState(CHARACTER_UPPER_STATE.DISABLED); }
-    public void Attack() { playerController.ChangeUpperState(CHARACTER_UPPER_STATE.AIM_ATTACKING); }
+
+    public void Disable() { playerController.ChangeUpperState(PLAYER_UPPER_STATE.DISABLED); }
+
+    public void Attack() { playerController.ChangeUpperState(PLAYER_UPPER_STATE.AIM_ATTACKING); }
+
     public void Aim(Vector3 aim)
     {
         if(aim == Vector3.zero)
-        {
-            playerController.ChangeUpperState(CHARACTER_UPPER_STATE.IDLE); 
-            playerController.CurrentPlayer.RotateUpperBody(0);
-        }  
+            playerController.ChangeUpperState(PLAYER_UPPER_STATE.IDLE); 
         else
             aimingPosition = aim;
     }
+
+    // Set player's looking direction
+    private void SetDirection()
+    {
+        direction = aimingPosition.x > playerTransform.position.x ? 1 : -1;
+        playerTransform.localScale = new Vector3(direction * Mathf.Abs(playerTransform.localScale.x),
+            playerTransform.localScale.y, playerTransform.localScale.z);
+    }
+
+    /***** Inavailable State Change *****/
     public void LookUp(bool lookUp) { return;}
     public void Stop() { return; }
     public void Jump() { return; }

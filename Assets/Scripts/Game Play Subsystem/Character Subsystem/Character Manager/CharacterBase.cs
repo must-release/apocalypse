@@ -17,11 +17,14 @@ public abstract class CharacterBase : MonoBehaviour
     public abstract void OnGround();
     public abstract void OnDamaged();
 
-    private void Awake() { InitializeCharacter(); }
-    protected virtual void InitializeCharacter()
+    private void Awake() { AwakeCharacter(); }
+    protected virtual void AwakeCharacter()
     {
         gameObject.layer = LayerMask.NameToLayer("Character");
     }
+
+    private void Start() { StartCharacter(); }
+    protected virtual void StartCharacter() { }
 
 
     /***** Object Interaction Functions *****/
@@ -85,14 +88,14 @@ public abstract class CharacterBase : MonoBehaviour
             if(collision.gameObject == StandingGround)
             {
                 StandingGround = null;
-                if(isActiveAndEnabled)
+                if(gameObject.activeSelf)
                     StartCoroutine(OnAirDelay());
             }
         }
     }
     IEnumerator OnAirDelay()
     {
-        yield return new WaitForSeconds(0.05f);
+        yield return new WaitForSeconds(0.1f);
         if(StandingGround == null) OnAir();
     }
 

@@ -16,10 +16,10 @@ public class AimingLowerState : MonoBehaviour, IPlayerLowerState
         playerTransform = transform.parent.parent;
         playerController = playerTransform.GetComponent<PlayerController>();
         playerRigid = playerTransform.GetComponent<Rigidbody2D>();
-        playerController.AddLowerState(CHARACTER_LOWER_STATE.AIMING, this);
+        playerController.AddLowerState(PLAYER_LOWER_STATE.AIMING, this);
     }
 
-    public CHARACTER_LOWER_STATE GetState() { return CHARACTER_LOWER_STATE.AIMING; }
+    public PLAYER_LOWER_STATE GetState() { return PLAYER_LOWER_STATE.AIMING; }
     public bool DisableUpperBody() { return false; }
 
     public void StartState()
@@ -36,9 +36,9 @@ public class AimingLowerState : MonoBehaviour, IPlayerLowerState
     {
 
     }
-    public void Aim(bool isAiming) { if(!isAiming) playerController.ChangeLowerState(CHARACTER_LOWER_STATE.IDLE);}
-    public void OnAir() { playerController.ChangeLowerState(CHARACTER_LOWER_STATE.JUMPING); }
-    public void Damaged() { playerController.ChangeLowerState(CHARACTER_LOWER_STATE.DAMAGED); }
+    public void Aim(bool isAiming) { if(!isAiming) playerController.ChangeLowerState(PLAYER_LOWER_STATE.IDLE);}
+    public void OnAir() { playerController.ChangeLowerState(PLAYER_LOWER_STATE.JUMPING); }
+    public void Damaged() { playerController.ChangeLowerState(PLAYER_LOWER_STATE.DAMAGED); }
     
     public void Move(int move) { return; }
     public void Climb(bool climb) { return; }

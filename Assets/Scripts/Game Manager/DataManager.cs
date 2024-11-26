@@ -60,7 +60,7 @@ public class DataManager : MonoBehaviour
         STAGE curStage = STAGE.TEST;
         int curMap = 3;
         GameEvent startingEvent = null;
-        CHARACTER lastChar = CHARACTER.HERO;
+        PLAYER lastChar = PLAYER.HERO;
         string playTime = "00:00";
 
         // Initialize current data
@@ -81,7 +81,7 @@ public class DataManager : MonoBehaviour
         IsSaving = true;
 
         // Update current data according to player data
-        PlayerManager.Instance.GetPlayerData(out STAGE stage, out int map, out CHARACTER character);
+        PlayerManager.Instance.GetPlayerData(out STAGE stage, out int map, out PLAYER character);
         currentData.UpdatePlayerData(stage, map, character);
 
         // Wait for a frame before taking a screenshot

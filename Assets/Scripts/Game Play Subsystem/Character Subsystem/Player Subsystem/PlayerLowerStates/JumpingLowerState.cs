@@ -15,10 +15,10 @@ public class JumpingLowerState : MonoBehaviour, IPlayerLowerState
         playerTransform = transform.parent.parent;
         playerController = playerTransform.GetComponent<PlayerController>();
         playerRigid = playerTransform.GetComponent<Rigidbody2D>();
-        playerController.AddLowerState(CHARACTER_LOWER_STATE.JUMPING, this);
+        playerController.AddLowerState(PLAYER_LOWER_STATE.JUMPING, this);
     }
 
-    public CHARACTER_LOWER_STATE GetState() { return CHARACTER_LOWER_STATE.JUMPING; }
+    public PLAYER_LOWER_STATE GetState() { return PLAYER_LOWER_STATE.JUMPING; }
     public bool DisableUpperBody() { return false; }
 
     public void StartState()
@@ -58,17 +58,17 @@ public class JumpingLowerState : MonoBehaviour, IPlayerLowerState
 
     public void Damaged()
     {
-        playerController.ChangeLowerState(CHARACTER_LOWER_STATE.DAMAGED);
+        playerController.ChangeLowerState(PLAYER_LOWER_STATE.DAMAGED);
     }
 
     public void OnGround()
     {
-        playerController.ChangeLowerState(CHARACTER_LOWER_STATE.IDLE);
+        playerController.ChangeLowerState(PLAYER_LOWER_STATE.IDLE);
     }
 
     public void Climb(bool climb) 
     {
-        if (climb) playerController.ChangeLowerState(CHARACTER_LOWER_STATE.CLIMBING);
+        if (climb) playerController.ChangeLowerState(PLAYER_LOWER_STATE.CLIMBING);
     }
 
     public void Aim(bool isAiming) { return; }

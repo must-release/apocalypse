@@ -19,7 +19,7 @@ public class CharacterManager : MonoBehaviour
     }
 
     // Set player character transform, info
-    public void SetPlayerCharacter(Transform player, CHARACTER who)
+    public void SetPlayerCharacter(Transform player, PLAYER who)
     {
         // Find player controller
         playerController = player.GetComponent<PlayerController>();

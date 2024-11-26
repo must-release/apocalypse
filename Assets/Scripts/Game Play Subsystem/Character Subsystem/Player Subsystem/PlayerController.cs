@@ -5,38 +5,38 @@ using UnityEngine;
 
 public class PlayerController : CharacterBase, SceneObejct
 {
-    public float MovingSpeed { get; private set; } = 8f;
-    public float JumpingSpeed { get; private set; } = 15f;
-    public float Gravity { get; private set; } = 4f;
+    public float MovingSpeed { get; private set; } = 15f;
+    public float JumpingSpeed { get; private set; } = 30f;
+    public float Gravity { get; private set; } = 10f;
 
     public IPlayer CurrentPlayer { get; private set; }
-    public CHARACTER CurrentCharacter { get; private set; }
+    public PLAYER CurrentCharacter { get; private set; }
     public ControlInfo CurrentControlInfo {get; private set; }
     public IPlayerLowerState LowerState { get; private set; }
     public IPlayerUpperState UpperState { get; private set; }
 
-    private Dictionary<CHARACTER, IPlayer> playerDictionary;
-    private Dictionary<CHARACTER_LOWER_STATE, IPlayerLowerState> lowerStateDictionary;
-    private Dictionary<CHARACTER_UPPER_STATE, IPlayerUpperState> upperStateDictionary;
+    private Dictionary<PLAYER, IPlayer> playerDictionary;
+    private Dictionary<PLAYER_LOWER_STATE, IPlayerLowerState> lowerStateDictionary;
+    private Dictionary<PLAYER_UPPER_STATE, IPlayerUpperState> upperStateDictionary;
 
     private Rigidbody2D playerRigid;
 
-    protected override void InitializeCharacter()
+    protected override void AwakeCharacter()
     {
-        base.InitializeCharacter();
+        base.AwakeCharacter();
 
         playerRigid = GetComponent<Rigidbody2D>();
         playerRigid.gravityScale = Gravity;
         CharacterHeight = GetComponent<CapsuleCollider2D>().size.y * transform.localScale.y;
-        lowerStateDictionary = new Dictionary<CHARACTER_LOWER_STATE, IPlayerLowerState>();
-        upperStateDictionary = new Dictionary<CHARACTER_UPPER_STATE, IPlayerUpperState>();
+        lowerStateDictionary = new Dictionary<PLAYER_LOWER_STATE, IPlayerLowerState>();
+        upperStateDictionary = new Dictionary<PLAYER_UPPER_STATE, IPlayerUpperState>();
 
         // Get player character object
-        playerDictionary = new Dictionary<CHARACTER, IPlayer>();
-        playerDictionary[CHARACTER.HERO] = transform.Find("Hero").GetComponent<IPlayer>();
-        playerDictionary[CHARACTER.HEROINE] = transform.Find("Heroine").GetComponent<IPlayer>();
-        CurrentPlayer = playerDictionary[CHARACTER.HERO];
-        CurrentCharacter = CHARACTER.HERO;
+        playerDictionary = new Dictionary<PLAYER, IPlayer>();
+        playerDictionary[PLAYER.HERO] = transform.Find("Hero").GetComponent<IPlayer>();
+        playerDictionary[PLAYER.HEROINE] = transform.Find("Heroine").GetComponent<IPlayer>();
+        CurrentPlayer = playerDictionary[PLAYER.HERO];
+        CurrentCharacter = PLAYER.HERO;
     }
 
     public void Update()
@@ -48,18 +48,18 @@ public class PlayerController : CharacterBase, SceneObejct
 
     public bool IsLoaded()
     {
-        return playerDictionary[CHARACTER.HERO].IsLoaded; // && playerDictionary[CHARACTER.HEROINE].IsLoaded;
+        return playerDictionary[PLAYER.HERO].IsLoaded; // && playerDictionary[CHARACTER.HEROINE].IsLoaded;
     }
 
     // Set player according to the info
-    public void SetPlayer(CHARACTER character)
+    public void SetPlayer(PLAYER character)
     {
         // Initially change character
         ChangeCharacter(character);
 
         // Set initial state
-        LowerState = lowerStateDictionary[CHARACTER_LOWER_STATE.IDLE];
-        UpperState = upperStateDictionary[CHARACTER_UPPER_STATE.IDLE];
+        LowerState = lowerStateDictionary[PLAYER_LOWER_STATE.IDLE];
+        UpperState = upperStateDictionary[PLAYER_UPPER_STATE.IDLE];
     }
 
     // Control player according to the control info
@@ -131,7 +131,7 @@ public class PlayerController : CharacterBase, SceneObejct
     }
 
     // Change player character
-    public void ChangeCharacter(CHARACTER character)
+    public void ChangeCharacter(PLAYER character)
     {
         CurrentPlayer.ShowCharacter(false);
         CurrentPlayer = playerDictionary[character];
@@ -140,7 +140,7 @@ public class PlayerController : CharacterBase, SceneObejct
     }
 
     // Change player's lower body state
-    public void ChangeLowerState(CHARACTER_LOWER_STATE state)
+    public void ChangeLowerState(PLAYER_LOWER_STATE state)
     {
         Debug.Log("Lower : " + LowerState.GetState().ToString() + " -> " + state.ToString());
         LowerState.EndState();
@@ -149,20 +149,20 @@ public class PlayerController : CharacterBase, SceneObejct
     }
 
     // Change player's upper body state
-    public void ChangeUpperState(CHARACTER_UPPER_STATE state)
+    public void ChangeUpperState(PLAYER_UPPER_STATE state)
     {
         Debug.Log("Uppper : " + UpperState.GetState().ToString() + " -> " + state.ToString());
-        UpperState.EndState();
+        UpperState.EndState(state);
         UpperState = upperStateDictionary[state];
         UpperState.StartState();
     }
 
-    public void AddLowerState(CHARACTER_LOWER_STATE stateKey, IPlayerLowerState state)
+    public void AddLowerState(PLAYER_LOWER_STATE stateKey, IPlayerLowerState state)
     {
         if (!lowerStateDictionary.ContainsKey(stateKey)) lowerStateDictionary[stateKey] = state;
     }
 
-    public void AddUpperState(CHARACTER_UPPER_STATE stateKey, IPlayerUpperState state)
+    public void AddUpperState(PLAYER_UPPER_STATE stateKey, IPlayerUpperState state)
     {
         if (!upperStateDictionary.ContainsKey(stateKey)) upperStateDictionary[stateKey] = state;
     }

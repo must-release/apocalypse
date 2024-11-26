@@ -20,14 +20,14 @@ public class TaggingLowerState : MonoBehaviour, IPlayerLowerState
         playerTransform = transform.parent.parent;
         playerController = playerTransform.GetComponent<PlayerController>();
         playerRigid = playerTransform.GetComponent<Rigidbody2D>();
-        playerController.AddLowerState(CHARACTER_LOWER_STATE.TAGGING, this);
+        playerController.AddLowerState(PLAYER_LOWER_STATE.TAGGING, this);
         taggingTime = 0.2f;
         time = 0f;
         popping = 3f;
         isOnAir = false;
     }
 
-    public CHARACTER_LOWER_STATE GetState() { return CHARACTER_LOWER_STATE.TAGGING; }
+    public PLAYER_LOWER_STATE GetState() { return PLAYER_LOWER_STATE.TAGGING; }
     public bool DisableUpperBody() { return true; }
 
     public void StartState()
@@ -36,7 +36,7 @@ public class TaggingLowerState : MonoBehaviour, IPlayerLowerState
         playerRigid.velocity = Vector2.up * popping;
 
         // Change player character
-        playerController.ChangeCharacter(playerController.CurrentCharacter == CHARACTER.HERO ? CHARACTER.HEROINE : CHARACTER.HERO);
+        playerController.ChangeCharacter(playerController.CurrentCharacter == PLAYER.HERO ? PLAYER.HEROINE : PLAYER.HERO);
     
         // Reset Time
         time = 0f;
@@ -49,11 +49,11 @@ public class TaggingLowerState : MonoBehaviour, IPlayerLowerState
         {
             if (isOnAir)
             {
-                playerController.ChangeLowerState(CHARACTER_LOWER_STATE.JUMPING);
+                playerController.ChangeLowerState(PLAYER_LOWER_STATE.JUMPING);
             }
             else
             {
-                playerController.ChangeLowerState(CHARACTER_LOWER_STATE.IDLE);
+                playerController.ChangeLowerState(PLAYER_LOWER_STATE.IDLE);
             }
         }
     }
@@ -67,7 +67,7 @@ public class TaggingLowerState : MonoBehaviour, IPlayerLowerState
 
     public void OnGround() { isOnAir = false; }
 
-    public void Damaged() { playerController.ChangeLowerState(CHARACTER_LOWER_STATE.DAMAGED); }
+    public void Damaged() { playerController.ChangeLowerState(PLAYER_LOWER_STATE.DAMAGED); }
 
 
     public void Tag() { return; }

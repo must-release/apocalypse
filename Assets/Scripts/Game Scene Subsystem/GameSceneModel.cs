@@ -96,23 +96,28 @@ public class GameSceneModel : MonoBehaviour
     IEnumerator LoadMap(string map)
     {
 
-        AsyncOperationHandle<GameObject> loadingMap = Addressables.InstantiateAsync(map);
+        AsyncOperationHandle<GameObject> loadingMap = Addressables.InstantiateAsync(map, SceneObjects.transform);
         yield return loadingMap;
         if (loadingMap.Status == AsyncOperationStatus.Succeeded)
         {
-            // Load map in inactive state
-            GameObject loadedMap = loadingMap.Result;
-            loadedMap.SetActive(false);
+            // Load map in active state
+            Transform loadedMap = loadingMap.Result.transform;
+
+            // Wait for async loading of scene objects in the map
+            foreach (var sceneObject in loadedMap.GetComponentsInChildren<SceneObejct>())
+            {
+                yield return new WaitUntil(()=>sceneObject.IsLoaded());
+            }
 
             // Check if the Maps queue is at its maximum capacity
             if (Maps.Count >= mapCount)
             {
                 Destroy(Maps.Dequeue().map); // Remove the oldest map
             }
-            Maps.Enqueue(new MapInfo(loadedMap));
+            Maps.Enqueue(new MapInfo(loadedMap.gameObject));
 
-            // Add map to the Scene objects
-            loadedMap.transform.parent = SceneObjects.transform;
+            // Inactivate loaded map
+            loadedMap.gameObject.SetActive(false);
         }
         else
         {
@@ -128,9 +133,9 @@ public class GameSceneModel : MonoBehaviour
         if (player.Status == AsyncOperationStatus.Succeeded)
         {
             Player = player.Result.transform;
-            if (Player.TryGetComponent(out SceneObejct sceneObejct))
+            if (Player.TryGetComponent(out SceneObejct sceneObject))
             {
-                yield return new WaitUntil(()=>sceneObejct.IsLoaded());
+                yield return new WaitUntil(()=>sceneObject.IsLoaded());
             }
             Player.gameObject.SetActive(false);
             Player.parent = SceneObjects.transform;

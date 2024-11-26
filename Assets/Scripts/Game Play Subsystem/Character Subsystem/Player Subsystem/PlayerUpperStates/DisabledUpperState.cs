@@ -12,10 +12,10 @@ public class DisabledUpperState : MonoBehaviour, IPlayerUpperState
     {
         playerTransform = transform.parent.parent;
         playerController = playerTransform.GetComponent<PlayerController>();
-        playerController.AddUpperState(CHARACTER_UPPER_STATE.DISABLED, this);
+        playerController.AddUpperState(PLAYER_UPPER_STATE.DISABLED, this);
     }
 
-    public CHARACTER_UPPER_STATE GetState() { return CHARACTER_UPPER_STATE.DISABLED; }
+    public PLAYER_UPPER_STATE GetState() { return PLAYER_UPPER_STATE.DISABLED; }
 
     public void StartState()
     {
@@ -25,21 +25,20 @@ public class DisabledUpperState : MonoBehaviour, IPlayerUpperState
     {
 
     }
-    public void EndState()
+    public void EndState(PLAYER_UPPER_STATE _)
     {
 
     }
     public void Enable()
     {
         if(playerController.StandingGround != null)
-        {
-            playerController.ChangeUpperState(CHARACTER_UPPER_STATE.IDLE);
-        }
+            playerController.ChangeUpperState(PLAYER_UPPER_STATE.IDLE);
         else
-        {
-            playerController.ChangeUpperState(CHARACTER_UPPER_STATE.JUMPING);
-        }
+            playerController.ChangeUpperState(PLAYER_UPPER_STATE.JUMPING);
     }
+
+
+    /***** Inavailable State Change *****/
     public void Move() { return; }
     public void Jump() { return; }
     public void OnAir() { return; }

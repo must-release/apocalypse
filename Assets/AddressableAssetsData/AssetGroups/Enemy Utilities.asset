@@ -10,31 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Maps
+  m_Name: Enemy Utilities
   m_EditorClassIdentifier: 
-  m_GroupName: Maps
+  m_GroupName: Enemy Utilities
   m_Data:
     m_SerializedData: []
-  m_GUID: bbb192d43ffd34d8fb0fc1527097ddff
+  m_GUID: f3dc55e6f873246f2b51eac4d657f9c6
   m_SerializeEntries:
-  - m_GUID: 8cb194ece59d24e609acc52c05ef0a02
-    m_Address: MAP_TEST_0
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b4ae9e8a9ccb44c00bf85459bbbd0386
-    m_Address: MAP_TEST_1
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8052f54242de0ef41b69e9ff253b841f
-    m_Address: MAP_TEST_3
+  - m_GUID: edfbd213f830a4402b23082a89f027a5
+    m_Address: Enemy Utilities/EnemyState
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 0018d54b9f5f74640839669867571db9, type: 2}
   m_SchemaSet:
-    m_Schemas:
-    - {fileID: 11400000, guid: 5935268ceff314fb38cd9527aee2d2ab, type: 2}
-    - {fileID: 11400000, guid: 7271b4cb15ec24624a1edf51dafc5cb0, type: 2}
+    m_Schemas: []

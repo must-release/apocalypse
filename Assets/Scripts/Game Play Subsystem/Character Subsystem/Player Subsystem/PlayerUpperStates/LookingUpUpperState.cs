@@ -12,46 +12,49 @@ public class LookingUpUpperState : MonoBehaviour, IPlayerUpperState
     {
         playerTransform = transform.parent.parent;
         playerController = playerTransform.GetComponent<PlayerController>();
-        playerController.AddUpperState(CHARACTER_UPPER_STATE.LOOKING_UP, this);
+        playerController.AddUpperState(PLAYER_UPPER_STATE.LOOKING_UP, this);
     }
 
-    public CHARACTER_UPPER_STATE GetState() { return CHARACTER_UPPER_STATE.LOOKING_UP; }
+    public PLAYER_UPPER_STATE GetState() { return PLAYER_UPPER_STATE.LOOKING_UP; }
 
     public void StartState()
     {
+        // Rotate upper body by 90 degree
         playerController.CurrentPlayer.RotateUpperBody(90);
     }
     public void UpdateState()
     {
 
     }
-    public void EndState()
+    public void EndState(PLAYER_UPPER_STATE nextState)
     {
-
+        // Recover upper body rotation when not attacking
+        if (nextState != PLAYER_UPPER_STATE.TOP_ATTACKING)
+            playerController.CurrentPlayer.RotateUpperBody(0);
     }
-    public void Disable() { playerController.ChangeUpperState(CHARACTER_UPPER_STATE.DISABLED); }
+
+    public void Disable() { playerController.ChangeUpperState(PLAYER_UPPER_STATE.DISABLED); }
+
     public void LookUp(bool lookUp) 
     { 
         if(!lookUp) 
         {
-            playerController.CurrentPlayer.RotateUpperBody(0);
-
             if (playerController.StandingGround == null)
-            {
-                playerController.ChangeUpperState(CHARACTER_UPPER_STATE.JUMPING);
-            }
+                playerController.ChangeUpperState(PLAYER_UPPER_STATE.JUMPING);
             else
-            {
-                playerController.ChangeUpperState(CHARACTER_UPPER_STATE.IDLE);
-            }
+                playerController.ChangeUpperState(PLAYER_UPPER_STATE.IDLE);
         }
     }
     public void Aim(Vector3 aim) 
     {  
         if (aim != Vector3.zero && playerController.StandingGround != null)
-            playerController.ChangeUpperState(CHARACTER_UPPER_STATE.AIMING);
+            playerController.ChangeUpperState(PLAYER_UPPER_STATE.AIMING);
     }
-    public void Attack() { playerController.ChangeUpperState(CHARACTER_UPPER_STATE.TOP_ATTACKING); }
+
+    public void Attack() { playerController.ChangeUpperState(PLAYER_UPPER_STATE.TOP_ATTACKING); }
+
+
+    /***** Inavailable State Change *****/
     public void OnGround() { return; }
     public void Stop() { return; }
     public void Move() { return; }

@@ -8,55 +8,72 @@ public class AimingUpperState : MonoBehaviour, IPlayerUpperState
     private Vector3 aimingPosition;
     private int direction;
     private bool fixedUpdateFlag;
-
-    // Start is called before the first frame update
+    
 
     public void Start()
     {
         playerTransform = transform.parent.parent;
         playerController = playerTransform.GetComponent<PlayerController>();
-        playerController.AddUpperState(CHARACTER_UPPER_STATE.AIMING, this);
+        playerController.AddUpperState(PLAYER_UPPER_STATE.AIMING, this);
     }
 
-    public CHARACTER_UPPER_STATE GetState() { return CHARACTER_UPPER_STATE.AIMING; }
+    public PLAYER_UPPER_STATE GetState() { return PLAYER_UPPER_STATE.AIMING; }
 
     public void StartState()
     {
+        // Enable fixed update
         fixedUpdateFlag = true;
     }
     public void UpdateState()
     {
-        direction = aimingPosition.x > playerTransform.position.x ? 1 : -1;
-        playerTransform.localScale = new Vector3(direction * Mathf.Abs(playerTransform.localScale.x),
-            playerTransform.localScale.y, playerTransform.localScale.z);
+        // Set player's looking direction
+        SetDirection();
+
+        // Rotate upper body toward the aiming position
         playerController.CurrentPlayer.RotateUpperBody(aimingPosition);
     }
+
     private void FixedUpdate() 
     {   
+        // Turn on player's aiming state
         if(fixedUpdateFlag) playerController.CurrentPlayer.Aim(true);
     }
 
-    public void EndState()
+    public void EndState(PLAYER_UPPER_STATE nextState)
     {
+        // Turn off player's aiming state
         playerController.CurrentPlayer.Aim(false);
+
+        // Recover player's upper body rotation when not attacking
+        if(nextState != PLAYER_UPPER_STATE.AIM_ATTACKING)
+            playerController.CurrentPlayer.RotateUpperBody(0);
+
+        // Disable fixed update
         fixedUpdateFlag = false;
     }
-    public void Disable() { playerController.ChangeUpperState(CHARACTER_UPPER_STATE.DISABLED); }
-    public void OnAir() { playerController.ChangeUpperState(CHARACTER_UPPER_STATE.JUMPING); }
+
+    public void Disable() { playerController.ChangeUpperState(PLAYER_UPPER_STATE.DISABLED); }
+
+    public void OnAir() { playerController.ChangeUpperState(PLAYER_UPPER_STATE.JUMPING); }
+
+    public void Attack() { playerController.ChangeUpperState(PLAYER_UPPER_STATE.AIM_ATTACKING); }
+
     public void Aim(Vector3 aim)
     {
         if(aim == Vector3.zero)
-        {
-            playerController.ChangeUpperState(CHARACTER_UPPER_STATE.IDLE); 
-            playerController.CurrentPlayer.RotateUpperBody(0);
-        }  
+            playerController.ChangeUpperState(PLAYER_UPPER_STATE.IDLE); 
         else
             aimingPosition = aim;
     }
-    public void Attack()
+
+    private void SetDirection()
     {
-        playerController.ChangeUpperState(CHARACTER_UPPER_STATE.AIM_ATTACKING);
+        direction = aimingPosition.x > playerTransform.position.x ? 1 : -1;
+        playerTransform.localScale = new Vector3(direction * Mathf.Abs(playerTransform.localScale.x),
+            playerTransform.localScale.y, playerTransform.localScale.z);
     }
+
+    /***** Inavailable State Change *****/
     public void Jump() { return; }
     public void Stop() { return; }
     public void LookUp(bool lookUp) { return; }

@@ -15,7 +15,7 @@ public interface IPlayer
 
 public interface IPlayerLowerState
 {
-    public CHARACTER_LOWER_STATE GetState();
+    public PLAYER_LOWER_STATE GetState();
     public bool DisableUpperBody();
     public void StartState();
     public void UpdateState();
@@ -36,10 +36,10 @@ public interface IPlayerLowerState
 
 public interface IPlayerUpperState
 {
-    public CHARACTER_UPPER_STATE GetState();
+    public PLAYER_UPPER_STATE GetState();
     public void StartState();
     public void UpdateState();
-    public void EndState();
+    public void EndState(PLAYER_UPPER_STATE nextState);
     
     public void Move();
     public void Stop();

@@ -17,7 +17,7 @@ public class UserData : ISerializationCallbackReceiver
     public int CurrentMap { get { return currentMap; } set { currentMap = value; } }
 
     [SerializeField] private int lastCharacter;
-    public CHARACTER LastCharacter { get { return (CHARACTER)lastCharacter; } set { lastCharacter = (int)value; } }
+    public PLAYER LastCharacter { get { return (PLAYER)lastCharacter; } set { lastCharacter = (int)value; } }
 
     [SerializeField] private string playTime;
     public string PlayTime { get { return playTime; } set { playTime = value; } }
@@ -62,7 +62,7 @@ public class UserData : ISerializationCallbackReceiver
     [SerializeField] private string startingEventAssemblyQualifiedName;
     [SerializeField] private string startingEventData;
 
-    public UserData(STAGE curStage, int curMap, GameEvent startingEvent, CHARACTER lastChar, string playTime, string saveTime)
+    public UserData(STAGE curStage, int curMap, GameEvent startingEvent, PLAYER lastChar, string playTime, string saveTime)
     {
         CurrentStage = curStage;
         CurrentMap = curMap;
@@ -73,7 +73,7 @@ public class UserData : ISerializationCallbackReceiver
     }
 
     // Update user data
-    public void UpdatePlayerData(STAGE stage, int map, CHARACTER character)
+    public void UpdatePlayerData(STAGE stage, int map, PLAYER character)
     {
         CurrentStage = stage;
         CurrentMap = map;
