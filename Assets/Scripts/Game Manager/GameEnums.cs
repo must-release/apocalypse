@@ -43,3 +43,14 @@ namespace ScreenEffectEnums
 {
     public enum SCREEN_EFFECT { FADE_IN, FADE_OUT }
 }
+
+namespace LayerEnums
+{
+    public static class LAYER
+    {
+        public const string GROUND = "Ground";
+        public const string CHARACTER = "Character";
+        public const string WEAPON = "Weapon";
+
+    }
+}

@@ -10,12 +10,21 @@ public abstract class EnemyController : CharacterBase, SceneObejct
     public GameObject DetectedPlayer { get; set; }
     public bool IsPlayerInAttackRange { get; private set; }
 
+
+    // Terrain checking params
+    protected float groundCheckingDistance;
+    protected Vector3 groundCheckingVector;
+    protected float ObstacleCheckingDistance;
+    protected bool checkTerrain;
+
+    // Detecting player params
     protected Vector2 detectRange;
     protected Vector2 rangeOffset;
     protected float attackRange = 1;
 
     private IEnemyState currentState;
     private Dictionary<ENEMY_STATE, IEnemyState> enemyStateDictionary;
+    private TerrainChecker terrainChecker;
     private bool isLoaded = false;
 
 
@@ -27,12 +36,19 @@ public abstract class EnemyController : CharacterBase, SceneObejct
     { 
         base.AwakeCharacter();
     
-        StartCoroutine(AsyncEnemyInitialze());
         AwakeEnemy();
+        StartCoroutine(AsyncEnemyInitialze());
         //SetDetectRange();
     }
     protected virtual void AwakeEnemy()
     {
+        // Terrain checker settings
+        groundCheckingDistance = 5f;
+        groundCheckingVector = new Vector3(1, - 1, 0);
+        ObstacleCheckingDistance = 3f;
+        checkTerrain = true;
+
+
         detectRange = new Vector2(20, 8);
         rangeOffset = new Vector2(4, 0);
     }
@@ -46,10 +62,20 @@ public abstract class EnemyController : CharacterBase, SceneObejct
     }
     protected virtual void StartEnemy(){ }
 
+    private void OnEnable() 
+    {
+        if(isLoaded)
+        {
+            // Start current state when enabled
+            currentState.StartState();
+        }
+    }
+
     IEnumerator AsyncEnemyInitialze()
     {
         yield return SetStateDictionary();
-
+        if(checkTerrain) yield return SetTerrainChecker();
+        
         isLoaded = true;
     }
 
@@ -58,7 +84,7 @@ public abstract class EnemyController : CharacterBase, SceneObejct
     {
         enemyStateDictionary = new Dictionary<ENEMY_STATE, IEnemyState>();
 
-        AsyncOperationHandle<GameObject> enemyState = Addressables.InstantiateAsync("Enemy Utilities/EnemyState", transform);
+        AsyncOperationHandle<GameObject> enemyState = Addressables.InstantiateAsync("Enemy State", transform);
         yield return enemyState;
 
         if (enemyState.Status == AsyncOperationStatus.Succeeded)
@@ -73,11 +99,31 @@ public abstract class EnemyController : CharacterBase, SceneObejct
         }
         else
         {
-            Debug.LogError("Failed to load the enemy state: ");
+            Debug.LogError("Failed to load the enemy state");
+        }
+    }
+
+    // Get ray checker prefab and set ray checking settings
+    IEnumerator SetTerrainChecker()
+    {
+        AsyncOperationHandle<GameObject> checker = Addressables.InstantiateAsync("Terrain Checker", transform);
+        yield return checker;
+
+        if(checker.Status == AsyncOperationStatus.Succeeded)
+        {
+            terrainChecker = checker.Result.GetComponent<TerrainChecker>();
+            terrainChecker.SetTerrainChecker(groundCheckingDistance, groundCheckingVector,
+                 ObstacleCheckingDistance);
+        }
+        else
+        {
+            Debug.LogError("Failed to load the Terrain Checker");
         }
     }
 
     public bool IsLoaded() { return isLoaded; }
+
+
 
     /****** Operate Enemy Character ******/
 
@@ -98,6 +144,8 @@ public abstract class EnemyController : CharacterBase, SceneObejct
         currentState.UpdateState();
     }
 
+    // Initialize patrol info
+    public abstract void SetPatrolInfo();
     // Circle patrol area 
     public abstract void Patrol();
 
@@ -119,6 +167,9 @@ public abstract class EnemyController : CharacterBase, SceneObejct
         else
             IsPlayerInAttackRange = false;
     }
+
+    // Check if enemy can go ahead
+    protected bool CanMoveAhead() { return terrainChecker.CanMoveAhead(); }
 
 
 

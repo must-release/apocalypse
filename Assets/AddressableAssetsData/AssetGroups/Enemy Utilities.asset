@@ -18,7 +18,12 @@ MonoBehaviour:
   m_GUID: f3dc55e6f873246f2b51eac4d657f9c6
   m_SerializeEntries:
   - m_GUID: edfbd213f830a4402b23082a89f027a5
-    m_Address: Enemy Utilities/EnemyState
+    m_Address: Enemy State
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2f81613de6b7b4d88be2d0ca9d3264ba
+    m_Address: Terrain Checker
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

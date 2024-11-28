@@ -16,7 +16,8 @@ public class PatrollingState : MonoBehaviour, IEnemyState
 
     public void StartState()
     {
-        
+        // Set initial info for patrolling
+        enemyController.SetPatrolInfo();
     }
 
     public void UpdateState()
