@@ -30,4 +30,14 @@ public class PatrollingState : MonoBehaviour, IEnemyState
     {
 
     }
+
+    public void DetectedPlayer()
+    {
+        
+    }
+
+    public void Attack()
+    {
+        
+    }
 }

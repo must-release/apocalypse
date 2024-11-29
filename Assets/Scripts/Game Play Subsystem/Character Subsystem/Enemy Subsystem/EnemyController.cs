@@ -20,11 +20,12 @@ public abstract class EnemyController : CharacterBase, SceneObejct
     // Detecting player params
     protected Vector2 detectRange;
     protected Vector2 rangeOffset;
-    protected float attackRange = 1;
+    protected float attackRange;
 
     private IEnemyState currentState;
     private Dictionary<ENEMY_STATE, IEnemyState> enemyStateDictionary;
     private TerrainChecker terrainChecker;
+    private PlayerDetector playerDetector;
     private bool isLoaded = false;
 
 
@@ -48,9 +49,12 @@ public abstract class EnemyController : CharacterBase, SceneObejct
         ObstacleCheckingDistance = 3f;
         checkTerrain = true;
 
-
+        // Player detector settings
         detectRange = new Vector2(20, 8);
         rangeOffset = new Vector2(4, 0);
+
+        // Set attack range
+        attackRange = 10;
     }
 
     // Start enemy character. Activated on Start().
@@ -75,6 +79,7 @@ public abstract class EnemyController : CharacterBase, SceneObejct
     {
         yield return SetStateDictionary();
         if(checkTerrain) yield return SetTerrainChecker();
+        yield return SetPlayerDetector();
         
         isLoaded = true;
     }
@@ -103,7 +108,7 @@ public abstract class EnemyController : CharacterBase, SceneObejct
         }
     }
 
-    // Get ray checker prefab and set ray checking settings
+    // Get terrain checker prefab and set ray checking settings
     IEnumerator SetTerrainChecker()
     {
         AsyncOperationHandle<GameObject> checker = Addressables.InstantiateAsync("Terrain Checker", transform);
@@ -121,6 +126,23 @@ public abstract class EnemyController : CharacterBase, SceneObejct
         }
     }
 
+    // Get player detector prefab and set detecting settings
+    IEnumerator SetPlayerDetector()
+    {
+        AsyncOperationHandle<GameObject> detector = Addressables.InstantiateAsync("Player Detector", transform);
+        yield return detector;
+
+        if (detector.Status == AsyncOperationStatus.Succeeded)
+        {
+            playerDetector = detector.Result.GetComponent<PlayerDetector>();
+            playerDetector.SetPlayerDetector(detectRange, rangeOffset);
+        }
+        else
+        {
+            Debug.LogError("Failed to load the Player Detector");
+        }
+    }
+
     public bool IsLoaded() { return isLoaded; }
 
 
@@ -133,16 +155,26 @@ public abstract class EnemyController : CharacterBase, SceneObejct
         // Wait for async loading
         if(!isLoaded) return; 
 
-        UpdateEnemy(); 
-    }
-    protected virtual void UpdateEnemy()
-    {
-        // Check if enemy should attack
-        if (DetectedPlayer) CheckPlayerEnemyDistance();
+        // Check if player is detected
+        if(DetectedPlayer = playerDetector.DetectPlayer())
+        {
+            // Player detected
+            currentState.DetectedPlayer();
+
+            // Check if enemy should attack
+            if(CheckPlayerEnemyDistance())
+            {
+                Debug.Log("ues");
+                currentState.Attack();
+            }
+        }
 
         // Update current state
         currentState.UpdateState();
+
+        UpdateEnemy(); 
     }
+    protected virtual void UpdateEnemy() { }
 
     // Initialize patrol info
     public abstract void SetPatrolInfo();
@@ -150,48 +182,16 @@ public abstract class EnemyController : CharacterBase, SceneObejct
     public abstract void Patrol();
 
 
-    // Set default detect range
-    private void SetDetectRange()
-    {
-        CircleCollider2D rangeCollider = gameObject.AddComponent<CircleCollider2D>();
-        rangeCollider.radius = detectRange.x / 2; // Set radius based on the original detectRange width
-        rangeCollider.offset = rangeOffset;
-        rangeCollider.isTrigger = true;
-    }
-
     // Check distance between player and enemy
-    private void CheckPlayerEnemyDistance()
+    private bool CheckPlayerEnemyDistance()
     {
-        if ((transform.position - DetectedPlayer.transform.position).magnitude < attackRange)
-            IsPlayerInAttackRange = true;
-        else
-            IsPlayerInAttackRange = false;
+        return (transform.position - DetectedPlayer.transform.position).magnitude < attackRange;
     }
 
     // Check if enemy can go ahead
     protected bool CanMoveAhead() { return terrainChecker.CanMoveAhead(); }
 
 
-
-    /***** Detect Player *****/
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            DetectedPlayer = other.gameObject;
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            if (other.gameObject == DetectedPlayer)
-                DetectedPlayer = null;
-            else
-                Debug.LogError("Unknown Player Exiting from Detect Range");
-        }
-    }
 }
 
 
@@ -201,4 +201,6 @@ public interface IEnemyState
     public void StartState();
     public void UpdateState();
     public void EndState();
+    public void DetectedPlayer();
+    public void Attack();
 }

@@ -18,6 +18,8 @@ public class NormalInfectee : EnemyController
 
     protected override void AwakeEnemy()
     {
+        base.AwakeEnemy();
+
         enemyRigid = transform.GetComponent<Rigidbody2D>();
 
         // Terrain checker settings
@@ -26,6 +28,11 @@ public class NormalInfectee : EnemyController
         ObstacleCheckingDistance = 3f;
         checkTerrain = true;
 
+        // Player detector settings
+        detectRange = new Vector2(25, 5);
+        rangeOffset = new Vector2(3, 0);
+
+        attackRange = 5;
     }
 
     protected override void StartEnemy()
