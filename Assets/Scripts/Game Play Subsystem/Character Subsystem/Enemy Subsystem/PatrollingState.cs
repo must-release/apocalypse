@@ -33,11 +33,10 @@ public class PatrollingState : MonoBehaviour, IEnemyState
 
     public void DetectedPlayer()
     {
-        
+        enemyController.ChangeState(ENEMY_STATE.CHASING);
     }
 
-    public void Attack()
-    {
-        
-    }
+
+
+    public void Attack() { return; }
 }

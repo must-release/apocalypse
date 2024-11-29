@@ -4,7 +4,7 @@ using UnityEngine;
 public class NormalInfectee : EnemyController
 {
 
-    public float movingSpeed;
+    public float MovingSpeed;
 
 
     private Rigidbody2D enemyRigid;
@@ -37,7 +37,7 @@ public class NormalInfectee : EnemyController
 
     protected override void StartEnemy()
     {
-        movingSpeed = 5f;
+        MovingSpeed = 5f;
     }
 
     // Set initial info for patrolling
@@ -71,6 +71,19 @@ public class NormalInfectee : EnemyController
         PatrolDirection(transform.localScale.x > 0);
     }
 
+    // Called every frame when chasing
+    public override void ChasePlayer()
+    {
+        // Look at the player
+        int direction = ChasingTarget.position.x > transform.position.x ? 1: -1;
+        if(transform.localScale.x * direction < 0) Flip();
+
+        if (CanMoveAhead() && math.abs(ChasingTarget.position.x - transform.position.x) > 0.1f) 
+            enemyRigid.velocity = new Vector2(direction * MovingSpeed, enemyRigid.velocity.y);
+        else
+            enemyRigid.velocity = Vector2.zero;
+    }
+
     private void PatrolDirection(bool isPatrollingRight)
     {
         // There is no ground ahead, or there is obstacle ahead
@@ -95,7 +108,7 @@ public class NormalInfectee : EnemyController
                 (!isPatrollingRight && transform.position.x > patrolLeftEnd))
         {
             float direction = isPatrollingRight ? 1 : -1;
-            enemyRigid.velocity = new Vector2(direction * movingSpeed, enemyRigid.velocity.y);
+            enemyRigid.velocity = new Vector2(direction * MovingSpeed, enemyRigid.velocity.y);
         }
         // Reached one of the end side of the patrol range
         else

@@ -7,8 +7,9 @@ using UnityEngine;
 
 public abstract class EnemyController : CharacterBase, SceneObejct
 {
-    public GameObject DetectedPlayer { get; set; }
-    public bool IsPlayerInAttackRange { get; private set; }
+
+    public GameObject DetectedPlayer {get; set;}
+    public Transform ChasingTarget {get; set;}
 
 
     // Terrain checking params
@@ -39,7 +40,6 @@ public abstract class EnemyController : CharacterBase, SceneObejct
     
         AwakeEnemy();
         StartCoroutine(AsyncEnemyInitialze());
-        //SetDetectRange();
     }
     protected virtual void AwakeEnemy()
     {
@@ -164,7 +164,6 @@ public abstract class EnemyController : CharacterBase, SceneObejct
             // Check if enemy should attack
             if(CheckPlayerEnemyDistance())
             {
-                Debug.Log("ues");
                 currentState.Attack();
             }
         }
@@ -176,11 +175,8 @@ public abstract class EnemyController : CharacterBase, SceneObejct
     }
     protected virtual void UpdateEnemy() { }
 
-    // Initialize patrol info
-    public abstract void SetPatrolInfo();
-    // Circle patrol area 
-    public abstract void Patrol();
-
+    // Check if enemy can go ahead
+    protected bool CanMoveAhead() { return terrainChecker.CanMoveAhead(); }
 
     // Check distance between player and enemy
     private bool CheckPlayerEnemyDistance()
@@ -188,12 +184,33 @@ public abstract class EnemyController : CharacterBase, SceneObejct
         return (transform.position - DetectedPlayer.transform.position).magnitude < attackRange;
     }
 
-    // Check if enemy can go ahead
-    protected bool CanMoveAhead() { return terrainChecker.CanMoveAhead(); }
+    public void ChangeState(ENEMY_STATE state)
+    {
+        currentState.EndState();
+        currentState = enemyStateDictionary[state];
+        currentState.StartState();
+    }
 
 
+    // Detect collision with player
+    // private void OnCollisionEnter2D(Collision2D other) 
+    // {
+    //     if (other.transform.TryGetComponent(out PlayerController player))
+    //     {
+    //         player.OnDamaged();
+    //     }
+    // }
+
+
+    /****** Abstract Functions ******/
+
+    // Initialize patrol info
+    public abstract void SetPatrolInfo();
+    // Circle patrol area 
+    public abstract void Patrol();
+    // Chase detected player
+    public abstract void ChasePlayer();
 }
-
 
 public interface IEnemyState
 {
