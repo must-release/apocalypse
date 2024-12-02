@@ -14,6 +14,8 @@ public class HeroineController : MonoBehaviour, IPlayer
         IsLoaded = true;
     }
 
+    public Transform GetTransform() { return transform; }
+
     // Show or hide character object
     public void ShowCharacter(bool value)
     {

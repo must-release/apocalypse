@@ -10,6 +10,7 @@ public abstract class WeaponBase : MonoBehaviour
     public bool DamagePlayer {get; protected set;}
     public WEAPON_TYPE WeaponType {get; protected set;}
     public float FireSpeed {get; protected set;}
+    public DamageInfo WeaponDamageInfo {get; protected set;}
 
     private Coroutine visibilityCheckCoroutine;
 
@@ -57,7 +58,7 @@ public abstract class WeaponBase : MonoBehaviour
         {
             if (character.CompareTag("Player") == DamagePlayer)
             {
-                character.OnDamaged();
+                character.OnDamaged(WeaponDamageInfo);
             }
         }
 

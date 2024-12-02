@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using LayerEnums;
 
 public abstract class CharacterBase : MonoBehaviour
 {
@@ -15,12 +16,12 @@ public abstract class CharacterBase : MonoBehaviour
     public abstract void ControlCharacter(ControlInfo controlInfo);
     public abstract void OnAir();
     public abstract void OnGround();
-    public abstract void OnDamaged();
+    public abstract void OnDamaged(DamageInfo damageInfo);
 
     private void Awake() { AwakeCharacter(); }
     protected virtual void AwakeCharacter()
     {
-        gameObject.layer = LayerMask.NameToLayer("Character");
+        gameObject.layer = LayerMask.NameToLayer(LAYER.CHARACTER);
     }
 
     private void Start() { StartCharacter(); }
@@ -108,6 +109,8 @@ public abstract class CharacterBase : MonoBehaviour
         }
     } 
 
+
+    // Check angle between character and ground
     private bool StandingOnGround(Collision2D collision)
     {
         Vector2 normal = collision.contacts[0].normal;

@@ -5,6 +5,7 @@ using System.Collections;
 public interface IPlayer
 {
     public bool IsLoaded {get; set;}
+    public Transform GetTransform();
     public IEnumerator LoadWeaponsAndDots();
     public void ShowCharacter(bool value);
     public void RotateUpperBody(float rotateAngle);

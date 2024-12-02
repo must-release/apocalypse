@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 7078589395153798833}
   - component: {fileID: 1348946517842069816}
   - component: {fileID: 7972358916392020845}
+  - component: {fileID: 3613168050654549966}
   m_Layer: 8
   m_Name: Lower State
   m_TagString: Untagged
@@ -140,6 +141,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aabb18ef3a67a4d2387a6c03ce9a72cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3613168050654549966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 733912380070404862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 810218eecd20a43beb381ab5f0909ffd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3645786124481219758
@@ -289,6 +302,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 771c5eeadb55e45ed8b4f135a4cae560, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flickeringSpeed: 0.5
+  flickeringCount: 3
 --- !u!70 &3152829716522880432
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -298,7 +313,7 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 3836751109032054554}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 6200000, guid: 3b5ec1c8816844bc1ae3be0109981749, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -340,7 +355,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 3b5ec1c8816844bc1ae3be0109981749, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

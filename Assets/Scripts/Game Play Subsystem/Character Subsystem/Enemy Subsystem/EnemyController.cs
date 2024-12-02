@@ -11,6 +11,10 @@ public abstract class EnemyController : CharacterBase, SceneObejct
     public GameObject DetectedPlayer {get; set;}
     public Transform ChasingTarget {get; set;}
 
+    // Damage Info
+    protected DamageInfo defaultDamageInfo;
+    protected DamageInfo attackDamageInfo;
+
 
     // Terrain checking params
     protected float groundCheckingDistance;
@@ -27,6 +31,7 @@ public abstract class EnemyController : CharacterBase, SceneObejct
     private Dictionary<ENEMY_STATE, IEnemyState> enemyStateDictionary;
     private TerrainChecker terrainChecker;
     private PlayerDetector playerDetector;
+    private DamageArea defalutDamageArea;
     private bool isLoaded = false;
 
 
@@ -52,6 +57,13 @@ public abstract class EnemyController : CharacterBase, SceneObejct
         // Player detector settings
         detectRange = new Vector2(20, 8);
         rangeOffset = new Vector2(4, 0);
+
+        // Set damage Info
+        defaultDamageInfo = new DamageInfo();
+        defaultDamageInfo.attacker = gameObject;
+        defaultDamageInfo.damageValue = 1;
+        attackDamageInfo = new DamageInfo();
+        attackDamageInfo.damageValue = 1;
 
         // Set attack range
         attackRange = 10;
@@ -80,6 +92,7 @@ public abstract class EnemyController : CharacterBase, SceneObejct
         yield return SetStateDictionary();
         if(checkTerrain) yield return SetTerrainChecker();
         yield return SetPlayerDetector();
+        SetDamageArea();
         
         isLoaded = true;
     }
@@ -143,6 +156,15 @@ public abstract class EnemyController : CharacterBase, SceneObejct
         }
     }
 
+    // Create default damage area child object
+    private void SetDamageArea()
+    {
+        GameObject dmgAreaObj = new GameObject("Default Damage Area");
+        dmgAreaObj.transform.SetParent(transform, false);
+        defalutDamageArea = dmgAreaObj.AddComponent<DamageArea>();
+        defalutDamageArea.SetDamageArea(transform.GetComponent<Collider2D>(), defaultDamageInfo, true);
+    }
+
     public bool IsLoaded() { return isLoaded; }
 
 
@@ -190,16 +212,6 @@ public abstract class EnemyController : CharacterBase, SceneObejct
         currentState = enemyStateDictionary[state];
         currentState.StartState();
     }
-
-
-    // Detect collision with player
-    // private void OnCollisionEnter2D(Collision2D other) 
-    // {
-    //     if (other.transform.TryGetComponent(out PlayerController player))
-    //     {
-    //         player.OnDamaged();
-    //     }
-    // }
 
 
     /****** Abstract Functions ******/
