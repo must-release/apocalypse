@@ -169,6 +169,7 @@ public abstract class EnemyController : CharacterBase, SceneObejct
 
 
 
+
     /****** Operate Enemy Character ******/
 
     // Update enemy character every frame
@@ -200,12 +201,6 @@ public abstract class EnemyController : CharacterBase, SceneObejct
     // Check if enemy can go ahead
     protected bool CanMoveAhead() { return terrainChecker.CanMoveAhead(); }
 
-    // Check distance between player and enemy
-    private bool CheckPlayerEnemyDistance()
-    {
-        return (transform.position - DetectedPlayer.transform.position).magnitude < attackRange;
-    }
-
     public void ChangeState(ENEMY_STATE state)
     {
         currentState.EndState();
@@ -213,6 +208,22 @@ public abstract class EnemyController : CharacterBase, SceneObejct
         currentState.StartState();
     }
 
+    public void SetDefaultDamageArea(bool value)
+    {
+        defalutDamageArea.gameObject.SetActive(value);
+    }
+
+    public override void OnDamaged(DamageInfo damageInfo)
+    {
+        currentState.OnDamaged();
+    }
+
+
+    // Check distance between player and enemy
+    private bool CheckPlayerEnemyDistance()
+    {
+        return (transform.position - DetectedPlayer.transform.position).magnitude < attackRange;
+    }
 
     /****** Abstract Functions ******/
 
@@ -232,4 +243,5 @@ public interface IEnemyState
     public void EndState();
     public void DetectedPlayer();
     public void Attack();
+    public void OnDamaged();
 }

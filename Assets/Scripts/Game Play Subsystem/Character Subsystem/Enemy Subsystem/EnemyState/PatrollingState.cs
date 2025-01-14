@@ -36,7 +36,10 @@ public class PatrollingState : MonoBehaviour, IEnemyState
         enemyController.ChangeState(ENEMY_STATE.CHASING);
     }
 
-
+    public void OnDamaged()
+    {
+        enemyController.ChangeState(ENEMY_STATE.DEAD);
+    }
 
     public void Attack() { return; }
 }

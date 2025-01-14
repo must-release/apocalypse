@@ -45,6 +45,11 @@ public class ChasingState : MonoBehaviour, IEnemyState
         enemyController.ChasingTarget = null;
     }
 
+    public void OnDamaged() 
+    { 
+        enemyController.ChangeState(ENEMY_STATE.DEAD);
+    }
+
     public void DetectedPlayer() { return; }
     public void Attack() { return; }
 }
