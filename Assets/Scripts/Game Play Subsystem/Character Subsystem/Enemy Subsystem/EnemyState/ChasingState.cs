@@ -18,7 +18,13 @@ public class ChasingState : MonoBehaviour, IEnemyState
 
     public void StartState()
     {
-        enemyController.ChasingTarget = enemyController.DetectedPlayer.transform;
+        if( enemyController.DetectedPlayer )
+            enemyController.ChasingTarget = enemyController.DetectedPlayer.transform;
+        else if ( enemyController.RecentDamagedInfo.attacker )
+            enemyController.ChasingTarget = enemyController.RecentDamagedInfo.attacker.transform;
+        else
+            Debug.LogError("There's nobody to chase!");
+
         forgettingTime = 0;
     }
 
@@ -47,7 +53,7 @@ public class ChasingState : MonoBehaviour, IEnemyState
 
     public void OnDamaged() 
     { 
-        enemyController.ChangeState(ENEMY_STATE.DEAD);
+        enemyController.ChangeState(ENEMY_STATE.DAMAGED);
     }
 
     public void DetectedPlayer() { return; }

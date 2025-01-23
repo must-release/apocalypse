@@ -38,7 +38,7 @@ public class PatrollingState : MonoBehaviour, IEnemyState
 
     public void OnDamaged()
     {
-        enemyController.ChangeState(ENEMY_STATE.DEAD);
+        enemyController.ChangeState(ENEMY_STATE.DAMAGED);
     }
 
     public void Attack() { return; }

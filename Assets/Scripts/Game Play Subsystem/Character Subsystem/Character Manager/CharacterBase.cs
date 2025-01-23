@@ -5,8 +5,10 @@ using LayerEnums;
 
 public abstract class CharacterBase : MonoBehaviour
 {
-    public GameObject StandingGround {get; protected set;} 
+    public GameObject StandingGround {get; protected set;}
     public float CharacterHeight {get; protected set;}
+    public DamageInfo RecentDamagedInfo { get; protected set; }
+    public int HitPoint { get; protected set; }
 
     protected List<InteractionObject> interactableObjects = new List<InteractionObject>();
     protected List<InteractionObject> interactingObjects = new List<InteractionObject>();

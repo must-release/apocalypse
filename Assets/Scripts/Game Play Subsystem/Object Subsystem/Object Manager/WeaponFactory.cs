@@ -17,13 +17,13 @@ public class WeaponFactory : MonoBehaviour
         }
     }
 
-    public Coroutine PoolWeapons(WEAPON_TYPE weapon, Queue<WeaponBase> weapons, int poolNum)
+    public Coroutine PoolWeapons(CharacterBase owner, WEAPON_TYPE weaponType, Queue<WeaponBase> weapons, int poolNum)
     {
-        return StartCoroutine(AsyncPoolWeapons(weapon,weapons,poolNum));
+        return StartCoroutine(AsyncPoolWeapons(owner, weaponType, weapons, poolNum));
     }
-    IEnumerator AsyncPoolWeapons(WEAPON_TYPE weapon, Queue<WeaponBase> weapons, int poolNum)
+    IEnumerator AsyncPoolWeapons(CharacterBase owner, WEAPON_TYPE weaponType, Queue<WeaponBase> weapons, int poolNum)
     {
-        string weaponPath = "WEAPON_" + weapon.ToString();
+        string weaponPath = "WEAPON_" + weaponType.ToString();
         AsyncOperationHandle<GameObject> loadingWeapon = Addressables.InstantiateAsync(weaponPath);
         yield return loadingWeapon;
         if (loadingWeapon.Status == AsyncOperationStatus.Succeeded)
@@ -33,11 +33,15 @@ public class WeaponFactory : MonoBehaviour
             loadedWeapon.SetActive(false);
 
             // Copy weapons
-            weapons.Enqueue(loadedWeapon.GetComponent<WeaponBase>());
+            WeaponBase firstWeapon = loadedWeapon.GetComponent<WeaponBase>();
+            firstWeapon.SetOwner(owner);
+            weapons.Enqueue(firstWeapon);
             for (int i = 0; i < poolNum - 1; i++)
             {
                 GameObject weaponCopy = Instantiate(loadedWeapon);
-                weapons.Enqueue(weaponCopy.GetComponent<WeaponBase>());
+                WeaponBase weapon = weaponCopy.GetComponent<WeaponBase>();
+                weapon.SetOwner(owner);
+                weapons.Enqueue(weapon);
             }
         }
         else

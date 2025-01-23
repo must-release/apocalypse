@@ -14,7 +14,6 @@ public class PlayerController : CharacterBase, SceneObejct
     public ControlInfo CurrentControlInfo {get; private set; }
     public IPlayerLowerState LowerState { get; private set; }
     public IPlayerUpperState UpperState { get; private set; }
-    public DamageInfo RecentDamagedInfo { get; private set; }
 
     private Dictionary<PLAYER, IPlayer> playerDictionary;
     private Dictionary<PLAYER_LOWER_STATE, IPlayerLowerState> lowerStateDictionary;
@@ -145,7 +144,6 @@ public class PlayerController : CharacterBase, SceneObejct
     public override void OnDamaged(DamageInfo damageInfo) 
     {
         if(isDamageImmune) return;
-
 
         RecentDamagedInfo = damageInfo;
         StartCoroutine(StartDamageImmuneState());

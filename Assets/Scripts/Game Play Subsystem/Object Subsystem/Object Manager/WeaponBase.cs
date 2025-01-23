@@ -10,14 +10,33 @@ public abstract class WeaponBase : MonoBehaviour
     public bool DamagePlayer {get; protected set;}
     public WEAPON_TYPE WeaponType {get; protected set;}
     public float FireSpeed {get; protected set;}
-    public DamageInfo WeaponDamageInfo {get; protected set;}
+    public DamageInfo WeaponDamageInfo 
+    {
+        get
+        {
+            if ( null == _weaponDamageInfo )
+                _weaponDamageInfo = new DamageInfo();
+            return _weaponDamageInfo;
+        }
+         
+        protected set
+        {
+            _weaponDamageInfo = value;
+        }
+    }
 
     private Coroutine visibilityCheckCoroutine;
+    private DamageInfo _weaponDamageInfo;
 
     public virtual void Fire(Vector3 direction)
     {
         gameObject.SetActive(true);
         transform.localRotation = Quaternion.FromToRotation(Vector3.right, direction);
+    }
+
+    public void SetOwner(CharacterBase owner)
+    {
+        WeaponDamageInfo.attacker = owner.gameObject;
     }
 
     private void Awake() { InitializeWeapon(); }

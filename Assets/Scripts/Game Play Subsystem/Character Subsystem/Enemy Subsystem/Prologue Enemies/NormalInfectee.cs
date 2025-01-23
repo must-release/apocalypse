@@ -9,6 +9,7 @@ public class NormalInfectee : EnemyController
 
     private Rigidbody2D enemyRigid;
 
+    private const int MAX_HIT_POINT = 3;
     private const float PATROL_RANGE_MAX = 30;
     private const float PATROL_RANGE_MIN = 5;
     private const float STANDING_TIME = 5f;
@@ -38,6 +39,7 @@ public class NormalInfectee : EnemyController
     protected override void StartEnemy()
     {
         MovingSpeed = 5f;
+        HitPoint = MAX_HIT_POINT;
     }
 
     // Set initial info for patrolling

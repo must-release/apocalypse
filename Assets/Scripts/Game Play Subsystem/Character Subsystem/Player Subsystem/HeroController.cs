@@ -6,6 +6,7 @@ using WeaponEnums;
 public class HeroController : MonoBehaviour, IPlayer
 {
     public bool IsLoaded {get; set;}
+    private PlayerController playerController;
     private Queue<WeaponBase> weapons;
     private List<GameObject> aimingDots;
     private int weaponCount;
@@ -15,6 +16,7 @@ public class HeroController : MonoBehaviour, IPlayer
     private float attackCoolTime;
 
     private void Awake() {
+        playerController = transform.parent.GetComponent<PlayerController>();
         weapons = new Queue<WeaponBase>();
         aimingDots = new List<GameObject>();
         weaponCount = 20;
@@ -28,7 +30,7 @@ public class HeroController : MonoBehaviour, IPlayer
     private void Start() { StartCoroutine(LoadWeaponsAndDots()); }
     public IEnumerator LoadWeaponsAndDots()
     {
-        yield return WeaponFactory.Instance.PoolWeapons(WEAPON_TYPE.BULLET, weapons, weaponCount);
+        yield return WeaponFactory.Instance.PoolWeapons(playerController, WEAPON_TYPE.BULLET, weapons, weaponCount);
         yield return WeaponFactory.Instance.PoolAimingDots(WEAPON_TYPE.BULLET, aimingDots, aimingDotsNum);
         IsLoaded = true;
     }

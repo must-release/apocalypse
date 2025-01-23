@@ -178,8 +178,7 @@ public abstract class EnemyController : CharacterBase, SceneObejct
         // Wait for async loading
         if(!isLoaded) return; 
 
-        // Check if player is detected
-        if(DetectedPlayer = playerDetector.DetectPlayer())
+        if( DetectedPlayer = playerDetector.DetectPlayer() )
         {
             // Player detected
             currentState.DetectedPlayer();
@@ -215,6 +214,9 @@ public abstract class EnemyController : CharacterBase, SceneObejct
 
     public override void OnDamaged(DamageInfo damageInfo)
     {
+        RecentDamagedInfo = damageInfo;
+        HitPoint -= RecentDamagedInfo.damageValue;
+
         currentState.OnDamaged();
     }
 

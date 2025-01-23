@@ -18,6 +18,7 @@ public class Bullet : WeaponBase
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 0;
         FireSpeed = 30;
+        WeaponDamageInfo.damageValue = 1;
     }
 
     public override void Fire(Vector3 direction)
