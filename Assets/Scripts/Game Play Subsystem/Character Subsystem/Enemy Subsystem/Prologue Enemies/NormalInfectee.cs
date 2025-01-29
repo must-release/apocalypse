@@ -1,5 +1,7 @@
 using Unity.Mathematics;
+using System.Collections.Generic;
 using UnityEngine;
+using WeaponEnums;
 
 public class NormalInfectee : EnemyController
 {
@@ -7,48 +9,67 @@ public class NormalInfectee : EnemyController
     public float MovingSpeed;
 
 
-    private Rigidbody2D enemyRigid;
-
     private const int MAX_HIT_POINT = 3;
     private const float PATROL_RANGE_MAX = 30;
     private const float PATROL_RANGE_MIN = 5;
     private const float STANDING_TIME = 5f;
+    private const float ATTACK_COOL_TIME = 0.8f;
+    private const float ATTACK_TIME = 0.5f;
+
     private float patrolLeftEnd, patrolRightEnd; // Each end side of the partrol range
     private bool wait;
     private float waitingTime;
+    private bool attacked;
+    private float attackingTime;
 
-    protected override void AwakeEnemy()
+    protected override void InitializeTerrainChecker()
     {
-        base.AwakeEnemy();
+        groundCheckingDistance      = 5f;
+        groundCheckingVector        = new Vector3(1, - 1, 0);
+        ObstacleCheckingDistance    = 3f;
+        checkTerrain                = true;
+    }
 
-        enemyRigid = transform.GetComponent<Rigidbody2D>();
-
-        // Terrain checker settings
-        groundCheckingDistance = 5f;
-        groundCheckingVector = new Vector3(1, - 1, 0);
-        ObstacleCheckingDistance = 3f;
-        checkTerrain = true;
-
-        // Player detector settings
+    protected override void InitializePlayerDetector()
+    {
         detectRange = new Vector2(25, 5);
         rangeOffset = new Vector2(3, 0);
+    }
 
-        attackRange = 5;
+    protected override void InitializeDamageAndWeapon()
+    {
+        defaultDamageInfo   = new DamageInfo(gameObject, 1);
+        weaponType          = WEAPON_TYPE.SCRATCH;
+        weapons             = new Queue<WeaponBase>();
+        aimingDots          = new List<GameObject>();
+        weaponOffset        = new Vector3(2.5f, 0, 0);
+        useShortRangeWeapon = true;
+        weaponCount         = 1;
+        aimingDotsCount     = 0;
+
+        attackRange = 4;
     }
 
     protected override void StartEnemy()
     {
-        MovingSpeed = 5f;
-        HitPoint = MAX_HIT_POINT;
+        MovingSpeed     = 5f;
+        HitPoint        = MAX_HIT_POINT;
+
+        patrolLeftEnd   = 0;
+        patrolRightEnd  = 0;
+        wait            = false;
+        waitingTime     = 0;
+        attacked        = false;
+        attackingTime   = 0;
     }
 
     // Set initial info for patrolling
     public override void SetPatrolInfo()
     {
-        patrolRightEnd = transform.position.x + PATROL_RANGE_MAX / 2;
-        patrolLeftEnd = transform.position.x - PATROL_RANGE_MAX / 2;
-        waitingTime = 0;
-        wait = false;
+        patrolRightEnd  = transform.position.x + PATROL_RANGE_MAX / 2;
+        patrolLeftEnd   = transform.position.x - PATROL_RANGE_MAX / 2;
+        waitingTime     = 0;
+        wait            = false;
     }
 
     // Called every frame when patrolling
@@ -84,6 +105,46 @@ public class NormalInfectee : EnemyController
             enemyRigid.velocity = new Vector2(direction * MovingSpeed, enemyRigid.velocity.y);
         else
             enemyRigid.velocity = Vector2.zero;
+    }
+
+    public override void SetAttackInfo()
+    {
+        waitingTime     = 0;
+        wait            = true;
+        attacked        = false;
+        attackingTime   = 0;
+        enemyRigid.velocity = Vector2.zero;
+    }
+
+    public override bool Attack()
+    {
+        WeaponBase scratch = weapons.Peek();
+
+        if ( false == attacked )
+        {
+            scratch.transform.localPosition = weaponOffset;
+            scratch.Attack(Vector3.zero);
+            attacked = true;
+        }
+
+        // Wait a little while attacking
+        attackingTime += Time.deltaTime;
+        if ( attackingTime < ATTACK_TIME )
+            return false;
+
+        scratch.gameObject.SetActive(false);
+
+        // Wait a little after attacking
+        if ( wait )
+        {
+            waitingTime += Time.deltaTime;
+            if ( ATTACK_COOL_TIME < waitingTime )
+                wait = false;
+
+            return false;
+        }
+
+        return true;
     }
 
     private void PatrolDirection(bool isPatrollingRight)

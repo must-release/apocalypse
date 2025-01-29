@@ -1,41 +1,21 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using WeaponEnums;
 
 public abstract class WeaponBase : MonoBehaviour
 {
-
     public bool DamagePlayer {get; protected set;}
     public WEAPON_TYPE WeaponType {get; protected set;}
-    public float FireSpeed {get; protected set;}
-    public DamageInfo WeaponDamageInfo 
-    {
-        get
-        {
-            if ( null == _weaponDamageInfo )
-                _weaponDamageInfo = new DamageInfo();
-            return _weaponDamageInfo;
-        }
-         
-        protected set
-        {
-            _weaponDamageInfo = value;
-        }
-    }
+    public DamageInfo WeaponDamageInfo { get; protected set;}
 
-    private Coroutine visibilityCheckCoroutine;
-    private DamageInfo _weaponDamageInfo;
 
-    public virtual void Fire(Vector3 direction)
-    {
-        gameObject.SetActive(true);
-        transform.localRotation = Quaternion.FromToRotation(Vector3.right, direction);
-    }
+    public abstract void Attack(Vector3 vector);
 
     public void SetOwner(CharacterBase owner)
     {
+        if ( null == WeaponDamageInfo )
+            WeaponDamageInfo = new DamageInfo();
+        
         WeaponDamageInfo.attacker = owner.gameObject;
     }
 
@@ -43,47 +23,9 @@ public abstract class WeaponBase : MonoBehaviour
     protected virtual void InitializeWeapon()
     {
         gameObject.layer = LayerMask.NameToLayer("Weapon");
+        WeaponDamageInfo = new DamageInfo();
     }
 
-    private void Update() { WeaponUpdate();}
-    protected virtual void WeaponUpdate()
-    {
-        CheckVisibility();
-    }
-
-    private void CheckVisibility()
-    {
-        Vector3 viewportPos = Camera.main.WorldToViewportPoint(transform.position);
-
-        if (viewportPos.x > 0 && viewportPos.x < 1 && viewportPos.y > 0 && viewportPos.y < 1)
-        {
-            if(visibilityCheckCoroutine!=null) StopCoroutine(visibilityCheckCoroutine);
-        }
-        else
-        {
-            visibilityCheckCoroutine = StartCoroutine(AsyncInactivateWeapon());
-        }
-    }
-    IEnumerator AsyncInactivateWeapon()
-    {
-        yield return new WaitForSeconds(5f);
-
-        gameObject.SetActive(false);
-    }
-
-    private void OnTriggerEnter2D(Collider2D other) 
-    {
-        if(other.transform.TryGetComponent(out CharacterBase character))
-        {
-            if (character.CompareTag("Player") == DamagePlayer)
-            {
-                character.OnDamaged(WeaponDamageInfo);
-            }
-        }
-
-        if(!other.isTrigger)
-        {
-            gameObject.SetActive(false);
-        }
-    }
+    private void Update() { WeaponUpdate(); }
+    protected abstract void WeaponUpdate();
 }

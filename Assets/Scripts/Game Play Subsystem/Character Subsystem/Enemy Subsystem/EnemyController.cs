@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using CharacterEums;
+using WeaponEnums;
 using UnityEngine;
 
 public abstract class EnemyController : CharacterBase, SceneObejct
@@ -11,9 +12,19 @@ public abstract class EnemyController : CharacterBase, SceneObejct
     public GameObject DetectedPlayer {get; set;}
     public Transform ChasingTarget {get; set;}
 
-    // Damage Info
+    // Common variables
+    protected Rigidbody2D enemyRigid;
+
+
+    // Damage & Weapon Info
     protected DamageInfo defaultDamageInfo;
-    protected DamageInfo attackDamageInfo;
+    protected WEAPON_TYPE weaponType;
+    protected Queue<WeaponBase> weapons;
+    protected List<GameObject> aimingDots;
+    protected Vector3 weaponOffset;
+    protected bool useShortRangeWeapon;
+    protected int weaponCount;
+    protected int aimingDotsCount;
 
 
     // Terrain checking params
@@ -42,31 +53,14 @@ public abstract class EnemyController : CharacterBase, SceneObejct
     protected override void AwakeCharacter() 
     { 
         base.AwakeCharacter();
+
+        enemyRigid = GetComponent<Rigidbody2D>();
     
-        AwakeEnemy();
+        InitializeTerrainChecker();
+        InitializePlayerDetector();
+        InitializeDamageAndWeapon();
+        
         StartCoroutine(AsyncEnemyInitialze());
-    }
-    protected virtual void AwakeEnemy()
-    {
-        // Terrain checker settings
-        groundCheckingDistance = 5f;
-        groundCheckingVector = new Vector3(1, - 1, 0);
-        ObstacleCheckingDistance = 3f;
-        checkTerrain = true;
-
-        // Player detector settings
-        detectRange = new Vector2(20, 8);
-        rangeOffset = new Vector2(4, 0);
-
-        // Set damage Info
-        defaultDamageInfo = new DamageInfo();
-        defaultDamageInfo.attacker = gameObject;
-        defaultDamageInfo.damageValue = 1;
-        attackDamageInfo = new DamageInfo();
-        attackDamageInfo.damageValue = 1;
-
-        // Set attack range
-        attackRange = 10;
     }
 
     // Start enemy character. Activated on Start().
@@ -80,7 +74,7 @@ public abstract class EnemyController : CharacterBase, SceneObejct
 
     private void OnEnable() 
     {
-        if(isLoaded)
+        if( isLoaded )
         {
             // Start current state when enabled
             currentState.StartState();
@@ -92,6 +86,7 @@ public abstract class EnemyController : CharacterBase, SceneObejct
         yield return SetStateDictionary();
         if(checkTerrain) yield return SetTerrainChecker();
         yield return SetPlayerDetector();
+        yield return LoadWeaponsAndDots();
         SetDamageArea();
         
         isLoaded = true;
@@ -156,6 +151,15 @@ public abstract class EnemyController : CharacterBase, SceneObejct
         }
     }
 
+    IEnumerator LoadWeaponsAndDots()
+    {
+        if ( WEAPON_TYPE.WEAPON_TYPE_COUNT != weaponType )
+            yield return WeaponFactory.Instance.PoolWeapons(this, weaponType, weapons, weaponCount, useShortRangeWeapon);
+
+        if ( 0 < aimingDotsCount )
+            yield return WeaponFactory.Instance.PoolAimingDots(weaponType, aimingDots, aimingDotsCount);
+    }
+
     // Create default damage area child object
     private void SetDamageArea()
     {
@@ -179,18 +183,8 @@ public abstract class EnemyController : CharacterBase, SceneObejct
         if(!isLoaded) return; 
 
         if( DetectedPlayer = playerDetector.DetectPlayer() )
-        {
-            // Player detected
             currentState.DetectedPlayer();
 
-            // Check if enemy should attack
-            if(CheckPlayerEnemyDistance())
-            {
-                currentState.Attack();
-            }
-        }
-
-        // Update current state
         currentState.UpdateState();
 
         UpdateEnemy(); 
@@ -202,7 +196,7 @@ public abstract class EnemyController : CharacterBase, SceneObejct
 
     public void ChangeState(ENEMY_STATE state)
     {
-        currentState.EndState();
+        currentState.EndState(state);
         currentState = enemyStateDictionary[state];
         currentState.StartState();
     }
@@ -220,21 +214,25 @@ public abstract class EnemyController : CharacterBase, SceneObejct
         currentState.OnDamaged();
     }
 
-
-    // Check distance between player and enemy
-    private bool CheckPlayerEnemyDistance()
+    public bool CheckPlayerEnemyDistance()
     {
+        if ( null == DetectedPlayer )
+            return false;
+            
         return (transform.position - DetectedPlayer.transform.position).magnitude < attackRange;
     }
 
     /****** Abstract Functions ******/
-
-    // Initialize patrol info
     public abstract void SetPatrolInfo();
-    // Circle patrol area 
     public abstract void Patrol();
-    // Chase detected player
     public abstract void ChasePlayer();
+    public abstract void SetAttackInfo();
+    public abstract bool Attack(); // return if attack is over
+    protected abstract void InitializeTerrainChecker();
+    protected abstract void InitializePlayerDetector();
+    protected abstract void InitializeDamageAndWeapon();
+    
+
 }
 
 public interface IEnemyState
@@ -242,8 +240,7 @@ public interface IEnemyState
     public ENEMY_STATE GetState();
     public void StartState();
     public void UpdateState();
-    public void EndState();
+    public void EndState(ENEMY_STATE nextState);
     public void DetectedPlayer();
-    public void Attack();
     public void OnDamaged();
 }

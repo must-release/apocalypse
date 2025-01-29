@@ -5,7 +5,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine;
 using WeaponEnums;
 
-public class Bullet : WeaponBase
+public class Bullet : LongRangeWeaponBase
 {
     private Rigidbody2D rb;
 
@@ -21,9 +21,9 @@ public class Bullet : WeaponBase
         WeaponDamageInfo.damageValue = 1;
     }
 
-    public override void Fire(Vector3 direction)
+    public override void Attack(Vector3 direction)
     {
-        base.Fire(direction);
+        base.Attack(direction);
         rb.velocity = direction * FireSpeed;
     }
 }

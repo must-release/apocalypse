@@ -17,38 +17,57 @@ public class WeaponFactory : MonoBehaviour
         }
     }
 
-    public Coroutine PoolWeapons(CharacterBase owner, WEAPON_TYPE weaponType, Queue<WeaponBase> weapons, int poolNum)
+    public Coroutine PoolWeapons( CharacterBase owner, 
+                                  WEAPON_TYPE weaponType, 
+                                  Queue<WeaponBase> weapons, 
+                                  int poolNum,
+                                  bool attachToOwner = false
+    ) 
     {
-        return StartCoroutine(AsyncPoolWeapons(owner, weaponType, weapons, poolNum));
+        return StartCoroutine(AsyncPoolWeapons(owner, weaponType, weapons, poolNum, attachToOwner));
     }
-    IEnumerator AsyncPoolWeapons(CharacterBase owner, WEAPON_TYPE weaponType, Queue<WeaponBase> weapons, int poolNum)
+
+    IEnumerator AsyncPoolWeapons( CharacterBase owner, 
+                                  WEAPON_TYPE weaponType, 
+                                  Queue<WeaponBase> weapons, 
+                                  int poolNum,
+                                  bool attachToOwner
+    )
     {
         string weaponPath = "WEAPON_" + weaponType.ToString();
         AsyncOperationHandle<GameObject> loadingWeapon = Addressables.InstantiateAsync(weaponPath);
         yield return loadingWeapon;
         if (loadingWeapon.Status == AsyncOperationStatus.Succeeded)
         {
-            // Load Weapon in inactive state
+            // Copy Weapon 
             GameObject loadedWeapon = loadingWeapon.Result;
-            loadedWeapon.SetActive(false);
-
-            // Copy weapons
-            WeaponBase firstWeapon = loadedWeapon.GetComponent<WeaponBase>();
-            firstWeapon.SetOwner(owner);
-            weapons.Enqueue(firstWeapon);
-            for (int i = 0; i < poolNum - 1; i++)
-            {
-                GameObject weaponCopy = Instantiate(loadedWeapon);
-                WeaponBase weapon = weaponCopy.GetComponent<WeaponBase>();
-                weapon.SetOwner(owner);
-                weapons.Enqueue(weapon);
-            }
+            CreateAndEnqueueWeapon(loadedWeapon, owner, weapons, poolNum, attachToOwner);
         }
         else
         {
             Debug.LogError("Failed to load the weapon: " + weaponPath);
         }
     }
+
+void CreateAndEnqueueWeapon( GameObject loadedWeapon, 
+                             CharacterBase owner, 
+                             Queue<WeaponBase> weapons, 
+                             int count, 
+                             bool attachToOwner
+)
+{
+    for (int i = count; 0 < i; i--)
+    {
+        GameObject weaponInstance = (i == 1) ? loadedWeapon : Instantiate(loadedWeapon);
+        WeaponBase weapon = weaponInstance.GetComponent<WeaponBase>();
+        weapon.SetOwner(owner);
+        weapons.Enqueue(weapon);
+        weaponInstance.SetActive(false);
+
+        if ( attachToOwner )
+            weaponInstance.transform.SetParent(owner.transform, false);
+    }
+}
 
     public Coroutine PoolAimingDots(WEAPON_TYPE weapon, List<GameObject> aimingDots, int poolNum)
     {

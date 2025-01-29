@@ -10,7 +10,7 @@ public class HeroController : MonoBehaviour, IPlayer
     private Queue<WeaponBase> weapons;
     private List<GameObject> aimingDots;
     private int weaponCount;
-    private int aimingDotsNum;
+    private int aimingDotsCount;
     private Transform shootingPointPivot;
     private Transform shootingPoint;
     private float attackCoolTime;
@@ -20,7 +20,7 @@ public class HeroController : MonoBehaviour, IPlayer
         weapons = new Queue<WeaponBase>();
         aimingDots = new List<GameObject>();
         weaponCount = 20;
-        aimingDotsNum = 40;
+        aimingDotsCount = 40;
         IsLoaded = false;
         shootingPointPivot = transform.Find("Shooting Point Pivot");
         shootingPoint = shootingPointPivot.Find("Shooting Point").transform;
@@ -31,7 +31,7 @@ public class HeroController : MonoBehaviour, IPlayer
     public IEnumerator LoadWeaponsAndDots()
     {
         yield return WeaponFactory.Instance.PoolWeapons(playerController, WEAPON_TYPE.BULLET, weapons, weaponCount);
-        yield return WeaponFactory.Instance.PoolAimingDots(WEAPON_TYPE.BULLET, aimingDots, aimingDotsNum);
+        yield return WeaponFactory.Instance.PoolAimingDots(WEAPON_TYPE.BULLET, aimingDots, aimingDotsCount);
         IsLoaded = true;
     }
 
@@ -65,7 +65,7 @@ public class HeroController : MonoBehaviour, IPlayer
         if(value)
         {
             Vector3 direction = (shootingPoint.position - shootingPointPivot.position).normalized;
-            for (int i=0; i<aimingDotsNum; i++ )
+            for (int i=0; i<aimingDotsCount; i++ )
             {
                 aimingDots[i].gameObject.SetActive(true);
                 aimingDots[i].transform.position = shootingPoint.position;
@@ -83,7 +83,7 @@ public class HeroController : MonoBehaviour, IPlayer
     {
         WeaponBase bullet = weapons.Dequeue();
         bullet.transform.position = shootingPoint.position;
-        bullet.Fire((shootingPoint.position - shootingPointPivot.position).normalized);
+        bullet.Attack((shootingPoint.position - shootingPointPivot.position).normalized);
         weapons.Enqueue(bullet);
         return attackCoolTime;
     }

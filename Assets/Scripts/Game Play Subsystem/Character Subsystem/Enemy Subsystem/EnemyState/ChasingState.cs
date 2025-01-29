@@ -18,11 +18,12 @@ public class ChasingState : MonoBehaviour, IEnemyState
 
     public void StartState()
     {
-        if( enemyController.DetectedPlayer )
+        if ( enemyController.DetectedPlayer )
             enemyController.ChasingTarget = enemyController.DetectedPlayer.transform;
-        else if ( enemyController.RecentDamagedInfo.attacker )
+        else if ( null != enemyController.RecentDamagedInfo )
             enemyController.ChasingTarget = enemyController.RecentDamagedInfo.attacker.transform;
-        else
+        
+        if ( null == enemyController.ChasingTarget )
             Debug.LogError("There's nobody to chase!");
 
         forgettingTime = 0;
@@ -33,8 +34,14 @@ public class ChasingState : MonoBehaviour, IEnemyState
         // Chase detected player
         enemyController.ChasePlayer();
 
-        // Forget player when player is no detected for a while
-        if (enemyController.DetectedPlayer == null)
+        if ( enemyController.CheckPlayerEnemyDistance() )
+        {
+            enemyController.ChangeState(ENEMY_STATE.ATTACKING); 
+            return;
+        }
+
+        // Forget player when player is not detected for a while
+        if ( null == enemyController.DetectedPlayer )
         {
             forgettingTime += Time.deltaTime;
             if (forgettingTime > FORGET_TIME)
@@ -46,16 +53,19 @@ public class ChasingState : MonoBehaviour, IEnemyState
         }
     }
 
-    public void EndState()
+    public void EndState(ENEMY_STATE nextState)
     {
-        enemyController.ChasingTarget = null;
+        if ( ENEMY_STATE.ATTACKING != nextState)
+            enemyController.ChasingTarget = null;
     }
 
     public void OnDamaged() 
     { 
-        enemyController.ChangeState(ENEMY_STATE.DAMAGED);
+        if( 0 < enemyController.HitPoint )
+            enemyController.ChangeState(ENEMY_STATE.DAMAGED);
+        else
+            enemyController.ChangeState(ENEMY_STATE.DEAD);
     }
 
     public void DetectedPlayer() { return; }
-    public void Attack() { return; }
 }

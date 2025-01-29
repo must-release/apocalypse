@@ -33,20 +33,14 @@ public class DamagedState : MonoBehaviour, IEnemyState
     {
         flickeredTime += Time.deltaTime;
         if(flickeredTime > FLICKER_TIME)
-        {
-            if( 0 < enemyController.HitPoint )
-                enemyController.ChangeState(ENEMY_STATE.CHASING);
-            else
-                enemyController.ChangeState(ENEMY_STATE.DEAD);
-        }
+            enemyController.ChangeState(ENEMY_STATE.CHASING);
     }
 
-    public void EndState()
+    public void EndState(ENEMY_STATE _)
     {
         enemySprite.color = initialColor;
     }
 
     public void DetectedPlayer() { return; }
-    public void Attack() { return; }
     public void OnDamaged() { return; }
 }

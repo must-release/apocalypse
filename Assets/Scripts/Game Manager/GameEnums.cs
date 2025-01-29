@@ -14,7 +14,7 @@ namespace StageEnums
 namespace CharacterEums
 {
     public enum PLAYER { HERO, HEROINE }
-    public enum PLAYER_LOWER_STATE { IDLE, RUNNING, JUMPING, AIMING, CLIMBING, PUSHING, TAGGING, DAMAGED }
+    public enum PLAYER_LOWER_STATE { IDLE, RUNNING, JUMPING, AIMING, CLIMBING, PUSHING, TAGGING, DAMAGED, DEAD }
     public enum PLAYER_UPPER_STATE { DISABLED, IDLE, RUNNING, JUMPING, LOOKING_UP, AIMING, ATTACKING, TOP_ATTACKING, AIM_ATTACKING }
     public enum ENEMY_STATE { PATROLLING, CHASING, ATTACKING, DAMAGED, DEAD }
 
@@ -22,7 +22,18 @@ namespace CharacterEums
 
 namespace WeaponEnums
 {
-    public enum WEAPON_TYPE { BULLET, GRANADE }
+    public enum WEAPON_TYPE 
+    { 
+        // Player weapon
+        BULLET, GRANADE, 
+
+        // Monster weapon
+        SCRATCH,    
+        
+        // Enum count
+        WEAPON_TYPE_COUNT 
+        
+    }
 }
 
 namespace EventEnums
