@@ -1,42 +1,31 @@
 using CharacterEums;
 using UnityEngine;
 
-public class AttackingState : MonoBehaviour, IEnemyState
+public class AttackingState : EnemyStateBase
 {
-    private Transform enemyTransform;
-    private EnemyController enemyController;
 
-    public ENEMY_STATE GetState() { return ENEMY_STATE.ATTACKING; }
-
-    public void Start()
+    protected override void StartEnemyState()
     {
-        enemyTransform  = transform.parent;
-        enemyController = enemyTransform.GetComponent<EnemyController>();
+
     }
 
-    public void StartState()
+    public override ENEMY_STATE GetState() { return ENEMY_STATE.ATTACKING; }
+
+    public override void OnEnter()
     {
         enemyController.SetAttackInfo();
     }
 
-    public void UpdateState()
+    public override void OnUpdate()
     {
         if( enemyController.Attack() )
             enemyController.ChangeState(ENEMY_STATE.CHASING);
     }
 
-    public void EndState(ENEMY_STATE _)
+    public override void OnExit(ENEMY_STATE _)
     {
 
     }
 
-    public void OnDamaged() 
-    { 
-        if( 0 < enemyController.HitPoint )
-            enemyController.ChangeState(ENEMY_STATE.DAMAGED);
-        else
-            enemyController.ChangeState(ENEMY_STATE.DEAD);
-    }
-
-    public void DetectedPlayer() { return; }
+    public override void DetectedPlayer() { return; }
 }

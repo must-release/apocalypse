@@ -3,49 +3,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IdleUpperState : MonoBehaviour, IPlayerUpperState
+public class IdleUpperState : PlayerUpperStateBase
 {
-    private Transform playerTransform;
-    private PlayerController playerController;
-
-    // Start is called before the first frame update
-
-    public void Start()
+    protected override void StartUpperState()
     {
-        playerTransform = transform.parent.parent;
-        playerController = playerTransform.GetComponent<PlayerController>();
         playerController.AddUpperState(PLAYER_UPPER_STATE.IDLE, this);
     }
 
-    public PLAYER_UPPER_STATE GetState() { return PLAYER_UPPER_STATE.IDLE; }
+    public override PLAYER_UPPER_STATE GetState() { return PLAYER_UPPER_STATE.IDLE; }
 
-    public void StartState()
+    public override void OnEnter()
     {
 
     }
-    public void UpdateState()
+    public override void OnUpdate()
     {
 
     }
-    public void EndState(PLAYER_UPPER_STATE _)
+    public override void OnExit(PLAYER_UPPER_STATE _)
     {
 
     }
-    public void Disable() { playerController.ChangeUpperState(PLAYER_UPPER_STATE.DISABLED); }
-    public void Move() { playerController.ChangeUpperState(PLAYER_UPPER_STATE.RUNNING); }
-    public void OnAir() { playerController.ChangeUpperState(PLAYER_UPPER_STATE.JUMPING); }
-    public void LookUp(bool lookUp) { if(lookUp) playerController.ChangeUpperState(PLAYER_UPPER_STATE.LOOKING_UP);}
-    public void Aim(Vector3 aim)
-    {
-        if (aim != Vector3.zero && playerController.StandingGround != null)
-            playerController.ChangeUpperState(PLAYER_UPPER_STATE.AIMING);
+
+    public override void Move() 
+    { 
+        playerController.ChangeUpperState(PLAYER_UPPER_STATE.RUNNING); 
     }
-    public void Attack() { playerController.ChangeUpperState(PLAYER_UPPER_STATE.ATTACKING); }
+
+    public override void OnAir() 
+    { 
+        playerController.ChangeUpperState(PLAYER_UPPER_STATE.JUMPING); 
+    }
+
+    public override void LookUp(bool lookUp) 
+    { 
+        if ( lookUp ) 
+            playerController.ChangeUpperState(PLAYER_UPPER_STATE.LOOKING_UP);
+    }
+
+    public override void Attack() 
+    { 
+        playerController.ChangeUpperState(PLAYER_UPPER_STATE.ATTACKING); 
+    }
 
 
     /***** Inavailable State Change *****/
-    public void Jump() { return; }
-    public void Stop() { return; }
-    public void OnGround() { return; }
-    public void Enable() { return; }
+    public override void Jump() { return; }
+    public override void Stop() { return; }
+    public override void OnGround() { return; }
+    public override void Enable() { return; }
 }

@@ -1,45 +1,50 @@
 using UnityEngine;
 using CharacterEums;
 
-public class JumpingUpperState : MonoBehaviour, IPlayerUpperState
+public class JumpingUpperState : PlayerUpperStateBase
 {
-    private Transform playerTransform;
-    private PlayerController playerController;
-
-    // Start is called before the first frame update
-
-    public void Start()
+    protected override void StartUpperState()
     {
-        playerTransform = transform.parent.parent;
-        playerController = playerTransform.GetComponent<PlayerController>();
         playerController.AddUpperState(PLAYER_UPPER_STATE.JUMPING, this);
     }
 
-    public PLAYER_UPPER_STATE GetState() { return PLAYER_UPPER_STATE.JUMPING; }
+    public override PLAYER_UPPER_STATE GetState() { return PLAYER_UPPER_STATE.JUMPING; }
 
-    public void StartState()
+    public override void OnEnter()
     {
 
     }
-    public void UpdateState()
+    public override void OnUpdate()
     {
 
     }
-    public void EndState(PLAYER_UPPER_STATE _)
+    public override void OnExit(PLAYER_UPPER_STATE _)
     {
 
     }
-    public void Disable() { playerController.ChangeUpperState(PLAYER_UPPER_STATE.DISABLED); }
-    public void OnGround() { playerController.ChangeUpperState(PLAYER_UPPER_STATE.IDLE); }
-    public void LookUp(bool lookUp) { if(lookUp) playerController.ChangeUpperState(PLAYER_UPPER_STATE.LOOKING_UP);}
-    public void Attack() { playerController.ChangeUpperState(PLAYER_UPPER_STATE.ATTACKING); }
+
+    public override void OnGround() 
+    { 
+        playerController.ChangeUpperState(PLAYER_UPPER_STATE.IDLE); 
+    }
+
+    public override void LookUp(bool lookUp) 
+    { 
+        if ( lookUp ) 
+            playerController.ChangeUpperState(PLAYER_UPPER_STATE.LOOKING_UP);
+    }
+
+    public override void Attack() 
+    {   
+        playerController.ChangeUpperState(PLAYER_UPPER_STATE.ATTACKING); 
+    }
 
 
     /***** Inavailable State Change *****/
-    public void Aim(Vector3 aim) { return; }
-    public void Stop() { return; }
-    public void Move() { return; }
-    public void Jump() { return; }
-    public void OnAir() { return; }
-    public void Enable() {return;}
+    public override void Aim(Vector3 aim) { return; }
+    public override void Stop() { return; }
+    public override void Move() { return; }
+    public override void Jump() { return; }
+    public override void OnAir() { return; }
+    public override void Enable() {return;}
 }

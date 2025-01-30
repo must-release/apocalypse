@@ -1,36 +1,30 @@
 using UnityEngine;
 using CharacterEums;
 
-public class AimAttackingUpperState : MonoBehaviour, IPlayerUpperState
+public class AimAttackingUpperState : PlayerUpperStateBase
 {
-    private Transform playerTransform;
-    private PlayerController playerController;
     private float attackCoolTime;
     private Vector3 aimingPosition;
     private int direction;
 
-    public void Start()
+    protected override void StartUpperState()
     {
-        playerTransform = transform.parent.parent;
-        playerController = playerTransform.GetComponent<PlayerController>();
         playerController.AddUpperState(PLAYER_UPPER_STATE.AIM_ATTACKING, this);
     }
 
-    public PLAYER_UPPER_STATE GetState() { return PLAYER_UPPER_STATE.AIM_ATTACKING; }
+    public override PLAYER_UPPER_STATE GetState() { return PLAYER_UPPER_STATE.AIM_ATTACKING; }
 
-    public void StartState()
+    public override void OnEnter()
     {
         attackCoolTime = playerController.CurrentPlayer.Attack();
     }
 
-    public void UpdateState()
+    public override void OnUpdate()
     {
         // Wait for attacking animation
         attackCoolTime -= Time.deltaTime;
-        if (attackCoolTime < 0)
-        {
+        if ( 0 < attackCoolTime )
             playerController.ChangeUpperState(PLAYER_UPPER_STATE.AIMING);
-        }
 
         // Set player's looking direction
         SetDirection();
@@ -39,20 +33,22 @@ public class AimAttackingUpperState : MonoBehaviour, IPlayerUpperState
         playerController.CurrentPlayer.RotateUpperBody(aimingPosition);
     }
 
-    public void EndState(PLAYER_UPPER_STATE nextState)
+    public override void OnExit(PLAYER_UPPER_STATE nextState)
     {
         // Recover player's upper body rotation when not aiming or attacking
-        if (nextState != PLAYER_UPPER_STATE.AIMING && nextState != PLAYER_UPPER_STATE.AIM_ATTACKING)
-            playerController.CurrentPlayer.RotateUpperBody(0);
+        if (PLAYER_UPPER_STATE.AIMING == nextState || PLAYER_UPPER_STATE.AIM_ATTACKING == nextState)
+            return;
+
+        playerController.CurrentPlayer.RotateUpperBody(0);
     }
 
-    public void Disable() { playerController.ChangeUpperState(PLAYER_UPPER_STATE.DISABLED); }
+    public override void Disable() { playerController.ChangeUpperState(PLAYER_UPPER_STATE.DISABLED); }
 
-    public void Attack() { playerController.ChangeUpperState(PLAYER_UPPER_STATE.AIM_ATTACKING); }
+    public override void Attack() { playerController.ChangeUpperState(PLAYER_UPPER_STATE.AIM_ATTACKING); }
 
-    public void Aim(Vector3 aim)
+    public override void Aim(Vector3 aim)
     {
-        if(aim == Vector3.zero)
+        if(Vector3.zero == aim )
             playerController.ChangeUpperState(PLAYER_UPPER_STATE.IDLE); 
         else
             aimingPosition = aim;
@@ -67,11 +63,11 @@ public class AimAttackingUpperState : MonoBehaviour, IPlayerUpperState
     }
 
     /***** Inavailable State Change *****/
-    public void LookUp(bool lookUp) { return;}
-    public void Stop() { return; }
-    public void Jump() { return; }
-    public void OnAir() { return; }
-    public void Move() { return; }
-    public void OnGround() { return; }
-    public void Enable() {return;}
+    public override void LookUp(bool lookUp) { return;}
+    public override void Stop() { return; }
+    public override void Jump() { return; }
+    public override void OnAir() { return; }
+    public override void Move() { return; }
+    public override void OnGround() { return; }
+    public override void Enable() {return;}
 }

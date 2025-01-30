@@ -3,54 +3,49 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClimbingLowerState : MonoBehaviour, IPlayerLowerState
+public class ClimbingLowerState : PlayerLowerStateBase
 {
-    private Transform playerTransform;
-    private PlayerController playerController;
-    private Rigidbody2D playerRigid;
     private float climbingSpeed;
-    private float climbUpHeight = 0.1f;
+    private float climbUpHeight;
     private float climbDownHeight;
     
-
-    public void Start()
+    protected override void StartLowerState()
     {
-        playerTransform = transform.parent.parent;
-        playerController = playerTransform.GetComponent<PlayerController>();
-        playerRigid = playerTransform.GetComponent<Rigidbody2D>();
         playerController.AddLowerState(PLAYER_LOWER_STATE.CLIMBING, this);
 
         climbingSpeed = playerController.MovingSpeed;
+        climbUpHeight = 0.1f;
         climbDownHeight = playerController.CharacterHeight / 2 + 0.2f;
     }
 
-    public PLAYER_LOWER_STATE GetState() { return PLAYER_LOWER_STATE.CLIMBING; }
-    public bool DisableUpperBody() { return true; }
+    public override PLAYER_LOWER_STATE GetState() { return PLAYER_LOWER_STATE.CLIMBING; }
 
-    public void StartState()
+    public override bool DisableUpperBody() { return true; }
+
+    public override void OnEnter()
     {
         playerRigid.gravityScale = 0;
 
         MoveNearToClimbingObject();
     }
 
-    public void UpdateState()
+    public override void OnUpdate()
     {
 
     }
 
-    public void EndState()
+    public override void OnExit()
     {
         playerRigid.gravityScale = playerController.Gravity;
     }
 
 
-    public void UpDown(int upDown)
+    public override void UpDown(int upDown)
     {
         playerRigid.velocity =  Vector2.up * upDown * climbingSpeed;
     }
     
-    public void Climb(bool climb)
+    public override void Climb(bool climb)
     {
         if(!climb)
         {
@@ -71,15 +66,13 @@ public class ClimbingLowerState : MonoBehaviour, IPlayerLowerState
         }
     }
 
-    public void Jump()
+    public override void Jump()
     {
         // jump player
         playerRigid.velocity = new Vector2(playerRigid.velocity.x, playerController.JumpingSpeed/3);
 
         playerController.ChangeLowerState(PLAYER_LOWER_STATE.JUMPING);
     }
-
-    public void Damaged() { playerController.ChangeLowerState(PLAYER_LOWER_STATE.DAMAGED); }
 
     // Move character near the climbing object
     private void MoveNearToClimbingObject()
@@ -102,11 +95,11 @@ public class ClimbingLowerState : MonoBehaviour, IPlayerLowerState
 
 
     /***** Inavailable State Change *****/
-    public void Move(int move) { return; }
-    public void Stop() { return; }
-    public void Aim(bool isAiming) { return; }
-    public void OnAir() { return; }
-    public void OnGround(){ return; }
-    public void Tag() { return; }
-    public void Push(bool push) { return; }
+    public override void Move(int move) { return; }
+    public override void Stop() { return; }
+    public override void Aim(bool isAiming) { return; }
+    public override void OnAir() { return; }
+    public override void OnGround(){ return; }
+    public override void Tag() { return; }
+    public override void Push(bool push) { return; }
 }

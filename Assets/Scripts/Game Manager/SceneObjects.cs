@@ -1,4 +1,4 @@
-public interface SceneObejct
+public interface ISceneObejct
 {
     public bool IsLoaded();
 }

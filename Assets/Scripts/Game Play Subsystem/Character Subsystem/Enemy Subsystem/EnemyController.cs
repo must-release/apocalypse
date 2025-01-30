@@ -6,9 +6,8 @@ using CharacterEums;
 using WeaponEnums;
 using UnityEngine;
 
-public abstract class EnemyController : CharacterBase, SceneObejct
+public abstract class EnemyController : CharacterBase, ISceneObejct
 {
-
     public GameObject DetectedPlayer {get; set;}
     public Transform ChasingTarget {get; set;}
 
@@ -38,8 +37,8 @@ public abstract class EnemyController : CharacterBase, SceneObejct
     protected Vector2 rangeOffset;
     protected float attackRange;
 
-    private IEnemyState currentState;
-    private Dictionary<ENEMY_STATE, IEnemyState> enemyStateDictionary;
+    private EnemyStateBase currentState;
+    private Dictionary<ENEMY_STATE, EnemyStateBase> enemyStateDictionary;
     private TerrainChecker terrainChecker;
     private PlayerDetector playerDetector;
     private DamageArea defalutDamageArea;
@@ -77,7 +76,7 @@ public abstract class EnemyController : CharacterBase, SceneObejct
         if( isLoaded )
         {
             // Start current state when enabled
-            currentState.StartState();
+            currentState.OnEnter();
         }
     }
 
@@ -95,7 +94,7 @@ public abstract class EnemyController : CharacterBase, SceneObejct
     // Get enemyState prefab and set state components 
     IEnumerator SetStateDictionary()
     {
-        enemyStateDictionary = new Dictionary<ENEMY_STATE, IEnemyState>();
+        enemyStateDictionary = new Dictionary<ENEMY_STATE, EnemyStateBase>();
 
         AsyncOperationHandle<GameObject> enemyState = Addressables.InstantiateAsync("Enemy State", transform);
         yield return enemyState;
@@ -103,7 +102,7 @@ public abstract class EnemyController : CharacterBase, SceneObejct
         if (enemyState.Status == AsyncOperationStatus.Succeeded)
         {
             Transform enemyStateTrans = enemyState.Result.transform;
-            foreach (var state in enemyStateTrans.GetComponents<IEnemyState>())
+            foreach (var state in enemyStateTrans.GetComponents<EnemyStateBase>())
             {
                 if (!enemyStateDictionary.ContainsKey(state.GetState())) 
                     enemyStateDictionary[state.GetState()] = state;
@@ -185,7 +184,7 @@ public abstract class EnemyController : CharacterBase, SceneObejct
         if( DetectedPlayer = playerDetector.DetectPlayer() )
             currentState.DetectedPlayer();
 
-        currentState.UpdateState();
+        currentState.OnUpdate();
 
         UpdateEnemy(); 
     }
@@ -196,9 +195,9 @@ public abstract class EnemyController : CharacterBase, SceneObejct
 
     public void ChangeState(ENEMY_STATE state)
     {
-        currentState.EndState(state);
+        currentState.OnExit(state);
         currentState = enemyStateDictionary[state];
-        currentState.StartState();
+        currentState.OnEnter();
     }
 
     public void SetDefaultDamageArea(bool value)
@@ -233,14 +232,4 @@ public abstract class EnemyController : CharacterBase, SceneObejct
     protected abstract void InitializeDamageAndWeapon();
     
 
-}
-
-public interface IEnemyState
-{
-    public ENEMY_STATE GetState();
-    public void StartState();
-    public void UpdateState();
-    public void EndState(ENEMY_STATE nextState);
-    public void DetectedPlayer();
-    public void OnDamaged();
 }

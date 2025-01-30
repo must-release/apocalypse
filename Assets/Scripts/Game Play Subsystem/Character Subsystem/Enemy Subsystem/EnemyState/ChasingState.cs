@@ -1,22 +1,19 @@
 using CharacterEums;
 using UnityEngine;
 
-public class ChasingState : MonoBehaviour, IEnemyState
+public class ChasingState : EnemyStateBase
 {
-    private Transform enemyTransform;
-    private EnemyController enemyController;
     private const float FORGET_TIME = 10f;
     private float forgettingTime;
 
-    public ENEMY_STATE GetState() { return ENEMY_STATE.CHASING; }
-
-    public void Start()
+    protected override void StartEnemyState()
     {
-        enemyTransform = transform.parent;
-        enemyController = enemyTransform.GetComponent<EnemyController>();
+        forgettingTime = 0;
     }
 
-    public void StartState()
+    public override ENEMY_STATE GetState() { return ENEMY_STATE.CHASING; }
+
+    public override void OnEnter()
     {
         if ( enemyController.DetectedPlayer )
             enemyController.ChasingTarget = enemyController.DetectedPlayer.transform;
@@ -29,7 +26,7 @@ public class ChasingState : MonoBehaviour, IEnemyState
         forgettingTime = 0;
     }
 
-    public void UpdateState()
+    public override void OnUpdate()
     {
         // Chase detected player
         enemyController.ChasePlayer();
@@ -53,19 +50,11 @@ public class ChasingState : MonoBehaviour, IEnemyState
         }
     }
 
-    public void EndState(ENEMY_STATE nextState)
+    public override void OnExit(ENEMY_STATE nextState)
     {
         if ( ENEMY_STATE.ATTACKING != nextState)
             enemyController.ChasingTarget = null;
     }
 
-    public void OnDamaged() 
-    { 
-        if( 0 < enemyController.HitPoint )
-            enemyController.ChangeState(ENEMY_STATE.DAMAGED);
-        else
-            enemyController.ChangeState(ENEMY_STATE.DEAD);
-    }
-
-    public void DetectedPlayer() { return; }
+    public override void DetectedPlayer() { return; }
 }

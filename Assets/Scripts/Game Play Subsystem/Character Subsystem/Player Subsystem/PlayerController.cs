@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using CharacterEums;
 using UnityEngine;
 
-public class PlayerController : CharacterBase, SceneObejct
+public class PlayerController : CharacterBase, ISceneObejct
 {
     public float MovingSpeed { get; private set; } = 15f;
     public float JumpingSpeed { get; private set; } = 30f;
@@ -12,28 +12,31 @@ public class PlayerController : CharacterBase, SceneObejct
     public IPlayer CurrentPlayer { get; private set; }
     public PLAYER CurrentCharacter { get; private set; }
     public ControlInfo CurrentControlInfo {get; private set; }
-    public IPlayerLowerState LowerState { get; private set; }
-    public IPlayerUpperState UpperState { get; private set; }
+    public PlayerLowerStateBase LowerState { get; private set; }
+    public PlayerUpperStateBase UpperState { get; private set; }
+
+    private const int MAX_HIT_POINT = 3;
 
     private Dictionary<PLAYER, IPlayer> playerDictionary;
-    private Dictionary<PLAYER_LOWER_STATE, IPlayerLowerState> lowerStateDictionary;
-    private Dictionary<PLAYER_UPPER_STATE, IPlayerUpperState> upperStateDictionary;
+    private Dictionary<PLAYER_LOWER_STATE, PlayerLowerStateBase> lowerStateDictionary;
+    private Dictionary<PLAYER_UPPER_STATE, PlayerUpperStateBase> upperStateDictionary;
     private Rigidbody2D playerRigid;
     private SpriteRenderer playerRenderer;
     private Color damagedColor = Color.red;  // flickering color when damaged
     private Color originalColor;
     private bool isReady;
     private bool isDamageImmune;
-    public float flickeringSpeed = 0.3f; 
-    public int flickeringCount = 4;
+    private float flickeringSpeed;
+    private int flickeringCount;
 
     protected override void AwakeCharacter()
     {
         base.AwakeCharacter();
 
         CharacterHeight = GetComponent<CapsuleCollider2D>().size.y * transform.localScale.y;
-        lowerStateDictionary = new Dictionary<PLAYER_LOWER_STATE, IPlayerLowerState>();
-        upperStateDictionary = new Dictionary<PLAYER_UPPER_STATE, IPlayerUpperState>();
+        HitPoint = MAX_HIT_POINT;
+        lowerStateDictionary = new Dictionary<PLAYER_LOWER_STATE, PlayerLowerStateBase>();
+        upperStateDictionary = new Dictionary<PLAYER_UPPER_STATE, PlayerUpperStateBase>();
         playerRigid = GetComponent<Rigidbody2D>();
         playerRigid.gravityScale = Gravity;
         isReady = false;
@@ -57,8 +60,8 @@ public class PlayerController : CharacterBase, SceneObejct
         if(!isReady) return;
 
         // Update player's state
-        LowerState.UpdateState();
-        UpperState.UpdateState();
+        LowerState.OnUpdate();
+        UpperState.OnUpdate();
     }
 
     public bool IsLoaded()
@@ -143,9 +146,11 @@ public class PlayerController : CharacterBase, SceneObejct
 
     public override void OnDamaged(DamageInfo damageInfo) 
     {
-        if(isDamageImmune) return;
+        if ( isDamageImmune ) return;
 
         RecentDamagedInfo = damageInfo;
+        HitPoint -= RecentDamagedInfo.damageValue;
+
         StartCoroutine(StartDamageImmuneState());
 
         LowerState.Damaged(); 
@@ -198,27 +203,40 @@ public class PlayerController : CharacterBase, SceneObejct
     public void ChangeLowerState(PLAYER_LOWER_STATE state)
     {
         Debug.Log("Lower : " + LowerState.GetState().ToString() + " -> " + state.ToString());
-        LowerState.EndState();
+        LowerState.OnExit();
         LowerState = lowerStateDictionary[state];
-        LowerState.StartState();
+        LowerState.OnEnter();
     }
 
     // Change player's upper body state
     public void ChangeUpperState(PLAYER_UPPER_STATE state)
     {
         Debug.Log("Uppper : " + UpperState.GetState().ToString() + " -> " + state.ToString());
-        UpperState.EndState(state);
+        UpperState.OnExit(state);
         UpperState = upperStateDictionary[state];
-        UpperState.StartState();
+        UpperState.OnEnter();
     }
 
-    public void AddLowerState(PLAYER_LOWER_STATE stateKey, IPlayerLowerState state)
+    public void AddLowerState(PLAYER_LOWER_STATE stateKey, PlayerLowerStateBase state)
     {
         if (!lowerStateDictionary.ContainsKey(stateKey)) lowerStateDictionary[stateKey] = state;
     }
 
-    public void AddUpperState(PLAYER_UPPER_STATE stateKey, IPlayerUpperState state)
+    public void AddUpperState(PLAYER_UPPER_STATE stateKey, PlayerUpperStateBase state)
     {
         if (!upperStateDictionary.ContainsKey(stateKey)) upperStateDictionary[stateKey] = state;
     }
+}
+
+
+public interface IPlayer
+{
+    public bool IsLoaded {get; set;}
+    public Transform GetTransform();
+    public IEnumerator LoadWeaponsAndDots();
+    public void ShowCharacter(bool value);
+    public void RotateUpperBody(float rotateAngle);
+    public void RotateUpperBody(Vector3 target);
+    public void Aim(bool value);
+    public float Attack(); // Execute attack and return attack cool time
 }

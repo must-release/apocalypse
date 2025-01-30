@@ -3,41 +3,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JumpingLowerState : MonoBehaviour, IPlayerLowerState
+public class JumpingLowerState : PlayerLowerStateBase
 {
-    private Transform playerTransform;
-    private PlayerController playerController;
-    private Rigidbody2D playerRigid;
     private int movingDirection;
 
-    public void Start()
+    protected override void StartLowerState()
     {
-        playerTransform = transform.parent.parent;
-        playerController = playerTransform.GetComponent<PlayerController>();
-        playerRigid = playerTransform.GetComponent<Rigidbody2D>();
         playerController.AddLowerState(PLAYER_LOWER_STATE.JUMPING, this);
     }
 
-    public PLAYER_LOWER_STATE GetState() { return PLAYER_LOWER_STATE.JUMPING; }
-    public bool DisableUpperBody() { return false; }
+    public override PLAYER_LOWER_STATE GetState() { return PLAYER_LOWER_STATE.JUMPING; }
+    public override bool DisableUpperBody() { return false; }
 
-    public void StartState()
+    public override void OnEnter()
     {
-        if (playerTransform.localScale.x > 0) movingDirection = 1;
-        else movingDirection = -1;
+        if ( 0 < playerTransform.localScale.x ) 
+            movingDirection = 1;
+        else 
+            movingDirection = -1;
     }
 
-    public void UpdateState()
-    {
-
-    }
-
-    public void EndState()
+    public override void OnUpdate()
     {
 
     }
 
-    public void Move(int move)
+    public override void OnExit()
+    {
+
+    }
+
+    public override void Move(int move)
     {
         // move player
         playerRigid.velocity = new Vector2(move * playerController.MovingSpeed, playerRigid.velocity.y);
@@ -51,30 +47,26 @@ public class JumpingLowerState : MonoBehaviour, IPlayerLowerState
         }
     }
 
-    public void Stop()
+    public override void Stop()
     {
         playerRigid.velocity = new Vector2(0, playerRigid.velocity.y);
     }
 
-    public void Damaged()
-    {
-        playerController.ChangeLowerState(PLAYER_LOWER_STATE.DAMAGED);
-    }
-
-    public void OnGround()
+    public override void OnGround()
     {
         playerController.ChangeLowerState(PLAYER_LOWER_STATE.IDLE);
     }
 
-    public void Climb(bool climb) 
+    public override void Climb(bool climb) 
     {
-        if (climb) playerController.ChangeLowerState(PLAYER_LOWER_STATE.CLIMBING);
+        if ( climb ) 
+            playerController.ChangeLowerState(PLAYER_LOWER_STATE.CLIMBING);
     }
 
-    public void Aim(bool isAiming) { return; }
-    public void Tag() { return; }
-    public void Jump() { return; }
-    public void OnAir() { return; }
-    public void Push(bool push) {return;}
-    public void UpDown(int upDown) {return;}
+    public override void Aim(bool isAiming) { return; }
+    public override void Tag() { return; }
+    public override void Jump() { return; }
+    public override void OnAir() { return; }
+    public override void Push(bool push) {return;}
+    public override void UpDown(int upDown) {return;}
 }

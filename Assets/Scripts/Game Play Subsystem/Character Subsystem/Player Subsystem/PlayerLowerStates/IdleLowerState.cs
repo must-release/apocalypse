@@ -3,82 +3,67 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IdleLowerState : MonoBehaviour, IPlayerLowerState
+public class IdleLowerState : PlayerLowerStateBase
 {
-    private Transform playerTransform;
-    private PlayerController playerController;
-    private Rigidbody2D playerRigid;
-
-    // Start is called before the first frame update
-
-    public void Start()
+    protected override void StartLowerState()
     {
-        playerTransform = transform.parent.parent;
-        playerController = playerTransform.GetComponent<PlayerController>();
-        playerRigid = playerTransform.GetComponent<Rigidbody2D>();
         playerController.AddLowerState(PLAYER_LOWER_STATE.IDLE, this);
     }
 
-    public PLAYER_LOWER_STATE GetState() { return PLAYER_LOWER_STATE.IDLE; }
-    public bool DisableUpperBody() { return false; }
+    public override PLAYER_LOWER_STATE GetState() { return PLAYER_LOWER_STATE.IDLE; }
 
-    public void StartState()
+    public override bool DisableUpperBody() { return false; }
+
+    public override void OnEnter()
     {
         playerRigid.velocity = Vector2.zero;
     }
 
-    public void UpdateState()
+    public override void OnUpdate()
     {
 
     }
 
-    public void EndState()
+    public override void OnExit()
     {
 
     }
 
-    public void Jump()
+    public override void Jump()
     {
         playerRigid.velocity = new Vector2(playerRigid.velocity.x, playerController.JumpingSpeed);
         playerController.ChangeLowerState(PLAYER_LOWER_STATE.JUMPING);
     }
 
-    public void OnAir()
+    public override void OnAir()
     {
         playerController.ChangeLowerState(PLAYER_LOWER_STATE.JUMPING);
     }
 
-    public void Aim(bool isAiming)
+    public override void Aim(bool isAiming)
     {
         if (isAiming)
-        {
             playerController.ChangeLowerState(PLAYER_LOWER_STATE.AIMING);
-        }
     }
 
-    public void Move(int move)
+    public override void Move(int move)
     {
         playerController.ChangeLowerState(PLAYER_LOWER_STATE.RUNNING);
     }
 
-    public void Damaged()
-    {
-        playerController.ChangeLowerState(PLAYER_LOWER_STATE.DAMAGED);
-    }
-
-    public void Tag()
+    public override void Tag()
     {
         playerController.ChangeLowerState(PLAYER_LOWER_STATE.TAGGING);
     }
 
-    public void Climb(bool climb)
+    public override void Climb(bool climb)
     {
         if (climb) playerController.ChangeLowerState(PLAYER_LOWER_STATE.CLIMBING);
     }
 
-    public void OnGround() { return; }
+    public override void OnGround() { return; }
 
-    public void Stop() { return; }
-    public void Push(bool push) {return;}
-    public void UpDown(int upDown) {return;}
+    public override void Stop() { return; }
+    public override void Push(bool push) {return;}
+    public override void UpDown(int upDown) {return;}
 }

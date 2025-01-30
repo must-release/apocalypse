@@ -104,7 +104,7 @@ public class GameSceneModel : MonoBehaviour
             Transform loadedMap = loadingMap.Result.transform;
 
             // Wait for async loading of scene objects in the map
-            foreach (var sceneObject in loadedMap.GetComponentsInChildren<SceneObejct>())
+            foreach (var sceneObject in loadedMap.GetComponentsInChildren<ISceneObejct>())
             {
                 yield return new WaitUntil(()=>sceneObject.IsLoaded());
             }
@@ -133,7 +133,7 @@ public class GameSceneModel : MonoBehaviour
         if (player.Status == AsyncOperationStatus.Succeeded)
         {
             Player = player.Result.transform;
-            if (Player.TryGetComponent(out SceneObejct sceneObject))
+            if (Player.TryGetComponent(out ISceneObejct sceneObject))
             {
                 yield return new WaitUntil(()=>sceneObject.IsLoaded());
             }

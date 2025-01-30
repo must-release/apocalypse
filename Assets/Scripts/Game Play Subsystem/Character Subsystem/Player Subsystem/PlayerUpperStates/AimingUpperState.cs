@@ -1,30 +1,26 @@
 using UnityEngine;
 using CharacterEums;
 
-public class AimingUpperState : MonoBehaviour, IPlayerUpperState
+public class AimingUpperState : PlayerUpperStateBase
 {
-    private Transform playerTransform;
-    private PlayerController playerController;
     private Vector3 aimingPosition;
     private int direction;
     private bool fixedUpdateFlag;
     
 
-    public void Start()
+    protected override void StartUpperState()
     {
-        playerTransform = transform.parent.parent;
-        playerController = playerTransform.GetComponent<PlayerController>();
         playerController.AddUpperState(PLAYER_UPPER_STATE.AIMING, this);
     }
 
-    public PLAYER_UPPER_STATE GetState() { return PLAYER_UPPER_STATE.AIMING; }
+    public override PLAYER_UPPER_STATE GetState() { return PLAYER_UPPER_STATE.AIMING; }
 
-    public void StartState()
+    public override void OnEnter()
     {
         // Enable fixed update
         fixedUpdateFlag = true;
     }
-    public void UpdateState()
+    public override void OnUpdate()
     {
         // Set player's looking direction
         SetDirection();
@@ -36,10 +32,11 @@ public class AimingUpperState : MonoBehaviour, IPlayerUpperState
     private void FixedUpdate() 
     {   
         // Turn on player's aiming state
-        if(fixedUpdateFlag) playerController.CurrentPlayer.Aim(true);
+        if(fixedUpdateFlag) 
+            playerController.CurrentPlayer.Aim(true);
     }
 
-    public void EndState(PLAYER_UPPER_STATE nextState)
+    public override void OnExit(PLAYER_UPPER_STATE nextState)
     {
         // Turn off player's aiming state
         playerController.CurrentPlayer.Aim(false);
@@ -52,15 +49,19 @@ public class AimingUpperState : MonoBehaviour, IPlayerUpperState
         fixedUpdateFlag = false;
     }
 
-    public void Disable() { playerController.ChangeUpperState(PLAYER_UPPER_STATE.DISABLED); }
+    public override void OnAir() 
+    { 
+        playerController.ChangeUpperState(PLAYER_UPPER_STATE.JUMPING); 
+    }
 
-    public void OnAir() { playerController.ChangeUpperState(PLAYER_UPPER_STATE.JUMPING); }
-
-    public void Attack() { playerController.ChangeUpperState(PLAYER_UPPER_STATE.AIM_ATTACKING); }
-
-    public void Aim(Vector3 aim)
+    public override void Attack() 
     {
-        if(aim == Vector3.zero)
+        playerController.ChangeUpperState(PLAYER_UPPER_STATE.AIM_ATTACKING); 
+    }
+
+    public override void Aim(Vector3 aim)
+    {
+        if ( Vector3.zero == aim )
             playerController.ChangeUpperState(PLAYER_UPPER_STATE.IDLE); 
         else
             aimingPosition = aim;
@@ -74,10 +75,10 @@ public class AimingUpperState : MonoBehaviour, IPlayerUpperState
     }
 
     /***** Inavailable State Change *****/
-    public void Jump() { return; }
-    public void Stop() { return; }
-    public void LookUp(bool lookUp) { return; }
-    public void Move() { return; }
-    public void OnGround() { return; }
-    public void Enable() {return;}
+    public override void Jump() { return; }
+    public override void Stop() { return; }
+    public override void LookUp(bool lookUp) { return; }
+    public override void Move() { return; }
+    public override void OnGround() { return; }
+    public override void Enable() {return;}
 }

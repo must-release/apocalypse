@@ -1,46 +1,34 @@
 using CharacterEums;
 using UnityEngine;
 
-public class PatrollingState : MonoBehaviour, IEnemyState
+public class PatrollingState : EnemyStateBase
 {
-    private Transform enemyTransform;
-    private EnemyController enemyController;
-
-    public ENEMY_STATE GetState() { return ENEMY_STATE.PATROLLING; }
-
-    public void Start()
+    protected override void StartEnemyState()
     {
-        enemyTransform = transform.parent;
-        enemyController = enemyTransform.GetComponent<EnemyController>();
+
     }
 
-    public void StartState()
+    public override ENEMY_STATE GetState() { return ENEMY_STATE.PATROLLING; }
+
+    public override void OnEnter()
     {
         // Set initial info for patrolling
         enemyController.SetPatrolInfo();
     }
 
-    public void UpdateState()
+    public override void OnUpdate()
     {
         // Circle patrol area
         enemyController.Patrol();
     }
 
-    public void EndState(ENEMY_STATE _)
+    public override void OnExit(ENEMY_STATE _)
     {
 
     }
 
-    public void DetectedPlayer()
+    public override void DetectedPlayer()
     {
         enemyController.ChangeState(ENEMY_STATE.CHASING);
-    }
-
-    public void OnDamaged()
-    {        
-        if( 0 < enemyController.HitPoint )
-            enemyController.ChangeState(ENEMY_STATE.DAMAGED);
-        else
-            enemyController.ChangeState(ENEMY_STATE.DEAD);
     }
 }
