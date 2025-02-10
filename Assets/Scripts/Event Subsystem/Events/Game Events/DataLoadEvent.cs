@@ -18,7 +18,7 @@ public class DataLoadEvent : GameEvent
     }
 
     // Check compatibility with current event and UI
-    public override bool CheckCompatibility(GameEvent parentEvent, BASEUI baseUI, SUBUI subUI)
+    public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
         // Can be played when current base UI is title or load
         if (parentEvent == null || parentEvent.EventType == EVENT_TYPE.STORY || parentEvent.EventType == EVENT_TYPE.CHOICE)
@@ -47,7 +47,7 @@ public class DataLoadEvent : GameEvent
             if(startingEvent == null) // When there is no starting event, concat UI change event to current event chain
             {
                 ChangeUIEvent uiEvent = CreateInstance<ChangeUIEvent>();
-                uiEvent.changingUI = BASEUI.CONTROL;
+                uiEvent.changingUI = BaseUI.Control;
                 ConcatEvent(uiEvent);
             }
             else // When there is starting event, concat it to current event chain

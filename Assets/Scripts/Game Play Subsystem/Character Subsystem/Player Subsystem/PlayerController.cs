@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using CharacterEums;
 using UnityEngine;
 
-public class PlayerController : CharacterBase, ISceneObejct
+public class PlayerController : CharacterBase, IAsyncLoadObject
 {
     public float MovingSpeed { get; private set; } = 15f;
     public float JumpingSpeed { get; private set; } = 30f;

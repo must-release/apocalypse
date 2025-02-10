@@ -25,42 +25,39 @@ public class GameEventProducer : MonoBehaviour
     public void Start()
     {
         // When game starts, play splash screen
-        StartCoroutine(GenerateSplashScreenEventStream());
+        //StartCoroutine(GenerateSplashScreenEventStream());
     }
 
     // Generate splash screent event stream
-    IEnumerator GenerateSplashScreenEventStream()
+    public void GenerateSplashScreenEventStream()
     {
-        // Wait for a frame
-        yield return null;
-
         // First, set UI to splash scren UI
         ChangeUIEvent changeUIEvent = ScriptableObject.CreateInstance<ChangeUIEvent>();
-        changeUIEvent.changingUI = BASEUI.TITLE; //BASEUI.SPLASH_SCREEN;
+        changeUIEvent.changingUI = BaseUI.SplashScreen;
 
-        // // Second, load title scene asynchronously
-        // SceneLoadEvent sceneLoadEvent = ScriptableObject.CreateInstance<SceneLoadEvent>();
-        // sceneLoadEvent.LoadingScene = SCENE.TITLE;
-        // changeUIEvent.NextEvent = sceneLoadEvent;
+        // Second, load title scene asynchronously
+        SceneLoadEvent sceneLoadEvent = ScriptableObject.CreateInstance<SceneLoadEvent>();
+        sceneLoadEvent.LoadingScene = SCENE.TITLE;
+        changeUIEvent.NextEvent = sceneLoadEvent;
 
-        // // Third, Activate scene
-        // SceneActivateEvent sceneActivateEvent = ScriptableObject.CreateInstance<SceneActivateEvent>();
-        // sceneLoadEvent.NextEvent = sceneActivateEvent;
+        // Third, Activate scene
+        SceneActivateEvent sceneActivateEvent = ScriptableObject.CreateInstance<SceneActivateEvent>();
+        sceneLoadEvent.NextEvent = sceneActivateEvent;
 
-        // // Fourth, show fade out effect
-        // ScreenEffectEvent fadeOutEvent = ScriptableObject.CreateInstance<ScreenEffectEvent>();
-        // fadeOutEvent.screenEffect = SCREEN_EFFECT.FADE_OUT;
-        // sceneActivateEvent.NextEvent = fadeOutEvent;
+        // Fourth, show fade out effect
+        ScreenEffectEvent fadeOutEvent = ScriptableObject.CreateInstance<ScreenEffectEvent>();
+        fadeOutEvent.screenEffect = SCREEN_EFFECT.FADE_OUT;
+        sceneActivateEvent.NextEvent = fadeOutEvent;
 
-        // // Fifth, change UI to title UI
-        // ChangeUIEvent uiChangeEvent = ScriptableObject.CreateInstance<ChangeUIEvent>();
-        // uiChangeEvent.changingUI = BASEUI.TITLE;
-        // fadeOutEvent.NextEvent = uiChangeEvent;
+        // Fifth, change UI to title UI
+        ChangeUIEvent uiChangeEvent = ScriptableObject.CreateInstance<ChangeUIEvent>();
+        uiChangeEvent.changingUI = BaseUI.Title;
+        fadeOutEvent.NextEvent = uiChangeEvent;
 
-        // // Finall, show fade in effect
-        // ScreenEffectEvent fadeInEvent = ScriptableObject.CreateInstance<ScreenEffectEvent>();
-        // fadeInEvent.screenEffect = SCREEN_EFFECT.FADE_IN;
-        // uiChangeEvent.NextEvent = fadeInEvent;
+        // Finall, show fade in effect
+        ScreenEffectEvent fadeInEvent = ScriptableObject.CreateInstance<ScreenEffectEvent>();
+        fadeInEvent.screenEffect = SCREEN_EFFECT.FADE_IN;
+        uiChangeEvent.NextEvent = fadeInEvent;
 
         // Handle generated event stream
         HandleGeneratedEventChain(changeUIEvent);
@@ -101,7 +98,7 @@ public class GameEventProducer : MonoBehaviour
 
         // Finally, change ui to control ui
         ChangeUIEvent uiChangeEvent = ScriptableObject.CreateInstance<ChangeUIEvent>();
-        uiChangeEvent.changingUI = BASEUI.CONTROL;
+        uiChangeEvent.changingUI = BaseUI.Control;
         cutsceneEvent.NextEvent = uiChangeEvent;
 
         // Handle generated event stream
@@ -146,7 +143,7 @@ public class GameEventProducer : MonoBehaviour
 
         // Third, Change UI according to scene
         ChangeUIEvent changeUIEvent = ScriptableObject.CreateInstance<ChangeUIEvent>();
-        changeUIEvent.changingUI = scene == SCENE.TITLE? BASEUI.TITLE : BASEUI.CONTROL;
+        changeUIEvent.changingUI = scene == SCENE.TITLE? BaseUI.Title : BaseUI.Control;
         sceneActivateEvent.NextEvent = changeUIEvent;
 
         // Handle generated event stream

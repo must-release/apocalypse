@@ -10,7 +10,7 @@ public class GameSceneModel : MonoBehaviour
 {
     public static GameSceneModel Instance;
 
-    public SCENE CurrentScene { get; private set; }
+    public SceneEnums.SCENE CurrentScene { get; private set; }
     public GameObject SceneObjects { get; private set; }
     public Transform Player { get; private set; }
     public Queue<MapInfo> Maps { get; private set; }
@@ -39,7 +39,7 @@ public class GameSceneModel : MonoBehaviour
     }
 
     // Asyncronously load scene
-    public AsyncOperation AsyncLoadScene(SCENE loadingScene)
+    public AsyncOperation AsyncLoadScene(SceneEnums.SCENE loadingScene)
     {
         CurrentScene = loadingScene;
 
@@ -58,9 +58,9 @@ public class GameSceneModel : MonoBehaviour
 
         switch (CurrentScene)
         {
-            case SCENE.TITLE:
+            case SceneEnums.SCENE.TITLE:
                 return StartCoroutine(LoadTitleAssets());
-            case SCENE.STAGE:
+            case SceneEnums.SCENE.STAGE:
                 return StartCoroutine(LoadStageAssets());
             default:
                 Debug.Log("Asset Load Fail : Invalid Scene");
@@ -104,7 +104,7 @@ public class GameSceneModel : MonoBehaviour
             Transform loadedMap = loadingMap.Result.transform;
 
             // Wait for async loading of scene objects in the map
-            foreach (var sceneObject in loadedMap.GetComponentsInChildren<ISceneObejct>())
+            foreach (var sceneObject in loadedMap.GetComponentsInChildren<IAsyncLoadObject>())
             {
                 yield return new WaitUntil(()=>sceneObject.IsLoaded());
             }
@@ -133,7 +133,7 @@ public class GameSceneModel : MonoBehaviour
         if (player.Status == AsyncOperationStatus.Succeeded)
         {
             Player = player.Result.transform;
-            if (Player.TryGetComponent(out ISceneObejct sceneObject))
+            if (Player.TryGetComponent(out IAsyncLoadObject sceneObject))
             {
                 yield return new WaitUntil(()=>sceneObject.IsLoaded());
             }
@@ -148,13 +148,13 @@ public class GameSceneModel : MonoBehaviour
     }
 
     // Return scene name string
-    private string GetSceneName(SCENE loadingScene)
+    private string GetSceneName(SceneEnums.SCENE loadingScene)
     {
         switch (loadingScene)
         {
-            case SCENE.TITLE:
+            case SceneEnums.SCENE.TITLE:
                 return "TitleScene";
-            case SCENE.STAGE:
+            case SceneEnums.SCENE.STAGE:
                 return "StageScene";
             default:
                 return null;

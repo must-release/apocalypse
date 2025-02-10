@@ -1,18 +1,17 @@
-using CharacterEums;
 using System.Collections;
-using System.Collections.Generic;
+using CharacterEums;
 using UnityEngine;
 
 public class DeadLowerState : PlayerLowerStateBase
 {
-    private const float ANIMATION_PLAYTIME = 0.5f;
-    private float animationTime;
+    private const float ANIMATION_PLAYTIME = 2f;
+    private Coroutine deadStateCoroutine;
 
     protected override void StartLowerState()
     {
         playerController.AddLowerState(PLAYER_LOWER_STATE.DEAD, this);
 
-        animationTime = 0;
+        deadStateCoroutine = null;
     }
 
     public override PLAYER_LOWER_STATE GetState() { return PLAYER_LOWER_STATE.DEAD; }
@@ -21,19 +20,24 @@ public class DeadLowerState : PlayerLowerStateBase
 
     public override void OnEnter()
     {
-        animationTime = 0;
+        deadStateCoroutine = StartCoroutine(ProcessDeadState());
     }
 
     public override void OnUpdate()
     {
-        animationTime += Time.deltaTime;
-        if( animationTime < ANIMATION_PLAYTIME )
-            return;
+
     }
 
     public override void OnExit()
     {
 
+    }
+
+    private IEnumerator ProcessDeadState()
+    {
+        yield return new WaitForSeconds(ANIMATION_PLAYTIME);
+
+        CharacterManager.Instance.ProcessPlayersDeath();
     }
 
     public override void Jump() { return; }

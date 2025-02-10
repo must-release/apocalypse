@@ -6,7 +6,7 @@ using CharacterEums;
 using WeaponEnums;
 using UnityEngine;
 
-public abstract class EnemyController : CharacterBase, ISceneObejct
+public abstract class EnemyController : CharacterBase, IAsyncLoadObject
 {
     public GameObject DetectedPlayer {get; set;}
     public Transform ChasingTarget {get; set;}

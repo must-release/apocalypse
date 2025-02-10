@@ -20,7 +20,7 @@ public class ChoiceEvent : GameEvent
     }
 
     // Check compatibility with current event
-    public override bool CheckCompatibility(GameEvent parentEvent, BASEUI baseUI, SUBUI subUI)
+    public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
         if (parentEvent.EventType == EVENT_TYPE.STORY) // Can be played when story event is playing
         {
@@ -40,7 +40,7 @@ public class ChoiceEvent : GameEvent
     {
         // Set choice info and switch to choice UI
         UIController.Instance.SetChoiceInfo(choiceList);
-        UIController.Instance.TurnSubUIOn(SUBUI.CHOICE);
+        UIController.Instance.TurnSubUIOn(SubUI.Choice);
 
         // Wait for player to select a choice
         while (UIController.Instance.GetSelectedChoice() == null)
@@ -49,7 +49,7 @@ public class ChoiceEvent : GameEvent
         }
 
         // Get the selected choice and process it
-        var selectedChoice = UIController.Instance.GetSelectedChoice();
+        string selectedChoice = UIController.Instance.GetSelectedChoice();
         bool generateResponse = choiceList == null;
         StoryController.Instance.ProcessSelectedChoice(selectedChoice, generateResponse);
 

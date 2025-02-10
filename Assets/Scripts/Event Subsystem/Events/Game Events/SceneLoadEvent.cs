@@ -17,7 +17,7 @@ public class SceneLoadEvent : GameEvent
     }
 
     // Check compatibility with current event and UI
-    public override bool CheckCompatibility(GameEvent parentEvent, BASEUI baseUI, SUBUI subUI)
+    public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
         // Can be played when parent event is null, story or choice
         if (parentEvent == null || parentEvent.EventType == EVENT_TYPE.STORY || 

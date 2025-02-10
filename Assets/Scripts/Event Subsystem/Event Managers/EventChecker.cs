@@ -18,7 +18,7 @@ public class EventChecker : MonoBehaviour
     // Check compatibility of the new game event with parent event
     public bool CheckEventCompatibility(GameEvent checkingEvent, GameEvent parentEvent)
     {
-        UIController.Instance.GetCurrentUI(out BASEUI baseUI, out SUBUI subUI);
+        UIController.Instance.GetCurrentUI(out BaseUI baseUI, out SubUI subUI);
         bool result = checkingEvent.CheckCompatibility(parentEvent, baseUI, subUI);
 
         if (!result)
@@ -40,7 +40,7 @@ public class EventChecker : MonoBehaviour
     public bool CheckEventCompatibility(InputEvent checkingEvent)
     {
         List<InputEvent> eventList = InputEventManager.Instance.EventList;
-        UIController.Instance.GetCurrentUI(out BASEUI baseUI, out SUBUI subUI);
+        UIController.Instance.GetCurrentUI(out BaseUI baseUI, out SubUI subUI);
         bool result = checkingEvent.CheckCompatibility(eventList, baseUI, subUI);
 
         return result;

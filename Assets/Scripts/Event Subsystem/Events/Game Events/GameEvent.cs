@@ -23,7 +23,7 @@ public class GameEvent : ScriptableObject
     private string nextEventdata;
 
     // Check compatibiliry with parent event and current UI
-    public virtual bool CheckCompatibility(GameEvent parentEvent, BASEUI baseUI, SUBUI subUI)
+    public virtual bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
         return default;
     }

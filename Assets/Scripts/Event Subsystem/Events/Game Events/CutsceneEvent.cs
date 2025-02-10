@@ -16,7 +16,7 @@ public class CutsceneEvent : GameEvent
     }
 
     // Check compatibility with current event and UI
-    public override bool CheckCompatibility(GameEvent parentEvent, BASEUI baseUI, SUBUI subUI)
+    public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
         // Can be played when there is no event playing
         if (parentEvent == null)
@@ -38,7 +38,7 @@ public class CutsceneEvent : GameEvent
     public override IEnumerator PlayEventCoroutine()
     {
         // Change to cutscene UI
-        UIController.Instance.ChangeBaseUI(BASEUI.CUTSCENE);
+        UIController.Instance.ChangeBaseUI(BaseUI.Cutscene);
 
         // Play cutscene
         GamePlayManager.Instance.PlayCutscene();

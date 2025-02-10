@@ -7,19 +7,19 @@ public class UIModel : MonoBehaviour
 {
     public static UIModel Instance { get; private set; }
 
-    public BASEUI CurrentBaseUI { get; set; } // Base UI using right now
-    public SUBUI CurrentSubUI { get; private set; }  // SubUI using right now
+    public BaseUI CurrentBaseUI { get; set; } // Base UI using right now
+    public SubUI CurrentSubUI { get; private set; }  // SubUI using right now
     public List<string> ChoiceList { get; set; } // Choice option list
     public string SelectedChoice { get; set; } // Selected choice option
 
-    private Stack<SUBUI> savedSubUIs; // Sub UIs which are stacked
+    private Stack<SubUI> savedSubUIs; // Sub UIs which are stacked
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            savedSubUIs = new Stack<SUBUI>();
+            savedSubUIs = new Stack<SubUI>();
         }
     }
 
@@ -28,7 +28,7 @@ public class UIModel : MonoBehaviour
     }
 
     // Push new sub UI in the stack
-    public void PushNewSubUI(SUBUI subUI)
+    public void PushNewSubUI(SubUI subUI)
     {
         CurrentSubUI = subUI;
         savedSubUIs.Push(subUI);
@@ -52,7 +52,7 @@ public class UIModel : MonoBehaviour
         }
         else
         {
-            CurrentSubUI = SUBUI.NONE;
+            CurrentSubUI = SubUI.None;
         }
     }
 

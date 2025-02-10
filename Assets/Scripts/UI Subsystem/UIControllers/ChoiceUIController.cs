@@ -5,87 +5,31 @@ using System.Collections.Generic;
 using UIEnums;
 using TMPro;
 
-public class ChoiceUIController : MonoBehaviour, IUIController
+public class ChoiceUIController : MonoBehaviour, IUIController<SubUI>
 {
-    /****** Private fields ******/
-    private string choicelUIName = "Choice UI";
-    private string inputOptionName = "Input Option";
-    private string submitButtonName = "Submit Button";
-    private string inputFieldName = "Input Field";
-    private Transform choiceUI;
-    private List<ChoiceOption> choiceOptionList;
-    private Transform inputOption;
-    private Button inputOptionSubmitButton;
-    private TMP_InputField inputField;
+    /****** Public Members ******/
 
-    /****** Single tone instance ******/
-    public static ChoiceUIController Instance;
-
-    public void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-
-            // Find Title UI object
-            choiceUI = transform.Find(choicelUIName);
-            if (choiceUI == null)
-            {
-                Debug.Log("Choice UI Initialization Error");
-                return;
-            }
-            choiceOptionList = new List<ChoiceOption>();
-            for (int i = 0; i < choiceUI.childCount - 1; i++)
-            {
-                int index = i;
-                choiceOptionList.Add(new ChoiceOption(choiceUI.GetChild(i)));
-                choiceOptionList[i].optionButton.onClick.AddListener(() => OnChoiceSelect(index));
-            }
-            inputOption = choiceUI.Find(inputOptionName);
-            inputOptionSubmitButton = inputOption.Find(submitButtonName).GetComponent<Button>();
-            inputOptionSubmitButton.onClick.AddListener(()=>OnChoiceSelect(choiceUI.childCount));
-            inputField = inputOption.Find(inputFieldName).GetComponent<TMP_InputField>();
-        }
-    }
-
-    public void Start()
-    {
-        // Add current UI controller
-        UIController.Instance.AddUIController(SUBUI.CHOICE, Instance);
-    }
-
-    /****** Methods ******/
-
-    // Enter Choice UI state
     public void StartUI()
     {
-        // Active Choice UI object
-        choiceUI.gameObject.SetActive(true);
-
-        // Set Choice UI
+        gameObject.SetActive(true);
         SetChoiceUI();
     }
 
-    // Update Choice UI
     public void UpdateUI()
     {
         
     }
 
-    // Exit Choice UI state
     public void EndUI()
     {
         // Reset input field
-        inputField.text = "";
-        //inputField.caretPosition = 0;
-        //inputField.selectionAnchorPosition = 0;
-        //inputField.selectionFocusPosition = 0;
+        _inputField.text = "";
 
         // Turn off choice UI
-        inputOption.gameObject.SetActive(false);
-        choiceOptionList.ForEach((option) => option.SetOptionInactive());
-        choiceUI.gameObject.SetActive(false);
-        inputField.DeactivateInputField();
+        _inputOption.gameObject.SetActive(false);
+        _choiceOptionList.ForEach((option) => option.SetOptionInactive());
+        gameObject.SetActive(false);
+        _inputField.DeactivateInputField();
     }
 
     public void Cancel()
@@ -93,21 +37,53 @@ public class ChoiceUIController : MonoBehaviour, IUIController
 
     }
 
-    // Set Choice UI
-    public void SetChoiceUI()
+    public SubUI GetUIType() { return SubUI.Choice; }
+
+
+    /****** Private Members ******/
+
+    private const string _InputOptionName = "Input Option";
+    private const string _SubmitButtonName = "Submit Button";
+    private const string _InputFieldName = "Input Field";
+    private List<ChoiceOption> _choiceOptionList;
+    private Transform _inputOption;
+    private Button _inputOptionSubmitButton;
+    private TMP_InputField _inputField;
+
+    private void Awake()
+    {
+        _choiceOptionList = new List<ChoiceOption>();
+        for (int i = 0; i < transform.childCount - 1; i++)
+        {
+            int index = i;
+            _choiceOptionList.Add(new ChoiceOption(transform.GetChild(i)));
+            _choiceOptionList[i].optionButton.onClick.AddListener(() => OnChoiceSelect(index));
+        }
+        _inputOption = transform.Find(_InputOptionName);
+        _inputOptionSubmitButton = _inputOption.Find(_SubmitButtonName).GetComponent<Button>();
+        _inputOptionSubmitButton.onClick.AddListener(()=>OnChoiceSelect(transform.childCount));
+        _inputField = _inputOption.Find(_InputFieldName).GetComponent<TMP_InputField>();
+    }
+
+    private void Start() 
+    { 
+        
+    }
+
+    private void SetChoiceUI()
     {
         // Get choice info
         List<string> choiceList = UIModel.Instance.ChoiceList;
 
-        if(choiceList == null) // Enable input option
+        if(null == choiceList) // Enable input option
         {
-            inputOption.gameObject.SetActive(true);
+            _inputOption.gameObject.SetActive(true);
         }
         else // Enable choice options
         {
-            for(int i = 0; i < choiceOptionList.Count; i++)
+            for(int i = 0; i < _choiceOptionList.Count; i++)
             {
-                choiceOptionList[i].SetOption(choiceList[i]);
+                _choiceOptionList[i].SetOption(choiceList[i]);
             }
         }
     }
@@ -116,17 +92,16 @@ public class ChoiceUIController : MonoBehaviour, IUIController
     public void OnChoiceSelect(int index)
     {
         // Update selected choice
-        if (index == choiceUI.childCount) // When player wrote text
+        if ( transform.childCount == index ) // When player wrote text
         {
-            UIModel.Instance.SelectedChoice = inputField.text;
+            UIModel.Instance.SelectedChoice = _inputField.text;
         }
         else // When player selected choice option
         {
-            UIModel.Instance.SelectedChoice = choiceOptionList[index].optionText.text;
+            UIModel.Instance.SelectedChoice = _choiceOptionList[index].optionText.text;
         }
 
-        // Turn Choice UI off
-        UIController.Instance.TurnSubUIOff(SUBUI.CHOICE);
+        UIController.Instance.TurnSubUIOff(SubUI.Choice);
     }
 }
 

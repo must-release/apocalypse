@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using UIEnums;
 
-class DataSlot
+public class DataSlot
 {
     public UserData slotData;
     public Button slotButton;
@@ -51,7 +51,7 @@ class DataSlot
             slotText.text = "AUTO";
 
             // Can not save at auto save slot
-            if (UIModel.Instance.CurrentSubUI == SUBUI.SAVE)
+            if (UIModel.Instance.CurrentSubUI == SubUI.Save)
             {
                 slotButton.interactable = false;
             }

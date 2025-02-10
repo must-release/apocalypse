@@ -5,22 +5,27 @@
             "entries": [
                 {
                     "type": "dialogue",
-                    "character": "NPC 이름",
-                    "text": "안녕하세요, 모험가님."
+                    "character": "도미나",
+                    "text": "앞을 봐! 괴물들이 있어!"
+                },
+                {
+                    "type": "dialogue",
+                    "character": "도미나",
+                    "text": "어떻게 하지? 돌아가야할까?"
                 },
                 {
                     "type": "choice",
                     "options": [
                         {
-                            "text": "안녕하세요.",
+                            "text": "죽이자.",
                             "branchId": "positiveResponse"
                         },
                         {
-                            "text": "지금은 바빠요.",
+                            "text": "돌아가자.",
                             "branchId": "negativeResponse"
                         },
                         {
-                            "text": "네.",
+                            "text": "귀찮다.",
                             "branchId": "negativeResponse"
                         }
                     ]
@@ -32,8 +37,13 @@
             "entries": [
                 {
                     "type": "dialogue",
-                    "character": "플레이어",
-                    "text": "반갑습니다!"
+                    "character": "나",
+                    "text": "내가 처리할게."
+                },
+                {
+                    "type": "dialogue",
+                    "character": "도미나",
+                    "text": "좋아! 믿고 있을게!"
                 }
             ]
         },
@@ -42,8 +52,18 @@
             "entries": [
                 {
                     "type": "dialogue",
-                    "character": "플레이어",
-                    "text": "지금은 조금 바쁘네요."
+                    "character": "나",
+                    "text": "별로 싸우고 싶지 않아."
+                },
+                {
+                    "type": "dialogue",
+                    "character": "도미나",
+                    "text": "하지만 우리의 의지와 상관없이 괴물이 이쪽으로 오고 있어!"
+                },
+                {
+                    "type": "dialogue",
+                    "character": "도미나",
+                    "text": "...화이팅!!"
                 }
             ]
         },
@@ -52,8 +72,8 @@
             "entries": [
                 {
                     "type": "dialogue",
-                    "character": "NPC 이름",
-                    "text": "네."
+                    "character": "나",
+                    "text": "...그래."
                 }
             ]
         }

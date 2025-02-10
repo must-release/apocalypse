@@ -96,10 +96,10 @@ public class ControlEvent : InputEvent, KeySettingsObserver
     }
 
     // Check compatibiliry with event list and current UI
-    public override bool CheckCompatibility(List<InputEvent> eventList, BASEUI baseUI, SUBUI subUI)
+    public override bool CheckCompatibility(List<InputEvent> eventList, BaseUI baseUI, SubUI subUI)
     {
         bool isEventListEmpty = eventList.Count == 0;
-        bool isValidUI = baseUI == BASEUI.CONTROL && subUI == SUBUI.NONE;
+        bool isValidUI = baseUI == BaseUI.Control && subUI == SubUI.None;
 
         return isEventListEmpty && isValidUI;
     }

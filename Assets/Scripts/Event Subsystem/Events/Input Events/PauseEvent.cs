@@ -18,11 +18,11 @@ public class PauseEvent : InputEvent, KeySettingsObserver
     }
 
     // Check compatibiliry with event list and current UI
-    public override bool CheckCompatibility(List<InputEvent> eventList, BASEUI baseUI, SUBUI subUI)
+    public override bool CheckCompatibility(List<InputEvent> eventList, BaseUI baseUI, SubUI subUI)
     {
         bool isEventListEmpty = eventList.Count == 0;
-        bool isValidBaseUI = baseUI == BASEUI.CONTROL || baseUI == BASEUI.STORY;
-        bool isValidSubUI = subUI == SUBUI.CHOICE || subUI == SUBUI.NONE;
+        bool isValidBaseUI = baseUI == BaseUI.Control || baseUI == BaseUI.Story;
+        bool isValidSubUI = subUI == SubUI.Choice || subUI == SubUI.None;
 
         return isEventListEmpty && isValidBaseUI && isValidSubUI;
     }
@@ -31,7 +31,7 @@ public class PauseEvent : InputEvent, KeySettingsObserver
     public override void PlayEvent()
     {
         // Turn sub UI on
-        UIController.Instance.TurnSubUIOn(SUBUI.PAUSE);
+        UIController.Instance.TurnSubUIOn(SubUI.Pause);
 
         // Terminate pause event
         InputEventManager.Instance.TerminateInputEvent(this);

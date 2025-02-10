@@ -6,88 +6,96 @@ using UIEnums;
 using System;
 using System.Reflection;
 
-public class KeySettingsUIController : MonoBehaviour, IUIController
+public class KeySettingsUIController : MonoBehaviour, IUIController<SubUI>
 {
-    /****** Private fields ******/
-    private string keySettingsUIName = "Key Settings UI";
-    private string keyBoxPath = " Key Box";
-    private string keyButtonTextPath = " Key Box/Key Button/Key Button Text";
-    private Transform keySettingsUI;
-    private Transform content;
-    private GameObject keyBox;
-    private Transform currentButtonTextTransform;
-    private bool isWaitingForKeyInput = false;
-    private string currentKeySettingField;
-    private Dictionary<string, KeyCode> originalKeySettings = new Dictionary<string, KeyCode>();
-    private Dictionary<string, KeyCode> tempKeySettings;
+    /****** Public Members ******/
 
-    private string confirmPanelName = "Confirm Panel";
-    private Transform confirmPanel;
-    private TextMeshProUGUI confirmText;
-    private TextMeshProUGUI labelText;
-    private Button _confirmButton_;
-    private Button _cancelButton_;
-
-    /****** Singleton instance ******/
-    public static KeySettingsUIController Instance;
-
-    private void Awake()
+    public void StartUI()
     {
-        if (Instance == null)
+        gameObject.SetActive(true);
+    }
+
+    public void UpdateUI()
+    {
+
+    }
+
+    public void EndUI()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public void Cancel()
+    {
+        if (_confirmPanel.gameObject.activeInHierarchy)
         {
-            Instance = this;
-
-            keySettingsUI = transform.Find(keySettingsUIName);
-            if (keySettingsUI == null)
-            {
-                Debug.LogError("Key Settings UI Initialization Error");
-                return;
-            }
-
-            content = keySettingsUI.Find("KeySettingScroll/Viewport/Content");
-            if (content == null)
-            {
-                Debug.LogError("Content Initialization Error");
-                return;
-            }
-
-            keyBox = content.Find("Key Box").gameObject;
-            if (keyBox == null)
-            {
-                Debug.LogError("Key Box Initialization Error");
-                return;
-            }
-
-            Button resetButton = keySettingsUI.Find("Buttons/Reset Button")?.GetComponent<Button>();
-            if (resetButton != null)
-            {
-                resetButton.onClick.AddListener(OnResetButton);
-            }
-
-            Button confirmButton = keySettingsUI.Find("Buttons/Confirm Button")?.GetComponent<Button>();
-            if (confirmButton != null)
-            {
-                confirmButton.onClick.AddListener(OnConfirmButton);
-            }
-
-            InitailizeConfirmPanel();
+            _confirmPanel.gameObject.SetActive(false);
+        }
+        else
+        {
+            UIController.Instance.TurnSubUIOff(SubUI.KeySettings);
         }
     }
 
-    public void Start()
+    public SubUI GetUIType() { return SubUI.KeySettings; }
+
+
+    /****** Private fields ******/
+
+    private const string _KeyBoxPath = " Key Box";
+    private const string _KeyButtonTextPath = " Key Box/Key Button/Key Button Text";
+    private const string _ConfirmPanelName = "Confirm Panel";
+    private Transform _content;
+    private GameObject _keyBox;
+    private Transform _currentButtonTextTransform;
+    private bool _isWaitingForKeyInput = false;
+    private string _currentKeySettingField;
+    private Dictionary<string, KeyCode> _originalKeySettings = new Dictionary<string, KeyCode>();
+    private Dictionary<string, KeyCode> _tempKeySettings;
+    private Transform _confirmPanel;
+    private TextMeshProUGUI _confirmText;
+    private TextMeshProUGUI _labelText;
+    private Button _confirmButton_;
+    private Button _cancelButton_;
+
+    private void Awake()
+    {
+        _content = transform.Find("KeySettingScroll/Viewport/Content");
+        if ( null == _content)
+        {
+            Debug.LogError("Content Initialization Error");
+            return;
+        }
+
+        _keyBox = _content.Find("Key Box").gameObject;
+        if ( null == _keyBox )
+        {
+            Debug.LogError("Key Box Initialization Error");
+            return;
+        }
+
+        Button resetButton = transform.Find("Buttons/Reset Button")?.GetComponent<Button>();
+        if ( null != resetButton )
+            resetButton.onClick.AddListener(OnResetButton);
+
+        Button confirmButton = transform.Find("Buttons/Confirm Button")?.GetComponent<Button>();
+        if ( null != confirmButton )
+            confirmButton.onClick.AddListener(OnConfirmButton);
+
+        InitailizeConfirmPanel();
+    }
+
+    private void Start()
     {
         // Load existing settings from SettingsManager
         LoadExistingKeySettings();
-
-        // Add current UI conroller
-        UIController.Instance.AddUIController(SUBUI.KEYSETTINGS, Instance);
     }
 
     // Load existing key settings from SettingsManager
     private void LoadExistingKeySettings()
     {
         // Load key settings
-        var keySettings = SettingsManager.Instance.KeySettingInfo;
+        KeySettings keySettings = SettingsManager.Instance.KeySettingInfo;
 
         // Create and initialize Key Box objects according to the settings
         FieldInfo[] fields = keySettings.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
@@ -96,10 +104,10 @@ public class KeySettingsUIController : MonoBehaviour, IUIController
             GameButton gameButton = fields[i].GetValue(keySettings) as GameButton;
 
             // Instantiate a new keyBox if it's not the first iteration
-            GameObject newKeyBox = i > 0 ? Instantiate(keyBox, content) : keyBox;
+            GameObject newKeyBox = i > 0 ? Instantiate(_keyBox, _content) : _keyBox;
 
             // Set the name of the new key box and key text
-            newKeyBox.name = gameButton.buttonName + keyBoxPath;
+            newKeyBox.name = gameButton.buttonName + _KeyBoxPath;
             newKeyBox.transform.Find("Key Text").GetComponent<TextMeshProUGUI>().text = gameButton.buttonName;
 
             // Update the button text
@@ -110,44 +118,11 @@ public class KeySettingsUIController : MonoBehaviour, IUIController
             button.onClick.AddListener(() => OnButtonClick(gameButton));
 
             // Store the original key settings
-            originalKeySettings[gameButton.buttonName] = gameButton.buttonKeyCode;
+            _originalKeySettings[gameButton.buttonName] = gameButton.buttonKeyCode;
         }
 
         // Initialize tempKeySettings with original values
-        tempKeySettings = new Dictionary<string, KeyCode>(originalKeySettings);
-    }
-
-    // Enter Key Settings UI state
-    public void StartUI()
-    {
-        // Activate key settings UI object
-        keySettingsUI.gameObject.SetActive(true);
-    }
-
-    // Update Key Settings UI
-    public void UpdateUI()
-    {
-
-    }
-
-    // Exit Key Settings UI state
-    public void EndUI()
-    {
-        // Inactivate key settings UI object
-        keySettingsUI.gameObject.SetActive(false);
-    }
-
-    public void Cancel()
-    {
-        if (confirmPanel.gameObject.activeInHierarchy) // check if confirm panel is on.
-        {
-            confirmPanel.gameObject.SetActive(false);
-        }
-        else
-        {
-            Debug.Log("Cancel");
-            UIController.Instance.TurnSubUIOff(SUBUI.KEYSETTINGS);
-        }
+        _tempKeySettings = new Dictionary<string, KeyCode>(_originalKeySettings);
     }
 
     private void OnButtonClick(GameButton gameButton)
@@ -155,16 +130,15 @@ public class KeySettingsUIController : MonoBehaviour, IUIController
         SetCurrentButtonTextTransform(GetButtonTextTransform(gameButton.buttonName), gameButton.buttonName);
     }
 
-
     // Reset to original key settings
     private void OnResetButton()
     {
         Debug.Log("Reset Button Clicked");
 
-        foreach (var entry in originalKeySettings)
+        foreach (var entry in _originalKeySettings)
         {
             // Update tempKeySettings with the original values
-            tempKeySettings[entry.Key] = entry.Value;
+            _tempKeySettings[entry.Key] = entry.Value;
 
             // Update the UI text to reflect the original key bindings
             UpdateButtonText(GetButtonTextTransform(entry.Key), entry.Value);
@@ -172,19 +146,17 @@ public class KeySettingsUIController : MonoBehaviour, IUIController
 
         Debug.Log("All key settings have been reset to their original values.");
     }
+
     private void OnConfirmButton() // On KeySetting UI
     {
         //Debug.Log("Confirm Button Clicked");
-        confirmPanel.gameObject.SetActive(true);
+        _confirmPanel.gameObject.SetActive(true);
     }
-
-
-
 
     // Update KeySetting
     private void Update()
     {
-        if (isWaitingForKeyInput)
+        if (_isWaitingForKeyInput)
         {
             if (Input.anyKeyDown)
             {
@@ -193,28 +165,29 @@ public class KeySettingsUIController : MonoBehaviour, IUIController
                     if (Input.GetKeyDown(keyCode))
                     {
                         // Update the text with the new key for the current button
-                        UpdateButtonText(currentButtonTextTransform, keyCode);
+                        UpdateButtonText(_currentButtonTextTransform, keyCode);
 
                         // Temporarily store the new key in tempKeySettings
-                        UpdateKeySetting(currentKeySettingField, keyCode);
+                        UpdateKeySetting(_currentKeySettingField, keyCode);
 
-                        isWaitingForKeyInput = false;
+                        _isWaitingForKeyInput = false;
                         break;
                     }
                 }
             }
         }
     }
+
     private void SetCurrentButtonTextTransform(Transform buttonTextTransform, string keySettingField)
     {
-        currentButtonTextTransform = buttonTextTransform;
-        if (currentButtonTextTransform == null)
+        _currentButtonTextTransform = buttonTextTransform;
+        if (_currentButtonTextTransform == null)
         {
             Debug.LogError($"Transform not found for path: {buttonTextTransform}");
             return;
         }
-        isWaitingForKeyInput = true;
-        currentKeySettingField = keySettingField;
+        _isWaitingForKeyInput = true;
+        _currentKeySettingField = keySettingField;
     }
 
     private void _OnConfirmButton_() // On Confirm Panel
@@ -227,16 +200,16 @@ public class KeySettingsUIController : MonoBehaviour, IUIController
         for (int i = 0; i < fields.Length; i++)
         {
             GameButton gameButton = fields[i].GetValue(keySettings) as GameButton;
-            gameButton.buttonKeyCode = tempKeySettings[gameButton.buttonName];
+            gameButton.buttonKeyCode = _tempKeySettings[gameButton.buttonName];
             fields[i].SetValue(keySettings, gameButton);
         }
         
 
         // Update the originalKeySettings to match the confirmed tempKeySettings
-        originalKeySettings = new Dictionary<string, KeyCode>(tempKeySettings);
+        _originalKeySettings = new Dictionary<string, KeyCode>(_tempKeySettings);
 
         SettingsManager.Instance.ChangeKeySettings(keySettings);
-        confirmPanel.gameObject.SetActive(false);
+        _confirmPanel.gameObject.SetActive(false);
     }
 
     private void _OnCancelButton_() // On Confirm Panel
@@ -266,14 +239,12 @@ public class KeySettingsUIController : MonoBehaviour, IUIController
         }
     }
 
-
-
     // Update the key setting
     private void UpdateKeySetting(string keySettingField, KeyCode newKey)
     {
         // Check if the new key is already assigned to another action
         string existingKeyField = null;
-        foreach (var entry in tempKeySettings)
+        foreach (var entry in _tempKeySettings)
         {
             if (entry.Value == newKey && entry.Key != keySettingField)
             {
@@ -287,9 +258,9 @@ public class KeySettingsUIController : MonoBehaviour, IUIController
             // Debug.Log($"Key {newKey} is already assigned to {existingKeyField}. Swapping keys.");
 
             // Swap the keys between the current field and the existing one
-            KeyCode temp = tempKeySettings[keySettingField];
-            tempKeySettings[keySettingField] = newKey;
-            tempKeySettings[existingKeyField] = temp;
+            KeyCode temp = _tempKeySettings[keySettingField];
+            _tempKeySettings[keySettingField] = newKey;
+            _tempKeySettings[existingKeyField] = temp;
 
             // Update the UI text for both fields
             UpdateButtonText(GetButtonTextTransform(keySettingField), newKey);
@@ -298,10 +269,10 @@ public class KeySettingsUIController : MonoBehaviour, IUIController
         else
         {
             // Update the current key setting if there's no conflict
-            tempKeySettings[keySettingField] = newKey;
+            _tempKeySettings[keySettingField] = newKey;
 
             // Update the UI text for the current button
-            UpdateButtonText(currentButtonTextTransform, newKey);
+            UpdateButtonText(_currentButtonTextTransform, newKey);
         }
 
         // Debug.Log($"Key {newKey} assigned to {keySettingField}");
@@ -309,18 +280,18 @@ public class KeySettingsUIController : MonoBehaviour, IUIController
 
     private Transform GetButtonTextTransform(string keyButtonName)
     {
-        return content.Find(keyButtonName + keyButtonTextPath);
+        return _content.Find(keyButtonName + _KeyButtonTextPath);
     }
 
     private void InitailizeConfirmPanel()
     {
-        confirmPanel = keySettingsUI.Find(confirmPanelName);
-        _confirmButton_ = confirmPanel.GetChild(0).GetChild(1).GetComponent<Button>();
+        _confirmPanel = transform.Find(_ConfirmPanelName);
+        _confirmButton_ = _confirmPanel.GetChild(0).GetChild(1).GetComponent<Button>();
         _confirmButton_.onClick.AddListener(_OnConfirmButton_);
-        confirmText = confirmPanel.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
-        confirmText.text = "Confirm?";
+        _confirmText = _confirmPanel.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
+        _confirmText.text = "Confirm?";
 
-        _cancelButton_ = confirmPanel.GetChild(0).GetChild(2).GetComponent<Button>();
+        _cancelButton_ = _confirmPanel.GetChild(0).GetChild(2).GetComponent<Button>();
         _cancelButton_.onClick.AddListener(_OnCancelButton_);
     }
 

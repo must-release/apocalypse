@@ -1,9 +1,10 @@
 ﻿using System;
+using Unity.VisualScripting;
 
 namespace UIEnums
 {
-    public enum BASEUI { SPLASH_SCREEN, TITLE, CONTROL, STORY, CUTSCENE, LOADING }
-    public enum SUBUI { NONE, PAUSE, SAVE, LOAD, CHOICE, PREFERENCE, KEYSETTINGS, SAVING }
+    public enum BaseUI { SplashScreen, Title, Control, Story, Cutscene, Loading, GameOver, BaseUICount }
+    public enum SubUI { None, Pause, Save, Load, Choice, Preference, KeySettings, Saving, SubUICount }
 }
 
 namespace StageEnums
@@ -43,6 +44,11 @@ namespace EventEnums
         STORY, TUTORIAL, CUTSCENE, MAP_CHANGE, CHANGE_UI,
         DATA_SAVE, DATA_LOAD, SCENE_LOAD, SCENE_ACTIVATE, CHOICE, SCREEN_EFFECT
     };
+
+    public enum GAME_EVENT
+    {
+        GAME_OVER
+    }
 }
 
 namespace SceneEnums
@@ -63,5 +69,36 @@ namespace LayerEnums
         public const string CHARACTER = "Character";
         public const string WEAPON = "Weapon";
 
+    }
+}
+
+namespace AssetEnums
+{
+    public static class SystemAsset
+    {
+        public enum AssetName
+        {
+            // Don't change the sequence
+            GameManager, 
+            Cameras, AISystem, GamePlaySystem, GameSceneSystem, StorySystem, UISystem, UtilitySystem, 
+            EventSystem
+        }
+
+        public static readonly string PathPrefix = "Systems/";
+    }
+
+    public static class UIAsset
+    {
+        public enum BaseUIName
+        {
+            SplashScreenUI, TitleUI, ControlUI, StoryUI, CutsceneUI, LoadingUI, GameOverUI
+        }
+
+        public enum SubUIName
+        {
+            ChoiceUI, PauseUI, SaveLoadUI, PreferenceUI, KeySettingsUI, SavingUI
+        }
+
+        public static readonly string PathPrefix = "UI/";
     }
 }

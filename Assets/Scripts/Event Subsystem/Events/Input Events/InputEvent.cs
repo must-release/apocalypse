@@ -14,7 +14,7 @@ public class InputEvent : MonoBehaviour
     }
 
     // Check compatibiliry with parent event and current UI
-    public virtual bool CheckCompatibility(List<InputEvent> eventList, BASEUI baseUI, SUBUI subUI)
+    public virtual bool CheckCompatibility(List<InputEvent> eventList, BaseUI baseUI, SubUI subUI)
     {
         return default;
     }

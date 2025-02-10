@@ -8,7 +8,7 @@ using EventEnums;
 [CreateAssetMenu(fileName = "NewChangeUI", menuName = "Event/ChangeUI", order = 0)]
 public class ChangeUIEvent : GameEvent
 {
-    public BASEUI changingUI;
+    public BaseUI changingUI;
 
     // Set event Type on load
     public void OnEnable()
@@ -17,7 +17,7 @@ public class ChangeUIEvent : GameEvent
     }
 
     // Check compatibility with current event and UI
-    public override bool CheckCompatibility(GameEvent parentEvent, BASEUI baseUI, SUBUI subUI)
+    public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
         // Can be played when there is no event playing
         if (parentEvent == null)

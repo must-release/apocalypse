@@ -17,10 +17,10 @@ public class DataSaveEvent : GameEvent
     }
 
     // Check compatibility with current event and UI
-    public override bool CheckCompatibility(GameEvent parentEvent, BASEUI baseUI, SUBUI subUI)
+    public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
         // Can be played when current base UI is loading or save
-        if (baseUI == BASEUI.LOADING || subUI == SUBUI.SAVE)
+        if (baseUI == BaseUI.Loading || subUI == SubUI.Save)
         {
             return true;
         }
@@ -43,7 +43,7 @@ public class DataSaveEvent : GameEvent
     public override IEnumerator PlayEventCoroutine()
     {
         // Turn Saving UI on
-        UIController.Instance.TurnSubUIOn(SUBUI.SAVING);
+        UIController.Instance.TurnSubUIOn(SubUI.Saving);
 
         // When saving during story mode
         GameEvent rootEvent = GetRootEvent();
@@ -70,7 +70,7 @@ public class DataSaveEvent : GameEvent
         }
 
         // Turn Saving UI off
-        UIController.Instance.TurnSubUIOff(SUBUI.SAVING);
+        UIController.Instance.TurnSubUIOff(SubUI.Saving);
 
         // Terminate data save event and play next event
         GameEventManager.Instance.TerminateGameEvent(this);

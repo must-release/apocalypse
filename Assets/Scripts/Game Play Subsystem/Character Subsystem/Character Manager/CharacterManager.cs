@@ -58,7 +58,7 @@ public class CharacterManager : MonoBehaviour
     // Execute control of the actor character
     public void ExecuteActorControl(ControlInfo controlInfo, string actorName)
     {
-        if(actorDictionary.ContainsKey(actorName))
+        if( actorDictionary.ContainsKey(actorName) )
         {
             actorDictionary[actorName].ControlCharacter(controlInfo);
         }
@@ -79,5 +79,10 @@ public class CharacterManager : MonoBehaviour
             Debug.LogError("playerController is not initiallized");
             return Vector3.zero;
         }
+    }
+
+    public void ProcessPlayersDeath()
+    {
+        GamePlayManager.Instance.ProcessGameOver();
     }
 }

@@ -23,7 +23,7 @@ public class StoryEvent : GameEvent
     }
 
     // Check compatibility with current event and UI
-    public override bool CheckCompatibility(GameEvent parentEvent, BASEUI baseUI, SUBUI subUI)
+    public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
         // Can be played only when there is no event playing
         if (parentEvent == null)
@@ -45,7 +45,7 @@ public class StoryEvent : GameEvent
     public override IEnumerator PlayEventCoroutine()
     {
         // Change to story UI
-        UIController.Instance.ChangeBaseUI(BASEUI.STORY);
+        UIController.Instance.ChangeBaseUI(BaseUI.Story);
 
         // Start Story
         InputEventProducer.Instance.LockInput(true);

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using CharacterEums;
 using UnityEngine;
 
@@ -40,5 +39,10 @@ public class GamePlayManager : MonoBehaviour
     {
         // Control player
         CharacterManager.Instance.ExecutePlayerControl(controlInfo);
+    }
+
+    public void ProcessGameOver()
+    {
+        GameEventProducer.Instance.GenerateLoadGameEventStream();
     }
 }
