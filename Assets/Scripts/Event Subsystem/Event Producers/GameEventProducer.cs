@@ -20,6 +20,10 @@ public class GameEventProducer : MonoBehaviour
         {
             Instance = this;
         }
+        else
+        {
+            Destroy(this);
+        }
     }
 
     public void Start()
@@ -63,7 +67,6 @@ public class GameEventProducer : MonoBehaviour
         HandleGeneratedEventChain(changeUIEvent);
     }
 
-
     // Generate new game event stream
     public void GenerateNewGameEventStream()
     {
@@ -104,7 +107,6 @@ public class GameEventProducer : MonoBehaviour
         // Handle generated event stream
         HandleGeneratedEventChain(dataLoadEvent);
     }
-
 
     // Generate load game event stream. If there is no parameter, load recent game
     public void GenerateLoadGameEventStream(int slotNum = int.MaxValue)
@@ -150,7 +152,6 @@ public class GameEventProducer : MonoBehaviour
         HandleGeneratedEventChain(sceneLoadEvent);
     }
 
-
     // Generate save event stream
     public void GenerateSaveGameEventStream(int slotNum)
     {
@@ -167,6 +168,14 @@ public class GameEventProducer : MonoBehaviour
         choiceEvent.choiceList = choiceList;
 
         HandleGeneratedEventChain(choiceEvent);
+    }
+
+    public void GenerateGameOverEventStream()
+    {
+        ChangeUIEvent changeUIEvent = ScriptableObject.CreateInstance<ChangeUIEvent>();
+        changeUIEvent.changingUI = BaseUI.GameOver;
+
+        HandleGeneratedEventChain(changeUIEvent);
     }
 
     // Handle generated game event to GameEventManager

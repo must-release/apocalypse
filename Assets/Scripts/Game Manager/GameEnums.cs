@@ -80,7 +80,7 @@ namespace AssetEnums
         {
             // Don't change the sequence
             GameManager, 
-            Cameras, AISystem, GamePlaySystem, GameSceneSystem, StorySystem, UISystem, UtilitySystem, 
+            AISystem, StorySystem, UISystem, UtilitySystem, Cameras, GamePlaySystem, GameSceneSystem,
             EventSystem
         }
 
@@ -99,6 +99,6 @@ namespace AssetEnums
             ChoiceUI, PauseUI, SaveLoadUI, PreferenceUI, KeySettingsUI, SavingUI
         }
 
-        public static readonly string PathPrefix = "UI/";
+        public static readonly string PathPrefix = "UIAssets/";
     }
 }

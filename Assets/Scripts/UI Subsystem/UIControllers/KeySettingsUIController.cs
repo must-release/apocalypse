@@ -10,7 +10,7 @@ public class KeySettingsUIController : MonoBehaviour, IUIController<SubUI>
 {
     /****** Public Members ******/
 
-    public void StartUI()
+    public void EnterUI()
     {
         gameObject.SetActive(true);
     }
@@ -20,7 +20,7 @@ public class KeySettingsUIController : MonoBehaviour, IUIController<SubUI>
 
     }
 
-    public void EndUI()
+    public void ExitUI()
     {
         gameObject.SetActive(false);
     }

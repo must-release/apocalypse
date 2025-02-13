@@ -43,6 +43,6 @@ public class GamePlayManager : MonoBehaviour
 
     public void ProcessGameOver()
     {
-        GameEventProducer.Instance.GenerateLoadGameEventStream();
+        GameEventProducer.Instance.GenerateGameOverEventStream();
     }
 }

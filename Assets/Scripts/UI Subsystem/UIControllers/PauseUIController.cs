@@ -8,7 +8,7 @@ public class PauseUIController : MonoBehaviour, IUIController<SubUI>
 {
     /****** Public Members ******/
 
-    public void StartUI()
+    public void EnterUI()
     {
         Time.timeScale = 0f;
 
@@ -20,7 +20,7 @@ public class PauseUIController : MonoBehaviour, IUIController<SubUI>
 
     }
 
-    public void EndUI()
+    public void ExitUI()
     {
         EventSystem.current.SetSelectedGameObject(null);
         _confirmBox.gameObject.SetActive(false);

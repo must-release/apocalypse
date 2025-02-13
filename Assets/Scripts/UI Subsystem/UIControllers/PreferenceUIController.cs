@@ -7,7 +7,7 @@ public class PreferenceUIController : MonoBehaviour, IUIController<SubUI>
 {
     /****** Public Members ******/
 
-    public void StartUI()
+    public void EnterUI()
     {
         gameObject.SetActive(true);
     }
@@ -22,7 +22,7 @@ public class PreferenceUIController : MonoBehaviour, IUIController<SubUI>
         UIController.Instance.TurnSubUIOff( GetUIType() );
     }
 
-    public void EndUI()
+    public void ExitUI()
     {
         gameObject.SetActive(false);
     }

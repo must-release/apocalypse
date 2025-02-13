@@ -9,7 +9,7 @@ public class ChoiceUIController : MonoBehaviour, IUIController<SubUI>
 {
     /****** Public Members ******/
 
-    public void StartUI()
+    public void EnterUI()
     {
         gameObject.SetActive(true);
         SetChoiceUI();
@@ -20,7 +20,7 @@ public class ChoiceUIController : MonoBehaviour, IUIController<SubUI>
         
     }
 
-    public void EndUI()
+    public void ExitUI()
     {
         // Reset input field
         _inputField.text = "";

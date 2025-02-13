@@ -7,7 +7,7 @@ public class ControlUIController : MonoBehaviour, IUIController<BaseUI>
 {
     /****** Public Members ******/
 
-    public void StartUI()
+    public void EnterUI()
     {
         gameObject.SetActive(true);
         SetControlUI();
@@ -18,7 +18,7 @@ public class ControlUIController : MonoBehaviour, IUIController<BaseUI>
 
     }
 
-    public void EndUI()
+    public void ExitUI()
     {
         gameObject.SetActive(false);
     }

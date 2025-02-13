@@ -72,6 +72,16 @@ public class SaveLoadUIBase : MonoBehaviour
         _confirmButton.onClick.RemoveAllListeners();
     }
 
+    protected virtual void Start()
+    {
+        _currentPage    =   1;
+        _saveOrLoad     =   SubUI.SubUICount;
+
+        // Set Slot Info
+        _dataList = DataManager.Instance.GetAllUserData();
+        SetDataSlots();
+    }
+
 
     /****** Private Members ******/
 
@@ -124,17 +134,6 @@ public class SaveLoadUIBase : MonoBehaviour
             _slotList[i].slotButton.onClick.AddListener(() => OnSlotClick(index));
         }
     }
-
-    private void Start()
-    {
-        _currentPage    =   1;
-        _saveOrLoad     =   SubUI.SubUICount;
-
-        // Set Slot Info
-        _dataList = DataManager.Instance.GetAllUserData();
-        SetDataSlots();
-    }
-
 
     // Load user data and set to data slots
     private void SetDataSlots()

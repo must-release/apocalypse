@@ -6,7 +6,7 @@ public class CutsceneUIController : MonoBehaviour, IUIController<BaseUI>
 {
     /****** Public Members ******/
 
-    public void StartUI()
+    public void EnterUI()
     {
         gameObject.SetActive(true);
     }
@@ -16,7 +16,7 @@ public class CutsceneUIController : MonoBehaviour, IUIController<BaseUI>
 
     }
 
-    public void EndUI()
+    public void ExitUI()
     {
         gameObject.SetActive(false);
     }

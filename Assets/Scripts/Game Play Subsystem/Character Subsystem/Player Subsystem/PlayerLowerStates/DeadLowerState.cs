@@ -20,6 +20,7 @@ public class DeadLowerState : PlayerLowerStateBase
 
     public override void OnEnter()
     {
+        playerRigid.velocity = Vector2.zero;
         deadStateCoroutine = StartCoroutine(ProcessDeadState());
     }
 

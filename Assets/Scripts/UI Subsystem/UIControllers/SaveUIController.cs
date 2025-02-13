@@ -9,20 +9,18 @@ public class SaveUIController : SaveLoadUIBase, IUIController<SubUI>
 {
     /****** Public Methods ******/
 
-    public void StartUI()
+    public void EnterUI()
     {
-        SetSaveUI();
-
         gameObject.SetActive(true);
     }
 
 
     public void UpdateUI()
     {
-        UpdateDataSlots();
+        
     }
 
-    public void EndUI()
+    public void ExitUI()
     {
         gameObject.SetActive(false);
 
@@ -37,19 +35,24 @@ public class SaveUIController : SaveLoadUIBase, IUIController<SubUI>
 
     public SubUI GetUIType() { return SubUI.Save; }
 
-    /****** Private Members ******/
 
-    private const string _SaveConfirmText   =   "Save Data?";
-    private const string _SaveLabelText     =   "Save";
+    /****** Protected Members ******/
 
-    private void SetSaveUI()
+    protected override void Start()
     {
+        base.Start();
+
         ConfirmText.text    =   _SaveConfirmText;
         LabelText.text      =   _SaveLabelText;
         SaveOrLoad          =   GetUIType();
         
         SetConfirmButtonAction(SaveAtSelectedSlot);
     }
+
+    /****** Private Members ******/
+
+    private const string _SaveConfirmText   =   "Save Data?";
+    private const string _SaveLabelText     =   "Save";
 
     // Save current player data at the selected slot
     private void SaveAtSelectedSlot()

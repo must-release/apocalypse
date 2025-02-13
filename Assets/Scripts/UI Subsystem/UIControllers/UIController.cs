@@ -6,6 +6,7 @@ using System.Collections;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using AssetEnums;
+using UnityEngine.EventSystems;
 
 public class UIController : MonoBehaviour, IAsyncLoadObject
 {
@@ -20,17 +21,18 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
         }
         set { _isStoryPanelClicked = value; }
     }
+    
     public bool IsLoaded() { return _isLoaded; }
 
     // Change Base UI.
     public void ChangeBaseUI(BaseUI baseUI)
     {
-        _curUIController?.EndUI();
+        _curUIController?.ExitUI();
 
         UIModel.Instance.CurrentBaseUI = baseUI;
         SetUIController(baseUI);
 
-        _curUIController.StartUI();
+        _curUIController.EnterUI();
     }
 
     // Turn Sub UI On
@@ -43,7 +45,7 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
         SetUIController(subUI);
 
         // Start Sub UI
-        _curUIController.StartUI();
+        _curUIController.EnterUI();
     }
 
     // Turn Sub UI Off
@@ -57,7 +59,7 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
         }
                     
         // End current Sub UI
-        _curUIController.EndUI();
+        _curUIController.ExitUI();
         UIModel.Instance.PopCurrentSubUI();
 
         // Check what UI comes next
@@ -82,7 +84,7 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
         while(UIModel.Instance.CurrentSubUI != SubUI.None)
         {
             // End current sub UI
-            _curUIController.EndUI();
+            _curUIController.ExitUI();
             UIModel.Instance.PopCurrentSubUI();
 
             // Set current UI controller to previous sub UI
@@ -143,6 +145,23 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
         StartCoroutine(LoadUIControllers());
     }
 
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0)) // 마우스 왼쪽 버튼 클릭 감지
+        {
+            PointerEventData eventData = new PointerEventData(EventSystem.current);
+            eventData.position = Input.mousePosition;
+
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventData, results);
+
+            if (results.Count > 0)
+            {
+                Debug.Log("클릭된 UI 오브젝트: " + results[0].gameObject.name);
+            }
+        }
+    }
+
     // Load baseUI, subUI Controllers
     private IEnumerator LoadUIControllers()
     {
@@ -176,6 +195,9 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
                 _baseUIDictionary.Add(uiType, uiController);
             }
 
+            // Execute Awake, Start method of uiObject
+            yield return null;
+
             uiObject.SetActive(false);
         }
 
@@ -202,6 +224,9 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
                 SubUI uiType = uiController.GetUIType();
                 _subUIDictionary.Add(uiType, uiController);
             }
+
+            // Execute Awake, Start method of uiObject
+            yield return null;
 
             uiObject.SetActive(false);
         }
@@ -240,9 +265,9 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
 
 public interface IUIController
 {
-    public void StartUI();
+    public void EnterUI();
     public void UpdateUI();
-    public void EndUI();
+    public void ExitUI();
     public void Cancel();
 }
 

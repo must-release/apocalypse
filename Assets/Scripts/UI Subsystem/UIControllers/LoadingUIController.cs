@@ -12,7 +12,7 @@ public class LoadingUIController : MonoBehaviour, IUIController<BaseUI>
 {
     /****** Public Members ******/
 
-    public void StartUI()
+    public void EnterUI()
     {
         gameObject.SetActive(true);
     }
@@ -22,7 +22,7 @@ public class LoadingUIController : MonoBehaviour, IUIController<BaseUI>
 
     }
 
-    public void EndUI()
+    public void ExitUI()
     {
         gameObject.SetActive(false);
     }

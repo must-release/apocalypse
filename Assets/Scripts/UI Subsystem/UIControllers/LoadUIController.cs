@@ -5,20 +5,18 @@ public class LoadUIController : SaveLoadUIBase, IUIController<SubUI>
 {
     /****** Public Methods ******/
 
-    public void StartUI()
+    public void EnterUI()
     {
-        SetLoadUI();
-
         gameObject.SetActive(true);
     }
 
 
     public void UpdateUI()
     {
-        UpdateDataSlots();
+        
     }
 
-    public void EndUI()
+    public void ExitUI()
     {
         gameObject.SetActive(false);
 
@@ -33,20 +31,25 @@ public class LoadUIController : SaveLoadUIBase, IUIController<SubUI>
 
     public SubUI GetUIType() { return SubUI.Load; }
 
+
+    /****** Protected Members ******/
+
+    protected override void Start()
+    {
+        base.Start();
+
+        ConfirmText.text    =   _LoadConfirmText;
+        LabelText.text      =   _LoadLabelText;
+        SaveOrLoad          =   GetUIType();
+
+        SetConfirmButtonAction(LoadSavedData);
+    }
+
+
     /****** Private Members ******/
 
     private const string _LoadConfirmText   =   "Load Data?";
     private const string _LoadLabelText     =   "LOAD";
-
-
-    // Set SaveLoad UI objects
-    private void SetLoadUI()
-    {
-        ConfirmText.text    =   _LoadConfirmText;
-        LabelText.text      =   _LoadLabelText;
-        SaveOrLoad          =   GetUIType();
-        SetConfirmButtonAction(LoadSavedData);
-    }
 
     // Load saved data of the selected slot
     private void LoadSavedData()
