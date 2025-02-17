@@ -17,6 +17,8 @@ public class IdleLowerState : PlayerLowerStateBase
     public override void OnEnter()
     {
         playerRigid.velocity = Vector2.zero;
+
+        playerController.LowerAnimator.SetBool("Move", false);
     }
 
     public override void OnUpdate()

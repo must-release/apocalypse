@@ -39,7 +39,7 @@ public class JumpingLowerState : PlayerLowerStateBase
         playerRigid.velocity = new Vector2(move * playerController.MovingSpeed, playerRigid.velocity.y);
 
         // Set direction
-        if (move != movingDirection)
+        if ( move * movingDirection < 0)
         {
             playerTransform.localScale = new Vector3(-playerTransform.localScale.x,
                 playerTransform.localScale.y, playerTransform.localScale.z);

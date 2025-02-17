@@ -49,9 +49,9 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
     /****** Initailizing Enemy Character ******/
 
     // Awake ememy character. Activated on Awake()
-    protected override void AwakeCharacter() 
+    protected override void Awake() 
     { 
-        base.AwakeCharacter();
+        base.Awake();
 
         enemyRigid = GetComponent<Rigidbody2D>();
     
@@ -63,9 +63,9 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
     }
 
     // Start enemy character. Activated on Start().
-    protected override void StartCharacter() 
+    protected override void Start() 
     {
-        base.StartCharacter();
+        base.Start();
 
         StartEnemy();
     }

@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PlayerController : CharacterBase, IAsyncLoadObject
 {
+    /****** Public Members ******/
+
     public float MovingSpeed { get; private set; } = 15f;
     public float JumpingSpeed { get; private set; } = 30f;
     public float Gravity { get; private set; } = 10f;
@@ -14,59 +16,13 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
     public ControlInfo CurrentControlInfo {get; private set; }
     public PlayerLowerStateBase LowerState { get; private set; }
     public PlayerUpperStateBase UpperState { get; private set; }
+    public Animator LowerAnimator { get { return _lowerAnimator; } }
+    public Animator UpperAnimator { get { return _upperAnimator; } }
 
-    private const int MAX_HIT_POINT = 3;
-
-    private Dictionary<PLAYER, IPlayer> playerDictionary;
-    private Dictionary<PLAYER_LOWER_STATE, PlayerLowerStateBase> lowerStateDictionary;
-    private Dictionary<PLAYER_UPPER_STATE, PlayerUpperStateBase> upperStateDictionary;
-    private Rigidbody2D playerRigid;
-    private SpriteRenderer playerRenderer;
-    private Color damagedColor = Color.red;  // flickering color when damaged
-    private Color originalColor;
-    private bool isReady;
-    private bool isDamageImmune;
-    private float flickeringSpeed;
-    private int flickeringCount;
-
-    protected override void AwakeCharacter()
-    {
-        base.AwakeCharacter();
-
-        CharacterHeight = GetComponent<CapsuleCollider2D>().size.y * transform.localScale.y;
-        HitPoint = MAX_HIT_POINT;
-        lowerStateDictionary = new Dictionary<PLAYER_LOWER_STATE, PlayerLowerStateBase>();
-        upperStateDictionary = new Dictionary<PLAYER_UPPER_STATE, PlayerUpperStateBase>();
-        playerRigid = GetComponent<Rigidbody2D>();
-        playerRigid.gravityScale = Gravity;
-        isReady = false;
-        isDamageImmune = false;
-        flickeringSpeed = 0.5f; 
-        flickeringCount = 3;
-
-
-        // Get player character object
-        playerDictionary = new Dictionary<PLAYER, IPlayer>();
-        playerDictionary[PLAYER.HERO] = transform.Find("Hero").GetComponent<IPlayer>();
-        playerDictionary[PLAYER.HEROINE] = transform.Find("Heroine").GetComponent<IPlayer>();
-        CurrentPlayer = playerDictionary[PLAYER.HERO];
-        CurrentCharacter = PLAYER.HERO;
-        playerRenderer = CurrentPlayer.GetTransform().GetComponent<SpriteRenderer>();
-        originalColor = playerRenderer.material.color;
-    }
-
-    public void Update()
-    {
-        if(!isReady) return;
-
-        // Update player's state
-        LowerState.OnUpdate();
-        UpperState.OnUpdate();
-    }
 
     public bool IsLoaded()
     {
-        return playerDictionary[PLAYER.HERO].IsLoaded; // && playerDictionary[CHARACTER.HEROINE].IsLoaded;
+        return _playerDictionary[PLAYER.HEROINE].IsLoaded; // && playerDictionary[CHARACTER.HEROINE].IsLoaded;
     }
 
     // Set player according to the info
@@ -76,10 +32,10 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
         ChangeCharacter(character);
 
         // Set initial state
-        LowerState = lowerStateDictionary[PLAYER_LOWER_STATE.IDLE];
-        UpperState = upperStateDictionary[PLAYER_UPPER_STATE.IDLE];
+        LowerState = _lowerStateDictionary[PLAYER_LOWER_STATE.IDLE];
+        UpperState = _upperStateDictionary[PLAYER_UPPER_STATE.IDLE];
 
-        isReady = true;
+        _isReady = true;
     }
 
     // Control player according to the control info
@@ -92,6 +48,136 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
         ControlInteractionObjects(controlInfo);
         ControlLowerBody(controlInfo);
         ControlUpperBody(controlInfo);
+    }
+
+        // Called once when player is on air
+    public override void OnAir()
+    { 
+        LowerState.OnAir();
+        UpperState.OnAir();
+    }
+
+    // Called once when player is on ground
+    public override void OnGround() 
+    { 
+        LowerState.OnGround();
+        UpperState.OnGround();
+    }
+
+    public override void OnDamaged(DamageInfo damageInfo) 
+    {
+        if ( _isDamageImmune ) return;
+
+        RecentDamagedInfo = damageInfo;
+        HitPoint -= RecentDamagedInfo.damageValue;
+
+        StartCoroutine(StartDamageImmuneState());
+
+        LowerState.Damaged(); 
+        UpperState.Disable();
+    }
+
+        // Change player character
+    public void ChangeCharacter(PLAYER character)
+    {
+        CurrentPlayer.ShowCharacter(false);
+
+        CurrentPlayer = _playerDictionary[character];
+        CurrentCharacter = character;
+
+        CurrentPlayer.GetSpriteRenderers( out _lowerSpriteRenderer, out _upperSpriteRenderer );
+        CurrentPlayer.GetAnimators( out _lowerAnimator, out _upperAnimator );
+        CurrentPlayer.ShowCharacter(true);
+    }
+
+    // Change player's lower body state
+    public void ChangeLowerState(PLAYER_LOWER_STATE state)
+    {
+        Debug.Log("Lower : " + LowerState.GetState().ToString() + " -> " + state.ToString());
+        LowerState.OnExit();
+        LowerState = _lowerStateDictionary[state];
+        LowerState.OnEnter();
+    }
+
+    // Change player's upper body state
+    public void ChangeUpperState(PLAYER_UPPER_STATE state)
+    {
+        Debug.Log("Uppper : " + UpperState.GetState().ToString() + " -> " + state.ToString());
+        UpperState.OnExit(state);
+        UpperState = _upperStateDictionary[state];
+        UpperState.OnEnter();
+    }
+
+    public void AddLowerState(PLAYER_LOWER_STATE stateKey, PlayerLowerStateBase state)
+    {
+        if (!_lowerStateDictionary.ContainsKey(stateKey)) _lowerStateDictionary[stateKey] = state;
+    }
+
+    public void AddUpperState(PLAYER_UPPER_STATE stateKey, PlayerUpperStateBase state)
+    {
+        if (!_upperStateDictionary.ContainsKey(stateKey)) _upperStateDictionary[stateKey] = state;
+    }
+
+
+    /****** Protected Members ******/
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        CharacterHeight = GetComponent<CapsuleCollider2D>().size.y * transform.localScale.y;
+        
+        _lowerStateDictionary   = new Dictionary<PLAYER_LOWER_STATE, PlayerLowerStateBase>();
+        _upperStateDictionary   = new Dictionary<PLAYER_UPPER_STATE, PlayerUpperStateBase>();
+        _playerDictionary       = new Dictionary<PLAYER, IPlayer>();
+        _playerRigid            = GetComponent<Rigidbody2D>();
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+
+        HitPoint                    = _MaxHitPoint;
+        _playerRigid.gravityScale   = Gravity;
+        _isReady                    = false;
+        _isDamageImmune             = false;
+        _flickeringSpeed            = 0.5f; 
+        _flickeringCount            = 3;
+
+        _playerDictionary[PLAYER.HERO]      = transform.Find("Hero").GetComponent<IPlayer>();
+        _playerDictionary[PLAYER.HEROINE]   = transform.Find("Heroine").GetComponent<IPlayer>();
+        CurrentPlayer                       = _playerDictionary[PLAYER.HEROINE];
+        CurrentCharacter                    = PLAYER.HEROINE;
+        _damagedColor                       = Color.red;
+        _originalColor                      = Color.white;
+    }
+
+
+    /****** Private Members ******/
+    private const int _MaxHitPoint = 3;
+
+    private Dictionary<PLAYER, IPlayer> _playerDictionary;
+    private Dictionary<PLAYER_LOWER_STATE, PlayerLowerStateBase> _lowerStateDictionary;
+    private Dictionary<PLAYER_UPPER_STATE, PlayerUpperStateBase> _upperStateDictionary;
+    private Rigidbody2D _playerRigid;
+    private SpriteRenderer _lowerSpriteRenderer;
+    private SpriteRenderer _upperSpriteRenderer;
+    private Animator _lowerAnimator;
+    private Animator _upperAnimator;
+    private Color _damagedColor;
+    private Color _originalColor;
+    private bool _isReady;
+    private bool _isDamageImmune;
+    private float _flickeringSpeed;
+    private int _flickeringCount;
+
+    private void Update()
+    {
+        if(!_isReady) return;
+
+        // Update player's state
+        LowerState.OnUpdate();
+        UpperState.OnUpdate();
     }
 
     // Control player's lower body
@@ -130,101 +216,35 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
         }
     }
 
-    // Called once when player is on air
-    public override void OnAir()
-    { 
-        LowerState.OnAir();
-        UpperState.OnAir();
-    }
-
-    // Called once when player is on ground
-    public override void OnGround() 
-    { 
-        LowerState.OnGround();
-        UpperState.OnGround();
-    }
-
-    public override void OnDamaged(DamageInfo damageInfo) 
+    private IEnumerator StartDamageImmuneState()
     {
-        if ( isDamageImmune ) return;
-
-        RecentDamagedInfo = damageInfo;
-        HitPoint -= RecentDamagedInfo.damageValue;
-
-        StartCoroutine(StartDamageImmuneState());
-
-        LowerState.Damaged(); 
-        UpperState.Disable();
-    }
-
-    IEnumerator StartDamageImmuneState()
-    {
-        isDamageImmune = true;
+        _isDamageImmune = true;
 
         // Change character's color
-        for (int i = 0; i < flickeringCount; i++)
+        for (int i = 0; i < _flickeringCount; i++)
         {
-            yield return StartCoroutine(LerpColor(originalColor, damagedColor, flickeringSpeed));
-            yield return StartCoroutine(LerpColor(damagedColor, originalColor, flickeringSpeed));
+            yield return StartCoroutine(LerpColor(_originalColor, _damagedColor, _flickeringSpeed));
+            yield return StartCoroutine(LerpColor(_damagedColor, _originalColor, _flickeringSpeed));
         }
 
-        isDamageImmune = false;
+        _isDamageImmune = false;
     }
 
-    IEnumerator LerpColor(Color startColor, Color targetColor, float duration)
+    private IEnumerator LerpColor(Color startColor, Color targetColor, float duration)
     {
         float elapsedTime = 0f;
 
         while (elapsedTime < duration)
         {
-            playerRenderer.material.color = Color.Lerp(startColor, targetColor, elapsedTime / duration);
+            _lowerSpriteRenderer.material.color = Color.Lerp(startColor, targetColor, elapsedTime / duration);
+            _upperSpriteRenderer.material.color = Color.Lerp(startColor, targetColor, elapsedTime / duration);
             elapsedTime += Time.deltaTime;
 
             yield return null;
         }
 
-        playerRenderer.material.color = targetColor;
-    }
-
-    // Change player character
-    public void ChangeCharacter(PLAYER character)
-    {
-        CurrentPlayer.ShowCharacter(false);
-
-        CurrentPlayer = playerDictionary[character];
-        CurrentCharacter = character;
-        playerRenderer = CurrentPlayer.GetTransform().GetComponent<SpriteRenderer>();
-        originalColor = playerRenderer.material.color;
-
-        CurrentPlayer.ShowCharacter(true);
-    }
-
-    // Change player's lower body state
-    public void ChangeLowerState(PLAYER_LOWER_STATE state)
-    {
-        Debug.Log("Lower : " + LowerState.GetState().ToString() + " -> " + state.ToString());
-        LowerState.OnExit();
-        LowerState = lowerStateDictionary[state];
-        LowerState.OnEnter();
-    }
-
-    // Change player's upper body state
-    public void ChangeUpperState(PLAYER_UPPER_STATE state)
-    {
-        Debug.Log("Uppper : " + UpperState.GetState().ToString() + " -> " + state.ToString());
-        UpperState.OnExit(state);
-        UpperState = upperStateDictionary[state];
-        UpperState.OnEnter();
-    }
-
-    public void AddLowerState(PLAYER_LOWER_STATE stateKey, PlayerLowerStateBase state)
-    {
-        if (!lowerStateDictionary.ContainsKey(stateKey)) lowerStateDictionary[stateKey] = state;
-    }
-
-    public void AddUpperState(PLAYER_UPPER_STATE stateKey, PlayerUpperStateBase state)
-    {
-        if (!upperStateDictionary.ContainsKey(stateKey)) upperStateDictionary[stateKey] = state;
+        _lowerSpriteRenderer.material.color = targetColor;
+        _upperSpriteRenderer.material.color = targetColor;
     }
 }
 
@@ -233,6 +253,8 @@ public interface IPlayer
 {
     public bool IsLoaded {get; set;}
     public Transform GetTransform();
+    public void GetAnimators( out Animator lowerAnimator, out Animator upperAnimator );
+    public void GetSpriteRenderers( out SpriteRenderer lowerSpriteRenderer, out SpriteRenderer upperSpriteRenderer );
     public IEnumerator LoadWeaponsAndDots();
     public void ShowCharacter(bool value);
     public void RotateUpperBody(float rotateAngle);

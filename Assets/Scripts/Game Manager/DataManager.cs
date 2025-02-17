@@ -60,7 +60,7 @@ public class DataManager : MonoBehaviour
         STAGE curStage = STAGE.TEST;
         int curMap = 3;
         GameEvent startingEvent = null;
-        PLAYER lastChar = PLAYER.HERO;
+        PLAYER lastChar = PLAYER.HEROINE;
         string playTime = "00:00";
 
         // Initialize current data

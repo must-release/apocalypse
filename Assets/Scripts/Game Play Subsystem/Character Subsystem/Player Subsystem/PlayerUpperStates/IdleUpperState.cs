@@ -14,7 +14,7 @@ public class IdleUpperState : PlayerUpperStateBase
 
     public override void OnEnter()
     {
-
+        playerController.UpperAnimator.SetBool("Move", false);
     }
     public override void OnUpdate()
     {

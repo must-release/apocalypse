@@ -12,7 +12,7 @@ public class RunningUpperState : PlayerUpperStateBase
 
     public override void OnEnter()
     {
-
+        playerController.UpperAnimator.SetBool("Move", true);
     }
     public override void OnUpdate()
     {

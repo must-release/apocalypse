@@ -20,14 +20,12 @@ public abstract class CharacterBase : MonoBehaviour
     public abstract void OnGround();
     public abstract void OnDamaged(DamageInfo damageInfo);
 
-    private void Awake() { AwakeCharacter(); }
-    protected virtual void AwakeCharacter()
-    {
-        gameObject.layer = LayerMask.NameToLayer(LAYER.CHARACTER);
+    protected virtual void Awake() 
+    { 
+        gameObject.layer = LayerMask.NameToLayer(LAYER.CHARACTER); 
     }
 
-    private void Start() { StartCharacter(); }
-    protected virtual void StartCharacter() { }
+    protected virtual void Start() { }
 
 
     /***** Object Interaction Functions *****/

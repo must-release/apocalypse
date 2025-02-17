@@ -147,19 +147,6 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0)) // 마우스 왼쪽 버튼 클릭 감지
-        {
-            PointerEventData eventData = new PointerEventData(EventSystem.current);
-            eventData.position = Input.mousePosition;
-
-            List<RaycastResult> results = new List<RaycastResult>();
-            EventSystem.current.RaycastAll(eventData, results);
-
-            if (results.Count > 0)
-            {
-                Debug.Log("클릭된 UI 오브젝트: " + results[0].gameObject.name);
-            }
-        }
     }
 
     // Load baseUI, subUI Controllers

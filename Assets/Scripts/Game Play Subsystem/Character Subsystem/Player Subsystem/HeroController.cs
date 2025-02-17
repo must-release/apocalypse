@@ -87,4 +87,16 @@ public class HeroController : MonoBehaviour, IPlayer
         weapons.Enqueue(bullet);
         return attackCoolTime;
     }
+
+    public void GetAnimators( out Animator lowerAnimator, out Animator upperAnimator)
+    {
+        lowerAnimator = null;
+        upperAnimator = null;
+    }
+
+    public void GetSpriteRenderers( out SpriteRenderer lowerSpriteRenderer, out SpriteRenderer upperSpirteRenderer )
+    {
+        lowerSpriteRenderer = null;
+        upperSpirteRenderer = null;
+    }
 }

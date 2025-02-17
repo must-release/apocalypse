@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class HeroineController : MonoBehaviour, IPlayer
 {
+    /****** Public Members ******/
+
     public bool IsLoaded {get; set;}
     public bool IsAiming { set{}}
 
-    private void Start() { StartCoroutine(LoadWeaponsAndDots()); }
     public IEnumerator LoadWeaponsAndDots()
     {
         yield return null;
@@ -40,5 +41,38 @@ public class HeroineController : MonoBehaviour, IPlayer
     public float Attack()
     {
         return 0;
+    }
+
+    public void GetAnimators( out Animator lowerAnimator, out Animator upperAnimator)
+    {
+        lowerAnimator = _lowerBody.GetComponent<Animator>();
+        upperAnimator = _upperBody.GetComponent<Animator>();
+    }
+
+    public void GetSpriteRenderers( out SpriteRenderer lowerSpriteRenderer, out SpriteRenderer upperSpriteRenderer )
+    {
+        lowerSpriteRenderer = _lowerBody.GetComponent<SpriteRenderer>();
+        upperSpriteRenderer = _upperBody.GetComponent<SpriteRenderer>();
+    }
+
+
+    /****** Private Members ******/
+
+    private const string _LowerBodyName = "Heroine Lower Body";
+    private const string _UpperBodyName = "Heroine Upper Body";
+
+    private Transform _lowerBody;
+    private Transform _upperBody;
+    
+
+    private void Awake()
+    {
+        _lowerBody = transform.Find( _LowerBodyName );
+        _upperBody = transform.Find( _UpperBodyName );
+    }
+
+    private void Start() 
+    {
+        StartCoroutine(LoadWeaponsAndDots()); 
     }
 }

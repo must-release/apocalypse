@@ -22,6 +22,8 @@ public class RunningLowerState : PlayerLowerStateBase
             movingDirection = 1;
         else 
             movingDirection = -1;
+
+        playerController.LowerAnimator.SetBool("Move", true);
     }
 
     public override void OnUpdate()
