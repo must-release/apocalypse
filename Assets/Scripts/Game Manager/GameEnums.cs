@@ -39,10 +39,12 @@ namespace WeaponEnums
 
 namespace EventEnums
 {
-    public enum EVENT_TYPE
+    public enum GameEventType
     {
-        STORY, TUTORIAL, CUTSCENE, MAP_CHANGE, CHANGE_UI,
-        DATA_SAVE, DATA_LOAD, SCENE_LOAD, SCENE_ACTIVATE, CHOICE, SCREEN_EFFECT
+        Story, Tutorial, Cutscene, MapTransition, UIChange,
+        DataSave, DataLoad, SceneLoad, SceneActivation, Choice, ScreenEffect,
+
+        GameEventTypeCount
     };
 
     public enum GAME_EVENT

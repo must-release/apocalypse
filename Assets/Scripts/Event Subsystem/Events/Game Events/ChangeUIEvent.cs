@@ -13,7 +13,7 @@ public class ChangeUIEvent : GameEvent
     // Set event Type on load
     public void OnEnable()
     {
-        EventType = EVENT_TYPE.CHANGE_UI;
+        EventType = EventEnums.GameEventType.UIChange;
     }
 
     // Check compatibility with current event and UI

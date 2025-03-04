@@ -14,7 +14,7 @@ public class ScreenEffectEvent : GameEvent
 
     private void OnEnable()
     {
-        EventType = EVENT_TYPE.SCREEN_EFFECT;
+        EventType = EventEnums.GameEventType.ScreenEffect;
     }
 
     // Check compatibility with current event and UI

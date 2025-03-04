@@ -16,13 +16,13 @@ public class ChoiceEvent : GameEvent
     // Set event Type on load
     public void OnEnable()
     {
-        EventType = EVENT_TYPE.CHOICE;
+        EventType = EventEnums.GameEventType.Choice;
     }
 
     // Check compatibility with current event
     public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
-        if (parentEvent.EventType == EVENT_TYPE.STORY) // Can be played when story event is playing
+        if (parentEvent.EventType == EventEnums.GameEventType.Story) // Can be played when story event is playing
         {
             return true;
         }

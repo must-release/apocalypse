@@ -13,15 +13,15 @@ public class SceneLoadEvent : GameEvent
     // Set event Type on load
     public void OnEnable()
     {
-        EventType = EVENT_TYPE.SCENE_LOAD;
+        EventType = EventEnums.GameEventType.SceneLoad;
     }
 
     // Check compatibility with current event and UI
     public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
         // Can be played when parent event is null, story or choice
-        if (parentEvent == null || parentEvent.EventType == EVENT_TYPE.STORY || 
-            parentEvent.EventType == EVENT_TYPE.CHOICE)
+        if (parentEvent == null || parentEvent.EventType == EventEnums.GameEventType.Story || 
+            parentEvent.EventType == EventEnums.GameEventType.Choice)
         {
             return true;
         }

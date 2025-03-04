@@ -11,14 +11,14 @@ public class SceneActivateEvent : GameEvent
     // Set event Type on load
     public void OnEnable()
     {
-        EventType = EVENT_TYPE.SCENE_ACTIVATE;
+        EventType = EventEnums.GameEventType.SceneActivation;
     }
 
     // Check compatibility with current event and UI
     public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
         // Can be played when current base UI is loading or save
-        if (parentEvent == null || parentEvent.EventType == EVENT_TYPE.STORY || parentEvent.EventType == EVENT_TYPE.CHOICE)
+        if (parentEvent == null || parentEvent.EventType == EventEnums.GameEventType.Story || parentEvent.EventType == EventEnums.GameEventType.Choice)
         {
             return true;
         }
@@ -37,9 +37,10 @@ public class SceneActivateEvent : GameEvent
     public override IEnumerator PlayEventCoroutine()
     {
         // Succeed parent events
-        if(parentEvent)
+        if(ParentEvent)
         {
-            GameEventManager.Instance.SucceedParentEvents(ref parentEvent);
+            GameEventManager.Instance.SucceedParentEvents(ParentEvent);
+            ParentEvent = null;
         }
 
         // If scene is still loading

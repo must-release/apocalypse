@@ -19,7 +19,7 @@ public class StoryEvent : GameEvent
     // Set event Type on load
     public void OnEnable()
     {
-        EventType = EVENT_TYPE.STORY;
+        EventType = EventEnums.GameEventType.Story;
     }
 
     // Check compatibility with current event and UI

@@ -14,14 +14,14 @@ public class DataLoadEvent : GameEvent
     // Set event Type on load
     public void OnEnable()
     {
-        EventType = EVENT_TYPE.DATA_LOAD;
+        EventType = EventEnums.GameEventType.DataLoad;
     }
 
     // Check compatibility with current event and UI
     public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
         // Can be played when current base UI is title or load
-        if (parentEvent == null || parentEvent.EventType == EVENT_TYPE.STORY || parentEvent.EventType == EVENT_TYPE.CHOICE)
+        if (parentEvent == null || parentEvent.EventType == EventEnums.GameEventType.Story || parentEvent.EventType == EventEnums.GameEventType.Choice)
         {
             return true;
         }
@@ -65,9 +65,9 @@ public class DataLoadEvent : GameEvent
     {
         GameEvent lastEvent = this;
 
-        while (lastEvent.nextEvent != null)
+        while (lastEvent.NextEvent != null)
         {
-            lastEvent = lastEvent.nextEvent;
+            lastEvent = lastEvent.NextEvent;
         }
 
         lastEvent.NextEvent = startingEvent;

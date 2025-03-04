@@ -13,7 +13,7 @@ public class DataSaveEvent : GameEvent
     // Set event Type on load
     public void OnEnable()
     {
-        EventType = EVENT_TYPE.DATA_SAVE;
+        EventType = EventEnums.GameEventType.DataSave;
     }
 
     // Check compatibility with current event and UI
@@ -47,7 +47,7 @@ public class DataSaveEvent : GameEvent
 
         // When saving during story mode
         GameEvent rootEvent = GetRootEvent();
-        if (rootEvent?.EventType == EVENT_TYPE.STORY)
+        if (rootEvent?.EventType == EventEnums.GameEventType.Story)
         {
             // Get current story progress info
             var storyInfo = StoryController.Instance.GetStoryProgressInfo();

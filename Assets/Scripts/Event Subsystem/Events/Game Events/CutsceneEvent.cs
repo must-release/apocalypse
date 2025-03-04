@@ -12,7 +12,7 @@ public class CutsceneEvent : GameEvent
     // Set event Type on load
     public void OnEnable()
     {
-        EventType = EVENT_TYPE.CUTSCENE;
+        EventType = EventEnums.GameEventType.Cutscene;
     }
 
     // Check compatibility with current event and UI

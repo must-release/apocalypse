@@ -50,7 +50,7 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
         ControlUpperBody(controlInfo);
     }
 
-        // Called once when player is on air
+    // Called once when player is on air
     public override void OnAir()
     { 
         LowerState.OnAir();
@@ -77,7 +77,7 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
         UpperState.Disable();
     }
 
-        // Change player character
+    // Change player character
     public void ChangeCharacter(PLAYER character)
     {
         CurrentPlayer.ShowCharacter(false);

@@ -95,18 +95,14 @@ public class GameEventManager : MonoBehaviour
     }
 
     // Succeed every parent event
-    public void SucceedParentEvents(ref GameEvent parentEvent)
+    public void SucceedParentEvents(GameEvent parentEvent)
     {
-        GameEvent _parentEvent = parentEvent;
-
         do
         {
-            TerminateGameEvent(_parentEvent, true);
+            TerminateGameEvent(parentEvent, true);
 
-            _parentEvent = _parentEvent.ParentEvent;
-        } while (_parentEvent);
-
-        parentEvent = null;
+            parentEvent = parentEvent.ParentEvent;
+        } while (parentEvent);
     }
 }
 
