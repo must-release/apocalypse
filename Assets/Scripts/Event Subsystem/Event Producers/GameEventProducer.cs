@@ -36,7 +36,7 @@ public class GameEventProducer : MonoBehaviour
     public void GenerateSplashScreenEventStream()
     {
         // First, set UI to splash scren UI
-        ChangeUIEvent changeUIEvent = ScriptableObject.CreateInstance<ChangeUIEvent>();
+        UIChangeEvent changeUIEvent = ScriptableObject.CreateInstance<UIChangeEvent>();
         changeUIEvent.changingUI = BaseUI.SplashScreen;
 
         // Second, load title scene asynchronously
@@ -54,7 +54,7 @@ public class GameEventProducer : MonoBehaviour
         sceneActivateEvent.NextEvent = fadeOutEvent;
 
         // Fifth, change UI to title UI
-        ChangeUIEvent uiChangeEvent = ScriptableObject.CreateInstance<ChangeUIEvent>();
+        UIChangeEvent uiChangeEvent = ScriptableObject.CreateInstance<UIChangeEvent>();
         uiChangeEvent.changingUI = BaseUI.Title;
         fadeOutEvent.NextEvent = uiChangeEvent;
 
@@ -100,7 +100,7 @@ public class GameEventProducer : MonoBehaviour
         dataSaveEvent.NextEvent = cutsceneEvent;
 
         // Finally, change ui to control ui
-        ChangeUIEvent uiChangeEvent = ScriptableObject.CreateInstance<ChangeUIEvent>();
+        UIChangeEvent uiChangeEvent = ScriptableObject.CreateInstance<UIChangeEvent>();
         uiChangeEvent.changingUI = BaseUI.Control;
         cutsceneEvent.NextEvent = uiChangeEvent;
 
@@ -144,7 +144,7 @@ public class GameEventProducer : MonoBehaviour
         sceneLoadEvent.NextEvent = sceneActivateEvent;
 
         // Third, Change UI according to scene
-        ChangeUIEvent changeUIEvent = ScriptableObject.CreateInstance<ChangeUIEvent>();
+        UIChangeEvent changeUIEvent = ScriptableObject.CreateInstance<UIChangeEvent>();
         changeUIEvent.changingUI = scene == SCENE.TITLE? BaseUI.Title : BaseUI.Control;
         sceneActivateEvent.NextEvent = changeUIEvent;
 
@@ -172,7 +172,7 @@ public class GameEventProducer : MonoBehaviour
 
     public void GenerateGameOverEventStream()
     {
-        ChangeUIEvent changeUIEvent = ScriptableObject.CreateInstance<ChangeUIEvent>();
+        UIChangeEvent changeUIEvent = ScriptableObject.CreateInstance<UIChangeEvent>();
         changeUIEvent.changingUI = BaseUI.GameOver;
 
         HandleGeneratedEventChain(changeUIEvent);

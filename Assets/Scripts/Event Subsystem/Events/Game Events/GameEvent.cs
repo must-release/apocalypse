@@ -4,23 +4,19 @@ using EventEnums;
 using UIEnums;
 using System.Collections;
 
-public abstract class GameEvent : ScriptableObject
+public abstract class GameEvent : MonoBehaviour
 {
     /******* Public Members ******/
 
-    public GameEventInfo GameEventInfo { get; }
-    public GameEventType EventType { get { return (GameEventType)_eventType; } set { _eventType = (int)value; } }
-    public GameEvent NextEvent { get { return _nextEvent; } set { _nextEvent = value; } }
-    public GameEvent ParentEvent { get { return _parentEvent; } set { _parentEvent = value; } }
+    public GameEventType    EventType { get { return (GameEventType)_eventType; } set { _eventType = (int)value; } }
+    public GameEvent        NextEvent { get { return _nextEvent; } set { _nextEvent = value; } }
+    public GameEvent        ParentEvent { get { return _parentEvent; } set { _parentEvent = value; } }
 
     // Check compatibiliry with parent event and current UI
-    public abstract bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI);
-
-    public abstract void PlayEvent();
-
-    public virtual IEnumerator PlayEventCoroutine() { return default; }
-
-    public virtual void TerminateEvent() { return; }
+    public abstract bool            CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI);
+    public abstract void            PlayEvent(GameEventInfo evebtInfo);
+    public abstract GameEventInfo   GetEventInfo();
+    public virtual void TerminateEvent() { }
 
     // Save flawless info of the nextEvent
     public void SaveNextEventInfo()
@@ -40,47 +36,61 @@ public abstract class GameEvent : ScriptableObject
         if ( string.IsNullOrEmpty(_nextEventAssemblyQualifiedName) || string.IsNullOrEmpty(_nextEventdata) )
             return;
 
-        // Create objects and deserialize data based on stored type information
-        Type eventType = Type.GetType(_nextEventAssemblyQualifiedName);
-        GameEvent eventInstance = (GameEvent)CreateInstance(eventType);
-        JsonUtility.FromJsonOverwrite(_nextEventdata, eventInstance);
-        _nextEvent = eventInstance;
-        _nextEvent.RestoreNextEventInfo();
+        // // Create objects and deserialize data based on stored type information
+        // Type eventType = Type.GetType(_nextEventAssemblyQualifiedName);
+        // GameEvent eventInstance = (GameEvent)CreateInstance(eventType);
+        // JsonUtility.FromJsonOverwrite(_nextEventdata, eventInstance);
+        // _nextEvent = eventInstance;
+        // _nextEvent.RestoreNextEventInfo();
     }
 
 
     /****** Private Memebers ******/
 
-    private GameEventInfo _gameEventInfo;
-    private int _eventType;
-    private GameEvent _nextEvent;
-    private GameEvent _parentEvent;
+    private int             _eventType;
+    private GameEvent       _nextEvent;
+    private GameEvent       _parentEvent;
+
     [SerializeField] private string _nextEventAssemblyQualifiedName; 
     [SerializeField] private string _nextEventdata;
 }
 
 
 [Serializable]
-public abstract class GameEventInfo
+public abstract class GameEventInfo : ScriptableObject
 {
     /****** Public Members ******/
 
-    public GameEventType GameEventType 
-    { 
-        get { return (GameEventType)_gameEventType; } 
-        set 
-        { 
-            _gameEventType = (int)value; 
-        }
-    }
+    public GameEventType    EventType { get { return _eventType; } protected set { _eventType = value; } }
+    public bool             IsInitialized { get { return _isInitialized; } protected set { _isInitialized = value; }}
 
-    public GameEventInfo( GameEventType gameEventType = GameEventType.GameEventTypeCount )
-    {
-        GameEventType = gameEventType;
-    }
+
+    /****** Protected Members ******/
+
+    // Called when script is loaded
+    protected abstract void OnEnable();
+
+    // Called when property is changed by the inspector
+    protected abstract void OnValidate();
 
 
     /****** Private Members ******/
 
-    private int _gameEventType;
+    private GameEventType   _eventType;
+    private bool            _isInitialized = false;
+}
+
+
+[Serializable]
+public class GameEventList : ScriptableObject
+{
+    /****** Public Members ******/
+
+
+
+    /****** Protected Members ******/
+
+
+
+    /******* Private Members ******/
 }

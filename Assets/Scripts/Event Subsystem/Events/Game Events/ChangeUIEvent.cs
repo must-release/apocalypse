@@ -3,40 +3,72 @@ using System.Collections.Generic;
 using UnityEngine;
 using UIEnums;
 using EventEnums;
+using UnityEngine.Assertions;
 
-[System.Serializable]
-[CreateAssetMenu(fileName = "NewChangeUI", menuName = "Event/ChangeUI", order = 0)]
-public class ChangeUIEvent : GameEvent
+public class UIChangeEvent : GameEvent
 {
-    public BaseUI changingUI;
+    /****** Public Members ******/
 
-    // Set event Type on load
-    public void OnEnable()
-    {
-        EventType = EventEnums.GameEventType.UIChange;
-    }
-
-    // Check compatibility with current event and UI
     public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
-        // Can be played when there is no event playing
-        if (parentEvent == null)
-        {
+        if ( null == parentEvent )
             return true;
-        }
-        else
-        {
-            return false;
-        }
+        
+        return false;
     }
 
     // Play change UI event
-    public override void PlayEvent()
+    public override void PlayEvent(GameEventInfo eventInfo)
     {
-        // Change UI
-        UIController.Instance.ChangeBaseUI(changingUI); 
+        Assert.IsTrue(GameEventType.UIChange == eventInfo.EventType, "잘못된 이벤트 타입[" + eventInfo.EventType.ToString() + "]입니다. UIChangeEventInfo를 전달해주세요.");
 
-        // Terminate change UI event
+        _uiEventInfo = eventInfo as UIChangeEventInfo;
+        UIController.Instance.ChangeBaseUI(_uiEventInfo.TargetUI); 
         GameEventManager.Instance.TerminateGameEvent(this); 
     }
+
+    public override GameEventInfo GetEventInfo()
+    {
+        return _uiEventInfo;
+    }
+
+    /****** Private Members ******/
+
+    private UIChangeEventInfo _uiEventInfo;
+}
+
+
+[CreateAssetMenu(fileName = "NewUIChange", menuName = "EventInfo/UIChange", order = 0)]
+public class UIChangeEventInfo : GameEventInfo
+{
+    /****** Public Members ******/
+
+    public BaseUI TargetUI { get { return _targetUI; } private set { _targetUI = value; } }
+
+    public void Initialize(BaseUI targetUI)
+    {
+        Assert.IsTrue(false == IsInitialized, "GameEventInfo의 중복 초기화는 허용하지 않습니다.");
+
+        TargetUI        = targetUI;
+        IsInitialized   = true;
+    }
+
+
+    /****** Protected Members ******/
+
+    protected override void OnEnable()
+    {
+        EventType = GameEventType.UIChange;
+    }
+
+    protected override void OnValidate()
+    {
+        if ( BaseUI.BaseUICount != TargetUI)
+            IsInitialized = true;
+    }
+
+
+    /****** Private Members ******/
+
+    private BaseUI _targetUI = BaseUI.BaseUICount;
 }

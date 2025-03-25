@@ -13,7 +13,7 @@ public class DataSaveEvent : GameEvent
     // Set event Type on load
     public void OnEnable()
     {
-        EventType = EventEnums.GameEventType.DataSave;
+        EventType = GameEventType.DataSave;
     }
 
     // Check compatibility with current event and UI
