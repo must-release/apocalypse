@@ -28,14 +28,14 @@ public class GameSceneView : MonoBehaviour
     public void PlaceSceneObjects()
     {
         // Check current scene
-        SCENE currentScene = GameSceneModel.Instance.CurrentScene;
+        Scene currentScene = GameSceneModel.Instance.CurrentScene;
 
         switch (currentScene)
         {
-            case SCENE.TITLE:
+            case Scene.Title:
                 PlaceTitleSceneObjects();
                 break;
-            case SCENE.STAGE:
+            case Scene.Stage:
                 PlaceStageSceneObjects();
                 break;
             default:

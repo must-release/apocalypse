@@ -3,63 +3,101 @@ using System.Collections.Generic;
 using UIEnums;
 using EventEnums;
 using System.Collections;
+using UnityEngine.Assertions;
 
-[System.Serializable]
-[CreateAssetMenu(fileName = "NewChoice", menuName = "Event/ChoiceEvent", order = 0)]
+/*
+ * 스토리 진행 중 화면에 선택지를 표시하고, 플레이어가 고른 선택지를 처리하는 ChoiceEvent입니다.
+ */  
+
 public class ChoiceEvent : GameEvent
 {
-    public List<string> choiceList;
-    public string selectedChoice;
+    /****** Public Members ******/
 
-    private Coroutine choiceCoroutine;
-
-    // Set event Type on load
-    public void OnEnable()
-    {
-        EventType = EventEnums.GameEventType.Choice;
-    }
-
-    // Check compatibility with current event
     public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
-        if (parentEvent.EventType == EventEnums.GameEventType.Story) // Can be played when story event is playing
-        {
+        if (parentEvent.EventType == GameEventType.Story) // Can be played when story event is playing
             return true;
-        }
-        else
-            return false;
+        
+        return false;
     }
 
-    // Play Choice event
-    public override void PlayEvent()
+    public override void PlayEvent(GameEventInfo eventInfo)
     {
-        // Use GameEventManger to start coroutine
-        choiceCoroutine = GameEventManager.Instance.StartCoroutine(PlayEventCoroutine());
+        Assert.IsTrue( GameEventType.Choice == eventInfo.EventType,     "Wrong event type[" + eventInfo.EventType.ToString() + "]. Should be ChoiceEventInfo.");
+        Assert.IsTrue( eventInfo.IsInitialized,                         "Event info is not initialized");
+
+
+        _choiceEventInfo    = eventInfo as ChoiceEventInfo;
+        _eventCoroutine     = StartCoroutine(PlayEventCoroutine());
     }
-    public override IEnumerator PlayEventCoroutine()
+
+    public override void TerminateEvent()
+    {
+        _choiceEventInfo = null;
+        StopCoroutine(_eventCoroutine);
+    }
+
+    public override GameEventInfo GetEventInfo()
+    {
+        return _choiceEventInfo;
+    }
+
+
+    /****** Private Members ******/
+
+    private Coroutine       _eventCoroutine;
+    private ChoiceEventInfo _choiceEventInfo;
+
+    private IEnumerator PlayEventCoroutine()
     {
         // Set choice info and switch to choice UI
-        UIController.Instance.SetChoiceInfo(choiceList);
+        UIController.Instance.SetChoiceInfo(_choiceEventInfo.ChoiceList);
         UIController.Instance.TurnSubUIOn(SubUI.Choice);
 
         // Wait for player to select a choice
-        while (UIController.Instance.GetSelectedChoice() == null)
-        {
-            yield return null;
-        }
+        yield return new WaitUntil( () =>  null != UIController.Instance.GetSelectedChoice() );
 
         // Get the selected choice and process it
-        string selectedChoice = UIController.Instance.GetSelectedChoice();
-        bool generateResponse = choiceList == null;
-        StoryController.Instance.ProcessSelectedChoice(selectedChoice, generateResponse);
+        string selectedChoice       = UIController.Instance.GetSelectedChoice();
+        bool shouldGenerateResponse = _choiceEventInfo.ChoiceList == null;
 
-        // Terminate the choice event
+        StoryController.Instance.ProcessSelectedChoice(selectedChoice, shouldGenerateResponse);
+
         GameEventManager.Instance.TerminateGameEvent(this);
     }
+}
 
-    // Terminate choice event
-    public override void TerminateEvent()
+[CreateAssetMenu(fileName = "NewChoiceEvent", menuName = "EventInfo/ChoiceEvent", order = 0)]
+public class ChoiceEventInfo : GameEventInfo
+{
+    /****** Public Members ******/
+
+    public List<string> ChoiceList { get { return _choiceList; } private set { _choiceList = value; }}
+    
+    public void Initialize(List<string> choices)
     {
-        GameEventManager.Instance.StopCoroutine(choiceCoroutine);
+        Assert.IsTrue( false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed." );
+
+        ChoiceList      = choices;
+        IsInitialized   = true;
     }
+
+
+    /****** Protected Members ******/
+
+    protected override void OnEnable()
+    {
+        EventType = GameEventType.Choice;
+    }
+
+    protected override void OnValidate()
+    {
+        if ( null != ChoiceList && 0 < ChoiceList.Count )
+            IsInitialized = true;
+    }
+
+
+    /****** Private Members ******/
+
+    [SerializeField] private List<string> _choiceList;
 }

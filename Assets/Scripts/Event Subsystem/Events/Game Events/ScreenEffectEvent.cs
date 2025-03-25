@@ -4,57 +4,104 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UIEnums;
+using UnityEngine.Assertions;
 
-[System.Serializable]
-[CreateAssetMenu(fileName = "NewScreenEffect", menuName = "Event/ScreenEffectEvent", order = 0)]
+/*
+ * Screen effect event. Must be removed.
+ */
+
 public class ScreenEffectEvent : GameEvent
 {
-    public SCREEN_EFFECT screenEffect;
-    Coroutine effectCoroutine;
+    /****** Public Members ******/
 
-    private void OnEnable()
-    {
-        EventType = EventEnums.GameEventType.ScreenEffect;
-    }
-
-    // Check compatibility with current event and UI
     public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
         return true;
     }
 
-    // Play screent effect event
-    public override void PlayEvent()
+    public override void PlayEvent(GameEventInfo eventInfo)
     {
-        // Use GameEventManger to start coroutine
-        GameEventManager.Instance.StartCoroutine(PlayEventCoroutine());
+        Assert.IsTrue( GameEventType.ScreenEffect == eventInfo.EventType,   "Wrong event type[" + eventInfo.EventType.ToString() + "]. Should be ScreenEffectEventInfo." );
+        Assert.IsTrue( eventInfo.IsInitialized,                             "Event info is not initialized" );
+
+
+        _effectEventInfo    = eventInfo as ScreenEffectEventInfo;
+        _eventCoroutine     = StartCoroutine( PlayEventCoroutine() );
     }
-    public override IEnumerator PlayEventCoroutine()
+
+    public override void TerminateEvent()
     {
+        _effectEventInfo = null;
+        StopCoroutine(_eventCoroutine);
+    }
+
+    public override GameEventInfo GetEventInfo()
+    {
+        return _effectEventInfo;
+    }
+
+
+    /****** Private Members ******/
+    private Coroutine               _eventCoroutine;
+    private ScreenEffectEventInfo   _effectEventInfo;
+
+    private IEnumerator PlayEventCoroutine()
+    {
+        Assert.IsTrue( null != _effectEventInfo, "Event info should be set" );
+
+
         ScreenEffecter screenEffecter = UtilityManager.Instance.GetUtilityTool<ScreenEffecter>();
 
-        switch (screenEffect)
+        switch (_effectEventInfo.ScreenEffectType)
         {
-            case SCREEN_EFFECT.FADE_IN:
-                effectCoroutine = screenEffecter.FadeIn();
+            case ScreenEffect.FadeIn:
+                _eventCoroutine = screenEffecter.FadeIn();
                 break;
-            case SCREEN_EFFECT.FADE_OUT:
-                effectCoroutine = screenEffecter.FadeOut(); 
+            case ScreenEffect.FadeOut:
+                _eventCoroutine = screenEffecter.FadeOut(); 
                 break;
         }
 
-        yield return effectCoroutine;
-        effectCoroutine = null;
+        yield return _eventCoroutine;
+        _eventCoroutine = null;
 
         GameEventManager.Instance.TerminateGameEvent(this);
     }
+}
 
-    // Terminate screen effect event
-    public override void TerminateEvent()
+
+[CreateAssetMenu(fileName = "NewScrenEffectEvent", menuName = "EventInfo/ScreenEffectEvent", order = 0)]
+public class ScreenEffectEventInfo : GameEventInfo
+{
+    /****** Public Members ******/
+
+    public ScreenEffect ScreenEffectType { get { return _screenEffectType; } private set { _screenEffectType = value; }}
+    
+    public void Initialize(ScreenEffect screenEffectType)
     {
-        if (effectCoroutine != null)
-        {
-            Debug.Log("Terminate error: screen effect is not done yet!");
-        }
+        Assert.IsTrue( false == IsInitialized,                              "Duplicate initialization of GameEventInfo is not allowed." );
+        Assert.IsTrue( ScreenEffect.ScreenEffectCount != screenEffectType,  "Screen effect is not set properly." );
+
+
+        ScreenEffectType    = screenEffectType;
+        IsInitialized       = true;
     }
+
+
+    /****** Protected Members ******/
+
+    protected override void OnEnable()
+    {
+        EventType = GameEventType.ScreenEffect;
+    }
+
+    protected override void OnValidate()
+    {
+        if ( ScreenEffect.ScreenEffectCount != ScreenEffectType )
+            IsInitialized = true;
+    }
+
+
+    /****** Private Members ******/
+    [SerializeField] private ScreenEffect _screenEffectType = ScreenEffect.ScreenEffectCount;
 }

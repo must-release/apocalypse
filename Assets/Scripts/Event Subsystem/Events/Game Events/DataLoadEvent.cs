@@ -2,53 +2,51 @@
 using System.Collections;
 using UIEnums;
 using EventEnums;
+using UnityEngine.Assertions;
 
-[System.Serializable]
-[CreateAssetMenu(fileName = "NewDataLoad", menuName = "Event/DataLoadEvent", order = 0)]
+/*
+ * Load Game Data
+ */
+
 public class DataLoadEvent : GameEvent
 {
-    public int slotNum; // Number of the data slot to load data
-    public bool isNewGame = false; // If true, create new game data
-    public bool isContinueGame = false; // If true, load most recent saved data
+    /****** Public Members ******/
 
-    // Set event Type on load
-    public void OnEnable()
-    {
-        EventType = EventEnums.GameEventType.DataLoad;
-    }
-
-    // Check compatibility with current event and UI
     public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
         // Can be played when current base UI is title or load
-        if (parentEvent == null || parentEvent.EventType == EventEnums.GameEventType.Story || parentEvent.EventType == EventEnums.GameEventType.Choice)
-        {
+        if (parentEvent == null || parentEvent.EventType == GameEventType.Story || parentEvent.EventType == GameEventType.Choice)
             return true;
-        }
-        else
-            return false;
+        
+        return false;
     }
 
-    // Play Data Load Event
-    public override void PlayEvent()
+    public override void PlayEvent(GameEventInfo eventInfo)
     {
-        if (isNewGame) // Create new game data
+        Assert.IsTrue( GameEventType.DataLoad == eventInfo.EventType,   "Wrong event type[" + eventInfo.EventType.ToString() + "]. Should be DataLoadEventInfo." );
+        Assert.IsTrue( eventInfo.IsInitialized,                         "Event info is not initialized" );
+
+
+        _dataLoadEventInfo = eventInfo as DataLoadEventInfo;
+
+        if (_dataLoadEventInfo.IsNewGame) // Create new game data
         {
             DataManager.Instance.CreateNewGameData();
         }
         else // Load game data
         {
             // Load data and get starting event
-            GameEvent startingEvent = isContinueGame?
+            GameEvent startingEvent = _dataLoadEventInfo.IsContinueGame ? 
                 DataManager.Instance.LoadRecentData():
-                DataManager.Instance.LoadGameData(slotNum);
+                DataManager.Instance.LoadGameData(_dataLoadEventInfo.SlotNum);
 
             // Apply starting event
-            if(startingEvent == null) // When there is no starting event, concat UI change event to current event chain
+            if( null == startingEvent) // When there is no starting event, concat UI change event to current event chain
             {
-                UIChangeEvent uiEvent = CreateInstance<UIChangeEvent>();
-                uiEvent.changingUI = BaseUI.Control;
-                ConcatEvent(uiEvent);
+                // TODO : GameEventList에 추가하는 방식으로 변경
+                // UIChangeEvent uiEvent = CreateInstance<UIChangeEvent>();
+                // uiEvent.changingUI = BaseUI.Control;
+                // ConcatEvent(uiEvent);
             }
             else // When there is starting event, concat it to current event chain
             {
@@ -56,12 +54,25 @@ public class DataLoadEvent : GameEvent
             }
         }
 
-        // Terminate data load event and play next event
         GameEventManager.Instance.TerminateGameEvent(this);
     }
 
+    public override void TerminateEvent()
+    {
+        _dataLoadEventInfo = null;
+    }
+
+    public override GameEventInfo GetEventInfo()
+    {
+        return _dataLoadEventInfo;
+    }
+
+    /****** Private Members ******/
+
+    private DataLoadEventInfo _dataLoadEventInfo;
+
     // Concat starting event to current event chain
-    public void ConcatEvent(GameEvent startingEvent)
+    private void ConcatEvent(GameEvent startingEvent)
     {
         GameEvent lastEvent = this;
 
@@ -74,3 +85,48 @@ public class DataLoadEvent : GameEvent
     }
 }
 
+
+[CreateAssetMenu(fileName = "NewDataLoadEvent", menuName = "EventInfo/DataLoadEvent", order = 0)]
+public class DataLoadEventInfo : GameEventInfo
+{
+    /****** Public Members ******/
+
+    public int SlotNum { get { return _slotNum; } private set { _slotNum = value; }}
+    public bool IsNewGame { get {return _isNewGame; } private set { _isNewGame = value; }}
+    public bool IsContinueGame { get { return _isContinueGame; } private set { _isContinueGame = value; }}
+    
+    public void Initialize(int slotNum, bool isNewGame = false, bool isContinueGame = false)
+    {
+        Assert.IsTrue( false == IsInitialized,          "Duplicate initialization of GameEventInfo is not allowed." );
+        Assert.IsFalse( isNewGame && isContinueGame,    "It can't be both New Game and Continue Game." );
+
+        SlotNum         = slotNum;
+        IsNewGame       = isNewGame;
+        IsContinueGame  = isContinueGame;
+        IsInitialized   = true;
+    }
+
+
+    /****** Protected Members ******/
+
+    protected override void OnEnable()
+    {
+        EventType = GameEventType.DataLoad;
+    }
+
+    protected override void OnValidate()
+    {
+        if ( _isNewGame && _isContinueGame )
+            Debug.LogError("New Game 이면서 Continue Game일 수는 없습니다.");
+
+        if ( 0 < _slotNum )
+            IsInitialized = true;
+    }
+
+
+    /****** Private Members ******/
+
+    [SerializeField] private int    _slotNum        = -1; // Number of the data slot to load data
+    [SerializeField] private bool   _isNewGame      = false; // If true, create new game data
+    [SerializeField] private bool   _isContinueGame = false; // If true, load most recent saved data
+}

@@ -3,41 +3,57 @@ using System.Collections;
 using UIEnums;
 using EventEnums;
 using CharacterEums;
+using UnityEngine.Assertions;
 
-[System.Serializable]
-[CreateAssetMenu(fileName = "NewSceneActivate", menuName = "Event/SceneActivateEvent", order = 0)]
+/*
+ * Activate loaded scene
+ */
+
 public class SceneActivateEvent : GameEvent
 {
-    // Set event Type on load
-    public void OnEnable()
-    {
-        EventType = EventEnums.GameEventType.SceneActivation;
-    }
+    /****** Public Members *****/
 
-    // Check compatibility with current event and UI
     public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
-        // Can be played when current base UI is loading or save
-        if (parentEvent == null || parentEvent.EventType == EventEnums.GameEventType.Story || parentEvent.EventType == EventEnums.GameEventType.Choice)
-        {
+        if ( null == parentEvent || GameEventType.Story == parentEvent.EventType || GameEventType.Choice == parentEvent.EventType )
             return true;
-        }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
-    // Play scene activate event
-    public override void PlayEvent()
+    public override void PlayEvent(GameEventInfo eventInfo)
     {
-        // Use GameEventManger to start coroutine
-        GameEventManager.Instance.StartCoroutine(PlayEventCoroutine());
+        Assert.IsTrue( GameEventType.SceneActivate == eventInfo.EventType,    "Wrong event type[" + eventInfo.EventType.ToString() + "]. Should be SceneActivateEventInfo." );
+        Assert.IsTrue( eventInfo.IsInitialized,                                 "Event info is not initialized" );
+
+        _sceneActivateEventInfo = eventInfo as SceneActivateEventInfo;
+        _eventCoroutine         = StartCoroutine( PlayEventCoroutine() );
     }
-    public override IEnumerator PlayEventCoroutine()
+
+    public override GameEventInfo GetEventInfo()
+    {
+        return _sceneActivateEventInfo;
+    }
+
+    public override void TerminateEvent()
+    {
+        Assert.IsTrue( GameSceneController.Instance.IsSceneLoading, "Should not be terminated when scene is not loaded yet.");
+
+        _sceneActivateEventInfo = null;
+        StopCoroutine( _eventCoroutine );
+    }
+
+
+    /****** Private Members ******/
+
+    private Coroutine               _eventCoroutine;
+    private SceneActivateEventInfo  _sceneActivateEventInfo;
+
+    // TODO : Move SucceedParentEvents function to GameEventManager
+    private IEnumerator PlayEventCoroutine()
     {
         // Succeed parent events
-        if(ParentEvent)
+        if( ParentEvent )
         {
             GameEventManager.Instance.SucceedParentEvents(ParentEvent);
             ParentEvent = null;
@@ -48,14 +64,11 @@ public class SceneActivateEvent : GameEvent
         {
             // If it's not splash screen, change to Loading UI
             UIController.Instance.GetCurrentUI(out BaseUI baseUI, out _);
-            if(baseUI != BaseUI.SplashScreen)
+            if( BaseUI.SplashScreen != baseUI )
                 UIController.Instance.ChangeBaseUI(BaseUI.Loading);
 
             // Wait for loading to end
-            while (GameSceneController.Instance.IsSceneLoading)
-            {
-                yield return null;
-            }
+            yield return new WaitWhile( () => GameSceneController.Instance.IsSceneLoading );
         }
 
         // Initialize player character for game play
@@ -72,13 +85,34 @@ public class SceneActivateEvent : GameEvent
         // Terminate scene activate event and play next event
         GameEventManager.Instance.TerminateGameEvent(this);
     }
+}
 
-    // Terminate scene activate event
-    public override void TerminateEvent()
+
+[CreateAssetMenu(fileName = "NewSceneActivateEvent", menuName = "EventInfo/SceneActivateEvent", order = 0)]
+public class SceneActivateEventInfo : GameEventInfo
+{
+    /****** Public Members ******/
+
+    public void Initialize()
     {
-        if (GameSceneController.Instance.IsSceneLoading)
-        {
-            Debug.LogError("Terminate error: scene is not loaded yet!");
-        }
+        Assert.IsTrue( false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed." );
+
+        IsInitialized = true;
     }
+
+
+    /****** Protected Members ******/
+
+    protected override void OnEnable()
+    {
+        EventType = GameEventType.SceneActivate;
+    }
+
+    protected override void OnValidate()
+    {
+        IsInitialized = true;
+    }
+
+
+    /****** Private Members ******/
 }

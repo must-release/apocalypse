@@ -17,7 +17,7 @@ public class DataManager : MonoBehaviour
     public bool IsSaving { get; private set; }
 
     private UserData currentData;
-    private Dictionary<STAGE, Texture2D> stageSlotmage;
+    private Dictionary<Stage, Texture2D> stageSlotmage;
 
     private void Awake()
     {
@@ -33,15 +33,15 @@ public class DataManager : MonoBehaviour
     // Load stage slot image and save it to dictionary
     private void LoadStageImage()
     {
-        stageSlotmage = new Dictionary<STAGE, Texture2D>();
+        stageSlotmage = new Dictionary<Stage, Texture2D>();
         string rootKey = "Stage Slot Image/";
-        string test = rootKey + STAGE.TEST.ToString();
+        string test = rootKey + Stage.Test.ToString();
 
         Addressables.LoadAssetAsync<Texture2D>(test).Completed += (AsyncOperationHandle<Texture2D> img) =>
         {
             if (img.Status == AsyncOperationStatus.Succeeded)
             {
-                stageSlotmage.Add(STAGE.TEST, img.Result);
+                stageSlotmage.Add(Stage.Test, img.Result);
             }
             else
             {
@@ -57,7 +57,7 @@ public class DataManager : MonoBehaviour
     {
         // Initialize Info
         string saveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); // Get current time
-        STAGE curStage = STAGE.TEST;
+        Stage curStage = Stage.Test;
         int curMap = 3;
         GameEvent startingEvent = null;
         PLAYER lastChar = PLAYER.HEROINE;
@@ -81,7 +81,7 @@ public class DataManager : MonoBehaviour
         IsSaving = true;
 
         // Update current data according to player data
-        PlayerManager.Instance.GetPlayerData(out STAGE stage, out int map, out PLAYER character);
+        PlayerManager.Instance.GetPlayerData(out Stage stage, out int map, out PLAYER character);
         currentData.UpdatePlayerData(stage, map, character);
 
         // Wait for a frame before taking a screenshot

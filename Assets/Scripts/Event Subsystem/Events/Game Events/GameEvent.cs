@@ -15,8 +15,8 @@ public abstract class GameEvent : MonoBehaviour
     // Check compatibiliry with parent event and current UI
     public abstract bool            CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI);
     public abstract void            PlayEvent(GameEventInfo evebtInfo);
+    public abstract void            TerminateEvent();
     public abstract GameEventInfo   GetEventInfo();
-    public virtual void TerminateEvent() { }
 
     // Save flawless info of the nextEvent
     public void SaveNextEventInfo()

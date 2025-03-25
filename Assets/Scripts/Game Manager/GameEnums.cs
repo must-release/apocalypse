@@ -9,7 +9,7 @@ namespace UIEnums
 
 namespace StageEnums
 {
-    public enum STAGE { TEST, PROLOGUE, LIBRARY, EVENT }
+    public enum Stage { Test, Prologue, Library, Event, StageCount }
 }
 
 namespace CharacterEums
@@ -42,7 +42,7 @@ namespace EventEnums
     public enum GameEventType
     {
         Story, Tutorial, Cutscene, MapTransition, UIChange,
-        DataSave, DataLoad, SceneLoad, SceneActivation, Choice, ScreenEffect,
+        DataSave, DataLoad, SceneLoad, SceneActivate, Choice, ScreenEffect,
 
         GameEventTypeCount
     };
@@ -55,12 +55,12 @@ namespace EventEnums
 
 namespace SceneEnums
 {
-    public enum SCENE { TITLE, STAGE, BOSS }
+    public enum Scene { Title, Stage, Boss, SceneCount }
 }
 
 namespace ScreenEffectEnums
 {
-    public enum SCREEN_EFFECT { FADE_IN, FADE_OUT }
+    public enum ScreenEffect { FadeIn, FadeOut, ScreenEffectCount }
 }
 
 namespace LayerEnums

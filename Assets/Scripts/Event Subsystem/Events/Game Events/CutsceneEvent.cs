@@ -2,40 +2,51 @@
 using System.Collections;
 using UIEnums;
 using EventEnums;
+using UnityEngine.Assertions;
 
-[System.Serializable]
-[CreateAssetMenu(fileName = "NewCutscene", menuName = "Event/CutsceneEvent", order = 0)]
+/*
+ * 게임 플레이 도중 컷씬을 재생하는 CutsceneEvent를 관리하는 파일입니다.
+ */
+
 public class CutsceneEvent : GameEvent
 {
-    private Coroutine cutsceneCoroutine;
+    /****** Public Members ******/
 
-    // Set event Type on load
-    public void OnEnable()
-    {
-        EventType = EventEnums.GameEventType.Cutscene;
-    }
-
-    // Check compatibility with current event and UI
     public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
-        // Can be played when there is no event playing
-        if (parentEvent == null)
-        {
+        if ( null == parentEvent )
             return true;
-        }
-        else
-        {
-            return false;
-        }
+        
+        return false;
     }
 
-    // Play cutscene event
-    public override void PlayEvent()
+    public override void PlayEvent(GameEventInfo eventInfo)
     {
-        // Use GameEventManger to start coroutine
-        cutsceneCoroutine = GameEventManager.Instance.StartCoroutine(PlayEventCoroutine());
+        Assert.IsTrue( GameEventType.Cutscene == eventInfo.EventType,   "Wrong event type[" + eventInfo.EventType.ToString() + "]. Should be CutsceneEventInfo.");
+        Assert.IsTrue( eventInfo.IsInitialized,                         "Event info is not initialized");
+
+        _choiceEventInfo    = eventInfo as ChoiceEventInfo;
+        _eventCoroutine     = StartCoroutine(PlayEventCoroutine());
     }
-    public override IEnumerator PlayEventCoroutine()
+
+    public override void TerminateEvent()
+    {
+        _choiceEventInfo = null;
+        StopCoroutine(_eventCoroutine);
+    }
+
+    public override GameEventInfo GetEventInfo()
+    {
+        return _choiceEventInfo;
+    }
+
+
+    /****** Private Members ******/
+
+    private Coroutine       _eventCoroutine;
+    private GameEventInfo   _choiceEventInfo;
+
+    private IEnumerator PlayEventCoroutine()
     {
         // Change to cutscene UI
         UIController.Instance.ChangeBaseUI(BaseUI.Cutscene);
@@ -44,18 +55,39 @@ public class CutsceneEvent : GameEvent
         GamePlayManager.Instance.PlayCutscene();
 
         // Wait for cutscene to end
-        while (GamePlayManager.Instance.IsCutscenePlaying)
-        {
-            yield return null;
-        }
+        yield return new WaitUntil( () => GamePlayManager.Instance.IsCutscenePlaying );
 
         // Terminate cutscene event
         GameEventManager.Instance.TerminateGameEvent(this);
     }
+}
 
-    // Terminate cutscene event
-    public override void TerminateEvent()
+
+[CreateAssetMenu(fileName = "NewCutsceneEvent", menuName = "EventInfo/CutsceneEvent", order = 0)]
+public class CutsceneEventInfo : GameEventInfo
+{
+    /****** Public Members ******/
+
+    public void Initialize()
     {
-        GameEventManager.Instance.StopCoroutine(cutsceneCoroutine);
+        Assert.IsTrue(false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed.");
+
+        IsInitialized = true;
     }
+
+
+    /****** Protected Members ******/
+
+    protected override void OnEnable()
+    {
+        EventType = GameEventType.Cutscene;
+    }
+
+    protected override void OnValidate()
+    {
+        IsInitialized = true;
+    }
+
+
+    /****** Private Members ******/
 }

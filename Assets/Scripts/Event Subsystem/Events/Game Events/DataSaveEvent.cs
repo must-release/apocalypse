@@ -2,52 +2,60 @@
 using UIEnums;
 using EventEnums;
 using System.Collections;
+using UnityEngine.Assertions;
 
-[System.Serializable]
-[CreateAssetMenu(fileName = "NewDataSave", menuName = "Event/DataSaveEvent", order = 0)]
+
 public class DataSaveEvent : GameEvent
 {
-    public int slotNum; // if 0 auto save, else save in slot
-    private bool takeScreenShot = false;
+    /****** Public Members ******/
 
-    // Set event Type on load
-    public void OnEnable()
-    {
-        EventType = GameEventType.DataSave;
-    }
-
-    // Check compatibility with current event and UI
     public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
         // Can be played when current base UI is loading or save
-        if (baseUI == BaseUI.Loading || subUI == SubUI.Save)
-        {
+        if ( BaseUI.Loading == baseUI || SubUI.Save == subUI || null == parentEvent )
             return true;
-        }
-        else if(parentEvent == null)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
-    // Play Data Save Event
-    public override void PlayEvent()
+    public override void PlayEvent(GameEventInfo eventInfo)
     {
-        // Use GameEventManger to start coroutine
-        GameEventManager.Instance.StartCoroutine(PlayEventCoroutine());
+        Assert.IsTrue( GameEventType.DataSave == eventInfo.EventType,   "Wrong event type[" + eventInfo.EventType.ToString() + "]. Should be DataSaveEventInfo.");
+        Assert.IsTrue( eventInfo.IsInitialized,                         "Event info is not initialized");
+
+
+        _dataSaveEventInfo  = eventInfo as DataSaveEventInfo;
+        _eventCoroutine     = StartCoroutine( PlayEventCoroutine() );
     }
-    public override IEnumerator PlayEventCoroutine()
+
+    public override GameEventInfo GetEventInfo()
+    {
+        return _dataSaveEventInfo;
+    }
+
+    public override void TerminateEvent()
+    {
+        Assert.IsTrue( false == DataManager.Instance.IsSaving, "Should not be terminated when data saving is on progress " );
+
+        _dataSaveEventInfo = null;
+        StopCoroutine( _eventCoroutine );
+    }
+
+    /****** Private Members ******/
+
+    DataSaveEventInfo   _dataSaveEventInfo;
+    Coroutine           _eventCoroutine;
+
+    // TODO : Move GetStartingEvent and GetRootEvent function to GameEventManager
+    private IEnumerator PlayEventCoroutine()
     {
         // Turn Saving UI on
         UIController.Instance.TurnSubUIOn(SubUI.Saving);
 
         // When saving during story mode
+        bool shouldTakeScreenShot = false;
         GameEvent rootEvent = GetRootEvent();
-        if (rootEvent?.EventType == EventEnums.GameEventType.Story)
+        if (rootEvent?.EventType == GameEventType.Story)
         {
             // Get current story progress info
             var storyInfo = StoryController.Instance.GetStoryProgressInfo();
@@ -56,18 +64,15 @@ public class DataSaveEvent : GameEvent
             (rootEvent as StoryEvent).UpdateStoryProgress(storyInfo);
 
             // Take screen shot when saving
-            takeScreenShot = true;
+            shouldTakeScreenShot = true;
         }
 
         // Save user data
         GameEvent startingEvent = GetStartingEvent();
-        DataManager.Instance.SaveUserData(startingEvent, slotNum, takeScreenShot);
+        DataManager.Instance.SaveUserData(startingEvent, _dataSaveEventInfo.SlotNum, shouldTakeScreenShot);
 
         // Wait while saving
-        while (DataManager.Instance.IsSaving)
-        {
-            yield return null;
-        }
+        yield return new WaitWhile(() => DataManager.Instance.IsSaving );
 
         // Turn Saving UI off
         UIController.Instance.TurnSubUIOff(SubUI.Saving);
@@ -105,13 +110,40 @@ public class DataSaveEvent : GameEvent
             return root;
         }
     }
+}
 
-    // Terminate data save event
-    public override void TerminateEvent()
+
+[CreateAssetMenu(fileName = "NewDataSaveEvent", menuName = "EventInfo/DataSaveEvent", order = 0)]
+public class DataSaveEventInfo : GameEventInfo
+{
+    /****** Public Members ******/
+
+    public int  SlotNum { get { return _slotNum; } private set { _slotNum = value; }}
+
+    public void Initialize(int slotNum)
     {
-        if (DataManager.Instance.IsSaving)
-        {
-            Debug.LogError("Terminate error: data is not saved yet!");
-        }
+        Assert.IsTrue( false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed." );
+
+        SlotNum                 = slotNum;
+        IsInitialized           = true;
     }
+
+
+    /****** Protected Members ******/
+
+    protected override void OnEnable()
+    {
+        EventType = GameEventType.DataSave;
+    }
+
+    protected override void OnValidate()
+    {
+        if ( 0 < _slotNum )
+            IsInitialized = true;
+    }
+
+
+    /****** Private Members ******/
+
+    [SerializeField] private int _slotNum = -1; // if 0 auto save, else save in slot
 }

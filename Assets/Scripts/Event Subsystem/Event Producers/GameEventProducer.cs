@@ -41,7 +41,7 @@ public class GameEventProducer : MonoBehaviour
 
         // Second, load title scene asynchronously
         SceneLoadEvent sceneLoadEvent = ScriptableObject.CreateInstance<SceneLoadEvent>();
-        sceneLoadEvent.LoadingScene = SCENE.TITLE;
+        sceneLoadEvent.LoadingScene = Scene.Title;
         changeUIEvent.NextEvent = sceneLoadEvent;
 
         // Third, Activate scene
@@ -50,7 +50,7 @@ public class GameEventProducer : MonoBehaviour
 
         // Fourth, show fade out effect
         ScreenEffectEvent fadeOutEvent = ScriptableObject.CreateInstance<ScreenEffectEvent>();
-        fadeOutEvent.screenEffect = SCREEN_EFFECT.FADE_OUT;
+        fadeOutEvent.screenEffect = ScreenEffect.FadeOut;
         sceneActivateEvent.NextEvent = fadeOutEvent;
 
         // Fifth, change UI to title UI
@@ -60,7 +60,7 @@ public class GameEventProducer : MonoBehaviour
 
         // Finall, show fade in effect
         ScreenEffectEvent fadeInEvent = ScriptableObject.CreateInstance<ScreenEffectEvent>();
-        fadeInEvent.screenEffect = SCREEN_EFFECT.FADE_IN;
+        fadeInEvent.screenEffect = ScreenEffect.FadeIn;
         uiChangeEvent.NextEvent = fadeInEvent;
 
         // Handle generated event stream
@@ -76,12 +76,12 @@ public class GameEventProducer : MonoBehaviour
 
         // Second, load stage scene asynchronously
         SceneLoadEvent sceneLoadEvent = ScriptableObject.CreateInstance<SceneLoadEvent>();
-        sceneLoadEvent.LoadingScene = SCENE.STAGE;
+        sceneLoadEvent.LoadingScene = Scene.Stage;
         dataLoadEvent.NextEvent = sceneLoadEvent;
 
         // Third, play prologue story
         StoryEvent storyEvent = ScriptableObject.CreateInstance<StoryEvent>();
-        storyEvent.stage = STAGE.PROLOGUE;
+        storyEvent.stage = Stage.Prologue;
         storyEvent.storyNum = 0;
         storyEvent.readBlockCount = storyEvent.readEntryCount = 0;
         sceneLoadEvent.NextEvent = storyEvent;
@@ -121,7 +121,7 @@ public class GameEventProducer : MonoBehaviour
 
         // Second, load stage scene asynchronously
         SceneLoadEvent sceneLoadEvent = ScriptableObject.CreateInstance<SceneLoadEvent>();
-        sceneLoadEvent.LoadingScene = SCENE.STAGE;
+        sceneLoadEvent.LoadingScene = Scene.Stage;
         dataLoadEvent.NextEvent = sceneLoadEvent;
 
         // Third, Activate scene 
@@ -133,7 +133,7 @@ public class GameEventProducer : MonoBehaviour
     }
 
     // Generate scene change event. Load certain scene and change it to current scene
-    public void GenerateChangeSceneEventStream(SCENE scene)
+    public void GenerateChangeSceneEventStream(Scene scene)
     {
         // First, load stage scene asynchronously
         SceneLoadEvent sceneLoadEvent = ScriptableObject.CreateInstance<SceneLoadEvent>();
@@ -145,7 +145,7 @@ public class GameEventProducer : MonoBehaviour
 
         // Third, Change UI according to scene
         UIChangeEvent changeUIEvent = ScriptableObject.CreateInstance<UIChangeEvent>();
-        changeUIEvent.changingUI = scene == SCENE.TITLE? BaseUI.Title : BaseUI.Control;
+        changeUIEvent.changingUI = scene == Scene.Title? BaseUI.Title : BaseUI.Control;
         sceneActivateEvent.NextEvent = changeUIEvent;
 
         // Handle generated event stream

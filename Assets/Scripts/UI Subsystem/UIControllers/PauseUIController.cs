@@ -109,6 +109,6 @@ public class PauseUIController : MonoBehaviour, IUIController<SubUI>
     private void ReturnToTitle()
     {
         UIController.Instance.TurnEverySubUIOff();
-        GameEventProducer.Instance.GenerateChangeSceneEventStream(SceneEnums.SCENE.TITLE);
+        GameEventProducer.Instance.GenerateChangeSceneEventStream(SceneEnums.Scene.Title);
     }
 }

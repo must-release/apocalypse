@@ -22,8 +22,8 @@ public class GameSceneController : MonoBehaviour
 	}
 
     // Load game scene
-    public void LoadGameScene(SceneEnums.SCENE loadingScene) { StartCoroutine(AsyncLoadGameScene(loadingScene)); }
-	IEnumerator AsyncLoadGameScene(SceneEnums.SCENE loadingScene)
+    public void LoadGameScene(SceneEnums.Scene loadingScene) { StartCoroutine(AsyncLoadGameScene(loadingScene)); }
+	IEnumerator AsyncLoadGameScene(SceneEnums.Scene loadingScene)
 	{
         // Start scene loading
         IsSceneLoading = true;

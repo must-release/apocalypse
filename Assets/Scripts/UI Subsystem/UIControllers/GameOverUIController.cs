@@ -68,7 +68,7 @@ public class GameOverUIController : MonoBehaviour, IUIController<BaseUI>
     private void ReturnToTitle()
     {
         UIController.Instance.TurnEverySubUIOff();
-        GameEventProducer.Instance.GenerateChangeSceneEventStream(SceneEnums.SCENE.TITLE);
+        GameEventProducer.Instance.GenerateChangeSceneEventStream(SceneEnums.Scene.Title);
     }
 }
 

@@ -10,7 +10,7 @@ public class GameSceneModel : MonoBehaviour
 {
     public static GameSceneModel Instance;
 
-    public SceneEnums.SCENE CurrentScene { get; private set; }
+    public SceneEnums.Scene CurrentScene { get; private set; }
     public GameObject SceneObjects { get; private set; }
     public Transform Player { get; private set; }
     public Queue<MapInfo> Maps { get; private set; }
@@ -39,7 +39,7 @@ public class GameSceneModel : MonoBehaviour
     }
 
     // Asyncronously load scene
-    public AsyncOperation AsyncLoadScene(SceneEnums.SCENE loadingScene)
+    public AsyncOperation AsyncLoadScene(SceneEnums.Scene loadingScene)
     {
         CurrentScene = loadingScene;
 
@@ -58,9 +58,9 @@ public class GameSceneModel : MonoBehaviour
 
         switch (CurrentScene)
         {
-            case SceneEnums.SCENE.TITLE:
+            case SceneEnums.Scene.Title:
                 return StartCoroutine(LoadTitleAssets());
-            case SceneEnums.SCENE.STAGE:
+            case SceneEnums.Scene.Stage:
                 return StartCoroutine(LoadStageAssets());
             default:
                 Debug.Log("Asset Load Fail : Invalid Scene");
@@ -148,13 +148,13 @@ public class GameSceneModel : MonoBehaviour
     }
 
     // Return scene name string
-    private string GetSceneName(SceneEnums.SCENE loadingScene)
+    private string GetSceneName(SceneEnums.Scene loadingScene)
     {
         switch (loadingScene)
         {
-            case SceneEnums.SCENE.TITLE:
+            case SceneEnums.Scene.Title:
                 return "TitleScene";
-            case SceneEnums.SCENE.STAGE:
+            case SceneEnums.Scene.Stage:
                 return "StageScene";
             default:
                 return null;

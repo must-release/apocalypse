@@ -20,11 +20,18 @@ public class UIChangeEvent : GameEvent
     // Play change UI event
     public override void PlayEvent(GameEventInfo eventInfo)
     {
-        Assert.IsTrue(GameEventType.UIChange == eventInfo.EventType, "잘못된 이벤트 타입[" + eventInfo.EventType.ToString() + "]입니다. UIChangeEventInfo를 전달해주세요.");
+        Assert.IsTrue( GameEventType.UIChange == eventInfo.EventType,   "Wrong event type[" + eventInfo.EventType.ToString() + "]. Should be UIChangeEventInfo.");
+        Assert.IsTrue( eventInfo.IsInitialized,                         "Event info is not initialized");
 
         _uiEventInfo = eventInfo as UIChangeEventInfo;
         UIController.Instance.ChangeBaseUI(_uiEventInfo.TargetUI); 
+
         GameEventManager.Instance.TerminateGameEvent(this); 
+    }
+
+    public override void TerminateEvent()
+    {
+        _uiEventInfo = null;
     }
 
     public override GameEventInfo GetEventInfo()
@@ -32,13 +39,14 @@ public class UIChangeEvent : GameEvent
         return _uiEventInfo;
     }
 
+
     /****** Private Members ******/
 
     private UIChangeEventInfo _uiEventInfo;
 }
 
 
-[CreateAssetMenu(fileName = "NewUIChange", menuName = "EventInfo/UIChange", order = 0)]
+[CreateAssetMenu(fileName = "NewUIChangeEvent", menuName = "EventInfo/UIChangeEvent", order = 0)]
 public class UIChangeEventInfo : GameEventInfo
 {
     /****** Public Members ******/
@@ -47,7 +55,7 @@ public class UIChangeEventInfo : GameEventInfo
 
     public void Initialize(BaseUI targetUI)
     {
-        Assert.IsTrue(false == IsInitialized, "GameEventInfo의 중복 초기화는 허용하지 않습니다.");
+        Assert.IsTrue( false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed." );
 
         TargetUI        = targetUI;
         IsInitialized   = true;
@@ -70,5 +78,5 @@ public class UIChangeEventInfo : GameEventInfo
 
     /****** Private Members ******/
 
-    private BaseUI _targetUI = BaseUI.BaseUICount;
+    [SerializeField] private BaseUI _targetUI = BaseUI.BaseUICount;
 }
