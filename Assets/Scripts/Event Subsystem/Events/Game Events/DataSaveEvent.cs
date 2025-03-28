@@ -9,6 +9,13 @@ public class DataSaveEvent : GameEvent
 {
     /****** Public Members ******/
 
+    public void SetEventInfo(DataSaveEventInfo eventInfo)
+    {
+        Assert.IsTrue(eventInfo.IsInitialized, "Event info is not initialized");
+
+        _dataSaveEventInfo = eventInfo;
+    }
+
     public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
         // Can be played when current base UI is loading or save
@@ -18,14 +25,11 @@ public class DataSaveEvent : GameEvent
         return false;
     }
 
-    public override void PlayEvent(GameEventInfo eventInfo)
+    public override void PlayEvent()
     {
-        Assert.IsTrue( GameEventType.DataSave == eventInfo.EventType,   "Wrong event type[" + eventInfo.EventType.ToString() + "]. Should be DataSaveEventInfo.");
-        Assert.IsTrue( eventInfo.IsInitialized,                         "Event info is not initialized");
+        Assert.IsTrue( null != _dataSaveEventInfo, "Event info is not set." );
 
-
-        _dataSaveEventInfo  = eventInfo as DataSaveEventInfo;
-        _eventCoroutine     = StartCoroutine( PlayEventCoroutine() );
+        _eventCoroutine = StartCoroutine( PlayEventCoroutine() );
     }
 
     public override GameEventInfo GetEventInfo()
@@ -35,16 +39,25 @@ public class DataSaveEvent : GameEvent
 
     public override void TerminateEvent()
     {
-        Assert.IsTrue( false == DataManager.Instance.IsSaving, "Should not be terminated when data saving is on progress " );
+        Assert.IsTrue( false == DataManager.Instance.IsSaving,  "Should not be terminated when data saving is on progress." );
+        Assert.IsTrue( null != _dataSaveEventInfo,              "Event info is not set before termination" );
 
+        if (_eventCoroutine != null)
+        {
+            StopCoroutine(_eventCoroutine);
+            _eventCoroutine = null;
+        }
+
+        ScriptableObject.Destroy(_dataSaveEventInfo);
         _dataSaveEventInfo = null;
-        StopCoroutine( _eventCoroutine );
+
+        GameEventPool<DataSaveEvent>.Release(this);
     }
 
     /****** Private Members ******/
 
-    DataSaveEventInfo   _dataSaveEventInfo;
-    Coroutine           _eventCoroutine;
+    DataSaveEventInfo   _dataSaveEventInfo  = null;
+    Coroutine           _eventCoroutine     = null;
 
     // TODO : Move GetStartingEvent and GetRootEvent function to GameEventManager
     private IEnumerator PlayEventCoroutine()

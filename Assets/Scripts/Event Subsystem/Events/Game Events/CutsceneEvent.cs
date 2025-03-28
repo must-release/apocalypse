@@ -12,6 +12,13 @@ public class CutsceneEvent : GameEvent
 {
     /****** Public Members ******/
 
+    public void SetEventInfo(CutsceneEventInfo eventInfo)
+    {
+        Assert.IsTrue(eventInfo.IsInitialized, "Event info is not initialized");
+
+        _cutsceneEventInfo = eventInfo;
+    }
+
     public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
         if ( null == parentEvent )
@@ -20,34 +27,44 @@ public class CutsceneEvent : GameEvent
         return false;
     }
 
-    public override void PlayEvent(GameEventInfo eventInfo)
+    public override void PlayEvent()
     {
-        Assert.IsTrue( GameEventType.Cutscene == eventInfo.EventType,   "Wrong event type[" + eventInfo.EventType.ToString() + "]. Should be CutsceneEventInfo.");
-        Assert.IsTrue( eventInfo.IsInitialized,                         "Event info is not initialized");
+        Assert.IsTrue( null != _cutsceneEventInfo, "Event info is not set.");
 
-        _choiceEventInfo    = eventInfo as ChoiceEventInfo;
-        _eventCoroutine     = StartCoroutine(PlayEventCoroutine());
+        _eventCoroutine = StartCoroutine(PlayEventCoroutine());
     }
 
     public override void TerminateEvent()
     {
-        _choiceEventInfo = null;
-        StopCoroutine(_eventCoroutine);
+        Assert.IsTrue(null != _cutsceneEventInfo, "Event info is not set before termination");
+
+        if ( _eventCoroutine != null )
+        {
+            StopCoroutine(_eventCoroutine);
+            _eventCoroutine = null;
+        }
+
+        ScriptableObject.Destroy(_cutsceneEventInfo);
+        _cutsceneEventInfo = null;
+
+        GameEventPool<CutsceneEvent>.Release(this);
     }
 
     public override GameEventInfo GetEventInfo()
     {
-        return _choiceEventInfo;
+        return _cutsceneEventInfo;
     }
 
 
     /****** Private Members ******/
 
-    private Coroutine       _eventCoroutine;
-    private GameEventInfo   _choiceEventInfo;
+    private Coroutine       _eventCoroutine     = null;
+    private GameEventInfo   _cutsceneEventInfo  = null;
 
     private IEnumerator PlayEventCoroutine()
     {
+        Assert.IsTrue(null != _cutsceneEventInfo, "Event info is not set.");
+
         // Change to cutscene UI
         UIController.Instance.ChangeBaseUI(BaseUI.Cutscene);
 

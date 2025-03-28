@@ -12,6 +12,13 @@ public class SceneLoadEvent : GameEvent
 {
     /****** Public Members ******/
 
+    public void SetEventInfo(SceneLoadEventInfo eventInfo)
+    {
+        Assert.IsTrue(eventInfo.IsInitialized, "Event info is not initialized");
+
+        _sceneLoadEventInfo = eventInfo;
+    }
+
     public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
         if (parentEvent == null || parentEvent.EventType == GameEventType.Story || parentEvent.EventType == GameEventType.Choice)
@@ -20,12 +27,9 @@ public class SceneLoadEvent : GameEvent
         return false;
     }
 
-    public override void PlayEvent(GameEventInfo eventInfo)
+    public override void PlayEvent()
     {
-        Assert.IsTrue( GameEventType.SceneLoad == eventInfo.EventType,  "Wrong event type[" + eventInfo.EventType.ToString() + "]. Should be SceneLoadEventInfo." );
-        Assert.IsTrue( eventInfo.IsInitialized,                         "Event info is not initialized" );
-
-        _sceneLoadEventInfo = eventInfo as SceneLoadEventInfo;
+        Assert.IsTrue(null != _sceneLoadEventInfo, "Event info is not initialized" );
 
         // Load scene asynchronously
         GameSceneController.Instance.LoadGameScene(_sceneLoadEventInfo.LoadingScene);
@@ -36,7 +40,12 @@ public class SceneLoadEvent : GameEvent
 
     public override void TerminateEvent()
     {
+        Assert.IsTrue(null != _sceneLoadEventInfo, "Event info is not set before termination");
+
+        ScriptableObject.Destroy(_sceneLoadEventInfo);
         _sceneLoadEventInfo = null;
+
+        GameEventPool<SceneLoadEvent>.Release(this);
     }
 
     public override GameEventInfo GetEventInfo()
@@ -47,7 +56,7 @@ public class SceneLoadEvent : GameEvent
 
     /****** Private Members ******/
 
-    private SceneLoadEventInfo _sceneLoadEventInfo;
+    private SceneLoadEventInfo _sceneLoadEventInfo = null;
 }
 
 

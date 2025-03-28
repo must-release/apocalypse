@@ -5,11 +5,17 @@ using EventEnums;
 using System.Collections;
 using UnityEngine.Assertions;
 
-[System.Serializable]
-[CreateAssetMenu(fileName = "NewStory", menuName = "Event/StoryEvent", order = 0)]
+
 public class StoryEvent : GameEvent
 {
     /****** Public Members ******/
+
+    public void SetEventInfo(StoryEventInfo eventInfo)
+    {
+        Assert.IsTrue(eventInfo.IsInitialized, "Event info is not initialized");
+
+        _storyEventInfo = eventInfo;
+    }
 
     public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
@@ -19,12 +25,10 @@ public class StoryEvent : GameEvent
         return false;
     }
 
-    public override void PlayEvent(GameEventInfo eventInfo)
+    public override void PlayEvent()
     {
-        Assert.IsTrue( GameEventType.Story == eventInfo.EventType,      "Wrong event type[" + eventInfo.EventType.ToString() + "]. Should be StoryEventInfo." );
-        Assert.IsTrue( eventInfo.IsInitialized,                         "Event info is not initialized" );
+        Assert.IsTrue(null != _storyEventInfo, "Event info is not initialized");
 
-        _storyEventInfo = eventInfo as StoryEventInfo;
         _eventCoroutine = StartCoroutine(PlayEventCoroutine());
     }
 
@@ -40,11 +44,22 @@ public class StoryEvent : GameEvent
     // Terminate story event
     public override void TerminateEvent()
     {
+        Assert.IsTrue(null != _storyEventInfo, "Event info is not set before termination");
+
+
         // Tell StoryController to finish story
         StoryController.Instance.FinishStory();
+        
+        if (_eventCoroutine != null)
+        {
+            StopCoroutine(_eventCoroutine);
+            _eventCoroutine = null;
+        }
 
+        ScriptableObject.Destroy(_storyEventInfo);
         _storyEventInfo = null;
-        StopCoroutine(_eventCoroutine);
+
+        GameEventPool<StoryEvent>.Release(this);
     }
 
     public override GameEventInfo GetEventInfo()
@@ -55,8 +70,8 @@ public class StoryEvent : GameEvent
 
     /****** Private Members ******/
 
-    private Coroutine       _eventCoroutine;
-    private StoryEventInfo  _storyEventInfo;
+    private Coroutine       _eventCoroutine = null;
+    private StoryEventInfo  _storyEventInfo = null;
 
     private IEnumerator PlayEventCoroutine()
     {

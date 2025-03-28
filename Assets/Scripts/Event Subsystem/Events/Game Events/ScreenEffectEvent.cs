@@ -14,25 +14,39 @@ public class ScreenEffectEvent : GameEvent
 {
     /****** Public Members ******/
 
+    public void SetEventInfo(ScreenEffectEventInfo eventInfo)
+    {
+        Assert.IsTrue(eventInfo.IsInitialized, "Event info is not initialized");
+
+        _effectEventInfo = eventInfo;
+    }
+
     public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
         return true;
     }
 
-    public override void PlayEvent(GameEventInfo eventInfo)
+    public override void PlayEvent()
     {
-        Assert.IsTrue( GameEventType.ScreenEffect == eventInfo.EventType,   "Wrong event type[" + eventInfo.EventType.ToString() + "]. Should be ScreenEffectEventInfo." );
-        Assert.IsTrue( eventInfo.IsInitialized,                             "Event info is not initialized" );
+        Assert.IsTrue(null != _effectEventInfo, "Event info is not initialized");
 
-
-        _effectEventInfo    = eventInfo as ScreenEffectEventInfo;
-        _eventCoroutine     = StartCoroutine( PlayEventCoroutine() );
+        _eventCoroutine = StartCoroutine(PlayEventCoroutine());
     }
 
     public override void TerminateEvent()
     {
+        Assert.IsTrue(null != _effectEventInfo, "Event info is not set before termination");
+
+        if (_eventCoroutine != null)
+        {
+            StopCoroutine(_eventCoroutine);
+            _eventCoroutine = null;
+        }
+
+        ScriptableObject.Destroy(_effectEventInfo);
         _effectEventInfo = null;
-        StopCoroutine(_eventCoroutine);
+
+        GameEventPool<ScreenEffectEvent>.Release(this);
     }
 
     public override GameEventInfo GetEventInfo()
@@ -42,8 +56,8 @@ public class ScreenEffectEvent : GameEvent
 
 
     /****** Private Members ******/
-    private Coroutine               _eventCoroutine;
-    private ScreenEffectEventInfo   _effectEventInfo;
+    private Coroutine               _eventCoroutine     = null;
+    private ScreenEffectEventInfo   _effectEventInfo    = null;
 
     private IEnumerator PlayEventCoroutine()
     {

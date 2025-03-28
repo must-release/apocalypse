@@ -9,6 +9,13 @@ public class UIChangeEvent : GameEvent
 {
     /****** Public Members ******/
 
+    public void SetEventInfo(UIChangeEventInfo eventInfo)
+    {
+        Assert.IsTrue(eventInfo.IsInitialized, "Event info is not initialized");
+
+        _uiEventInfo = eventInfo;
+    }
+
     public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
         if ( null == parentEvent )
@@ -18,12 +25,11 @@ public class UIChangeEvent : GameEvent
     }
 
     // Play change UI event
-    public override void PlayEvent(GameEventInfo eventInfo)
+    public override void PlayEvent()
     {
-        Assert.IsTrue( GameEventType.UIChange == eventInfo.EventType,   "Wrong event type[" + eventInfo.EventType.ToString() + "]. Should be UIChangeEventInfo.");
-        Assert.IsTrue( eventInfo.IsInitialized,                         "Event info is not initialized");
+        Assert.IsTrue(null != _uiEventInfo, "Event info is not initialized");
 
-        _uiEventInfo = eventInfo as UIChangeEventInfo;
+
         UIController.Instance.ChangeBaseUI(_uiEventInfo.TargetUI); 
 
         GameEventManager.Instance.TerminateGameEvent(this); 
@@ -31,7 +37,13 @@ public class UIChangeEvent : GameEvent
 
     public override void TerminateEvent()
     {
+        Assert.IsTrue(null != _uiEventInfo, "Event info is not set before termination");
+
+
+        ScriptableObject.Destroy(_uiEventInfo);
         _uiEventInfo = null;
+
+        GameEventPool<UIChangeEvent>.Release(this);
     }
 
     public override GameEventInfo GetEventInfo()
@@ -42,7 +54,7 @@ public class UIChangeEvent : GameEvent
 
     /****** Private Members ******/
 
-    private UIChangeEventInfo _uiEventInfo;
+    private UIChangeEventInfo _uiEventInfo = null;
 }
 
 

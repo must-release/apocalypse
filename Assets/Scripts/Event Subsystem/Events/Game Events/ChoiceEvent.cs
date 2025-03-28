@@ -13,6 +13,13 @@ public class ChoiceEvent : GameEvent
 {
     /****** Public Members ******/
 
+    public void SetEventInfo(ChoiceEventInfo eventInfo)
+    {
+        Assert.IsTrue(eventInfo.IsInitialized, "Event info is not initialized");
+
+        _choiceEventInfo = eventInfo;
+    }
+
     public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
         if (parentEvent.EventType == GameEventType.Story) // Can be played when story event is playing
@@ -21,20 +28,27 @@ public class ChoiceEvent : GameEvent
         return false;
     }
 
-    public override void PlayEvent(GameEventInfo eventInfo)
+    public override void PlayEvent()
     {
-        Assert.IsTrue( GameEventType.Choice == eventInfo.EventType,     "Wrong event type[" + eventInfo.EventType.ToString() + "]. Should be ChoiceEventInfo.");
-        Assert.IsTrue( eventInfo.IsInitialized,                         "Event info is not initialized");
+        Assert.IsTrue( null != _choiceEventInfo, "Event info is not set");
 
-
-        _choiceEventInfo    = eventInfo as ChoiceEventInfo;
-        _eventCoroutine     = StartCoroutine(PlayEventCoroutine());
+        _eventCoroutine = StartCoroutine(PlayEventCoroutine());
     }
 
     public override void TerminateEvent()
     {
+        Assert.IsTrue(null != _choiceEventInfo, "Event info is not set before termination");
+
+        if ( _eventCoroutine != null )
+        {
+            StopCoroutine( _eventCoroutine );
+            _eventCoroutine = null;
+        }
+
+        ScriptableObject.Destroy( _choiceEventInfo );
         _choiceEventInfo = null;
-        StopCoroutine(_eventCoroutine);
+
+        GameEventPool<ChoiceEvent>.Release( this );
     }
 
     public override GameEventInfo GetEventInfo()
@@ -45,11 +59,13 @@ public class ChoiceEvent : GameEvent
 
     /****** Private Members ******/
 
-    private Coroutine       _eventCoroutine;
-    private ChoiceEventInfo _choiceEventInfo;
+    private Coroutine       _eventCoroutine     = null;
+    private ChoiceEventInfo _choiceEventInfo    = null;
 
     private IEnumerator PlayEventCoroutine()
     {
+        Assert.IsTrue(null != _choiceEventInfo, "Event info is not set");
+
         // Set choice info and switch to choice UI
         UIController.Instance.SetChoiceInfo(_choiceEventInfo.ChoiceList);
         UIController.Instance.TurnSubUIOn(SubUI.Choice);
@@ -76,7 +92,9 @@ public class ChoiceEventInfo : GameEventInfo
     
     public void Initialize(List<string> choices)
     {
-        Assert.IsTrue( false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed." );
+        Assert.IsTrue( false == IsInitialized,  "Duplicate initialization of GameEventInfo is not allowed." );
+        Assert.IsTrue(null != choices,          "Choices cannot be null.");
+        Assert.IsTrue(choices.Count > 0,        "Choice list must have at least one item.");
 
         ChoiceList      = choices;
         IsInitialized   = true;

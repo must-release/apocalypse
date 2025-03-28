@@ -13,21 +13,26 @@ public class SceneActivateEvent : GameEvent
 {
     /****** Public Members *****/
 
+    public void SetEventInfo(SceneActivateEventInfo eventInfo)
+    {
+        Assert.IsTrue(eventInfo.IsInitialized, "Event info is not initialized");
+
+        _sceneActivateEventInfo = eventInfo;
+    }
+
     public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
-        if ( null == parentEvent || GameEventType.Story == parentEvent.EventType || GameEventType.Choice == parentEvent.EventType )
+        if (null == parentEvent || GameEventType.Story == parentEvent.EventType || GameEventType.Choice == parentEvent.EventType)
             return true;
 
         return false;
     }
 
-    public override void PlayEvent(GameEventInfo eventInfo)
+    public override void PlayEvent()
     {
-        Assert.IsTrue( GameEventType.SceneActivate == eventInfo.EventType,    "Wrong event type[" + eventInfo.EventType.ToString() + "]. Should be SceneActivateEventInfo." );
-        Assert.IsTrue( eventInfo.IsInitialized,                                 "Event info is not initialized" );
+        Assert.IsTrue(null != _sceneActivateEventInfo, "Event info is not set.");
 
-        _sceneActivateEventInfo = eventInfo as SceneActivateEventInfo;
-        _eventCoroutine         = StartCoroutine( PlayEventCoroutine() );
+        _eventCoroutine = StartCoroutine(PlayEventCoroutine());
     }
 
     public override GameEventInfo GetEventInfo()
@@ -37,23 +42,34 @@ public class SceneActivateEvent : GameEvent
 
     public override void TerminateEvent()
     {
-        Assert.IsTrue( GameSceneController.Instance.IsSceneLoading, "Should not be terminated when scene is not loaded yet.");
+        Assert.IsTrue(GameSceneController.Instance.IsSceneLoading, "Should not be terminated when scene is not loaded yet.");
+        Assert.IsTrue(null != _sceneActivateEventInfo, "Event info is not set before termination");
 
+        if (_eventCoroutine != null)
+        {
+            StopCoroutine(_eventCoroutine);
+            _eventCoroutine = null;
+        }
+
+        ScriptableObject.Destroy(_sceneActivateEventInfo);
         _sceneActivateEventInfo = null;
-        StopCoroutine( _eventCoroutine );
+
+        GameEventPool<SceneActivateEvent>.Release(this);
     }
 
 
     /****** Private Members ******/
 
-    private Coroutine               _eventCoroutine;
-    private SceneActivateEventInfo  _sceneActivateEventInfo;
+    private Coroutine               _eventCoroutine         = null;
+    private SceneActivateEventInfo  _sceneActivateEventInfo = null;
 
     // TODO : Move SucceedParentEvents function to GameEventManager
     private IEnumerator PlayEventCoroutine()
     {
+        Assert.IsTrue(null != _sceneActivateEventInfo, "Event info is not set.");
+
         // Succeed parent events
-        if( ParentEvent )
+        if (ParentEvent)
         {
             GameEventManager.Instance.SucceedParentEvents(ParentEvent);
             ParentEvent = null;
@@ -64,16 +80,16 @@ public class SceneActivateEvent : GameEvent
         {
             // If it's not splash screen, change to Loading UI
             UIController.Instance.GetCurrentUI(out BaseUI baseUI, out _);
-            if( BaseUI.SplashScreen != baseUI )
+            if (BaseUI.SplashScreen != baseUI)
                 UIController.Instance.ChangeBaseUI(BaseUI.Loading);
 
             // Wait for loading to end
-            yield return new WaitWhile( () => GameSceneController.Instance.IsSceneLoading );
+            yield return new WaitWhile(() => GameSceneController.Instance.IsSceneLoading);
         }
 
         // Initialize player character for game play
         Transform player = GameSceneController.Instance.FindPlayerTransform();
-        if(player != null)
+        if (player != null)
         {
             PLAYER character = PlayerManager.Instance.Character;
             GamePlayManager.Instance.InitializePlayerCharacter(player, character);
@@ -95,7 +111,7 @@ public class SceneActivateEventInfo : GameEventInfo
 
     public void Initialize()
     {
-        Assert.IsTrue( false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed." );
+        Assert.IsTrue(false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed.");
 
         IsInitialized = true;
     }

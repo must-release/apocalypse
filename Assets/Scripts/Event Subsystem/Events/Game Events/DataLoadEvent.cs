@@ -12,6 +12,13 @@ public class DataLoadEvent : GameEvent
 {
     /****** Public Members ******/
 
+    public void SetEventInfo(DataLoadEventInfo eventInfo)
+    {
+        Assert.IsTrue(eventInfo.IsInitialized, "Event info is not initialized");
+
+        _dataLoadEventInfo = eventInfo;
+    }
+
     public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
     {
         // Can be played when current base UI is title or load
@@ -21,13 +28,10 @@ public class DataLoadEvent : GameEvent
         return false;
     }
 
-    public override void PlayEvent(GameEventInfo eventInfo)
+    public override void PlayEvent()
     {
-        Assert.IsTrue( GameEventType.DataLoad == eventInfo.EventType,   "Wrong event type[" + eventInfo.EventType.ToString() + "]. Should be DataLoadEventInfo." );
-        Assert.IsTrue( eventInfo.IsInitialized,                         "Event info is not initialized" );
+        Assert.IsTrue( null != _dataLoadEventInfo, "Event info is not initialized" );
 
-
-        _dataLoadEventInfo = eventInfo as DataLoadEventInfo;
 
         if (_dataLoadEventInfo.IsNewGame) // Create new game data
         {
@@ -59,7 +63,12 @@ public class DataLoadEvent : GameEvent
 
     public override void TerminateEvent()
     {
+        Assert.IsTrue(null != _dataLoadEventInfo, "Event info is not set before termination");
+
+        ScriptableObject.Destroy(_dataLoadEventInfo);
         _dataLoadEventInfo = null;
+
+        GameEventPool<DataLoadEvent>.Release(this);
     }
 
     public override GameEventInfo GetEventInfo()
@@ -69,7 +78,7 @@ public class DataLoadEvent : GameEvent
 
     /****** Private Members ******/
 
-    private DataLoadEventInfo _dataLoadEventInfo;
+    private DataLoadEventInfo _dataLoadEventInfo = null;
 
     // Concat starting event to current event chain
     private void ConcatEvent(GameEvent startingEvent)
@@ -95,7 +104,7 @@ public class DataLoadEventInfo : GameEventInfo
     public bool IsNewGame { get {return _isNewGame; } private set { _isNewGame = value; }}
     public bool IsContinueGame { get { return _isContinueGame; } private set { _isContinueGame = value; }}
     
-    public void Initialize(int slotNum, bool isNewGame = false, bool isContinueGame = false)
+    public void Initialize(int slotNum, bool isNewGame, bool isContinueGame)
     {
         Assert.IsTrue( false == IsInitialized,          "Duplicate initialization of GameEventInfo is not allowed." );
         Assert.IsFalse( isNewGame && isContinueGame,    "It can't be both New Game and Continue Game." );
