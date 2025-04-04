@@ -2,57 +2,35 @@
 using UnityEngine;
 using EventEnums;
 using UIEnums;
-using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.Assertions;
 
 public abstract class GameEvent : MonoBehaviour
 {
     /******* Public Members ******/
 
-    public GameEventType    EventType { get { return (GameEventType)_eventType; } set { _eventType = (int)value; } }
-    public GameEvent        NextEvent { get { return _nextEvent; } set { _nextEvent = value; } }
-    public GameEvent        ParentEvent { get { return _parentEvent; } set { _parentEvent = value; } }
+    public GameEventType EventType => GetEventInfo().EventType;
+    public EventStatus Status { get; protected set; } = EventStatus.EventStatusCount;
+    public System.Action OnTerminate;
+    
+    public abstract bool CheckCompatibility();
+    public abstract GameEventInfo GetEventInfo();
 
-    // Check compatibiliry with parent event and current UI
-    public abstract bool            CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI);
-    public abstract void            PlayEvent();
-    public abstract void            TerminateEvent();
-    public abstract GameEventInfo   GetEventInfo();
-
-    // Save flawless info of the nextEvent
-    public void SaveNextEventInfo()
+    public virtual void PlayEvent()
     {
-        if ( null == _nextEvent )
-            return;
+        Assert.IsTrue(EventStatus.Waiting == Status, "Event status must be set as waiting before execution.");
 
-        // Save type of the nextEvent
-        _nextEventAssemblyQualifiedName = _nextEvent.GetType().AssemblyQualifiedName;
-        // Save Json data of the nextEvent
-        _nextEventdata = JsonUtility.ToJson(_nextEvent);
+        Status = EventStatus.Running;
     }
 
-    // Restore data of the nextEvent
-    public void RestoreNextEventInfo()
+    protected virtual void TerminateEvent()
     {
-        if ( string.IsNullOrEmpty(_nextEventAssemblyQualifiedName) || string.IsNullOrEmpty(_nextEventdata) )
-            return;
+        Assert.IsTrue(EventStatus.Terminated != Status, "Event is already terminated.");
+        Assert.IsTrue(OnTerminate != null, "Terminate handler must be set.");
 
-        // // Create objects and deserialize data based on stored type information
-        // Type eventType = Type.GetType(_nextEventAssemblyQualifiedName);
-        // GameEvent eventInstance = (GameEvent)CreateInstance(eventType);
-        // JsonUtility.FromJsonOverwrite(_nextEventdata, eventInstance);
-        // _nextEvent = eventInstance;
-        // _nextEvent.RestoreNextEventInfo();
+        Status = EventStatus.Terminated;
+        OnTerminate.Invoke();
     }
-
-
-    /****** Private Memebers ******/
-
-    private int             _eventType;
-    private GameEvent       _nextEvent;
-    private GameEvent       _parentEvent;
-
-    [SerializeField] private string _nextEventAssemblyQualifiedName; 
-    [SerializeField] private string _nextEventdata;
 }
 
 
@@ -61,9 +39,17 @@ public abstract class GameEventInfo : ScriptableObject
 {
     /****** Public Members ******/
 
-    public GameEventType    EventType { get { return _eventType; } protected set { _eventType = value; } }
-    public bool             IsInitialized { get { return _isInitialized; } protected set { _isInitialized = value; }}
+    public GameEventType EventType
+    {
+        get => _eventType;
+        protected set => _eventType = value;
+    }
 
+    public bool IsInitialized
+    {
+        get => _isInitialized;
+        protected set => _isInitialized = value;
+    }
 
     /****** Protected Members ******/
 
@@ -76,21 +62,6 @@ public abstract class GameEventInfo : ScriptableObject
 
     /****** Private Members ******/
 
-    private GameEventType   _eventType;
-    private bool            _isInitialized = false;
-}
-
-
-[Serializable]
-public class GameEventList : ScriptableObject
-{
-    /****** Public Members ******/
-
-
-
-    /****** Protected Members ******/
-
-
-
-    /******* Private Members ******/
+    private GameEventType       _eventType       = GameEventType.GameEventTypeCount;
+    private bool                _isInitialized   = false;
 }

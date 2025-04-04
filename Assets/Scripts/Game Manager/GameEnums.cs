@@ -42,7 +42,7 @@ namespace EventEnums
     public enum GameEventType
     {
         Story, Tutorial, Cutscene, MapTransition, UIChange,
-        DataSave, DataLoad, SceneLoad, SceneActivate, Choice, ScreenEffect,
+        DataSave, DataLoad, SceneLoad, SceneActivate, Choice, ScreenEffect, Sequential,
 
         GameEventTypeCount
     };
@@ -51,6 +51,17 @@ namespace EventEnums
     {
         GAME_OVER
     }
+
+    public enum EventStatus
+    {
+        Waiting,
+        Running,
+        Blocked,
+        Terminated,
+        
+        EventStatusCount
+    }
+
 }
 
 namespace SceneEnums

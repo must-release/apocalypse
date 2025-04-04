@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using UIEnums;
 using EventEnums;
 using UnityEngine.Assertions;
@@ -19,7 +19,7 @@ public class DataLoadEvent : GameEvent
         _dataLoadEventInfo = eventInfo;
     }
 
-    public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
+    public override bool CheckCompatibility(GameEvent parentEvent, Stack<GameEvent> pararrelEvents)
     {
         // Can be played when current base UI is title or load
         if (parentEvent == null || parentEvent.EventType == GameEventType.Story || parentEvent.EventType == GameEventType.Choice)
@@ -90,7 +90,7 @@ public class DataLoadEvent : GameEvent
             lastEvent = lastEvent.NextEvent;
         }
 
-        lastEvent.NextEvent = startingEvent;
+        //lastEvent.NextEvent = startingEvent;
     }
 }
 

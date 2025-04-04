@@ -2,6 +2,7 @@ using UnityEngine;
 using StageEnums;
 using UIEnums;
 using EventEnums;
+using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.Assertions;
 
@@ -17,7 +18,7 @@ public class StoryEvent : GameEvent
         _storyEventInfo = eventInfo;
     }
 
-    public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
+    public override bool CheckCompatibility(GameEvent parentEvent, Stack<GameEvent> pararrelEvents)
     {
         if ( null == parentEvent )
             return true;

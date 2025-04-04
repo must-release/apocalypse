@@ -7,7 +7,7 @@ using UnityEngine.Assertions;
 
 /*
  * 스토리 진행 중 화면에 선택지를 표시하고, 플레이어가 고른 선택지를 처리하는 ChoiceEvent입니다.
- */  
+ */
 
 public class ChoiceEvent : GameEvent
 {
@@ -15,14 +15,15 @@ public class ChoiceEvent : GameEvent
 
     public void SetEventInfo(ChoiceEventInfo eventInfo)
     {
-        Assert.IsTrue(eventInfo.IsInitialized, "Event info is not initialized");
+        Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "Event info is not initialized");
 
-        _choiceEventInfo = eventInfo;
+        _info   = eventInfo;
+        Status  = EventStatus.Waiting;
     }
 
-    public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
+    public override bool CheckCompatibility()
     {
-        if (parentEvent.EventType == GameEventType.Story) // Can be played when story event is playing
+        if (GameEventManager.Instance.IsEventTypeActive(GameEventType.Story))
             return true;
         
         return false;
@@ -30,56 +31,68 @@ public class ChoiceEvent : GameEvent
 
     public override void PlayEvent()
     {
-        Assert.IsTrue( null != _choiceEventInfo, "Event info is not set");
+        Assert.IsTrue( null != _info, "Event info is not set");
 
         _eventCoroutine = StartCoroutine(PlayEventCoroutine());
     }
 
-    public override void TerminateEvent()
+    protected override void TerminateEvent()
     {
-        Assert.IsTrue(null != _choiceEventInfo, "Event info is not set before termination");
+        Assert.IsTrue(null != _info, "Event info is not set before termination");
 
-        if ( _eventCoroutine != null )
+
+        if ( null != _eventCoroutine )
         {
             StopCoroutine( _eventCoroutine );
             _eventCoroutine = null;
         }
 
-        ScriptableObject.Destroy( _choiceEventInfo );
-        _choiceEventInfo = null;
+        ScriptableObject.Destroy( _info );
+        _info = null;
 
         GameEventPool<ChoiceEvent>.Release( this );
+
+        base.TerminateEvent();
     }
 
     public override GameEventInfo GetEventInfo()
     {
-        return _choiceEventInfo;
+        return _info;
     }
 
 
     /****** Private Members ******/
 
     private Coroutine       _eventCoroutine     = null;
-    private ChoiceEventInfo _choiceEventInfo    = null;
+    private ChoiceEventInfo _info    = null;
 
     private IEnumerator PlayEventCoroutine()
     {
-        Assert.IsTrue(null != _choiceEventInfo, "Event info is not set");
+        Assert.IsTrue(null != _info, "Event info is not set");
+
 
         // Set choice info and switch to choice UI
-        UIController.Instance.SetChoiceInfo(_choiceEventInfo.ChoiceList);
+        UIController.Instance.SetChoiceInfo(_info.ChoiceList);
         UIController.Instance.TurnSubUIOn(SubUI.Choice);
 
         // Wait for player to select a choice
-        yield return new WaitUntil( () =>  null != UIController.Instance.GetSelectedChoice() );
+        yield return new WaitUntil( () =>  null != UIController.Instance.GetSelectedChoice() ||
+            false == GameEventManager.Instance.IsEventTypeActive(GameEventType.Story) );
+
+        if (GameEventManager.Instance.IsEventTypeActive(GameEventType.Story))
+        {
+            Debug.LogWarning("ChoiceEvent is terminated due to the termination of StoryEvent.");
+            TerminateEvent();
+            yield break;
+        }
 
         // Get the selected choice and process it
         string selectedChoice       = UIController.Instance.GetSelectedChoice();
-        bool shouldGenerateResponse = _choiceEventInfo.ChoiceList == null;
+        bool shouldGenerateResponse = _info.ChoiceList == null;
 
         StoryController.Instance.ProcessSelectedChoice(selectedChoice, shouldGenerateResponse);
 
-        GameEventManager.Instance.TerminateGameEvent(this);
+        TerminateEvent();
     }
 }
 

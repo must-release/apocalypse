@@ -1,108 +1,93 @@
-﻿using UnityEngine;
-using System.Collections;
-using UIEnums;
-using EventEnums;
+using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
+using EventEnums;
 
 public class GameEventManager : MonoBehaviour
 {
-	public static GameEventManager Instance { get; private set; }
+    /****** Public Members ******/
 
-	public GameEvent EventPointer { get; private set; }
+    public static GameEventManager Instance { get; private set; }
 
-	void Awake()
-	{
-		if (Instance == null)
-		{
-            Instance = this;
-        }
-	}
-
-	// Start Event Chain
-	public void StartEventChain(GameEvent firstEvent)
-	{
-        // Set parent-child relationship to first event and pointed event
-        SetRelationship(EventPointer, firstEvent);
-
-        // play first event
-        PlayGameEvent(firstEvent);
-    }
-
-	// Set parent-chile relationship
-	private void SetRelationship(GameEvent parentEvent, GameEvent childEvent)
-	{
-		childEvent.ParentEvent = parentEvent;
-	}
-
-    // Play game event 
-    private void PlayGameEvent(GameEvent playingEvent)
-	{
-		// Update event pointer
- 		EventPointer = playingEvent;
-
-		// Play event
-		playingEvent.PlayEvent();
-	}
-
-    // Terminate target game event
-    public void TerminateGameEvent(GameEvent terminatingEvent, bool succeeding = false)
-	{
-		StartCoroutine(AsyncTerminateEvent(terminatingEvent, succeeding));
-	}
-	IEnumerator AsyncTerminateEvent(GameEvent terminatingEvent, bool succeeding)
-	{
-		// Check if succeeding is on progress
-        if (succeeding)
-		{
-            // Terminate target game event
-            terminatingEvent.TerminateEvent();
-
-			// End this coroutine
-			yield break;
-        }
-        else // Wait child event chain to be terminated
-        {
-            while (EventPointer != terminatingEvent)
-            {
-                yield return null;
-            }
-
-            // Terminate target game event
-            terminatingEvent.TerminateEvent();
-        }
-
-
-        // Check if there is next event
-        if (terminatingEvent.NextEvent)
-		{
-            // Check compatibility of the next event
-            if (!EventChecker.Instance.CheckEventCompatibility(terminatingEvent.NextEvent, terminatingEvent.ParentEvent))
-            {
-                yield break;
-            }
-
-            // Update event relationship. Update parent event of the child event.
-            SetRelationship(terminatingEvent.ParentEvent, terminatingEvent.NextEvent);
-
-            // Play next event
-            PlayGameEvent(terminatingEvent.NextEvent);
-		}
-		else
-		{
-            // Set EventPointer to parent event
-			EventPointer = terminatingEvent.ParentEvent;
-        }
-    }
-
-    // Succeed every parent event
-    public void SucceedParentEvents(GameEvent parentEvent)
+    public bool IsEventTypeActive(GameEventType type)
     {
-        do
-        {
-            TerminateGameEvent(parentEvent, true);
+        return _activeEventTypeCounts.ContainsKey(type);
+    }
 
-            parentEvent = parentEvent.ParentEvent;
-        } while (parentEvent);
+    public void Submit(GameEvent gameEvent)
+    {
+        if (gameEvent.CheckCompatibility())
+        {
+            Activate(gameEvent);
+        }
+        else
+        {
+            _waitingQueue.Enqueue(gameEvent);
+        }
+    }
+
+
+    /****** Private Members ******/
+
+    private readonly List<GameEvent> _activeEvents = new();
+    private readonly Queue<GameEvent> _waitingQueue = new();
+    private readonly Dictionary<GameEventType, int> _activeEventTypeCounts = new();
+
+    private void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+    }
+
+    private void Activate(GameEvent gameEvent)
+    {
+        _activeEvents.Add(gameEvent);
+
+        if (_activeEventTypeCounts.ContainsKey(gameEvent.EventType))
+            _activeEventTypeCounts[gameEvent.EventType]++;
+        else
+            _activeEventTypeCounts[gameEvent.EventType] = 1;
+
+        gameEvent.OnTerminate += () => HandleEventTermination(gameEvent);
+        gameEvent.PlayEvent();
+    }
+
+    private void HandleEventTermination(GameEvent gameEvent)
+    {
+        _activeEvents.Remove(gameEvent);
+
+        if (_activeEventTypeCounts.ContainsKey(gameEvent.EventType))
+        {
+            _activeEventTypeCounts[gameEvent.EventType]--;
+            if (_activeEventTypeCounts[gameEvent.EventType] <= 0)
+                _activeEventTypeCounts.Remove(gameEvent.EventType);
+        }
+
+        TryProcessWaitingQueue();
+    }
+
+    private void TryProcessWaitingQueue()
+    {
+        Queue<GameEvent> tempQueue = new();
+
+        while (_waitingQueue.Count > 0)
+        {
+            var waiting = _waitingQueue.Dequeue();
+
+            if (waiting.CheckCompatibility())
+            {
+                Activate(waiting);
+            }
+            else
+            {
+                tempQueue.Enqueue(waiting);
+            }
+        }
+
+        // Restore unresolved events
+        while (0 < tempQueue.Count)
+        {
+            _waitingQueue.Enqueue(tempQueue.Dequeue());
+        }
     }
 }
-

@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using StageEnums;
 using EventEnums;
-using SceneEnums
-
-
+using SceneEnums;
 using ScreenEffectEnums;
 using UIEnums;
+using UnityEngine.Assertions;
 
 public static class GameEventFactory
 {
@@ -97,11 +96,72 @@ public static class GameEventFactory
         var info = ScriptableObject.CreateInstance<UIChangeEventInfo>();
         info.Initialize(targetUI);
 
-        var evt = GameEventPool<UIChangeEvent>.Get(EventHost, $"UIChangeEvent{targetUI}");
+        var evt = GameEventPool<UIChangeEvent>.Get(EventHost, $"UIChangeEvent_{targetUI}");
         evt.SetEventInfo(info);
         return evt;
     }
 
+    public static SequentialEvent CreateSequentialEvent(List<GameEventInfo> infos)
+    {
+        var info = ScriptableObject.CreateInstance<SequentialEventInfo>();
+        info.Initialize(infos);
+
+        var evt = GameEventPool<SequentialEvent>.Get(EventHost, "SequentialEvent");
+        evt.SetEventInfo(info);
+        return evt;
+    }
+
+    public static GameEvent CreateFromInfo(GameEventInfo info)
+    {
+        Assert.IsTrue((int)GameEventType.GameEventTypeCount == 12, "Don't forget to update CreateFromInfo when adding a new GameEventType.");
+
+        switch (info.EventType)
+        {
+            case GameEventType.Story:
+                var storyEvent = GameEventPool<StoryEvent>.Get(EventHost, "StoryEvent");
+                storyEvent.SetEventInfo((StoryEventInfo)info);
+                return storyEvent;
+            case GameEventType.Sequential:
+                var sequentialEvent = GameEventPool<SequentialEvent>.Get(EventHost, "SequentialEvent");
+                sequentialEvent.SetEventInfo((SequentialEventInfo)info);
+                return sequentialEvent;
+            case GameEventType.Choice:
+                var choiceEvent = GameEventPool<ChoiceEvent>.Get(EventHost, "ChoiceEvent");
+                choiceEvent.SetEventInfo((ChoiceEventInfo)info);
+                return choiceEvent;
+            case GameEventType.Cutscene:
+                var cutsceneEvent = GameEventPool<CutsceneEvent>.Get(EventHost, "CutsceneEvent");
+                cutsceneEvent.SetEventInfo((CutsceneEventInfo)info);
+                return cutsceneEvent;
+            case GameEventType.DataLoad:
+                var loadEvent = GameEventPool<DataLoadEvent>.Get(EventHost, "DataLoadEvent");
+                loadEvent.SetEventInfo((DataLoadEventInfo)info);
+                return loadEvent;
+            case GameEventType.DataSave:
+                var saveEvent = GameEventPool<DataSaveEvent>.Get(EventHost, "DataSaveEvent");
+                saveEvent.SetEventInfo((DataSaveEventInfo)info);
+                return saveEvent;
+            case GameEventType.SceneActivate:
+                var sceneActivate = GameEventPool<SceneActivateEvent>.Get(EventHost, "SceneActivateEvent");
+                sceneActivate.SetEventInfo((SceneActivateEventInfo)info);
+                return sceneActivate;
+            case GameEventType.SceneLoad:
+                var sceneLoad = GameEventPool<SceneLoadEvent>.Get(EventHost, "SceneLoadEvent");
+                sceneLoad.SetEventInfo((SceneLoadEventInfo)info);
+                return sceneLoad;
+            case GameEventType.ScreenEffect:
+                var screenEffect = GameEventPool<ScreenEffectEvent>.Get(EventHost, "ScreenEffectEvent");
+                screenEffect.SetEventInfo((ScreenEffectEventInfo)info);
+                return screenEffect;
+            case GameEventType.UIChange:
+                var uiChange = GameEventPool<UIChangeEvent>.Get(EventHost, "UIChangeEvent");
+                uiChange.SetEventInfo((UIChangeEventInfo)info);
+                return uiChange;
+            default:
+                Debug.LogError("Unknown GameEventType: " + info.EventType);
+                return null;
+        }
+    }
 
     /****** Private Members *******/
 
@@ -115,7 +175,7 @@ public static class GameEventFactory
             {
                 _eventHost = GameObject.Find("Event System");
                 if (_eventHost == null)
-                    Debug.LogError("Event System not found");
+                    Debug.LogError("Event System not found in current scene.");
             }
             return _eventHost.transform;
         }
