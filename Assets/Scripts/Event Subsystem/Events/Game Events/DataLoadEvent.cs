@@ -14,35 +14,44 @@ public class DataLoadEvent : GameEvent
 
     public void SetEventInfo(DataLoadEventInfo eventInfo)
     {
-        Assert.IsTrue(eventInfo.IsInitialized, "Event info is not initialized");
+        Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "Event info is not valid");
 
-        _dataLoadEventInfo = eventInfo;
+        _info   = eventInfo;
+        Status  = EventStatus.Waiting;
     }
 
-    public override bool CheckCompatibility(GameEvent parentEvent, Stack<GameEvent> pararrelEvents)
+    public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
     {
-        // Can be played when current base UI is title or load
-        if (parentEvent == null || parentEvent.EventType == GameEventType.Story || parentEvent.EventType == GameEventType.Choice)
-            return true;
-        
-        return false;
+        Assert.IsTrue(null != activeEventTypeCounts, "activeEventTypeCounts is null.");
+
+        foreach (GameEventType eventType in activeEventTypeCounts.Keys)
+        {
+            if (GameEventType.Story == eventType || GameEventType.Choice == eventType)
+                continue;
+
+            return false;
+        }
+
+        return true;
     }
 
     public override void PlayEvent()
     {
-        Assert.IsTrue( null != _dataLoadEventInfo, "Event info is not initialized" );
+        Assert.IsTrue( null != _info, "Event info is not initialized" );
 
 
-        if (_dataLoadEventInfo.IsNewGame) // Create new game data
+        base.PlayEvent();
+
+        if (_info.IsNewGame) // Create new game data
         {
             DataManager.Instance.CreateNewGameData();
         }
         else // Load game data
         {
             // Load data and get starting event
-            GameEvent startingEvent = _dataLoadEventInfo.IsContinueGame ? 
+            GameEvent startingEvent = _info.IsContinueGame ? 
                 DataManager.Instance.LoadRecentData():
-                DataManager.Instance.LoadGameData(_dataLoadEventInfo.SlotNum);
+                DataManager.Instance.LoadGameData(_info.SlotNum);
 
             // Apply starting event
             if( null == startingEvent) // When there is no starting event, concat UI change event to current event chain
@@ -54,44 +63,46 @@ public class DataLoadEvent : GameEvent
             }
             else // When there is starting event, concat it to current event chain
             {
-                ConcatEvent(startingEvent);
+                //ConcatEvent(startingEvent);
             }
         }
 
-        GameEventManager.Instance.TerminateGameEvent(this);
+        TerminateEvent();
     }
 
     public override void TerminateEvent()
     {
-        Assert.IsTrue(null != _dataLoadEventInfo, "Event info is not set before termination");
+        Assert.IsTrue(null != _info, "Event info is not set before termination");
 
-        ScriptableObject.Destroy(_dataLoadEventInfo);
-        _dataLoadEventInfo = null;
+        ScriptableObject.Destroy(_info);
+        _info = null;
 
         GameEventPool<DataLoadEvent>.Release(this);
+
+        base.TerminateEvent();
     }
 
     public override GameEventInfo GetEventInfo()
     {
-        return _dataLoadEventInfo;
+        return _info;
     }
 
     /****** Private Members ******/
 
-    private DataLoadEventInfo _dataLoadEventInfo = null;
+    private DataLoadEventInfo _info = null;
 
-    // Concat starting event to current event chain
-    private void ConcatEvent(GameEvent startingEvent)
-    {
-        GameEvent lastEvent = this;
+    // // Concat starting event to current event chain
+    // private void ConcatEvent(GameEvent startingEvent)
+    // {
+    //     GameEvent lastEvent = this;
 
-        while (lastEvent.NextEvent != null)
-        {
-            lastEvent = lastEvent.NextEvent;
-        }
+    //     while (lastEvent.NextEvent != null)
+    //     {
+    //         lastEvent = lastEvent.NextEvent;
+    //     }
 
-        //lastEvent.NextEvent = startingEvent;
-    }
+    //     //lastEvent.NextEvent = startingEvent;
+    // }
 }
 
 

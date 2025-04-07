@@ -9,19 +9,21 @@ public class GameEventManager : MonoBehaviour
 
     public static GameEventManager Instance { get; private set; }
 
-    public bool IsEventTypeActive(GameEventType type)
+    public bool IsEventTypeActive(GameEventType eventType)
     {
-        return _activeEventTypeCounts.ContainsKey(type);
+        return _activeEventTypeCounts.ContainsKey(eventType);
     }
 
     public void Submit(GameEvent gameEvent)
     {
-        if (gameEvent.CheckCompatibility())
+        if (gameEvent.CheckCompatibility(_activeEventTypeCounts))
         {
+            Debug.Log($"Activating Event : {gameEvent.EventType}");
             Activate(gameEvent);
         }
         else
         {
+            Debug.Log($"Enque Event to Waiting Queue : {gameEvent.EventType}");
             _waitingQueue.Enqueue(gameEvent);
         }
     }
@@ -74,8 +76,9 @@ public class GameEventManager : MonoBehaviour
         {
             var waiting = _waitingQueue.Dequeue();
 
-            if (waiting.CheckCompatibility())
+            if (waiting.CheckCompatibility(_activeEventTypeCounts))
             {
+                Debug.Log($"Process Waiting Event : {waiting.EventType}");
                 Activate(waiting);
             }
             else

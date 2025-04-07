@@ -3,6 +3,7 @@ using System.Collections;
 using UIEnums;
 using EventEnums;
 using UnityEngine.Assertions;
+using System.Collections.Generic;
 
 /*
  * 게임 플레이 도중 컷씬을 재생하는 CutsceneEvent를 관리하는 파일입니다.
@@ -14,14 +15,17 @@ public class CutsceneEvent : GameEvent
 
     public void SetEventInfo(CutsceneEventInfo eventInfo)
     {
-        Assert.IsTrue(eventInfo.IsInitialized, "Event info is not initialized");
+        Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "Event info is not valid.");
 
-        _cutsceneEventInfo = eventInfo;
-    }
+        _info   = eventInfo;
+        Status  = EventStatus.Waiting;
+    }   
 
-    public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
+    public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
     {
-        if ( null == parentEvent )
+        Assert.IsTrue(null != activeEventTypeCounts, "activeEventTypeCounts is null.");
+
+        if (activeEventTypeCounts.Count == 0)
             return true;
         
         return false;
@@ -29,14 +33,16 @@ public class CutsceneEvent : GameEvent
 
     public override void PlayEvent()
     {
-        Assert.IsTrue( null != _cutsceneEventInfo, "Event info is not set.");
+        Assert.IsTrue(null != _info, "Event info is not set.");
 
+        base.PlayEvent();
         _eventCoroutine = StartCoroutine(PlayEventCoroutine());
     }
 
     public override void TerminateEvent()
     {
-        Assert.IsTrue(null != _cutsceneEventInfo, "Event info is not set before termination");
+        Assert.IsTrue(null != _info, "Event info is not set before termination");
+
 
         if ( _eventCoroutine != null )
         {
@@ -44,26 +50,28 @@ public class CutsceneEvent : GameEvent
             _eventCoroutine = null;
         }
 
-        ScriptableObject.Destroy(_cutsceneEventInfo);
-        _cutsceneEventInfo = null;
+        ScriptableObject.Destroy(_info);
+        _info = null;
 
         GameEventPool<CutsceneEvent>.Release(this);
+
+        base.TerminateEvent();
     }
 
     public override GameEventInfo GetEventInfo()
     {
-        return _cutsceneEventInfo;
+        return _info;
     }
 
 
     /****** Private Members ******/
 
     private Coroutine       _eventCoroutine     = null;
-    private GameEventInfo   _cutsceneEventInfo  = null;
+    private GameEventInfo   _info  = null;
 
     private IEnumerator PlayEventCoroutine()
     {
-        Assert.IsTrue(null != _cutsceneEventInfo, "Event info is not set.");
+        Assert.IsTrue(null != _info, "Event info is not set.");
 
         // Change to cutscene UI
         UIController.Instance.ChangeBaseUI(BaseUI.Cutscene);
@@ -74,8 +82,7 @@ public class CutsceneEvent : GameEvent
         // Wait for cutscene to end
         yield return new WaitUntil( () => GamePlayManager.Instance.IsCutscenePlaying );
 
-        // Terminate cutscene event
-        GameEventManager.Instance.TerminateGameEvent(this);
+        TerminateEvent();
     }
 }
 

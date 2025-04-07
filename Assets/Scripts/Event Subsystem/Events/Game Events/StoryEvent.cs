@@ -13,30 +13,34 @@ public class StoryEvent : GameEvent
 
     public void SetEventInfo(StoryEventInfo eventInfo)
     {
-        Assert.IsTrue(eventInfo.IsInitialized, "Event info is not initialized");
+        Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "Event info is not valid.");
 
-        _storyEventInfo = eventInfo;
+        _info   = eventInfo;
+        Status  = EventStatus.Waiting;
     }
 
-    public override bool CheckCompatibility(GameEvent parentEvent, Stack<GameEvent> pararrelEvents)
+    public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
     {
-        if ( null == parentEvent )
-            return true;
+        Assert.IsTrue(null != activeEventTypeCounts, "activeEventTypeCounts is null.");
 
+        if (activeEventTypeCounts.Count == 0)
+            return true;
+        
         return false;
     }
 
     public override void PlayEvent()
     {
-        Assert.IsTrue(null != _storyEventInfo, "Event info is not initialized");
+        Assert.IsTrue(null != _info, "Event info is not initialized");
 
+        base.PlayEvent();
         _eventCoroutine = StartCoroutine(PlayEventCoroutine());
     }
 
     // TODO : Find solution for UpdateStoryProgress
     public void UpdateStoryProgress((int, int) storyInfo)
     {
-        Assert.IsTrue( null != _storyEventInfo, "Story event is not progressing" );
+        Assert.IsTrue( null != _info, "Story event is not progressing" );
 
         // readBlockCount = storyInfo.Item1;
         // readEntryCount = storyInfo.Item2;
@@ -45,7 +49,7 @@ public class StoryEvent : GameEvent
     // Terminate story event
     public override void TerminateEvent()
     {
-        Assert.IsTrue(null != _storyEventInfo, "Event info is not set before termination");
+        Assert.IsTrue(null != _info, "Event info is not set before termination");
 
 
         // Tell StoryController to finish story
@@ -57,41 +61,39 @@ public class StoryEvent : GameEvent
             _eventCoroutine = null;
         }
 
-        ScriptableObject.Destroy(_storyEventInfo);
-        _storyEventInfo = null;
+        ScriptableObject.Destroy(_info);
+        _info = null;
 
         GameEventPool<StoryEvent>.Release(this);
+        base.TerminateEvent();
     }
 
-    public override GameEventInfo GetEventInfo()
-    {
-        return _storyEventInfo;
-    }
+    public override GameEventInfo GetEventInfo() => _info;
 
 
     /****** Private Members ******/
 
     private Coroutine       _eventCoroutine = null;
-    private StoryEventInfo  _storyEventInfo = null;
+    private StoryEventInfo  _info = null;
 
     private IEnumerator PlayEventCoroutine()
     {
-        Assert.IsTrue( null != _storyEventInfo, "Event info should be set" );
+        Assert.IsTrue( null != _info, "Event info should be set" );
 
         // Change to story UI
         UIController.Instance.ChangeBaseUI(BaseUI.Story);
 
         // Start Story
         InputEventProducer.Instance.LockInput(true);
-        string story = "STORY_" + _storyEventInfo.StoryStage.ToString() + '_' + _storyEventInfo.StoryNumber;
-        yield return StoryController.Instance.StartStory(story, _storyEventInfo.ReadBlockCount, _storyEventInfo.ReadEntryCount);
+        string story = "STORY_" + _info.StoryStage.ToString() + '_' + _info.StoryNumber;
+        yield return StoryController.Instance.StartStory(story, _info.ReadBlockCount, _info.ReadEntryCount);
         InputEventProducer.Instance.LockInput(false);
 
         // Wait for story to end
         yield return new WaitWhile( () => StoryController.Instance.IsStoryPlaying );
 
         // Terminate story event and play next event
-        GameEventManager.Instance.TerminateGameEvent(this);
+        TerminateEvent();
     }
 }
 

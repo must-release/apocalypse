@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UIEnums;
+using UnityEditor.SceneManagement;
 
 
 public class LoadUIController : SaveLoadUIBase, IUIController<SubUI>
@@ -25,7 +27,7 @@ public class LoadUIController : SaveLoadUIBase, IUIController<SubUI>
 
     public void Cancel()
     {
-        if ( false == TryConfirmPanelClose() )
+        if ( false == TryClosingConfirmPanel() )
             UIController.Instance.TurnSubUIOff( GetUIType() );
     }
 
@@ -58,12 +60,19 @@ public class LoadUIController : SaveLoadUIBase, IUIController<SubUI>
         int slotNum = SelectedSlot.slotNumber;
 
         // Close confirm panel
-        TryConfirmPanelClose();
+        TryClosingConfirmPanel();
 
         // Turn every sub UI off
         UIController.Instance.TurnEverySubUIOff();
 
         // Generate Load Game Event Stream. Load data of the selected slot
-        GameEventProducer.Instance.GenerateLoadGameEventStream(slotNum);
+        var loadEvent = GameEventFactory.CreateSequentialEvent(new List<GameEvent>
+        {
+            GameEventFactory.CreateDataLoadEvent(slotNum, false, false),
+            GameEventFactory.CreateSceneLoadEvent(SceneEnums.Scene.Stage),
+            GameEventFactory.CreateSceneActivateEvent()
+        });
+
+        GameEventManager.Instance.Submit(loadEvent);
     }
 }

@@ -43,7 +43,7 @@ public class SaveLoadUIBase : MonoBehaviour
         private set { _selectedSlot = value; }
     }
 
-    protected bool TryConfirmPanelClose()
+    protected bool TryClosingConfirmPanel()
     {
         if ( _confirmPanel.gameObject.activeInHierarchy )
         {

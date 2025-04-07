@@ -4,10 +4,11 @@ using System.Collections;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using AssetEnums;
+using TMPro;
 
 public class MainSystem : MonoBehaviour
 {
-    private static MainSystem _instance;
+    private static MainSystem _instance = null;
 
     private void Awake()
     {
@@ -50,15 +51,22 @@ public class MainSystem : MonoBehaviour
 
             if ( systemObject.transform.TryGetComponent(out IAsyncLoadObject asyncObject) )
             {
-                while (false == asyncObject.IsLoaded())
-                {
-                    yield return null;
-                }
+                yield return new WaitUntil(() => asyncObject.IsLoaded());
             }
         }
 
         Debug.Log("All System Initialization Complete. Move to Main Scene");
 
-        GameEventProducer.Instance.GenerateSplashScreenEventStream();
+        var splashScreenEventInfo = Addressables.LoadAssetAsync<GameEventInfo>(SequentialEventInfoAsset.Common.SplashScreen);
+        yield return splashScreenEventInfo;
+        if (splashScreenEventInfo.Status == AsyncOperationStatus.Succeeded)
+        {
+            var splashScreenEvent = GameEventFactory.CreateFromInfo(splashScreenEventInfo.Result);
+            GameEventManager.Instance.Submit(splashScreenEvent);
+        }
+        else
+        {
+            Debug.LogError("Failed to load Splash Screen Event Info");
+        }
     }
 }

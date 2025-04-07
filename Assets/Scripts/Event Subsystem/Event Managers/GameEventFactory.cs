@@ -101,13 +101,21 @@ public static class GameEventFactory
         return evt;
     }
 
-    public static SequentialEvent CreateSequentialEvent(List<GameEventInfo> infos)
+    public static SequentialEvent CreateSequentialEvent(List<GameEvent> gameEvents)
     {
+        Assert.IsTrue(null != gameEvents && 0 < gameEvents.Count, "GameEvents list is null or empty");
+
         var info = ScriptableObject.CreateInstance<SequentialEventInfo>();
-        info.Initialize(infos);
+        info.Initialize(null);
 
         var evt = GameEventPool<SequentialEvent>.Get(EventHost, "SequentialEvent");
         evt.SetEventInfo(info);
+
+        foreach (var gameEvent in gameEvents)
+        {
+            evt.AddEvent(gameEvent);
+        }
+
         return evt;
     }
 

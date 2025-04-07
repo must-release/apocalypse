@@ -29,7 +29,7 @@ public class SaveUIController : SaveLoadUIBase, IUIController<SubUI>
 
     public void Cancel()
     {
-        if ( false == TryConfirmPanelClose() )
+        if ( false == TryClosingConfirmPanel() )
             UIController.Instance.TurnSubUIOff( GetUIType() );
     }
 
@@ -50,7 +50,7 @@ public class SaveUIController : SaveLoadUIBase, IUIController<SubUI>
     }
 
     /****** Private Members ******/
-
+ 
     private const string _SaveConfirmText   =   "Save Data?";
     private const string _SaveLabelText     =   "Save";
 
@@ -58,9 +58,9 @@ public class SaveUIController : SaveLoadUIBase, IUIController<SubUI>
     private void SaveAtSelectedSlot()
     {
         // Close confirm panel
-        TryConfirmPanelClose();
+        TryClosingConfirmPanel();
 
         // Generate Save Game Event Stream. Save data at the selected slot
-        GameEventProducer.Instance.GenerateSaveGameEventStream(SelectedSlot.slotNumber);
+        GameEventManager.Instance.Submit(GameEventFactory.CreateDataSaveEvent(SelectedSlot.slotNumber));
     }
 }

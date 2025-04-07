@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UIEnums;
 using EventEnums;
 using CharacterEums;
@@ -15,35 +16,44 @@ public class SceneActivateEvent : GameEvent
 
     public void SetEventInfo(SceneActivateEventInfo eventInfo)
     {
-        Assert.IsTrue(eventInfo.IsInitialized, "Event info is not initialized");
+        Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "Event info is not valid.");
 
-        _sceneActivateEventInfo = eventInfo;
+        _info   = eventInfo;
+        Status  = EventStatus.Waiting;
     }
 
-    public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
+    public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
     {
-        if (null == parentEvent || GameEventType.Story == parentEvent.EventType || GameEventType.Choice == parentEvent.EventType)
-            return true;
+        Assert.IsTrue(null != activeEventTypeCounts, "activeEventTypeCounts is null.");
 
-        return false;
+        foreach (GameEventType eventType in activeEventTypeCounts.Keys)
+        {
+            if (GameEventType.Story == eventType || GameEventType.Choice == eventType)
+                continue;
+
+            return false;
+        }
+
+        return true;
     }
 
     public override void PlayEvent()
     {
-        Assert.IsTrue(null != _sceneActivateEventInfo, "Event info is not set.");
+        Assert.IsTrue(null != _info, "Event info is not set.");
 
+        base.PlayEvent();
         _eventCoroutine = StartCoroutine(PlayEventCoroutine());
     }
 
     public override GameEventInfo GetEventInfo()
     {
-        return _sceneActivateEventInfo;
+        return _info;
     }
 
     public override void TerminateEvent()
     {
         Assert.IsTrue(GameSceneController.Instance.IsSceneLoading, "Should not be terminated when scene is not loaded yet.");
-        Assert.IsTrue(null != _sceneActivateEventInfo, "Event info is not set before termination");
+        Assert.IsTrue(null != _info, "Event info is not set before termination");
 
         if (_eventCoroutine != null)
         {
@@ -51,29 +61,31 @@ public class SceneActivateEvent : GameEvent
             _eventCoroutine = null;
         }
 
-        ScriptableObject.Destroy(_sceneActivateEventInfo);
-        _sceneActivateEventInfo = null;
+        ScriptableObject.Destroy(_info);
+        _info = null;
 
         GameEventPool<SceneActivateEvent>.Release(this);
+
+        base.TerminateEvent();
     }
 
 
     /****** Private Members ******/
 
     private Coroutine               _eventCoroutine         = null;
-    private SceneActivateEventInfo  _sceneActivateEventInfo = null;
+    private SceneActivateEventInfo  _info = null;
 
     // TODO : Move SucceedParentEvents function to GameEventManager
     private IEnumerator PlayEventCoroutine()
     {
-        Assert.IsTrue(null != _sceneActivateEventInfo, "Event info is not set.");
+        Assert.IsTrue(null != _info, "Event info is not set.");
 
         // Succeed parent events
-        if (ParentEvent)
-        {
-            GameEventManager.Instance.SucceedParentEvents(ParentEvent);
-            ParentEvent = null;
-        }
+        // if (ParentEvent)
+        // {
+        //     GameEventManager.Instance.SucceedParentEvents(ParentEvent);
+        //     ParentEvent = null;
+        // }
 
         // If scene is still loading
         if (GameSceneController.Instance.IsSceneLoading)
@@ -99,7 +111,7 @@ public class SceneActivateEvent : GameEvent
         GameSceneController.Instance.ActivateGameScene();
 
         // Terminate scene activate event and play next event
-        GameEventManager.Instance.TerminateGameEvent(this);
+        TerminateEvent();
     }
 }
 

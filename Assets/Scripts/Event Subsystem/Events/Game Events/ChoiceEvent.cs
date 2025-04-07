@@ -15,15 +15,17 @@ public class ChoiceEvent : GameEvent
 
     public void SetEventInfo(ChoiceEventInfo eventInfo)
     {
-        Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "Event info is not initialized");
+        Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "Event info is not valid.");
 
         _info   = eventInfo;
         Status  = EventStatus.Waiting;
     }
 
-    public override bool CheckCompatibility()
+    public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
     {
-        if (GameEventManager.Instance.IsEventTypeActive(GameEventType.Story))
+        Assert.IsTrue(null != activeEventTypeCounts, "activeEventTypeCounts is null.");
+
+        if (activeEventTypeCounts.ContainsKey(GameEventType.Story))
             return true;
         
         return false;
@@ -33,10 +35,11 @@ public class ChoiceEvent : GameEvent
     {
         Assert.IsTrue( null != _info, "Event info is not set");
 
+        base.PlayEvent();
         _eventCoroutine = StartCoroutine(PlayEventCoroutine());
     }
 
-    protected override void TerminateEvent()
+    public override void TerminateEvent()
     {
         Assert.IsTrue(null != _info, "Event info is not set before termination");
 
@@ -55,10 +58,7 @@ public class ChoiceEvent : GameEvent
         base.TerminateEvent();
     }
 
-    public override GameEventInfo GetEventInfo()
-    {
-        return _info;
-    }
+    public override GameEventInfo GetEventInfo() => _info;
 
 
     /****** Private Members ******/

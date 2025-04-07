@@ -22,9 +22,8 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
         set { _isStoryPanelClicked = value; }
     }
     
-    public bool IsLoaded() { return _isLoaded; }
+    public bool IsLoaded() => _isLoaded;
 
-    // Change Base UI.
     public void ChangeBaseUI(BaseUI baseUI)
     {
         _curUIController?.ExitUI();
@@ -35,7 +34,6 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
         _curUIController.EnterUI();
     }
 
-    // Turn Sub UI On
     public void TurnSubUIOn(SubUI subUI)
     {
         // Stack sub UI
@@ -48,7 +46,6 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
         _curUIController.EnterUI();
     }
 
-    // Turn Sub UI Off
     public void TurnSubUIOff(SubUI subUI)
     {
         // Check if it is a right call
@@ -185,6 +182,11 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
             // Execute Awake, Start method of uiObject
             yield return null;
 
+            if (uiObject.TryGetComponent(out IAsyncLoadObject asyncObject))
+            {
+                yield return new WaitUntil(() => asyncObject.IsLoaded());
+            }
+
             uiObject.SetActive(false);
         }
 
@@ -214,6 +216,11 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
 
             // Execute Awake, Start method of uiObject
             yield return null;
+
+            if (uiObject.TryGetComponent(out IAsyncLoadObject asyncObject))
+            {
+                yield return new WaitUntil(() => asyncObject.IsLoaded());
+            }
 
             uiObject.SetActive(false);
         }

@@ -3,8 +3,12 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using UIEnums;
+using UnityEngine.AddressableAssets;
+using AssetEnums;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using System.Collections;
 
-public class PauseUIController : MonoBehaviour, IUIController<SubUI>
+public class PauseUIController : MonoBehaviour, IUIController<SubUI>, IAsyncLoadObject
 {
     /****** Public Members ******/
 
@@ -43,16 +47,20 @@ public class PauseUIController : MonoBehaviour, IUIController<SubUI>
     }
 
     public SubUI GetUIType() { return SubUI.Pause; }
+
+    public bool IsLoaded() => _isLoaded;
     
 
     /****** Private Members ******/
     
-    private const string _ConfirmBoxName = "Confirm Box";
-    private const string _ConfirmButtonName = "Confirm Button";
-    private const string _CancelButtonName = "Cancel Button";
-    private const string _ButtonsName = "Buttons";
-    private Transform _confirmBox;
-    private List<Button> _buttonList;
+    private const string    _ConfirmBoxName             = "Confirm Box";
+    private const string    _ConfirmButtonName          = "Confirm Button";
+    private const string    _CancelButtonName           = "Cancel Button";
+    private const string    _ButtonsName                = "Buttons";
+    private GameEventInfo   _returnToTitleEventInfo     = null;
+    private Transform       _confirmBox                 = null;
+    private List<Button>    _buttonList                 = null;
+    private bool            _isLoaded                   = false;
 
     private void Awake()
     {
@@ -82,7 +90,23 @@ public class PauseUIController : MonoBehaviour, IUIController<SubUI>
 
     private void Start()
     {
+        StartCoroutine(LoadGameEventInfos());
+    }
 
+    private IEnumerator LoadGameEventInfos()
+    {
+        var returnToTitleEvent =Addressables.LoadAssetAsync<GameEventInfo>(SequentialEventInfoAsset.Common.ReturnToTitle);
+        yield return returnToTitleEvent;
+        if (returnToTitleEvent.Status == AsyncOperationStatus.Succeeded)
+        {
+            _returnToTitleEventInfo = returnToTitleEvent.Result;
+        }
+        else
+        {
+            Debug.LogError("Can not load " + SequentialEventInfoAsset.Common.ReturnToTitle);
+        }
+
+        _isLoaded = true;
     }
 
     private void OnSaveButtonClick()
@@ -109,6 +133,7 @@ public class PauseUIController : MonoBehaviour, IUIController<SubUI>
     private void ReturnToTitle()
     {
         UIController.Instance.TurnEverySubUIOff();
-        GameEventProducer.Instance.GenerateChangeSceneEventStream(SceneEnums.Scene.Title);
+
+        GameEventManager.Instance.Submit(GameEventFactory.CreateFromInfo(_returnToTitleEventInfo));
     }
 }

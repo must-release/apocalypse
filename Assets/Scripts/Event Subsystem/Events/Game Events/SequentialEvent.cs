@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using EventEnums;
 using UnityEngine.Assertions;
 
@@ -12,37 +11,55 @@ public class SequentialEvent : GameEvent
 
     public void SetEventInfo(SequentialEventInfo eventInfo)
     {
-        Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "Event info is not initialized");
+        Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "GameEventInfo is not valid");
 
-        _info = eventInfo;
-        Status = EventStatus.Waiting;
+        _info   = eventInfo;
+        Status  = EventStatus.Waiting;
+
+        foreach (GameEventInfo info in _info.EventInfos)
+        {
+            GameEvent evt = GameEventFactory.CreateFromInfo(info);
+            _eventQueue.Enqueue(evt);
+        }
     }
 
-    public override bool CheckCompatibility()
+    public void AddEvent(GameEvent gameEvent)
+    {
+        Assert.IsTrue(null != gameEvent, "GameEvent is null");
+        Assert.IsTrue(gameEvent.Status == EventStatus.Waiting, "GameEvent is not in waiting state");
+
+
+        _info.EventInfos.Add(gameEvent.GetEventInfo());
+        _eventQueue.Enqueue(gameEvent);
+    }
+
+    public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
     {
         return true;
     }
 
     public override void PlayEvent()
     {
+        Assert.IsTrue( null != _eventQueue, "There are no events to run sequentially" );
+
         base.PlayEvent();
-        StartCoroutine(RunSequentially());
+        _eventCoroutine = StartCoroutine(RunSequentially());
     }
 
-    private IEnumerator RunSequentially()
+    public override void TerminateEvent()
     {
-        foreach (GameEventInfo info in _info.EventInfos)
+        if (null != _eventCoroutine)
         {
-            GameEvent evt = GameEventFactory.CreateFromInfo(info);
-            GameEventManager.Instance.Submit(evt);
-            yield return new WaitUntil(() => evt.Status == EventStatus.Terminated);
+            StopCoroutine(_eventCoroutine);
+            _eventCoroutine = null;
         }
 
-        TerminateEvent();
-    }
+        ScriptableObject.Destroy(_info);
+        _info = null;
+        _eventQueue.Clear();
 
-    protected override void TerminateEvent()
-    {
+        GameEventPool<SequentialEvent>.Release(this);
+
         base.TerminateEvent();
     }
 
@@ -51,7 +68,24 @@ public class SequentialEvent : GameEvent
 
     /****** Private Members ******/
 
-    private SequentialEventInfo _info;
+    private SequentialEventInfo _info       = null;
+    private Queue<GameEvent> _eventQueue    = new Queue<GameEvent>();
+    private Coroutine _eventCoroutine       = null;
+
+    private IEnumerator RunSequentially()
+    {
+        Assert.IsTrue(0 < _eventQueue.Count, "There are no events to run sequentially");
+
+        while (0 < _eventQueue.Count)
+        {
+            GameEvent evt = _eventQueue.Dequeue();
+            GameEventManager.Instance.Submit(evt);
+
+            yield return new WaitUntil(() => evt.Status == EventStatus.Terminated);
+        }
+
+        TerminateEvent();
+    }
 }
 
 
@@ -64,9 +98,10 @@ public class SequentialEventInfo : GameEventInfo
 
     public void Initialize(List<GameEventInfo> infos)
     {
-        Assert.IsTrue(infos != null && infos.Count > 0, "GameEventInfo list is not set");
+        Assert.IsTrue(infos != null , "GameEventInfo list is null");
 
         _eventInfos = infos;
+        IsInitialized = true;
     }
 
 
@@ -79,11 +114,11 @@ public class SequentialEventInfo : GameEventInfo
 
     protected override void OnValidate()
     {
-        IsInitialized = EventInfos != null && EventInfos.Count > 0;
+        IsInitialized = EventInfos != null; // && EventInfos.Count > 0;
     }
 
 
     /****** Private Members ******/
 
-    [SerializeField] private List<GameEventInfo> _eventInfos;
+    [SerializeField] private List<GameEventInfo> _eventInfos = null;
 }

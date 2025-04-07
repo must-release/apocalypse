@@ -11,14 +11,17 @@ public class UIChangeEvent : GameEvent
 
     public void SetEventInfo(UIChangeEventInfo eventInfo)
     {
-        Assert.IsTrue(eventInfo.IsInitialized, "Event info is not initialized");
+        Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "Event info is not valid.");
 
-        _uiEventInfo = eventInfo;
+        _info   = eventInfo;
+        Status  = EventStatus.Waiting;
     }
 
-    public override bool CheckCompatibility(GameEvent parentEvent, BaseUI baseUI, SubUI subUI)
+    public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
     {
-        if ( null == parentEvent )
+        Assert.IsTrue(null != activeEventTypeCounts, "activeEventTypeCounts is null.");
+
+        if (0 == activeEventTypeCounts.Count)
             return true;
         
         return false;
@@ -27,34 +30,33 @@ public class UIChangeEvent : GameEvent
     // Play change UI event
     public override void PlayEvent()
     {
-        Assert.IsTrue(null != _uiEventInfo, "Event info is not initialized");
+        Assert.IsTrue(null != _info, "Event info is not initialized");
 
+        base.PlayEvent();
+        UIController.Instance.ChangeBaseUI(_info.TargetUI); 
 
-        UIController.Instance.ChangeBaseUI(_uiEventInfo.TargetUI); 
-
-        GameEventManager.Instance.TerminateGameEvent(this); 
+        TerminateEvent();
     }
 
     public override void TerminateEvent()
     {
-        Assert.IsTrue(null != _uiEventInfo, "Event info is not set before termination");
+        Assert.IsTrue(null != _info, "Event info is not set before termination");
 
 
-        ScriptableObject.Destroy(_uiEventInfo);
-        _uiEventInfo = null;
+        ScriptableObject.Destroy(_info);
+        _info = null;
 
         GameEventPool<UIChangeEvent>.Release(this);
+
+        base.TerminateEvent();
     }
 
-    public override GameEventInfo GetEventInfo()
-    {
-        return _uiEventInfo;
-    }
+    public override GameEventInfo GetEventInfo() => _info;
 
 
     /****** Private Members ******/
 
-    private UIChangeEventInfo _uiEventInfo = null;
+    private UIChangeEventInfo _info = null;
 }
 
 

@@ -85,11 +85,12 @@ public class InputEventProducer : MonoBehaviour
         while (incomingEvents.Count > 0)
         {
             InputEvent input = incomingEvents.Dequeue();
-            bool result = EventChecker.Instance.CheckEventCompatibility(input);
-            if (result)
-            {
-                playingEvents.Add(input);
-            }
+            // bool result = EventChecker.Instance.CheckEventCompatibility(input);
+            // if (result)
+            // {
+            //     playingEvents.Add(input);
+            // }
+            playingEvents.Add(input);
         }
     }
 

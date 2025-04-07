@@ -1,0 +1,39 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			"**/.vs/**": true,
+			"**/.vscode/**": false,
+			"**/bin/**": true,
+			"**/obj/**": true,
+			"**/Library/**": true,
+			"**/Temp/**": true,
+			"**/Logs/**": true,
+			"**/Packages/**": true,
+			"**/ProjectSettings/**": true,
+			"**/UserSettings/**": true,
+			"**/.gitignore": true,
+			"**/.vsconfig/**": true,
+			"**/*.sln/**":true,
+			"**/*.csproj": true,
+			"**/*.sh": true,
+			"**/*.meta": true,
+			"**/Assets/AddressableAssetsData/**": true,
+			"**/Assets/Animations/**": true,
+			"**/Assets/DeadRevolver/**": true,
+			"**/Assets/Materials/**": true,
+			"**/Assets/Prefabs/**": true,
+			"**/Assets/Scenes/**": true,
+			"**/Assets/Sequential Events/**": true,
+			"**/Assets/Sound/**": true,
+			"**/Assets/Sprites/**": true,
+			"**/Assets/Story Texts/**": true,
+			"**/Assets/TextMesh Pro/**": true,
+			"**/Assets/*.config/**": true
+		}
+	}
+}

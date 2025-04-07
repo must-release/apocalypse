@@ -102,6 +102,8 @@ namespace AssetEnums
 
     public static class UIAsset
     {
+        public static readonly string PathPrefix = "UIAssets/";
+
         public enum BaseUIName
         {
             SplashScreenUI, TitleUI, ControlUI, StoryUI, CutsceneUI, LoadingUI, GameOverUI
@@ -111,7 +113,23 @@ namespace AssetEnums
         {
             ChoiceUI, PauseUI, SaveLoadUI, PreferenceUI, KeySettingsUI, SavingUI
         }
+    }
 
-        public static readonly string PathPrefix = "UIAssets/";
+    public static class SequentialEventInfoAsset
+    {
+        public static class Common
+        {
+            public const string NewGame         = "Common/NewGameEventInfo";
+            public const string GameOver        = "Common/GameOverEventInfo";
+            public const string SplashScreen    = "Common/SplashScreenInfo";
+            public const string GameStart       = "Common/GameStartEventInfo";
+            public const string ContinueGame    = "Common/ContinueGameEventInfo";
+            public const string ReturnToTitle   = "Common/ReturnToTitleEventInfo";
+        }
+
+        public static class Prologue
+        {
+            public const string Trigger = "Prologue/TriggerInfo";
+        }
     }
 }

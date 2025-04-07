@@ -13,7 +13,7 @@ public abstract class GameEvent : MonoBehaviour
     public EventStatus Status { get; protected set; } = EventStatus.EventStatusCount;
     public System.Action OnTerminate;
     
-    public abstract bool CheckCompatibility();
+    public abstract bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts);
     public abstract GameEventInfo GetEventInfo();
 
     public virtual void PlayEvent()
@@ -23,7 +23,7 @@ public abstract class GameEvent : MonoBehaviour
         Status = EventStatus.Running;
     }
 
-    protected virtual void TerminateEvent()
+    public virtual void TerminateEvent()
     {
         Assert.IsTrue(EventStatus.Terminated != Status, "Event is already terminated.");
         Assert.IsTrue(OnTerminate != null, "Terminate handler must be set.");

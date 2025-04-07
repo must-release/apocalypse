@@ -113,7 +113,7 @@ public class StoryController : MonoBehaviour
             }
             else if (isChatting && StoryModel.Instance.StoryEntryBuffer.Count == 0) // Continue chating
             {
-                GameEventProducer.Instance.GenerateChoiceEventStream();
+                //GameEventProducer.Instance.GenerateChoiceEventStream();
             }
             else
             {
@@ -149,8 +149,9 @@ public class StoryController : MonoBehaviour
             // Extracting the text values from the options
             List<string> optionTexts = choice.options.Select(option => option.text).ToList();
 
-            // Generate show choice event stream
-            GameEventProducer.Instance.GenerateChoiceEventStream(optionTexts);
+            // Generate show choice event
+            var choiceEvent = GameEventFactory.CreateChoiceEvent(optionTexts);
+            GameEventManager.Instance.Submit(choiceEvent);
         }
         else
         {
