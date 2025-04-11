@@ -66,7 +66,7 @@ namespace EventEnums
 
 namespace SceneEnums
 {
-    public enum Scene { SplashScreenScene, TitleScene, StageScene, BossScene, SceneCount }
+    public enum SceneName { SplashScreenScene, TitleScene, StageScene, BossScene, SceneNameCount }
 }
 
 namespace ScreenEffectEnums

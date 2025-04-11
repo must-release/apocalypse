@@ -51,17 +51,17 @@ public static class GameEventFactory
         return evt;
     }
 
-    public static SceneActivateEvent CreateSceneActivateEvent()
+    public static SceneActivateEvent CreateSceneActivateEvent(bool ShouldTurnOnLoadingUI = true)
     {
         var info = ScriptableObject.CreateInstance<SceneActivateEventInfo>();
-        info.Initialize();
+        info.Initialize(ShouldTurnOnLoadingUI);
 
         var evt = GameEventPool<SceneActivateEvent>.Get(EventHost, "SceneActivateEvent");
         evt.SetEventInfo(info);
         return evt;
     }
 
-    public static SceneLoadEvent CreateSceneLoadEvent(Scene loadingScene)
+    public static SceneLoadEvent CreateSceneLoadEvent(SceneName loadingScene)
     {
         var info = ScriptableObject.CreateInstance<SceneLoadEventInfo>();
         info.Initialize(loadingScene);

@@ -11,9 +11,9 @@ public class SceneLoadEventInfo : GameEventInfo
 {
     /****** Public Members ******/
 
-    public Scene LoadingScene { get { return _loadingScene; } private set { _loadingScene = value; }}
+    public SceneName LoadingScene { get { return _loadingScene; } private set { _loadingScene = value; }}
 
-    public void Initialize(Scene loadingScene)
+    public void Initialize(SceneName loadingScene)
     {
         Assert.IsTrue( false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed." );
 
@@ -31,12 +31,12 @@ public class SceneLoadEventInfo : GameEventInfo
 
     protected override void OnValidate()
     {
-        if ( Scene.SceneCount != LoadingScene )
+        if ( SceneName.SceneNameCount != LoadingScene )
             IsInitialized = true;
     }
 
 
     /****** Private Members ******/
 
-    [SerializeField] private Scene _loadingScene = Scene.SceneCount;
+    [SerializeField] private SceneName _loadingScene = SceneName.SceneNameCount;
 }

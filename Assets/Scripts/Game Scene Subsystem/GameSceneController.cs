@@ -22,21 +22,21 @@ public class GameSceneController : MonoBehaviour
 	}
 
     // Load game scene
-    public void LoadGameScene(SceneEnums.Scene loadingScene) { StartCoroutine(AsyncLoadGameScene(loadingScene)); }
-	IEnumerator AsyncLoadGameScene(SceneEnums.Scene loadingScene)
-	{
+    public void LoadGameScene(SceneEnums.SceneName loadingScene) { StartCoroutine(AsyncLoadGameScene(loadingScene)); }
+    IEnumerator AsyncLoadGameScene(SceneEnums.SceneName loadingScene)
+    {
         // Start scene loading
         IsSceneLoading = true;
 
-		// Load Scene
+        // Load Scene
         AsyncOperation asyncLoad = GameSceneModel.Instance.AsyncLoadScene(loadingScene);
         while (!asyncLoad.isDone) { yield return null; }
 
-		// Load Assets
-	    yield return GameSceneModel.Instance.LoadAssets();
+        // Load Assets
+        yield return GameSceneModel.Instance.LoadAssets();
 
-		// Place assets
-		GameSceneView.Instance.PlaceSceneObjects();
+        // Place assets
+        GameSceneView.Instance.PlaceSceneObjects();
 
         // Complete scene loading
         IsSceneLoading = false;

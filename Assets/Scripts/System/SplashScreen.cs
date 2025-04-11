@@ -36,9 +36,9 @@ public class SplashScreen : MonoBehaviour
         Assert.IsTrue(_frameworkInitialized, "Framework not initialized");
 
         GameEventManager.Instance.Submit(GameEventFactory.CreateSequentialEvent( new List<GameEvent> {
-            GameEventFactory.CreateSceneLoadEvent(SceneEnums.Scene.TitleScene),
-            GameEventFactory.CreateSceneActivateEvent(),
-            GameEventFactory.CreateUIChangeEvent(UIEnums.BaseUI.Title)
+            GameEventFactory.CreateSceneLoadEvent(SceneEnums.SceneName.TitleScene),
+            GameEventFactory.CreateUIChangeEvent(UIEnums.BaseUI.Title),
+            GameEventFactory.CreateSceneActivateEvent(false)
         }));
     }
 }

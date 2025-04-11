@@ -10,10 +10,13 @@ public class SceneActivateEventInfo : GameEventInfo
 {
     /****** Public Members ******/
 
-    public void Initialize()
+    public bool ShouldTurnOnLoadingUI { get => _shouldTurnOnLoadingUI; private set => _shouldTurnOnLoadingUI = value; }
+
+    public void Initialize(bool shouldTurnOnLoadingUI)
     {
         Assert.IsTrue(false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed.");
 
+        ShouldTurnOnLoadingUI = shouldTurnOnLoadingUI;
         IsInitialized = true;
     }
 
@@ -32,4 +35,6 @@ public class SceneActivateEventInfo : GameEventInfo
 
 
     /****** Private Members ******/
+
+    [SerializeField] private bool _shouldTurnOnLoadingUI = true;
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UIEnums;
 using EventEnums;
 using CharacterEums;
+using SceneEnums;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 
@@ -75,9 +76,8 @@ public class SceneActivateEvent : GameEvent
     /****** Private Members ******/
 
     private Coroutine               _eventCoroutine         = null;
-    private SceneActivateEventInfo  _info = null;
+    private SceneActivateEventInfo  _info                   = null;
 
-    // TODO : Move SucceedParentEvents function to GameEventManager
     private IEnumerator PlayEventCoroutine()
     {
         Assert.IsTrue(null != _info, "Event info is not set.");
@@ -86,8 +86,7 @@ public class SceneActivateEvent : GameEvent
         // If scene is still loading
         if (GameSceneController.Instance.IsSceneLoading)
         {
-            // If it's not splash screen, change to Loading UI
-            if (SceneEnums.Scene.SplashScreenScene.ToString() != SceneManager.GetActiveScene().name)
+            if (_info.ShouldTurnOnLoadingUI)
                 UIController.Instance.ChangeBaseUI(BaseUI.Loading);
 
             yield return new WaitWhile(() => GameSceneController.Instance.IsSceneLoading);

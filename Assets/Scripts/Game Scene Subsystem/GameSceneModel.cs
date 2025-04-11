@@ -10,7 +10,7 @@ public class GameSceneModel : MonoBehaviour
 {
     public static GameSceneModel Instance;
 
-    public SceneEnums.Scene CurrentScene { get; private set; }
+    public SceneEnums.SceneName CurrentScene { get; private set; }
     public GameObject SceneObjects { get; private set; }
     public Transform Player { get; private set; }
     public Queue<MapInfo> Maps { get; private set; }
@@ -38,8 +38,8 @@ public class GameSceneModel : MonoBehaviour
         }
     }
 
-    // Asyncronously load scene
-    public AsyncOperation AsyncLoadScene(SceneEnums.Scene loadingScene)
+    // Asynchronously load scene
+    public AsyncOperation AsyncLoadScene(SceneEnums.SceneName loadingScene)
     {
         CurrentScene = loadingScene;
 
@@ -49,7 +49,7 @@ public class GameSceneModel : MonoBehaviour
     // Load Assets
     public Coroutine LoadAssets() 
     {
-        // Destory all previous scene objects
+        // Destroy all previous scene objects
         foreach (Transform child in SceneObjects.transform)
         {
             Destroy(child.gameObject);
@@ -58,9 +58,9 @@ public class GameSceneModel : MonoBehaviour
 
         switch (CurrentScene)
         {
-            case SceneEnums.Scene.TitleScene:
+            case SceneEnums.SceneName.TitleScene:
                 return StartCoroutine(LoadTitleAssets());
-            case SceneEnums.Scene.StageScene:
+            case SceneEnums.SceneName.StageScene:
                 return StartCoroutine(LoadStageAssets());
             default:
                 Debug.Log("Asset Load Fail : Invalid Scene");
@@ -148,13 +148,13 @@ public class GameSceneModel : MonoBehaviour
     }
 
     // Return scene name string
-    private string GetSceneName(SceneEnums.Scene loadingScene)
+    private string GetSceneName(SceneEnums.SceneName loadingScene)
     {
         switch (loadingScene)
         {
-            case SceneEnums.Scene.TitleScene:
+            case SceneEnums.SceneName.TitleScene:
                 return "TitleScene";
-            case SceneEnums.Scene.StageScene:
+            case SceneEnums.SceneName.StageScene:
                 return "StageScene";
             default:
                 return null;
