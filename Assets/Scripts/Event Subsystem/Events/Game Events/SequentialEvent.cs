@@ -9,6 +9,8 @@ public class SequentialEvent : GameEvent
 {
     /****** Public Members ******/
 
+    public override bool ShouldBeSaved() => false;
+
     public void SetEventInfo(SequentialEventInfo eventInfo)
     {
         Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "GameEventInfo is not valid");
@@ -65,6 +67,8 @@ public class SequentialEvent : GameEvent
 
     public override GameEventInfo GetEventInfo() => _info;
 
+    public override GameEventType GetEventType() => GameEventType.Sequential;
+
 
     /****** Private Members ******/
 
@@ -86,39 +90,4 @@ public class SequentialEvent : GameEvent
 
         TerminateEvent();
     }
-}
-
-
-[CreateAssetMenu(menuName = "EventInfo/SequentialEventInfo", fileName = "NewSequentialEventInfo")]
-public class SequentialEventInfo : GameEventInfo
-{
-    /****** Public Members ******/
-
-    public List<GameEventInfo> EventInfos => _eventInfos;
-
-    public void Initialize(List<GameEventInfo> infos)
-    {
-        Assert.IsTrue(infos != null , "GameEventInfo list is null");
-
-        _eventInfos = infos;
-        IsInitialized = true;
-    }
-
-
-    /****** Protected Members ******/
-
-    protected override void OnEnable()
-    {
-        EventType = GameEventType.Sequential;
-    }
-
-    protected override void OnValidate()
-    {
-        IsInitialized = EventInfos != null; // && EventInfos.Count > 0;
-    }
-
-
-    /****** Private Members ******/
-
-    [SerializeField] private List<GameEventInfo> _eventInfos = null;
 }

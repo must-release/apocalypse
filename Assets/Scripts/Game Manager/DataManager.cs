@@ -10,79 +10,44 @@ using CharacterEums;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class DataManager : MonoBehaviour
+public class DataManager : MonoBehaviour, IAsyncLoadObject
 {
+    /******* Public Members ********/
+
     public static DataManager Instance { get; private set; }
     public const int SLOT_NUM = 18;
     public bool IsSaving { get; private set; }
+    public bool IsLoaded() => _isLoaded;
 
-    private UserData currentData;
-    private Dictionary<Stage, Texture2D> stageSlotmage;
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-
-            // Load stage slot image
-            LoadStageImage();
-        }
-    }
-
-    // Load stage slot image and save it to dictionary
-    private void LoadStageImage()
-    {
-        stageSlotmage = new Dictionary<Stage, Texture2D>();
-        string rootKey = "Stage Slot Image/";
-        string test = rootKey + Stage.Test.ToString();
-
-        Addressables.LoadAssetAsync<Texture2D>(test).Completed += (AsyncOperationHandle<Texture2D> img) =>
-        {
-            if (img.Status == AsyncOperationStatus.Succeeded)
-            {
-                stageSlotmage.Add(Stage.Test, img.Result);
-            }
-            else
-            {
-                Debug.LogError("Failed to load addressable asset: " + test);
-            }
-        };
-    }
-
-    /******* Manage User Data ********/
-
-    // Create new game data and set it to current data
     public void CreateNewGameData()
     {
         // Initialize Info
+        Stage curStage  = Stage.Test;
+        int curMap      = 3;
         string saveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); // Get current time
-        Stage curStage = Stage.Test;
-        int curMap = 3;
-        GameEvent startingEvent = null;
         PLAYER lastChar = PLAYER.HEROINE;
-        string playTime = "00:00";
+        string playTime = "00:00"; 
 
         // Initialize current data
-        currentData = new UserData(curStage, curMap, startingEvent, lastChar, playTime, saveTime);
+        _currentData = new UserData(curStage, curMap, null, lastChar, playTime, saveTime);
 
         // Set player data
         PlayerManager.Instance.SetPlayerData(curStage, curMap, lastChar);
     }
 
     // Save User Data.
-    public void SaveUserData(GameEvent startingEvent, int slotNum, bool takeScreenShot)
+    public void SaveUserData(int slotNum, bool takeScreenShot)
     {
-        StartCoroutine(AsyncSaveUserData(startingEvent, slotNum, takeScreenShot));
+        StartCoroutine(AsyncSaveUserData(slotNum, takeScreenShot));
     }
-    private IEnumerator AsyncSaveUserData(GameEvent startingEvent, int slotNum, bool takeScreenShot)
+    private IEnumerator AsyncSaveUserData(int slotNum, bool takeScreenShot)
     {
         // start saving
         IsSaving = true;
 
         // Update current data according to player data
         PlayerManager.Instance.GetPlayerData(out Stage stage, out int map, out PLAYER character);
-        currentData.UpdatePlayerData(stage, map, character);
+        _currentData.UpdatePlayerData(stage, map, character);
 
         // Wait for a frame before taking a screenshot
         yield return new WaitForEndOfFrame();
@@ -91,26 +56,26 @@ public class DataManager : MonoBehaviour
         if (takeScreenShot) // Take screenshot of story screen
         {
             Texture2D screenShot = CaptureScreenShot();
-            currentData.SlotImage = screenShot;
+            _currentData.SlotImage = screenShot;
             Destroy(screenShot);
         }
         else // Set stage slot image
         {
-            currentData.SlotImage = stageSlotmage[currentData.CurrentStage];
+            _currentData.SlotImage = _stageSlotImage[_currentData.CurrentStage];
         }
 
         // Calculate play time
-        currentData.PlayTime = CalculatePlayTime(currentData.PlayTime, currentData.SaveTime);
+        _currentData.PlayTime = CalculatePlayTime(_currentData.PlayTime, _currentData.SaveTime);
 
         // Update save time
-        currentData.SaveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+        _currentData.SaveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
         // Set starting event
-        currentData.StartingEvent = startingEvent;
+        _currentData.ActiveEventInfoList = GameEventManager.Instance.GetSavableEventInfoList();
 
         // Save Json file
         string path = Application.persistentDataPath + "/userData" + slotNum + ".json";
-        string json = JsonUtility.ToJson(currentData);
+        string json = JsonUtility.ToJson(_currentData);
         File.WriteAllText(path, json);
 
         // Finsih Saving
@@ -197,13 +162,13 @@ public class DataManager : MonoBehaviour
     }
 
     // Load specific game slot data and return starting event
-    public GameEvent LoadGameData(int slotNum)
+    public List<GameEventInfo> LoadGameData(int slotNum)
     {
         string path = Application.persistentDataPath + "/userData" + slotNum + ".json";
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path);
-            currentData = JsonUtility.FromJson<UserData>(json);
+            _currentData = JsonUtility.FromJson<UserData>(json);
         }
         else
         {
@@ -211,19 +176,19 @@ public class DataManager : MonoBehaviour
         }
 
         // Set player data
-        PlayerManager.Instance.SetPlayerData(currentData.CurrentStage, currentData.CurrentMap, currentData.LastCharacter);
+        PlayerManager.Instance.SetPlayerData(_currentData.CurrentStage, _currentData.CurrentMap, _currentData.LastCharacter);
 
-        return currentData.StartingEvent;
+        return _currentData.ActiveEventInfoList;
     }
 
     // Load recent saved data and return starting event
-    public GameEvent LoadRecentData()
+    public List<GameEventInfo> LoadRecentData()
     {
         List<UserData> allData = GetAllUserData();
 
         // Parse string to DateTime by using DateTime.TryParseExact method
         // Use "yyyy-MM-dd HH:mm" format and CultureInfo.InvariantCulture
-        currentData = allData
+        _currentData = allData
             .Where(u => u != null && !string.IsNullOrWhiteSpace(u.SaveTime))
             .OrderByDescending(u =>
             {
@@ -233,8 +198,50 @@ public class DataManager : MonoBehaviour
             .FirstOrDefault();
 
         // Set player data
-        PlayerManager.Instance.SetPlayerData(currentData.CurrentStage, currentData.CurrentMap, currentData.LastCharacter);
+        PlayerManager.Instance.SetPlayerData(_currentData.CurrentStage, _currentData.CurrentMap, _currentData.LastCharacter);
 
-        return currentData.StartingEvent;
+        return _currentData.ActiveEventInfoList;
+    }
+
+    /****** Private Members ******/
+
+    
+    private UserData _currentData;
+    private Dictionary<Stage, Texture2D> _stageSlotImage;
+    private bool _isLoaded = false;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+    }
+
+    private IEnumerator Start()
+    {
+        yield return LoadStageImage();
+
+        // Set loaded flag
+        _isLoaded = true;
+    }
+
+    // Load stage slot image and save it to dictionary
+    private IEnumerator LoadStageImage()
+    {
+        _stageSlotImage = new Dictionary<Stage, Texture2D>();
+        string rootKey = "Stage Slot Image/";
+        string test = rootKey + Stage.Test.ToString();
+
+        AsyncOperationHandle<Texture2D> handle = Addressables.LoadAssetAsync<Texture2D>(test);
+        yield return handle;
+        if (handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            _stageSlotImage.Add(Stage.Test, handle.Result);
+        }
+        else
+        {
+            Debug.LogError("Failed to load addressable asset: " + test);
+        }
     }
 }

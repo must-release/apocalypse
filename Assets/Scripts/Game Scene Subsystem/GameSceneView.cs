@@ -32,10 +32,10 @@ public class GameSceneView : MonoBehaviour
 
         switch (currentScene)
         {
-            case Scene.Title:
+            case Scene.TitleScene:
                 PlaceTitleSceneObjects();
                 break;
-            case Scene.Stage:
+            case Scene.StageScene:
                 PlaceStageSceneObjects();
                 break;
             default:

@@ -1,36 +1,26 @@
-﻿using System.Collections.Generic;
-using System.Collections;
-using System;
+﻿using System;
 using UnityEngine;
 using StageEnums;
 using CharacterEums;
+using System.Collections.Generic;
 
 
-[System.Serializable]
-public class UserData : ISerializationCallbackReceiver
+[Serializable]
+public class UserData
 {
+    /****** Public Memebers *******/
 
-    [SerializeField] private int currentStage;
-    public Stage CurrentStage { get { return (Stage)currentStage; } set { currentStage = (int)value; } }
-
-    [SerializeField] private int currentMap;
-    public int CurrentMap { get { return currentMap; } set { currentMap = value; } }
-
-    [SerializeField] private int lastCharacter;
-    public PLAYER LastCharacter { get { return (PLAYER)lastCharacter; } set { lastCharacter = (int)value; } }
-
-    [SerializeField] private string playTime;
-    public string PlayTime { get { return playTime; } set { playTime = value; } }
-
-    [SerializeField] private string saveTime;
-    public string SaveTime { get { return saveTime; } set { saveTime = value; } }
-
-    [SerializeField] private string slotImage;
+    public Stage    CurrentStage { get => (Stage)_currentStage; set => _currentStage = (int)value; }
+    public int      CurrentMap { get => _currentMap; set => _currentMap = value; }
+    public PLAYER   LastCharacter { get => (PLAYER)_lastCharacter; set => _lastCharacter = (int)value; }
+    public string   PlayTime { get => _playTime; set => _playTime = value; }
+    public string   SaveTime { get => _saveTime; set => _saveTime = value; }
+    public List<GameEventInfo> ActiveEventInfoList { get => _activeEventInfoList; set => _activeEventInfoList = value; }
     public Texture2D SlotImage
     {
         get
         {
-            byte[] imageBytes = Convert.FromBase64String(slotImage);
+            byte[] imageBytes = Convert.FromBase64String(_slotImage);
 
             // convert byte array to Texture2D
             Texture2D texture = new Texture2D(2, 2); // Initial size doesn't matter, LoadImage resizes it
@@ -50,76 +40,36 @@ public class UserData : ISerializationCallbackReceiver
             byte[] imageBytes = value.EncodeToPNG();
 
             // Convert PNG data to Base64 string
-            slotImage = Convert.ToBase64String(imageBytes);
+            _slotImage = Convert.ToBase64String(imageBytes);
         }
     }
 
-    // Used for game
-    [NonSerialized] public GameEvent startingEvent;
-    public GameEvent StartingEvent { get { return startingEvent; } set { startingEvent = value; } }
-
-    // Used for serialization
-    [SerializeField] private string startingEventAssemblyQualifiedName;
-    [SerializeField] private string startingEventData;
-
-    public UserData(Stage curStage, int curMap, GameEvent startingEvent, PLAYER lastChar, string playTime, string saveTime)
+    public UserData(Stage curStage, int curMap, List<GameEventInfo> infoList, PLAYER lastChar, string playTime, string saveTime)
     {
-        CurrentStage = curStage;
-        CurrentMap = curMap;
-        StartingEvent = startingEvent;
-        LastCharacter = lastChar;
-        PlayTime = playTime;
-        SaveTime = saveTime;
+        CurrentStage    = curStage;
+        CurrentMap      = curMap;
+        LastCharacter   = lastChar;
+        PlayTime        = playTime;
+        SaveTime        = saveTime;
+        ActiveEventInfoList    = infoList;
     }
 
     // Update user data
     public void UpdatePlayerData(Stage stage, int map, PLAYER character)
     {
-        CurrentStage = stage;
-        CurrentMap = map;
-        LastCharacter = character;
+        CurrentStage    = stage;
+        CurrentMap      = map;
+        LastCharacter   = character;
     }
 
-    // Save info of the startingEvent
-    public void OnBeforeSerialize()
-    {
-        if (StartingEvent != null)
-        {
-            // Save chained events
-            Stack<GameEvent> eventStack = new Stack<GameEvent>();
-            GameEvent savingEvent = StartingEvent;
-            while(savingEvent != null)
-            {
-                eventStack.Push(savingEvent);
-                savingEvent = savingEvent.NextEvent;
-            }
-            while(eventStack.Count > 0)
-            {
-                eventStack.Pop().SaveNextEventInfo();
-            }
 
-            // Create Json data of StartingEvent
-            startingEventAssemblyQualifiedName = StartingEvent.GetType().AssemblyQualifiedName;
-            startingEventData = JsonUtility.ToJson(StartingEvent);
-        }
-        else
-        {
-            startingEventAssemblyQualifiedName = null;
-            startingEventData = null;
-        }
-    }
+    /****** Private Members ******/
 
-    // Restore data of the startingEvent
-    public void OnAfterDeserialize()
-    {
-        if (!string.IsNullOrEmpty(startingEventAssemblyQualifiedName) && !string.IsNullOrEmpty(startingEventData))
-        {
-            // Restore Starting event
-            Type eventType = Type.GetType(startingEventAssemblyQualifiedName);
-            GameEvent eventInstance = (GameEvent)ScriptableObject.CreateInstance(eventType);
-            JsonUtility.FromJsonOverwrite(startingEventData, eventInstance);
-            StartingEvent = eventInstance;
-            StartingEvent.RestoreNextEventInfo();
-        }
-    }
+    [SerializeField] private int _currentStage = (int)Stage.StageCount;
+    [SerializeField] private int _currentMap = 0;
+    [SerializeField] private int _lastCharacter = (int)PLAYER.PLAYER_COUNT;
+    [SerializeField] private string _playTime = "00:00:00";
+    [SerializeField] private string _saveTime = "00:00:00";
+    [SerializeField] private string _slotImage = null; // Base64 string for the image
+    [SerializeField] private List<GameEventInfo> _activeEventInfoList = null;
 }

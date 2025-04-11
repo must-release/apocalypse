@@ -18,12 +18,12 @@ MonoBehaviour:
   m_GUID: 6cae98d3a3d171b4985017a2a2d3b22b
   m_SerializeEntries:
   - m_GUID: c35f58781a086b3439416c4601b22c16
-    m_Address: Stage Profiles/PROLOGUE
+    m_Address: Stage Profiles/Prologue
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 95d6dc9d02d38ff4d9407f73094f7b8c
-    m_Address: Stage Slot Image/TEST
+    m_Address: Stage Slot Image/Test
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

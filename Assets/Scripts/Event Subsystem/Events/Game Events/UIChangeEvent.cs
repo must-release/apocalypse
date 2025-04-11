@@ -1,13 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UIEnums;
 using EventEnums;
 using UnityEngine.Assertions;
 
 public class UIChangeEvent : GameEvent
 {
     /****** Public Members ******/
+
+    public override bool ShouldBeSaved() => false;
 
     public void SetEventInfo(UIChangeEventInfo eventInfo)
     {
@@ -21,10 +21,7 @@ public class UIChangeEvent : GameEvent
     {
         Assert.IsTrue(null != activeEventTypeCounts, "activeEventTypeCounts is null.");
 
-        if (0 == activeEventTypeCounts.Count)
-            return true;
-        
-        return false;
+        return true;
     }
 
     // Play change UI event
@@ -53,44 +50,10 @@ public class UIChangeEvent : GameEvent
 
     public override GameEventInfo GetEventInfo() => _info;
 
+    public override GameEventType GetEventType() => GameEventType.UIChange;
+
 
     /****** Private Members ******/
 
     private UIChangeEventInfo _info = null;
-}
-
-
-[CreateAssetMenu(fileName = "NewUIChangeEvent", menuName = "EventInfo/UIChangeEvent", order = 0)]
-public class UIChangeEventInfo : GameEventInfo
-{
-    /****** Public Members ******/
-
-    public BaseUI TargetUI { get { return _targetUI; } private set { _targetUI = value; } }
-
-    public void Initialize(BaseUI targetUI)
-    {
-        Assert.IsTrue( false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed." );
-
-        TargetUI        = targetUI;
-        IsInitialized   = true;
-    }
-
-
-    /****** Protected Members ******/
-
-    protected override void OnEnable()
-    {
-        EventType = GameEventType.UIChange;
-    }
-
-    protected override void OnValidate()
-    {
-        if ( BaseUI.BaseUICount != TargetUI)
-            IsInitialized = true;
-    }
-
-
-    /****** Private Members ******/
-
-    [SerializeField] private BaseUI _targetUI = BaseUI.BaseUICount;
 }

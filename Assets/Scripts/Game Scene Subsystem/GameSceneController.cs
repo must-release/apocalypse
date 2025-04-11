@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 using System.Collections;
 using SceneEnums;
+using UnityEngine.SceneManagement;
 
 /* 
  * SceneConroller initializes maps when starting the StageScene.
@@ -58,4 +58,3 @@ public class GameSceneController : MonoBehaviour
 		return GameSceneModel.Instance.Player;
 	}
 }
-

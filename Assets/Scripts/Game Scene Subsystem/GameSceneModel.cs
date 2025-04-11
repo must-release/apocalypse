@@ -58,9 +58,9 @@ public class GameSceneModel : MonoBehaviour
 
         switch (CurrentScene)
         {
-            case SceneEnums.Scene.Title:
+            case SceneEnums.Scene.TitleScene:
                 return StartCoroutine(LoadTitleAssets());
-            case SceneEnums.Scene.Stage:
+            case SceneEnums.Scene.StageScene:
                 return StartCoroutine(LoadStageAssets());
             default:
                 Debug.Log("Asset Load Fail : Invalid Scene");
@@ -152,9 +152,9 @@ public class GameSceneModel : MonoBehaviour
     {
         switch (loadingScene)
         {
-            case SceneEnums.Scene.Title:
+            case SceneEnums.Scene.TitleScene:
                 return "TitleScene";
-            case SceneEnums.Scene.Stage:
+            case SceneEnums.Scene.StageScene:
                 return "StageScene";
             default:
                 return null;

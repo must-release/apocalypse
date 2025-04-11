@@ -106,7 +106,7 @@ public static class GameEventFactory
         Assert.IsTrue(null != gameEvents && 0 < gameEvents.Count, "GameEvents list is null or empty");
 
         var info = ScriptableObject.CreateInstance<SequentialEventInfo>();
-        info.Initialize(null);
+        info.Initialize(new List<GameEventInfo>());
 
         var evt = GameEventPool<SequentialEvent>.Get(EventHost, "SequentialEvent");
         evt.SetEventInfo(info);

@@ -32,6 +32,36 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 84e400e7552ef4ee38aa15db8b4ace23
+    m_Address: Assets/GameResources/Dev/DevConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 57d99b37d3d9948b48f043d2af7b76f5
+    m_Address: Common/ContinueGameEventInfo
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0a4f1eedcb18a4c74925c1f896da27d4
+    m_Address: Common/GameOverEventInfo
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6298560bde88d44e5a5e648330987e6e
+    m_Address: Common/GameStartEventInfo
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 56abb2212a431453ba8ffb279164e657
+    m_Address: Common/NewGameEventInfo
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 968871fbb43dd4b7ab4094df456107a5
+    m_Address: Common/ReturnToTitleEventInfo
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 0018d54b9f5f74640839669867571db9, type: 2}
   m_SchemaSet:

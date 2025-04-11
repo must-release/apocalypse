@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 using EventEnums;
-using UIEnums;
 using System.Collections.Generic;
 using UnityEngine.Assertions;
 
@@ -9,12 +8,13 @@ public abstract class GameEvent : MonoBehaviour
 {
     /******* Public Members ******/
 
-    public GameEventType EventType => GetEventInfo().EventType;
     public EventStatus Status { get; protected set; } = EventStatus.EventStatusCount;
-    public System.Action OnTerminate;
+    public Action OnTerminate;
     
     public abstract bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts);
     public abstract GameEventInfo GetEventInfo();
+    public abstract GameEventType GetEventType();
+    public abstract bool ShouldBeSaved();
 
     public virtual void PlayEvent()
     {
@@ -31,37 +31,4 @@ public abstract class GameEvent : MonoBehaviour
         Status = EventStatus.Terminated;
         OnTerminate.Invoke();
     }
-}
-
-
-[Serializable]
-public abstract class GameEventInfo : ScriptableObject
-{
-    /****** Public Members ******/
-
-    public GameEventType EventType
-    {
-        get => _eventType;
-        protected set => _eventType = value;
-    }
-
-    public bool IsInitialized
-    {
-        get => _isInitialized;
-        protected set => _isInitialized = value;
-    }
-
-    /****** Protected Members ******/
-
-    // Called when script is loaded
-    protected abstract void OnEnable();
-
-    // Called when property is changed by the inspector
-    protected abstract void OnValidate();
-
-
-    /****** Private Members ******/
-
-    private GameEventType       _eventType       = GameEventType.GameEventTypeCount;
-    private bool                _isInitialized   = false;
 }

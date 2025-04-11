@@ -13,6 +13,8 @@ public class CutsceneEvent : GameEvent
 {
     /****** Public Members ******/
 
+    public override bool ShouldBeSaved() => false;
+
     public void SetEventInfo(CutsceneEventInfo eventInfo)
     {
         Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "Event info is not valid.");
@@ -58,10 +60,9 @@ public class CutsceneEvent : GameEvent
         base.TerminateEvent();
     }
 
-    public override GameEventInfo GetEventInfo()
-    {
-        return _info;
-    }
+    public override GameEventInfo GetEventInfo() => _info;
+
+    public override GameEventType GetEventType() => GameEventType.Cutscene;
 
 
     /****** Private Members ******/
@@ -84,34 +85,4 @@ public class CutsceneEvent : GameEvent
 
         TerminateEvent();
     }
-}
-
-
-[CreateAssetMenu(fileName = "NewCutsceneEvent", menuName = "EventInfo/CutsceneEvent", order = 0)]
-public class CutsceneEventInfo : GameEventInfo
-{
-    /****** Public Members ******/
-
-    public void Initialize()
-    {
-        Assert.IsTrue(false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed.");
-
-        IsInitialized = true;
-    }
-
-
-    /****** Protected Members ******/
-
-    protected override void OnEnable()
-    {
-        EventType = GameEventType.Cutscene;
-    }
-
-    protected override void OnValidate()
-    {
-        IsInitialized = true;
-    }
-
-
-    /****** Private Members ******/
 }

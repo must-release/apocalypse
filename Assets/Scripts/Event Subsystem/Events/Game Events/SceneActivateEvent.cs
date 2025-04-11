@@ -5,6 +5,7 @@ using UIEnums;
 using EventEnums;
 using CharacterEums;
 using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
 
 /*
  * Activate loaded scene
@@ -13,6 +14,8 @@ using UnityEngine.Assertions;
 public class SceneActivateEvent : GameEvent
 {
     /****** Public Members *****/
+
+    public override bool ShouldBeSaved() => false;
 
     public void SetEventInfo(SceneActivateEventInfo eventInfo)
     {
@@ -28,7 +31,7 @@ public class SceneActivateEvent : GameEvent
 
         foreach (GameEventType eventType in activeEventTypeCounts.Keys)
         {
-            if (GameEventType.Story == eventType || GameEventType.Choice == eventType)
+            if (GameEventType.Story == eventType || GameEventType.Choice == eventType || GameEventType.Sequential == eventType)
                 continue;
 
             return false;
@@ -45,14 +48,9 @@ public class SceneActivateEvent : GameEvent
         _eventCoroutine = StartCoroutine(PlayEventCoroutine());
     }
 
-    public override GameEventInfo GetEventInfo()
-    {
-        return _info;
-    }
-
     public override void TerminateEvent()
     {
-        Assert.IsTrue(GameSceneController.Instance.IsSceneLoading, "Should not be terminated when scene is not loaded yet.");
+        Assert.IsTrue(false == GameSceneController.Instance.IsSceneLoading, "Should not be terminated when scene is not loaded yet.");
         Assert.IsTrue(null != _info, "Event info is not set before termination");
 
         if (_eventCoroutine != null)
@@ -69,6 +67,10 @@ public class SceneActivateEvent : GameEvent
         base.TerminateEvent();
     }
 
+    public override GameEventInfo GetEventInfo() => _info;
+    
+    public override GameEventType GetEventType() => GameEventType.SceneActivate;
+
 
     /****** Private Members ******/
 
@@ -80,22 +82,14 @@ public class SceneActivateEvent : GameEvent
     {
         Assert.IsTrue(null != _info, "Event info is not set.");
 
-        // Succeed parent events
-        // if (ParentEvent)
-        // {
-        //     GameEventManager.Instance.SucceedParentEvents(ParentEvent);
-        //     ParentEvent = null;
-        // }
 
         // If scene is still loading
         if (GameSceneController.Instance.IsSceneLoading)
         {
             // If it's not splash screen, change to Loading UI
-            UIController.Instance.GetCurrentUI(out BaseUI baseUI, out _);
-            if (BaseUI.SplashScreen != baseUI)
+            if (SceneEnums.Scene.SplashScreenScene.ToString() != SceneManager.GetActiveScene().name)
                 UIController.Instance.ChangeBaseUI(BaseUI.Loading);
 
-            // Wait for loading to end
             yield return new WaitWhile(() => GameSceneController.Instance.IsSceneLoading);
         }
 
@@ -113,34 +107,4 @@ public class SceneActivateEvent : GameEvent
         // Terminate scene activate event and play next event
         TerminateEvent();
     }
-}
-
-
-[CreateAssetMenu(fileName = "NewSceneActivateEvent", menuName = "EventInfo/SceneActivateEvent", order = 0)]
-public class SceneActivateEventInfo : GameEventInfo
-{
-    /****** Public Members ******/
-
-    public void Initialize()
-    {
-        Assert.IsTrue(false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed.");
-
-        IsInitialized = true;
-    }
-
-
-    /****** Protected Members ******/
-
-    protected override void OnEnable()
-    {
-        EventType = GameEventType.SceneActivate;
-    }
-
-    protected override void OnValidate()
-    {
-        IsInitialized = true;
-    }
-
-
-    /****** Private Members ******/
 }

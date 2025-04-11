@@ -3,6 +3,7 @@ using EventEnums;
 using SceneEnums;
 using UnityEngine.Assertions;
 using System.Collections.Generic;
+using System;
 
 /*
  * Load Scene Event
@@ -11,6 +12,8 @@ using System.Collections.Generic;
 public class SceneLoadEvent : GameEvent
 {
     /****** Public Members ******/
+
+    public override bool ShouldBeSaved() => false;
 
     public void SetEventInfo(SceneLoadEventInfo eventInfo)
     {
@@ -26,7 +29,7 @@ public class SceneLoadEvent : GameEvent
 
         foreach (GameEventType eventType in activeEventTypeCounts.Keys)
         {
-            if (GameEventType.Story == eventType || GameEventType.Choice == eventType)
+            if (GameEventType.Story == eventType || GameEventType.Choice == eventType || GameEventType.Sequential == eventType)
                 continue;
 
             return false;
@@ -60,49 +63,12 @@ public class SceneLoadEvent : GameEvent
         base.TerminateEvent();
     }
 
-    public override GameEventInfo GetEventInfo()
-    {
-        return _info;
-    }
+    public override GameEventInfo GetEventInfo() => _info;
+
+    public override GameEventType GetEventType() => GameEventType.SceneLoad;
 
 
     /****** Private Members ******/
 
     private SceneLoadEventInfo _info = null;
-}
-
-
-[CreateAssetMenu(fileName = "NewSceneLoadEvent", menuName = "EventInfo/SceneLoadEvent", order = 0)]
-public class SceneLoadEventInfo : GameEventInfo
-{
-    /****** Public Members ******/
-
-    public Scene LoadingScene { get { return _loadingScene; } private set { _loadingScene = value; }}
-
-    public void Initialize(Scene loadingScene)
-    {
-        Assert.IsTrue( false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed." );
-
-        LoadingScene    = loadingScene;
-        IsInitialized   = true;
-    }
-
-
-    /****** Protected Members ******/
-
-    protected override void OnEnable()
-    {
-        EventType = GameEventType.SceneLoad;
-    }
-
-    protected override void OnValidate()
-    {
-        if ( Scene.SceneCount != LoadingScene )
-            IsInitialized = true;
-    }
-
-
-    /****** Private Members ******/
-
-    [SerializeField] private Scene _loadingScene = Scene.SceneCount;
 }

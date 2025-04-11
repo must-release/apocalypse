@@ -14,7 +14,7 @@ namespace StageEnums
 
 namespace CharacterEums
 {
-    public enum PLAYER { HERO, HEROINE }
+    public enum PLAYER { HERO, HEROINE, PLAYER_COUNT }
     public enum PLAYER_LOWER_STATE { IDLE, RUNNING, JUMPING, AIMING, CLIMBING, PUSHING, TAGGING, DAMAGED, DEAD, PLAYER_LOWER_STATE_COUNT }
     public enum PLAYER_UPPER_STATE { DISABLED, IDLE, RUNNING, JUMPING, LOOKING_UP, AIMING, ATTACKING, TOP_ATTACKING, AIM_ATTACKING }
     public enum ENEMY_STATE { PATROLLING, CHASING, ATTACKING, DAMAGED, DEAD }
@@ -66,7 +66,7 @@ namespace EventEnums
 
 namespace SceneEnums
 {
-    public enum Scene { Title, Stage, Boss, SceneCount }
+    public enum Scene { SplashScreenScene, TitleScene, StageScene, BossScene, SceneCount }
 }
 
 namespace ScreenEffectEnums
@@ -89,6 +89,8 @@ namespace AssetEnums
 {
     public static class SystemAsset
     {
+        public static readonly string PathPrefix = "Systems/";
+
         public enum AssetName
         {
             // Don't change the sequence
@@ -96,8 +98,6 @@ namespace AssetEnums
             AISystem, StorySystem, UISystem, UtilitySystem, Cameras, GamePlaySystem, GameSceneSystem,
             EventSystem
         }
-
-        public static readonly string PathPrefix = "Systems/";
     }
 
     public static class UIAsset
@@ -121,7 +121,6 @@ namespace AssetEnums
         {
             public const string NewGame         = "Common/NewGameEventInfo";
             public const string GameOver        = "Common/GameOverEventInfo";
-            public const string SplashScreen    = "Common/SplashScreenInfo";
             public const string GameStart       = "Common/GameStartEventInfo";
             public const string ContinueGame    = "Common/ContinueGameEventInfo";
             public const string ReturnToTitle   = "Common/ReturnToTitleEventInfo";
