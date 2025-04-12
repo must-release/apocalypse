@@ -25,7 +25,7 @@ public class CharacterManager : MonoBehaviour
         playerController = player.GetComponent<PlayerController>();
          if(playerController == null)
          {
-            Debug.LogError("Falied to find PlayerController");
+            Debug.LogError("Failed to find PlayerController");
          }
 
         // Set player State
@@ -50,7 +50,7 @@ public class CharacterManager : MonoBehaviour
     {
         if (playerController == null)
         {
-            Debug.LogError("playerController not initialied");
+            Debug.LogError("playerController not initialized");
         }
         playerController.ControlCharacter(controlInfo);
     }
@@ -76,7 +76,7 @@ public class CharacterManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("playerController is not initiallized");
+            Debug.LogError("playerController is not initialized");
             return Vector3.zero;
         }
     }

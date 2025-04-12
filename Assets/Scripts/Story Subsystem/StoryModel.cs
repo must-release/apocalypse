@@ -1,16 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+using System.Xml.Serialization;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Collections;
+using System.IO;
 
 public class StoryModel : MonoBehaviour
 {
-	public static StoryModel Instance { get; private set; }
+    public static StoryModel Instance { get; private set; }
 
     private Queue<StoryBlock> storyBlockQueue = null;
     private Queue<StoryEntry> storyEntryQueue = null;
@@ -22,10 +21,9 @@ public class StoryModel : MonoBehaviour
     public Queue<StoryEntry> StoryEntryBuffer { get; set; }
     public Choice ProcessingChoice { get; set; }
 
-
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
             StoryEntryBuffer = new Queue<StoryEntry>();
@@ -42,22 +40,16 @@ public class StoryModel : MonoBehaviour
         // Load Story Texts
         return StartCoroutine(AsyncLoadStoryText(storyInfo));
     }
+
     IEnumerator AsyncLoadStoryText(string storyInfo)
     {
-        // Set JsonConvert settings
-        var settings = new JsonSerializerSettings
-        {
-            // Add custom converter
-            Converters = new List<JsonConverter> { new StoryEntryConverter() }
-        };
-
         // Load story
         AsyncOperationHandle<TextAsset> story = Addressables.LoadAssetAsync<TextAsset>(storyInfo);
         yield return story;
 
-        // Convert Json file to StoryEntries object
-        string jsonContent = story.Result.text;
-        StoryBlocks storyBlocks = JsonConvert.DeserializeObject<StoryBlocks>(jsonContent, settings);
+        // Convert XML file to StoryBlocks object
+        string xmlContent = story.Result.text;
+        StoryBlocks storyBlocks = DeserializeFromXml<StoryBlocks>(xmlContent);
 
         // Set story info
         SetStoryInfo(storyBlocks.blocks);
@@ -70,7 +62,16 @@ public class StoryModel : MonoBehaviour
         StoryBlock firstBlock = storyBlockQueue.Dequeue(); // Get first story block
         CurrentStoryBranch = firstBlock.branchId; // Set current branch id according to the first story block
         storyEntryQueue = new Queue<StoryEntry>(firstBlock.entries.Skip(ReadEntryCount));
+    }
 
+    // Deserialize XML string to object
+    private T DeserializeFromXml<T>(string xmlContent)
+    {
+        XmlSerializer serializer = new XmlSerializer(typeof(T));
+        using (StringReader reader = new StringReader(xmlContent))
+        {
+            return (T)serializer.Deserialize(reader);
+        }
     }
 
     // Return first story entry
@@ -79,10 +80,26 @@ public class StoryModel : MonoBehaviour
         return storyEntryQueue.Dequeue();
     }
 
+    // Set current branch according to selected choice option
+    public void SetCurrentBranch(string optionText)
+    {
+        if (ProcessingChoice != null && ProcessingChoice.options != null)
+        {
+            foreach (var option in ProcessingChoice.options)
+            {
+                if (option.text.Equals(optionText))
+                {
+                    CurrentStoryBranch = option.branchId;
+                    break;
+                }
+            }
+        }
+    }
+
     // Return next story entry in the queue.
     public StoryEntry GetNextEntry()
     {
-        if(StoryEntryBuffer.Count > 0) // return buffered entry
+        if (StoryEntryBuffer.Count > 0) // return buffered entry
         {
             return StoryEntryBuffer.Dequeue();
         }
@@ -91,7 +108,7 @@ public class StoryModel : MonoBehaviour
             StoryEntry nextEntry = storyEntryQueue.Dequeue();
             readEntryCountBuffer++;
 
-            if (nextEntry.savePoint) // If next entry is save point, update ReadEntryCount
+            if (nextEntry.isSavePoint) // If next entry is save point, update ReadEntryCount
             {
                 ReadEntryCount += readEntryCountBuffer;
                 readEntryCountBuffer = 0;
@@ -101,7 +118,7 @@ public class StoryModel : MonoBehaviour
         }
         else
         {
-            if(storyBlockQueue.Count > 0) // Move to next story block
+            if (storyBlockQueue.Count > 0) // Move to next story block
             {
                 // player read all entries in previous story block
                 StoryBlock nextBlock = storyBlockQueue.Dequeue();
@@ -125,60 +142,9 @@ public class StoryModel : MonoBehaviour
                 // Reset read dialogue number to 0
                 ReadBlockCount = 0;
                 ReadEntryCount = readEntryCountBuffer = 0;
-                
+
                 return null;
             }
-        }
-    }
-
-    // Set current branch according to selected choice option
-    public void SetCurrentBranch(string optionText)
-    {
-        if (ProcessingChoice != null && ProcessingChoice.options != null)
-        {
-            foreach (var option in ProcessingChoice.options)
-            {
-                if (option.text.Equals(optionText))
-                {
-                    CurrentStoryBranch = option.branchId;
-                    break;
-                }
-            }
-        }
-    }
-
-    // Class for converting story json file
-    class StoryEntryConverter : JsonConverter
-    {
-        public override bool CanConvert(Type objectType)
-        {
-            return (objectType == typeof(StoryEntry));
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            JObject jo = JObject.Load(reader);
-            switch (jo["type"].Value<string>())
-            {
-                case "dialogue":
-                    return jo.ToObject<Dialogue>(serializer);
-                case "effect":
-                    return jo.ToObject<Effect>(serializer);
-                case "choice":
-                    return jo.ToObject<Choice>(serializer);
-                default:
-                    throw new Exception("Unknown type");
-            }
-        }
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool CanWrite
-        {
-            get { return false; }
         }
     }
 }
