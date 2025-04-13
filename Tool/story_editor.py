@@ -16,8 +16,13 @@ class StoryEditorApp(tk.Frame):
         super().__init__(master)
         self.master.title("스토리 스크립트 XML 에디터")
         self.pack(fill=tk.BOTH, expand=True)
+        
+        # 최소 창 크기 설정 (예: 800x600)
+        self.master.minsize(800, 600)
+        
+        self.block_drag_start_index = None  # Initialize drag operation attribute
 
-        # 내부 데이터: StoryBlocks 리스트
+        # 내부 데이터
         self.blocks = []  # 각 요소는 {"branchId": str, "entries": list} 형식
         self.selected_block_index = None  # 현재 선택된 블록 인덱스
         self.selected_entry_index = None  # 현재 선택된 엔트리 인덱스
@@ -35,35 +40,33 @@ class StoryEditorApp(tk.Frame):
         self.master.config(menu=menubar)
 
     def create_widgets(self):
-        # 좌측: 블록 리스트
-        left_frame = tk.Frame(self)
-        left_frame.pack(side=tk.LEFT, fill=tk.Y, padx=5, pady=5)
-
-        tk.Label(left_frame, text="스토리 블록").pack()
-        self.block_listbox = tk.Listbox(left_frame, width=30, height=20)
-        self.block_listbox.pack(fill=tk.Y, expand=True)
+        # 좌측: 블록 리스트 패널
+        self.left_frame = tk.Frame(self, bd=2, relief=tk.SUNKEN)
+        self.left_frame.place(relx=0, rely=0, relwidth=0.2, relheight=1)
+        
+        tk.Label(self.left_frame, text="스토리 블록").pack()
+        # Listbox의 width 옵션을 제거하여 부모 프레임에 맞게 확장되도록 함.
+        self.block_listbox = tk.Listbox(self.left_frame, height=20)
+        self.block_listbox.pack(fill=tk.BOTH, expand=True)
         self.block_listbox.bind("<<ListboxSelect>>", self.on_block_select)
-
-        # 블록 순서 변경 버튼
-        block_button_frame = tk.Frame(left_frame)
-        block_button_frame.pack(fill=tk.X, pady=5)
-        tk.Button(block_button_frame, text="▲", command=self.move_block_up).pack(side=tk.LEFT, padx=2)
-        tk.Button(block_button_frame, text="▼", command=self.move_block_down).pack(side=tk.LEFT, padx=2)
-
+        self.block_listbox.bind("<ButtonPress-1>", self.on_block_button_press)
+        self.block_listbox.bind("<B1-Motion>", self.on_block_button_motion)
+        self.block_listbox.bind("<ButtonRelease-1>", self.on_block_button_release)
+        self.block_listbox.bind("<Double-Button-1>", self.edit_block_name)
+        
         # 블록 추가 버튼
-        tk.Button(left_frame, text="블록 추가", command=self.add_block).pack(fill=tk.X, pady=5)
-
-        # 중앙: 엔트리 리스트
-        center_frame = tk.Frame(self)
-        center_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=5, pady=5)
-
-        tk.Label(center_frame, text="엔트리 리스트").pack()
-        self.entry_listbox = tk.Listbox(center_frame, width=40, height=20)
+        tk.Button(self.left_frame, text="블록 추가", command=self.add_block).pack(fill=tk.X, pady=5)
+        
+        # 중앙: 엔트리 리스트 패널
+        self.center_frame = tk.Frame(self, bd=2, relief=tk.SUNKEN)
+        self.center_frame.place(relx=0.2, rely=0, relwidth=0.4, relheight=1)
+        
+        tk.Label(self.center_frame, text="스토리 엔트리").pack()
+        self.entry_listbox = tk.Listbox(self.center_frame, height=20)
         self.entry_listbox.pack(fill=tk.BOTH, expand=True)
         self.entry_listbox.bind("<<ListboxSelect>>", self.on_entry_select)
-
-        # 엔트리 추가 버튼
-        entry_button_frame = tk.Frame(center_frame)
+        
+        entry_button_frame = tk.Frame(self.center_frame)
         entry_button_frame.pack(fill=tk.X, pady=5)
         self.entry_type_var = tk.StringVar(value="Dialogue")
         entry_type_dropdown = ttk.Combobox(
@@ -72,12 +75,13 @@ class StoryEditorApp(tk.Frame):
         )
         entry_type_dropdown.pack(side=tk.LEFT, padx=2)
         tk.Button(entry_button_frame, text="엔트리 추가", command=self.add_entry_to_block).pack(side=tk.LEFT, padx=2)
-
+        
         # 우측: 편집 패널
-        right_frame = tk.Frame(self)
-        right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=5, pady=5)
-        tk.Label(right_frame, text="편집").pack(anchor="w")
-        self.editor_frame = tk.Frame(right_frame)
+        self.right_frame = tk.Frame(self, bd=2, relief=tk.SUNKEN)
+        self.right_frame.place(relx=0.6, rely=0, relwidth=0.4, relheight=1)
+        
+        tk.Label(self.right_frame, text="편집").pack(anchor="w")
+        self.editor_frame = tk.Frame(self.right_frame)
         self.editor_frame.pack(fill=tk.BOTH, expand=True)
 
     # ===== 블록 관련 =====
@@ -100,21 +104,43 @@ class StoryEditorApp(tk.Frame):
             self.selected_block_index = None
             self.entry_listbox.delete(0, tk.END)
 
-    def move_block_up(self):
-        if self.selected_block_index is not None and self.selected_block_index > 0:
-            idx = self.selected_block_index
-            self.blocks[idx], self.blocks[idx - 1] = self.blocks[idx - 1], self.blocks[idx]
-            self.refresh_block_list()
-            self.block_listbox.select_set(idx - 1)
-            self.on_block_select(None)
+    def edit_block_name(self, event):
+        # 더블클릭한 항목의 인덱스를 구합니다.
+        index = self.block_listbox.nearest(event.y)
+        bbox = self.block_listbox.bbox(index)
+        if not bbox:
+            return
+        # 기존 bbox에서 x, y, w, h를 얻지만, Entry의 width는 전체 Listbox 너비로 설정합니다.
+        x, y, w, h = bbox
+        listbox_width = self.block_listbox.winfo_width()
+        # 약간의 여백을 위해 4픽셀 정도를 빼줍니다.
+        entry_width = listbox_width - 4
 
-    def move_block_down(self):
-        if self.selected_block_index is not None and self.selected_block_index < len(self.blocks) - 1:
-            idx = self.selected_block_index
-            self.blocks[idx], self.blocks[idx + 1] = self.blocks[idx + 1], self.blocks[idx]
-            self.refresh_block_list()
-            self.block_listbox.select_set(idx + 1)
-            self.on_block_select(None)
+        # 현재 항목의 텍스트를 가져옵니다.
+        current_text = self.block_listbox.get(index)
+        parts = current_text.split(". ", 1)
+        if len(parts) == 2:
+            block_name = parts[1]
+        else:
+            block_name = current_text
+
+        # Listbox 위에 Entry 위젯을 오버레이 합니다.
+        self.edit_entry = tk.Entry(self.block_listbox)
+        self.edit_entry.insert(0, block_name)
+        # x를 0으로 설정하여 Listbox 전체 너비에 맞게 배치
+        self.edit_entry.place(x=0, y=y, width=entry_width, height=h)
+        self.edit_entry.focus_set()
+        # 엔터키나 포커스 아웃 시 편집 완료 처리
+        self.edit_entry.bind("<Return>", lambda e, idx=index: self.finish_edit_block_name(idx))
+        self.edit_entry.bind("<FocusOut>", lambda e, idx=index: self.finish_edit_block_name(idx))
+
+    def finish_edit_block_name(self, index):
+        new_text = self.edit_entry.get().strip()
+        if new_text:
+            self.blocks[index]["branchId"] = new_text
+        self.edit_entry.destroy()
+        self.edit_entry = None
+        self.refresh_block_list()
 
     # ===== 엔트리 관련 =====
     def refresh_entry_list(self):
@@ -335,6 +361,27 @@ class StoryEditorApp(tk.Frame):
             self.entry_listbox.delete(0, tk.END)
             self.clear_editor()
             messagebox.showinfo("새로 만들기", "새 파일이 생성되었습니다.")
+
+    def on_block_button_press(self, event):
+        # Record the starting index of the drag operation
+        self.block_drag_start_index = self.block_listbox.nearest(event.y)
+
+    def on_block_button_motion(self, event):
+        # Determine the new index as the mouse moves
+        current_index = self.block_listbox.nearest(event.y)
+        if current_index != self.block_drag_start_index:
+            # Swap the blocks in the underlying data list
+            self.blocks[self.block_drag_start_index], self.blocks[current_index] = self.blocks[current_index], self.blocks[self.block_drag_start_index]
+            # Update the drag start index
+            self.block_drag_start_index = current_index
+            # Refresh the listbox to reflect changes
+            self.refresh_block_list()
+            self.block_listbox.select_clear(0, tk.END)
+            self.block_listbox.select_set(current_index)
+
+    def on_block_button_release(self, event):
+        # Reset the drag start index when mouse button is released
+        self.block_drag_start_index = None
 
 # ===== 메인 함수 =====
 def main():
