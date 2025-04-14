@@ -17,7 +17,7 @@ class StoryEditorApp(tk.Frame):
         self.master.title("스토리 스크립트 XML 에디터")
         self.pack(fill=tk.BOTH, expand=True)
         
-        # 최소 창 크기 설정 (예: 800x600)
+        # 최소 창 크기 설정
         self.master.minsize(800, 600)
         
         self.block_drag_start_index = None  # Initialize drag operation attribute
@@ -45,8 +45,7 @@ class StoryEditorApp(tk.Frame):
         self.left_frame.place(relx=0, rely=0, relwidth=0.2, relheight=1)
         
         tk.Label(self.left_frame, text="스토리 블록").pack()
-        # Listbox의 width 옵션을 제거하여 부모 프레임에 맞게 확장되도록 함.
-        self.block_listbox = tk.Listbox(self.left_frame, height=20)
+        self.block_listbox = tk.Listbox(self.left_frame, height=20, exportselection=False)
         self.block_listbox.pack(fill=tk.BOTH, expand=True)
         self.block_listbox.bind("<<ListboxSelect>>", self.on_block_select)
         self.block_listbox.bind("<ButtonPress-1>", self.on_block_button_press)
@@ -62,7 +61,7 @@ class StoryEditorApp(tk.Frame):
         self.center_frame.place(relx=0.2, rely=0, relwidth=0.4, relheight=1)
         
         tk.Label(self.center_frame, text="스토리 엔트리").pack()
-        self.entry_listbox = tk.Listbox(self.center_frame, height=20)
+        self.entry_listbox = tk.Listbox(self.center_frame, height=20, exportselection=False)
         self.entry_listbox.pack(fill=tk.BOTH, expand=True)
         self.entry_listbox.bind("<<ListboxSelect>>", self.on_entry_select)
         
@@ -71,7 +70,7 @@ class StoryEditorApp(tk.Frame):
         self.entry_type_var = tk.StringVar(value="Dialogue")
         entry_type_dropdown = ttk.Combobox(
             entry_button_frame, textvariable=self.entry_type_var, state="readonly",
-            values=["Dialogue", "Effect", "Choice"]
+            values=["Dialogue", "Effect", "Choice"], width=10
         )
         entry_type_dropdown.pack(side=tk.LEFT, padx=2)
         tk.Button(entry_button_frame, text="엔트리 추가", command=self.add_entry_to_block).pack(side=tk.LEFT, padx=2)
@@ -158,7 +157,15 @@ class StoryEditorApp(tk.Frame):
 
         entry_type = self.entry_type_var.get()
         if entry_type == "Dialogue":
-            new_entry = {"type": "Dialogue", "character": "", "text": ""}
+            # 현재 선택된 블록의 엔트리들 중에서, 마지막으로 생성된 Dialogue 엔트리의 character 값을 찾음
+            current_entries = self.blocks[self.selected_block_index]["entries"]
+            default_character = "독백"
+            # 뒤에서부터 순회하며 Dialogue 타입이고, character 값이 비어있지 않으면 사용
+            for e in reversed(current_entries):
+                if e["type"] == "Dialogue" and e.get("character", ""):
+                    default_character = e["character"]
+                    break
+            new_entry = {"type": "Dialogue", "character": default_character, "text": ""}
         elif entry_type == "Effect":
             new_entry = {"type": "Effect", "action": "", "duration": 0}
         elif entry_type == "Choice":
@@ -166,8 +173,19 @@ class StoryEditorApp(tk.Frame):
         else:
             return
 
+        # 새 엔트리를 추가
         self.blocks[self.selected_block_index]["entries"].append(new_entry)
+        # 리스트 박스를 갱신
         self.refresh_entry_list()
+        # 새 엔트리의 인덱스를 계산 (리스트의 마지막 항목)
+        new_index = len(self.blocks[self.selected_block_index]["entries"]) - 1
+        # 선택 상태를 새 엔트리로 설정
+        self.selected_entry_index = new_index
+        self.entry_listbox.select_clear(0, tk.END)
+        self.entry_listbox.select_set(new_index)
+        self.entry_listbox.activate(new_index)
+        # 편집 패널에 새 엔트리의 편집 화면 표시
+        self.show_editor_for_index(new_index)
 
     def on_entry_select(self, event):
         selection = self.entry_listbox.curselection()
@@ -204,29 +222,82 @@ class StoryEditorApp(tk.Frame):
 
         block = self.blocks[self.selected_block_index]
         entry = block["entries"][index]
-        t = entry["type"]
-
-        tk.Label(self.editor_frame, text=f"편집 - {t}").grid(row=0, column=0, columnspan=2, sticky="w")
-        row = 1
-
         self.editor_vars = {}
 
+        # row 0: 엔트리 타입 표시
+        row = 0
+        tk.Label(self.editor_frame, text=entry["type"]).grid(row=row, column=0, columnspan=2, sticky="w")
+        row += 1
+
+        t = entry["type"]
         if t == "Dialogue":
-            tk.Label(self.editor_frame, text="캐릭터:").grid(row=row, column=0, sticky="e")
-            char_var = tk.StringVar(value=entry.get("character", ""))
-            tk.Entry(self.editor_frame, textvariable=char_var).grid(row=row, column=1, sticky="w")
-            self.editor_vars["character"] = char_var
-            row += 1
-
-            tk.Label(self.editor_frame, text="대사:").grid(row=row, column=0, sticky="e")
-            text_var = tk.StringVar(value=entry.get("text", ""))
-            tk.Entry(self.editor_frame, textvariable=text_var, width=40).grid(row=row, column=1, sticky="w")
-            self.editor_vars["text"] = text_var
-            row += 1
-
-        # Add similar logic for "Effect" and "Choice" types...
+            row = self.show_editor_dialogue(entry, row)
+        elif t == "Effect":
+            row = self.show_editor_effect(entry, row)
+        elif t == "Choice":
+            row = self.show_editor_choice(entry, row)
 
         tk.Button(self.editor_frame, text="변경 저장", command=self.save_editor_changes).grid(row=row, column=0, columnspan=2, pady=5)
+
+    def show_editor_dialogue(self, entry, row):
+        tk.Label(self.editor_frame, text="캐릭터:").grid(row=row, column=0, sticky="e")
+        char_var = tk.StringVar(value=entry.get("character", ""))
+        char_combo = ttk.Combobox(self.editor_frame, textvariable=char_var, values=["독백", "나", "소녀", "중개상"], state="readonly", width=5)
+        char_combo.grid(row=row, column=1, sticky="w")
+        self.editor_vars["character"] = char_var
+        row += 1
+
+        tk.Label(self.editor_frame, text="대사:").grid(row=row, column=0, sticky="ne")
+        text_widget = tk.Text(self.editor_frame, height=5, wrap=tk.WORD, width=50)
+        text_widget.grid(row=row, column=1, sticky="w")
+        text_widget.insert("1.0", entry.get("text", ""))
+        self.editor_vars["text"] = text_widget
+        row += 1
+        return row
+
+    def show_editor_effect(self, entry, row):
+        tk.Label(self.editor_frame, text="액션:").grid(row=row, column=0, sticky="e")
+        action_var = tk.StringVar(value=entry.get("action", ""))
+        tk.Entry(self.editor_frame, textvariable=action_var).grid(row=row, column=1, sticky="w")
+        self.editor_vars["action"] = action_var
+        row += 1
+
+        tk.Label(self.editor_frame, text="지속 시간:").grid(row=row, column=0, sticky="e")
+        duration_var = tk.StringVar(value=str(entry.get("duration", 0)))
+        tk.Entry(self.editor_frame, textvariable=duration_var, width=10).grid(row=row, column=1, sticky="w")
+        self.editor_vars["duration"] = duration_var
+        row += 1
+        return row
+
+    def show_editor_choice(self, entry, row):
+        # 이전 대화 편집
+        tk.Label(self.editor_frame, text="이전 대화").grid(row=row, column=0, columnspan=2, sticky="w")
+        row += 1
+        prev = entry.get("prevDialogue", {})
+        tk.Label(self.editor_frame, text="캐릭터:").grid(row=row, column=0, sticky="e")
+        prev_char_var = tk.StringVar(value=prev.get("character", ""))
+        tk.Entry(self.editor_frame, textvariable=prev_char_var).grid(row=row, column=1, sticky="w")
+        self.editor_vars["prev_character"] = prev_char_var
+        row += 1
+
+        tk.Label(self.editor_frame, text="대사:").grid(row=row, column=0, sticky="e")
+        prev_text_var = tk.StringVar(value=prev.get("text", ""))
+        tk.Entry(self.editor_frame, textvariable=prev_text_var, width=40).grid(row=row, column=1, sticky="w")
+        self.editor_vars["prev_text"] = prev_text_var
+        row += 1
+
+        # 옵션 편집 – 각 줄 "BranchId: 옵션 내용" 형태
+        tk.Label(self.editor_frame, text="옵션 (각 줄: BranchId: 옵션 내용)").grid(row=row, column=0, columnspan=2, sticky="w")
+        row += 1
+        options_text = ""
+        for option in entry.get("options", []):
+            options_text += f"{option.get('branchId', '')}: {option.get('text', '')}\n"
+        options_widget = tk.Text(self.editor_frame, height=5, width=40)
+        options_widget.grid(row=row, column=0, columnspan=2, sticky="w")
+        options_widget.insert("1.0", options_text)
+        self.editor_vars["options"] = options_widget
+        row += 1
+        return row
 
     def save_editor_changes(self):
         if self.selected_block_index is None or self.selected_entry_index is None:
@@ -238,9 +309,27 @@ class StoryEditorApp(tk.Frame):
 
         if t == "Dialogue":
             entry["character"] = self.editor_vars["character"].get()
-            entry["text"] = self.editor_vars["text"].get()
-
-        # Add similar logic for "Effect" and "Choice" types...
+            entry["text"] = self.editor_vars["text"].get("1.0", tk.END).strip()
+        elif t == "Effect":
+            entry["action"] = self.editor_vars["action"].get()
+            try:
+                entry["duration"] = int(self.editor_vars["duration"].get())
+            except ValueError:
+                entry["duration"] = 0
+        elif t == "Choice":
+            prev = entry.get("prevDialogue", {})
+            prev["character"] = self.editor_vars["prev_character"].get()
+            prev["text"] = self.editor_vars["prev_text"].get()
+            entry["prevDialogue"] = prev
+            options_str = self.editor_vars["options"].get("1.0", tk.END).strip()
+            options = []
+            if options_str:
+                lines = options_str.splitlines()
+                for line in lines:
+                    if ": " in line:
+                        branch, text = line.split(": ", 1)
+                        options.append({"branchId": branch.strip(), "text": text.strip()})
+            entry["options"] = options
 
         self.refresh_entry_list()
 
