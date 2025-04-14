@@ -36,7 +36,7 @@ public class Effect : StoryEntry
 {
     public Effect() { isSavePoint = false; }
 
-    public Effect(string action, int duration)
+    public Effect(string action, float duration)
     {
         this.action     = action;
         this.duration   = duration;
@@ -47,7 +47,7 @@ public class Effect : StoryEntry
     public string action;
 
     [XmlAttribute("Duration")]
-    public int duration;
+    public float duration;
 }
 
 [System.Serializable]
