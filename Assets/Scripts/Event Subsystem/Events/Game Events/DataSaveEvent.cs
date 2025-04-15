@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Assertions;
 using System;
+using UnityEngine.AddressableAssets;
 
 
 public class DataSaveEvent : GameEvent
@@ -53,7 +54,9 @@ public class DataSaveEvent : GameEvent
             _eventCoroutine = null;
         }
 
-        ScriptableObject.Destroy(_info);
+        // Todo: Release the event info
+        // if (_info.IsFromAddressables) Addressables.Release(_info);
+        // else Destroy(_info);
         _info = null;
 
         GameEventPool<DataSaveEvent>.Release(this);

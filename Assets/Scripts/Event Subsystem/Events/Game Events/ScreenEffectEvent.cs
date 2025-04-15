@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.AddressableAssets;
 
 /*
  * Screen effect event. Must be removed.
@@ -56,7 +57,9 @@ public class ScreenEffectEvent : GameEvent
             _eventCoroutine = null;
         }
 
-        ScriptableObject.Destroy(_info);
+        // Todo: Release the event info
+        // if (_info.IsFromAddressables) Addressables.Release(_info);
+        // else Destroy(_info);
         _info = null;
 
         GameEventPool<ScreenEffectEvent>.Release(this);

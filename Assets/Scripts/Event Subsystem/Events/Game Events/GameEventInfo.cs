@@ -20,6 +20,12 @@ public abstract class GameEventInfo : ScriptableObject
         protected set => _isInitialized = value;
     }
 
+    public bool IsFromAddressables
+    {
+        get => _isFromAddressables;
+        protected set => _isFromAddressables = value;
+    }
+
     /****** Protected Members ******/
 
     // Called when script is loaded
@@ -31,6 +37,8 @@ public abstract class GameEventInfo : ScriptableObject
 
     /****** Private Members ******/
 
-    [SerializeField] private GameEventType      _eventType       = GameEventType.GameEventTypeCount;
-    [SerializeField] private bool               _isInitialized   = false;
+    [SerializeField, HideInInspector] private GameEventType      _eventType       = GameEventType.GameEventTypeCount;
+    [SerializeField, HideInInspector] private bool               _isInitialized   = false;
+    
+    private bool _isFromAddressables = true;
 }

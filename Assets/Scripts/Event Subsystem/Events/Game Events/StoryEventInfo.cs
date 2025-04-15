@@ -26,12 +26,13 @@ public class StoryEventInfo : GameEventInfo
         Assert.IsTrue( 0 <= readEntryCount,             "Read entry count can not be negative." );
         
 
-        StoryStage      = storyStage;
-        StoryNumber     = storyNumber;
-        ReadBlockCount  = readBlockCount;
-        ReadEntryCount  = readEntryCount;
-        IsOnMap         = isOnMap;
-        IsInitialized   = true;
+        StoryStage          = storyStage;
+        StoryNumber         = storyNumber;
+        ReadBlockCount      = readBlockCount;
+        ReadEntryCount      = readEntryCount;
+        IsOnMap             = isOnMap;
+        IsInitialized       = true;
+        IsFromAddressables  = false;
     }
 
 

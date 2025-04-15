@@ -1,8 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UIEnums;
 using EventEnums;
-using System.Collections;
 using UnityEngine.Assertions;
 using System;
 
@@ -16,12 +14,13 @@ public class ChoiceEventInfo : GameEventInfo
     
     public void Initialize(List<string> choices)
     {
-        Assert.IsTrue( false == IsInitialized,  "Duplicate initialization of GameEventInfo is not allowed." );
-        Assert.IsTrue(null != choices,          "Choices cannot be null.");
-        Assert.IsTrue(choices.Count > 0,        "Choice list must have at least one item.");
+        Assert.IsTrue(false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed.");
+        Assert.IsTrue(null != choices, "Choices cannot be null.");
+        Assert.IsTrue(0 < choices.Count, "Choice list must have at least one item.");
 
-        ChoiceList      = choices;
-        IsInitialized   = true;
+        ChoiceList          = choices;
+        IsInitialized       = true;
+        IsFromAddressables  = false;
     }
 
 

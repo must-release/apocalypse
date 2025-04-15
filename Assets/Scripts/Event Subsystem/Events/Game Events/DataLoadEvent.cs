@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using EventEnums;
 using UnityEngine.Assertions;
+using UnityEngine.AddressableAssets;
 
 /*
  * Load Game Data
@@ -27,7 +28,7 @@ public class DataLoadEvent : GameEvent
 
         foreach (GameEventType eventType in activeEventTypeCounts.Keys)
         {
-            if (GameEventType.Story == eventType || GameEventType.Choice == eventType)
+            if (GameEventType.Story == eventType || GameEventType.Choice == eventType || GameEventType.Sequential == eventType)
                 continue;
 
             return false;
@@ -75,7 +76,9 @@ public class DataLoadEvent : GameEvent
     {
         Assert.IsTrue(null != _info, "Event info is not set before termination");
 
-        ScriptableObject.Destroy(_info);
+        // Todo: Release the event info
+        // if (_info.IsFromAddressables) Addressables.Release(_info);
+        // else Destroy(_info);
         _info = null;
 
         GameEventPool<DataLoadEvent>.Release(this);

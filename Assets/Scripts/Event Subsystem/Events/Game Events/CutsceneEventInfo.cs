@@ -13,7 +13,8 @@ public class CutsceneEventInfo : GameEventInfo
     {
         Assert.IsTrue(false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed.");
 
-        IsInitialized = true;
+        IsInitialized       = true;
+        IsFromAddressables  = false;
     }
 
 

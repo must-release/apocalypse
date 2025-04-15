@@ -15,10 +15,11 @@ public class UIChangeEventInfo : GameEventInfo
 
     public void Initialize(BaseUI targetUI)
     {
-        Assert.IsTrue( false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed." );
+        Assert.IsTrue(false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed.");
 
-        TargetUI        = targetUI;
-        IsInitialized   = true;
+        TargetUI            = targetUI;
+        IsInitialized       = true;
+        IsFromAddressables  = false;
     }
 
 

@@ -21,6 +21,7 @@ public class ScreenEffectEventInfo : GameEventInfo
 
         ScreenEffectType    = screenEffectType;
         IsInitialized       = true;
+        IsFromAddressables  = false;
     }
 
 

@@ -19,10 +19,11 @@ public class DataLoadEventInfo : GameEventInfo
         Assert.IsTrue( false == IsInitialized,          "Duplicate initialization of GameEventInfo is not allowed." );
         Assert.IsFalse( isNewGame && isContinueGame,    "It can't be both New Game and Continue Game." );
 
-        SlotNum         = slotNum;
-        IsNewGame       = isNewGame;
-        IsContinueGame  = isContinueGame;
-        IsInitialized   = true;
+        SlotNum             = slotNum;
+        IsNewGame           = isNewGame;
+        IsContinueGame      = isContinueGame;
+        IsInitialized       = true;
+        IsFromAddressables  = false;
     }
 
 
@@ -38,7 +39,7 @@ public class DataLoadEventInfo : GameEventInfo
         if ( _isNewGame && _isContinueGame )
             Debug.LogError("New Game 이면서 Continue Game일 수는 없습니다.");
 
-        if ( 0 < _slotNum )
+        if ( 0 < _slotNum || IsNewGame || IsContinueGame )
             IsInitialized = true;
     }
 

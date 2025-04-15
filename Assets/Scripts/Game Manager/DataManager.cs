@@ -23,7 +23,7 @@ public class DataManager : MonoBehaviour, IAsyncLoadObject
     {
         // Initialize Info
         Stage curStage  = Stage.Test;
-        int curMap      = 3;
+        int curMap      = 1;
         string saveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); // Get current time
         PLAYER lastChar = PLAYER.HEROINE;
         string playTime = "00:00"; 

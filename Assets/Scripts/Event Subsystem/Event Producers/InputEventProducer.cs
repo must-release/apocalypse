@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UIEnums;
 
 
 /*
@@ -85,12 +86,12 @@ public class InputEventProducer : MonoBehaviour
         while (incomingEvents.Count > 0)
         {
             InputEvent input = incomingEvents.Dequeue();
-            // bool result = EventChecker.Instance.CheckEventCompatibility(input);
-            // if (result)
-            // {
-            //     playingEvents.Add(input);
-            // }
-            playingEvents.Add(input);
+            UIController.Instance.GetCurrentUI(out BaseUI baseUI, out SubUI subUI);
+            bool result = input.CheckCompatibility(playingEvents, baseUI, subUI);
+            if (result)
+            {
+                playingEvents.Add(input);
+            }
         }
     }
 

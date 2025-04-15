@@ -2,6 +2,7 @@
 using UnityEngine;
 using EventEnums;
 using UnityEngine.Assertions;
+using UnityEngine.AddressableAssets;
 
 public class UIChangeEvent : GameEvent
 {
@@ -39,8 +40,9 @@ public class UIChangeEvent : GameEvent
     {
         Assert.IsTrue(null != _info, "Event info is not set before termination");
 
-
-        ScriptableObject.Destroy(_info);
+        // Todo: Release the event info
+        // if (_info.IsFromAddressables) Addressables.Release(_info);
+        // else Destroy(_info);
         _info = null;
 
         GameEventPool<UIChangeEvent>.Release(this);

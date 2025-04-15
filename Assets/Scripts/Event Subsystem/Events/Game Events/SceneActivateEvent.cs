@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using UIEnums;
 using EventEnums;
 using CharacterEums;
-using SceneEnums;
 using UnityEngine.Assertions;
-using UnityEngine.SceneManagement;
 
 /*
  * Activate loaded scene
@@ -60,7 +58,9 @@ public class SceneActivateEvent : GameEvent
             _eventCoroutine = null;
         }
 
-        ScriptableObject.Destroy(_info);
+        // Todo: Release the event info
+        // if (_info.IsFromAddressables) Addressables.Release(_info);
+        // else Destroy(_info);
         _info = null;
 
         GameEventPool<SceneActivateEvent>.Release(this);

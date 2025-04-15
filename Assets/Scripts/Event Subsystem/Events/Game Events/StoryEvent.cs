@@ -4,6 +4,7 @@ using EventEnums;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.Assertions;
+using UnityEngine.AddressableAssets;
 
 
 public class StoryEvent : GameEvent
@@ -23,11 +24,8 @@ public class StoryEvent : GameEvent
     public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
     {
         Assert.IsTrue(null != activeEventTypeCounts, "activeEventTypeCounts is null.");
-
-        if (activeEventTypeCounts.Count == 0)
-            return true;
         
-        return false;
+        return true;
     }
 
     public override void PlayEvent()
@@ -62,7 +60,9 @@ public class StoryEvent : GameEvent
             _eventCoroutine = null;
         }
 
-        ScriptableObject.Destroy(_info);
+        // Todo: Release the event info
+        // if (_info.IsFromAddressables) Addressables.Release(_info);
+        // else Destroy(_info);
         _info = null;
 
         GameEventPool<StoryEvent>.Release(this);
@@ -88,7 +88,7 @@ public class StoryEvent : GameEvent
 
         // Start Story
         InputEventProducer.Instance.LockInput(true);
-        string story = "STORY_" + _info.StoryStage.ToString() + '_' + _info.StoryNumber;
+        string story = "StoryScripts/" + _info.StoryStage.ToString() + '_' + _info.StoryNumber;
         yield return StoryController.Instance.StartStory(story, _info.ReadBlockCount, _info.ReadEntryCount);
         InputEventProducer.Instance.LockInput(false);
 

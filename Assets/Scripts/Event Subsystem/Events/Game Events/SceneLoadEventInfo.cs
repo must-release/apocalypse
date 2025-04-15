@@ -17,8 +17,9 @@ public class SceneLoadEventInfo : GameEventInfo
     {
         Assert.IsTrue( false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed." );
 
-        LoadingScene    = loadingScene;
-        IsInitialized   = true;
+        LoadingScene        = loadingScene;
+        IsInitialized       = true;
+        IsFromAddressables  = false;
     }
 
 

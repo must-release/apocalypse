@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using EventEnums;
 using UnityEngine.Assertions;
+using UnityEngine.AddressableAssets;
 
 
 public class SequentialEvent : GameEvent
@@ -56,7 +57,9 @@ public class SequentialEvent : GameEvent
             _eventCoroutine = null;
         }
 
-        ScriptableObject.Destroy(_info);
+        // Todo: Release the event info
+        // if (_info.IsFromAddressables) Addressables.Release(_info);
+        // else Destroy(_info);
         _info = null;
         _eventQueue.Clear();
 

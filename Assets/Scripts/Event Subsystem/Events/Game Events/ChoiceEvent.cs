@@ -4,6 +4,7 @@ using UIEnums;
 using EventEnums;
 using System.Collections;
 using UnityEngine.Assertions;
+using UnityEngine.AddressableAssets;
 
 /*
  * 스토리 진행 중 화면에 선택지를 표시하고, 플레이어가 고른 선택지를 처리하는 ChoiceEvent입니다.
@@ -46,13 +47,15 @@ public class ChoiceEvent : GameEvent
         Assert.IsTrue(null != _info, "Event info is not set before termination");
 
 
-        if ( null != _eventCoroutine )
+        if (null != _eventCoroutine)
         {
             StopCoroutine( _eventCoroutine );
             _eventCoroutine = null;
         }
 
-        ScriptableObject.Destroy( _info );
+        // Todo: Release the event info
+        // if (_info.IsFromAddressables) Addressables.Release(_info);
+        // else Destroy(_info);
         _info = null;
 
         GameEventPool<ChoiceEvent>.Release( this );
@@ -83,7 +86,7 @@ public class ChoiceEvent : GameEvent
         yield return new WaitUntil( () =>  null != UIController.Instance.GetSelectedChoice() ||
             false == GameEventManager.Instance.IsEventTypeActive(GameEventType.Story) );
 
-        if (GameEventManager.Instance.IsEventTypeActive(GameEventType.Story))
+        if (false == GameEventManager.Instance.IsEventTypeActive(GameEventType.Story))
         {
             Debug.LogWarning("ChoiceEvent is terminated due to the termination of StoryEvent.");
             TerminateEvent();

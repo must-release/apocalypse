@@ -1,0 +1,54 @@
+<?xml version="1.0" ?>
+<StoryBlocks>
+  <Block BranchId="common">
+    <Dialogue>
+      <Character>소녀</Character>
+      <Text>앞을 봐! 괴물들이 있어!</Text>
+    </Dialogue>
+    <Dialogue>
+      <Character>소녀</Character>
+      <Text>어떻게 하지? 돌아가야할까?</Text>
+    </Dialogue>
+    <Choice>
+      <PrevDialogue>
+        <Character>소녀</Character>
+        <Text>어떻게 하지? 돌아가야할까?</Text>
+      </PrevDialogue>
+      <Options>
+        <Option BranchId="positive">죽이자.</Option>
+        <Option BranchId="negative">돌아가자.</Option>
+        <Option BranchId="negative">귀찮다.</Option>
+      </Options>
+    </Choice>
+  </Block>
+  <Block BranchId="positive">
+    <Dialogue>
+      <Character>나</Character>
+      <Text>내가 처리할게.</Text>
+    </Dialogue>
+    <Dialogue>
+      <Character>소녀</Character>
+      <Text>좋아! 믿고 있을게!</Text>
+    </Dialogue>
+  </Block>
+  <Block BranchId="negative">
+    <Dialogue>
+      <Character>나</Character>
+      <Text>별로 싸우고 싶지 않아.</Text>
+    </Dialogue>
+    <Dialogue>
+      <Character>소녀</Character>
+      <Text>하지만 우리의 의지와 상관없이 괴물이 이쪽으로 오고 있어!</Text>
+    </Dialogue>
+    <Dialogue>
+      <Character>소녀</Character>
+      <Text>...화이팅!!</Text>
+    </Dialogue>
+  </Block>
+  <Block BranchId="common">
+    <Dialogue>
+      <Character>나</Character>
+      <Text>...그래.</Text>
+    </Dialogue>
+  </Block>
+</StoryBlocks>

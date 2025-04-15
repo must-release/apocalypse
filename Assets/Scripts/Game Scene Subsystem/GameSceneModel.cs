@@ -73,8 +73,8 @@ public class GameSceneModel : MonoBehaviour
     {
         // Get map data
         PlayerManager.Instance.GetStageMapInfo(out string stage, out int map);
-        string map1 = "MAP_" + stage + '_' + map;
-        string map2 = "MAP_" + stage + '_' + (map + 1);
+        string map1 = "Stage/" + stage + '_' + map;
+        string map2 = "Stage/" + stage + '_' + (map + 1);
 
         // Load first map
         yield return StartCoroutine(LoadMap(map1));

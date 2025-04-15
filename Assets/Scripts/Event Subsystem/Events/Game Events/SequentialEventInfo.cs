@@ -17,8 +17,9 @@ public class SequentialEventInfo : GameEventInfo
     {
         Assert.IsTrue(infos != null , "GameEventInfo list is null");
 
-        _eventInfos = infos;
-        IsInitialized = true;
+        _eventInfos         = infos;
+        IsInitialized       = true;
+        IsFromAddressables  = false;
     }
 
 

@@ -18,6 +18,7 @@ public class DataSaveEventInfo : GameEventInfo
 
         SlotNum                 = slotNum;
         IsInitialized           = true;
+        IsFromAddressables      = false;
     }
 
 

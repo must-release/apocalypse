@@ -4,6 +4,7 @@ using UIEnums;
 using EventEnums;
 using UnityEngine.Assertions;
 using System.Collections.Generic;
+using UnityEngine.AddressableAssets;
 
 /*
  * 게임 플레이 도중 컷씬을 재생하는 CutsceneEvent를 관리하는 파일입니다.
@@ -52,7 +53,9 @@ public class CutsceneEvent : GameEvent
             _eventCoroutine = null;
         }
 
-        ScriptableObject.Destroy(_info);
+        // Todo: Release the event info
+        // if (_info.IsFromAddressables) Addressables.Release(_info);
+        // else Destroy(_info);
         _info = null;
 
         GameEventPool<CutsceneEvent>.Release(this);

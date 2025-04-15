@@ -4,6 +4,7 @@ using SceneEnums;
 using UnityEngine.Assertions;
 using System.Collections.Generic;
 using System;
+using UnityEngine.AddressableAssets;
 
 /*
  * Load Scene Event
@@ -55,7 +56,9 @@ public class SceneLoadEvent : GameEvent
     {
         Assert.IsTrue(null != _info, "Event info is not set before termination");
 
-        ScriptableObject.Destroy(_info);
+        // Todo: Release the event info
+        // if (_info.IsFromAddressables) Addressables.Release(_info);
+        // else Destroy(_info);
         _info = null;
 
         GameEventPool<SceneLoadEvent>.Release(this);

@@ -1,66 +1,56 @@
 using System.Collections.Generic;
 using CharacterEums;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class CharacterManager : MonoBehaviour
 {
-    public static CharacterManager Instance;
+    /****** Public Members ******/
 
-    private PlayerController playerController;
-    private Dictionary<string, CharacterBase> actorDictionary;
+    public static CharacterManager Instance { get; private set; }
 
-    private void Awake()
-    {
-        if(Instance == null)
-        {
-            Instance = this;
-            actorDictionary = new Dictionary<string, CharacterBase>();
-        }
-    }
 
-    // Set player character transform, info
     public void SetPlayerCharacter(Transform player, PLAYER who)
     {
         // Find player controller
-        playerController = player.GetComponent<PlayerController>();
-         if(playerController == null)
+         if(player.TryGetComponent(out _playerController) == false)
          {
             Debug.LogError("Failed to find PlayerController");
          }
 
         // Set player State
-        playerController.SetPlayer(who);
+        _playerController.SetPlayer(who);
     }
 
     // Add cutscene actor to the dictionary
     public void SetActorCharacter(string actorName, Transform actor)
     {
         CharacterBase character = actor.GetComponent<CharacterBase>();
-        actorDictionary.Add(actorName, character);
+        _actorDictionary.Add(actorName, character);
     }
 
     // Reset actor dictionary
     public void ClearActorCharacters()
     {
-        actorDictionary.Clear();
+        _actorDictionary.Clear();
     }
 
     // Execute control of the player character
     public void ExecutePlayerControl(ControlInfo controlInfo)
     {
-        if (playerController == null)
-        {
-            Debug.LogError("playerController not initialized");
-        }
-        playerController.ControlCharacter(controlInfo);
+        Assert.IsTrue(null != controlInfo, "Control info is null");
+        Assert.IsTrue(null != _playerController, "Player controller is not initialized");
+
+
+        _playerController.ControlCharacter(controlInfo);
     }
 
     // Execute control of the actor character
     public void ExecuteActorControl(ControlInfo controlInfo, string actorName)
     {
-        if( actorDictionary.ContainsKey(actorName) )
+        if( _actorDictionary.ContainsKey(actorName) )
         {
-            actorDictionary[actorName].ControlCharacter(controlInfo);
+            _actorDictionary[actorName].ControlCharacter(controlInfo);
         }
         else
         {
@@ -70,9 +60,9 @@ public class CharacterManager : MonoBehaviour
 
     public Vector3 GetPlayerPosition()
     {
-        if(playerController != null)
+        if(_playerController != null)
         {
-            return playerController.transform.position;
+            return _playerController.transform.position;
         }
         else
         {
@@ -85,4 +75,23 @@ public class CharacterManager : MonoBehaviour
     {
         GamePlayManager.Instance.ProcessGameOver();
     }
+
+
+    /****** Private Members ******/
+
+    private PlayerController _playerController = null;
+    private Dictionary<string, CharacterBase> _actorDictionary = new Dictionary<string, CharacterBase>();
+
+    private void Awake()
+    {
+        if (null == Instance )
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
 }

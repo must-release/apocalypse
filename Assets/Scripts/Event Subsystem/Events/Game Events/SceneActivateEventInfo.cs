@@ -16,8 +16,9 @@ public class SceneActivateEventInfo : GameEventInfo
     {
         Assert.IsTrue(false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed.");
 
-        ShouldTurnOnLoadingUI = shouldTurnOnLoadingUI;
-        IsInitialized = true;
+        ShouldTurnOnLoadingUI   = shouldTurnOnLoadingUI;
+        IsInitialized           = true;
+        IsFromAddressables      = false;
     }
 
 

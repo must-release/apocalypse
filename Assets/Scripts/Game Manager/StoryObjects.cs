@@ -85,7 +85,9 @@ public class StoryBlock
     [XmlAttribute("BranchId")]
     public string branchId;
 
-    [XmlElement]
+    [XmlElement(typeof(Dialogue))]
+    [XmlElement(typeof(Choice))]
+    [XmlElement(typeof(Effect))]
     public List<StoryEntry> entries;
 }
 
