@@ -1,15 +1,11 @@
 using UnityEngine;
 using CharacterEums;
-using System.Collections;
 
 public abstract class PlayerLowerStateBase : MonoBehaviour
 {
-    protected Transform playerTransform;
-    protected PlayerController playerController;
-    protected Rigidbody2D playerRigid;
+    /****** Public Memebers ******/
 
-    /*** Abstract Funtions ***/
-    public abstract PLAYER_LOWER_STATE GetState();
+    public abstract PlayerLowerState GetStateType();
     public abstract bool DisableUpperBody();
     public abstract void OnEnter();
     public abstract void OnUpdate();
@@ -24,32 +20,39 @@ public abstract class PlayerLowerStateBase : MonoBehaviour
     public abstract void Stop();
     public abstract void Push(bool push);
     public abstract void UpDown(int upDown);
-    protected abstract void StartLowerState();
 
-
-    /*** Virtual Functions ***/
     public virtual void Damaged() 
     {
-        PLAYER_LOWER_STATE nextState;
+        PlayerLowerState nextState = PlayerLowerState.PlayerLowerStateCount;
         
-        if ( 0 < playerController.HitPoint )
-            nextState = PLAYER_LOWER_STATE.DAMAGED;
+        if ( 0 < OwnerController.HitPoint )
+            nextState = PlayerLowerState.Damaged;
         else
-            nextState = PLAYER_LOWER_STATE.DEAD;
+            nextState = PlayerLowerState.Dead;
 
-        playerController.ChangeLowerState(nextState);
+        OwnerController.ChangeLowerState(nextState);
     }
 
 
-    /*** private Function ***/
-    private void Start()
+    /****** Protected Members ******/
+
+    protected Transform         OwnerTransform     => _ownerTransform;
+    protected PlayerController  OwnerController    => _ownerController;
+    protected Rigidbody2D       OwnerRigid         => _ownerRigid;
+
+    protected virtual void Start()
     {
-        playerTransform = transform.parent.parent;
-        playerController = playerTransform.GetComponent<PlayerController>();
-        playerRigid = playerTransform.GetComponent<Rigidbody2D>();
-
-        StartLowerState();
+        _ownerTransform     = transform.parent.parent;
+        _ownerController    = _ownerTransform.GetComponent<PlayerController>();
+        _ownerRigid         = _ownerTransform.GetComponent<Rigidbody2D>();
     }
+
+
+    /****** Private Members ******/
+
+    private Transform           _ownerTransform    = null;
+    private PlayerController    _ownerController   = null;
+    private Rigidbody2D         _ownerRigid        = null;
 }
 
 
@@ -59,10 +62,10 @@ public abstract class PlayerUpperStateBase : MonoBehaviour
     protected PlayerController playerController;
 
     /*** Abstract Funtions ***/
-    public abstract PLAYER_UPPER_STATE GetState();
+    public abstract PlayerUpperState GetStateType();
     public abstract void OnEnter();
     public abstract void OnUpdate();
-    public abstract void OnExit(PLAYER_UPPER_STATE nextState);
+    public abstract void OnExit(PlayerUpperState nextState);
     public abstract void Move();
     public abstract void OnAir();
     public abstract void LookUp(bool lookUp);
@@ -77,7 +80,7 @@ public abstract class PlayerUpperStateBase : MonoBehaviour
     /*** Virtual Functions ***/
     public virtual void Disable() 
     { 
-        playerController.ChangeUpperState(PLAYER_UPPER_STATE.DISABLED); 
+        playerController.ChangeUpperState(PlayerUpperState.Disabled); 
     }
 
     public virtual void Aim(Vector3 aim) 
@@ -85,7 +88,7 @@ public abstract class PlayerUpperStateBase : MonoBehaviour
         if ( Vector3.zero == aim || null == playerController.StandingGround )
             return;
         
-        playerController.ChangeUpperState(PLAYER_UPPER_STATE.AIMING);
+        playerController.ChangeUpperState(PlayerUpperState.Aiming);
     }
 
 

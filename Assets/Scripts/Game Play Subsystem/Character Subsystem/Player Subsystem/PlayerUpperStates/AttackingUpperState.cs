@@ -7,15 +7,15 @@ public class AttackingUpperState : PlayerUpperStateBase
 
     protected override void StartUpperState()
     {
-        playerController.AddUpperState(PLAYER_UPPER_STATE.ATTACKING, this);
+        playerController.RegisterUpperState(PlayerUpperState.ATTACKING, this);
     }
 
-    public override PLAYER_UPPER_STATE GetState() { return PLAYER_UPPER_STATE.ATTACKING; }
+    public override PlayerUpperState GetStateType() { return PlayerUpperState.ATTACKING; }
 
     public override void OnEnter()
     {
         // Execute attack and get attacking motion time
-        attackingTime = playerController.CurrentPlayer.Attack();
+        attackingTime = playerController.CurrentAvatar.Attack();
     }
 
     public override void OnUpdate()
@@ -25,13 +25,13 @@ public class AttackingUpperState : PlayerUpperStateBase
         if (attackingTime < 0)
         {
             if ( null == playerController.StandingGround )
-                playerController.ChangeUpperState(PLAYER_UPPER_STATE.JUMPING);
+                playerController.ChangeUpperState(PlayerUpperState.Jumping);
             else
-                playerController.ChangeUpperState(PLAYER_UPPER_STATE.IDLE);
+                playerController.ChangeUpperState(PlayerUpperState.Idle);
         }
     }
 
-    public override void OnExit(PLAYER_UPPER_STATE _)
+    public override void OnExit(PlayerUpperState _)
     {
         
     }
@@ -39,12 +39,12 @@ public class AttackingUpperState : PlayerUpperStateBase
     public override void LookUp(bool lookUp) 
     { 
         if ( lookUp ) 
-            playerController.ChangeUpperState(PLAYER_UPPER_STATE.LOOKING_UP);
+            playerController.ChangeUpperState(PlayerUpperState.LookingUp);
     }
     
     public override void Attack() 
     { 
-        playerController.ChangeUpperState(PLAYER_UPPER_STATE.ATTACKING); 
+        playerController.ChangeUpperState(PlayerUpperState.ATTACKING); 
     }
 
 

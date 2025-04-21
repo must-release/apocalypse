@@ -15,10 +15,10 @@ public abstract class EnemyStateBase : MonoBehaviour
 
 
     /*** Abstract Funtions ***/
-    public abstract ENEMY_STATE GetState();
+    public abstract EnemyState GetState();
     public abstract void OnEnter();
     public abstract void OnUpdate();
-    public abstract void OnExit(ENEMY_STATE nextState);
+    public abstract void OnExit(EnemyState nextState);
     public abstract void DetectedPlayer();
     protected abstract void StartEnemyState();
 
@@ -27,9 +27,9 @@ public abstract class EnemyStateBase : MonoBehaviour
     public virtual void OnDamaged() 
     { 
         if( 0 < enemyController.HitPoint )
-            enemyController.ChangeState(ENEMY_STATE.DAMAGED);
+            enemyController.ChangeState(EnemyState.Damaged);
         else
-            enemyController.ChangeState(ENEMY_STATE.DEAD);
+            enemyController.ChangeState(EnemyState.Dead);
     }
 
 

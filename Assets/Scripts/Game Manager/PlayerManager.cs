@@ -9,7 +9,7 @@ public class PlayerManager : MonoBehaviour
     // Current data of the player
     public Stage Stage { get; private set; }
     public int Map { get; private set; }
-    public PLAYER Character { get; private set; }
+    public PlayerType Character { get; private set; }
     
 
     private void Awake()
@@ -20,14 +20,14 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public void SetPlayerData(Stage stage, int map, PLAYER character)
+    public void SetPlayerData(Stage stage, int map, PlayerType character)
     {
         Stage = stage;
         Map = map;
         Character = character;
     }
 
-    public void GetPlayerData(out Stage stage, out int map, out PLAYER character)
+    public void GetPlayerData(out Stage stage, out int map, out PlayerType character)
     {
         stage = Stage;
         map = Map;

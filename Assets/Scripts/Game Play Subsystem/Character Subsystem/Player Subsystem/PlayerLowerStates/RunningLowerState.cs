@@ -7,23 +7,25 @@ public class RunningLowerState : PlayerLowerStateBase
 {
     private int movingDirection;
 
-    protected override void StartLowerState()
+    protected override void Start()
     {
-        playerController.AddLowerState(PLAYER_LOWER_STATE.RUNNING, this);
+        base.Start();
+
+        OwnerController.RegisterLowerState(PlayerLowerState.Running, this);
     }
 
-    public override PLAYER_LOWER_STATE GetState() { return PLAYER_LOWER_STATE.RUNNING; }
+    public override PlayerLowerState GetStateType() { return PlayerLowerState.Running; }
 
     public override bool DisableUpperBody() { return false; }
 
     public override void OnEnter()
     {
-        if ( 0 < playerTransform.localScale.x ) 
+        if ( 0 < OwnerTransform.localScale.x ) 
             movingDirection = 1;
         else 
             movingDirection = -1;
 
-        playerController.LowerAnimator.SetBool("Move", true);
+        OwnerController.LowerAnimator.PlayRunning();
     }
 
     public override void OnUpdate()
@@ -39,48 +41,48 @@ public class RunningLowerState : PlayerLowerStateBase
     public override void Move(int move)
     {
         // move player
-        playerRigid.velocity = new Vector2(move * playerController.MovingSpeed, playerRigid.velocity.y);
+        OwnerRigid.velocity = new Vector2(move * OwnerController.MovingSpeed, OwnerRigid.velocity.y);
 
         // Set direction
         if (move != movingDirection)
         {
-            playerTransform.localScale = new Vector3(-playerTransform.localScale.x, 
-                playerTransform.localScale.y, playerTransform.localScale.z);
+            OwnerTransform.localScale = new Vector3(-OwnerTransform.localScale.x, 
+                OwnerTransform.localScale.y, OwnerTransform.localScale.z);
             movingDirection = move;
         }
     }
 
     public override void Stop()
     {
-        playerController.ChangeLowerState(PLAYER_LOWER_STATE.IDLE);
+        OwnerController.ChangeLowerState(PlayerLowerState.Idle);
     }
 
     public override void Jump()
     {
-        playerRigid.velocity = new Vector2(playerRigid.velocity.x, playerController.JumpingSpeed);
-        playerController.ChangeLowerState(PLAYER_LOWER_STATE.JUMPING);
+        OwnerRigid.velocity = new Vector2(OwnerRigid.velocity.x, OwnerController.JumpingSpeed);
+        OwnerController.ChangeLowerState(PlayerLowerState.Jumping);
     }
 
     public override void OnAir()
     {
-        playerController.ChangeLowerState(PLAYER_LOWER_STATE.JUMPING);
+        OwnerController.ChangeLowerState(PlayerLowerState.Jumping);
     }
 
     public override void Aim(bool isAiming)
     {
         if ( isAiming )
-            playerController.ChangeLowerState(PLAYER_LOWER_STATE.AIMING);
+            OwnerController.ChangeLowerState(PlayerLowerState.Aiming);
     }
 
     public override void Tag()
     {
-        playerController.ChangeLowerState(PLAYER_LOWER_STATE.TAGGING);
+        OwnerController.ChangeLowerState(PlayerLowerState.Tagging);
     }
 
     public override void Climb(bool climb) 
     {
         if ( climb ) 
-            playerController.ChangeLowerState(PLAYER_LOWER_STATE.CLIMBING);
+            OwnerController.ChangeLowerState(PlayerLowerState.Climbing);
     }
 
     public override void OnGround() { return; }

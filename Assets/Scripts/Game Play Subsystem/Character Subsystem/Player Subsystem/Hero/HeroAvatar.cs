@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using WeaponEnums;
 
-public class HeroController : MonoBehaviour, IPlayer
+public class HeroAvatar : MonoBehaviour, IPlayerAvatar
 {
     public bool IsLoaded {get; set;}
     private PlayerController playerController;

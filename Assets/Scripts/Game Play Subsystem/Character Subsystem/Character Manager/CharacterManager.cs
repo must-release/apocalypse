@@ -10,7 +10,7 @@ public class CharacterManager : MonoBehaviour
     public static CharacterManager Instance { get; private set; }
 
 
-    public void SetPlayerCharacter(Transform player, PLAYER who)
+    public void SetPlayerCharacter(Transform player, PlayerType who)
     {
         // Find player controller
          if(player.TryGetComponent(out _playerController) == false)
@@ -19,7 +19,7 @@ public class CharacterManager : MonoBehaviour
          }
 
         // Set player State
-        _playerController.SetPlayer(who);
+        _playerController.InitializePlayer(who);
     }
 
     // Add cutscene actor to the dictionary

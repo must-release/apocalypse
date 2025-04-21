@@ -9,7 +9,7 @@ public class AttackingState : EnemyStateBase
 
     }
 
-    public override ENEMY_STATE GetState() { return ENEMY_STATE.ATTACKING; }
+    public override EnemyState GetState() { return EnemyState.Attacking; }
 
     public override void OnEnter()
     {
@@ -19,10 +19,10 @@ public class AttackingState : EnemyStateBase
     public override void OnUpdate()
     {
         if( enemyController.Attack() )
-            enemyController.ChangeState(ENEMY_STATE.CHASING);
+            enemyController.ChangeState(EnemyState.Chasing);
     }
 
-    public override void OnExit(ENEMY_STATE _)
+    public override void OnExit(EnemyState _)
     {
 
     }

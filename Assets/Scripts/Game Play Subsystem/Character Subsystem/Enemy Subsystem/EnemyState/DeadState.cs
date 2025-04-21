@@ -11,7 +11,7 @@ public class DeadState : EnemyStateBase
         enemyColor = Color.white;
     }
 
-    public override ENEMY_STATE GetState() { return ENEMY_STATE.DEAD; }
+    public override EnemyState GetState() { return EnemyState.Dead; }
 
     public override void OnEnter()
     {
@@ -30,7 +30,7 @@ public class DeadState : EnemyStateBase
             enemyController.gameObject.SetActive(false);
     }
 
-    public override void OnExit(ENEMY_STATE _)
+    public override void OnExit(EnemyState _)
     {
         enemyController.SetDefaultDamageArea(true);
     }

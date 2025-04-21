@@ -5,10 +5,10 @@ public class DisabledUpperState : PlayerUpperStateBase
 {
     protected override void StartUpperState()
     {
-        playerController.AddUpperState(PLAYER_UPPER_STATE.DISABLED, this);
+        playerController.RegisterUpperState(PlayerUpperState.Disabled, this);
     }
 
-    public override PLAYER_UPPER_STATE GetState() { return PLAYER_UPPER_STATE.DISABLED; }
+    public override PlayerUpperState GetStateType() { return PlayerUpperState.Disabled; }
 
     public override void OnEnter()
     {
@@ -18,16 +18,16 @@ public class DisabledUpperState : PlayerUpperStateBase
     {
 
     }
-    public override void OnExit(PLAYER_UPPER_STATE _)
+    public override void OnExit(PlayerUpperState _)
     {
 
     }
     public override void Enable()
     {
         if( playerController.StandingGround )
-            playerController.ChangeUpperState(PLAYER_UPPER_STATE.IDLE);
+            playerController.ChangeUpperState(PlayerUpperState.Idle);
         else
-            playerController.ChangeUpperState(PLAYER_UPPER_STATE.JUMPING);
+            playerController.ChangeUpperState(PlayerUpperState.Jumping);
     }
 
 

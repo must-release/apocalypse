@@ -7,20 +7,22 @@ public class DeadLowerState : PlayerLowerStateBase
     private const float ANIMATION_PLAYTIME = 2f;
     private Coroutine deadStateCoroutine;
 
-    protected override void StartLowerState()
-    {
-        playerController.AddLowerState(PLAYER_LOWER_STATE.DEAD, this);
+    protected override void Start()
+    {   
+        base.Start();
+
+        OwnerController.RegisterLowerState(PlayerLowerState.Dead, this);
 
         deadStateCoroutine = null;
     }
 
-    public override PLAYER_LOWER_STATE GetState() { return PLAYER_LOWER_STATE.DEAD; }
+    public override PlayerLowerState GetStateType() { return PlayerLowerState.Dead; }
 
     public override bool DisableUpperBody() { return true; }
 
     public override void OnEnter()
     {
-        playerRigid.velocity = Vector2.zero;
+        OwnerRigid.velocity = Vector2.zero;
         deadStateCoroutine = StartCoroutine(ProcessDeadState());
     }
 

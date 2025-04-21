@@ -14,10 +14,10 @@ namespace StageEnums
 
 namespace CharacterEums
 {
-    public enum PLAYER { HERO, HEROINE, PLAYER_COUNT }
-    public enum PLAYER_LOWER_STATE { IDLE, RUNNING, JUMPING, AIMING, CLIMBING, PUSHING, TAGGING, DAMAGED, DEAD, PLAYER_LOWER_STATE_COUNT }
-    public enum PLAYER_UPPER_STATE { DISABLED, IDLE, RUNNING, JUMPING, LOOKING_UP, AIMING, ATTACKING, TOP_ATTACKING, AIM_ATTACKING }
-    public enum ENEMY_STATE { PATROLLING, CHASING, ATTACKING, DAMAGED, DEAD }
+    public enum PlayerType { Hero, Heroine, PlayerCount }
+    public enum PlayerLowerState { Idle, Running, Jumping, Aiming, Climbing, Pushing, Tagging, Damaged, Dead, PlayerLowerStateCount }
+    public enum PlayerUpperState { Disabled, Idle, Running, Jumping, LookingUp, Aiming, ATTACKING, TopAttacking, AimAttacking, PlayerUpperStateCount }
+    public enum EnemyState { Patrolling, Chasing, Attacking, Damaged, Dead, EnemyStateCount }
 
 }
 

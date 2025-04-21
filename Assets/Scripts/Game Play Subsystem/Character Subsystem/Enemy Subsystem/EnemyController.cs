@@ -38,7 +38,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
     protected float attackRange;
 
     private EnemyStateBase currentState;
-    private Dictionary<ENEMY_STATE, EnemyStateBase> enemyStateDictionary;
+    private Dictionary<EnemyState, EnemyStateBase> enemyStateDictionary;
     private TerrainChecker terrainChecker;
     private PlayerDetector playerDetector;
     private DamageArea defalutDamageArea;
@@ -94,7 +94,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
     // Get enemyState prefab and set state components 
     IEnumerator SetStateDictionary()
     {
-        enemyStateDictionary = new Dictionary<ENEMY_STATE, EnemyStateBase>();
+        enemyStateDictionary = new Dictionary<EnemyState, EnemyStateBase>();
 
         AsyncOperationHandle<GameObject> enemyState = Addressables.InstantiateAsync("Enemy State", transform);
         yield return enemyState;
@@ -107,7 +107,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
                 if (!enemyStateDictionary.ContainsKey(state.GetState())) 
                     enemyStateDictionary[state.GetState()] = state;
             }
-            currentState = enemyStateDictionary[ENEMY_STATE.PATROLLING];
+            currentState = enemyStateDictionary[EnemyState.Patrolling];
         }
         else
         {
@@ -193,7 +193,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
     // Check if enemy can go ahead
     protected bool CanMoveAhead() { return terrainChecker.CanMoveAhead(); }
 
-    public void ChangeState(ENEMY_STATE state)
+    public void ChangeState(EnemyState state)
     {
         currentState.OnExit(state);
         currentState = enemyStateDictionary[state];

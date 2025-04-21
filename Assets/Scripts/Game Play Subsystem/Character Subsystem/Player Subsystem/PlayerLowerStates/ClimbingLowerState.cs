@@ -9,22 +9,24 @@ public class ClimbingLowerState : PlayerLowerStateBase
     private float climbUpHeight;
     private float climbDownHeight;
     
-    protected override void StartLowerState()
+    protected override void Start()
     {
-        playerController.AddLowerState(PLAYER_LOWER_STATE.CLIMBING, this);
+        base.Start();
 
-        climbingSpeed = playerController.MovingSpeed;
+        OwnerController.RegisterLowerState(PlayerLowerState.Climbing, this);
+
+        climbingSpeed = OwnerController.MovingSpeed;
         climbUpHeight = 0.1f;
-        climbDownHeight = playerController.CharacterHeight / 2 + 0.2f;
+        climbDownHeight = OwnerController.CharacterHeight / 2 + 0.2f;
     }
 
-    public override PLAYER_LOWER_STATE GetState() { return PLAYER_LOWER_STATE.CLIMBING; }
+    public override PlayerLowerState GetStateType() { return PlayerLowerState.Climbing; }
 
     public override bool DisableUpperBody() { return true; }
 
     public override void OnEnter()
     {
-        playerRigid.gravityScale = 0;
+        OwnerRigid.gravityScale = 0;
 
         MoveNearToClimbingObject();
     }
@@ -36,32 +38,32 @@ public class ClimbingLowerState : PlayerLowerStateBase
 
     public override void OnExit()
     {
-        playerRigid.gravityScale = playerController.Gravity;
+        OwnerRigid.gravityScale = OwnerController.Gravity;
     }
 
 
     public override void UpDown(int upDown)
     {
-        playerRigid.velocity =  Vector2.up * upDown * climbingSpeed;
+        OwnerRigid.velocity =  Vector2.up * upDown * climbingSpeed;
     }
     
     public override void Climb(bool climb)
     {
         if(!climb)
         {
-            if(playerRigid.velocity.y > 0)
+            if(OwnerRigid.velocity.y > 0)
             {
                 // Move player on the upside of the ladder
-                playerTransform.position += Vector3.up * playerController.CharacterHeight / 2;
-                playerController.ChangeLowerState(PLAYER_LOWER_STATE.IDLE);
+                OwnerTransform.position += Vector3.up * OwnerController.CharacterHeight / 2;
+                OwnerController.ChangeLowerState(PlayerLowerState.Idle);
             }
             else
             {
                 // Climbed down the climing object
-                if(playerController.StandingGround)
-                    playerController.ChangeLowerState(PLAYER_LOWER_STATE.IDLE);
+                if(OwnerController.StandingGround)
+                    OwnerController.ChangeLowerState(PlayerLowerState.Idle);
                 else
-                    playerController.ChangeLowerState(PLAYER_LOWER_STATE.JUMPING);
+                    OwnerController.ChangeLowerState(PlayerLowerState.Jumping);
             }
         }
     }
@@ -69,27 +71,27 @@ public class ClimbingLowerState : PlayerLowerStateBase
     public override void Jump()
     {
         // jump player
-        playerRigid.velocity = new Vector2(playerRigid.velocity.x, playerController.JumpingSpeed/3);
+        OwnerRigid.velocity = new Vector2(OwnerRigid.velocity.x, OwnerController.JumpingSpeed/3);
 
-        playerController.ChangeLowerState(PLAYER_LOWER_STATE.JUMPING);
+        OwnerController.ChangeLowerState(PlayerLowerState.Jumping);
     }
 
     // Move character near the climbing object
     private void MoveNearToClimbingObject()
     {
-        Transform climbingObject = playerController.CurrentControlInfo.climbingObject.transform;
+        Transform climbingObject = OwnerController.CurrentControlInfo.climbingObject.transform;
 
         // Climbing up
-        if(playerController.CurrentControlInfo.upDown > 0)
+        if(OwnerController.CurrentControlInfo.upDown > 0)
         {
-            playerTransform.position = new Vector3(climbingObject.position.x,
-                playerTransform.position.y + climbUpHeight, playerTransform.position.z);
+            OwnerTransform.position = new Vector3(climbingObject.position.x,
+                OwnerTransform.position.y + climbUpHeight, OwnerTransform.position.z);
         }
         // Climbing down
         else
         {
-            playerTransform.position = new Vector3(climbingObject.position.x,
-                playerTransform.position.y - climbDownHeight, playerTransform.position.z);
+            OwnerTransform.position = new Vector3(climbingObject.position.x,
+                OwnerTransform.position.y - climbDownHeight, OwnerTransform.position.z);
         }
     }
 

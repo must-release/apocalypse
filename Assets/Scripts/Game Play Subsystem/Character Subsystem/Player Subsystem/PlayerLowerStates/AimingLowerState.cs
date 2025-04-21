@@ -5,18 +5,20 @@ using UnityEngine;
 
 public class AimingLowerState : PlayerLowerStateBase
 {
-    protected override void StartLowerState()
+    protected override void Start()
     {
-        playerController.AddLowerState(PLAYER_LOWER_STATE.AIMING, this);
+        base.Start();
+
+        OwnerController.RegisterLowerState(PlayerLowerState.Aiming, this);
     }
 
-    public override PLAYER_LOWER_STATE GetState() { return PLAYER_LOWER_STATE.AIMING; }
+    public override PlayerLowerState GetStateType() { return PlayerLowerState.Aiming; }
 
     public override bool DisableUpperBody() { return false; }
 
     public override void OnEnter()
     {
-        playerRigid.velocity = Vector2.zero;
+        OwnerRigid.velocity = Vector2.zero;
     }
 
     public override void OnUpdate()
@@ -32,12 +34,12 @@ public class AimingLowerState : PlayerLowerStateBase
     public override void Aim(bool isAiming) 
     { 
         if(!isAiming) 
-            playerController.ChangeLowerState(PLAYER_LOWER_STATE.IDLE);
+            OwnerController.ChangeLowerState(PlayerLowerState.Idle);
     }
 
     public override void OnAir() 
     {
-        playerController.ChangeLowerState(PLAYER_LOWER_STATE.JUMPING); 
+        OwnerController.ChangeLowerState(PlayerLowerState.Jumping); 
     }
     
     public override void Move(int move) { return; }

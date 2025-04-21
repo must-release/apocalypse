@@ -9,12 +9,14 @@ public class DamagedLowerState : PlayerLowerStateBase
     private const float KNOCK_BACK_SPEED = 15f;
     private float sternedTime;
 
-    protected override void StartLowerState()
+    protected override void Start()
     {
-        playerController.AddLowerState(PLAYER_LOWER_STATE.DAMAGED, this);
+        base.Start();
+
+        OwnerController.RegisterLowerState(PlayerLowerState.Damaged, this);
     }
 
-    public override PLAYER_LOWER_STATE GetState() { return PLAYER_LOWER_STATE.DAMAGED; }
+    public override PlayerLowerState GetStateType() { return PlayerLowerState.Damaged; }
 
     public override bool DisableUpperBody() { return true; }
 
@@ -30,10 +32,10 @@ public class DamagedLowerState : PlayerLowerStateBase
         sternedTime += Time.deltaTime;
         if(sternedTime > STERN_TIME)
         {
-            if (playerController.StandingGround)
+            if (OwnerController.StandingGround)
             {
-                playerController.ChangeLowerState(PLAYER_LOWER_STATE.IDLE);
-                playerRigid.velocity = Vector2.zero;
+                OwnerController.ChangeLowerState(PlayerLowerState.Idle);
+                OwnerRigid.velocity = Vector2.zero;
             }
         }
     }
@@ -45,10 +47,10 @@ public class DamagedLowerState : PlayerLowerStateBase
 
     private void KnockBack()
     {
-        Vector3 attackerPos = playerController.RecentDamagedInfo.attacker.transform.position;
-        int direction = playerController.transform.position.x > attackerPos.x ? 1 : -1;
+        Vector3 attackerPos = OwnerController.RecentDamagedInfo.attacker.transform.position;
+        int direction = OwnerController.transform.position.x > attackerPos.x ? 1 : -1;
 
-        playerRigid.velocity = new Vector2(direction * KNOCK_BACK_SPEED, KNOCK_BACK_SPEED);
+        OwnerRigid.velocity = new Vector2(direction * KNOCK_BACK_SPEED, KNOCK_BACK_SPEED);
     }
 
     public override void Jump() { return; }

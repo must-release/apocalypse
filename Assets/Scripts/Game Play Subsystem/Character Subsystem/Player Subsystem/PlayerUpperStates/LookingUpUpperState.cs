@@ -5,15 +5,15 @@ public class LookingUpUpperState : PlayerUpperStateBase
 {
     protected override void StartUpperState()
     {
-        playerController.AddUpperState(PLAYER_UPPER_STATE.LOOKING_UP, this);
+        playerController.RegisterUpperState(PlayerUpperState.LookingUp, this);
     }
 
-    public override PLAYER_UPPER_STATE GetState() { return PLAYER_UPPER_STATE.LOOKING_UP; }
+    public override PlayerUpperState GetStateType() { return PlayerUpperState.LookingUp; }
 
     public override void OnEnter()
     {
         // Rotate upper body by 90 degree
-        playerController.CurrentPlayer.RotateUpperBody(90);
+        playerController.CurrentAvatar.RotateUpperBody(90);
     }
 
     public override void OnUpdate()
@@ -21,13 +21,13 @@ public class LookingUpUpperState : PlayerUpperStateBase
 
     }
 
-    public override void OnExit(PLAYER_UPPER_STATE nextState)
+    public override void OnExit(PlayerUpperState nextState)
     {
         // Recover upper body rotation when not attacking
-        if (PLAYER_UPPER_STATE.TOP_ATTACKING == nextState)
+        if (PlayerUpperState.TopAttacking == nextState)
             return;
         
-        playerController.CurrentPlayer.RotateUpperBody(0);
+        playerController.CurrentAvatar.RotateUpperBody(0);
     }
 
     public override void LookUp(bool lookUp) 
@@ -35,14 +35,14 @@ public class LookingUpUpperState : PlayerUpperStateBase
         if( lookUp ) return;
 
         if ( playerController.StandingGround )
-            playerController.ChangeUpperState(PLAYER_UPPER_STATE.IDLE);
+            playerController.ChangeUpperState(PlayerUpperState.Idle);
         else
-            playerController.ChangeUpperState(PLAYER_UPPER_STATE.JUMPING);
+            playerController.ChangeUpperState(PlayerUpperState.Jumping);
     }
 
     public override void Attack() 
     { 
-        playerController.ChangeUpperState(PLAYER_UPPER_STATE.TOP_ATTACKING); 
+        playerController.ChangeUpperState(PlayerUpperState.TopAttacking); 
     }
 
 

@@ -128,7 +128,7 @@ public class GameSceneModel : MonoBehaviour
     // Load player prefab
     IEnumerator LoadPlayer()
     {
-        AsyncOperationHandle<GameObject> player = Addressables.InstantiateAsync("Characters/Player");
+        AsyncOperationHandle<GameObject> player = Addressables.InstantiateAsync("Character/Player");
         yield return player;
         if (player.Status == AsyncOperationStatus.Succeeded)
         {

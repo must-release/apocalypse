@@ -8,9 +8,11 @@ public class TaggingLowerState : PlayerLowerStateBase
     private float popping;
     private bool isOnAir;
 
-    protected override void StartLowerState()
+    protected override void Start()
     {
-        playerController.AddLowerState(PLAYER_LOWER_STATE.TAGGING, this);
+        base.Start();
+        
+        OwnerController.RegisterLowerState(PlayerLowerState.Tagging, this);
 
         taggingTime = 0.2f;
         time = 0f;
@@ -18,17 +20,17 @@ public class TaggingLowerState : PlayerLowerStateBase
         isOnAir = false;
     }
 
-    public override PLAYER_LOWER_STATE GetState() { return PLAYER_LOWER_STATE.TAGGING; }
+    public override PlayerLowerState GetStateType() { return PlayerLowerState.Tagging; }
 
     public override bool DisableUpperBody() { return true; }
 
     public override void OnEnter()
     {
         // Stop player
-        playerRigid.velocity = Vector2.up * popping;
+        OwnerRigid.velocity = Vector2.up * popping;
 
         // Change player character
-        playerController.ChangeCharacter(playerController.CurrentCharacter == PLAYER.HERO ? PLAYER.HEROINE : PLAYER.HERO);
+        OwnerController.ChangePlayer(OwnerController.CurrentPlayerType == PlayerType.Hero ? PlayerType.Heroine : PlayerType.Hero);
     
         // Reset Time
         time = 0f;
@@ -40,9 +42,9 @@ public class TaggingLowerState : PlayerLowerStateBase
         if (time > taggingTime)
         {
             if ( isOnAir )
-                playerController.ChangeLowerState(PLAYER_LOWER_STATE.JUMPING);
+                OwnerController.ChangeLowerState(PlayerLowerState.Jumping);
             else
-                playerController.ChangeLowerState(PLAYER_LOWER_STATE.IDLE);
+                OwnerController.ChangeLowerState(PlayerLowerState.Idle);
         }
     }
 

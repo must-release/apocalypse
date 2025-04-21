@@ -12,7 +12,7 @@ public class UserData
 
     public Stage    CurrentStage { get => (Stage)_currentStage; set => _currentStage = (int)value; }
     public int      CurrentMap { get => _currentMap; set => _currentMap = value; }
-    public PLAYER   LastCharacter { get => (PLAYER)_lastCharacter; set => _lastCharacter = (int)value; }
+    public PlayerType   LastCharacter { get => (PlayerType)_lastCharacter; set => _lastCharacter = (int)value; }
     public string   PlayTime { get => _playTime; set => _playTime = value; }
     public string   SaveTime { get => _saveTime; set => _saveTime = value; }
     public List<GameEventInfo> ActiveEventInfoList { get => _activeEventInfoList; set => _activeEventInfoList = value; }
@@ -44,7 +44,7 @@ public class UserData
         }
     }
 
-    public UserData(Stage curStage, int curMap, List<GameEventInfo> infoList, PLAYER lastChar, string playTime, string saveTime)
+    public UserData(Stage curStage, int curMap, List<GameEventInfo> infoList, PlayerType lastChar, string playTime, string saveTime)
     {
         CurrentStage    = curStage;
         CurrentMap      = curMap;
@@ -55,7 +55,7 @@ public class UserData
     }
 
     // Update user data
-    public void UpdatePlayerData(Stage stage, int map, PLAYER character)
+    public void UpdatePlayerData(Stage stage, int map, PlayerType character)
     {
         CurrentStage    = stage;
         CurrentMap      = map;
@@ -67,7 +67,7 @@ public class UserData
 
     [SerializeField] private int _currentStage = (int)Stage.StageCount;
     [SerializeField] private int _currentMap = 0;
-    [SerializeField] private int _lastCharacter = (int)PLAYER.PLAYER_COUNT;
+    [SerializeField] private int _lastCharacter = (int)PlayerType.PlayerCount;
     [SerializeField] private string _playTime = "00:00:00";
     [SerializeField] private string _saveTime = "00:00:00";
     [SerializeField] private string _slotImage = null; // Base64 string for the image

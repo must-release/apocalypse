@@ -11,7 +11,7 @@ public class ChasingState : EnemyStateBase
         forgettingTime = 0;
     }
 
-    public override ENEMY_STATE GetState() { return ENEMY_STATE.CHASING; }
+    public override EnemyState GetState() { return EnemyState.Chasing; }
 
     public override void OnEnter()
     {
@@ -33,7 +33,7 @@ public class ChasingState : EnemyStateBase
 
         if ( enemyController.CheckPlayerEnemyDistance() )
         {
-            enemyController.ChangeState(ENEMY_STATE.ATTACKING); 
+            enemyController.ChangeState(EnemyState.Attacking); 
             return;
         }
 
@@ -42,7 +42,7 @@ public class ChasingState : EnemyStateBase
         {
             forgettingTime += Time.deltaTime;
             if (forgettingTime > FORGET_TIME)
-                enemyController.ChangeState(ENEMY_STATE.PATROLLING);
+                enemyController.ChangeState(EnemyState.Patrolling);
         }
         else
         {
@@ -50,9 +50,9 @@ public class ChasingState : EnemyStateBase
         }
     }
 
-    public override void OnExit(ENEMY_STATE nextState)
+    public override void OnExit(EnemyState nextState)
     {
-        if ( ENEMY_STATE.ATTACKING != nextState)
+        if ( EnemyState.Attacking != nextState)
             enemyController.ChasingTarget = null;
     }
 

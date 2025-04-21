@@ -5,48 +5,48 @@ public class RunningUpperState : PlayerUpperStateBase
 {
     protected override void StartUpperState()
     {
-        playerController.AddUpperState(PLAYER_UPPER_STATE.RUNNING, this);
+        playerController.RegisterUpperState(PlayerUpperState.Running, this);
     }
 
-    public override PLAYER_UPPER_STATE GetState() { return PLAYER_UPPER_STATE.RUNNING; }
+    public override PlayerUpperState GetStateType() { return PlayerUpperState.Running; }
 
     public override void OnEnter()
     {
-        playerController.UpperAnimator.SetBool("Move", true);
+        playerController.UpperAnimator.PlayRunning();
     }
     public override void OnUpdate()
     {
 
     }
-    public override void OnExit(PLAYER_UPPER_STATE _)
+    public override void OnExit(PlayerUpperState _)
     {
 
     }
 
     public override void Jump() 
     { 
-        playerController.ChangeUpperState(PLAYER_UPPER_STATE.JUMPING); 
+        playerController.ChangeUpperState(PlayerUpperState.Jumping); 
     }
 
     public override void OnAir() 
     { 
-        playerController.ChangeUpperState(PLAYER_UPPER_STATE.JUMPING); 
+        playerController.ChangeUpperState(PlayerUpperState.Jumping); 
     }
 
     public override void LookUp(bool lookUp) 
     { 
         if( lookUp ) 
-            playerController.ChangeUpperState(PLAYER_UPPER_STATE.LOOKING_UP);
+            playerController.ChangeUpperState(PlayerUpperState.LookingUp);
     }
 
     public override void Attack() 
     { 
-        playerController.ChangeUpperState(PLAYER_UPPER_STATE.ATTACKING); 
+        playerController.ChangeUpperState(PlayerUpperState.ATTACKING); 
     }
     
     public override void Stop() 
     { 
-        playerController.ChangeUpperState(PLAYER_UPPER_STATE.IDLE); 
+        playerController.ChangeUpperState(PlayerUpperState.Idle); 
     }
 
 

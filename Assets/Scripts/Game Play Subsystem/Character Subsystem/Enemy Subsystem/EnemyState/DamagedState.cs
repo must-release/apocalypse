@@ -15,7 +15,7 @@ public class DamagedState : EnemyStateBase
         flickeredTime = 0;
     }
 
-    public override ENEMY_STATE GetState() { return ENEMY_STATE.DAMAGED; }
+    public override EnemyState GetState() { return EnemyState.Damaged; }
 
     public override void OnEnter()
     {
@@ -27,10 +27,10 @@ public class DamagedState : EnemyStateBase
     {
         flickeredTime += Time.deltaTime;
         if( FLICKER_TIME < flickeredTime )
-            enemyController.ChangeState(ENEMY_STATE.CHASING);
+            enemyController.ChangeState(EnemyState.Chasing);
     }
 
-    public override void OnExit(ENEMY_STATE _)
+    public override void OnExit(EnemyState _)
     {
         enemySprite.color = initialColor;
     }

@@ -7,20 +7,20 @@ public class TopAttackingUpperState : PlayerUpperStateBase
 
     protected override void StartUpperState()
     {
-        playerController.AddUpperState(PLAYER_UPPER_STATE.TOP_ATTACKING, this);
+        playerController.RegisterUpperState(PlayerUpperState.TopAttacking, this);
 
         attackCoolTime = 0;
     }
 
-    public override PLAYER_UPPER_STATE GetState() { return PLAYER_UPPER_STATE.TOP_ATTACKING; }
+    public override PlayerUpperState GetStateType() { return PlayerUpperState.TopAttacking; }
 
     public override void OnEnter()
     {
         // Rotate upper body by 90 degree
-        playerController.CurrentPlayer.RotateUpperBody(90);
+        playerController.CurrentAvatar.RotateUpperBody(90);
 
         // Execute top attack and get attacking motion time
-        attackCoolTime = playerController.CurrentPlayer.Attack();
+        attackCoolTime = playerController.CurrentAvatar.Attack();
     }
 
     public override void OnUpdate()
@@ -28,21 +28,21 @@ public class TopAttackingUpperState : PlayerUpperStateBase
         // Wait for attacking animation
         attackCoolTime -= Time.deltaTime;
         if ( attackCoolTime < 0 )
-            playerController.ChangeUpperState(PLAYER_UPPER_STATE.LOOKING_UP);
+            playerController.ChangeUpperState(PlayerUpperState.LookingUp);
     }
 
-    public override void OnExit(PLAYER_UPPER_STATE nextState)
+    public override void OnExit(PlayerUpperState nextState)
     {
         // Recover upper body rotation when not looking up
-        if (PLAYER_UPPER_STATE.LOOKING_UP == nextState)
+        if (PlayerUpperState.LookingUp == nextState)
             return;
 
-        playerController.CurrentPlayer.RotateUpperBody(0);
+        playerController.CurrentAvatar.RotateUpperBody(0);
     }
 
     public override void Attack() 
     { 
-        playerController.ChangeUpperState(PLAYER_UPPER_STATE.TOP_ATTACKING); 
+        playerController.ChangeUpperState(PlayerUpperState.TopAttacking); 
     }
     
     public override void LookUp(bool lookUp)
@@ -50,9 +50,9 @@ public class TopAttackingUpperState : PlayerUpperStateBase
         if( lookUp ) return;
 
         if (playerController.StandingGround )
-            playerController.ChangeUpperState(PLAYER_UPPER_STATE.IDLE);
+            playerController.ChangeUpperState(PlayerUpperState.Idle);
         else
-            playerController.ChangeUpperState(PLAYER_UPPER_STATE.JUMPING);
+            playerController.ChangeUpperState(PlayerUpperState.Jumping);
     }
 
 

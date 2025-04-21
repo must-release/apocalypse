@@ -20,7 +20,7 @@ public class GamePlayManager : MonoBehaviour, IAsyncLoadObject
     public void PlayCutscene() { StartCoroutine(CutsceneCoroutine()); }
 
     // Initialize Player transform, info
-    public void InitializePlayerCharacter(Transform player, PLAYER character)
+    public void InitializePlayerCharacter(Transform player, PlayerType character)
     {
         CharacterManager.Instance.SetPlayerCharacter(player, character);
 

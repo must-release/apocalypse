@@ -5,20 +5,22 @@ using UnityEngine;
 
 public class IdleLowerState : PlayerLowerStateBase
 {
-    protected override void StartLowerState()
+    protected override void Start()
     {
-        playerController.AddLowerState(PLAYER_LOWER_STATE.IDLE, this);
+        base.Start();
+
+        OwnerController.RegisterLowerState(PlayerLowerState.Idle, this);
     }
 
-    public override PLAYER_LOWER_STATE GetState() { return PLAYER_LOWER_STATE.IDLE; }
+    public override PlayerLowerState GetStateType() { return PlayerLowerState.Idle; }
 
     public override bool DisableUpperBody() { return false; }
 
     public override void OnEnter()
     {
-        playerRigid.velocity = Vector2.zero;
+        OwnerRigid.velocity = Vector2.zero;
 
-        playerController.LowerAnimator.SetBool("Move", false);
+        OwnerController.LowerAnimator.PlayRunning();
     }
 
     public override void OnUpdate()
@@ -33,34 +35,34 @@ public class IdleLowerState : PlayerLowerStateBase
 
     public override void Jump()
     {
-        playerRigid.velocity = new Vector2(playerRigid.velocity.x, playerController.JumpingSpeed);
-        playerController.ChangeLowerState(PLAYER_LOWER_STATE.JUMPING);
+        OwnerRigid.velocity = new Vector2(OwnerRigid.velocity.x, OwnerController.JumpingSpeed);
+        OwnerController.ChangeLowerState(PlayerLowerState.Jumping);
     }
 
     public override void OnAir()
     {
-        playerController.ChangeLowerState(PLAYER_LOWER_STATE.JUMPING);
+        OwnerController.ChangeLowerState(PlayerLowerState.Jumping);
     }
 
     public override void Aim(bool isAiming)
     {
         if (isAiming)
-            playerController.ChangeLowerState(PLAYER_LOWER_STATE.AIMING);
+            OwnerController.ChangeLowerState(PlayerLowerState.Aiming);
     }
 
     public override void Move(int move)
     {
-        playerController.ChangeLowerState(PLAYER_LOWER_STATE.RUNNING);
+        OwnerController.ChangeLowerState(PlayerLowerState.Running);
     }
 
     public override void Tag()
     {
-        playerController.ChangeLowerState(PLAYER_LOWER_STATE.TAGGING);
+        OwnerController.ChangeLowerState(PlayerLowerState.Tagging);
     }
 
     public override void Climb(bool climb)
     {
-        if (climb) playerController.ChangeLowerState(PLAYER_LOWER_STATE.CLIMBING);
+        if (climb) OwnerController.ChangeLowerState(PlayerLowerState.Climbing);
     }
 
     public override void OnGround() { return; }

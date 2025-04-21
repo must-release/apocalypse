@@ -10,10 +10,10 @@ public class AimingUpperState : PlayerUpperStateBase
 
     protected override void StartUpperState()
     {
-        playerController.AddUpperState(PLAYER_UPPER_STATE.AIMING, this);
+        playerController.RegisterUpperState(PlayerUpperState.Aiming, this);
     }
 
-    public override PLAYER_UPPER_STATE GetState() { return PLAYER_UPPER_STATE.AIMING; }
+    public override PlayerUpperState GetStateType() { return PlayerUpperState.Aiming; }
 
     public override void OnEnter()
     {
@@ -26,24 +26,24 @@ public class AimingUpperState : PlayerUpperStateBase
         SetDirection();
 
         // Rotate upper body toward the aiming position
-        playerController.CurrentPlayer.RotateUpperBody(aimingPosition);
+        playerController.CurrentAvatar.RotateUpperBody(aimingPosition);
     }
 
     private void FixedUpdate() 
     {   
         // Turn on player's aiming state
         if(fixedUpdateFlag) 
-            playerController.CurrentPlayer.Aim(true);
+            playerController.CurrentAvatar.Aim(true);
     }
 
-    public override void OnExit(PLAYER_UPPER_STATE nextState)
+    public override void OnExit(PlayerUpperState nextState)
     {
         // Turn off player's aiming state
-        playerController.CurrentPlayer.Aim(false);
+        playerController.CurrentAvatar.Aim(false);
 
         // Recover player's upper body rotation when not attacking
-        if(nextState != PLAYER_UPPER_STATE.AIM_ATTACKING)
-            playerController.CurrentPlayer.RotateUpperBody(0);
+        if(nextState != PlayerUpperState.AimAttacking)
+            playerController.CurrentAvatar.RotateUpperBody(0);
 
         // Disable fixed update
         fixedUpdateFlag = false;
@@ -51,18 +51,18 @@ public class AimingUpperState : PlayerUpperStateBase
 
     public override void OnAir() 
     { 
-        playerController.ChangeUpperState(PLAYER_UPPER_STATE.JUMPING); 
+        playerController.ChangeUpperState(PlayerUpperState.Jumping); 
     }
 
     public override void Attack() 
     {
-        playerController.ChangeUpperState(PLAYER_UPPER_STATE.AIM_ATTACKING); 
+        playerController.ChangeUpperState(PlayerUpperState.AimAttacking); 
     }
 
     public override void Aim(Vector3 aim)
     {
         if ( Vector3.zero == aim )
-            playerController.ChangeUpperState(PLAYER_UPPER_STATE.IDLE); 
+            playerController.ChangeUpperState(PlayerUpperState.Idle); 
         else
             aimingPosition = aim;
     }

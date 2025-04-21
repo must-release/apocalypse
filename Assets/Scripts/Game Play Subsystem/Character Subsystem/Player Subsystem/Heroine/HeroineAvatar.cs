@@ -1,8 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class HeroineController : MonoBehaviour, IPlayer
+public class HeroineAvatar : MonoBehaviour, IPlayerAvatar
 {
     /****** Public Members ******/
 

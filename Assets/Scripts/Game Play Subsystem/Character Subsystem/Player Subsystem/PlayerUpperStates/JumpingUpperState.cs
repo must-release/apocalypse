@@ -5,10 +5,10 @@ public class JumpingUpperState : PlayerUpperStateBase
 {
     protected override void StartUpperState()
     {
-        playerController.AddUpperState(PLAYER_UPPER_STATE.JUMPING, this);
+        playerController.RegisterUpperState(PlayerUpperState.Jumping, this);
     }
 
-    public override PLAYER_UPPER_STATE GetState() { return PLAYER_UPPER_STATE.JUMPING; }
+    public override PlayerUpperState GetStateType() { return PlayerUpperState.Jumping; }
 
     public override void OnEnter()
     {
@@ -18,25 +18,25 @@ public class JumpingUpperState : PlayerUpperStateBase
     {
 
     }
-    public override void OnExit(PLAYER_UPPER_STATE _)
+    public override void OnExit(PlayerUpperState _)
     {
 
     }
 
     public override void OnGround() 
     { 
-        playerController.ChangeUpperState(PLAYER_UPPER_STATE.IDLE); 
+        playerController.ChangeUpperState(PlayerUpperState.Idle); 
     }
 
     public override void LookUp(bool lookUp) 
     { 
         if ( lookUp ) 
-            playerController.ChangeUpperState(PLAYER_UPPER_STATE.LOOKING_UP);
+            playerController.ChangeUpperState(PlayerUpperState.LookingUp);
     }
 
     public override void Attack() 
     {   
-        playerController.ChangeUpperState(PLAYER_UPPER_STATE.ATTACKING); 
+        playerController.ChangeUpperState(PlayerUpperState.ATTACKING); 
     }
 
 

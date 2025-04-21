@@ -25,7 +25,7 @@ public class DataManager : MonoBehaviour, IAsyncLoadObject
         Stage curStage  = Stage.Test;
         int curMap      = 1;
         string saveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); // Get current time
-        PLAYER lastChar = PLAYER.HEROINE;
+        PlayerType lastChar = PlayerType.Heroine;
         string playTime = "00:00"; 
 
         // Initialize current data
@@ -46,7 +46,7 @@ public class DataManager : MonoBehaviour, IAsyncLoadObject
         IsSaving = true;
 
         // Update current data according to player data
-        PlayerManager.Instance.GetPlayerData(out Stage stage, out int map, out PLAYER character);
+        PlayerManager.Instance.GetPlayerData(out Stage stage, out int map, out PlayerType character);
         _currentData.UpdatePlayerData(stage, map, character);
 
         // Wait for a frame before taking a screenshot

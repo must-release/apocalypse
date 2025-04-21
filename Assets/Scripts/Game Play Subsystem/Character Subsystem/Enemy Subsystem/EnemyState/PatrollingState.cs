@@ -8,7 +8,7 @@ public class PatrollingState : EnemyStateBase
 
     }
 
-    public override ENEMY_STATE GetState() { return ENEMY_STATE.PATROLLING; }
+    public override EnemyState GetState() { return EnemyState.Patrolling; }
 
     public override void OnEnter()
     {
@@ -22,13 +22,13 @@ public class PatrollingState : EnemyStateBase
         enemyController.Patrol();
     }
 
-    public override void OnExit(ENEMY_STATE _)
+    public override void OnExit(EnemyState _)
     {
 
     }
 
     public override void DetectedPlayer()
     {
-        enemyController.ChangeState(ENEMY_STATE.CHASING);
+        enemyController.ChangeState(EnemyState.Chasing);
     }
 }

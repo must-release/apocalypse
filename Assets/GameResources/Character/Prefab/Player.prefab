@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3740966308714854747}
   m_Layer: 8
-  m_Name: PlayerState
+  m_Name: Player State
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -211,7 +211,7 @@ Animator:
   m_GameObject: {fileID: 3100155105109098096}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e1ed1fa9aa1d0450da3977e8a052156b, type: 2}
+  m_Controller: {fileID: 9100000, guid: 3a5c735fd18a04c20886e3926ee7f82c, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -284,7 +284,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2078760139792449367}
   - component: {fileID: 6194403035280558638}
-  - component: {fileID: 5460991823532179720}
+  - component: {fileID: 7923366819907238996}
   m_Layer: 8
   m_Name: Hero
   m_TagString: Untagged
@@ -360,7 +360,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5460991823532179720
+--- !u!114 &7923366819907238996
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -369,7 +369,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3645786124481219758}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f982ba23e3e81dc4ea1d7f5104df1fb1, type: 3}
+  m_Script: {fileID: 11500000, guid: 6cae20c7b1a1740efa6fcd6f207c0c48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3836751109032054554
@@ -421,6 +421,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 771c5eeadb55e45ed8b4f135a4cae560, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _heroTransform: {fileID: 2078760139792449367}
+  _heroineTransform: {fileID: 1377288265050663595}
 --- !u!70 &3152829716522880432
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -526,7 +528,7 @@ Animator:
   m_GameObject: {fileID: 4117885887960782248}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 94c323d2984274906aeec5d1c86be344, type: 2}
+  m_Controller: {fileID: 9100000, guid: d92faf4a55b7a4f5fabb57e9200eab0f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -598,7 +600,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1377288265050663595}
-  - component: {fileID: 7138733039435096301}
+  - component: {fileID: 5185365712823968602}
   m_Layer: 8
   m_Name: Heroine
   m_TagString: Untagged
@@ -623,7 +625,7 @@ Transform:
   - {fileID: 6255710058938064399}
   m_Father: {fileID: 8497535858361422018}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7138733039435096301
+--- !u!114 &5185365712823968602
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -632,7 +634,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4205909327111830494}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b52aed5cd326b614a8dfd8c60adf6816, type: 3}
+  m_Script: {fileID: 11500000, guid: 470cd26e8d54a4e5a87283d5d75d3671, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6352527244798623221
