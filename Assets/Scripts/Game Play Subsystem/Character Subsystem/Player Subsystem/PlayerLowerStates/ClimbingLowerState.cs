@@ -9,11 +9,9 @@ public class ClimbingLowerState : PlayerLowerStateBase
     private float climbUpHeight;
     private float climbDownHeight;
     
-    protected override void Start()
+    public override void SetOwner(PlayerController playerController)
     {
-        base.Start();
-
-        OwnerController.RegisterLowerState(PlayerLowerState.Climbing, this);
+        base.SetOwner(playerController);
 
         climbingSpeed = OwnerController.MovingSpeed;
         climbUpHeight = 0.1f;

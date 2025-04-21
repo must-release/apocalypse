@@ -3,11 +3,6 @@ using UnityEngine;
 
 public class DisabledUpperState : PlayerUpperStateBase
 {
-    protected override void StartUpperState()
-    {
-        playerController.RegisterUpperState(PlayerUpperState.Disabled, this);
-    }
-
     public override PlayerUpperState GetStateType() { return PlayerUpperState.Disabled; }
 
     public override void OnEnter()
@@ -24,10 +19,10 @@ public class DisabledUpperState : PlayerUpperStateBase
     }
     public override void Enable()
     {
-        if( playerController.StandingGround )
-            playerController.ChangeUpperState(PlayerUpperState.Idle);
+        if( OwnerController.StandingGround )
+            OwnerController.ChangeUpperState(PlayerUpperState.Idle);
         else
-            playerController.ChangeUpperState(PlayerUpperState.Jumping);
+            OwnerController.ChangeUpperState(PlayerUpperState.Jumping);
     }
 
 

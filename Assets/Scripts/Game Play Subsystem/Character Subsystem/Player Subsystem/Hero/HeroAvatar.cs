@@ -5,7 +5,10 @@ using WeaponEnums;
 
 public class HeroAvatar : MonoBehaviour, IPlayerAvatar
 {
-    public bool IsLoaded {get; set;}
+    /****** Public Members ******/
+
+    public bool IsLoaded() => _isLoaded; 
+
     private PlayerController playerController;
     private Queue<WeaponBase> weapons;
     private List<GameObject> aimingDots;
@@ -14,6 +17,7 @@ public class HeroAvatar : MonoBehaviour, IPlayerAvatar
     private Transform shootingPointPivot;
     private Transform shootingPoint;
     private float attackCoolTime;
+    private bool _isLoaded = false;
 
     private void Awake() {
         playerController = transform.parent.GetComponent<PlayerController>();
@@ -21,7 +25,6 @@ public class HeroAvatar : MonoBehaviour, IPlayerAvatar
         aimingDots = new List<GameObject>();
         weaponCount = 20;
         aimingDotsCount = 40;
-        IsLoaded = false;
         shootingPointPivot = transform.Find("Shooting Point Pivot");
         shootingPoint = shootingPointPivot.Find("Shooting Point").transform;
         attackCoolTime = 0.5f;
@@ -32,7 +35,7 @@ public class HeroAvatar : MonoBehaviour, IPlayerAvatar
     {
         yield return WeaponFactory.Instance.PoolWeapons(playerController, WEAPON_TYPE.BULLET, weapons, weaponCount);
         yield return WeaponFactory.Instance.PoolAimingDots(WEAPON_TYPE.BULLET, aimingDots, aimingDotsCount);
-        IsLoaded = true;
+        _isLoaded = true;
     }
 
     private void Update() 

@@ -3,11 +3,6 @@ using CharacterEums;
 
 public class JumpingUpperState : PlayerUpperStateBase
 {
-    protected override void StartUpperState()
-    {
-        playerController.RegisterUpperState(PlayerUpperState.Jumping, this);
-    }
-
     public override PlayerUpperState GetStateType() { return PlayerUpperState.Jumping; }
 
     public override void OnEnter()
@@ -25,18 +20,18 @@ public class JumpingUpperState : PlayerUpperStateBase
 
     public override void OnGround() 
     { 
-        playerController.ChangeUpperState(PlayerUpperState.Idle); 
+        OwnerController.ChangeUpperState(PlayerUpperState.Idle); 
     }
 
     public override void LookUp(bool lookUp) 
     { 
         if ( lookUp ) 
-            playerController.ChangeUpperState(PlayerUpperState.LookingUp);
+            OwnerController.ChangeUpperState(PlayerUpperState.LookingUp);
     }
 
     public override void Attack() 
     {   
-        playerController.ChangeUpperState(PlayerUpperState.ATTACKING); 
+        OwnerController.ChangeUpperState(PlayerUpperState.ATTACKING); 
     }
 
 

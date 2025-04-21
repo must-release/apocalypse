@@ -3,22 +3,10 @@ using UnityEngine;
 
 public class TaggingLowerState : PlayerLowerStateBase
 {
-    private float taggingTime;
-    private float time;
-    private float popping;
-    private bool isOnAir;
-
-    protected override void Start()
-    {
-        base.Start();
-        
-        OwnerController.RegisterLowerState(PlayerLowerState.Tagging, this);
-
-        taggingTime = 0.2f;
-        time = 0f;
-        popping = 3f;
-        isOnAir = false;
-    }
+    private float taggingTime = 0.2f;
+    private float time = 0f;
+    private float popping = 3f;
+    private bool isOnAir = false;
 
     public override PlayerLowerState GetStateType() { return PlayerLowerState.Tagging; }
 

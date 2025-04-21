@@ -33,19 +33,19 @@ public abstract class PlayerLowerStateBase : MonoBehaviour
         OwnerController.ChangeLowerState(nextState);
     }
 
+    public virtual void SetOwner(PlayerController playerController)
+    {
+        _ownerController    = playerController;
+        _ownerTransform     = _ownerController.transform;
+        _ownerRigid         = _ownerController.GetComponent<Rigidbody2D>();
+    }
+
 
     /****** Protected Members ******/
 
     protected Transform         OwnerTransform     => _ownerTransform;
     protected PlayerController  OwnerController    => _ownerController;
     protected Rigidbody2D       OwnerRigid         => _ownerRigid;
-
-    protected virtual void Start()
-    {
-        _ownerTransform     = transform.parent.parent;
-        _ownerController    = _ownerTransform.GetComponent<PlayerController>();
-        _ownerRigid         = _ownerTransform.GetComponent<Rigidbody2D>();
-    }
 
 
     /****** Private Members ******/
@@ -58,10 +58,8 @@ public abstract class PlayerLowerStateBase : MonoBehaviour
 
 public abstract class PlayerUpperStateBase : MonoBehaviour
 {
-    protected Transform playerTransform;
-    protected PlayerController playerController;
+    /****** Public Members ******/
 
-    /*** Abstract Funtions ***/
     public abstract PlayerUpperState GetStateType();
     public abstract void OnEnter();
     public abstract void OnUpdate();
@@ -74,30 +72,34 @@ public abstract class PlayerUpperStateBase : MonoBehaviour
     public abstract void Stop();
     public abstract void OnGround();
     public abstract void Enable();
-    protected abstract void StartUpperState();
 
-
-    /*** Virtual Functions ***/
     public virtual void Disable() 
     { 
-        playerController.ChangeUpperState(PlayerUpperState.Disabled); 
+        OwnerController.ChangeUpperState(PlayerUpperState.Disabled); 
     }
 
     public virtual void Aim(Vector3 aim) 
     {  
-        if ( Vector3.zero == aim || null == playerController.StandingGround )
+        if ( Vector3.zero == aim || null == OwnerController.StandingGround )
             return;
         
-        playerController.ChangeUpperState(PlayerUpperState.Aiming);
+        OwnerController.ChangeUpperState(PlayerUpperState.Aiming);
     }
-
-
-    /*** private Function ***/
-    private void Start()
+    public virtual void SetOwner(PlayerController playerController)
     {
-        playerTransform = transform.parent.parent;
-        playerController = playerTransform.GetComponent<PlayerController>();
-
-        StartUpperState();
+        _ownerController    = playerController;
+        _ownerTransform     = _ownerController.transform;
     }
+
+
+    /****** Protected Members ******/
+
+    protected Transform OwnerTransform          => _ownerTransform;
+    protected PlayerController OwnerController  => _ownerController;
+
+
+    /****** Private Members ******/
+
+    private Transform _ownerTransform           = null;
+    private PlayerController _ownerController   = null;
 }

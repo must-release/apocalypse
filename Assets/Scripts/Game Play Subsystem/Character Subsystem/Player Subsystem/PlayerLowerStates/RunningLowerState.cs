@@ -7,13 +7,6 @@ public class RunningLowerState : PlayerLowerStateBase
 {
     private int movingDirection;
 
-    protected override void Start()
-    {
-        base.Start();
-
-        OwnerController.RegisterLowerState(PlayerLowerState.Running, this);
-    }
-
     public override PlayerLowerState GetStateType() { return PlayerLowerState.Running; }
 
     public override bool DisableUpperBody() { return false; }

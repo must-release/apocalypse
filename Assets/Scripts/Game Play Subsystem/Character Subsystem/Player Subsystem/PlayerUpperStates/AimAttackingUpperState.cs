@@ -7,16 +7,11 @@ public class AimAttackingUpperState : PlayerUpperStateBase
     private Vector3 aimingPosition;
     private int direction;
 
-    protected override void StartUpperState()
-    {
-        playerController.RegisterUpperState(PlayerUpperState.AimAttacking, this);
-    }
-
     public override PlayerUpperState GetStateType() { return PlayerUpperState.AimAttacking; }
 
     public override void OnEnter()
     {
-        attackCoolTime = playerController.CurrentAvatar.Attack();
+        attackCoolTime = OwnerController.CurrentAvatar.Attack();
     }
 
     public override void OnUpdate()
@@ -24,13 +19,13 @@ public class AimAttackingUpperState : PlayerUpperStateBase
         // Wait for attacking animation
         attackCoolTime -= Time.deltaTime;
         if ( 0 < attackCoolTime )
-            playerController.ChangeUpperState(PlayerUpperState.Aiming);
+            OwnerController.ChangeUpperState(PlayerUpperState.Aiming);
 
         // Set player's looking direction
         SetDirection();
 
         // Rotate upper body toward the aiming position
-        playerController.CurrentAvatar.RotateUpperBody(aimingPosition);
+        OwnerController.CurrentAvatar.RotateUpperBody(aimingPosition);
     }
 
     public override void OnExit(PlayerUpperState nextState)
@@ -39,17 +34,17 @@ public class AimAttackingUpperState : PlayerUpperStateBase
         if (PlayerUpperState.Aiming == nextState || PlayerUpperState.AimAttacking == nextState)
             return;
 
-        playerController.CurrentAvatar.RotateUpperBody(0);
+        OwnerController.CurrentAvatar.RotateUpperBody(0);
     }
 
-    public override void Disable() { playerController.ChangeUpperState(PlayerUpperState.Disabled); }
+    public override void Disable() { OwnerController.ChangeUpperState(PlayerUpperState.Disabled); }
 
-    public override void Attack() { playerController.ChangeUpperState(PlayerUpperState.AimAttacking); }
+    public override void Attack() { OwnerController.ChangeUpperState(PlayerUpperState.AimAttacking); }
 
     public override void Aim(Vector3 aim)
     {
         if(Vector3.zero == aim )
-            playerController.ChangeUpperState(PlayerUpperState.Idle); 
+            OwnerController.ChangeUpperState(PlayerUpperState.Idle); 
         else
             aimingPosition = aim;
     }
@@ -57,9 +52,9 @@ public class AimAttackingUpperState : PlayerUpperStateBase
     // Set player's looking direction
     private void SetDirection()
     {
-        direction = aimingPosition.x > playerTransform.position.x ? 1 : -1;
-        playerTransform.localScale = new Vector3(direction * Mathf.Abs(playerTransform.localScale.x),
-            playerTransform.localScale.y, playerTransform.localScale.z);
+        direction = aimingPosition.x > OwnerTransform.position.x ? 1 : -1;
+        OwnerTransform.localScale = new Vector3(direction * Mathf.Abs(OwnerTransform.localScale.x),
+            OwnerTransform.localScale.y, OwnerTransform.localScale.z);
     }
 
     /***** Inavailable State Change *****/

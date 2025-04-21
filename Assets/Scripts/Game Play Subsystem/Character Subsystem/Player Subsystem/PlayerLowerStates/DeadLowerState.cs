@@ -5,16 +5,7 @@ using UnityEngine;
 public class DeadLowerState : PlayerLowerStateBase
 {
     private const float ANIMATION_PLAYTIME = 2f;
-    private Coroutine deadStateCoroutine;
-
-    protected override void Start()
-    {   
-        base.Start();
-
-        OwnerController.RegisterLowerState(PlayerLowerState.Dead, this);
-
-        deadStateCoroutine = null;
-    }
+    private Coroutine deadStateCoroutine = null;
 
     public override PlayerLowerState GetStateType() { return PlayerLowerState.Dead; }
 

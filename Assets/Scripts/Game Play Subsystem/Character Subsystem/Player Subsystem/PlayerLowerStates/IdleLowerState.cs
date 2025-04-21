@@ -5,12 +5,6 @@ using UnityEngine;
 
 public class IdleLowerState : PlayerLowerStateBase
 {
-    protected override void Start()
-    {
-        base.Start();
-
-        OwnerController.RegisterLowerState(PlayerLowerState.Idle, this);
-    }
 
     public override PlayerLowerState GetStateType() { return PlayerLowerState.Idle; }
 
@@ -20,7 +14,7 @@ public class IdleLowerState : PlayerLowerStateBase
     {
         OwnerRigid.velocity = Vector2.zero;
 
-        OwnerController.LowerAnimator.PlayRunning();
+        OwnerController.LowerAnimator.PlayIdle();
     }
 
     public override void OnUpdate()

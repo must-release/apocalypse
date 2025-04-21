@@ -9,13 +9,6 @@ public class DamagedLowerState : PlayerLowerStateBase
     private const float KNOCK_BACK_SPEED = 15f;
     private float sternedTime;
 
-    protected override void Start()
-    {
-        base.Start();
-
-        OwnerController.RegisterLowerState(PlayerLowerState.Damaged, this);
-    }
-
     public override PlayerLowerState GetStateType() { return PlayerLowerState.Damaged; }
 
     public override bool DisableUpperBody() { return true; }

@@ -5,17 +5,12 @@ public class AttackingUpperState : PlayerUpperStateBase
 {
     private float attackingTime;
 
-    protected override void StartUpperState()
-    {
-        playerController.RegisterUpperState(PlayerUpperState.ATTACKING, this);
-    }
-
     public override PlayerUpperState GetStateType() { return PlayerUpperState.ATTACKING; }
 
     public override void OnEnter()
     {
         // Execute attack and get attacking motion time
-        attackingTime = playerController.CurrentAvatar.Attack();
+        attackingTime = OwnerController.CurrentAvatar.Attack();
     }
 
     public override void OnUpdate()
@@ -24,10 +19,10 @@ public class AttackingUpperState : PlayerUpperStateBase
         attackingTime -= Time.deltaTime;
         if (attackingTime < 0)
         {
-            if ( null == playerController.StandingGround )
-                playerController.ChangeUpperState(PlayerUpperState.Jumping);
+            if ( null == OwnerController.StandingGround )
+                OwnerController.ChangeUpperState(PlayerUpperState.Jumping);
             else
-                playerController.ChangeUpperState(PlayerUpperState.Idle);
+                OwnerController.ChangeUpperState(PlayerUpperState.Idle);
         }
     }
 
@@ -39,12 +34,12 @@ public class AttackingUpperState : PlayerUpperStateBase
     public override void LookUp(bool lookUp) 
     { 
         if ( lookUp ) 
-            playerController.ChangeUpperState(PlayerUpperState.LookingUp);
+            OwnerController.ChangeUpperState(PlayerUpperState.LookingUp);
     }
     
     public override void Attack() 
     { 
-        playerController.ChangeUpperState(PlayerUpperState.ATTACKING); 
+        OwnerController.ChangeUpperState(PlayerUpperState.ATTACKING); 
     }
 
 

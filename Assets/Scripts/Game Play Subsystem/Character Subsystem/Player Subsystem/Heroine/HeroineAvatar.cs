@@ -5,13 +5,14 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar
 {
     /****** Public Members ******/
 
-    public bool IsLoaded {get; set;}
+    public bool IsLoaded() => _isLoaded;
     public bool IsAiming { set{}}
 
     public IEnumerator LoadWeaponsAndDots()
     {
+        _isLoaded = true;
+
         yield return null;
-        IsLoaded = true;
     }
 
     public Transform GetTransform() { return transform; }
@@ -60,9 +61,10 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar
     private const string _LowerBodyName = "Heroine Lower Body";
     private const string _UpperBodyName = "Heroine Upper Body";
 
-    private Transform _lowerBody;
-    private Transform _upperBody;
-    
+    private Transform _lowerBody    = null;
+    private Transform _upperBody    = null;
+    private bool _isLoaded          = false;
+
 
     private void Awake()
     {

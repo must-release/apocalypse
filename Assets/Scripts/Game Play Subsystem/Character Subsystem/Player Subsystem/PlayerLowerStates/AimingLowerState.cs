@@ -5,13 +5,6 @@ using UnityEngine;
 
 public class AimingLowerState : PlayerLowerStateBase
 {
-    protected override void Start()
-    {
-        base.Start();
-
-        OwnerController.RegisterLowerState(PlayerLowerState.Aiming, this);
-    }
-
     public override PlayerLowerState GetStateType() { return PlayerLowerState.Aiming; }
 
     public override bool DisableUpperBody() { return false; }

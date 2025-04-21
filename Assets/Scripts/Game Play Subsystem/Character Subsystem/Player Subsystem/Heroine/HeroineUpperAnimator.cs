@@ -1,18 +1,18 @@
 using UnityEngine;
 using CharacterEums;
 
-public class HeroineLowerAnimator : PlayerLowerAnimatorBase
+public class HeroineUpperAnimator : PlayerUpperAnimatorBase
 {
     /****** Public Members ******/
 
     public override void PlayIdle()
     {
-        LowerAnimator.SetBool("Move", false);
+        UpperAnimator.SetBool("Move", false);
     }
 
     public override void PlayRunning()
     {
-        LowerAnimator.SetBool("Move", true);
+        UpperAnimator.SetBool("Move", true);
     }
 
     /****** Private Members ******/

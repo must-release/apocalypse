@@ -1,7 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using CharacterEums;
 
-public class HeroineLowerAnimator : PlayerLowerAnimatorBase
+public class HeroLowerAnimator : PlayerLowerAnimatorBase
 {
     /****** Public Members ******/
 
@@ -16,5 +17,4 @@ public class HeroineLowerAnimator : PlayerLowerAnimatorBase
     }
 
     /****** Private Members ******/
-
 }

@@ -7,13 +7,6 @@ public class JumpingLowerState : PlayerLowerStateBase
 {
     private int movingDirection;
 
-    protected override void Start()
-    {
-        base.Start();
-
-        OwnerController.RegisterLowerState(PlayerLowerState.Jumping, this);
-    }
-
     public override PlayerLowerState GetStateType() { return PlayerLowerState.Jumping; }
     public override bool DisableUpperBody() { return false; }
 

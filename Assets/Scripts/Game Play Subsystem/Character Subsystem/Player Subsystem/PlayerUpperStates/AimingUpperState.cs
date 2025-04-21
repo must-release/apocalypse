@@ -6,12 +6,6 @@ public class AimingUpperState : PlayerUpperStateBase
     private Vector3 aimingPosition;
     private int direction;
     private bool fixedUpdateFlag;
-    
-
-    protected override void StartUpperState()
-    {
-        playerController.RegisterUpperState(PlayerUpperState.Aiming, this);
-    }
 
     public override PlayerUpperState GetStateType() { return PlayerUpperState.Aiming; }
 
@@ -26,24 +20,24 @@ public class AimingUpperState : PlayerUpperStateBase
         SetDirection();
 
         // Rotate upper body toward the aiming position
-        playerController.CurrentAvatar.RotateUpperBody(aimingPosition);
+        OwnerController.CurrentAvatar.RotateUpperBody(aimingPosition);
     }
 
     private void FixedUpdate() 
     {   
         // Turn on player's aiming state
         if(fixedUpdateFlag) 
-            playerController.CurrentAvatar.Aim(true);
+            OwnerController.CurrentAvatar.Aim(true);
     }
 
     public override void OnExit(PlayerUpperState nextState)
     {
         // Turn off player's aiming state
-        playerController.CurrentAvatar.Aim(false);
+        OwnerController.CurrentAvatar.Aim(false);
 
         // Recover player's upper body rotation when not attacking
         if(nextState != PlayerUpperState.AimAttacking)
-            playerController.CurrentAvatar.RotateUpperBody(0);
+            OwnerController.CurrentAvatar.RotateUpperBody(0);
 
         // Disable fixed update
         fixedUpdateFlag = false;
@@ -51,27 +45,27 @@ public class AimingUpperState : PlayerUpperStateBase
 
     public override void OnAir() 
     { 
-        playerController.ChangeUpperState(PlayerUpperState.Jumping); 
+        OwnerController.ChangeUpperState(PlayerUpperState.Jumping); 
     }
 
     public override void Attack() 
     {
-        playerController.ChangeUpperState(PlayerUpperState.AimAttacking); 
+        OwnerController.ChangeUpperState(PlayerUpperState.AimAttacking); 
     }
 
     public override void Aim(Vector3 aim)
     {
         if ( Vector3.zero == aim )
-            playerController.ChangeUpperState(PlayerUpperState.Idle); 
+            OwnerController.ChangeUpperState(PlayerUpperState.Idle); 
         else
             aimingPosition = aim;
     }
 
     private void SetDirection()
     {
-        direction = aimingPosition.x > playerTransform.position.x ? 1 : -1;
-        playerTransform.localScale = new Vector3(direction * Mathf.Abs(playerTransform.localScale.x),
-            playerTransform.localScale.y, playerTransform.localScale.z);
+        direction = aimingPosition.x > OwnerTransform.position.x ? 1 : -1;
+        OwnerTransform.localScale = new Vector3(direction * Mathf.Abs(OwnerTransform.localScale.x),
+            OwnerTransform.localScale.y, OwnerTransform.localScale.z);
     }
 
     /***** Inavailable State Change *****/

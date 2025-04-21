@@ -5,16 +5,11 @@ using UnityEngine;
 
 public class IdleUpperState : PlayerUpperStateBase
 {
-    protected override void StartUpperState()
-    {
-        playerController.RegisterUpperState(PlayerUpperState.Idle, this);
-    }
-
     public override PlayerUpperState GetStateType() { return PlayerUpperState.Idle; }
 
     public override void OnEnter()
     {
-        playerController.UpperAnimator.PlayRunning();
+        OwnerController.UpperAnimator.PlayIdle();
     }
     public override void OnUpdate()
     {
@@ -27,23 +22,23 @@ public class IdleUpperState : PlayerUpperStateBase
 
     public override void Move() 
     { 
-        playerController.ChangeUpperState(PlayerUpperState.Running); 
+        OwnerController.ChangeUpperState(PlayerUpperState.Running); 
     }
 
     public override void OnAir() 
     { 
-        playerController.ChangeUpperState(PlayerUpperState.Jumping); 
+        OwnerController.ChangeUpperState(PlayerUpperState.Jumping); 
     }
 
     public override void LookUp(bool lookUp) 
     { 
         if ( lookUp ) 
-            playerController.ChangeUpperState(PlayerUpperState.LookingUp);
+            OwnerController.ChangeUpperState(PlayerUpperState.LookingUp);
     }
 
     public override void Attack() 
     { 
-        playerController.ChangeUpperState(PlayerUpperState.ATTACKING); 
+        OwnerController.ChangeUpperState(PlayerUpperState.ATTACKING); 
     }
 
 

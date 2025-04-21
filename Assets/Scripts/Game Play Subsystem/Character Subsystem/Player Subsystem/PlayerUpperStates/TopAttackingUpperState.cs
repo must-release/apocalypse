@@ -3,24 +3,17 @@ using CharacterEums;
 
 public class TopAttackingUpperState : PlayerUpperStateBase
 {
-    private float attackCoolTime;
-
-    protected override void StartUpperState()
-    {
-        playerController.RegisterUpperState(PlayerUpperState.TopAttacking, this);
-
-        attackCoolTime = 0;
-    }
+    private float attackCoolTime = 0;
 
     public override PlayerUpperState GetStateType() { return PlayerUpperState.TopAttacking; }
 
     public override void OnEnter()
     {
         // Rotate upper body by 90 degree
-        playerController.CurrentAvatar.RotateUpperBody(90);
+        OwnerController.CurrentAvatar.RotateUpperBody(90);
 
         // Execute top attack and get attacking motion time
-        attackCoolTime = playerController.CurrentAvatar.Attack();
+        attackCoolTime = OwnerController.CurrentAvatar.Attack();
     }
 
     public override void OnUpdate()
@@ -28,7 +21,7 @@ public class TopAttackingUpperState : PlayerUpperStateBase
         // Wait for attacking animation
         attackCoolTime -= Time.deltaTime;
         if ( attackCoolTime < 0 )
-            playerController.ChangeUpperState(PlayerUpperState.LookingUp);
+            OwnerController.ChangeUpperState(PlayerUpperState.LookingUp);
     }
 
     public override void OnExit(PlayerUpperState nextState)
@@ -37,22 +30,22 @@ public class TopAttackingUpperState : PlayerUpperStateBase
         if (PlayerUpperState.LookingUp == nextState)
             return;
 
-        playerController.CurrentAvatar.RotateUpperBody(0);
+        OwnerController.CurrentAvatar.RotateUpperBody(0);
     }
 
     public override void Attack() 
     { 
-        playerController.ChangeUpperState(PlayerUpperState.TopAttacking); 
+        OwnerController.ChangeUpperState(PlayerUpperState.TopAttacking); 
     }
     
     public override void LookUp(bool lookUp)
     { 
         if( lookUp ) return;
 
-        if (playerController.StandingGround )
-            playerController.ChangeUpperState(PlayerUpperState.Idle);
+        if (OwnerController.StandingGround )
+            OwnerController.ChangeUpperState(PlayerUpperState.Idle);
         else
-            playerController.ChangeUpperState(PlayerUpperState.Jumping);
+            OwnerController.ChangeUpperState(PlayerUpperState.Jumping);
     }
 
 
