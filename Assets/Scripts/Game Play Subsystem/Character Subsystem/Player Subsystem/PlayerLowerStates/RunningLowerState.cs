@@ -18,7 +18,7 @@ public class RunningLowerState : PlayerLowerStateBase
         else 
             movingDirection = -1;
 
-        OwnerController.LowerAnimator.PlayRunning();
+        OwnerController.CurrentAnimator.PlayRunning();
     }
 
     public override void OnUpdate()

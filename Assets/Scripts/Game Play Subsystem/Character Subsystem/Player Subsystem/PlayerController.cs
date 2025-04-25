@@ -8,17 +8,14 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
 {
     /****** Public Members ******/
 
-    public float MovingSpeed { get; private set; }  = 15f;
-    public float JumpingSpeed { get; private set; } = 30f;
-    public float Gravity { get; private set; }      = 10f;
+    public float MovingSpeed    { get; private set; } = 15f;
+    public float JumpingSpeed   { get; private set; } = 30f;
+    public float Gravity        { get; private set; } = 10f;
 
-    public IPlayerAvatar        CurrentAvatar { get; private set; }     = null;
-    public PlayerType           CurrentPlayerType { get; private set; } = PlayerType.PlayerCount;
-    public ControlInfo          CurrentControlInfo {get; private set; } = null;
-    public PlayerLowerStateBase LowerState { get; private set; }        = null;
-    public PlayerUpperStateBase UpperState { get; private set; }        = null;
-    public PlayerLowerAnimatorBase LowerAnimator { get; private set; }  = null;
-    public PlayerUpperAnimatorBase UpperAnimator { get; private set; }  = null;
+    public IPlayerAvatar        CurrentAvatar       { get; private set; } = null;
+    public PlayerType           CurrentPlayerType   { get; private set; } = PlayerType.PlayerCount;
+    public ControlInfo          CurrentControlInfo  { get; private set; } = null;
+    public PlayerAnimatorBase   CurrentAnimator     { get; private set; } = null;
 
 
     public bool IsLoaded()
@@ -33,12 +30,11 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
         CurrentAvatar       = _avatarDictionary[CurrentPlayerType];
 
         // Set initial state
-        LowerState = _lowerStateDictionary[PlayerLowerState.Idle];
-        UpperState = _upperStateDictionary[PlayerUpperState.Idle];
+        _lowerState = _lowerStateDictionary[PlayerLowerState.Idle];
+        _upperState = _upperStateDictionary[PlayerUpperState.Idle];
 
         // set initial animator
-        UpperAnimator = _upperAnimatorDictionary[CurrentPlayerType];
-        LowerAnimator = _lowerAnimatorDictionary[CurrentPlayerType];
+        CurrentAnimator = _animatorDictionary[CurrentPlayerType];
 
 
         CurrentAvatar.ShowCharacter(true);
@@ -61,15 +57,15 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
     // Called once when player is on air
     public override void OnAir()
     { 
-        LowerState.OnAir();
-        UpperState.OnAir();
+        _lowerState.OnAir();
+        _upperState.OnAir();
     }
 
     // Called once when player is on ground
     public override void OnGround() 
     { 
-        LowerState.OnGround();
-        UpperState.OnGround();
+        _lowerState.OnGround();
+        _upperState.OnGround();
     }
 
     public override void OnDamaged(DamageInfo damageInfo) 
@@ -81,8 +77,8 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
 
         StartCoroutine(StartDamageImmuneState());
 
-        LowerState.Damaged(); 
-        UpperState.Disable();
+        _lowerState.Damaged(); 
+        _upperState.Disable();
     }
 
     // Change player character
@@ -92,8 +88,7 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
 
         CurrentPlayerType   = player;
         CurrentAvatar       = _avatarDictionary[CurrentPlayerType];
-        LowerAnimator       = _lowerAnimatorDictionary[CurrentPlayerType];
-        UpperAnimator       = _upperAnimatorDictionary[CurrentPlayerType];
+        CurrentAnimator = _animatorDictionary[CurrentPlayerType];
 
         CurrentAvatar.GetSpriteRenderers( out _lowerSpriteRenderer, out _upperSpriteRenderer );
         CurrentAvatar.ShowCharacter(true);
@@ -102,19 +97,19 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
     // Change player's lower body state
     public void ChangeLowerState(PlayerLowerState state)
     {
-        Debug.Log("Lower : " + LowerState.GetStateType().ToString() + " -> " + state.ToString());
-        LowerState.OnExit();
-        LowerState = _lowerStateDictionary[state];
-        LowerState.OnEnter();
+        Debug.Log("Lower : " + _lowerState.GetStateType().ToString() + " -> " + state.ToString());
+        _lowerState.OnExit();
+        _lowerState = _lowerStateDictionary[state];
+        _lowerState.OnEnter();
     }
 
     // Change player's upper body state
     public void ChangeUpperState(PlayerUpperState state)
     {
-        Debug.Log("Upper : " + UpperState.GetStateType().ToString() + " -> " + state.ToString());
-        UpperState.OnExit(state);
-        UpperState = _upperStateDictionary[state];
-        UpperState.OnEnter();
+        Debug.Log("Upper : " + _upperState.GetStateType().ToString() + " -> " + state.ToString());
+        _upperState.OnExit(state);
+        _upperState = _upperStateDictionary[state];
+        _upperState.OnEnter();
     }
 
     public void RegisterLowerState(PlayerLowerState stateKey, PlayerLowerStateBase state)
@@ -133,20 +128,12 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
         }
     }
 
-    public void RegisterLowerAnimator(PlayerType playerType, PlayerLowerAnimatorBase animator)
+    public void RegisterAnimator(PlayerType playerType, PlayerAnimatorBase animator)
     {
-        if (false == _lowerAnimatorDictionary.ContainsKey(playerType))
+        if (false == _animatorDictionary.ContainsKey(playerType))
         {
-            _lowerAnimatorDictionary.Add(playerType, animator);
+            _animatorDictionary.Add(playerType, animator);
         }    
-    }
-
-    public void RegisterUpperAnimator(PlayerType playerType, PlayerUpperAnimatorBase animator)
-    {
-        if (false == _upperAnimatorDictionary.ContainsKey(playerType))
-        {
-            _upperAnimatorDictionary.Add(playerType, animator);
-        }
     }
 
     public void RegisterAvatar(PlayerType playerType, IPlayerAvatar avatar)
@@ -170,8 +157,7 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
         
         _lowerStateDictionary       = new Dictionary<PlayerLowerState, PlayerLowerStateBase>();
         _upperStateDictionary       = new Dictionary<PlayerUpperState, PlayerUpperStateBase>();
-        _lowerAnimatorDictionary    = new Dictionary<PlayerType, PlayerLowerAnimatorBase>();
-        _upperAnimatorDictionary    = new Dictionary<PlayerType, PlayerUpperAnimatorBase>();
+        _animatorDictionary         = new Dictionary<PlayerType, PlayerAnimatorBase>();
         _avatarDictionary           = new Dictionary<PlayerType, IPlayerAvatar>();
         _playerAssembler            = new PlayerAssembler(this, _heroTransform, _heroineTransform);
         _playerRigid                = GetComponent<Rigidbody2D>();
@@ -202,12 +188,13 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
     [SerializeField] private Transform _heroineTransform;
 
     private Dictionary<PlayerType, IPlayerAvatar> _avatarDictionary; 
-    private Dictionary<PlayerType, PlayerLowerAnimatorBase> _lowerAnimatorDictionary;
-    private Dictionary<PlayerType, PlayerUpperAnimatorBase> _upperAnimatorDictionary;
+    private Dictionary<PlayerType, PlayerAnimatorBase> _animatorDictionary;
     private Dictionary<PlayerLowerState, PlayerLowerStateBase> _lowerStateDictionary;
     private Dictionary<PlayerUpperState, PlayerUpperStateBase> _upperStateDictionary;
     private PlayerAssembler _playerAssembler;
     private Rigidbody2D _playerRigid;
+    private PlayerLowerStateBase _lowerState = null;
+    private PlayerUpperStateBase _upperState = null;
     private SpriteRenderer _lowerSpriteRenderer;
     private SpriteRenderer _upperSpriteRenderer;
     private Color _damagedColor;
@@ -219,46 +206,46 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
 
     private void Update()
     {
-        if(false == _isInitilized) return;
+        if (false == _isInitilized) return;
 
         // Update player's state
-        LowerState.OnUpdate();
-        UpperState.OnUpdate();
+        _lowerState.OnUpdate();
+        _upperState.OnUpdate();
     }
 
     // Control player's lower body
     private void ControlLowerBody(ControlInfo controlInfo)
     {
         // Change player state according to the input control info
-        if (controlInfo.move != 0) LowerState.Move(controlInfo.move);
-        else if (controlInfo.stop) LowerState.Stop();
-        if (controlInfo.jump) LowerState.Jump();
-        if (controlInfo.tag) LowerState.Tag();
-        LowerState.Aim(controlInfo.aim != Vector3.zero);
-        LowerState.UpDown(controlInfo.upDown);
+        if (controlInfo.move != 0) _lowerState.Move(controlInfo.move);
+        else if (controlInfo.stop) _lowerState.Stop();
+        if (controlInfo.jump) _lowerState.Jump();
+        if (controlInfo.tag) _lowerState.Tag();
+        _lowerState.Aim(controlInfo.aim != Vector3.zero);
+        _lowerState.UpDown(controlInfo.upDown);
 
         // Change player state according to the object control info
-        LowerState.Climb(controlInfo.climb);
-        LowerState.Push(controlInfo.push);
+        _lowerState.Climb(controlInfo.climb);
+        _lowerState.Push(controlInfo.push);
     }
 
     // Control player's upper body
     private void ControlUpperBody(ControlInfo controlInfo)
     {   
-        if (LowerState.DisableUpperBody())
+        if (_lowerState.DisableUpperBody())
         {
-            UpperState.Disable();
+            _upperState.Disable();
             return;
         }
         
-        UpperState.Enable();
-        if (controlInfo.move != 0) UpperState.Move();
-        else if (controlInfo.stop) UpperState.Stop();
-        if (controlInfo.jump) UpperState.Jump();
-        UpperState.Aim(controlInfo.aim);
-        if (controlInfo.upDown > 0) UpperState.LookUp(true);
-        else UpperState.LookUp(false);
-        if (controlInfo.attack) UpperState.Attack();
+        _upperState.Enable();
+        if (controlInfo.move != 0) _upperState.Move();
+        else if (controlInfo.stop) _upperState.Stop();
+        if (controlInfo.jump) _upperState.Jump();
+        _upperState.Aim(controlInfo.aim);
+        if (controlInfo.upDown > 0) _upperState.LookUp(true);
+        else _upperState.LookUp(false);
+        if (controlInfo.attack) _upperState.Attack();
     }
 
     private IEnumerator StartDamageImmuneState()

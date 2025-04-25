@@ -179,7 +179,6 @@ GameObject:
   - component: {fileID: 5161910571799360942}
   - component: {fileID: 7828203976356498993}
   - component: {fileID: 5002275169029830688}
-  - component: {fileID: 8016937316907206501}
   m_Layer: 0
   m_Name: Heroine Lower Body
   m_TagString: Untagged
@@ -275,18 +274,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8016937316907206501
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3100155105109098096}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 148de3ee24e6c4ff9b929b23ad88a026, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3645786124481219758
 GameObject:
   m_ObjectHideFlags: 0
@@ -509,7 +496,6 @@ GameObject:
   - component: {fileID: 6255710058938064399}
   - component: {fileID: 4288622769952702517}
   - component: {fileID: 4929831444136390512}
-  - component: {fileID: 3625341603113626433}
   m_Layer: 8
   m_Name: Heroine Upper Body
   m_TagString: Untagged
@@ -605,18 +591,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3625341603113626433
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4117885887960782248}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2a2464e198e1c148a165b836ca448d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4205909327111830494
 GameObject:
   m_ObjectHideFlags: 0
@@ -627,6 +601,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1377288265050663595}
   - component: {fileID: 5185365712823968602}
+  - component: {fileID: 992584163425359740}
   m_Layer: 8
   m_Name: Heroine
   m_TagString: Untagged
@@ -663,6 +638,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 470cd26e8d54a4e5a87283d5d75d3671, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &992584163425359740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4205909327111830494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 148de3ee24e6c4ff9b929b23ad88a026, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lowerAnimator: {fileID: 7828203976356498993}
+  _upperAnimator: {fileID: 4288622769952702517}
 --- !u!1 &6352527244798623221
 GameObject:
   m_ObjectHideFlags: 0

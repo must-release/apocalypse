@@ -1,7 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using CharacterEums;
 
-public class HeroineLowerAnimator : PlayerLowerAnimatorBase
+public class HeroAnimator : PlayerAnimatorBase
 {
     /****** Public Members ******/
 
@@ -15,6 +16,11 @@ public class HeroineLowerAnimator : PlayerLowerAnimatorBase
         LowerAnimator.SetBool("Move", true);
     }
 
-    /****** Private Members ******/
+    public override void PlayJumping()
+    {
+        LowerAnimator.SetTrigger("Jump");
 
+    }
+
+    /****** Private Members ******/
 }

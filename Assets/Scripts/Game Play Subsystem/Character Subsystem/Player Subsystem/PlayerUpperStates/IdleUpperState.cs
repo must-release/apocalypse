@@ -9,7 +9,7 @@ public class IdleUpperState : PlayerUpperStateBase
 
     public override void OnEnter()
     {
-        OwnerController.UpperAnimator.PlayIdle();
+        OwnerController.CurrentAnimator.PlayIdle();
     }
     public override void OnUpdate()
     {

@@ -38,21 +38,16 @@ public class PlayerAssembler
 
     private void RegisterAvatar(PlayerType type, Transform root)
     {
-        var avatar = root.GetComponent<IPlayerAvatar>();
+        IPlayerAvatar avatar = root.GetComponent<IPlayerAvatar>();
         Assert.IsTrue(null != avatar, $"{type} avatar (IPlayerAvatar) not found in {root.name}");
         _playerController.RegisterAvatar(type, avatar);
     }
 
     private void RegisterAnimator(PlayerType type, Transform root)
     {
-        var lower = root.GetComponentInChildren<PlayerLowerAnimatorBase>();
-        var upper = root.GetComponentInChildren<PlayerUpperAnimatorBase>();
-
-        Assert.IsTrue(null != lower, $"{type} lower animator not found in children of {root.name}");
-        Assert.IsTrue(null != upper, $"{type} upper animator not found in children of {root.name}");
-
-        _playerController.RegisterLowerAnimator(type, lower);
-        _playerController.RegisterUpperAnimator(type, upper);
+        PlayerAnimatorBase animator = root.GetComponent<PlayerAnimatorBase>();
+        Assert.IsTrue(null != animator, $"{type} animator not found in {root.name}");
+        _playerController.RegisterAnimator(type, animator);
     }
 
     private void RegisterStates()

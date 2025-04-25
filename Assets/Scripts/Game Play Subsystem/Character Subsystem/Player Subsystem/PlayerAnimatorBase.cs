@@ -1,50 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-public abstract class PlayerLowerAnimatorBase : MonoBehaviour
+public abstract class PlayerAnimatorBase : MonoBehaviour
 {
     /****** Public Members ******/
 
-
     public abstract void PlayIdle();
     public abstract void PlayRunning();
+    public abstract void PlayJumping();
 
 
     /****** Protected Members ******/
 
     protected Animator LowerAnimator => _lowerAnimator;
-
-
-    /****** Private Members ******/
-
-    private Animator _lowerAnimator;
-
-    private void Awake()
-    {
-        _lowerAnimator = GetComponent<Animator>();
-    }
-}
-
-public abstract class PlayerUpperAnimatorBase : MonoBehaviour
-{
-    /****** Public Members ******/
-
-    public abstract void PlayIdle();
-    public abstract void PlayRunning();
-
-
-    /****** Protected Members ******/
-
     protected Animator UpperAnimator => _upperAnimator;
 
 
     /****** Private Members ******/
 
-    private Animator _upperAnimator;
+    [SerializeField] private Animator _lowerAnimator = null;
+    [SerializeField] private Animator _upperAnimator = null;
 
     private void Awake()
     {
-        _upperAnimator = GetComponent<Animator>();
+        Assert.IsTrue(null != _lowerAnimator, "Lower Animator is not assigned.");
+        Assert.IsTrue(null != _upperAnimator, "Upper Animator is not assigned.");
     }
 }

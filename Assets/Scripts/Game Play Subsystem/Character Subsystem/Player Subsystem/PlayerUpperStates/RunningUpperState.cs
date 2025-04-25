@@ -7,7 +7,7 @@ public class RunningUpperState : PlayerUpperStateBase
 
     public override void OnEnter()
     {
-        OwnerController.UpperAnimator.PlayRunning();
+        OwnerController.CurrentAnimator.PlayRunning();
     }
     public override void OnUpdate()
     {

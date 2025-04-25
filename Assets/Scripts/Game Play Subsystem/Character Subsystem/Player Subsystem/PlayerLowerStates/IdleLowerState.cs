@@ -14,7 +14,7 @@ public class IdleLowerState : PlayerLowerStateBase
     {
         OwnerRigid.velocity = Vector2.zero;
 
-        OwnerController.LowerAnimator.PlayIdle();
+        OwnerController.CurrentAnimator.PlayIdle();
     }
 
     public override void OnUpdate()

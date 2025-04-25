@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: db1031b637a3048ff8b68ef8bbc97067
+guid: da8bcca22e20b4e498943f5e6ac8bcd2
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -81,33 +81,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
     buildTarget: Standalone
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: iPhone
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -136,7 +110,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Heroine_Running_0
+      name: Heroine_Upper_Jumping_0
       rect:
         serializedVersion: 2
         x: 0
@@ -150,14 +124,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dbb544b33e7e945689937991a87e453d
-      internalID: -376406104
+      spriteID: f4472457260492540b14442eef3faf43
+      internalID: 1776919751
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Heroine_Running_1
+      name: Heroine_Upper_Jumping_1
       rect:
         serializedVersion: 2
         x: 128
@@ -171,14 +145,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 97cbba06cdd89424e85ed783c459f1a0
-      internalID: -121835549
+      spriteID: b26cb0daf4e4c1943aacc67e764f3590
+      internalID: -790943488
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Heroine_Running_2
+      name: Heroine_Upper_Jumping_2
       rect:
         serializedVersion: 2
         x: 256
@@ -192,14 +166,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a8beabbced34643678d7898261ba80e2
-      internalID: -2066947015
+      spriteID: b96e483dad0985c4489e31749282884d
+      internalID: 1850872488
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Heroine_Running_3
+      name: Heroine_Upper_Jumping_3
       rect:
         serializedVersion: 2
         x: 384
@@ -213,14 +187,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 00a19058fd2264604ad352c9f31b3380
-      internalID: 989064628
+      spriteID: 2f42ea00189c6914ca7f51dfa8f5e0ba
+      internalID: -276381939
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Heroine_Running_4
+      name: Heroine_Upper_Jumping_4
       rect:
         serializedVersion: 2
         x: 512
@@ -234,14 +208,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 336d4fe4edb5940c4824bf362e762b26
-      internalID: 1158983967
+      spriteID: 39a5c9a184fc82a46bbce1dd22dd150b
+      internalID: -282020253
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Heroine_Running_5
+      name: Heroine_Upper_Jumping_5
       rect:
         serializedVersion: 2
         x: 640
@@ -255,14 +229,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6833071836b79423faf2b893bac702db
-      internalID: -1395754491
+      spriteID: eb770b8cac1a8f84fba0a94d71d56825
+      internalID: -2005312912
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Heroine_Running_6
+      name: Heroine_Upper_Jumping_6
       rect:
         serializedVersion: 2
         x: 768
@@ -276,71 +250,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 76f0365c123464b9eb29557873a3b333
-      internalID: -1858951605
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Heroine_Running_7
-      rect:
-        serializedVersion: 2
-        x: 896
-        y: 0
-        width: 128
-        height: 128
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a0e574ed520aa4a02b947a6b50b1eee2
-      internalID: 1764718640
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Heroine_Running_8
-      rect:
-        serializedVersion: 2
-        x: 1024
-        y: 0
-        width: 128
-        height: 128
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: bda5c8653eb9b461080848bf216f4f4f
-      internalID: -1921950642
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Heroine_Running_9
-      rect:
-        serializedVersion: 2
-        x: 1152
-        y: 0
-        width: 128
-        height: 128
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a095ea77685844748bf99ed86d1b8039
-      internalID: -185428790
+      spriteID: 20e808cd8ad3c514fb7a12e0deef969e
+      internalID: -1727511204
       vertices: []
       indices: 
       edges: []
@@ -356,16 +267,13 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Heroine_Running_0: -376406104
-      Heroine_Running_1: -121835549
-      Heroine_Running_2: -2066947015
-      Heroine_Running_3: 989064628
-      Heroine_Running_4: 1158983967
-      Heroine_Running_5: -1395754491
-      Heroine_Running_6: -1858951605
-      Heroine_Running_7: 1764718640
-      Heroine_Running_8: -1921950642
-      Heroine_Running_9: -185428790
+      Heroine_Upper_Jumping_0: 1776919751
+      Heroine_Upper_Jumping_1: -790943488
+      Heroine_Upper_Jumping_2: 1850872488
+      Heroine_Upper_Jumping_3: -276381939
+      Heroine_Upper_Jumping_4: -282020253
+      Heroine_Upper_Jumping_5: -2005312912
+      Heroine_Upper_Jumping_6: -1727511204
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

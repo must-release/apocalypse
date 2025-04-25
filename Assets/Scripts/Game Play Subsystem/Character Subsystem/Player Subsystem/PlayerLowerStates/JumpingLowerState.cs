@@ -12,10 +12,9 @@ public class JumpingLowerState : PlayerLowerStateBase
 
     public override void OnEnter()
     {
-        if ( 0 < OwnerTransform.localScale.x ) 
-            movingDirection = 1;
-        else 
-            movingDirection = -1;
+        movingDirection = 0 < OwnerTransform.localScale.x ? 1 : -1;
+
+
     }
 
     public override void OnUpdate()
