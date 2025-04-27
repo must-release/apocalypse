@@ -7,9 +7,9 @@ public class RunningLowerState : PlayerLowerStateBase
 {
     private int movingDirection;
 
-    public override PlayerLowerState GetStateType() { return PlayerLowerState.Running; }
+    public override CommonPlayerLowerState GetStateType() { return CommonPlayerLowerState.Running; }
 
-    public override bool DisableUpperBody() { return false; }
+    public override bool ShouldDisableUpperBody() { return false; }
 
     public override void OnEnter()
     {
@@ -47,35 +47,35 @@ public class RunningLowerState : PlayerLowerStateBase
 
     public override void Stop()
     {
-        OwnerController.ChangeLowerState(PlayerLowerState.Idle);
+        OwnerController.ChangeLowerState(CommonPlayerLowerState.Idle);
     }
 
     public override void Jump()
     {
         OwnerRigid.velocity = new Vector2(OwnerRigid.velocity.x, OwnerController.JumpingSpeed);
-        OwnerController.ChangeLowerState(PlayerLowerState.Jumping);
+        OwnerController.ChangeLowerState(CommonPlayerLowerState.Jumping);
     }
 
     public override void OnAir()
     {
-        OwnerController.ChangeLowerState(PlayerLowerState.Jumping);
+        OwnerController.ChangeLowerState(CommonPlayerLowerState.Jumping);
     }
 
     public override void Aim(bool isAiming)
     {
         if ( isAiming )
-            OwnerController.ChangeLowerState(PlayerLowerState.Aiming);
+            OwnerController.ChangeLowerState(CommonPlayerLowerState.Aiming);
     }
 
     public override void Tag()
     {
-        OwnerController.ChangeLowerState(PlayerLowerState.Tagging);
+        OwnerController.ChangeLowerState(CommonPlayerLowerState.Tagging);
     }
 
     public override void Climb(bool climb) 
     {
         if ( climb ) 
-            OwnerController.ChangeLowerState(PlayerLowerState.Climbing);
+            OwnerController.ChangeLowerState(CommonPlayerLowerState.Climbing);
     }
 
     public override void OnGround() { return; }

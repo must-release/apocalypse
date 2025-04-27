@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class AimingLowerState : PlayerLowerStateBase
 {
-    public override PlayerLowerState GetStateType() { return PlayerLowerState.Aiming; }
+    public override CommonPlayerLowerState GetStateType() { return CommonPlayerLowerState.Aiming; }
 
-    public override bool DisableUpperBody() { return false; }
+    public override bool ShouldDisableUpperBody() { return false; }
 
     public override void OnEnter()
     {
@@ -27,12 +27,12 @@ public class AimingLowerState : PlayerLowerStateBase
     public override void Aim(bool isAiming) 
     { 
         if(!isAiming) 
-            OwnerController.ChangeLowerState(PlayerLowerState.Idle);
+            OwnerController.ChangeLowerState(CommonPlayerLowerState.Idle);
     }
 
     public override void OnAir() 
     {
-        OwnerController.ChangeLowerState(PlayerLowerState.Jumping); 
+        OwnerController.ChangeLowerState(CommonPlayerLowerState.Jumping); 
     }
     
     public override void Move(int move) { return; }

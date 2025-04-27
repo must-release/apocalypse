@@ -6,9 +6,9 @@ using UnityEngine;
 public class IdleLowerState : PlayerLowerStateBase
 {
 
-    public override PlayerLowerState GetStateType() { return PlayerLowerState.Idle; }
+    public override CommonPlayerLowerState GetStateType() { return CommonPlayerLowerState.Idle; }
 
-    public override bool DisableUpperBody() { return false; }
+    public override bool ShouldDisableUpperBody() { return false; }
 
     public override void OnEnter()
     {
@@ -30,33 +30,33 @@ public class IdleLowerState : PlayerLowerStateBase
     public override void Jump()
     {
         OwnerRigid.velocity = new Vector2(OwnerRigid.velocity.x, OwnerController.JumpingSpeed);
-        OwnerController.ChangeLowerState(PlayerLowerState.Jumping);
+        OwnerController.ChangeLowerState(CommonPlayerLowerState.Jumping);
     }
 
     public override void OnAir()
     {
-        OwnerController.ChangeLowerState(PlayerLowerState.Jumping);
+        OwnerController.ChangeLowerState(CommonPlayerLowerState.Jumping);
     }
 
     public override void Aim(bool isAiming)
     {
         if (isAiming)
-            OwnerController.ChangeLowerState(PlayerLowerState.Aiming);
+            OwnerController.ChangeLowerState(CommonPlayerLowerState.Aiming);
     }
 
     public override void Move(int move)
     {
-        OwnerController.ChangeLowerState(PlayerLowerState.Running);
+        OwnerController.ChangeLowerState(CommonPlayerLowerState.Running);
     }
 
     public override void Tag()
     {
-        OwnerController.ChangeLowerState(PlayerLowerState.Tagging);
+        OwnerController.ChangeLowerState(CommonPlayerLowerState.Tagging);
     }
 
     public override void Climb(bool climb)
     {
-        if (climb) OwnerController.ChangeLowerState(PlayerLowerState.Climbing);
+        if (climb) OwnerController.ChangeLowerState(CommonPlayerLowerState.Climbing);
     }
 
     public override void OnGround() { return; }

@@ -4,7 +4,7 @@ using CharacterEums;
 public class LookingUpUpperState : PlayerUpperStateBase
 {
 
-    public override PlayerUpperState GetStateType() { return PlayerUpperState.LookingUp; }
+    public override CommonPlayerUpperState GetStateType() { return CommonPlayerUpperState.LookingUp; }
 
     public override void OnEnter()
     {
@@ -17,10 +17,10 @@ public class LookingUpUpperState : PlayerUpperStateBase
 
     }
 
-    public override void OnExit(PlayerUpperState nextState)
+    public override void OnExit(CommonPlayerUpperState nextState)
     {
         // Recover upper body rotation when not attacking
-        if (PlayerUpperState.TopAttacking == nextState)
+        if (CommonPlayerUpperState.TopAttacking == nextState)
             return;
         
         OwnerController.CurrentAvatar.RotateUpperBody(0);
@@ -31,14 +31,14 @@ public class LookingUpUpperState : PlayerUpperStateBase
         if( lookUp ) return;
 
         if ( OwnerController.StandingGround )
-            OwnerController.ChangeUpperState(PlayerUpperState.Idle);
+            OwnerController.ChangeUpperState(CommonPlayerUpperState.Idle);
         else
-            OwnerController.ChangeUpperState(PlayerUpperState.Jumping);
+            OwnerController.ChangeUpperState(CommonPlayerUpperState.Jumping);
     }
 
     public override void Attack() 
     { 
-        OwnerController.ChangeUpperState(PlayerUpperState.TopAttacking); 
+        OwnerController.ChangeUpperState(CommonPlayerUpperState.TopAttacking); 
     }
 
 

@@ -7,9 +7,9 @@ public class DeadLowerState : PlayerLowerStateBase
     private const float ANIMATION_PLAYTIME = 2f;
     private Coroutine deadStateCoroutine = null;
 
-    public override PlayerLowerState GetStateType() { return PlayerLowerState.Dead; }
+    public override CommonPlayerLowerState GetStateType() { return CommonPlayerLowerState.Dead; }
 
-    public override bool DisableUpperBody() { return true; }
+    public override bool ShouldDisableUpperBody() { return true; }
 
     public override void OnEnter()
     {

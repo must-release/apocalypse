@@ -7,7 +7,7 @@ public class AimingUpperState : PlayerUpperStateBase
     private int direction;
     private bool fixedUpdateFlag;
 
-    public override PlayerUpperState GetStateType() { return PlayerUpperState.Aiming; }
+    public override CommonPlayerUpperState GetStateType() { return CommonPlayerUpperState.Aiming; }
 
     public override void OnEnter()
     {
@@ -30,13 +30,13 @@ public class AimingUpperState : PlayerUpperStateBase
             OwnerController.CurrentAvatar.Aim(true);
     }
 
-    public override void OnExit(PlayerUpperState nextState)
+    public override void OnExit(CommonPlayerUpperState nextState)
     {
         // Turn off player's aiming state
         OwnerController.CurrentAvatar.Aim(false);
 
         // Recover player's upper body rotation when not attacking
-        if(nextState != PlayerUpperState.AimAttacking)
+        if(nextState != CommonPlayerUpperState.AimAttacking)
             OwnerController.CurrentAvatar.RotateUpperBody(0);
 
         // Disable fixed update
@@ -45,18 +45,18 @@ public class AimingUpperState : PlayerUpperStateBase
 
     public override void OnAir() 
     { 
-        OwnerController.ChangeUpperState(PlayerUpperState.Jumping); 
+        OwnerController.ChangeUpperState(CommonPlayerUpperState.Jumping); 
     }
 
     public override void Attack() 
     {
-        OwnerController.ChangeUpperState(PlayerUpperState.AimAttacking); 
+        OwnerController.ChangeUpperState(CommonPlayerUpperState.AimAttacking); 
     }
 
     public override void Aim(Vector3 aim)
     {
         if ( Vector3.zero == aim )
-            OwnerController.ChangeUpperState(PlayerUpperState.Idle); 
+            OwnerController.ChangeUpperState(CommonPlayerUpperState.Idle); 
         else
             aimingPosition = aim;
     }

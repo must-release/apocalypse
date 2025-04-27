@@ -5,7 +5,7 @@ public class TopAttackingUpperState : PlayerUpperStateBase
 {
     private float attackCoolTime = 0;
 
-    public override PlayerUpperState GetStateType() { return PlayerUpperState.TopAttacking; }
+    public override CommonPlayerUpperState GetStateType() { return CommonPlayerUpperState.TopAttacking; }
 
     public override void OnEnter()
     {
@@ -21,13 +21,13 @@ public class TopAttackingUpperState : PlayerUpperStateBase
         // Wait for attacking animation
         attackCoolTime -= Time.deltaTime;
         if ( attackCoolTime < 0 )
-            OwnerController.ChangeUpperState(PlayerUpperState.LookingUp);
+            OwnerController.ChangeUpperState(CommonPlayerUpperState.LookingUp);
     }
 
-    public override void OnExit(PlayerUpperState nextState)
+    public override void OnExit(CommonPlayerUpperState nextState)
     {
         // Recover upper body rotation when not looking up
-        if (PlayerUpperState.LookingUp == nextState)
+        if (CommonPlayerUpperState.LookingUp == nextState)
             return;
 
         OwnerController.CurrentAvatar.RotateUpperBody(0);
@@ -35,7 +35,7 @@ public class TopAttackingUpperState : PlayerUpperStateBase
 
     public override void Attack() 
     { 
-        OwnerController.ChangeUpperState(PlayerUpperState.TopAttacking); 
+        OwnerController.ChangeUpperState(CommonPlayerUpperState.TopAttacking); 
     }
     
     public override void LookUp(bool lookUp)
@@ -43,9 +43,9 @@ public class TopAttackingUpperState : PlayerUpperStateBase
         if( lookUp ) return;
 
         if (OwnerController.StandingGround )
-            OwnerController.ChangeUpperState(PlayerUpperState.Idle);
+            OwnerController.ChangeUpperState(CommonPlayerUpperState.Idle);
         else
-            OwnerController.ChangeUpperState(PlayerUpperState.Jumping);
+            OwnerController.ChangeUpperState(CommonPlayerUpperState.Jumping);
     }
 
 

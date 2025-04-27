@@ -45,7 +45,7 @@ public class HeroAvatar : MonoBehaviour, IPlayerAvatar
     public Transform GetTransform() { return transform; }
     
     // Show or hide character object
-    public void ShowCharacter(bool value)
+    public void ActivateAvatar(bool value)
     {
         gameObject.SetActive(value);
     }

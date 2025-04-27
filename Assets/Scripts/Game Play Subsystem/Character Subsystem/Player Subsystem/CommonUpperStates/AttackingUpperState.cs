@@ -5,7 +5,7 @@ public class AttackingUpperState : PlayerUpperStateBase
 {
     private float attackingTime;
 
-    public override PlayerUpperState GetStateType() { return PlayerUpperState.ATTACKING; }
+    public override CommonPlayerUpperState GetStateType() { return CommonPlayerUpperState.Attacking; }
 
     public override void OnEnter()
     {
@@ -20,13 +20,13 @@ public class AttackingUpperState : PlayerUpperStateBase
         if (attackingTime < 0)
         {
             if ( null == OwnerController.StandingGround )
-                OwnerController.ChangeUpperState(PlayerUpperState.Jumping);
+                OwnerController.ChangeUpperState(CommonPlayerUpperState.Jumping);
             else
-                OwnerController.ChangeUpperState(PlayerUpperState.Idle);
+                OwnerController.ChangeUpperState(CommonPlayerUpperState.Idle);
         }
     }
 
-    public override void OnExit(PlayerUpperState _)
+    public override void OnExit(CommonPlayerUpperState _)
     {
         
     }
@@ -34,12 +34,12 @@ public class AttackingUpperState : PlayerUpperStateBase
     public override void LookUp(bool lookUp) 
     { 
         if ( lookUp ) 
-            OwnerController.ChangeUpperState(PlayerUpperState.LookingUp);
+            OwnerController.ChangeUpperState(CommonPlayerUpperState.LookingUp);
     }
     
     public override void Attack() 
     { 
-        OwnerController.ChangeUpperState(PlayerUpperState.ATTACKING); 
+        OwnerController.ChangeUpperState(CommonPlayerUpperState.Attacking); 
     }
 
 

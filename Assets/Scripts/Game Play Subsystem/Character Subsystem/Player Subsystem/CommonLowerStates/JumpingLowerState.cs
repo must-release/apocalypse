@@ -7,8 +7,8 @@ public class JumpingLowerState : PlayerLowerStateBase
 {
     private int movingDirection;
 
-    public override PlayerLowerState GetStateType() { return PlayerLowerState.Jumping; }
-    public override bool DisableUpperBody() { return false; }
+    public override CommonPlayerLowerState GetStateType() { return CommonPlayerLowerState.Jumping; }
+    public override bool ShouldDisableUpperBody() { return false; }
 
     public override void OnEnter()
     {
@@ -48,13 +48,13 @@ public class JumpingLowerState : PlayerLowerStateBase
 
     public override void OnGround()
     {
-        OwnerController.ChangeLowerState(PlayerLowerState.Idle);
+        OwnerController.ChangeLowerState(CommonPlayerLowerState.Idle);
     }
 
     public override void Climb(bool climb) 
     {
         if ( climb ) 
-            OwnerController.ChangeLowerState(PlayerLowerState.Climbing);
+            OwnerController.ChangeLowerState(CommonPlayerLowerState.Climbing);
     }
 
     public override void Aim(bool isAiming) { return; }

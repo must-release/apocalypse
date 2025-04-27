@@ -1,12 +1,29 @@
 using UnityEngine;
-using CharacterEums;
 
-public abstract class PlayerLowerStateBase : MonoBehaviour
+public abstract class PlayerLowerStateBase<TEnum> : MonoBehaviour where TEnum : System.Enum
+{
+    /****** Public Members ******/
+
+    public abstract TEnum GetStateType();
+    public abstract bool ShouldDisableUpperBody();
+    public abstract void OnEnter();
+    public abstract void OnUpdate();
+    public abstract void OnExit(CommonPlayerLowerState nextState);
+    public abstract void Jump();
+    public abstract void OnAir();
+    public abstract void Aim(bool isAiming);
+    public abstract void Move(int move);
+    public abstract void Tag();
+    public abstract void Climb(bool climb);
+    public abstract void OnGround();
+    public abstract void Stop();
+    public abstract void Push(bool push);
+    public abstract void UpDown(int upDown);
 {
     /****** Public Memebers ******/
 
-    public abstract PlayerLowerState GetStateType();
-    public abstract bool DisableUpperBody();
+    public abstract string GetStateName();
+    public abstract bool ShouldDisableUpperBody();
     public abstract void OnEnter();
     public abstract void OnUpdate();
     public abstract void OnExit();
@@ -23,12 +40,12 @@ public abstract class PlayerLowerStateBase : MonoBehaviour
 
     public virtual void Damaged() 
     {
-        PlayerLowerState nextState = PlayerLowerState.PlayerLowerStateCount;
+        CommonPlayerLowerState nextState = CommonPlayerLowerState.PlayerLowerStateCount;
         
         if ( 0 < OwnerController.HitPoint )
-            nextState = PlayerLowerState.Damaged;
+            nextState = CommonPlayerLowerState.Damaged;
         else
-            nextState = PlayerLowerState.Dead;
+            nextState = CommonPlayerLowerState.Dead;
 
         OwnerController.ChangeLowerState(nextState);
     }
@@ -60,10 +77,10 @@ public abstract class PlayerUpperStateBase : MonoBehaviour
 {
     /****** Public Members ******/
 
-    public abstract PlayerUpperState GetStateType();
+    public abstract string GetStateName();
     public abstract void OnEnter();
     public abstract void OnUpdate();
-    public abstract void OnExit(PlayerUpperState nextState);
+    public abstract void OnExit(CommonPlayerUpperState nextState);
     public abstract void Move();
     public abstract void OnAir();
     public abstract void LookUp(bool lookUp);
@@ -75,7 +92,7 @@ public abstract class PlayerUpperStateBase : MonoBehaviour
 
     public virtual void Disable() 
     { 
-        OwnerController.ChangeUpperState(PlayerUpperState.Disabled); 
+        OwnerController.ChangeUpperState(CommonPlayerUpperState.Disabled); 
     }
 
     public virtual void Aim(Vector3 aim) 
@@ -83,7 +100,7 @@ public abstract class PlayerUpperStateBase : MonoBehaviour
         if ( Vector3.zero == aim || null == OwnerController.StandingGround )
             return;
         
-        OwnerController.ChangeUpperState(PlayerUpperState.Aiming);
+        OwnerController.ChangeUpperState(CommonPlayerUpperState.Aiming);
     }
     public virtual void SetOwner(PlayerController playerController)
     {

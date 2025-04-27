@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class DisabledUpperState : PlayerUpperStateBase
 {
-    public override PlayerUpperState GetStateType() { return PlayerUpperState.Disabled; }
+    public override CommonPlayerUpperState GetStateType() { return CommonPlayerUpperState.Disabled; }
 
     public override void OnEnter()
     {
@@ -13,16 +13,16 @@ public class DisabledUpperState : PlayerUpperStateBase
     {
 
     }
-    public override void OnExit(PlayerUpperState _)
+    public override void OnExit(CommonPlayerUpperState _)
     {
 
     }
     public override void Enable()
     {
         if( OwnerController.StandingGround )
-            OwnerController.ChangeUpperState(PlayerUpperState.Idle);
+            OwnerController.ChangeUpperState(CommonPlayerUpperState.Idle);
         else
-            OwnerController.ChangeUpperState(PlayerUpperState.Jumping);
+            OwnerController.ChangeUpperState(CommonPlayerUpperState.Jumping);
     }
 
 

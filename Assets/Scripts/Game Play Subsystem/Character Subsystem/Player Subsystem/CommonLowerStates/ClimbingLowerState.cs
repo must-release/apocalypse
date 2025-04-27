@@ -18,9 +18,9 @@ public class ClimbingLowerState : PlayerLowerStateBase
         climbDownHeight = OwnerController.CharacterHeight / 2 + 0.2f;
     }
 
-    public override PlayerLowerState GetStateType() { return PlayerLowerState.Climbing; }
+    public override CommonPlayerLowerState GetStateType() { return CommonPlayerLowerState.Climbing; }
 
-    public override bool DisableUpperBody() { return true; }
+    public override bool ShouldDisableUpperBody() { return true; }
 
     public override void OnEnter()
     {
@@ -53,15 +53,15 @@ public class ClimbingLowerState : PlayerLowerStateBase
             {
                 // Move player on the upside of the ladder
                 OwnerTransform.position += Vector3.up * OwnerController.CharacterHeight / 2;
-                OwnerController.ChangeLowerState(PlayerLowerState.Idle);
+                OwnerController.ChangeLowerState(CommonPlayerLowerState.Idle);
             }
             else
             {
                 // Climbed down the climing object
                 if(OwnerController.StandingGround)
-                    OwnerController.ChangeLowerState(PlayerLowerState.Idle);
+                    OwnerController.ChangeLowerState(CommonPlayerLowerState.Idle);
                 else
-                    OwnerController.ChangeLowerState(PlayerLowerState.Jumping);
+                    OwnerController.ChangeLowerState(CommonPlayerLowerState.Jumping);
             }
         }
     }
@@ -71,7 +71,7 @@ public class ClimbingLowerState : PlayerLowerStateBase
         // jump player
         OwnerRigid.velocity = new Vector2(OwnerRigid.velocity.x, OwnerController.JumpingSpeed/3);
 
-        OwnerController.ChangeLowerState(PlayerLowerState.Jumping);
+        OwnerController.ChangeLowerState(CommonPlayerLowerState.Jumping);
     }
 
     // Move character near the climbing object

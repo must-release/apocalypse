@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class IdleUpperState : PlayerUpperStateBase
 {
-    public override PlayerUpperState GetStateType() { return PlayerUpperState.Idle; }
+    public override CommonPlayerUpperState GetStateType() { return CommonPlayerUpperState.Idle; }
 
     public override void OnEnter()
     {
@@ -15,30 +15,30 @@ public class IdleUpperState : PlayerUpperStateBase
     {
 
     }
-    public override void OnExit(PlayerUpperState _)
+    public override void OnExit(CommonPlayerUpperState _)
     {
 
     }
 
     public override void Move() 
     { 
-        OwnerController.ChangeUpperState(PlayerUpperState.Running); 
+        OwnerController.ChangeUpperState(CommonPlayerUpperState.Running); 
     }
 
     public override void OnAir() 
     { 
-        OwnerController.ChangeUpperState(PlayerUpperState.Jumping); 
+        OwnerController.ChangeUpperState(CommonPlayerUpperState.Jumping); 
     }
 
     public override void LookUp(bool lookUp) 
     { 
         if ( lookUp ) 
-            OwnerController.ChangeUpperState(PlayerUpperState.LookingUp);
+            OwnerController.ChangeUpperState(CommonPlayerUpperState.LookingUp);
     }
 
     public override void Attack() 
     { 
-        OwnerController.ChangeUpperState(PlayerUpperState.ATTACKING); 
+        OwnerController.ChangeUpperState(CommonPlayerUpperState.Attacking); 
     }
 
 

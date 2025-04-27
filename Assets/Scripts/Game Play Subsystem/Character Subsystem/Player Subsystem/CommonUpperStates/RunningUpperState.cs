@@ -3,7 +3,7 @@ using CharacterEums;
 
 public class RunningUpperState : PlayerUpperStateBase
 {
-    public override PlayerUpperState GetStateType() { return PlayerUpperState.Running; }
+    public override CommonPlayerUpperState GetStateType() { return CommonPlayerUpperState.Running; }
 
     public override void OnEnter()
     {
@@ -13,35 +13,35 @@ public class RunningUpperState : PlayerUpperStateBase
     {
 
     }
-    public override void OnExit(PlayerUpperState _)
+    public override void OnExit(CommonPlayerUpperState _)
     {
 
     }
 
     public override void Jump() 
     { 
-        OwnerController.ChangeUpperState(PlayerUpperState.Jumping); 
+        OwnerController.ChangeUpperState(CommonPlayerUpperState.Jumping); 
     }
 
     public override void OnAir() 
     { 
-        OwnerController.ChangeUpperState(PlayerUpperState.Jumping); 
+        OwnerController.ChangeUpperState(CommonPlayerUpperState.Jumping); 
     }
 
     public override void LookUp(bool lookUp) 
     { 
         if( lookUp ) 
-            OwnerController.ChangeUpperState(PlayerUpperState.LookingUp);
+            OwnerController.ChangeUpperState(CommonPlayerUpperState.LookingUp);
     }
 
     public override void Attack() 
     { 
-        OwnerController.ChangeUpperState(PlayerUpperState.ATTACKING); 
+        OwnerController.ChangeUpperState(CommonPlayerUpperState.Attacking); 
     }
     
     public override void Stop() 
     { 
-        OwnerController.ChangeUpperState(PlayerUpperState.Idle); 
+        OwnerController.ChangeUpperState(CommonPlayerUpperState.Idle); 
     }
 
 

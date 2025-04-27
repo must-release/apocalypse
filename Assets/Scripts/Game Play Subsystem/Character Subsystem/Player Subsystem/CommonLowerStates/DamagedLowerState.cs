@@ -9,9 +9,9 @@ public class DamagedLowerState : PlayerLowerStateBase
     private const float KNOCK_BACK_SPEED = 15f;
     private float sternedTime;
 
-    public override PlayerLowerState GetStateType() { return PlayerLowerState.Damaged; }
+    public override CommonPlayerLowerState GetStateType() { return CommonPlayerLowerState.Damaged; }
 
-    public override bool DisableUpperBody() { return true; }
+    public override bool ShouldDisableUpperBody() { return true; }
 
     public override void OnEnter()
     {
@@ -27,7 +27,7 @@ public class DamagedLowerState : PlayerLowerStateBase
         {
             if (OwnerController.StandingGround)
             {
-                OwnerController.ChangeLowerState(PlayerLowerState.Idle);
+                OwnerController.ChangeLowerState(CommonPlayerLowerState.Idle);
                 OwnerRigid.velocity = Vector2.zero;
             }
         }

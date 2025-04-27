@@ -41,6 +41,7 @@ public class PlayerAssembler
         IPlayerAvatar avatar = root.GetComponent<IPlayerAvatar>();
         Assert.IsTrue(null != avatar, $"{type} avatar (IPlayerAvatar) not found in {root.name}");
         _playerController.RegisterAvatar(type, avatar);
+        avatar.InitializeAvatar(_playerController);
     }
 
     private void RegisterAnimator(PlayerType type, Transform root)
@@ -57,7 +58,7 @@ public class PlayerAssembler
         foreach (var lowerState in lowerStates)
         {
             lowerState.SetOwner(_playerController);
-            PlayerLowerState state = lowerState.GetStateType();
+            CommonPlayerLowerState state = lowerState.GetStateType();
             _playerController.RegisterLowerState(state, lowerState);
         }
 
@@ -66,7 +67,7 @@ public class PlayerAssembler
         foreach (var upperState in upperStates)
         {
             upperState.SetOwner(_playerController);
-            PlayerUpperState state = upperState.GetStateType();
+            CommonPlayerUpperState state = upperState.GetStateType();
             _playerController.RegisterUpperState(state, upperState);
         }
     }

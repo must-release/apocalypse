@@ -7,7 +7,7 @@ public class AimAttackingUpperState : PlayerUpperStateBase
     private Vector3 aimingPosition;
     private int direction;
 
-    public override PlayerUpperState GetStateType() { return PlayerUpperState.AimAttacking; }
+    public override CommonPlayerUpperState GetStateType() { return CommonPlayerUpperState.AimAttacking; }
 
     public override void OnEnter()
     {
@@ -19,7 +19,7 @@ public class AimAttackingUpperState : PlayerUpperStateBase
         // Wait for attacking animation
         attackCoolTime -= Time.deltaTime;
         if ( 0 < attackCoolTime )
-            OwnerController.ChangeUpperState(PlayerUpperState.Aiming);
+            OwnerController.ChangeUpperState(CommonPlayerUpperState.Aiming);
 
         // Set player's looking direction
         SetDirection();
@@ -28,23 +28,23 @@ public class AimAttackingUpperState : PlayerUpperStateBase
         OwnerController.CurrentAvatar.RotateUpperBody(aimingPosition);
     }
 
-    public override void OnExit(PlayerUpperState nextState)
+    public override void OnExit(CommonPlayerUpperState nextState)
     {
         // Recover player's upper body rotation when not aiming or attacking
-        if (PlayerUpperState.Aiming == nextState || PlayerUpperState.AimAttacking == nextState)
+        if (CommonPlayerUpperState.Aiming == nextState || CommonPlayerUpperState.AimAttacking == nextState)
             return;
 
         OwnerController.CurrentAvatar.RotateUpperBody(0);
     }
 
-    public override void Disable() { OwnerController.ChangeUpperState(PlayerUpperState.Disabled); }
+    public override void Disable() { OwnerController.ChangeUpperState(CommonPlayerUpperState.Disabled); }
 
-    public override void Attack() { OwnerController.ChangeUpperState(PlayerUpperState.AimAttacking); }
+    public override void Attack() { OwnerController.ChangeUpperState(CommonPlayerUpperState.AimAttacking); }
 
     public override void Aim(Vector3 aim)
     {
         if(Vector3.zero == aim )
-            OwnerController.ChangeUpperState(PlayerUpperState.Idle); 
+            OwnerController.ChangeUpperState(CommonPlayerUpperState.Idle); 
         else
             aimingPosition = aim;
     }

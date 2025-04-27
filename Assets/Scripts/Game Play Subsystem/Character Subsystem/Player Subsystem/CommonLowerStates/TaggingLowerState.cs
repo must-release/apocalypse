@@ -8,9 +8,9 @@ public class TaggingLowerState : PlayerLowerStateBase
     private float popping = 3f;
     private bool isOnAir = false;
 
-    public override PlayerLowerState GetStateType() { return PlayerLowerState.Tagging; }
+    public override CommonPlayerLowerState GetStateType() { return CommonPlayerLowerState.Tagging; }
 
-    public override bool DisableUpperBody() { return true; }
+    public override bool ShouldDisableUpperBody() { return true; }
 
     public override void OnEnter()
     {
@@ -30,9 +30,9 @@ public class TaggingLowerState : PlayerLowerStateBase
         if (time > taggingTime)
         {
             if ( isOnAir )
-                OwnerController.ChangeLowerState(PlayerLowerState.Jumping);
+                OwnerController.ChangeLowerState(CommonPlayerLowerState.Jumping);
             else
-                OwnerController.ChangeLowerState(PlayerLowerState.Idle);
+                OwnerController.ChangeLowerState(CommonPlayerLowerState.Idle);
         }
     }
 
