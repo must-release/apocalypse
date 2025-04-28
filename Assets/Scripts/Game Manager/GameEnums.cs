@@ -12,7 +12,7 @@ namespace StageEnums
     public enum Stage { Test, Prologue, Library, Event, StageCount }
 }
 
-namespace CharacterEums
+namespace CharacterEnums
 {
     public enum PlayerType { Hero, Heroine, PlayerCount }
     public enum HeroLowerState { Idle, Running, Jumping, Aiming, Climbing, Pushing, Tagging, Damaged, Dead, HeroLowerStateCount }

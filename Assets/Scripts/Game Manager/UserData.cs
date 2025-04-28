@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using StageEnums;
-using CharacterEums;
+using CharacterEnums;
 using System.Collections.Generic;
 
 

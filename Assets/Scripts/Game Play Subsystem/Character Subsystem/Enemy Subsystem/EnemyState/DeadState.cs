@@ -1,4 +1,4 @@
-using CharacterEums;
+using CharacterEnums;
 using UnityEngine;
 
 public class DeadState : EnemyStateBase

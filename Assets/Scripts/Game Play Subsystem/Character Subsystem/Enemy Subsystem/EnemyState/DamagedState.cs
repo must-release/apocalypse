@@ -1,4 +1,4 @@
-using CharacterEums;
+using CharacterEnums;
 using JetBrains.Rider.Unity.Editor;
 using UnityEngine;
 

@@ -1,6 +1,6 @@
 using UnityEngine;
 using StageEnums;
-using CharacterEums;
+using CharacterEnums;
 
 public class PlayerManager : MonoBehaviour
 {

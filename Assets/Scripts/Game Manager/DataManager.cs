@@ -6,7 +6,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
 using StageEnums;
-using CharacterEums;
+using CharacterEnums;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 

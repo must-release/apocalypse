@@ -1,5 +1,5 @@
 using UnityEngine;
-using CharacterEums;
+using CharacterEnums;
 
 public class AimingUpperState : PlayerUpperStateBase
 {

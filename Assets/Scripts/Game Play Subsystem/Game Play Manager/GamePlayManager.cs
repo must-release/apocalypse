@@ -1,6 +1,6 @@
 using System.Collections;
 using AssetEnums;
-using CharacterEums;
+using CharacterEnums;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Assertions;

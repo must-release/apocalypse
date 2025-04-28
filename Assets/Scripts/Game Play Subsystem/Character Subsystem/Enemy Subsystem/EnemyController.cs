@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using CharacterEums;
+using CharacterEnums;
 using WeaponEnums;
 using UnityEngine;
 

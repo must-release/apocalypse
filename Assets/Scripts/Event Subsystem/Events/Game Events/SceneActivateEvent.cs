@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UIEnums;
 using EventEnums;
-using CharacterEums;
+using CharacterEnums;
 using UnityEngine.Assertions;
 
 /*

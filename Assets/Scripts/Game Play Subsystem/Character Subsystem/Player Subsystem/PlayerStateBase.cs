@@ -19,24 +19,6 @@ public abstract class PlayerLowerStateBase<TEnum> : MonoBehaviour where TEnum : 
     public abstract void Stop();
     public abstract void Push(bool push);
     public abstract void UpDown(int upDown);
-{
-    /****** Public Memebers ******/
-
-    public abstract string GetStateName();
-    public abstract bool ShouldDisableUpperBody();
-    public abstract void OnEnter();
-    public abstract void OnUpdate();
-    public abstract void OnExit();
-    public abstract void Jump();
-    public abstract void OnAir();
-    public abstract void Aim(bool isAiming);
-    public abstract void Move(int move);
-    public abstract void Tag();
-    public abstract void Climb(bool climb);
-    public abstract void OnGround();
-    public abstract void Stop();
-    public abstract void Push(bool push);
-    public abstract void UpDown(int upDown);
 
     public virtual void Damaged() 
     {
@@ -73,11 +55,11 @@ public abstract class PlayerLowerStateBase<TEnum> : MonoBehaviour where TEnum : 
 }
 
 
-public abstract class PlayerUpperStateBase : MonoBehaviour
+public abstract class PlayerUpperStateBase<TEnum> : MonoBehaviour where TEnum : System.Enum
 {
     /****** Public Members ******/
 
-    public abstract string GetStateName();
+    public abstract TEnum  GetStateType();
     public abstract void OnEnter();
     public abstract void OnUpdate();
     public abstract void OnExit(CommonPlayerUpperState nextState);

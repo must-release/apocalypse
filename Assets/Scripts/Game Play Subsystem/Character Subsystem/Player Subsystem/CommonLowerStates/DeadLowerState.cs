@@ -1,5 +1,5 @@
 using System.Collections;
-using CharacterEums;
+using CharacterEnums;
 using UnityEngine;
 
 public class DeadLowerState : PlayerLowerStateBase

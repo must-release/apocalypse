@@ -1,5 +1,5 @@
 using UnityEngine;
-using CharacterEums;
+using CharacterEnums;
 using UnityEngine.Assertions;
 
 public class PlayerAssembler

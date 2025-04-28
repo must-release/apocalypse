@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using CharacterEums;
+using CharacterEnums;
 using UnityEngine.Assertions;
 
-using LowerState = 
+using HeroineLower = PlayerLowerStateBase<CharacterEnums.HeroineLowerState>;
+using HeroineUpper = PlayerUpperStateBase<CharacterEnums.HeroineUpperState>;
+
 
 public class HeroineAvatar : MonoBehaviour, IPlayerAvatar
 {
@@ -34,12 +36,12 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar
 
     /****** Private Members ******/
 
-    private Dictionary<HeroineLowerState, PlayerLowerStateBase<HeroineLowerState>> _lowerStateTable = new Dictionary<HeroineLowerState, PlayerLowerStateBase<HeroineLowerState>>();
-    private Dictionary<HeroineUpperState, PlayerUpperStateBase> _upperStateTable = new Dictionary<HeroineUpperState, PlayerUpperStateBase>();
+    private Dictionary<HeroineLowerState, HeroineLower> _lowerStateTable = new Dictionary<HeroineLowerState, HeroineLower>();
+    private Dictionary<HeroineUpperState, HeroineUpper> _upperStateTable = new Dictionary<HeroineUpperState, HeroineUpper>();
 
     private PlayerController        _playerController   = null;
-    private PlayerLowerStateBase<HeroineLowerState>    _lowerState         = null;
-    private PlayerUpperStateBase    _upperState         = null;
+    private HeroineLower            _lowerState         = null;
+    private HeroineUpper            _upperState         = null;
     private PlayerAnimatorBase      _animator           = null;
 
     private bool    _isLoaded   = false;
@@ -47,7 +49,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar
 
     private void Awake()
     {
-
+        RegisterStates();
     }
 
     private IEnumerator Start() 
@@ -95,24 +97,24 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar
         if (controlInfo.attack) _upperState.Attack();
     }
 
-    private void RegisterHeroineStates()
+    private void RegisterStates()
     {
-        var lowerStates = GetComponentsInChildren<PlayerLowerStateBase<HeroineLowerState>>();
-        Assert.IsTrue(0 < lowerStates.Length, "No HeroineLowerState components found in children.");
-        foreach (var lowerState in lowerStates)
+        var lowers = GetComponentsInChildren<HeroineLower>();
+        Assert.IsTrue(0 < lowers.Length, "No LowerState components found in children.");
+        foreach (var lower in lowers)
         {
-            lowerState.SetOwner(_playerController);
-            HeroineLowerState state = lowerState.GetStateType();
-            _lowerStateTable.Add(state, lowerState);
+            lower.SetOwner(_playerController);
+            HeroineLowerState state = lower.GetStateType();
+            _lowerStateTable.Add(state, lower);
         }
 
-        var upperStates = _playerController.GetComponentsInChildren<HeroineUpperState>();
-        Assert.IsTrue(0 < upperStates.Length, "No HeroineUpperState components found in children.");
-        foreach (var upperState in upperStates)
+        var uppers = _playerController.GetComponentsInChildren<HeroineUpper>();
+        Assert.IsTrue(0 < uppers.Length, "No HeroineUpperState components found in children.");
+        foreach (var upper in uppers)
         {
-            upperState.SetOwner(_playerController);
-            HeroineUpperState state = upperState.GetStateType();
-            RegisterUpperState(state, upperState);
+            upper.SetOwner(_playerController);
+            HeroineUpperState state = upper.GetStateType();
+            _upperStateTable.Add(state, upper);
         }
     }
 }
