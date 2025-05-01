@@ -21,6 +21,8 @@ namespace CharacterEnums
     public enum HeroineUpperState { Disabled, Idle, Running, Jumping, LookingUp, Aiming, Attacking, TopAttacking, AimAttacking, HeroineUpperStateCount }
     public enum EnemyState { Patrolling, Chasing, Attacking, Damaged, Dead, EnemyStateCount }
 
+    public enum FacingDirection { Left = -1, Right = 1 }
+
 }
 
 namespace WeaponEnums

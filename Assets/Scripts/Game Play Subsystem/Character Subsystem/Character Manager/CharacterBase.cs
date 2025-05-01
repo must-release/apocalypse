@@ -2,51 +2,64 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using LayerEnums;
+using UnityEngine.Assertions;
+using CharacterEnums;
 
-public abstract class CharacterBase : MonoBehaviour
+public abstract class CharacterBase : MonoBehaviour, IMotionController, ICharacterInfo
 {
-    public GameObject StandingGround {get; protected set;}
-    public float CharacterHeight {get; protected set;}
-    public DamageInfo RecentDamagedInfo { get; protected set; }
-    public int HitPoint { get; protected set; }
+    /****** Public Members ******/
 
-    protected List<InteractionObject> interactableObjects = new List<InteractionObject>();
-    protected List<InteractionObject> interactingObjects = new List<InteractionObject>();
+    public FacingDirection FacingDirection 
+    { 
+        get 
+        { 
+            if (0 < transform.localScale.x) return FacingDirection.Right;
+            else return FacingDirection.Left; 
+        } 
+    }
+    public ControlInfo  CurrentControlInfo  { get; protected set; } = null;
+    public GameObject   StandingGround      { get; protected set; } = null;
+    public DamageInfo   RecentDamagedInfo   { get; protected set; } = null;
+    public Vector2      CurrentVelocity     
+    { 
+        get 
+        { 
+            Assert.IsTrue(null != _rigidbody, "Rigidbody2D is not assigned.");
+            return _rigidbody.velocity; 
+        } 
+    }
+    public Vector2      CurrentPosition     { get { return transform.position; } }
+    public float        CharacterHeight     { get; protected set; } = -1;
+    public float        MovingSpeed         { get; protected set; } = -1;
+    public float        JumpingSpeed        { get; protected set; } = -1;
+    public float        Gravity             { get; protected set; } = -1;
+    public int          MaxHitPoint         { get; protected set; } = -1;
+    public int          CurrentHitPoint     { get; protected set; } = -1;
 
-
-    /***** Abstract Functions *****/
     public abstract void ControlCharacter(ControlInfo controlInfo);
     public abstract void OnAir();
     public abstract void OnGround();
     public abstract void OnDamaged(DamageInfo damageInfo);
 
-    protected virtual void Awake() 
-    { 
-        gameObject.layer = LayerMask.NameToLayer(LAYER.CHARACTER); 
-    }
-
-    protected virtual void Start() { }
-
-
-    /***** Object Interaction Functions *****/
     public void RecognizeInteractionObject(InteractionObject obj)
     {
-        bool notInteractable = !interactableObjects.Contains(obj);
-        bool notInteracting = !interactingObjects.Contains(obj);
+        bool notInteractable = !_interactableObjects.Contains(obj);
+        bool notInteracting = !_interactingObjects.Contains(obj);
 
         if(notInteractable && notInteracting)
         {
-            interactableObjects.Add(obj);
+            _interactableObjects.Add(obj);
         }
         else
         {
             Debug.LogError("Detecting duplicate Object");
         }
     }
+    
     public void ForgetInteractionObject(InteractionObject obj)
     {
-        bool removedFromInteractable = interactableObjects.Remove(obj);
-        bool removedFromInteracting = interactingObjects.Remove(obj);
+        bool removedFromInteractable = _interactableObjects.Remove(obj);
+        bool removedFromInteracting = _interactingObjects.Remove(obj);
 
         if (!removedFromInteractable && !removedFromInteracting)
         {
@@ -54,34 +67,99 @@ public abstract class CharacterBase : MonoBehaviour
         }
     }
 
-    // Control Interaction objects and set object control info
+    public void SetVelocity(Vector2 velocity)
+    {
+        Assert.IsTrue(null != _rigidbody, "Rigidbody2D is not assigned.");
+
+        _rigidbody.velocity = velocity;
+    }
+
+    public void AddForce(Vector2 force, ForceMode2D mode = ForceMode2D.Force)
+    {
+        Assert.IsTrue(null != _rigidbody, "Rigidbody2D is not assigned.");
+
+        _rigidbody.AddForce(force, mode);
+    }
+
+    public void ResetVelocity()
+    {
+        Assert.IsTrue(null != _rigidbody, "Rigidbody2D is not assigned.");
+
+        _rigidbody.velocity = Vector2.zero;
+    }
+
+    public void SetAngularVelocity(float angularVelocity)
+    {
+        Assert.IsTrue(null != _rigidbody, "Rigidbody2D is not assigned.");
+
+        _rigidbody.angularVelocity = angularVelocity;
+    }
+
+    public void SetGravityScale(float scale)
+    {
+        Assert.IsTrue(null != _rigidbody, "Rigidbody2D is not assigned.");
+
+        _rigidbody.gravityScale = scale;
+    }
+
+    public void TeleportTo(Vector2 position)
+    {
+        Assert.IsTrue(null != _rigidbody, "Rigidbody2D is not assigned.");
+
+        _rigidbody.MovePosition(position);
+    }
+
+    public void SetFacingDirection(FacingDirection direction)
+    {
+        if (direction == FacingDirection.Right)
+            transform.localScale = new Vector3(1, 1, 1);
+        else if (direction == FacingDirection.Left)
+            transform.localScale = new Vector3(-1, 1, 1);
+    }
+
+    /****** Protected Members ******/
+
+    protected virtual void Awake() 
+    { 
+        _rigidbody = GetComponent<Rigidbody2D>();
+
+        gameObject.layer = LayerMask.NameToLayer(LAYER.CHARACTER); 
+    }
+
+    protected virtual void Start() { }
+
     protected void ControlInteractionObjects(ControlInfo controlInfo)
     {
         // Control interacting objects
-        for (int i = interactingObjects.Count - 1; i >= 0; i--)
+        for (int i = _interactingObjects.Count - 1; i >= 0; i--)
         {
-            if(!interactingObjects[i].CheckInteractingControl(this, controlInfo))
+            if(!_interactingObjects[i].CheckInteractingControl(this, controlInfo))
             {
-                interactingObjects[i].EndInteraction(this, controlInfo);
-                interactableObjects.Add(interactingObjects[i]);
-                interactingObjects.RemoveAt(i);
+                _interactingObjects[i].EndInteraction(this, controlInfo);
+                _interactableObjects.Add(_interactingObjects[i]);
+                _interactingObjects.RemoveAt(i);
             }
         }
 
         // Control interactable objects
-        for (int i = interactableObjects.Count - 1; i >= 0; i--)
+        for (int i = _interactableObjects.Count - 1; i >= 0; i--)
         {
-            if(interactableObjects[i].CheckInteractableControl(this, controlInfo))
+            if(_interactableObjects[i].CheckInteractableControl(this, controlInfo))
             {
-                interactableObjects[i].StartInteraction(this, controlInfo);
-                interactingObjects.Add(interactableObjects[i]);
-                interactableObjects.RemoveAt(i);
+                _interactableObjects[i].StartInteraction(this, controlInfo);
+                _interactingObjects.Add(_interactableObjects[i]);
+                _interactableObjects.RemoveAt(i);
             }
         }
     }
 
 
-    /********** Detect Collision **********/
+    /****** Private Members ******/
+
+    private List<InteractionObject> _interactableObjects   = new List<InteractionObject>();
+    private List<InteractionObject> _interactingObjects    = new List<InteractionObject>();
+    private Rigidbody2D _rigidbody = null;
+
     private void OnCollisionExit2D(Collision2D collision)
     {
         if(collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
@@ -94,7 +172,7 @@ public abstract class CharacterBase : MonoBehaviour
             }
         }
     }
-    IEnumerator OnAirDelay()
+    private IEnumerator OnAirDelay()
     {
         yield return new WaitForSeconds(0.1f);
         if(StandingGround == null) OnAir();
@@ -108,7 +186,6 @@ public abstract class CharacterBase : MonoBehaviour
             StandingGround = collision.gameObject;
         }
     } 
-
 
     // Check angle between character and ground
     private bool StandingOnGround(Collision2D collision)

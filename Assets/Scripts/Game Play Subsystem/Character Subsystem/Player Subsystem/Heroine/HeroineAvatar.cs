@@ -4,33 +4,102 @@ using UnityEngine;
 using CharacterEnums;
 using UnityEngine.Assertions;
 
-using HeroineLower = PlayerLowerStateBase<CharacterEnums.HeroineLowerState>;
-using HeroineUpper = PlayerUpperStateBase<CharacterEnums.HeroineUpperState>;
+using HeroineLower              = PlayerLowerStateBase<CharacterEnums.HeroineLowerState>;
+using HeroineUpper              = PlayerUpperStateBase<CharacterEnums.HeroineUpperState>;
+using ILowerStateController     = IStateController<CharacterEnums.HeroineLowerState>;
+using IUpperStateController     = IStateController<CharacterEnums.HeroineUpperState>;
 
 
-public class HeroineAvatar : MonoBehaviour, IPlayerAvatar
+public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController, IUpperStateController, IAsyncLoadObject
 {
     /****** Public Members ******/
 
-    public bool IsLoaded() => _isLoaded;
+    public PlayerType           PlayerType  => PlayerType.Heroine;
+    public PlayerAnimatorBase   Animator    => _animator;
+    public bool                 IsLoaded()  => _isLoaded;
+    public bool                 IsAiming    { set{} }
 
-    public bool IsAiming { set{} }
 
-    public void InitializeAvatar(PlayerController playerController)
+    public void InitializeAvatar(IMotionController playerPhysics, ICharacterInfo playerInfo)
     {
-        _playerController = playerController;
+        Assert.IsTrue(null != playerPhysics, "Player Physics is null");
+        Assert.IsTrue(null != playerInfo, "Player Info is null");
+
+        _playerPhysics = playerPhysics;
+        _playerInfo    = playerInfo;
+
+        RegisterStates();
         gameObject.SetActive(false);
     }
 
     public void ControlAvatar(ControlInfo controlInfo)
     {
+        Assert.IsTrue(null != controlInfo, "Control info is null");
+
         ControlLowerBody(controlInfo);
         ControlUpperBody(controlInfo);
     }    
 
     public void ActivateAvatar(bool value)
     {
+        Assert.IsTrue(_lowerStateTable.ContainsKey(HeroineLowerState.Idle), "Idle state not found");
+        Assert.IsTrue(_upperStateTable.ContainsKey(HeroineUpperState.Idle), "Idle state not found");
+
+        if (value)
+        {
+            _lowerState = _lowerStateTable[HeroineLowerState.Idle];
+            _upperState = _upperStateTable[HeroineUpperState.Idle];
+        }
+
         gameObject.SetActive(value);
+    }
+
+    public void OnUpdate()
+    {
+        Assert.IsTrue(_isLoaded, "Avatar is not loaded yet");
+
+        _lowerState.OnUpdate();
+        _upperState.OnUpdate();
+    }
+
+    public void OnAir()
+    {
+        _lowerState.OnAir();
+        _upperState.OnAir();
+    }
+
+    public void OnGround()
+    {
+        _lowerState.OnGround();
+        _upperState.OnGround();
+    }
+
+    public void OnDamaged(DamageInfo damageInfo)
+    {
+        _lowerState.Damaged();
+        _upperState.Disable();
+    }
+
+    public void ChangeState(HeroineLowerState state)
+    {
+        Assert.IsTrue(_lowerStateTable.ContainsKey(state), "Invalid Lower State");
+
+        Debug.Log("Lower : " + _lowerState.GetStateType().ToString() + " -> " + state.ToString());
+
+        _lowerState.OnExit();
+        _lowerState = _lowerStateTable[state];
+        _lowerState.OnEnter();
+    }
+
+    public void ChangeState(HeroineUpperState state)
+    {
+        Assert.IsTrue(_upperStateTable.ContainsKey(state), "Invalid Upper State");
+
+        Debug.Log("Upper : " + _upperState.GetStateType().ToString() + " -> " + state.ToString());
+
+        _upperState.OnExit(state);
+        _upperState = _upperStateTable[state];
+        _upperState.OnEnter();
     }
 
 
@@ -39,7 +108,8 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar
     private Dictionary<HeroineLowerState, HeroineLower> _lowerStateTable = new Dictionary<HeroineLowerState, HeroineLower>();
     private Dictionary<HeroineUpperState, HeroineUpper> _upperStateTable = new Dictionary<HeroineUpperState, HeroineUpper>();
 
-    private PlayerController        _playerController   = null;
+    private IMotionController      _playerPhysics      = null;
+    private ICharacterInfo          _playerInfo         = null;
     private HeroineLower            _lowerState         = null;
     private HeroineUpper            _upperState         = null;
     private PlayerAnimatorBase      _animator           = null;
@@ -49,7 +119,6 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar
 
     private void Awake()
     {
-        RegisterStates();
     }
 
     private IEnumerator Start() 
@@ -103,16 +172,16 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar
         Assert.IsTrue(0 < lowers.Length, "No LowerState components found in children.");
         foreach (var lower in lowers)
         {
-            lower.SetOwner(_playerController);
+            lower.InitializeState(this ,_playerPhysics, _playerInfo);
             HeroineLowerState state = lower.GetStateType();
             _lowerStateTable.Add(state, lower);
         }
 
-        var uppers = _playerController.GetComponentsInChildren<HeroineUpper>();
+        var uppers = GetComponentsInChildren<HeroineUpper>();
         Assert.IsTrue(0 < uppers.Length, "No HeroineUpperState components found in children.");
         foreach (var upper in uppers)
         {
-            upper.SetOwner(_playerController);
+            upper.InitializeState(this, _playerPhysics, _playerInfo);
             HeroineUpperState state = upper.GetStateType();
             _upperStateTable.Add(state, upper);
         }

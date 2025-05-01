@@ -27,5 +27,6 @@ public abstract class PlayerAnimatorBase : MonoBehaviour
     {
         Assert.IsTrue(null != _lowerAnimator, "Lower Animator is not assigned.");
         Assert.IsTrue(null != _upperAnimator, "Upper Animator is not assigned.");
+
     }
 }
