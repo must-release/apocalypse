@@ -28,9 +28,9 @@ public class TitleUIController : MonoBehaviour, IUIController<BaseUI>, IAsyncLoa
 
     public void Cancel() { return; }
 
-    public BaseUI GetUIType() { return BaseUI.Title; }
+    public BaseUI UIType => BaseUI.Title;
 
-    public bool IsLoaded() => _isLoaded;
+    public bool IsLoaded => _isLoaded;
 
 
     /****** Private Members ******/

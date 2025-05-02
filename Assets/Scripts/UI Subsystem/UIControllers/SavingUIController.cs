@@ -27,7 +27,7 @@ public class SavingUIController : MonoBehaviour, IUIController<SubUI>
 
     }
 
-    public SubUI GetUIType() { return SubUI.Saving; }
+    public SubUI UIType => SubUI.Saving;
 
 
     /****** Private Members ******/

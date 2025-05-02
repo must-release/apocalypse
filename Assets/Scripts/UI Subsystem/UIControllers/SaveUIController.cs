@@ -29,11 +29,11 @@ public class SaveUIController : SaveLoadUIBase, IUIController<SubUI>
 
     public void Cancel()
     {
-        if ( false == TryClosingConfirmPanel() )
-            UIController.Instance.TurnSubUIOff( GetUIType() );
+        if (false == TryClosingConfirmPanel())
+            UIController.Instance.TurnSubUIOff(UIType);
     }
 
-    public SubUI GetUIType() { return SubUI.Save; }
+    public SubUI UIType => SubUI.Save;
 
 
     /****** Protected Members ******/
@@ -44,7 +44,7 @@ public class SaveUIController : SaveLoadUIBase, IUIController<SubUI>
 
         ConfirmText.text    =   _SaveConfirmText;
         LabelText.text      =   _SaveLabelText;
-        SaveOrLoad          =   GetUIType();
+        SaveOrLoad          =   UIType;
         
         SetConfirmButtonAction(SaveAtSelectedSlot);
     }

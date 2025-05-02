@@ -27,11 +27,11 @@ public class LoadUIController : SaveLoadUIBase, IUIController<SubUI>
 
     public void Cancel()
     {
-        if ( false == TryClosingConfirmPanel() )
-            UIController.Instance.TurnSubUIOff( GetUIType() );
+        if (false == TryClosingConfirmPanel())
+            UIController.Instance.TurnSubUIOff(UIType);
     }
 
-    public SubUI GetUIType() { return SubUI.Load; }
+    public SubUI UIType => SubUI.Load; 
 
 
     /****** Protected Members ******/
@@ -42,7 +42,7 @@ public class LoadUIController : SaveLoadUIBase, IUIController<SubUI>
 
         ConfirmText.text    =   _LoadConfirmText;
         LabelText.text      =   _LoadLabelText;
-        SaveOrLoad          =   GetUIType();
+        SaveOrLoad          =   UIType;
 
         SetConfirmButtonAction(LoadSavedData);
     }

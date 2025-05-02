@@ -27,7 +27,7 @@ public class StoryUIController : MonoBehaviour, IUIController<BaseUI>
 
     }
 
-    public BaseUI GetUIType() { return BaseUI.Story; }
+    public BaseUI UIType => BaseUI.Story;
 
 
     /****** Private Members ******/

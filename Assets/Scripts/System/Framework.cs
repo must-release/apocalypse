@@ -80,7 +80,7 @@ public class Framework : MonoBehaviour
 
             if ( systemObject.transform.TryGetComponent(out IAsyncLoadObject asyncObject) )
             {
-                yield return new WaitUntil(() => asyncObject.IsLoaded());
+                yield return new WaitUntil(() => asyncObject.IsLoaded);
             }
         }
 

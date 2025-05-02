@@ -37,7 +37,7 @@ public class ChoiceUIController : MonoBehaviour, IUIController<SubUI>
 
     }
 
-    public SubUI GetUIType() { return SubUI.Choice; }
+    public SubUI UIType => SubUI.Choice;
 
 
     /****** Private Members ******/

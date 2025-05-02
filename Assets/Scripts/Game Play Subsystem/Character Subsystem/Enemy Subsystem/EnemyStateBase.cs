@@ -26,7 +26,7 @@ public abstract class EnemyStateBase : MonoBehaviour
     /*** Virtual Functions ***/
     public virtual void OnDamaged() 
     { 
-        if( 0 < enemyController.HitPoint )
+        if( 0 < enemyController.CurrentHitPoint )
             enemyController.ChangeState(EnemyState.Damaged);
         else
             enemyController.ChangeState(EnemyState.Dead);

@@ -19,7 +19,7 @@ public class PreferenceUIController : MonoBehaviour, IUIController<SubUI>
 
     public void Cancel()
     {
-        UIController.Instance.TurnSubUIOff( GetUIType() );
+        UIController.Instance.TurnSubUIOff(UIType);
     }
 
     public void ExitUI()
@@ -27,7 +27,7 @@ public class PreferenceUIController : MonoBehaviour, IUIController<SubUI>
         gameObject.SetActive(false);
     }
 
-    public SubUI GetUIType() { return SubUI.Preference; }
+    public SubUI UIType => SubUI.Preference;
 
     
     /****** Private Members ******/

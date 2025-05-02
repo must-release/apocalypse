@@ -10,11 +10,11 @@ public class GamePlayManager : MonoBehaviour, IAsyncLoadObject
 {
     /****** Public Members ******/
 
-    public static GamePlayManager Instance;
+    public static GamePlayManager Instance = null;
 
-    public bool IsCutscenePlaying { get; private set; }
+    public bool IsCutscenePlaying { get; private set; } = false;
 
-    public bool IsLoaded() => _isLoaded;
+    public bool IsLoaded => _isLoaded;
 
     // Play Cutscene
     public void PlayCutscene() { StartCoroutine(CutsceneCoroutine()); }

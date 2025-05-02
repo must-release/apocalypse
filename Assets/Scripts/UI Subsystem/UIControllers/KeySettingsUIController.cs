@@ -37,7 +37,7 @@ public class KeySettingsUIController : MonoBehaviour, IUIController<SubUI>
         }
     }
 
-    public SubUI GetUIType() { return SubUI.KeySettings; }
+    public SubUI UIType => SubUI.KeySettings;
 
 
     /****** Private fields ******/

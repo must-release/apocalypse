@@ -10,12 +10,18 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
 
     public IPlayerAvatar        CurrentAvatar       { get; private set; } = null;
     public PlayerType           CurrentPlayerType   { get; private set; } = PlayerType.PlayerCount;
-    public PlayerAnimatorBase   CurrentAnimator     { get; private set; } = null;
-
-
-    public bool IsLoaded()
+    
+    public bool IsLoaded
     {
-        return _avatarDictionary[PlayerType.Heroine].IsLoaded(); // && playerDictionary[CHARACTER.HEROINE].IsLoaded;
+        get
+        {
+            foreach (var avatar in _avatarDictionary)
+            {
+                if (false == avatar.Value.IsLoaded) return false;
+            }
+
+            return true;
+        }
     }
 
     public void InitializePlayer(PlayerType player)
@@ -23,7 +29,6 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
         // Initially change character
         CurrentPlayerType   = player;
         CurrentAvatar       = _avatarDictionary[CurrentPlayerType];
-        CurrentAnimator     = _animatorDictionary[CurrentPlayerType];
 
         CurrentAvatar.ActivateAvatar(true);
 
@@ -73,7 +78,6 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
 
         CurrentPlayerType   = player;
         CurrentAvatar       = _avatarDictionary[CurrentPlayerType];
-        CurrentAnimator     = _animatorDictionary[CurrentPlayerType];
 
         CurrentAvatar.ActivateAvatar(true);
     }
@@ -111,7 +115,7 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
         _damagedColor               = Color.red;
         _originalColor              = Color.white;
 
-        RegisterAvatar(PlayerType.Hero, _heroTransform);
+        //RegisterAvatar(PlayerType.Hero, _heroTransform);
         RegisterAvatar(PlayerType.Heroine, _heroineTransform);
     }
 

@@ -29,7 +29,7 @@ public class LoadingUIController : MonoBehaviour, IUIController<BaseUI>
 
     public void Cancel() { return; }
 
-    public BaseUI GetUIType() { return BaseUI.Loading; }
+    public BaseUI UIType => BaseUI.Loading;
     
 
     /****** Private fields ******/

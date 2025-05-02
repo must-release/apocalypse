@@ -26,8 +26,8 @@ public class CutsceneUIController : MonoBehaviour, IUIController<BaseUI>
         
     }
 
-    public BaseUI GetUIType() { return BaseUI.Cutscene; }
-
+    public BaseUI UIType => BaseUI.Cutscene;
+    
 
     /****** Private Members ******/
 

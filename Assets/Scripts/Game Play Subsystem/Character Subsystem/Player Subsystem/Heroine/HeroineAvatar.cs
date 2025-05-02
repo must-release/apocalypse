@@ -16,7 +16,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
 
     public PlayerType           PlayerType  => PlayerType.Heroine;
     public PlayerAnimatorBase   Animator    => _animator;
-    public bool                 IsLoaded()  => _isLoaded;
+    public bool                 IsLoaded    => _isLoaded;
     public bool                 IsAiming    { set{} }
 
 
@@ -29,7 +29,6 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
         _playerInfo    = playerInfo;
 
         RegisterStates();
-        gameObject.SetActive(false);
     }
 
     public void ControlAvatar(ControlInfo controlInfo)
@@ -84,7 +83,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
     {
         Assert.IsTrue(_lowerStateTable.ContainsKey(state), "Invalid Lower State");
 
-        Debug.Log("Lower : " + _lowerState.GetStateType().ToString() + " -> " + state.ToString());
+        Debug.Log("Lower : " + _lowerState.StateType.ToString() + " -> " + state.ToString());
 
         _lowerState.OnExit();
         _lowerState = _lowerStateTable[state];
@@ -95,7 +94,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
     {
         Assert.IsTrue(_upperStateTable.ContainsKey(state), "Invalid Upper State");
 
-        Debug.Log("Upper : " + _upperState.GetStateType().ToString() + " -> " + state.ToString());
+        Debug.Log("Upper : " + _upperState.StateType.ToString() + " -> " + state.ToString());
 
         _upperState.OnExit(state);
         _upperState = _upperStateTable[state];
@@ -150,7 +149,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
 
     private void ControlUpperBody(ControlInfo controlInfo)
     {   
-        if (_lowerState.ShouldDisableUpperBody())
+        if (_lowerState.ShouldDisableUpperBody)
         {
             _upperState.Disable();
             return;
@@ -173,7 +172,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
         foreach (var lower in lowers)
         {
             lower.InitializeState(this ,_playerPhysics, _playerInfo);
-            HeroineLowerState state = lower.GetStateType();
+            HeroineLowerState state = lower.StateType;
             _lowerStateTable.Add(state, lower);
         }
 
@@ -182,7 +181,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
         foreach (var upper in uppers)
         {
             upper.InitializeState(this, _playerPhysics, _playerInfo);
-            HeroineUpperState state = upper.GetStateType();
+            HeroineUpperState state = upper.StateType;
             _upperStateTable.Add(state, upper);
         }
     }

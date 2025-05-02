@@ -5,10 +5,6 @@ using WeaponEnums;
 
 public class NormalInfectee : EnemyController
 {
-
-    public float MovingSpeed;
-
-
     private const int MAX_HIT_POINT = 3;
     private const float PATROL_RANGE_MAX = 30;
     private const float PATROL_RANGE_MIN = 5;
@@ -53,7 +49,7 @@ public class NormalInfectee : EnemyController
     protected override void StartEnemy()
     {
         MovingSpeed     = 5f;
-        HitPoint        = MAX_HIT_POINT;
+        CurrentHitPoint = MAX_HIT_POINT;
 
         patrolLeftEnd   = 0;
         patrolRightEnd  = 0;

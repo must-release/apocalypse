@@ -8,8 +8,9 @@ using UnityEngine;
 
 public abstract class EnemyController : CharacterBase, IAsyncLoadObject
 {
-    public GameObject DetectedPlayer {get; set;}
-    public Transform ChasingTarget {get; set;}
+    public GameObject DetectedPlayer { get; set; }
+    public Transform ChasingTarget { get; set; }
+    public bool IsLoaded => isLoaded;
 
     // Common variables
     protected Rigidbody2D enemyRigid;
@@ -168,10 +169,6 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
         defalutDamageArea.SetDamageArea(transform.GetComponent<Collider2D>(), defaultDamageInfo, true);
     }
 
-    public bool IsLoaded() { return isLoaded; }
-
-
-
 
     /****** Operate Enemy Character ******/
 
@@ -208,7 +205,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
     public override void OnDamaged(DamageInfo damageInfo)
     {
         RecentDamagedInfo = damageInfo;
-        HitPoint -= RecentDamagedInfo.damageValue;
+        CurrentHitPoint -= RecentDamagedInfo.damageValue;
 
         currentState.OnDamaged();
     }
@@ -230,6 +227,5 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
     protected abstract void InitializeTerrainChecker();
     protected abstract void InitializePlayerDetector();
     protected abstract void InitializeDamageAndWeapon();
-    
 
 }

@@ -22,7 +22,7 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
         set { _isStoryPanelClicked = value; }
     }
     
-    public bool IsLoaded() => _isLoaded;
+    public bool IsLoaded => _isLoaded;
 
     public void ChangeBaseUI(BaseUI baseUI)
     {
@@ -175,7 +175,7 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
 
             foreach ( IUIController<BaseUI> uiController in uiObject.GetComponents<IUIController<BaseUI>>() )
             {
-                BaseUI uiType = uiController.GetUIType();
+                BaseUI uiType = uiController.UIType;
                 _baseUIDictionary.Add(uiType, uiController);
             }
 
@@ -184,7 +184,7 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
 
             if (uiObject.TryGetComponent(out IAsyncLoadObject asyncObject))
             {
-                yield return new WaitUntil(() => asyncObject.IsLoaded());
+                yield return new WaitUntil(() => asyncObject.IsLoaded);
             }
 
             uiObject.SetActive(false);
@@ -210,7 +210,7 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
 
             foreach ( IUIController<SubUI> uiController in uiObject.GetComponents<IUIController<SubUI>>() )
             {
-                SubUI uiType = uiController.GetUIType();
+                SubUI uiType = uiController.UIType;
                 _subUIDictionary.Add(uiType, uiController);
             }
 
@@ -219,7 +219,7 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
 
             if (uiObject.TryGetComponent(out IAsyncLoadObject asyncObject))
             {
-                yield return new WaitUntil(() => asyncObject.IsLoaded());
+                yield return new WaitUntil(() => asyncObject.IsLoaded);
             }
 
             uiObject.SetActive(false);
@@ -265,7 +265,8 @@ public interface IUIController
     public void Cancel();
 }
 
-public interface IUIController<T> : IUIController
+public interface IUIController<TEnum> : IUIController
+    where TEnum : Enum
 {
-    public T GetUIType();
+    TEnum UIType { get; }
 }

@@ -17,7 +17,7 @@ public class DataManager : MonoBehaviour, IAsyncLoadObject
     public static DataManager Instance { get; private set; }
     public const int SLOT_NUM = 18;
     public bool IsSaving { get; private set; }
-    public bool IsLoaded() => _isLoaded;
+    public bool IsLoaded => _isLoaded;
 
     public void CreateNewGameData()
     {

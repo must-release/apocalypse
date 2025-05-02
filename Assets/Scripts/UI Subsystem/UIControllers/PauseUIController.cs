@@ -46,9 +46,9 @@ public class PauseUIController : MonoBehaviour, IUIController<SubUI>, IAsyncLoad
         }
     }
 
-    public SubUI GetUIType() { return SubUI.Pause; }
+    public SubUI UIType  => SubUI.Pause;
 
-    public bool IsLoaded() => _isLoaded;
+    public bool IsLoaded => _isLoaded;
     
 
     /****** Private Members ******/

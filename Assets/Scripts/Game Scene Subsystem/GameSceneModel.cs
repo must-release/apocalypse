@@ -106,7 +106,7 @@ public class GameSceneModel : MonoBehaviour
             // Wait for async loading of scene objects in the map
             foreach (var sceneObject in loadedMap.GetComponentsInChildren<IAsyncLoadObject>())
             {
-                yield return new WaitUntil(()=>sceneObject.IsLoaded());
+                yield return new WaitUntil(()=>sceneObject.IsLoaded);
             }
 
             // Check if the Maps queue is at its maximum capacity
@@ -135,7 +135,7 @@ public class GameSceneModel : MonoBehaviour
             Player = player.Result.transform;
             if (Player.TryGetComponent(out IAsyncLoadObject sceneObject))
             {
-                yield return new WaitUntil(()=>sceneObject.IsLoaded());
+                yield return new WaitUntil(()=>sceneObject.IsLoaded);
             }
             Player.gameObject.SetActive(false);
             Player.parent = SceneObjects.transform;

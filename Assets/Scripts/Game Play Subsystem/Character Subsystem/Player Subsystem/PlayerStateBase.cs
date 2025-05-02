@@ -7,8 +7,8 @@ public abstract class PlayerLowerStateBase<TStateEnum> : MonoBehaviour where TSt
 {
     /****** Public Members ******/
 
-    public abstract TStateEnum GetStateType();
-    public abstract bool ShouldDisableUpperBody();
+    public abstract TStateEnum StateType { get; }
+    public abstract bool ShouldDisableUpperBody { get; }
     public abstract void OnEnter();
     public abstract void OnUpdate();
     public abstract void OnExit();
@@ -48,7 +48,7 @@ public abstract class PlayerUpperStateBase<TStateEnum> : MonoBehaviour where TSt
 {
     /****** Public Members ******/
 
-    public abstract TStateEnum  GetStateType();
+    public abstract TStateEnum  StateType { get; }
     public abstract void OnEnter();
     public abstract void OnUpdate();
     public abstract void OnExit(TStateEnum nextState);
@@ -60,7 +60,7 @@ public abstract class PlayerUpperStateBase<TStateEnum> : MonoBehaviour where TSt
         Assert.IsTrue(null != playerInfo, "PlayerInfo is not assigned.");
 
         StateController = stateController;
-        PlayerPhysics   = playerPhysics;
+        PlayerMotion   = playerPhysics;
         PlayerInfo      = playerInfo;
     }
 
@@ -78,6 +78,6 @@ public abstract class PlayerUpperStateBase<TStateEnum> : MonoBehaviour where TSt
     /****** Protected Members ******/
     
     protected IStateController<TStateEnum>  StateController { get; private set; }
-    protected IMotionController             PlayerPhysics   { get; private set; }
+    protected IMotionController             PlayerMotion    { get; private set; }
     protected ICharacterInfo                PlayerInfo      { get; private set; }
 }

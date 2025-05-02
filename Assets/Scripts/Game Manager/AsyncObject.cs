@@ -1,4 +1,4 @@
 public interface IAsyncLoadObject
 {
-    public bool IsLoaded();
+    bool IsLoaded { get; }
 }

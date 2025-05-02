@@ -7,42 +7,37 @@ public class HeroAvatar : MonoBehaviour, IPlayerAvatar
 {
     /****** Public Members ******/
 
-    public bool IsLoaded() => _isLoaded; 
+    public bool IsLoaded => _isLoaded; 
 
-    private PlayerController playerController;
-    private Queue<WeaponBase> weapons;
-    private List<GameObject> aimingDots;
-    private int weaponCount;
-    private int aimingDotsCount;
-    private Transform shootingPointPivot;
-    private Transform shootingPoint;
-    private float attackCoolTime;
-    private bool _isLoaded = false;
-
-    private void Awake() {
-        playerController = transform.parent.GetComponent<PlayerController>();
-        weapons = new Queue<WeaponBase>();
-        aimingDots = new List<GameObject>();
-        weaponCount = 20;
-        aimingDotsCount = 40;
-        shootingPointPivot = transform.Find("Shooting Point Pivot");
-        shootingPoint = shootingPointPivot.Find("Shooting Point").transform;
-        attackCoolTime = 0.5f;
-    }
-
-    private void Start() { StartCoroutine(LoadWeaponsAndDots()); }
-    public IEnumerator LoadWeaponsAndDots()
+    public void InitializeAvatar(IMotionController motionController, ICharacterInfo characterInfo)
     {
-        yield return WeaponFactory.Instance.PoolWeapons(playerController, WEAPON_TYPE.BULLET, weapons, weaponCount);
-        yield return WeaponFactory.Instance.PoolAimingDots(WEAPON_TYPE.BULLET, aimingDots, aimingDotsCount);
-        _isLoaded = true;
+        // TODO: Add initialization logic here
     }
 
-    private void Update() 
+    public void ControlAvatar(ControlInfo controlInfo)
     {
+        // TODO: Add control logic here
     }
 
-    public Transform GetTransform() { return transform; }
+    public void OnUpdate()
+    {
+        // TODO: Add update logic here
+    }
+
+    public void OnAir()
+    {
+        // TODO: Add logic for when the avatar is in the air
+    }
+
+    public void OnGround()
+    {
+        // TODO: Add logic for when the avatar is on the ground
+    }
+
+    public void OnDamaged(DamageInfo damageInfo)
+    {
+        // TODO: Add logic for when the avatar is damaged
+    }
     
     // Show or hide character object
     public void ActivateAvatar(bool value)
@@ -91,15 +86,36 @@ public class HeroAvatar : MonoBehaviour, IPlayerAvatar
         return attackCoolTime;
     }
 
-    public void GetAnimators( out Animator lowerAnimator, out Animator upperAnimator)
-    {
-        lowerAnimator = null;
-        upperAnimator = null;
+    /****** Private Members ******/
+
+    private PlayerController playerController;
+    private Queue<WeaponBase> weapons;
+    private List<GameObject> aimingDots;
+    private int weaponCount;
+    private int aimingDotsCount;
+    private Transform shootingPointPivot;
+    private Transform shootingPoint;
+    private float attackCoolTime;
+    private bool _isLoaded = false;
+
+    private void Awake() {
+        playerController = transform.parent.GetComponent<PlayerController>();
+        weapons = new Queue<WeaponBase>();
+        aimingDots = new List<GameObject>();
+        weaponCount = 20;
+        aimingDotsCount = 40;
+        shootingPointPivot = transform.Find("Shooting Point Pivot");
+        shootingPoint = shootingPointPivot.Find("Shooting Point").transform;
+        attackCoolTime = 0.5f;
     }
 
-    public void GetSpriteRenderers( out SpriteRenderer lowerSpriteRenderer, out SpriteRenderer upperSpirteRenderer )
+    private void Start() { StartCoroutine(LoadWeaponsAndDots()); }
+    private IEnumerator LoadWeaponsAndDots()
     {
-        lowerSpriteRenderer = null;
-        upperSpirteRenderer = null;
+        yield return WeaponFactory.Instance.PoolWeapons(playerController, WEAPON_TYPE.BULLET, weapons, weaponCount);
+        yield return WeaponFactory.Instance.PoolAimingDots(WEAPON_TYPE.BULLET, aimingDots, aimingDotsCount);
+        _isLoaded = true;
     }
+
+    private void Update() { }
 }

@@ -11,7 +11,7 @@ public class GameOverUIController : MonoBehaviour, IUIController<BaseUI>, IAsync
 {
     /****** Public Members ******/
 
-    public bool IsLoaded() => _isLoaded;
+    public bool IsLoaded => _isLoaded;
 
     public void EnterUI()
     {
@@ -33,7 +33,7 @@ public class GameOverUIController : MonoBehaviour, IUIController<BaseUI>, IAsync
 
     }
 
-    public BaseUI GetUIType() { return BaseUI.GameOver; }
+    public BaseUI UIType => BaseUI.GameOver;
 
 
     /****** Private Members ******/

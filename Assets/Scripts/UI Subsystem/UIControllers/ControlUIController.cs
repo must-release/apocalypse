@@ -29,7 +29,7 @@ public class ControlUIController : MonoBehaviour, IUIController<BaseUI>
         //UIController.Instance.ChangeState(UIController.STATE.PAUSE, false);
     }
 
-    public BaseUI GetUIType() { return BaseUI.Control; }
+    public BaseUI UIType => BaseUI.Control;
 
     /****** Private Members ******/
 

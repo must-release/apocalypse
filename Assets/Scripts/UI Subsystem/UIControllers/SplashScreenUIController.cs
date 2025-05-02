@@ -22,7 +22,7 @@ public class SplashScreenUIController : MonoBehaviour, IUIController<BaseUI>
 
     public void Cancel() { return; }
 
-    public BaseUI GetUIType() { return BaseUI.SplashScreen; }
+    public BaseUI UIType => BaseUI.SplashScreen;
 
 
     /****** Private Members ******/
