@@ -11,17 +11,17 @@ public abstract class PlayerLowerStateBase<TStateEnum> : MonoBehaviour where TSt
     public abstract void OnUpdate();
     public abstract void OnExit();
 
-    public virtual void InitializeState(IStateController<TStateEnum> stateController, IMotionController playerMotion, ICharacterInfo playerInfo, PlayerAnimatorBase playerAnimator)
+    public virtual void InitializeState(IStateController<TStateEnum> stateController, IMotionController playerMotion, ICharacterInfo playerInfo, Animator lowerAnimator)
     {
         Assert.IsTrue(null != stateController, "StateController is not assigned.");
         Assert.IsTrue(null != playerMotion, "PlayerMotion is not assigned.");
         Assert.IsTrue(null != playerInfo, "PlayerInfo is not assigned.");
-        Assert.IsTrue(null != playerAnimator, "PlayerAnimator is not assigned.");
+        Assert.IsTrue(null != lowerAnimator, "LowerAnimator is not assigned.");
 
         StateController = stateController;
         PlayerMotion    = playerMotion;
         PlayerInfo      = playerInfo;
-        PlayerAnimator  = playerAnimator;
+        LowerAnimator   = lowerAnimator;
     }
 
     public virtual void Jump() {}
@@ -41,7 +41,7 @@ public abstract class PlayerLowerStateBase<TStateEnum> : MonoBehaviour where TSt
     protected IStateController<TStateEnum>  StateController { get; private set; }
     protected IMotionController             PlayerMotion    { get; private set; }
     protected ICharacterInfo                PlayerInfo      { get; private set; }
-    protected PlayerAnimatorBase            PlayerAnimator  { get; private set; }
+    protected Animator                      LowerAnimator   { get; private set; }
 }
 
 
@@ -54,17 +54,17 @@ public abstract class PlayerUpperStateBase<TStateEnum> : MonoBehaviour where TSt
     public abstract void OnUpdate();
     public abstract void OnExit(TStateEnum nextState);
 
-    public virtual void InitializeState(IStateController<TStateEnum> stateController, IMotionController playerMotion, ICharacterInfo playerInfo, PlayerAnimatorBase playerAnimator)
+    public virtual void InitializeState(IStateController<TStateEnum> stateController, IMotionController playerMotion, ICharacterInfo playerInfo, Animator upperAnimator)
     {
         Assert.IsTrue(null != stateController, "StateController is not assigned.");
         Assert.IsTrue(null != playerMotion, "PlayerMotion is not assigned.");
         Assert.IsTrue(null != playerInfo, "PlayerInfo is not assigned.");
-        Assert.IsTrue(null != playerAnimator, "PlayerAnimator is not assigned.");
+        Assert.IsTrue(null != upperAnimator, "UpperAnimator is not assigned.");
 
         StateController = stateController;
         PlayerMotion    = playerMotion;
         PlayerInfo      = playerInfo;
-        PlayerAnimator  = playerAnimator;
+        UpperAnimator   = upperAnimator;
     }
 
     public virtual void Move() {}
@@ -83,5 +83,5 @@ public abstract class PlayerUpperStateBase<TStateEnum> : MonoBehaviour where TSt
     protected IStateController<TStateEnum>  StateController { get; private set; }
     protected IMotionController             PlayerMotion    { get; private set; }
     protected ICharacterInfo                PlayerInfo      { get; private set; }
-    protected PlayerAnimatorBase            PlayerAnimator  { get; private set; }
+    protected Animator                      UpperAnimator   { get; private set; }
 }

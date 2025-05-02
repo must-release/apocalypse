@@ -1,4 +1,3 @@
-using CharacterEnums;
 using UnityEngine;
 
 public class HeroineIdleLowerState : PlayerLowerStateBase<HeroineLowerState>
@@ -25,11 +24,13 @@ public class HeroineIdleLowerState : PlayerLowerStateBase<HeroineLowerState>
     public override void Jump()
     {
         PlayerMotion.SetVelocity(new Vector2(PlayerInfo.CurrentVelocity.x, PlayerInfo.JumpingSpeed));
+        LowerAnimator.SetTrigger(AnimatorParams.JumpTrigger);
         StateController.ChangeState(HeroineLowerState.Jumping);
     }
 
     public override void OnAir()
     {
+        LowerAnimator.SetBool(AnimatorParams.IsOnGround, false);
         StateController.ChangeState(HeroineLowerState.Jumping);
     }
 
@@ -42,6 +43,7 @@ public class HeroineIdleLowerState : PlayerLowerStateBase<HeroineLowerState>
 
     public override void Move(int move)
     {
+        LowerAnimator.SetBool(AnimatorParams.IsRunning, true);
         StateController.ChangeState(HeroineLowerState.Running);
     }
 

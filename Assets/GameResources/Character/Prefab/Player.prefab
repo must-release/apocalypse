@@ -653,7 +653,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1377288265050663595}
   - component: {fileID: 5185365712823968602}
-  - component: {fileID: 992584163425359740}
   m_Layer: 8
   m_Name: Heroine
   m_TagString: Untagged
@@ -688,18 +687,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 470cd26e8d54a4e5a87283d5d75d3671, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &992584163425359740
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4205909327111830494}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 148de3ee24e6c4ff9b929b23ad88a026, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _lowerAnimator: {fileID: 7828203976356498993}

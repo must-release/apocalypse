@@ -1,5 +1,4 @@
 using UnityEngine;
-using CharacterEnums;
 
 public class HeroineRunningUpperState : PlayerUpperStateBase<HeroineUpperState>
 {

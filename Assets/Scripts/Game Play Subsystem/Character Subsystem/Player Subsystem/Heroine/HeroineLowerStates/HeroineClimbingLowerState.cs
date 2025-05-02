@@ -1,5 +1,3 @@
-using CharacterEnums;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class HeroineClimbingLowerState : PlayerLowerStateBase<HeroineLowerState>
@@ -9,9 +7,9 @@ public class HeroineClimbingLowerState : PlayerLowerStateBase<HeroineLowerState>
     public override HeroineLowerState   StateType               => HeroineLowerState.Climbing;
     public override bool                ShouldDisableUpperBody  => true;
 
-    public override void InitializeState(IStateController<HeroineLowerState> stateController, IMotionController playerPhysics, ICharacterInfo playerInfo, PlayerAnimatorBase playerAnimator)
+    public override void InitializeState(IStateController<HeroineLowerState> stateController, IMotionController playerPhysics, ICharacterInfo playerInfo, Animator lowerAnimator)
     {
-        base.InitializeState(stateController, playerPhysics, playerInfo, playerAnimator);
+        base.InitializeState(stateController, playerPhysics, playerInfo, lowerAnimator);
 
         _climbingSpeed      = playerInfo.MovingSpeed;
         _climbUpHeight      = 0.1f;

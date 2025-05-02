@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using CharacterEnums;
 using UnityEngine;
 using UnityEngine.Assertions;
 

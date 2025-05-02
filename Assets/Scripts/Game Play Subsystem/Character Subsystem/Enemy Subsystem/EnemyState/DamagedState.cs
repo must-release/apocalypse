@@ -1,5 +1,3 @@
-using CharacterEnums;
-using JetBrains.Rider.Unity.Editor;
 using UnityEngine;
 
 public class DamagedState : EnemyStateBase

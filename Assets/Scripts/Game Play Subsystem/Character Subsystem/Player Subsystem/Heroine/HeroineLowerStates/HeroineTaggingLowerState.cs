@@ -1,4 +1,3 @@
-using CharacterEnums;
 using UnityEngine;
 
 public class HeroineTaggingLowerState : PlayerLowerStateBase<HeroineLowerState>

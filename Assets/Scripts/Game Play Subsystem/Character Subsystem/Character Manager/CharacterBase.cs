@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine;
 using LayerEnums;
 using UnityEngine.Assertions;
-using CharacterEnums;
 
 public abstract class CharacterBase : MonoBehaviour, IMotionController, ICharacterInfo
 {

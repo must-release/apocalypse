@@ -1,5 +1,4 @@
 using UnityEngine;
-using CharacterEnums;
 
 /// <summary>
 /// Interface for motion control methods.

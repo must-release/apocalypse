@@ -1,4 +1,3 @@
-using CharacterEnums;
 using UnityEngine;
 
 public interface ICharacterInfo

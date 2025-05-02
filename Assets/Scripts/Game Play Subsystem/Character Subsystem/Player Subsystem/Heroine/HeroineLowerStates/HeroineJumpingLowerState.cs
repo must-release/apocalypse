@@ -1,4 +1,3 @@
-using CharacterEnums;
 using UnityEngine;
 
 public class HeroineJumpingLowerState : PlayerLowerStateBase<HeroineLowerState>
@@ -45,6 +44,7 @@ public class HeroineJumpingLowerState : PlayerLowerStateBase<HeroineLowerState>
 
     public override void OnGround()
     {
+        LowerAnimator.SetBool(AnimatorParams.IsOnGround, true);
         StateController.ChangeState(HeroineLowerState.Idle);
     }
 

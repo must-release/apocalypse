@@ -1,5 +1,4 @@
 using System.Collections;
-using CharacterEnums;
 using UnityEngine;
 
 public class HeroineDeadLowerState : PlayerLowerStateBase<HeroineLowerState>

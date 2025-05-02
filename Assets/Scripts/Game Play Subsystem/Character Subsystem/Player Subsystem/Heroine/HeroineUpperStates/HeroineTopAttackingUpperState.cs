@@ -1,6 +1,4 @@
 using UnityEngine;
-using CharacterEnums;
-using Unity.VisualScripting;
 
 public class HeroineTopAttackingUpperState : PlayerUpperStateBase<HeroineUpperState>
 {
