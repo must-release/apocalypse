@@ -14,19 +14,17 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
 {
     /****** Public Members ******/
 
-    public PlayerType           PlayerType  => PlayerType.Heroine;
-    public PlayerAnimatorBase   Animator    => _animator;
-    public bool                 IsLoaded    => _isLoaded;
-    public bool                 IsAiming    { set{} }
+    public PlayerType   PlayerType  => PlayerType.Heroine;
+    public bool         IsLoaded    => _isLoaded;
 
 
-    public void InitializeAvatar(IMotionController playerPhysics, ICharacterInfo playerInfo)
+    public void InitializeAvatar(IMotionController playerMotion, ICharacterInfo playerInfo)
     {
-        Assert.IsTrue(null != playerPhysics, "Player Physics is null");
+        Assert.IsTrue(null != playerMotion, "Player Physics is null");
         Assert.IsTrue(null != playerInfo, "Player Info is null");
 
-        _playerPhysics = playerPhysics;
-        _playerInfo    = playerInfo;
+        _playerMotion   = playerMotion;
+        _playerInfo     = playerInfo;
 
         RegisterStates();
     }
@@ -107,7 +105,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
     private Dictionary<HeroineLowerState, HeroineLower> _lowerStateTable = new Dictionary<HeroineLowerState, HeroineLower>();
     private Dictionary<HeroineUpperState, HeroineUpper> _upperStateTable = new Dictionary<HeroineUpperState, HeroineUpper>();
 
-    private IMotionController      _playerPhysics      = null;
+    private IMotionController       _playerMotion       = null;
     private ICharacterInfo          _playerInfo         = null;
     private HeroineLower            _lowerState         = null;
     private HeroineUpper            _upperState         = null;
@@ -118,6 +116,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
 
     private void Awake()
     {
+        _animator = GetComponent<PlayerAnimatorBase>();
     }
 
     private IEnumerator Start() 
@@ -167,11 +166,15 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
 
     private void RegisterStates()
     {
+        Assert.IsTrue(null != _playerMotion, "Player Motion is not assigned");
+        Assert.IsTrue(null != _playerInfo, "Player Info is not assigned");
+        Assert.IsTrue(null != _animator, "Animator is not assigned");
+
         var lowers = GetComponentsInChildren<HeroineLower>();
         Assert.IsTrue(0 < lowers.Length, "No LowerState components found in children.");
         foreach (var lower in lowers)
         {
-            lower.InitializeState(this ,_playerPhysics, _playerInfo);
+            lower.InitializeState(this ,_playerMotion, _playerInfo, _animator);
             HeroineLowerState state = lower.StateType;
             _lowerStateTable.Add(state, lower);
         }
@@ -180,7 +183,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
         Assert.IsTrue(0 < uppers.Length, "No HeroineUpperState components found in children.");
         foreach (var upper in uppers)
         {
-            upper.InitializeState(this, _playerPhysics, _playerInfo);
+            upper.InitializeState(this, _playerMotion, _playerInfo, _animator);
             HeroineUpperState state = upper.StateType;
             _upperStateTable.Add(state, upper);
         }

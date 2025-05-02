@@ -92,7 +92,6 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
 
         base.Awake();
         
-        _animatorDictionary         = new Dictionary<PlayerType, PlayerAnimatorBase>();
         _avatarDictionary           = new Dictionary<PlayerType, IPlayerAvatar>();
         _playerRigid                = GetComponent<Rigidbody2D>();
     }
@@ -127,7 +126,6 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
     [SerializeField] private Transform _heroineTransform;
 
     private Dictionary<PlayerType, IPlayerAvatar>       _avatarDictionary; 
-    private Dictionary<PlayerType, PlayerAnimatorBase>  _animatorDictionary;
     
     private Rigidbody2D _playerRigid;
     private SpriteRenderer _lowerSpriteRenderer;
