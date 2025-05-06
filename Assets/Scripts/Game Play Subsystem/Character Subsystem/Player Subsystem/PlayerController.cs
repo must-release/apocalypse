@@ -119,13 +119,13 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
 
 
     /****** Private Members ******/
-    private const int _MaxHitPoint = 3;
 
     [SerializeField] private Transform _heroTransform;
     [SerializeField] private Transform _heroineTransform;
 
-    private Dictionary<PlayerType, IPlayerAvatar>       _avatarDictionary; 
-    
+    private const int _MaxHitPoint = 3;
+
+    private Dictionary<PlayerType, IPlayerAvatar> _avatarDictionary; 
     private Rigidbody2D _playerRigid;
     private SpriteRenderer _lowerSpriteRenderer;
     private SpriteRenderer _upperSpriteRenderer;

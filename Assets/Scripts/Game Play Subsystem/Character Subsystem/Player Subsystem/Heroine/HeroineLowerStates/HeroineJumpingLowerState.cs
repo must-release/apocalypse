@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 public class HeroineJumpingLowerState : PlayerLowerStateBase<HeroineLowerState>
@@ -5,11 +6,11 @@ public class HeroineJumpingLowerState : PlayerLowerStateBase<HeroineLowerState>
     /****** Public Members ******/
 
     public override HeroineLowerState   StateType               => HeroineLowerState.Jumping;
-    public override bool                ShouldDisableUpperBody  => false;
+    public override bool                ShouldDisableUpperBody  => true;
 
     public override void OnEnter()
     {
-
+        LowerAnimator.Play(AnimatorState.HeroineLower.Jumping);
     }
 
     public override void OnUpdate()
@@ -44,7 +45,6 @@ public class HeroineJumpingLowerState : PlayerLowerStateBase<HeroineLowerState>
 
     public override void OnGround()
     {
-        LowerAnimator.SetBool(AnimatorParams.IsOnGround, true);
         StateController.ChangeState(HeroineLowerState.Idle);
     }
 
@@ -54,4 +54,9 @@ public class HeroineJumpingLowerState : PlayerLowerStateBase<HeroineLowerState>
 
         StateController.ChangeState(HeroineLowerState.Climbing);
     }
+
+
+    /****** Protected Members ******/
+
+    protected override string AnimationClipPath => AnimationClipAsset.HeroineLower.Jumping;
 }

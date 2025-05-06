@@ -11,14 +11,14 @@ GameObject:
   - component: {fileID: 5161910571799360942}
   - component: {fileID: 7828203976356498993}
   - component: {fileID: 5002275169029830688}
-  - component: {fileID: 71689991799628555}
-  - component: {fileID: 6073270940463630508}
-  - component: {fileID: 679359489586599815}
-  - component: {fileID: 4072286438436803458}
-  - component: {fileID: 8530560908018471443}
-  - component: {fileID: 5350611579034525185}
-  - component: {fileID: 4385159759001933636}
-  - component: {fileID: 8469338339170816008}
+  - component: {fileID: 1358425868168389952}
+  - component: {fileID: 7907433747461415642}
+  - component: {fileID: 3649098502046423958}
+  - component: {fileID: 30906219908596512}
+  - component: {fileID: 4775230259783954932}
+  - component: {fileID: 4634533658463967908}
+  - component: {fileID: 4337044107646451240}
+  - component: {fileID: 2803709139516074054}
   m_Layer: 0
   m_Name: Heroine Lower Body
   m_TagString: Untagged
@@ -114,7 +114,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &71689991799628555
+--- !u!114 &1358425868168389952
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 047380da86c4c4f6e83b4982d3161f6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6073270940463630508
+--- !u!114 &7907433747461415642
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88d289f39c2824487a12423731f7516d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &679359489586599815
+--- !u!114 &3649098502046423958
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe52a502f3d164ea0b236ff759a9ccc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4072286438436803458
+--- !u!114 &30906219908596512
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -162,7 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1db9bbe10b4084f9f866d7414d96cc63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8530560908018471443
+--- !u!114 &4775230259783954932
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b94dce52d66034b36aa1d43a7aa9ecb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5350611579034525185
+--- !u!114 &4634533658463967908
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -186,7 +186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e433511956b864f61bd653fcc6db8a7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4385159759001933636
+--- !u!114 &4337044107646451240
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8284055aed4a48cda810759b5eff4dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8469338339170816008
+--- !u!114 &2803709139516074054
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -431,15 +431,13 @@ GameObject:
   - component: {fileID: 6255710058938064399}
   - component: {fileID: 4288622769952702517}
   - component: {fileID: 4929831444136390512}
-  - component: {fileID: 7321622842646423124}
-  - component: {fileID: 922366427485848079}
-  - component: {fileID: 8494597931839427681}
-  - component: {fileID: 5988190488722272444}
-  - component: {fileID: 1601552025731927070}
-  - component: {fileID: 7641789308207837568}
-  - component: {fileID: 7312741435429010780}
-  - component: {fileID: 1727371644701340894}
-  - component: {fileID: 1050375123653208470}
+  - component: {fileID: 4842803017697380034}
+  - component: {fileID: 1660597190140322520}
+  - component: {fileID: 3739821437993207773}
+  - component: {fileID: 8633028278815965261}
+  - component: {fileID: 7939485163612645450}
+  - component: {fileID: 5168281628557725436}
+  - component: {fileID: 7611431639622733164}
   m_Layer: 8
   m_Name: Heroine Upper Body
   m_TagString: Untagged
@@ -535,19 +533,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7321622842646423124
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4117885887960782248}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 227bddf6de82e42e1b67d74206eacbb4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &922366427485848079
+--- !u!114 &4842803017697380034
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -559,7 +545,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95f7e05049059400493621142878de6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8494597931839427681
+--- !u!114 &1660597190140322520
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -571,7 +557,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dcc725b800534bc18df2a8029db721d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5988190488722272444
+--- !u!114 &3739821437993207773
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -583,7 +569,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa40b3db6f02c49b3b821bbb2ac686dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1601552025731927070
+--- !u!114 &8633028278815965261
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -595,19 +581,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13faf25f79797422ca3cf0986e56d0be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7641789308207837568
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4117885887960782248}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37f11ef29e1b44bc391257afff457997, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &7312741435429010780
+--- !u!114 &7939485163612645450
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -619,7 +593,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8726c3d3aa87a421b8009a3dc58e41bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1727371644701340894
+--- !u!114 &5168281628557725436
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -631,7 +605,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0425482c28994b6d8689073ff40e3e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1050375123653208470
+--- !u!114 &7611431639622733164
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

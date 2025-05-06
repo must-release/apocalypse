@@ -51,7 +51,7 @@ public class HeroineClimbingLowerState : PlayerLowerStateBase<HeroineLowerState>
         }
         else
         {
-            // Climbed down the climing object
+            // Climbed down the climbing object
             var nextState = PlayerInfo.StandingGround == null ? HeroineLowerState.Jumping : HeroineLowerState.Idle;
             StateController.ChangeState(nextState);
         }
@@ -64,6 +64,10 @@ public class HeroineClimbingLowerState : PlayerLowerStateBase<HeroineLowerState>
         StateController.ChangeState(HeroineLowerState.Jumping);
     }
 
+
+    /****** Protected Members ******/
+
+    protected override string AnimationClipPath => AnimationClipAsset.HeroineLower.Climbing;
 
 
     /****** Private Members ******/

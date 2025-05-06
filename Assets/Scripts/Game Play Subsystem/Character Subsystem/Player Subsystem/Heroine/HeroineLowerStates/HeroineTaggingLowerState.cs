@@ -36,11 +36,16 @@ public class HeroineTaggingLowerState : PlayerLowerStateBase<HeroineLowerState>
     public override void OnGround() { _isOnAir = false; }
 
 
+    /****** Protected Members ******/
+
+    protected override string AnimationClipPath => AnimationClipAsset.HeroineLower.Tagging;
+
+
     /****** Private Members ******/
 
-    private float _taggingTime  = 0.2f;
-    private float _time         = 0f;
-    private float _popping      = 3f;
-    private bool _isOnAir       = false;
+    private float   _taggingTime  = 0.2f;
+    private float   _time         = 0f;
+    private float   _popping      = 3f;
+    private bool    _isOnAir      = false;
 
 }

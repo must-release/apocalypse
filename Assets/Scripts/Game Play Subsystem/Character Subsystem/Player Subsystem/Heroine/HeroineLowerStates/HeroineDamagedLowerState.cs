@@ -31,7 +31,12 @@ public class HeroineDamagedLowerState : PlayerLowerStateBase<HeroineLowerState>
 
     }
 
-    
+
+    /****** Protected Members ******/
+
+    protected override string AnimationClipPath => AnimationClipAsset.HeroineLower.Damaged;
+
+
     /****** Private Members ******/
 
     private const float _SternTime      = 0.4f;

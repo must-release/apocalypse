@@ -72,6 +72,86 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7893daafe7c7bae4faf389a4c33b1350
+    m_Address: AnimationClip/Heroine/Upper/Aiming
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8c32b794842cb495181f167cf4bfd0a8
+    m_Address: AnimationClip/Heroine/Upper/Attacking
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c6e648afd644f81419dd6489b2529834
+    m_Address: AnimationClip/Heroine/Upper/Disabled
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2373ddffda0614c4e83f89beddb516a0
+    m_Address: AnimationClip/Heroine/Upper/Idle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 46f48a4c9d4c00e45b87004799e089dc
+    m_Address: AnimationClip/Heroine/Upper/LookingUp
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 43efe682e32434c9e9c23ea1e689f28f
+    m_Address: AnimationClip/Heroine/Upper/Running
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 60e10db1fffeb2a48bf48a68f01b4c2f
+    m_Address: AnimationClip/Heroine/Upper/TopAttacking
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fabff87f59888014d8f83aaaba902c81
+    m_Address: AnimationClip/Heroine/Lower/Aiming
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 310a6e0dc1c000b46b051f8b8971779f
+    m_Address: AnimationClip/Heroine/Lower/Climbing
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 607d6ad8ed59437489928ce58baa2bd8
+    m_Address: AnimationClip/Heroine/Lower/Damaged
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0400755942d3fe341aa47851566d6694
+    m_Address: AnimationClip/Heroine/Lower/Dead
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 56a6bd774a91944a7820c30c22294525
+    m_Address: AnimationClip/Heroine/Lower/Idle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0225b9d557aefc340ad25fe74ee5b45c
+    m_Address: AnimationClip/Heroine/Lower/Jumping
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 434906e8cc1cc33459cdb40cc2fc7207
+    m_Address: AnimationClip/Heroine/Lower/Pushing
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 257aa801650834167bb690a7bdf96f45
+    m_Address: AnimationClip/Heroine/Lower/Running
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8137445674be14c4ba380fc082acef14
+    m_Address: AnimationClip/Heroine/Lower/Tagging
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 0018d54b9f5f74640839669867571db9, type: 2}
   m_SchemaSet:

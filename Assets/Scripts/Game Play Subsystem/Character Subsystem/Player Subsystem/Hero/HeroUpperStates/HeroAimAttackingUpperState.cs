@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class HeroineAimAttackingUpperState : PlayerUpperStateBase<HeroineUpperState>
+public class HeroAimAttackingUpperState : PlayerUpperStateBase<HeroUpperState>
 {
     /****** Public Members ******/
 
-    public override HeroineUpperState StateType => HeroineUpperState.AimAttacking;
+    public override HeroUpperState StateType => HeroUpperState.AimAttacking;
 
     public override void OnEnter()
     {
@@ -17,7 +17,7 @@ public class HeroineAimAttackingUpperState : PlayerUpperStateBase<HeroineUpperSt
         _attackCoolTime -= Time.deltaTime;
 
         if ( 0 < _attackCoolTime )
-            StateController.ChangeState(HeroineUpperState.Aiming);
+            StateController.ChangeState(HeroUpperState.Aiming);
 
         // Set player's looking direction
         SetDirection();
@@ -26,23 +26,23 @@ public class HeroineAimAttackingUpperState : PlayerUpperStateBase<HeroineUpperSt
         //StateController.CurrentAvatar.RotateUpperBody(_aimingPosition);
     }
 
-    public override void OnExit(HeroineUpperState nextState)
+    public override void OnExit(HeroUpperState nextState)
     {
         // Recover player's upper body rotation when not aiming or attacking
-        if (HeroineUpperState.Aiming == nextState || HeroineUpperState.AimAttacking == nextState)
+        if (HeroUpperState.Aiming == nextState || HeroUpperState.AimAttacking == nextState)
             return;
 
         //OwnerController.CurrentAvatar.RotateUpperBody(0);
     }
 
-    public override void Disable() { StateController.ChangeState(HeroineUpperState.Disabled); }
+    public override void Disable() { StateController.ChangeState(HeroUpperState.Disabled); }
 
-    public override void Attack() { StateController.ChangeState(HeroineUpperState.AimAttacking); }
+    public override void Attack() { StateController.ChangeState(HeroUpperState.AimAttacking); }
 
     public override void Aim(Vector3 aim)
     {
         if (Vector3.zero == aim)
-            StateController.ChangeState(HeroineUpperState.Idle); 
+            StateController.ChangeState(HeroUpperState.Idle); 
         else
             _aimingPosition = aim;
     }

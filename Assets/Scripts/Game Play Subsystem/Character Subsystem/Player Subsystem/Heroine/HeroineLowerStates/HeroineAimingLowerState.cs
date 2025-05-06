@@ -35,4 +35,9 @@ public class HeroineAimingLowerState : PlayerLowerStateBase<HeroineLowerState>
     {
         StateController.ChangeState(HeroineLowerState.Damaged); 
     }
+
+
+    /****** Protected Members ******/
+
+    protected override string AnimationClipPath => AnimationClipAsset.HeroineLower.Aiming;
 }

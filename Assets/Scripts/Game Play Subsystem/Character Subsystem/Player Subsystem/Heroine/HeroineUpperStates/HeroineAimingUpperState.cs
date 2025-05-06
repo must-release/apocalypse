@@ -41,14 +41,9 @@ public class HeroineAimingUpperState : PlayerUpperStateBase<HeroineUpperState>
         _fixedUpdateFlag = false;
     }
 
-    public override void OnAir() 
-    { 
-        StateController.ChangeState(HeroineUpperState.Jumping); 
-    }
-
     public override void Attack() 
     {
-        StateController.ChangeState(HeroineUpperState.AimAttacking); 
+        StateController.ChangeState(HeroineUpperState.Attacking); 
     }
 
     public override void Aim(Vector3 aim)
@@ -58,6 +53,16 @@ public class HeroineAimingUpperState : PlayerUpperStateBase<HeroineUpperState>
         else
             _aimingPosition = aim;
     }
+    public override void Disable()
+    {
+        StateController.ChangeState(HeroineUpperState.Disabled);
+    }
+
+
+    /****** Protected Members ******/
+
+    protected override string AnimationClipPath => AnimationClipAsset.HeroineUpper.Aiming;
+
 
     /****** Private Members ******/
 

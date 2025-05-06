@@ -9,7 +9,7 @@ public class HeroineRunningLowerState : PlayerLowerStateBase<HeroineLowerState>
 
     public override void OnEnter()
     {
-
+        LowerAnimator.Play(AnimatorState.HeroineLower.Running);
     }
 
     public override void OnUpdate()
@@ -19,7 +19,6 @@ public class HeroineRunningLowerState : PlayerLowerStateBase<HeroineLowerState>
 
     public override void OnExit()
     {
-
     }
 
     public override void Move(int move)
@@ -39,20 +38,17 @@ public class HeroineRunningLowerState : PlayerLowerStateBase<HeroineLowerState>
 
     public override void Stop()
     {
-        LowerAnimator.SetBool(AnimatorParams.IsRunning, false);
         StateController.ChangeState(HeroineLowerState.Idle);
     }
 
     public override void Jump()
     {
         PlayerMotion.SetVelocity(new Vector2(PlayerInfo.CurrentVelocity.x, PlayerInfo.JumpingSpeed));
-        LowerAnimator.SetTrigger(AnimatorParams.JumpTrigger);
         StateController.ChangeState(HeroineLowerState.Jumping);
     }
 
     public override void OnAir()
     {
-        LowerAnimator.SetBool(AnimatorParams.IsOnGround, false);
         StateController.ChangeState(HeroineLowerState.Jumping);
     }
 
@@ -74,4 +70,8 @@ public class HeroineRunningLowerState : PlayerLowerStateBase<HeroineLowerState>
 
         StateController.ChangeState(HeroineLowerState.Climbing);
     }
+
+    /****** Protected Members ******/
+
+    protected override string AnimationClipPath => AnimationClipAsset.HeroineLower.Running;
 }

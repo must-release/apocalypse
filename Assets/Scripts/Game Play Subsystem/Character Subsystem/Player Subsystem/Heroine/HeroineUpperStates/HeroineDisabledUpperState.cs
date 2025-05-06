@@ -6,7 +6,7 @@ public class HeroineDisabledUpperState : PlayerUpperStateBase<HeroineUpperState>
 
     public override void OnEnter()
     {
-
+        UpperAnimator.Play(AnimatorState.HeroineUpper.Disabled);
     }
     public override void OnUpdate()
     {
@@ -14,12 +14,15 @@ public class HeroineDisabledUpperState : PlayerUpperStateBase<HeroineUpperState>
     }
     public override void OnExit(HeroineUpperState _)
     {
-
     }
 
     public override void Enable()
     {
-        var nextState = PlayerInfo.StandingGround == null ? HeroineUpperState.Jumping : HeroineUpperState.Idle;
-        StateController.ChangeState(nextState);
+        StateController.ChangeState(HeroineUpperState.Idle);
     }
+
+
+    /****** Protected Members ******/
+
+    protected override string AnimationClipPath => AnimationClipAsset.HeroineUpper.Disabled;
 }

@@ -6,7 +6,7 @@ public class HeroineIdleUpperState : PlayerUpperStateBase<HeroineUpperState>
 
     public override void OnEnter()
     {
-
+        UpperAnimator.Play(AnimatorState.HeroineUpper.Idle);
     }
     public override void OnUpdate()
     {
@@ -17,14 +17,9 @@ public class HeroineIdleUpperState : PlayerUpperStateBase<HeroineUpperState>
 
     }
 
-    public override void Move() 
-    { 
+    public override void Move()
+    {
         StateController.ChangeState(HeroineUpperState.Running); 
-    }
-
-    public override void OnAir() 
-    { 
-        StateController.ChangeState(HeroineUpperState.Jumping); 
     }
 
     public override void LookUp(bool lookUp) 
@@ -38,4 +33,15 @@ public class HeroineIdleUpperState : PlayerUpperStateBase<HeroineUpperState>
     { 
         StateController.ChangeState(HeroineUpperState.Attacking);
     }
+
+    public override void Disable()
+    {
+        StateController.ChangeState(HeroineUpperState.Disabled);
+    }
+
+
+
+    /****** Protected Members ******/
+
+    protected override string AnimationClipPath => AnimationClipAsset.HeroineUpper.Idle;
 }

@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9de5ac663db044fb0b407a45abe43682, type: 3}
   m_Name: DevConfig
   m_EditorClassIdentifier: 
-  ShowSpashScreen: 1
+  ShowSplashScreen: 1
+  StartEvent: {fileID: 11400000, guid: b6cc0fadc5417ae418ae765c63d659e3, type: 2}

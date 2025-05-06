@@ -33,6 +33,8 @@ public class Framework : MonoBehaviour
         // if splash screen is enabled, notify it
         var splashController = FindObjectOfType<SplashScreen>();
         splashController?.OnFrameworkInitialized();
+
+        SubmitStartEvent();
     }
 
     private IEnumerator LoadDevConfig()
@@ -85,5 +87,20 @@ public class Framework : MonoBehaviour
         }
 
         Debug.Log("All System Load is Complete.");
+    }
+
+    private void SubmitStartEvent()
+    {
+        Assert.IsTrue(_devConfig != null, "DevConfig not loaded");
+
+        if (null != _devConfig.StartEvent)
+        {
+            var startEvent = GameEventFactory.CreateFromInfo(_devConfig.StartEvent);
+            GameEventManager.Instance.Submit(startEvent);
+        }
+        else
+        {
+            Debug.Log("There is no Starting Event.");
+        }
     }
 }

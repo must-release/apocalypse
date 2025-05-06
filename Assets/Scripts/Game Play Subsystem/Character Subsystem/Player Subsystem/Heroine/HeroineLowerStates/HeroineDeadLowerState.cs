@@ -31,6 +31,12 @@ public class HeroineDeadLowerState : PlayerLowerStateBase<HeroineLowerState>
         CharacterManager.Instance.ProcessPlayersDeath();
     }
 
+
+    /****** Protected Members ******/
+
+    protected override string AnimationClipPath => AnimationClipAsset.HeroineLower.Dead;
+
+
     /****** Private Members ******/
 
     private const float _AnimationPlayTime  = 2f;

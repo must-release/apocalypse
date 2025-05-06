@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class HeroineRunningUpperState : PlayerUpperStateBase<HeroineUpperState>
 {
-    public override HeroineUpperState StateType =>  HeroineUpperState.Running;
+    public override HeroineUpperState StateType => HeroineUpperState.Running;
 
     public override void OnEnter()
     {
-        //OwnerController.CurrentAnimator.PlayRunning();
+        UpperAnimator.Play(AnimatorState.HeroineUpper.Running);
     }
     public override void OnUpdate()
     {
@@ -15,16 +15,6 @@ public class HeroineRunningUpperState : PlayerUpperStateBase<HeroineUpperState>
     public override void OnExit(HeroineUpperState _)
     {
 
-    }
-
-    public override void Jump() 
-    { 
-        StateController.ChangeState(HeroineUpperState.Jumping);
-    }
-
-    public override void OnAir() 
-    { 
-        StateController.ChangeState(HeroineUpperState.Jumping);
     }
 
     public override void LookUp(bool lookUp) 
@@ -40,7 +30,16 @@ public class HeroineRunningUpperState : PlayerUpperStateBase<HeroineUpperState>
     }
     
     public override void Stop() 
-    { 
+    {
         StateController.ChangeState(HeroineUpperState.Idle); 
     }
+
+    public override void Disable()
+    {
+        StateController.ChangeState(HeroineUpperState.Disabled);
+    }
+
+    /****** Protected Members ******/
+
+    protected override string AnimationClipPath => AnimationClipAsset.HeroineUpper.Running;
 }

@@ -14,7 +14,28 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
     /****** Public Members ******/
 
     public PlayerType   PlayerType  => PlayerType.Heroine;
-    public bool         IsLoaded    => _isLoaded;
+    public bool         IsLoaded
+    {
+        get
+        {
+            if (false == _isWeaponAndDotsLoaded)
+                return false;
+
+            foreach (var lower in _lowerStateTable.Values)
+            {
+                if (false == lower.IsLoaded)
+                    return false;
+            }
+
+            foreach (var upper in _upperStateTable.Values)
+            {
+                if (false == upper.IsLoaded)
+                    return false;
+            }
+
+            return true;
+        }
+    }
 
 
     public void InitializeAvatar(IMotionController playerMotion, ICharacterInfo playerInfo)
@@ -52,7 +73,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
 
     public void OnUpdate()
     {
-        Assert.IsTrue(_isLoaded, "Avatar is not loaded yet");
+        Assert.IsTrue(_isWeaponAndDotsLoaded, "Avatar is not loaded yet");
 
         _lowerState.OnUpdate();
         _upperState.OnUpdate();
@@ -85,6 +106,11 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
         _lowerState.OnExit();
         _lowerState = _lowerStateTable[state];
         _lowerState.OnEnter();
+
+        if (_lowerState.ShouldDisableUpperBody)
+            _upperState.Disable();
+        else
+            _upperState.Enable();
     }
 
     public void ChangeState(HeroineUpperState state)
@@ -112,7 +138,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
     private HeroineLower            _lowerState         = null;
     private HeroineUpper            _upperState         = null;
 
-    private bool    _isLoaded   = false;
+    private bool    _isWeaponAndDotsLoaded   = false;
 
     private void Awake()
     {
@@ -127,7 +153,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
 
     private IEnumerator LoadWeaponsAndDots()
     {
-        _isLoaded = true;
+        _isWeaponAndDotsLoaded = true;
 
         yield return null;
     }
@@ -148,14 +174,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
     }
 
     private void ControlUpperBody(ControlInfo controlInfo)
-    {   
-        if (_lowerState.ShouldDisableUpperBody)
-        {
-            _upperState.Disable();
-            return;
-        }
-        
-        _upperState.Enable();
+    {  
         if (controlInfo.move != 0) _upperState.Move();
         else if (controlInfo.stop) _upperState.Stop();
         if (controlInfo.jump) _upperState.Jump();
@@ -171,7 +190,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
         Assert.IsTrue(null != _playerInfo, "Player Info is not assigned");
 
         var lowers = GetComponentsInChildren<HeroineLower>();
-        Assert.IsTrue(0 < lowers.Length, "No LowerState components found in children.");
+        Assert.IsTrue(0 < lowers.Length, "No HeroineLowerState components found in children.");
         foreach (var lower in lowers)
         {
             lower.InitializeState(this ,_playerMotion, _playerInfo, _lowerAnimator);

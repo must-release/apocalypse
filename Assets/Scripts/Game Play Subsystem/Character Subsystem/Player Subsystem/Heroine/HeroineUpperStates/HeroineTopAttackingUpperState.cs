@@ -43,9 +43,19 @@ public class HeroineTopAttackingUpperState : PlayerUpperStateBase<HeroineUpperSt
     { 
         if(lookUp) return;
 
-        var nextState = PlayerInfo.StandingGround == null ? HeroineUpperState.Jumping : HeroineUpperState.Idle;
+        var nextState = PlayerInfo.StandingGround == null ? HeroineUpperState.Disabled : HeroineUpperState.Idle;
         StateController.ChangeState(nextState);
     }
+
+    public override void Disable()
+    {
+        StateController.ChangeState(HeroineUpperState.Disabled);
+    }
+
+    /****** Protected Members ******/
+
+    protected override string AnimationClipPath => AnimationClipAsset.HeroineUpper.TopAttacking;
+
 
     /****** Private Members ******/
 

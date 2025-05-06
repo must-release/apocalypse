@@ -8,6 +8,7 @@ public class HeroineIdleLowerState : PlayerLowerStateBase<HeroineLowerState>
 
     public override void OnEnter()
     {
+        LowerAnimator.Play(AnimatorState.HeroineLower.Idle);
         PlayerMotion.SetVelocity(Vector2.zero);
     }
 
@@ -24,13 +25,11 @@ public class HeroineIdleLowerState : PlayerLowerStateBase<HeroineLowerState>
     public override void Jump()
     {
         PlayerMotion.SetVelocity(new Vector2(PlayerInfo.CurrentVelocity.x, PlayerInfo.JumpingSpeed));
-        LowerAnimator.SetTrigger(AnimatorParams.JumpTrigger);
         StateController.ChangeState(HeroineLowerState.Jumping);
     }
 
     public override void OnAir()
     {
-        LowerAnimator.SetBool(AnimatorParams.IsOnGround, false);
         StateController.ChangeState(HeroineLowerState.Jumping);
     }
 
@@ -43,7 +42,6 @@ public class HeroineIdleLowerState : PlayerLowerStateBase<HeroineLowerState>
 
     public override void Move(int move)
     {
-        LowerAnimator.SetBool(AnimatorParams.IsRunning, true);
         StateController.ChangeState(HeroineLowerState.Running);
     }
 
@@ -58,4 +56,9 @@ public class HeroineIdleLowerState : PlayerLowerStateBase<HeroineLowerState>
 
         StateController.ChangeState(HeroineLowerState.Climbing);
     }
+
+
+    /****** Protected Members ******/
+
+    protected override string AnimationClipPath => AnimationClipAsset.HeroineLower.Idle;
 }
