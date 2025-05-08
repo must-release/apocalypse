@@ -1,10 +1,9 @@
 using System.Collections;
 using UnityEngine;
-using WeaponEnums;
 
 public abstract class LongRangeWeaponBase : WeaponBase
 {
-    public float FireSpeed {get; protected set;}
+    public abstract float FireSpeed { get; }
 
     private Coroutine visibilityCheckCoroutine;
 
@@ -14,7 +13,7 @@ public abstract class LongRangeWeaponBase : WeaponBase
         transform.localRotation = Quaternion.FromToRotation(Vector3.right, direction);
     }
 
-    protected override void WeaponUpdate()
+    private void Update()
     {
         CheckVisibility();
     }
@@ -33,7 +32,8 @@ public abstract class LongRangeWeaponBase : WeaponBase
             visibilityCheckCoroutine = StartCoroutine(AsyncInactivateWeapon());
         }
     }
-    IEnumerator AsyncInactivateWeapon()
+
+    private IEnumerator AsyncInactivateWeapon()
     {
         yield return new WaitForSeconds(5f);
 
@@ -44,7 +44,7 @@ public abstract class LongRangeWeaponBase : WeaponBase
     {
         if(other.transform.TryGetComponent(out CharacterBase character))
         {
-            if (character.CompareTag("Player") == DamagePlayer)
+            if (character.CompareTag("Player") == CanDamagePlayer)
             {
                 character.OnDamaged(WeaponDamageInfo);
             }

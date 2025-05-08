@@ -28,7 +28,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6795b9326aaad4deabbf2a9c3c8d0353
-    m_Address: WEAPON_SCRATCH
+    m_Address: Weapon/Scratch
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

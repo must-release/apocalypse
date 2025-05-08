@@ -152,6 +152,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b8b8ab37253debd49a64878161d4319d
+    m_Address: Weapon/NormalGranade
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8025b6630582a244099fead019c914a0
+    m_Address: AimingDot/NormalGranade
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 0018d54b9f5f74640839669867571db9, type: 2}
   m_SchemaSet:

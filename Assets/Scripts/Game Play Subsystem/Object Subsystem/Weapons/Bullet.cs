@@ -1,29 +1,40 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine;
-using WeaponEnums;
 
 public class Bullet : LongRangeWeaponBase
 {
-    private Rigidbody2D rb;
+    /****** Public Members ******/
 
-    protected override void InitializeWeapon() 
-    {
-        base.InitializeWeapon();
-        DamagePlayer = false;
-        WeaponType = WEAPON_TYPE.BULLET;
-
-        rb = GetComponent<Rigidbody2D>();
-        rb.gravityScale = 0;
-        FireSpeed = 30;
-        WeaponDamageInfo.damageValue = 1;
-    }
+    public override WeaponType WeaponType   => WeaponType.Bullet;
+    public override bool CanDamagePlayer    => false;
+    public override float FireSpeed         => 30f;
+    public override float ActiveDuration    => 5f;
+    public override float PostDelay          => 0f;
 
     public override void Attack(Vector3 direction)
     {
         base.Attack(direction);
-        rb.velocity = direction * FireSpeed;
+
+        _bulletRigid.velocity = direction * FireSpeed;
     }
+
+    /****** Protected Members ******/
+
+    protected override void Start() 
+    {
+        base.Start();
+
+        _bulletRigid = GetComponent<Rigidbody2D>();
+        _bulletRigid.gravityScale = _GravityScale;
+
+        WeaponDamageInfo.damageValue = _Damage;
+    }
+
+
+
+    /****** Private Members ******/
+
+    private const float _GravityScale   = 0;
+    private const int   _Damage         = 1;
+
+    private Rigidbody2D _bulletRigid = null;
 }

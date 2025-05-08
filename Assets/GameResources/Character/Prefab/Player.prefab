@@ -1,5 +1,37 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1968603578136278652
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6362247081378316568}
+  m_Layer: 8
+  m_Name: Weapon Pivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6362247081378316568
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968603578136278652}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3844068004244827600}
+  m_Father: {fileID: 1377288265050663595}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3100155105109098096
 GameObject:
   m_ObjectHideFlags: 0
@@ -627,6 +659,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1377288265050663595}
   - component: {fileID: 5185365712823968602}
+  - component: {fileID: 7722594115300053283}
   m_Layer: 8
   m_Name: Heroine
   m_TagString: Untagged
@@ -649,6 +682,7 @@ Transform:
   m_Children:
   - {fileID: 5161910571799360942}
   - {fileID: 6255710058938064399}
+  - {fileID: 6362247081378316568}
   m_Father: {fileID: 8497535858361422018}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5185365712823968602
@@ -665,6 +699,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lowerAnimator: {fileID: 7828203976356498993}
   _upperAnimator: {fileID: 4288622769952702517}
+--- !u!114 &7722594115300053283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4205909327111830494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 924f30174c758a541bf740328300d820, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerObject: {fileID: 3836751109032054554}
+  _weaponPivot: {fileID: 6362247081378316568}
+  _shootingPoint: {fileID: 3844068004244827600}
 --- !u!1 &6352527244798623221
 GameObject:
   m_ObjectHideFlags: 0
@@ -780,4 +829,35 @@ Transform:
   m_Children:
   - {fileID: 8250717393770742856}
   m_Father: {fileID: 2078760139792449367}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7703159497443254690
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3844068004244827600}
+  m_Layer: 8
+  m_Name: Shooting Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3844068004244827600
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7703159497443254690}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.16, y: 0.58, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6362247081378316568}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

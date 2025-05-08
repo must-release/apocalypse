@@ -13,21 +13,6 @@ namespace StageEnums
     public enum Stage { Test, Prologue, Library, Event, StageCount }
 }
 
-namespace WeaponEnums
-{
-    public enum WEAPON_TYPE 
-    { 
-        // Player weapon
-        BULLET, GRANADE, 
-
-        // Monster weapon
-        SCRATCH,    
-        
-        // Enum count
-        WEAPON_TYPE_COUNT 
-        
-    }
-}
 
 namespace EventEnums
 {

@@ -1,13 +1,13 @@
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine;
-using WeaponEnums;
 using System.Collections.Generic;
 using System.Collections;
+using System;
 
 public class WeaponFactory : MonoBehaviour
 {
-    public static WeaponFactory Instance;
+    public static WeaponFactory Instance { get; private set; } = null;
 
     private void Awake() 
     {
@@ -15,27 +15,20 @@ public class WeaponFactory : MonoBehaviour
         {
             Instance = this;
         }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
-    public Coroutine PoolWeapons( CharacterBase owner, 
-                                  WEAPON_TYPE weaponType, 
-                                  Queue<WeaponBase> weapons, 
-                                  int poolNum,
-                                  bool attachToOwner = false
-    ) 
-    {
-        return StartCoroutine(AsyncPoolWeapons(owner, weaponType, weapons, poolNum, attachToOwner));
-    }
-
-    IEnumerator AsyncPoolWeapons( CharacterBase owner, 
-                                  WEAPON_TYPE weaponType, 
-                                  Queue<WeaponBase> weapons, 
-                                  int poolNum,
-                                  bool attachToOwner
+    public IEnumerator AsyncPoolWeapons(GameObject owner, 
+                                        WeaponType weaponType, 
+                                        Queue<IWeapon> weapons, 
+                                        int poolNum,
+                                        bool attachToOwner = false
     )
     {
-        string weaponPath = "WEAPON_" + weaponType.ToString();
-        AsyncOperationHandle<GameObject> loadingWeapon = Addressables.InstantiateAsync(weaponPath);
+        AsyncOperationHandle<GameObject> loadingWeapon = Addressables.InstantiateAsync(WeaponAsset.GetWeaponPath(weaponType));
         yield return loadingWeapon;
         if (loadingWeapon.Status == AsyncOperationStatus.Succeeded)
         {
@@ -45,39 +38,15 @@ public class WeaponFactory : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Failed to load the weapon: " + weaponPath);
+            Debug.LogError("Failed to load the weapon: " + WeaponAsset.GetWeaponPath(weaponType));
         }
     }
 
-void CreateAndEnqueueWeapon( GameObject loadedWeapon, 
-                             CharacterBase owner, 
-                             Queue<WeaponBase> weapons, 
-                             int count, 
-                             bool attachToOwner
-)
-{
-    for (int i = count; 0 < i; i--)
+    public IEnumerator AsyncPoolAimingDots(WeaponType weaponType, List<GameObject> aimingDots, int poolNum)
     {
-        GameObject weaponInstance = (i == 1) ? loadedWeapon : Instantiate(loadedWeapon);
-        WeaponBase weapon = weaponInstance.GetComponent<WeaponBase>();
-        weapon.SetOwner(owner);
-        weapons.Enqueue(weapon);
-        weaponInstance.SetActive(false);
-
-        if ( attachToOwner )
-            weaponInstance.transform.SetParent(owner.transform, false);
-    }
-}
-
-    public Coroutine PoolAimingDots(WEAPON_TYPE weapon, List<GameObject> aimingDots, int poolNum)
-    {
-        return StartCoroutine(AsyncPoolAimingDots(weapon,aimingDots,poolNum));
-    }
-    IEnumerator AsyncPoolAimingDots(WEAPON_TYPE weapon, List<GameObject> aimingDots, int poolNum)
-    {
-        string aimingDotsPath = "AIMING_DOT_" + weapon.ToString();
-        AsyncOperationHandle<GameObject> loadingDot = Addressables.InstantiateAsync(aimingDotsPath);
+        AsyncOperationHandle<GameObject> loadingDot = Addressables.InstantiateAsync(WeaponAsset.GetAimingDotPath(weaponType));
         yield return loadingDot;
+
         if (loadingDot.Status == AsyncOperationStatus.Succeeded)
         {
             // Load dots in inactive state
@@ -90,12 +59,33 @@ void CreateAndEnqueueWeapon( GameObject loadedWeapon,
             {
                 GameObject dotCopy = Instantiate(loadedDot);
                 aimingDots.Add(dotCopy);
-                aimingDots[i].GetComponent<AimingDot>().NextDot = aimingDots[i+1].GetComponent<AimingDot>();
+                aimingDots[i].GetComponent<AimingDot>().NextDot = aimingDots[i + 1].GetComponent<AimingDot>();
             }
         }
         else
         {
-            Debug.LogError("Failed to load the weapon: " + aimingDotsPath);
+            Debug.LogError("Failed to load the weapon: " + WeaponAsset.GetAimingDotPath(weaponType));
+        }
+    }
+
+
+    private void CreateAndEnqueueWeapon(GameObject loadedWeapon,
+                                        GameObject owner,
+                                        Queue<IWeapon> weapons,
+                                        int count,
+                                        bool attachToOwner
+)
+    {
+        for (int i = count; 0 < i; i--)
+        {
+            GameObject weaponInstance = (i == 1) ? loadedWeapon : Instantiate(loadedWeapon);
+            IWeapon weapon = weaponInstance.GetComponent<IWeapon>();
+            weapon.SetOwner(owner);
+            weapons.Enqueue(weapon);
+            weaponInstance.SetActive(false);
+
+            if (attachToOwner)
+                weaponInstance.transform.SetParent(owner.transform, false);
         }
     }
 }

@@ -1,31 +1,35 @@
 using System.Collections;
 using UnityEngine;
-using WeaponEnums;
 
-public abstract class WeaponBase : MonoBehaviour
+public abstract class WeaponBase : MonoBehaviour, IWeapon
 {
-    public bool DamagePlayer {get; protected set;}
-    public WEAPON_TYPE WeaponType {get; protected set;}
-    public DamageInfo WeaponDamageInfo { get; protected set;}
+    public DamageInfo WeaponDamageInfo { get; protected set; } = new DamageInfo();
+
+
+    public abstract WeaponType  WeaponType          { get; }
+    public abstract bool        CanDamagePlayer     { get; }
+    public abstract float       ActiveDuration      { get; }
+    public abstract float       PostDelay            { get; }
+
 
 
     public abstract void Attack(Vector3 vector);
 
-    public void SetOwner(CharacterBase owner)
+    public void SetOwner(GameObject owner)
     {
-        if ( null == WeaponDamageInfo )
-            WeaponDamageInfo = new DamageInfo();
-        
-        WeaponDamageInfo.attacker = owner.gameObject;
+        WeaponDamageInfo.attacker = owner;
     }
 
-    private void Awake() { InitializeWeapon(); }
-    protected virtual void InitializeWeapon()
+    public void SetLocalPosition(Vector3 position)
+    {
+        transform.localPosition = position;
+    }
+
+
+    /****** Protected Methods ******/
+
+    protected virtual void Start() 
     {
         gameObject.layer = LayerMask.NameToLayer("Weapon");
-        WeaponDamageInfo = new DamageInfo();
     }
-
-    private void Update() { WeaponUpdate(); }
-    protected abstract void WeaponUpdate();
 }
