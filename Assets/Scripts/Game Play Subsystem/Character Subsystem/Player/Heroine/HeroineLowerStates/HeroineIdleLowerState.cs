@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HeroineIdleLowerState : PlayerLowerState<HeroineLowerState>
+public class HeroineIdleLowerState : HeroineLowerStateBase
 {
 
     public override HeroineLowerState   StateType               => HeroineLowerState.Idle;
@@ -26,6 +26,11 @@ public class HeroineIdleLowerState : PlayerLowerState<HeroineLowerState>
     {
         PlayerMotion.SetVelocity(new Vector2(PlayerInfo.CurrentVelocity.x, PlayerInfo.JumpingSpeed));
         StateController.ChangeState(HeroineLowerState.Jumping);
+    }
+
+    public override void Attack()
+    {
+        StateController.ChangeState(HeroineLowerState.Attacking);
     }
 
     public override void OnAir()

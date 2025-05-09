@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HeroineDamagedLowerState : PlayerLowerState<HeroineLowerState>
+public class HeroineDamagedLowerState : HeroineLowerStateBase
 {
     /****** Public Members ******/
 

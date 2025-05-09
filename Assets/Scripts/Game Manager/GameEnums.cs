@@ -53,11 +53,11 @@ namespace ScreenEffectEnums
 
 namespace LayerEnums
 {
-    public static class LAYER
+    public static class Layer
     {
-        public const string GROUND = "Ground";
-        public const string CHARACTER = "Character";
-        public const string WEAPON = "Weapon";
+        public const string Ground      = "Ground";
+        public const string Character   = "Character";
+        public const string Weapon      = "Weapon";
 
     }
 }

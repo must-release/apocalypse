@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HeroineLookingUpUpperState : PlayerUpperStateBase<HeroineUpperState>
+public class HeroineLookingUpUpperState : HeroineUpperStateBase
 {
 
     public override HeroineUpperState StateType => HeroineUpperState.LookingUp;
@@ -33,10 +33,6 @@ public class HeroineLookingUpUpperState : PlayerUpperStateBase<HeroineUpperState
         StateController.ChangeState(nextState);
     }
 
-    public override void Attack() 
-    { 
-        StateController.ChangeState(HeroineUpperState.TopAttacking);
-    }
     public override void Disable()
     {
         StateController.ChangeState(HeroineUpperState.Disabled);

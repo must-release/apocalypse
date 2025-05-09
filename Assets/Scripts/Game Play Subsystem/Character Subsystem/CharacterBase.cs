@@ -122,7 +122,7 @@ public abstract class CharacterBase : MonoBehaviour, IMotionController, ICharact
     { 
         _rigidbody = GetComponent<Rigidbody2D>();
 
-        gameObject.layer = LayerMask.NameToLayer(LAYER.CHARACTER); 
+        gameObject.layer = LayerMask.NameToLayer(Layer.Character); 
     }
 
     protected virtual void Start() { }

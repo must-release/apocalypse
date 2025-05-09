@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HeroineIdleUpperState : PlayerUpperStateBase<HeroineUpperState>
+public class HeroineIdleUpperState : HeroineUpperStateBase
 {
     public override HeroineUpperState StateType => HeroineUpperState.Idle;
 
@@ -27,11 +27,6 @@ public class HeroineIdleUpperState : PlayerUpperStateBase<HeroineUpperState>
         if (false == lookUp) return;
 
         StateController.ChangeState(HeroineUpperState.LookingUp);
-    }
-
-    public override void Attack() 
-    { 
-        StateController.ChangeState(HeroineUpperState.Attacking);
     }
 
     public override void Disable()

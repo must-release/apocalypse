@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HeroineDisabledUpperState : PlayerUpperStateBase<HeroineUpperState>
+public class HeroineDisabledUpperState : HeroineUpperStateBase
 {
     public override HeroineUpperState StateType => HeroineUpperState.Disabled;
 

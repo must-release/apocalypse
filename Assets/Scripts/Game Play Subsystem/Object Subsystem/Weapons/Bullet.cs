@@ -4,11 +4,11 @@ public class Bullet : LongRangeWeaponBase
 {
     /****** Public Members ******/
 
-    public override WeaponType WeaponType   => WeaponType.Bullet;
-    public override bool CanDamagePlayer    => false;
-    public override float FireSpeed         => 30f;
-    public override float ActiveDuration    => 5f;
-    public override float PostDelay          => 0f;
+    public override WeaponType  WeaponType          => WeaponType.Bullet;
+    public override bool        CanDamagePlayer     => false;
+    public override float       FireSpeed           => 30f;
+    public override float       ActiveDuration      => 5f;
+    public override float       PostDelay           => 0f;
 
     public override void Attack(Vector3 direction)
     {
@@ -19,9 +19,9 @@ public class Bullet : LongRangeWeaponBase
 
     /****** Protected Members ******/
 
-    protected override void Start() 
+    protected override void Awake() 
     {
-        base.Start();
+        base.Awake();
 
         _bulletRigid = GetComponent<Rigidbody2D>();
         _bulletRigid.gravityScale = _GravityScale;

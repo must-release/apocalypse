@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HeroineTaggingLowerState : PlayerLowerState<HeroineLowerState>
+public class HeroineTaggingLowerState : HeroineLowerStateBase
 {
     /****** Public Members ******/
 

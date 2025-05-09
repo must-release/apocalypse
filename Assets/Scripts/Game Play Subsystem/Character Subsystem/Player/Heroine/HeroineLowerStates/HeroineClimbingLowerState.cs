@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HeroineClimbingLowerState : PlayerLowerState<HeroineLowerState>
+public class HeroineClimbingLowerState : HeroineLowerStateBase
 {
     /****** Public Members ******/
 

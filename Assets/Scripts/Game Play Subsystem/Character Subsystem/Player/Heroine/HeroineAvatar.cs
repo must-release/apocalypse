@@ -62,13 +62,13 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
         Assert.IsTrue(_lowerStateTable.ContainsKey(HeroineLowerState.Idle), "Idle state not found");
         Assert.IsTrue(_upperStateTable.ContainsKey(HeroineUpperState.Idle), "Idle state not found");
 
+        gameObject.SetActive(value);
+
         if (value)
         {
             _lowerState = _lowerStateTable[HeroineLowerState.Idle];
             _upperState = _upperStateTable[HeroineUpperState.Idle];
         }
-
-        gameObject.SetActive(value);
     }
 
     public void OnUpdate()
@@ -82,13 +82,11 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
     public void OnAir()
     {
         _lowerState.OnAir();
-        _upperState.OnAir();
     }
 
     public void OnGround()
     {
         _lowerState.OnGround();
-        _upperState.OnGround();
     }
 
     public void OnDamaged(DamageInfo damageInfo)
@@ -130,22 +128,29 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
     [SerializeField] private Animator _lowerAnimator = null;
     [SerializeField] private Animator _upperAnimator = null;
 
-    private Dictionary<HeroineLowerState, HeroineLower> _lowerStateTable = new Dictionary<HeroineLowerState, HeroineLower>();
-    private Dictionary<HeroineUpperState, HeroineUpper> _upperStateTable = new Dictionary<HeroineUpperState, HeroineUpper>();
+    private Dictionary<HeroineLowerState, HeroineLowerStateBase> _lowerStateTable = new Dictionary<HeroineLowerState, HeroineLowerStateBase>();
+    private Dictionary<HeroineUpperState, HeroineUpperStateBase> _upperStateTable = new Dictionary<HeroineUpperState, HeroineUpperStateBase>();
 
     private IMotionController       _playerMotion       = null;
     private ICharacterInfo          _playerInfo         = null;
-    private HeroineLower            _lowerState         = null;
-    private HeroineUpper            _upperState         = null;
+    private HeroineLowerStateBase   _lowerState         = null;
+    private HeroineUpperStateBase   _upperState         = null;
     private HeroineWeapon           _heroineWeapon      = null;
 
     private void Awake()
     {
         Assert.IsTrue(null != _lowerAnimator, "Lower Animator is not assigned.");
         Assert.IsTrue(null != _upperAnimator, "Upper Animator is not assigned.");
-
         _heroineWeapon = GetComponentInChildren<HeroineWeapon>();
         Assert.IsTrue(null != _heroineWeapon, "Heroine Weapon is not assigned.");
+    }
+
+    private void OnEnable()
+    {
+        if (false == IsLoaded) return;
+
+        _lowerState.OnEnter();
+        _upperState.OnEnter();
     }
 
     private void ControlLowerBody(ControlInfo controlInfo)
@@ -157,6 +162,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
         if (controlInfo.tag) _lowerState.Tag();
         _lowerState.Aim(controlInfo.aim != Vector3.zero);
         _lowerState.UpDown(controlInfo.upDown);
+        if (controlInfo.attack) _lowerState.Attack();
 
         // Change player state according to the object control info
         _lowerState.Climb(controlInfo.climb);
@@ -171,7 +177,6 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
         _upperState.Aim(controlInfo.aim);
         if (controlInfo.upDown > 0) _upperState.LookUp(true);
         else _upperState.LookUp(false);
-        if (controlInfo.attack) _upperState.Attack();
     }
 
     private void RegisterStates()
@@ -179,7 +184,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
         Assert.IsTrue(null != _playerMotion, "Player Motion is not assigned");
         Assert.IsTrue(null != _playerInfo, "Player Info is not assigned");
 
-        var lowers = GetComponentsInChildren<HeroineLower>();
+        var lowers = GetComponentsInChildren<HeroineLowerStateBase>();
         Assert.IsTrue(0 < lowers.Length, "No HeroineLowerState components found in children.");
         foreach (var lower in lowers)
         {
@@ -188,7 +193,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
             _lowerStateTable.Add(state, lower);
         }
 
-        var uppers = GetComponentsInChildren<HeroineUpper>();
+        var uppers = GetComponentsInChildren<HeroineUpperStateBase>();
         Assert.IsTrue(0 < uppers.Length, "No HeroineUpperState components found in children.");
         foreach (var upper in uppers)
         {

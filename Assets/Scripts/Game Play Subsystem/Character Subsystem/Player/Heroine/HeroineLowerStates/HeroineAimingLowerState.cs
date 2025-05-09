@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HeroineAimingLowerState : PlayerLowerState<HeroineLowerState>
+public class HeroineAimingLowerState : HeroineLowerStateBase
 {
     public override HeroineLowerState   StateType               => HeroineLowerState.Aiming;
     public override bool                ShouldDisableUpperBody  => false;

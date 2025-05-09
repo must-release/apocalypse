@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Assertions;
 
+[RequireComponent(typeof(Collider2D))]
 public abstract class WeaponBase : MonoBehaviour, IWeapon
 {
     public DamageInfo WeaponDamageInfo { get; protected set; } = new DamageInfo();
@@ -9,14 +11,16 @@ public abstract class WeaponBase : MonoBehaviour, IWeapon
     public abstract WeaponType  WeaponType          { get; }
     public abstract bool        CanDamagePlayer     { get; }
     public abstract float       ActiveDuration      { get; }
-    public abstract float       PostDelay            { get; }
+    public abstract float       PostDelay           { get; }
 
 
 
     public abstract void Attack(Vector3 vector);
 
-    public void SetOwner(GameObject owner)
+    public virtual void SetOwner(GameObject owner)
     {
+        Assert.IsTrue(null != owner, "Owner of the weapon is not assigned");
+
         WeaponDamageInfo.attacker = owner;
     }
 
@@ -28,8 +32,8 @@ public abstract class WeaponBase : MonoBehaviour, IWeapon
 
     /****** Protected Methods ******/
 
-    protected virtual void Start() 
+    protected virtual void Awake() 
     {
-        gameObject.layer = LayerMask.NameToLayer("Weapon");
+        gameObject.layer    = LayerMask.NameToLayer("Weapon");
     }
 }

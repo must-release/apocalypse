@@ -72,6 +72,48 @@ public abstract class PlayerStateBase<TStateEnum> : MonoBehaviour, IAsyncLoadObj
     }
 }
 
+public abstract class HeroineLowerStateBase : PlayerStateBase<HeroineLowerState>
+{
+    /****** Public Members ******/
+
+    public abstract bool ShouldDisableUpperBody { get; }
+
+    public abstract void OnEnter();
+    public abstract void OnUpdate();
+    public abstract void OnExit();
+
+    public virtual void Jump() { }
+    public virtual void OnAir() { }
+    public virtual void Aim(bool isAiming) { }
+    public virtual void Attack() { }
+    public virtual void Move(int move) { }
+    public virtual void Tag() { }
+    public virtual void Climb(bool climb) { }
+    public virtual void OnGround() { }
+    public virtual void Stop() { }
+    public virtual void Push(bool push) { }
+    public virtual void UpDown(int upDown) { }
+    public virtual void Damaged() { }
+}
+
+
+public abstract class HeroineUpperStateBase : PlayerStateBase<HeroineUpperState>
+{
+    /****** Public Members ******/
+
+    public abstract void OnEnter();
+    public abstract void OnUpdate();
+    public abstract void OnExit(HeroineUpperState nextState);
+
+    public virtual void Move() { }
+    public virtual void LookUp(bool lookUp) { }
+    public virtual void Jump() { }
+    public virtual void Stop() { }
+    public virtual void Enable() { }
+    public virtual void Disable() { }
+    public virtual void Aim(Vector3 aim) { }
+}
+
 public abstract class PlayerLowerState<TStateEnum> : PlayerStateBase<TStateEnum> where TStateEnum : System.Enum
 {
     /****** Public Members ******/

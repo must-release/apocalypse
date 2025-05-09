@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HeroineTopAttackingUpperState : PlayerUpperStateBase<HeroineUpperState>
+public class HeroineTopAttackingUpperState : HeroineUpperStateBase
 {
     /****** Public Members ******/
 

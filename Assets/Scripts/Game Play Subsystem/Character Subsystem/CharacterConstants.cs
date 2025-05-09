@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public enum PlayerType { Hero, Heroine, PlayerCount }
-public enum HeroineLowerState { Idle, Running, Jumping, Aiming, Attacking, Climbing, Pushing, Tagging, Damaged, Dead, HeroLowerStateCount }
+public enum HeroineLowerState { Idle, Running, Jumping, Aiming, Attacking, AimAttacking, Climbing, Pushing, Tagging, Damaged, Dead, HeroLowerStateCount }
 public enum HeroineUpperState { Disabled, Idle, Running, LookingUp, Aiming, Attacking, TopAttacking, HeroUpperStateCount }
 public enum HeroLowerState { Idle, Running, Jumping, Aiming, Climbing, Pushing, Tagging, Damaged, Dead, HeroineLowerStateCount }
 public enum HeroUpperState { Disabled, Idle, Running, Jumping, LookingUp, Aiming, Attacking, TopAttacking, AimAttacking, HeroineUpperStateCount }
@@ -26,6 +26,7 @@ public static class AnimatorState
         public static readonly int Running      = Animator.StringToHash("Heroine_Lower_Running");
         public static readonly int Jumping      = Animator.StringToHash("Heroine_Lower_Jumping");
         public static readonly int Aiming       = Animator.StringToHash("Heroine_Lower_Aiming");
+        public static readonly int AimAttacking = Animator.StringToHash("Heroine_Lower_AimAttacking");
         public static readonly int Attacking    = Animator.StringToHash("Heroine_Lower_Attacking");
         public static readonly int Climbing     = Animator.StringToHash("Heroine_Lower_Climbing");
         public static readonly int Pushing      = Animator.StringToHash("Heroine_Lower_Pushing");
@@ -39,7 +40,6 @@ public static class AnimatorState
         public static readonly int Idle         = Animator.StringToHash("Heroine_Upper_Idle");
         public static readonly int Running      = Animator.StringToHash("Heroine_Upper_Running");
         public static readonly int Aiming       = Animator.StringToHash("Heroine_Upper_Aiming");
-        public static readonly int Attacking    = Animator.StringToHash("Heroine_Upper_Attacking");
         public static readonly int Disabled     = Animator.StringToHash("Heroine_Upper_Disabled");
         public static readonly int LookingUp    = Animator.StringToHash("Heroine_Upper_LookingUp");
         public static readonly int TopAttacking = Animator.StringToHash("Heroine_Upper_TopAttacking"); 
@@ -65,16 +65,17 @@ public static class AnimationClipAsset
 
     public static class HeroineLower
     {
-        public const string Idle        = HeroinePrefix + "Lower/Idle";
-        public const string Running     = HeroinePrefix + "Lower/Running";
-        public const string Jumping     = HeroinePrefix + "Lower/Jumping";
-        public const string Aiming      = HeroinePrefix + "Lower/Aiming";
-        public const string Attacking   = HeroinePrefix + "Lower/Attacking";
-        public const string Climbing    = HeroinePrefix + "Lower/Climbing";
-        public const string Pushing     = HeroinePrefix + "Lower/Pushing";
-        public const string Tagging     = HeroinePrefix + "Lower/Tagging";
-        public const string Damaged     = HeroinePrefix + "Lower/Damaged";
-        public const string Dead        = HeroinePrefix + "Lower/Dead";
+        public const string Idle            = HeroinePrefix + "Lower/Idle";
+        public const string Running         = HeroinePrefix + "Lower/Running";
+        public const string Jumping         = HeroinePrefix + "Lower/Jumping";
+        public const string Aiming          = HeroinePrefix + "Lower/Aiming";
+        public const string AimAttacking    = HeroinePrefix + "Lower/AimAttacking";
+        public const string Attacking       = HeroinePrefix + "Lower/Attacking";
+        public const string Climbing        = HeroinePrefix + "Lower/Climbing";
+        public const string Pushing         = HeroinePrefix + "Lower/Pushing";
+        public const string Tagging         = HeroinePrefix + "Lower/Tagging";
+        public const string Damaged         = HeroinePrefix + "Lower/Damaged";
+        public const string Dead            = HeroinePrefix + "Lower/Dead";
 
     }
 
@@ -83,7 +84,6 @@ public static class AnimationClipAsset
         public const string Idle            = HeroinePrefix + "Upper/Idle";
         public const string Running         = HeroinePrefix + "Upper/Running";
         public const string Aiming          = HeroinePrefix + "Upper/Aiming";
-        public const string Attacking       = HeroinePrefix + "Upper/Attacking";
         public const string Disabled        = HeroinePrefix + "Upper/Disabled";
         public const string LookingUp       = HeroinePrefix + "Upper/LookingUp";
         public const string TopAttacking    = HeroinePrefix + "Upper/TopAttacking";

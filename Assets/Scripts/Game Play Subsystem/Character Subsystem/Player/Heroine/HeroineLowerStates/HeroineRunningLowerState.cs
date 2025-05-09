@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HeroineRunningLowerState : PlayerLowerState<HeroineLowerState>
+public class HeroineRunningLowerState : HeroineLowerStateBase
 {
     /****** Public Members ******/
 
@@ -39,6 +39,11 @@ public class HeroineRunningLowerState : PlayerLowerState<HeroineLowerState>
     public override void Stop()
     {
         StateController.ChangeState(HeroineLowerState.Idle);
+    }
+
+    public override void Attack()
+    {
+        StateController.ChangeState(HeroineLowerState.Attacking);
     }
 
     public override void Jump()

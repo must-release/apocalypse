@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HeroineRunningUpperState : PlayerUpperStateBase<HeroineUpperState>
+public class HeroineRunningUpperState : HeroineUpperStateBase
 {
     public override HeroineUpperState StateType => HeroineUpperState.Running;
 

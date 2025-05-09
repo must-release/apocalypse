@@ -10,9 +10,9 @@ public class Scratch : ShortRangeWeaponBase
 
     private Rigidbody2D rb;
 
-    protected override void Start() 
+    protected override void Awake() 
     {
-        base.Start();
+        base.Awake();
 
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 0;

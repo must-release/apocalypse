@@ -3,15 +3,34 @@ using UnityEngine;
 
 public abstract class LongRangeWeaponBase : WeaponBase
 {
-    public abstract float FireSpeed { get; }
+    /****** Public Members ******/
 
-    private Coroutine visibilityCheckCoroutine;
+    public abstract float FireSpeed { get; }
 
     public override void Attack(Vector3 direction)
     {
         gameObject.SetActive(true);
         transform.localRotation = Quaternion.FromToRotation(Vector3.right, direction);
     }
+
+
+    /****** Protected Members ******/
+
+    protected virtual void OnEnable()
+    {
+        if (null != _visibilityCheckCoroutine)
+        {
+            StopCoroutine(_visibilityCheckCoroutine);
+        }
+    }
+
+
+    /****** Private Members ******/
+
+    private const float _ActiveDuration = 10f;
+
+    private Coroutine _visibilityCheckCoroutine = null;
+
 
     private void Update()
     {
@@ -24,18 +43,18 @@ public abstract class LongRangeWeaponBase : WeaponBase
 
         if ( 0 < viewportPos.x && viewportPos.x < 1 && 0 < viewportPos.y  && viewportPos.y < 1)
         {
-            if( null != visibilityCheckCoroutine ) 
-                StopCoroutine(visibilityCheckCoroutine);
+            if( null != _visibilityCheckCoroutine ) 
+                StopCoroutine(_visibilityCheckCoroutine);
         }
         else
         {
-            visibilityCheckCoroutine = StartCoroutine(AsyncInactivateWeapon());
+            _visibilityCheckCoroutine = StartCoroutine(AsyncInactivateWeapon());
         }
     }
 
     private IEnumerator AsyncInactivateWeapon()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(_ActiveDuration);
 
         gameObject.SetActive(false);
     }

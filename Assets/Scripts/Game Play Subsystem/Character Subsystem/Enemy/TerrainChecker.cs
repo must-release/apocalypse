@@ -16,8 +16,8 @@ public class TerrainChecker : MonoBehaviour
     private void Start() {
         checker = transform.parent;
 
-        groundLayer = LayerMask.GetMask(LAYER.GROUND);
-        obstacleLayer = LayerMask.GetMask("Default", LAYER.GROUND);
+        groundLayer = LayerMask.GetMask(Layer.Ground);
+        obstacleLayer = LayerMask.GetMask("Default", Layer.Ground);
 
         // Set up filters
         groundFilter = new ContactFilter2D();

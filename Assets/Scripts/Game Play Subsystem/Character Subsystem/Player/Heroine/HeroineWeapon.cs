@@ -12,10 +12,4 @@ public class HeroineWeapon : PlayerWeaponBase
         // Implement aiming logic here
         Debug.Log($"Aiming in direction: {direction}");
     }
-
-    public override void Attack()
-    {
-        // Implement attack logic here
-        Debug.Log("Attacking!");
-    }
 }

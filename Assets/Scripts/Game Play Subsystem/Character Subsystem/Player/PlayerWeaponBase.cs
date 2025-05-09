@@ -13,7 +13,14 @@ public abstract class PlayerWeaponBase : MonoBehaviour, IAsyncLoadObject
     public abstract WeaponType  PlayerWeaponType    { get; }
 
     public abstract void Aim(Vector3 direction);
-    public abstract void Attack();
+
+    public void Attack()
+    {
+        IWeapon weapon = _pooledWeapons.Dequeue();
+        weapon.SetLocalPosition(_shootingPoint.position);
+        weapon.Attack((_shootingPoint.position - _weaponPivot.position).normalized);
+        _pooledWeapons.Enqueue(weapon);
+    }
 
     /****** Protected Members ******/
 

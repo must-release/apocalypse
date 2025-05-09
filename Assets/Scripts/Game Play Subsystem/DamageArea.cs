@@ -2,31 +2,36 @@ using UnityEngine;
 
 public class DamageArea : MonoBehaviour
 {
-    private DamageInfo damageInfo;
-    private bool isDamagingPlayer;
+    /****** Public Members ******/
 
-    public void SetDamageArea(Collider2D characterCollider, DamageInfo damageInfo, bool IsDamagingPlayer)
+    public void SetDamageArea(Collider2D characterCollider, DamageInfo damageInfo, bool isDamagingPlayer)
     {
         // Add new Collider
-        Collider2D damageCollider = (Collider2D)gameObject.AddComponent(characterCollider.GetType());
+        Collider2D damageCollider = gameObject.AddComponent(characterCollider.GetType()) as Collider2D;
 
         // Copy collider values
         CopyCollider2DProperties(characterCollider, damageCollider);
 
         // Additional settings
-        gameObject.layer = LayerMask.NameToLayer("Default");
-        damageCollider.isTrigger = true;
-        this.damageInfo = damageInfo;
-        this.isDamagingPlayer = IsDamagingPlayer;
+        damageCollider.isTrigger    = true;
+        gameObject.layer            = LayerMask.NameToLayer("Default");
+        _damageInfo                 = damageInfo;
+        _isDamagingPlayer           = isDamagingPlayer;
     }
+
+
+    /****** Private Members ******/
+
+    private DamageInfo  _damageInfo          = null;
+    private bool        _isDamagingPlayer    = false;
 
     private void OnTriggerStay2D(Collider2D other) 
     {   
         // Damage entered character
         if (other.TryGetComponent(out CharacterBase character))
         {
-            if(character.CompareTag("Player") == isDamagingPlayer)
-                character.OnDamaged(damageInfo);
+            if(character.CompareTag("Player") == _isDamagingPlayer)
+                character.OnDamaged(_damageInfo);
         }
     }
 

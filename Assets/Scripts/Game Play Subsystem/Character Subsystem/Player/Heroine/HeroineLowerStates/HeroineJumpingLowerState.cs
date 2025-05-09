@@ -1,7 +1,7 @@
-using UnityEditor;
+    using UnityEditor;
 using UnityEngine;
 
-public class HeroineJumpingLowerState : PlayerLowerState<HeroineLowerState>
+public class HeroineJumpingLowerState : HeroineLowerStateBase
 {
     /****** Public Members ******/
 
@@ -41,6 +41,11 @@ public class HeroineJumpingLowerState : PlayerLowerState<HeroineLowerState>
     public override void Stop()
     {
         PlayerMotion.SetVelocity(new Vector2(0, PlayerInfo.CurrentVelocity.y));
+    }
+
+    public override void Attack()
+    {
+        StateController.ChangeState(HeroineLowerState.Attacking);
     }
 
     public override void OnGround()

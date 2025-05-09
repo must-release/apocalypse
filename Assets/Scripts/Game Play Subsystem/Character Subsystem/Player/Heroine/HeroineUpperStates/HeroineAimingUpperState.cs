@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HeroineAimingUpperState : PlayerUpperStateBase<HeroineUpperState>
+public class HeroineAimingUpperState : HeroineUpperStateBase
 {
     /****** Public Members ******/
 
@@ -39,11 +39,6 @@ public class HeroineAimingUpperState : PlayerUpperStateBase<HeroineUpperState>
 
         // Disable fixed update
         _fixedUpdateFlag = false;
-    }
-
-    public override void Attack() 
-    {
-        StateController.ChangeState(HeroineUpperState.Attacking); 
     }
 
     public override void Aim(Vector3 aim)

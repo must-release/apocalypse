@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class HeroineDeadLowerState : PlayerLowerState<HeroineLowerState>
+public class HeroineDeadLowerState : HeroineLowerStateBase
 {
     /****** Public Members ******/
 
