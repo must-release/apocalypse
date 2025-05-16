@@ -71,7 +71,7 @@ public class ChoiceEvent : GameEvent
     /****** Private Members ******/
 
     private Coroutine       _eventCoroutine     = null;
-    private ChoiceEventInfo _info    = null;
+    private ChoiceEventInfo _info               = null;
 
     private IEnumerator PlayEventCoroutine()
     {

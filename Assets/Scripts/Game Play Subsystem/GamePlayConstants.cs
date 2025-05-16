@@ -1,7 +1,8 @@
 
 using UnityEngine.Assertions;
 
-public enum WeaponType
+
+public enum WeaponType : byte
 {
     // Player weapon
     Bullet, NormalGranade,
@@ -10,8 +11,7 @@ public enum WeaponType
     Scratch,
 
     // Enum count
-    WEAPON_TYPE_COUNT
-
+    WeaponTypeCount
 }
 
 public static class WeaponAsset
@@ -27,4 +27,18 @@ public static class WeaponAsset
 
         return "AimingDot/" + weaponType.ToString();
     }
+}
+
+public enum EffectType : byte
+{
+    NormalExplosion,
+
+    EffectTypeCount
+}
+
+public static class Layer
+{
+    public const string Ground = "Ground";
+    public const string Character = "Character";
+    public const string Weapon = "Weapon";
 }

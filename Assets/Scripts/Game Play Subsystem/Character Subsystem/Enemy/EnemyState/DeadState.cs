@@ -15,7 +15,7 @@ public class DeadState : EnemyStateBase
     public override void OnEnter()
     {
         enemyColor = enemySprite.color;
-        enemyRigid.velocity = Vector2.zero;
+        enemyRigid.linearVelocity = Vector2.zero;
     
         enemyController.SetDefaultDamageArea(false);
     }

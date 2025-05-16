@@ -51,32 +51,8 @@ namespace ScreenEffectEnums
     public enum ScreenEffect { FadeIn, FadeOut, ScreenEffectCount }
 }
 
-namespace LayerEnums
-{
-    public static class Layer
-    {
-        public const string Ground      = "Ground";
-        public const string Character   = "Character";
-        public const string Weapon      = "Weapon";
-
-    }
-}
-
 namespace AssetEnums
 {
-    public static class SystemAsset
-    {
-        public static readonly string PathPrefix = "Systems/";
-
-        public enum AssetName
-        {
-            // Don't change the sequence
-            GameManager, 
-            AISystem, StorySystem, UISystem, UtilitySystem, Cameras, GamePlaySystem, GameSceneSystem,
-            EventSystem
-        }
-    }
-
     public static class UIAsset
     {
         public static readonly string PathPrefix = "UIAssets/";

@@ -26,11 +26,25 @@ public class DamageArea : MonoBehaviour
     private bool        _isDamagingPlayer    = false;
 
     private void OnTriggerStay2D(Collider2D other) 
-    {   
-        // Damage entered character
-        if (other.TryGetComponent(out CharacterBase character))
+    {
+        if (_damageInfo.isSingleHit)
+            return;
+
+        if (other.TryGetComponent(out ICharacter character))
         {
-            if(character.CompareTag("Player") == _isDamagingPlayer)
+            if(character.IsPlayer == _isDamagingPlayer)
+                character.OnDamaged(_damageInfo);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (false == _damageInfo.isSingleHit)
+            return;
+
+        if (other.TryGetComponent(out ICharacter character))
+        {
+            if (character.IsPlayer == _isDamagingPlayer)
                 character.OnDamaged(_damageInfo);
         }
     }

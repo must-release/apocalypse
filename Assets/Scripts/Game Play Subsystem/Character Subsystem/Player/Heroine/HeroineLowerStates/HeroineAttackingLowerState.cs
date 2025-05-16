@@ -7,6 +7,8 @@ public class HeroineAttackingLowerState : HeroineLowerStateBase
 
     public override void OnEnter()
     {
+        PlayerMotion.SetVelocity(new Vector2(0, PlayerInfo.CurrentVelocity.y));
+
         StateAnimator.Play(AnimatorState.HeroineLower.Attacking);
         StateAnimator.Update(0.0f);
 

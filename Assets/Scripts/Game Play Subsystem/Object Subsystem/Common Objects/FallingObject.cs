@@ -9,14 +9,14 @@ public class FallingObject : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        rb.isKinematic = true;
+        rb.bodyType = RigidbodyType2D.Kinematic;
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Bullet"))
         {
-            rb.isKinematic = false;
+            rb.bodyType = RigidbodyType2D.Dynamic;
         }
 
         if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))

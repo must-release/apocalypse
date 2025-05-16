@@ -9,13 +9,12 @@ public class GamePlayManager : MonoBehaviour, IAsyncLoadObject
 {
     /****** Public Members ******/
 
-    public static GamePlayManager Instance = null;
+    public static GamePlayManager Instance { get; private set; } = null;
 
     public bool IsCutscenePlaying { get; private set; } = false;
 
-    public bool IsLoaded => _isLoaded;
+    public bool IsLoaded => _isEventLoaded && _isPoolLoaded;
 
-    // Play Cutscene
     public void PlayCutscene() { StartCoroutine(CutsceneCoroutine()); }
 
     // Initialize Player transform, info
@@ -44,7 +43,9 @@ public class GamePlayManager : MonoBehaviour, IAsyncLoadObject
     /****** Private Members ******/
 
     private GameEventInfo _gameOverEventInfo = null;
-    private bool _isLoaded = false;
+
+    private bool _isEventLoaded = false;
+    private bool _isPoolLoaded  = false;
 
     private void Awake()
     {
@@ -60,10 +61,11 @@ public class GamePlayManager : MonoBehaviour, IAsyncLoadObject
 
     private void Start()
     {
-        StartCoroutine(LoadGameEventInfos());
+        StartCoroutine(AsyncLoadGameEventInfos());
+        StartCoroutine(AsyncLoadObjectPool());
     }
 
-    private IEnumerator LoadGameEventInfos()
+    private IEnumerator AsyncLoadGameEventInfos()
     {
         // Load game over event info
         var gameOverEventInfo = Addressables.LoadAssetAsync<GameEventInfo>(SequentialEventInfoAsset.Common.GameOver);
@@ -78,7 +80,14 @@ public class GamePlayManager : MonoBehaviour, IAsyncLoadObject
             yield break;
         }
 
-        _isLoaded = true;
+        _isEventLoaded = true;
+    }
+
+    private IEnumerator AsyncLoadObjectPool()
+    {
+        yield return PooInitializer.AsyncLoadPool();
+
+        _isPoolLoaded = true;
     }
 
     private IEnumerator CutsceneCoroutine()

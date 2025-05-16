@@ -10,7 +10,7 @@ public class MovableObject : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        rb.isKinematic = false;
+        rb.bodyType = RigidbodyType2D.Dynamic;
     }
 
     void OnCollisionStay2D(Collision2D collision)
@@ -32,17 +32,17 @@ public class MovableObject : MonoBehaviour
 
                     pushDirection = new Vector2(pushDirection.x, 0).normalized;
 
-                    rb.velocity = pushDirection * pushForce;
+                    rb.linearVelocity = pushDirection * pushForce;
                 }
                 else
                 {
-                    rb.velocity = Vector2.zero;
+                    rb.linearVelocity = Vector2.zero;
                     rb.angularVelocity = 0f;
                 }
             }
             else
             {
-                rb.velocity = Vector2.zero;
+                rb.linearVelocity = Vector2.zero;
                 rb.angularVelocity = 0f;
             }
         }
@@ -52,7 +52,7 @@ public class MovableObject : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
             rb.angularVelocity = 0f;
         }
     }

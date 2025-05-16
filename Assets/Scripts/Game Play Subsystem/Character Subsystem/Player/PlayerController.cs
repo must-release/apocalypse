@@ -9,7 +9,8 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
 
     public IPlayerAvatar        CurrentAvatar       { get; private set; } = null;
     public PlayerType           CurrentPlayerType   { get; private set; } = PlayerType.PlayerCount;
-    
+
+    public override bool IsPlayer => true;
     public bool IsLoaded
     {
         get
@@ -44,18 +45,6 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
 
         ControlInteractionObjects(controlInfo);
         CurrentAvatar.ControlAvatar(controlInfo);
-    }
-
-    // Called once when player is on air
-    public override void OnAir()
-    {
-        CurrentAvatar.OnAir();
-    }
-
-    // Called once when player is on ground
-    public override void OnGround() 
-    { 
-        CurrentAvatar.OnGround();
     }
 
     public override void OnDamaged(DamageInfo damageInfo) 
@@ -100,9 +89,9 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
         base.Start();
 
         CharacterHeight             = GetComponent<CapsuleCollider2D>().size.y * transform.localScale.y;
-        MovingSpeed                 = 15f;
-        JumpingSpeed                = 30f;
-        Gravity                     = 10f;
+        MovingSpeed                 = 8f;
+        JumpingSpeed                = 10f;
+        Gravity                     = 3f;
         MaxHitPoint                 = _MaxHitPoint;
         CurrentHitPoint             = MaxHitPoint;
         _playerRigid.gravityScale   = Gravity;
@@ -115,6 +104,16 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
 
         //RegisterAvatar(PlayerType.Hero, _heroTransform);
         RegisterAvatar(PlayerType.Heroine, _heroineTransform);
+    }
+
+    protected override void OnAir()
+    {
+        CurrentAvatar.OnAir();
+    }
+
+    protected override void OnGround()
+    {
+        CurrentAvatar.OnGround();
     }
 
 

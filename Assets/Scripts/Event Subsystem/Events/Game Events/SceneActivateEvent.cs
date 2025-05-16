@@ -48,7 +48,7 @@ public class SceneActivateEvent : GameEvent
 
     public override void TerminateEvent()
     {
-        Assert.IsTrue(false == GameSceneController.Instance.IsSceneLoading, "Should not be terminated when scene is not loaded yet.");
+        Assert.IsTrue(false == SceneController.Instance.IsSceneLoading, "Should not be terminated when scene is not loaded yet.");
         Assert.IsTrue(null != _info, "Event info is not set before termination");
 
         if (_eventCoroutine != null)
@@ -83,16 +83,16 @@ public class SceneActivateEvent : GameEvent
 
 
         // If scene is still loading
-        if (GameSceneController.Instance.IsSceneLoading)
+        if (SceneController.Instance.IsSceneLoading)
         {
             if (_info.ShouldTurnOnLoadingUI)
                 UIController.Instance.ChangeBaseUI(BaseUI.Loading);
 
-            yield return new WaitWhile(() => GameSceneController.Instance.IsSceneLoading);
+            yield return new WaitWhile(() => SceneController.Instance.IsSceneLoading);
         }
 
         // Initialize player character for game play
-        Transform player = GameSceneController.Instance.FindPlayerTransform();
+        Transform player = SceneController.Instance.FindPlayerTransform();
         if (player != null)
         {
             PlayerType character = PlayerManager.Instance.Character;
@@ -100,7 +100,7 @@ public class SceneActivateEvent : GameEvent
         }
 
         // Activate game scene
-        GameSceneController.Instance.ActivateGameScene();
+        SceneController.Instance.ActivateGameScene();
 
         // Terminate scene activate event and play next event
         TerminateEvent();

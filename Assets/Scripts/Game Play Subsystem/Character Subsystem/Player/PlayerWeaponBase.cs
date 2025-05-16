@@ -47,34 +47,16 @@ public abstract class PlayerWeaponBase : MonoBehaviour, IAsyncLoadObject
         Assert.IsTrue(_shootingPoint != null, "Shooting point is not assigned.");
     }
 
-    private void Start() 
+    private IEnumerator Start() 
     { 
-        StartCoroutine(LoadWeaponsAndDots());
+        yield return LoadWeaponsAndDots();
     }
 
     private IEnumerator LoadWeaponsAndDots()
     {
-        bool isWeaponLoaded = false;
-        bool isAimingDotsLoaded = false;
+        yield return WeaponFactory.Instance.AsyncPoolWeapons(_playerObject, PlayerWeaponType, _pooledWeapons, _WeaponPoolCount);
+        yield return WeaponFactory.Instance.AsyncPoolAimingDots(PlayerWeaponType, _pooledAimingDots, _AimingDotsPoolCount);
 
-        StartCoroutine(LoadWeapons(() => isWeaponLoaded = true));
-        StartCoroutine(LoadAimingDots(() => isAimingDotsLoaded = true));
-
-        yield return new WaitUntil(() => isWeaponLoaded && isAimingDotsLoaded);
         _isLoaded = true;
-    }
-
-    private IEnumerator LoadWeapons(System.Action action)
-    {
-        yield return StartCoroutine(WeaponFactory.Instance.AsyncPoolWeapons(_playerObject, PlayerWeaponType, _pooledWeapons, _WeaponPoolCount));
-
-        action.Invoke();
-    }
-
-    private IEnumerator LoadAimingDots(System.Action action)
-    {
-        yield return StartCoroutine(WeaponFactory.Instance.AsyncPoolAimingDots(PlayerWeaponType, _pooledAimingDots, _AimingDotsPoolCount));
-
-        action.Invoke();
     }
 }

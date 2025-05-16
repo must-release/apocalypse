@@ -1,10 +1,6 @@
-﻿using UnityEngine;
-using EventEnums;
-using SceneEnums;
+﻿using EventEnums;
 using UnityEngine.Assertions;
 using System.Collections.Generic;
-using System;
-using UnityEngine.AddressableAssets;
 
 /*
  * Load Scene Event
@@ -46,7 +42,7 @@ public class SceneLoadEvent : GameEvent
         base.PlayEvent();
 
         // Load scene asynchronously
-        GameSceneController.Instance.LoadGameScene(_info.LoadingScene);
+        SceneController.Instance.LoadGameScene(_info.LoadingScene);
 
         // Terminate scene load event and play next event
         TerminateEvent();

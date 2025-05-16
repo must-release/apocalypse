@@ -14,7 +14,7 @@ public class Bullet : LongRangeWeaponBase
     {
         base.Attack(direction);
 
-        _bulletRigid.velocity = direction * FireSpeed;
+        _bulletRigid.linearVelocity = direction * FireSpeed;
     }
 
     /****** Protected Members ******/

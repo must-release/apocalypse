@@ -28,7 +28,8 @@ public static class AnimatorState
         public static readonly int Aiming       = Animator.StringToHash("Heroine_Lower_Aiming");
         public static readonly int AimAttacking = Animator.StringToHash("Heroine_Lower_AimAttacking");
         public static readonly int Attacking    = Animator.StringToHash("Heroine_Lower_Attacking");
-        public static readonly int Climbing     = Animator.StringToHash("Heroine_Lower_Climbing");
+        public static readonly int ClimbingUp   = Animator.StringToHash("Heroine_Lower_ClimbingUp");
+        public static readonly int ClimbingDown = Animator.StringToHash("Heroine_Lower_ClimbingDown");
         public static readonly int Pushing      = Animator.StringToHash("Heroine_Lower_Pushing");
         public static readonly int Tagging      = Animator.StringToHash("Heroine_Lower_Tagging");
         public static readonly int Damaged      = Animator.StringToHash("Heroine_Lower_Damaged");
@@ -71,7 +72,8 @@ public static class AnimationClipAsset
         public const string Aiming          = HeroinePrefix + "Lower/Aiming";
         public const string AimAttacking    = HeroinePrefix + "Lower/AimAttacking";
         public const string Attacking       = HeroinePrefix + "Lower/Attacking";
-        public const string Climbing        = HeroinePrefix + "Lower/Climbing";
+        public const string ClimbingUp      = HeroinePrefix + "Lower/ClimbingUp";
+        public const string ClimbingDown    = HeroinePrefix + "Lower/ClimbingDown";
         public const string Pushing         = HeroinePrefix + "Lower/Pushing";
         public const string Tagging         = HeroinePrefix + "Lower/Tagging";
         public const string Damaged         = HeroinePrefix + "Lower/Damaged";

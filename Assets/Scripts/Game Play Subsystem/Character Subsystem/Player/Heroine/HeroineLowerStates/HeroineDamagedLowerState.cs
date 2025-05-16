@@ -40,7 +40,7 @@ public class HeroineDamagedLowerState : HeroineLowerStateBase
     /****** Private Members ******/
 
     private const float _SternTime      = 0.4f;
-    private const float _KnockBackSpeed = 15f;
+    private const float _KnockBackSpeed = 4f;
     private float _sternedTime          = 0f;
 
     private void KnockBack()

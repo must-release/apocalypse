@@ -1,5 +1,4 @@
 using UnityEngine;
-using LayerEnums;
 using Unity.Mathematics;
 
 public class TerrainChecker : MonoBehaviour 

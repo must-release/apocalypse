@@ -161,12 +161,12 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
         if (controlInfo.jump) _lowerState.Jump();
         if (controlInfo.tag) _lowerState.Tag();
         _lowerState.Aim(controlInfo.aim != Vector3.zero);
-        _lowerState.UpDown(controlInfo.upDown);
         if (controlInfo.attack) _lowerState.Attack();
 
         // Change player state according to the object control info
         _lowerState.Climb(controlInfo.climb);
         _lowerState.Push(controlInfo.push);
+        _lowerState.UpDown(controlInfo.upDown);
     }
 
     private void ControlUpperBody(ControlInfo controlInfo)

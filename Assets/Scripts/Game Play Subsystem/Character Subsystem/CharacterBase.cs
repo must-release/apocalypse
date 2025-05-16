@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
-using LayerEnums;
 using UnityEngine.Assertions;
 
-public abstract class CharacterBase : MonoBehaviour, IMotionController, ICharacterInfo
+public abstract class CharacterBase : MonoBehaviour, ICharacter, IMotionController, ICharacterInfo
 {
     /****** Public Members ******/
 
@@ -24,7 +23,7 @@ public abstract class CharacterBase : MonoBehaviour, IMotionController, ICharact
         get 
         { 
             Assert.IsTrue(null != _rigidbody, "Rigidbody2D is not assigned.");
-            return _rigidbody.velocity; 
+            return _rigidbody.linearVelocity; 
         } 
     }
     public Vector2      CurrentPosition     { get { return transform.position; } }
@@ -35,9 +34,8 @@ public abstract class CharacterBase : MonoBehaviour, IMotionController, ICharact
     public int          MaxHitPoint         { get; protected set; } = -1;
     public int          CurrentHitPoint     { get; protected set; } = -1;
 
+    public abstract bool IsPlayer { get; }
     public abstract void ControlCharacter(ControlInfo controlInfo);
-    public abstract void OnAir();
-    public abstract void OnGround();
     public abstract void OnDamaged(DamageInfo damageInfo);
 
     public void RecognizeInteractionObject(InteractionObject obj)
@@ -70,7 +68,7 @@ public abstract class CharacterBase : MonoBehaviour, IMotionController, ICharact
     {
         Assert.IsTrue(null != _rigidbody, "Rigidbody2D is not assigned.");
 
-        _rigidbody.velocity = velocity;
+        _rigidbody.linearVelocity = velocity;
     }
 
     public void AddForce(Vector2 force, ForceMode2D mode = ForceMode2D.Force)
@@ -84,7 +82,7 @@ public abstract class CharacterBase : MonoBehaviour, IMotionController, ICharact
     {
         Assert.IsTrue(null != _rigidbody, "Rigidbody2D is not assigned.");
 
-        _rigidbody.velocity = Vector2.zero;
+        _rigidbody.linearVelocity = Vector2.zero;
     }
 
     public void SetAngularVelocity(float angularVelocity)
@@ -116,6 +114,7 @@ public abstract class CharacterBase : MonoBehaviour, IMotionController, ICharact
             transform.localScale = new Vector3(-1, 1, 1);
     }
 
+
     /****** Protected Members ******/
 
     protected virtual void Awake() 
@@ -126,6 +125,9 @@ public abstract class CharacterBase : MonoBehaviour, IMotionController, ICharact
     }
 
     protected virtual void Start() { }
+
+    protected abstract void OnAir();
+    protected abstract void OnGround();
 
     protected void ControlInteractionObjects(ControlInfo controlInfo)
     {

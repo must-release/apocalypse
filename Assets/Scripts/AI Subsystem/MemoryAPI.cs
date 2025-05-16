@@ -36,7 +36,7 @@ public class MemoryAPI : MonoBehaviour
         // Generate a unique UserID for testing
         // UserID = "User" + System.DateTime.Now.ToString("yyyyMMddHHmmss", CultureInfo.InvariantCulture);
 
-        // Load inital Story
+        // Load initial Story
         //Addressables.LoadAssetAsync<TextAsset>("INITIAL_STORY_KOREAN").Completed += OnInitStoryLoadComplete;
         //Addressables.LoadAssetAsync<TextAsset>("INITIAL_STORY_AMERICAN").Completed += OnInitStoryLoadComplete;
     }

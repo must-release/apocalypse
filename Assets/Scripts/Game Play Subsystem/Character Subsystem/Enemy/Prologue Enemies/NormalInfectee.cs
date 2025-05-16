@@ -9,7 +9,7 @@ public class NormalInfectee : EnemyController
     private const float PATROL_RANGE_MIN = 5;
     private const float STANDING_TIME = 5f;
 
-    private float patrolLeftEnd, patrolRightEnd; // Each end side of the partrol range
+    private float patrolLeftEnd, patrolRightEnd; // Each end side of the patrol range
     private bool wait;
     private float waitingTime;
     private bool attacked;
@@ -17,9 +17,9 @@ public class NormalInfectee : EnemyController
 
     protected override void InitializeTerrainChecker()
     {
-        groundCheckingDistance      = 5f;
+        groundCheckingDistance      = 3f;
         groundCheckingVector        = new Vector3(1, - 1, 0);
-        ObstacleCheckingDistance    = 3f;
+        ObstacleCheckingDistance    = 2f;
         checkTerrain                = true;
     }
 
@@ -40,12 +40,12 @@ public class NormalInfectee : EnemyController
         weaponCount         = 1;
         aimingDotsCount     = 0;
 
-        attackRange = 4;
+        attackRange = 1.5f;
     }
 
     protected override void StartEnemy()
     {
-        MovingSpeed     = 5f;
+        MovingSpeed     = 3f;
         CurrentHitPoint = MAX_HIT_POINT;
 
         patrolLeftEnd   = 0;
@@ -95,9 +95,9 @@ public class NormalInfectee : EnemyController
         if(transform.localScale.x * direction < 0) Flip();
 
         if (CanMoveAhead() && math.abs(ChasingTarget.position.x - transform.position.x) > 0.1f) 
-            enemyRigid.velocity = new Vector2(direction * MovingSpeed, enemyRigid.velocity.y);
+            enemyRigid.linearVelocity = new Vector2(direction * MovingSpeed, enemyRigid.linearVelocity.y);
         else
-            enemyRigid.velocity = Vector2.zero;
+            enemyRigid.linearVelocity = Vector2.zero;
     }
 
     public override void SetAttackInfo()
@@ -106,7 +106,7 @@ public class NormalInfectee : EnemyController
         wait            = true;
         attacked        = false;
         attackingTime   = 0;
-        enemyRigid.velocity = Vector2.zero;
+        enemyRigid.linearVelocity = Vector2.zero;
     }
 
     public override bool Attack()
@@ -156,20 +156,20 @@ public class NormalInfectee : EnemyController
             if (isPatrollingRight) patrolLeftEnd = patrolRightEnd - PATROL_RANGE_MAX;
             else patrolRightEnd = patrolLeftEnd + PATROL_RANGE_MAX;
 
-            enemyRigid.velocity = Vector2.zero;
+            enemyRigid.linearVelocity = Vector2.zero;
         }
         // Patrolling the area
         else if ((isPatrollingRight && transform.position.x < patrolRightEnd) ||
                 (!isPatrollingRight && transform.position.x > patrolLeftEnd))
         {
             float direction = isPatrollingRight ? 1 : -1;
-            enemyRigid.velocity = new Vector2(direction * MovingSpeed, enemyRigid.velocity.y);
+            enemyRigid.linearVelocity = new Vector2(direction * MovingSpeed, enemyRigid.linearVelocity.y);
         }
         // Reached one of the end side of the patrol range
         else
         {
             Flip();
-            enemyRigid.velocity = Vector2.zero;
+            enemyRigid.linearVelocity = Vector2.zero;
         }
     }
 
@@ -180,7 +180,7 @@ public class NormalInfectee : EnemyController
     }
 
 
-    public override void ControlCharacter(ControlInfo controlInfo) { return; }
-    public override void OnAir() { return; }
-    public override void OnGround() { return; }
+    public override void ControlCharacter(ControlInfo controlInfo) { }
+    protected override void OnAir() { }
+    protected override void OnGround() { }
 }

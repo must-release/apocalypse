@@ -26,19 +26,19 @@ public class TempPlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
 
         // �ϰ� �� �߰����� ���� ����
-        if (rb.velocity.y < 0)
+        if (rb.linearVelocity.y < 0)
         {
-            rb.velocity += Vector2.down * fallMultiplier * Time.deltaTime;
+            rb.linearVelocity += Vector2.down * fallMultiplier * Time.deltaTime;
         }
     }
 
     void FixedUpdate()
     {
-        rb.velocity = new Vector2(horizontalMove, rb.velocity.y);
+        rb.linearVelocity = new Vector2(horizontalMove, rb.linearVelocity.y);
     }
 
     public void SetGravityScale(float newGravityScale)

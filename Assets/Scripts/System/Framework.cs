@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-using AssetEnums;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Assertions;
@@ -31,7 +31,7 @@ public class Framework : MonoBehaviour
         Debug.Log("Framework Init Complete");
 
         // if splash screen is enabled, notify it
-        var splashController = FindObjectOfType<SplashScreen>();
+        var splashController = FindFirstObjectByType<SplashScreen>();
         splashController?.OnFrameworkInitialized();
 
         SubmitStartEvent();
@@ -40,19 +40,18 @@ public class Framework : MonoBehaviour
     private IEnumerator LoadDevConfig()
     {
         Debug.Log("Loading DevConfig...");
-
-        string assetPath = DevConfig.AssetPath;
-        AsyncOperationHandle<DevConfig> loadHandle = Addressables.LoadAssetAsync<DevConfig>(assetPath);
+        
+        AsyncOperationHandle<DevConfig> loadHandle = Addressables.LoadAssetAsync<DevConfig>(AssetPath.DevConfig);
         yield return loadHandle;
 
         if (loadHandle.Status == AsyncOperationStatus.Succeeded)
         {
             _devConfig = loadHandle.Result;
-            Debug.Log("Load DevConfig Complete : [" + assetPath + "]");
+            Debug.Log("Load DevConfig Complete : [" + AssetPath.DevConfig + "]");
         }
         else
         {
-            Debug.LogError("Load DevConfig Failed : [" + assetPath + "]");
+            Debug.LogError("Load DevConfig Failed : [" + AssetPath.DevConfig + "]");
             yield break;
         }
     }
@@ -61,37 +60,36 @@ public class Framework : MonoBehaviour
     {
         Debug.Log("Loading Systems...");
 
-        foreach (SystemAsset.AssetName system in Enum.GetValues(typeof(SystemAsset.AssetName)))
+        AsyncOperationHandle<SystemAsset> loadHandle = Addressables.LoadAssetAsync<SystemAsset>(AssetPath.SystemAsset);
+        yield return loadHandle;
+
+        if (loadHandle.Status != AsyncOperationStatus.Succeeded)
         {
-            string assetPath = SystemAsset.PathPrefix + system.ToString();
-            AsyncOperationHandle<GameObject> loadHandle = Addressables.LoadAssetAsync<GameObject>(assetPath);
-            yield return loadHandle;
+            Debug.LogError("Failed to load SystemAsset");
+            yield break;
+        }
 
-            GameObject systemObject;
-            if (loadHandle.Status == AsyncOperationStatus.Succeeded)
-            {
-                systemObject = Instantiate(loadHandle.Result, transform);
-                systemObject.name = loadHandle.Result.name;
-                Debug.Log("Load Complete : [" + assetPath + "]");
-            }
-            else
-            {
-                Debug.LogError("Load Failed : [" + assetPath + "]");
-                yield break;
-            }
+        SystemAsset group = loadHandle.Result;
 
-            if ( systemObject.transform.TryGetComponent(out IAsyncLoadObject asyncObject) )
+        foreach (var entry in group.SystemAssets)
+        {
+            GameObject systemObject = Instantiate(entry.SystemPrefab, transform);
+            systemObject.name = entry.SystemPrefab.name;
+            Debug.Log("Instantiated System Prefab: " + entry.SystemPrefab.name);
+
+            if (systemObject.TryGetComponent(out IAsyncLoadObject asyncObject))
             {
                 yield return new WaitUntil(() => asyncObject.IsLoaded);
             }
         }
 
-        Debug.Log("All System Load is Complete.");
+        Debug.Log("All System Prefabs Loaded.");
     }
+
 
     private void SubmitStartEvent()
     {
-        Assert.IsTrue(_devConfig != null, "DevConfig not loaded");
+        Assert.IsTrue(null != _devConfig, "DevConfig not loaded");
 
         if (null != _devConfig.StartEvent)
         {

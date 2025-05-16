@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AimingDot : MonoBehaviour
 {
-    public AimingDot NextDot {get; set;}
+    public AimingDot NextDot { get; set; }
 
     public void InactiveNextDots()
     {

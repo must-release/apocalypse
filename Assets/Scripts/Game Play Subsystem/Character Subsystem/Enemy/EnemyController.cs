@@ -8,6 +8,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
 {
     public GameObject DetectedPlayer { get; set; }
     public Transform ChasingTarget { get; set; }
+    public override bool IsPlayer => false;
     public bool IsLoaded => isLoaded;
 
     // Common variables
@@ -151,7 +152,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
 
     IEnumerator LoadWeaponsAndDots()
     {
-        if ( WeaponType.WEAPON_TYPE_COUNT != weaponType )
+        if ( WeaponType.WeaponTypeCount != weaponType )
             yield return WeaponFactory.Instance.AsyncPoolWeapons(gameObject, weaponType, weapons, weaponCount, useShortRangeWeapon);
 
         if ( 0 < aimingDotsCount )
