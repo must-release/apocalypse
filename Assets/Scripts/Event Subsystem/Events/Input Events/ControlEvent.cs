@@ -62,7 +62,10 @@ public class ControlEvent : InputEvent, KeySettingsObserver
         bool applyUpDown = controlInfo.upDown != 0 || prevUpDown != 0;
 
         // Set jump control
-        controlInfo.jump = Input.GetKeyDown(jumpButton);
+        controlInfo.isJumpStarted   = Input.GetKeyDown(jumpButton);
+        controlInfo.isJumping       = Input.GetKey(jumpButton);
+
+        bool applyJump = controlInfo.isJumpStarted || controlInfo.isJumping || Input.GetKeyUp(jumpButton);
 
         // Set attack control
         controlInfo.attack = Input.GetKeyDown(attackButton);
@@ -75,7 +78,7 @@ public class ControlEvent : InputEvent, KeySettingsObserver
         // Try interact control
         controlInfo.tryInteract = Input.GetKeyDown(interactButton);
 
-        return (controlInfo.move != 0) || controlInfo.stop || applyUpDown || controlInfo.jump || controlInfo.attack ||
+        return (controlInfo.move != 0) || controlInfo.stop || applyUpDown || applyJump || controlInfo.attack ||
             controlInfo.assistAttack || controlInfo.specialAttack || controlInfo.tag || controlInfo.tryInteract;
     }
 

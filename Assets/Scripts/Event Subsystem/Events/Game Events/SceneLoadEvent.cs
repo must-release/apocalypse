@@ -1,6 +1,8 @@
 ﻿using EventEnums;
 using UnityEngine.Assertions;
 using System.Collections.Generic;
+using System.Collections;
+using UnityEngine;
 
 /*
  * Load Scene Event
@@ -40,17 +42,18 @@ public class SceneLoadEvent : GameEvent
         Assert.IsTrue(null != _info, "Event info is not initialized" );
 
         base.PlayEvent();
-
-        // Load scene asynchronously
-        SceneController.Instance.LoadGameScene(_info.LoadingScene);
-
-        // Terminate scene load event and play next event
-        TerminateEvent();
+        _eventCoroutine = StartCoroutine(PlayEventCoroutine());
     }
 
     public override void TerminateEvent()
     {
         Assert.IsTrue(null != _info, "Event info is not set before termination");
+
+        if (_eventCoroutine != null)
+        {
+            StopCoroutine(_eventCoroutine);
+            _eventCoroutine = null;
+        }
 
         // Todo: Release the event info
         // if (_info.IsFromAddressables) Addressables.Release(_info);
@@ -70,4 +73,15 @@ public class SceneLoadEvent : GameEvent
     /****** Private Members ******/
 
     private SceneLoadEventInfo _info = null;
+
+    private Coroutine _eventCoroutine = null;
+
+    private IEnumerator PlayEventCoroutine()
+    {
+        yield return new WaitUntil(() => SceneController.Instance.CanMoveToNextScene);
+
+        SceneController.Instance.LoadGameScene(_info.LoadingScene);
+
+        TerminateEvent();
+    }
 }

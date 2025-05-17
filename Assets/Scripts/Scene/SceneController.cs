@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using NUnit.Framework;
 
 /* 
  * SceneConroller initializes maps when starting the StageScene.
@@ -13,6 +14,15 @@ public class SceneController : MonoBehaviour
     public static SceneController Instance { get; private set; }
 
     public bool IsSceneLoading { get; private set; }
+    public bool CanMoveToNextScene
+    {
+        get
+        {
+            Assert.IsTrue(null != _currentScene, "Current scene is not initialized.");
+
+            return _currentScene.CanMoveToNextScene;
+        }
+    }
 
 
     public void LoadGameScene(SceneEnums.SceneName loadingScene) 
@@ -23,22 +33,26 @@ public class SceneController : MonoBehaviour
     public void ActivateGameScene()
     {
         UtilityManager.Instance.ResetUtilityTools();
-        SceneObjectLoader.Instance.SetActiveSceneObjects(true);
+        SceneLoader.Instance.SetActiveSceneObjects(true);
     }
 
     public Transform FindPlayerTransform()
     {
-        return SceneObjectLoader.Instance.Player;
+        return SceneLoader.Instance.Player;
     }
 
 
     /****** Private Members ******/
+
+    private IScene _currentScene = null;
 
     private void Awake()
     {
         if (null == Instance)
         {
             Instance = this;
+
+            FindCurrentScene();
         }
         else
         {
@@ -51,14 +65,34 @@ public class SceneController : MonoBehaviour
     {
         IsSceneLoading = true;
 
-        AsyncOperation asyncLoad = SceneObjectLoader.Instance.AsyncLoadScene(loadingScene);
+        AsyncOperation asyncLoad = SceneLoader.Instance.AsyncLoadScene(loadingScene);
         yield return new WaitUntil(() => asyncLoad.isDone);
 
-        yield return SceneObjectLoader.Instance.LoadAssets();
+        FindCurrentScene();
 
-        SceneObjectPlacer.Instance.PlaceSceneObjects();
+        yield return SceneLoader.Instance.LoadAssets();
+
+        ScenePlacer.Instance.PlaceSceneObjects();
 
         IsSceneLoading = false;
+    }
+
+    private void FindCurrentScene()
+    {
+        MonoBehaviour[] behaviours = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
+        foreach (var behaviour in behaviours)
+        {
+            if (behaviour is IScene scene)
+            {
+                _currentScene = scene;
+                break;
+            }
+        }
+
+        if (null == _currentScene)
+        {
+            Debug.LogWarning("No IScene implementation found in the current scene.");
+        }
     }
 }
 

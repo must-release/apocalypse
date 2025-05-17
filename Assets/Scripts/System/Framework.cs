@@ -30,10 +30,6 @@ public class Framework : MonoBehaviour
 
         Debug.Log("Framework Init Complete");
 
-        // if splash screen is enabled, notify it
-        var splashController = FindFirstObjectByType<SplashScreen>();
-        splashController?.OnFrameworkInitialized();
-
         SubmitStartEvent();
     }
 
