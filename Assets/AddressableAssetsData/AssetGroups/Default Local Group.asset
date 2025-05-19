@@ -16,7 +16,7 @@ MonoBehaviour:
   m_GUID: 23bb5122b294b401f85e3938ca625771
   m_SerializeEntries:
   - m_GUID: 0225b9d557aefc340ad25fe74ee5b45c
-    m_Address: AnimationClip/Heroine/Lower/Jumping
+    m_Address: AnimationClip/Heroine/Lower/JumpingStart
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -120,6 +120,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7b11b4543e950c04fb064ccb2c1ce0f9
+    m_Address: AnimationClip/Heroine/Lower/JumpingDown
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8025b6630582a244099fead019c914a0
     m_Address: AimingDot/NormalGranade
     m_ReadOnly: 0
@@ -170,8 +175,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dea8fa15ac18442449ee5494dd437ab6
+    m_Address: AnimationClip/Heroine/Lower/JumpingEnd
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e36973d110eedbe488a5db3b81f15112
     m_Address: GameData/SystemAsset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e6dc383d0946911419a33a3685353d2f
+    m_Address: AnimationClip/Heroine/Lower/JumpingUp
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

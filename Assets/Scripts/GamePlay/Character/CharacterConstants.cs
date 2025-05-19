@@ -24,7 +24,10 @@ public static class AnimatorState
     {
         public static readonly int Idle         = Animator.StringToHash("Heroine_Lower_Idle");
         public static readonly int Running      = Animator.StringToHash("Heroine_Lower_Running");
-        public static readonly int Jumping      = Animator.StringToHash("Heroine_Lower_Jumping");
+        public static readonly int JumpingStart = Animator.StringToHash("Heroine_Lower_JumpingStart");
+        public static readonly int JumpingUp    = Animator.StringToHash("Heroine_Lower_JumpingUp");
+        public static readonly int JumpingDown  = Animator.StringToHash("Heroine_Lower_JumpingDown");
+        public static readonly int JumpingEnd   = Animator.StringToHash("Heroine_Lower_JumpingEnd");
         public static readonly int Aiming       = Animator.StringToHash("Heroine_Lower_Aiming");
         public static readonly int AimAttacking = Animator.StringToHash("Heroine_Lower_AimAttacking");
         public static readonly int Attacking    = Animator.StringToHash("Heroine_Lower_Attacking");
@@ -68,7 +71,10 @@ public static class AnimationClipAsset
     {
         public const string Idle            = HeroinePrefix + "Lower/Idle";
         public const string Running         = HeroinePrefix + "Lower/Running";
-        public const string Jumping         = HeroinePrefix + "Lower/Jumping";
+        public const string JumpingStart    = HeroinePrefix + "Lower/JumpingStart";
+        public const string JumpingUp       = HeroinePrefix + "Lower/JumpingUp";
+        public const string JumpingDown     = HeroinePrefix + "Lower/JumpingDown";
+        public const string JumpingEnd      = HeroinePrefix + "Lower/JumpingEnd";
         public const string Aiming          = HeroinePrefix + "Lower/Aiming";
         public const string AimAttacking    = HeroinePrefix + "Lower/AimAttacking";
         public const string Attacking       = HeroinePrefix + "Lower/Attacking";

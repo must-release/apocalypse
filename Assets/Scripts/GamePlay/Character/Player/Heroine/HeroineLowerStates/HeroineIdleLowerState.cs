@@ -9,6 +9,7 @@ public class HeroineIdleLowerState : HeroineLowerStateBase
     public override void OnEnter()
     {
         StateAnimator.Play(AnimatorState.HeroineLower.Idle);
+        StateAnimator.Update(0.0f);
         PlayerMotion.SetVelocity(Vector2.zero);
     }
 

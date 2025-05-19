@@ -1,4 +1,5 @@
-    using UnityEditor;
+using System.Collections;
+using UnityEditor;
 using UnityEngine;
 
 public class HeroineJumpingLowerState : HeroineLowerStateBase
@@ -10,22 +11,47 @@ public class HeroineJumpingLowerState : HeroineLowerStateBase
 
     public override void OnEnter()
     {
-        StateAnimator.Play(AnimatorState.HeroineLower.Jumping);
-
-        _isJumping = true;
+        if (0 < PlayerInfo.CurrentVelocity.y)
+        {
+            StateAnimator.Play(AnimatorState.HeroineLower.JumpingStart);
+            _isStartingJump = true;
+            _isJumping      = true;
+            _isFalling      = false;
+        }
+        else
+        {
+            StateAnimator.Play(AnimatorState.HeroineLower.JumpingDown);
+            _isStartingJump = false;
+            _isJumping      = false;
+            _isFalling      = true;
+        }
     }
 
     public override void OnUpdate()
     {
-        if (false == _isJumping && 0 < PlayerInfo.CurrentVelocity.y)
+        if (0 < PlayerInfo.CurrentVelocity.y)
         {
-            PlayerMotion.SetVelocity(new Vector2(PlayerInfo.CurrentVelocity.x, PlayerInfo.CurrentVelocity.y - 10 * PlayerInfo.JumpingSpeed * Time.deltaTime));
+            if (false == _isJumping)
+                ApplyJumpCut();
+
+            if (_isStartingJump)
+                ChangeToJumpingUpAnimation();
         }
+
+        if (false == _isJumping && 0 < PlayerInfo.CurrentVelocity.y)
+            ApplyJumpCut();
+
+        if (false == _isFalling && PlayerInfo.CurrentVelocity.y < 0)
+            ChangeToJumpingDownAnimation();
     }
 
     public override void OnExit()
     {
-
+        if (null != _landCoroutine)
+        {
+            StopCoroutine(_landCoroutine);
+            _landCoroutine = null;
+        }
     }
 
     public override void Move(int move)
@@ -55,7 +81,7 @@ public class HeroineJumpingLowerState : HeroineLowerStateBase
 
     public override void OnGround()
     {
-        StateController.ChangeState(HeroineLowerState.Idle);
+        _landCoroutine = StartCoroutine(LandOnGround());
     }
 
     public override void Climb(bool climb) 
@@ -83,9 +109,51 @@ public class HeroineJumpingLowerState : HeroineLowerStateBase
 
     /****** Protected Members ******/
 
-    protected override string AnimationClipPath => AnimationClipAsset.HeroineLower.Jumping;
+    protected override string AnimationClipPath => AnimationClipAsset.HeroineLower.JumpingStart;
 
     /****** Private Members ******/
 
-    private bool _isJumping = false;
+    private const float _JumpFallSpeed = 10f;
+
+    private Coroutine _landCoroutine = null;
+
+    private bool _isStartingJump    = false;
+    private bool _isJumping         = false;
+    private bool _isFalling         = false;
+
+    private void ApplyJumpCut()
+    {
+        PlayerMotion.SetVelocity(new Vector2(
+            PlayerInfo.CurrentVelocity.x,
+            PlayerInfo.CurrentVelocity.y - _JumpFallSpeed * PlayerInfo.JumpingSpeed * Time.deltaTime));
+    }
+
+    private void ChangeToJumpingUpAnimation()
+    {
+        if (StateAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
+            return;
+
+        StateAnimator.Play(AnimatorState.HeroineLower.JumpingUp);
+        StateAnimator.Update(0.0f);
+
+        _isStartingJump = false;
+    }
+
+    private void ChangeToJumpingDownAnimation()
+    {
+        StateAnimator.Play(AnimatorState.HeroineLower.JumpingDown);
+        StateAnimator.Update(0.0f);
+
+        _isFalling = true;
+    }
+
+    private IEnumerator LandOnGround()
+    {
+        StateAnimator.Play(AnimatorState.HeroineLower.JumpingEnd);
+        StateAnimator.Update(0.0f);
+
+        yield return new WaitWhile(() => StateAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+
+        StateController.ChangeState(HeroineLowerState.Idle);
+    }
 }

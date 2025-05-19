@@ -46,7 +46,7 @@ public class HeroineClimbingLowerState : HeroineLowerStateBase
         {
             var nextClip = verticalVelocity > 0 ? AnimatorState.HeroineLower.ClimbingUp : AnimatorState.HeroineLower.ClimbingDown;
 
-            if (!StateAnimator.GetCurrentAnimatorStateInfo(0).IsName(nextClip.ToString()))
+            if (false == StateAnimator.GetCurrentAnimatorStateInfo(0).IsName(nextClip.ToString()))
                 StateAnimator.Play(nextClip);
 
             StateAnimator.speed = 1.0f;
