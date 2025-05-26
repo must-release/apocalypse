@@ -14,7 +14,9 @@ public class ScreenEffectEvent : GameEvent
 {
     /****** Public Members ******/
 
-    public override bool ShouldBeSaved() => false;
+    public override bool            ShouldBeSaved   => false;
+    public override GameEventInfo   EventInfo       => _info;
+    public override GameEventType   EventType       => GameEventType.ScreenEffect;
 
     public void SetEventInfo(ScreenEffectEventInfo eventInfo)
     {
@@ -66,10 +68,6 @@ public class ScreenEffectEvent : GameEvent
 
         base.TerminateEvent();
     }
-
-    public override GameEventInfo GetEventInfo() => _info;
-
-    public override GameEventType GetEventType() => GameEventType.ScreenEffect;
 
 
     /****** Private Members ******/

@@ -8,7 +8,9 @@ public class UIChangeEvent : GameEvent
 {
     /****** Public Members ******/
 
-    public override bool ShouldBeSaved() => false;
+    public override bool            ShouldBeSaved   => false;
+    public override GameEventInfo   EventInfo       => _info;
+    public override GameEventType   EventType       => GameEventType.UIChange;
 
     public void SetEventInfo(UIChangeEventInfo eventInfo)
     {
@@ -49,10 +51,6 @@ public class UIChangeEvent : GameEvent
 
         base.TerminateEvent();
     }
-
-    public override GameEventInfo GetEventInfo() => _info;
-
-    public override GameEventType GetEventType() => GameEventType.UIChange;
 
 
     /****** Private Members ******/

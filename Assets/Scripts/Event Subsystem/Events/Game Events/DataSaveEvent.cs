@@ -12,8 +12,10 @@ public class DataSaveEvent : GameEvent
 {
     /****** Public Members ******/
 
-    public override bool ShouldBeSaved() => false;
-    
+    public override bool            ShouldBeSaved   => false;
+    public override GameEventInfo   EventInfo       => _info;
+    public override GameEventType   EventType       => GameEventType.DataSave;
+
     public void SetEventInfo(DataSaveEventInfo eventInfo)
     {
         Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "Event info is not valid.");
@@ -40,7 +42,7 @@ public class DataSaveEvent : GameEvent
         Assert.IsTrue( null != _info, "Event info is not set." );
 
         base.PlayEvent();
-        _eventCoroutine = StartCoroutine( PlayEventCoroutine() );
+        _eventCoroutine = StartCoroutine(PlayEventCoroutine());
     }
 
     public override void TerminateEvent()
@@ -63,49 +65,34 @@ public class DataSaveEvent : GameEvent
 
         base.TerminateEvent();
     }
-
-    public override GameEventInfo GetEventInfo() => _info;
-    
-    public override GameEventType GetEventType() => GameEventType.DataSave;
     
 
     /****** Private Members ******/
 
-    DataSaveEventInfo   _info  = null;
+    DataSaveEventInfo   _info               = null;
     Coroutine           _eventCoroutine     = null;
 
     // TODO : Move GetStartingEvent and GetRootEvent function to GameEventManager
     private IEnumerator PlayEventCoroutine()
     {
-        // Turn Saving UI on
         UIController.Instance.TurnSubUIOn(SubUI.Saving);
 
-        // When saving during story mode
-        // bool shouldTakeScreenShot = false;
-        // GameEvent rootEvent = GetRootEvent();
-        // if (rootEvent?.EventType == GameEventType.Story)
-        // {
-        //     // Get current story progress info
-        //     var storyInfo = StoryController.Instance.GetStoryProgressInfo();
+        bool shouldTakeScreenShot = false;
+        if (GameEventManager.Instance.IsEventTypeActive(GameEventType.Story))
+        {
+            var storyInfo = StoryController.Instance.GetStoryProgressInfo();
+            (GameEventManager.Instance.GetActiveEvent(GameEventType.Story) as StoryEvent).UpdateStoryProgress(storyInfo);
+            shouldTakeScreenShot = true;
+        }
 
-        //     // Update StoryEvent
-        //     (rootEvent as StoryEvent).UpdateStoryProgress(storyInfo);
-
-        //     // Take screen shot when saving
-        //     shouldTakeScreenShot = true;
-        // }
 
         // // Save user data
         // GameEvent startingEvent = GetStartingEvent();
         // DataManager.Instance.SaveUserData(startingEvent, _info.SlotNum, shouldTakeScreenShot);
 
-        // Wait while saving
         yield return new WaitWhile(() => DataManager.Instance.IsSaving );
 
-        // Turn Saving UI off
         UIController.Instance.TurnSubUIOff(SubUI.Saving);
-
-        // Terminate data save event and play next event
         TerminateEvent();
     }
 

@@ -12,6 +12,7 @@ public class SequentialEventInfo : GameEventInfo
     /****** Public Members ******/
 
     public List<GameEventInfo> EventInfos => _eventInfos;
+    public int StartIndex => _startIndex;
 
     public void Initialize(List<GameEventInfo> infos)
     {
@@ -39,4 +40,5 @@ public class SequentialEventInfo : GameEventInfo
     /****** Private Members ******/
 
     [SerializeField] private List<GameEventInfo> _eventInfos = null;
+    [SerializeField] private int _startIndex = 0; // The index of the first event to be played
 }

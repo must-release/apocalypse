@@ -8,13 +8,16 @@ public abstract class GameEvent : MonoBehaviour
 {
     /******* Public Members ******/
 
-    public EventStatus Status { get; protected set; } = EventStatus.EventStatusCount;
+    public EventStatus  Status      { get; protected set; } = EventStatus.EventStatusCount;
+    public GameEvent    ParentEvent { get; protected set; } = null;
+
+    public abstract GameEventInfo   EventInfo       { get; }
+    public abstract GameEventType   EventType       { get; }
+    public abstract bool            ShouldBeSaved   { get; }
+
     public Action OnTerminate;
     
     public abstract bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts);
-    public abstract GameEventInfo GetEventInfo();
-    public abstract GameEventType GetEventType();
-    public abstract bool ShouldBeSaved();
 
     public virtual void PlayEvent()
     {

@@ -12,7 +12,9 @@ public class DataLoadEvent : GameEvent
 {
     /****** Public Members ******/
 
-    public override bool ShouldBeSaved() => false;
+    public override bool            ShouldBeSaved   => false; 
+    public override GameEventInfo   EventInfo       => _info;
+    public override GameEventType   EventType       => GameEventType.DataLoad;
 
     public void SetEventInfo(DataLoadEventInfo eventInfo)
     {
@@ -86,9 +88,6 @@ public class DataLoadEvent : GameEvent
         base.TerminateEvent();
     }
 
-    public override GameEventInfo GetEventInfo() => _info;
-    
-    public override GameEventType GetEventType() => GameEventType.DataLoad;
 
     /****** Private Members ******/
 

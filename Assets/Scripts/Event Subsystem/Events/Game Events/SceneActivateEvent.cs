@@ -13,7 +13,9 @@ public class SceneActivateEvent : GameEvent
 {
     /****** Public Members *****/
 
-    public override bool ShouldBeSaved() => false;
+    public override bool            ShouldBeSaved   => false;
+    public override GameEventInfo   EventInfo       => _info;
+    public override GameEventType   EventType       => GameEventType.SceneActivate;
 
     public void SetEventInfo(SceneActivateEventInfo eventInfo)
     {
@@ -67,10 +69,6 @@ public class SceneActivateEvent : GameEvent
         base.TerminateEvent();
     }
 
-    public override GameEventInfo GetEventInfo() => _info;
-    
-    public override GameEventType GetEventType() => GameEventType.SceneActivate;
-
 
     /****** Private Members ******/
 
@@ -95,7 +93,7 @@ public class SceneActivateEvent : GameEvent
         Transform player = SceneController.Instance.FindPlayerTransform();
         if (player != null)
         {
-            PlayerType character = PlayerManager.Instance.Character;
+            PlayerType character = PlayerManager.Instance.CurrentPlayerType;
             GamePlayManager.Instance.InitializePlayerCharacter(player, character);
         }
 

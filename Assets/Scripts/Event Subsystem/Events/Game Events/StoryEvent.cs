@@ -11,7 +11,9 @@ public class StoryEvent : GameEvent
 {
     /****** Public Members ******/
 
-    public override bool ShouldBeSaved() => false;
+    public override bool            ShouldBeSaved   => true;
+    public override GameEventInfo   EventInfo       => _info;
+    public override GameEventType   EventType       => GameEventType.Story;
 
     public void SetEventInfo(StoryEventInfo eventInfo)
     {
@@ -68,10 +70,6 @@ public class StoryEvent : GameEvent
         GameEventPool<StoryEvent>.Release(this);
         base.TerminateEvent();
     }
-
-    public override GameEventInfo GetEventInfo() => _info;
-
-    public override GameEventType GetEventType() => GameEventType.Story;
 
 
     /****** Private Members ******/

@@ -14,6 +14,11 @@ public class ChoiceEvent : GameEvent
 {
     /****** Public Members ******/
 
+    public override bool            ShouldBeSaved   => false;
+    public override GameEventInfo   EventInfo       => _info;
+    public override GameEventType   EventType       => GameEventType.Choice;
+
+
     public void SetEventInfo(ChoiceEventInfo eventInfo)
     {
         Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "Event info is not valid.");
@@ -31,8 +36,6 @@ public class ChoiceEvent : GameEvent
         
         return false;
     }
-
-    public override bool ShouldBeSaved() => false;    
 
     public override void PlayEvent()
     {
@@ -62,10 +65,6 @@ public class ChoiceEvent : GameEvent
 
         base.TerminateEvent();
     }
-
-    public override GameEventInfo GetEventInfo() => _info;
-
-    public override GameEventType GetEventType() => GameEventType.Choice;
 
 
     /****** Private Members ******/

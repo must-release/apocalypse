@@ -10,7 +10,10 @@ public class SequentialEvent : GameEvent
 {
     /****** Public Members ******/
 
-    public override bool ShouldBeSaved() => false;
+    public override bool            ShouldBeSaved   => true;
+    public override GameEventInfo   EventInfo       => _info;
+    public override GameEventType   EventType       => GameEventType.Sequential;
+
 
     public void SetEventInfo(SequentialEventInfo eventInfo)
     {
@@ -19,8 +22,11 @@ public class SequentialEvent : GameEvent
         _info   = eventInfo;
         Status  = EventStatus.Waiting;
 
-        foreach (GameEventInfo info in _info.EventInfos)
+        _currentEventIndex = _info.StartIndex;
+
+        for (int i = _currentEventIndex; i < _info.EventInfos.Count; ++i)
         {
+            GameEventInfo info = _info.EventInfos[i];
             GameEvent evt = GameEventFactory.CreateFromInfo(info);
             _eventQueue.Enqueue(evt);
         }
@@ -32,7 +38,7 @@ public class SequentialEvent : GameEvent
         Assert.IsTrue(gameEvent.Status == EventStatus.Waiting, "GameEvent is not in waiting state");
 
 
-        _info.EventInfos.Add(gameEvent.GetEventInfo());
+        _info.EventInfos.Add(gameEvent.EventInfo);
         _eventQueue.Enqueue(gameEvent);
     }
 
@@ -68,16 +74,14 @@ public class SequentialEvent : GameEvent
         base.TerminateEvent();
     }
 
-    public override GameEventInfo GetEventInfo() => _info;
-
-    public override GameEventType GetEventType() => GameEventType.Sequential;
-
 
     /****** Private Members ******/
 
     private SequentialEventInfo _info       = null;
     private Queue<GameEvent> _eventQueue    = new Queue<GameEvent>();
     private Coroutine _eventCoroutine       = null;
+
+    private int _currentEventIndex = 0;
 
     private IEnumerator RunSequentially()
     {
@@ -89,6 +93,8 @@ public class SequentialEvent : GameEvent
             GameEventManager.Instance.Submit(evt);
 
             yield return new WaitUntil(() => evt.Status == EventStatus.Terminated);
+
+            _currentEventIndex++;
         }
 
         TerminateEvent();

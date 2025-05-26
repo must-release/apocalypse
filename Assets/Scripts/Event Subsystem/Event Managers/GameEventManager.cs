@@ -14,16 +14,27 @@ public class GameEventManager : MonoBehaviour
         return _activeEventTypeCounts.ContainsKey(eventType);
     }
 
+    public GameEvent GetActiveEvent(GameEventType eventType)
+    {
+        foreach (var gameEvent in _activeEvents)
+        {
+            if (gameEvent.EventType == eventType)
+                return gameEvent;
+        }
+
+        return null;
+    }
+
     public void Submit(GameEvent gameEvent)
     {
         if (gameEvent.CheckCompatibility(_activeEventTypeCounts))
         {
-            Debug.Log($"Activating Event : {gameEvent.GetEventType()}");
+            Debug.Log($"Activating Event : {gameEvent.EventType}");
             Activate(gameEvent);
         }
         else
         {
-            Debug.Log($"Enque Event to Waiting Queue : {gameEvent.GetEventType()}");
+            Debug.Log($"Enque Event to Waiting Queue : {gameEvent.EventType}");
             _waitingQueue.Enqueue(gameEvent);
         }
     }
@@ -34,8 +45,8 @@ public class GameEventManager : MonoBehaviour
 
         foreach (var gameEvent in _activeEvents)
         {
-            if (gameEvent.ShouldBeSaved())
-                infoList.Add(gameEvent.GetEventInfo());
+            if (gameEvent.ShouldBeSaved)
+                infoList.Add(gameEvent.EventInfo);
         }
 
         return infoList;
@@ -58,10 +69,10 @@ public class GameEventManager : MonoBehaviour
     {
         _activeEvents.Add(gameEvent);
 
-        if (_activeEventTypeCounts.ContainsKey(gameEvent.GetEventType()))
-            _activeEventTypeCounts[gameEvent.GetEventType()]++;
+        if (_activeEventTypeCounts.ContainsKey(gameEvent.EventType))
+            _activeEventTypeCounts[gameEvent.EventType]++;
         else
-            _activeEventTypeCounts[gameEvent.GetEventType()] = 1;
+            _activeEventTypeCounts[gameEvent.EventType] = 1;
 
         gameEvent.OnTerminate += () => HandleEventTermination(gameEvent);
         gameEvent.PlayEvent();
@@ -71,11 +82,11 @@ public class GameEventManager : MonoBehaviour
     {
         _activeEvents.Remove(gameEvent);
 
-        if (_activeEventTypeCounts.ContainsKey(gameEvent.GetEventType()))
+        if (_activeEventTypeCounts.ContainsKey(gameEvent.EventType))
         {
-            _activeEventTypeCounts[gameEvent.GetEventType()]--;
-            if (_activeEventTypeCounts[gameEvent.GetEventType()] <= 0)
-                _activeEventTypeCounts.Remove(gameEvent.GetEventType());
+            _activeEventTypeCounts[gameEvent.EventType]--;
+            if (_activeEventTypeCounts[gameEvent.EventType] <= 0)
+                _activeEventTypeCounts.Remove(gameEvent.EventType);
         }
 
         TryProcessWaitingQueue();
@@ -91,7 +102,7 @@ public class GameEventManager : MonoBehaviour
 
             if (waiting.CheckCompatibility(_activeEventTypeCounts))
             {
-                Debug.Log($"Process Waiting Event : {waiting.GetEventType()}");
+                Debug.Log($"Process Waiting Event : {waiting.EventType}");
                 Activate(waiting);
             }
             else
