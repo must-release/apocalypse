@@ -10,7 +10,7 @@ using UnityEngine.AddressableAssets;
  * Screen effect event. Must be removed.
  */
 
-public class ScreenEffectEvent : GameEvent
+public class ScreenEffectEvent : GameEventBase<ScreenEffectEventInfo>
 {
     /****** Public Members ******/
 
@@ -18,12 +18,13 @@ public class ScreenEffectEvent : GameEvent
     public override GameEventInfo   EventInfo       => _info;
     public override GameEventType   EventType       => GameEventType.ScreenEffect;
 
-    public void SetEventInfo(ScreenEffectEventInfo eventInfo)
+    public override void Initialize(ScreenEffectEventInfo eventInfo, IGameEvent parentEvent = null)
     {
         Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "Event info is not valid.");
 
-        _info   = eventInfo;
-        Status  = EventStatus.Waiting;
+        _info       = eventInfo;
+        Status      = EventStatus.Waiting;
+        ParentEvent = parentEvent;
     }
 
     public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
@@ -59,12 +60,10 @@ public class ScreenEffectEvent : GameEvent
             _eventCoroutine = null;
         }
 
-        // Todo: Release the event info
-        // if (_info.IsFromAddressables) Addressables.Release(_info);
-        // else Destroy(_info);
+        _info.DestroyInfo();
         _info = null;
 
-        GameEventPool<ScreenEffectEvent>.Release(this);
+        GameEventPool<ScreenEffectEvent, ScreenEffectEventInfo>.Release(this);
 
         base.TerminateEvent();
     }

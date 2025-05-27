@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public static class GameEventPool<T> where T : GameEvent
+public static class GameEventPool<TEvent, TInfo> 
+    where TEvent : GameEventBase<TInfo>
+    where TInfo : GameEventInfo
 {
-    private static readonly Stack<T> _pool = new Stack<T>();
+    private static readonly Stack<TEvent> _pool = new Stack<TEvent>();
     private static Transform _poolParent;
 
     static GameEventPool()
@@ -25,7 +27,7 @@ public static class GameEventPool<T> where T : GameEvent
         _poolParent = pooledRoot.transform;
     }
 
-    public static T Get(Transform activeParent, string name)
+    public static TEvent Get(Transform activeParent, string name)
     {
         if (_pool.Count > 0)
         {
@@ -38,10 +40,10 @@ public static class GameEventPool<T> where T : GameEvent
 
         var newEvt = new GameObject(name);
         newEvt.transform.SetParent(activeParent);
-        return newEvt.AddComponent<T>();
+        return newEvt.AddComponent<TEvent>();
     }
 
-    public static void Release(T evt)
+    public static void Release(TEvent evt)
     {
         evt.gameObject.SetActive(false);
         evt.transform.SetParent(_poolParent);

@@ -8,7 +8,7 @@ using UnityEngine.AddressableAssets;
  * Load Game Data
  */
 
-public class DataLoadEvent : GameEvent
+public class DataLoadEvent : GameEventBase<DataLoadEventInfo>
 {
     /****** Public Members ******/
 
@@ -16,12 +16,13 @@ public class DataLoadEvent : GameEvent
     public override GameEventInfo   EventInfo       => _info;
     public override GameEventType   EventType       => GameEventType.DataLoad;
 
-    public void SetEventInfo(DataLoadEventInfo eventInfo)
+    public override void Initialize(DataLoadEventInfo eventInfo, IGameEvent parentEvent = null)
     {
         Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "Event info is not valid");
 
-        _info   = eventInfo;
-        Status  = EventStatus.Waiting;
+        _info       = eventInfo;
+        Status      = EventStatus.Waiting;
+        ParentEvent = parentEvent;
     }
 
     public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
@@ -78,12 +79,11 @@ public class DataLoadEvent : GameEvent
     {
         Assert.IsTrue(null != _info, "Event info is not set before termination");
 
-        // Todo: Release the event info
-        // if (_info.IsFromAddressables) Addressables.Release(_info);
-        // else Destroy(_info);
+
+        _info.DestroyInfo();
         _info = null;
 
-        GameEventPool<DataLoadEvent>.Release(this);
+        GameEventPool<DataLoadEvent, DataLoadEventInfo>.Release(this);
 
         base.TerminateEvent();
     }

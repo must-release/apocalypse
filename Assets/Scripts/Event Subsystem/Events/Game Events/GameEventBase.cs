@@ -4,20 +4,24 @@ using EventEnums;
 using System.Collections.Generic;
 using UnityEngine.Assertions;
 
-public abstract class GameEvent : MonoBehaviour
+public abstract class GameEventBase<TEventInfo> : MonoBehaviour, IGameEvent where TEventInfo : GameEventInfo
 {
     /******* Public Members ******/
 
-    public EventStatus  Status      { get; protected set; } = EventStatus.EventStatusCount;
-    public GameEvent    ParentEvent { get; protected set; } = null;
+    public EventStatus  Status          { get; protected set; } = EventStatus.EventStatusCount;
+    public IGameEvent   ParentEvent     { get; protected set; } = null;
+    public Action       OnTerminate     { get; set; }
 
     public abstract GameEventInfo   EventInfo       { get; }
     public abstract GameEventType   EventType       { get; }
     public abstract bool            ShouldBeSaved   { get; }
 
-    public Action OnTerminate;
+
+    public abstract void Initialize(TEventInfo eventInfo, IGameEvent parentEvent = null);
     
     public abstract bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts);
+
+    public virtual void UpdateStatus() { }
 
     public virtual void PlayEvent()
     {

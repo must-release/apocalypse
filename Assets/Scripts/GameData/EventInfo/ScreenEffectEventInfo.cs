@@ -13,7 +13,7 @@ public class ScreenEffectEventInfo : GameEventInfo
 
     public ScreenEffect ScreenEffectType { get { return _screenEffectType; } private set { _screenEffectType = value; }}
     
-    public void Initialize(ScreenEffect screenEffectType)
+    public void Initialize(ScreenEffect screenEffectType, bool isRuntimeInstance = false)
     {
         Assert.IsTrue( false == IsInitialized,                              "Duplicate initialization of GameEventInfo is not allowed." );
         Assert.IsTrue( ScreenEffect.ScreenEffectCount != screenEffectType,  "Screen effect is not set properly." );
@@ -21,7 +21,7 @@ public class ScreenEffectEventInfo : GameEventInfo
 
         ScreenEffectType    = screenEffectType;
         IsInitialized       = true;
-        IsFromAddressables  = false;
+        IsRuntimeInstance   = true;
     }
 
 

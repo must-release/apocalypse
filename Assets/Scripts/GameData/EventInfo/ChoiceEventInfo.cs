@@ -12,7 +12,7 @@ public class ChoiceEventInfo : GameEventInfo
 
     public List<string> ChoiceList { get { return _choiceList; } private set { _choiceList = value; }}
     
-    public void Initialize(List<string> choices)
+    public void Initialize(List<string> choices, bool isRuntimeInstance = false)
     {
         Assert.IsTrue(false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed.");
         Assert.IsTrue(null != choices, "Choices cannot be null.");
@@ -20,7 +20,7 @@ public class ChoiceEventInfo : GameEventInfo
 
         ChoiceList          = choices;
         IsInitialized       = true;
-        IsFromAddressables  = false;
+        IsRuntimeInstance   = true;
     }
 
 

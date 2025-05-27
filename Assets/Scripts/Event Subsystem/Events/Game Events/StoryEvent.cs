@@ -7,7 +7,7 @@ using UnityEngine.Assertions;
 using UnityEngine.AddressableAssets;
 
 
-public class StoryEvent : GameEvent
+public class StoryEvent : GameEventBase<StoryEventInfo>
 {
     /****** Public Members ******/
 
@@ -15,12 +15,13 @@ public class StoryEvent : GameEvent
     public override GameEventInfo   EventInfo       => _info;
     public override GameEventType   EventType       => GameEventType.Story;
 
-    public void SetEventInfo(StoryEventInfo eventInfo)
+    public override void Initialize(StoryEventInfo eventInfo, IGameEvent parentEvent = null)
     {
         Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "Event info is not valid.");
 
-        _info   = eventInfo;
-        Status  = EventStatus.Waiting;
+        _info       = eventInfo;
+        Status      = EventStatus.Waiting;
+        ParentEvent = parentEvent;
     }
 
     public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
@@ -62,12 +63,10 @@ public class StoryEvent : GameEvent
             _eventCoroutine = null;
         }
 
-        // Todo: Release the event info
-        // if (_info.IsFromAddressables) Addressables.Release(_info);
-        // else Destroy(_info);
+        _info.DestroyInfo();
         _info = null;
 
-        GameEventPool<StoryEvent>.Release(this);
+        GameEventPool<StoryEvent, StoryEventInfo>.Release(this);
         base.TerminateEvent();
     }
 

@@ -66,7 +66,7 @@ public class LoadUIController : SaveLoadUIBase, IUIController<SubUI>
         UIController.Instance.TurnEverySubUIOff();
 
         // Generate Load Game Event Stream. Load data of the selected slot
-        var loadEvent = GameEventFactory.CreateSequentialEvent(new List<GameEvent>
+        var loadEvent = GameEventFactory.CreateSequentialEvent(new List<IGameEvent>
         {
             GameEventFactory.CreateDataLoadEvent(slotNum, false, false),
             GameEventFactory.CreateSceneLoadEvent(SceneEnums.SceneName.StageScene),

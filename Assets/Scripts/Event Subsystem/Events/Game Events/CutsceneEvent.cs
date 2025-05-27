@@ -10,7 +10,7 @@ using UnityEngine.AddressableAssets;
  * 게임 플레이 도중 컷씬을 재생하는 CutsceneEvent를 관리하는 파일입니다.
  */
 
-public class CutsceneEvent : GameEvent
+public class CutsceneEvent : GameEventBase<CutsceneEventInfo>
 {
     /****** Public Members ******/
 
@@ -18,12 +18,13 @@ public class CutsceneEvent : GameEvent
     public override GameEventInfo   EventInfo       => _info;
     public override GameEventType   EventType       => GameEventType.Cutscene;
 
-    public void SetEventInfo(CutsceneEventInfo eventInfo)
+    public override void Initialize(CutsceneEventInfo eventInfo, IGameEvent parentEvent = null)
     {
         Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "Event info is not valid.");
 
-        _info   = eventInfo;
-        Status  = EventStatus.Waiting;
+        _info       = eventInfo;
+        Status      = EventStatus.Waiting;
+        ParentEvent = parentEvent;
     }   
 
     public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
@@ -55,12 +56,10 @@ public class CutsceneEvent : GameEvent
             _eventCoroutine = null;
         }
 
-        // Todo: Release the event info
-        // if (_info.IsFromAddressables) Addressables.Release(_info);
-        // else Destroy(_info);
+        _info.DestroyInfo();
         _info = null;
 
-        GameEventPool<CutsceneEvent>.Release(this);
+        GameEventPool<CutsceneEvent, CutsceneEventInfo>.Release(this);
 
         base.TerminateEvent();
     }

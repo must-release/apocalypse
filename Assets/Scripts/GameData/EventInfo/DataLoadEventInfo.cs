@@ -14,7 +14,7 @@ public class DataLoadEventInfo : GameEventInfo
     public bool IsNewGame { get {return _isNewGame; } private set { _isNewGame = value; }}
     public bool IsContinueGame { get { return _isContinueGame; } private set { _isContinueGame = value; }}
     
-    public void Initialize(int slotNum, bool isNewGame, bool isContinueGame)
+    public void Initialize(int slotNum, bool isNewGame, bool isContinueGame, bool isRuntimeInstance = false)
     {
         Assert.IsTrue( false == IsInitialized,          "Duplicate initialization of GameEventInfo is not allowed." );
         Assert.IsFalse( isNewGame && isContinueGame,    "It can't be both New Game and Continue Game." );
@@ -23,7 +23,7 @@ public class DataLoadEventInfo : GameEventInfo
         IsNewGame           = isNewGame;
         IsContinueGame      = isContinueGame;
         IsInitialized       = true;
-        IsFromAddressables  = false;
+        IsRuntimeInstance   = true;
     }
 
 

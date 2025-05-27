@@ -4,13 +4,12 @@ using UIEnums;
 using EventEnums;
 using System.Collections;
 using UnityEngine.Assertions;
-using UnityEngine.AddressableAssets;
 
 /*
  * 스토리 진행 중 화면에 선택지를 표시하고, 플레이어가 고른 선택지를 처리하는 ChoiceEvent입니다.
  */
 
-public class ChoiceEvent : GameEvent
+public class ChoiceEvent : GameEventBase<ChoiceEventInfo>
 {
     /****** Public Members ******/
 
@@ -19,12 +18,13 @@ public class ChoiceEvent : GameEvent
     public override GameEventType   EventType       => GameEventType.Choice;
 
 
-    public void SetEventInfo(ChoiceEventInfo eventInfo)
+    public override void Initialize(ChoiceEventInfo eventInfo, IGameEvent parentEvent = null)
     {
         Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "Event info is not valid.");
 
         _info       = eventInfo;
         Status      = EventStatus.Waiting;
+        ParentEvent = parentEvent;
     }
 
     public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
@@ -56,12 +56,10 @@ public class ChoiceEvent : GameEvent
             _eventCoroutine = null;
         }
 
-        // Todo: Release the event info
-        // if (_info.IsFromAddressables) Addressables.Release(_info);
-        // else Destroy(_info);
+        _info.DestroyInfo();
         _info = null;
 
-        GameEventPool<ChoiceEvent>.Release( this );
+        GameEventPool<ChoiceEvent, ChoiceEventInfo>.Release(this);
 
         base.TerminateEvent();
     }

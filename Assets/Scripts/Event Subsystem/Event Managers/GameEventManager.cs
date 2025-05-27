@@ -14,7 +14,7 @@ public class GameEventManager : MonoBehaviour
         return _activeEventTypeCounts.ContainsKey(eventType);
     }
 
-    public GameEvent GetActiveEvent(GameEventType eventType)
+    public IGameEvent GetActiveEvent(GameEventType eventType)
     {
         foreach (var gameEvent in _activeEvents)
         {
@@ -25,7 +25,7 @@ public class GameEventManager : MonoBehaviour
         return null;
     }
 
-    public void Submit(GameEvent gameEvent)
+    public void Submit(IGameEvent gameEvent)
     {
         if (gameEvent.CheckCompatibility(_activeEventTypeCounts))
         {
@@ -55,8 +55,8 @@ public class GameEventManager : MonoBehaviour
 
     /****** Private Members ******/
 
-    private readonly List<GameEvent> _activeEvents = new();
-    private readonly Queue<GameEvent> _waitingQueue = new();
+    private readonly List<IGameEvent> _activeEvents = new();
+    private readonly Queue<IGameEvent> _waitingQueue = new();
     private readonly Dictionary<GameEventType, int> _activeEventTypeCounts = new();
 
     private void Awake()
@@ -65,7 +65,7 @@ public class GameEventManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    private void Activate(GameEvent gameEvent)
+    private void Activate(IGameEvent gameEvent)
     {
         _activeEvents.Add(gameEvent);
 
@@ -78,7 +78,7 @@ public class GameEventManager : MonoBehaviour
         gameEvent.PlayEvent();
     }
 
-    private void HandleEventTermination(GameEvent gameEvent)
+    private void HandleEventTermination(IGameEvent gameEvent)
     {
         _activeEvents.Remove(gameEvent);
 
@@ -94,7 +94,7 @@ public class GameEventManager : MonoBehaviour
 
     private void TryProcessWaitingQueue()
     {
-        Queue<GameEvent> tempQueue = new();
+        Queue<IGameEvent> tempQueue = new();
 
         while (_waitingQueue.Count > 0)
         {

@@ -12,13 +12,13 @@ public class SceneActivateEventInfo : GameEventInfo
 
     public bool ShouldTurnOnLoadingUI { get => _shouldTurnOnLoadingUI; private set => _shouldTurnOnLoadingUI = value; }
 
-    public void Initialize(bool shouldTurnOnLoadingUI)
+    public void Initialize(bool shouldTurnOnLoadingUI, bool isRuntimeInstance = false)
     {
         Assert.IsTrue(false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed.");
 
         ShouldTurnOnLoadingUI   = shouldTurnOnLoadingUI;
         IsInitialized           = true;
-        IsFromAddressables      = false;
+        IsRuntimeInstance       = true;
     }
 
 

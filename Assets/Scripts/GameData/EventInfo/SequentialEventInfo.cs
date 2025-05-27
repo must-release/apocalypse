@@ -12,15 +12,19 @@ public class SequentialEventInfo : GameEventInfo
     /****** Public Members ******/
 
     public List<GameEventInfo> EventInfos => _eventInfos;
-    public int StartIndex => _startIndex;
+    public int StartIndex
+    {
+        get => _startIndex;
+        set => _startIndex = value;
+    }
 
-    public void Initialize(List<GameEventInfo> infos)
+    public void Initialize(List<GameEventInfo> infos, bool isRuntimeInstance = false)
     {
         Assert.IsTrue(infos != null , "GameEventInfo list is null");
 
         _eventInfos         = infos;
         IsInitialized       = true;
-        IsFromAddressables  = false;
+        IsRuntimeInstance   = true;
     }
 
 

@@ -6,7 +6,7 @@ using UnityEngine.Assertions;
 using UnityEngine.AddressableAssets;
 
 
-public class SequentialEvent : GameEvent
+public class SequentialEvent : GameEventBase<SequentialEventInfo>
 {
     /****** Public Members ******/
 
@@ -15,24 +15,25 @@ public class SequentialEvent : GameEvent
     public override GameEventType   EventType       => GameEventType.Sequential;
 
 
-    public void SetEventInfo(SequentialEventInfo eventInfo)
+    public override void Initialize(SequentialEventInfo eventInfo, IGameEvent parentEvent = null)
     {
         Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "GameEventInfo is not valid");
 
-        _info   = eventInfo;
-        Status  = EventStatus.Waiting;
+        _info       = eventInfo;
+        Status      = EventStatus.Waiting;
+        ParentEvent = parentEvent;  
 
         _currentEventIndex = _info.StartIndex;
 
         for (int i = _currentEventIndex; i < _info.EventInfos.Count; ++i)
         {
             GameEventInfo info = _info.EventInfos[i];
-            GameEvent evt = GameEventFactory.CreateFromInfo(info);
+            IGameEvent evt = GameEventFactory.CreateFromInfo(info, this);
             _eventQueue.Enqueue(evt);
         }
     }
 
-    public void AddEvent(GameEvent gameEvent)
+    public void AddEvent(IGameEvent gameEvent)
     {
         Assert.IsTrue(null != gameEvent, "GameEvent is null");
         Assert.IsTrue(gameEvent.Status == EventStatus.Waiting, "GameEvent is not in waiting state");
@@ -63,13 +64,11 @@ public class SequentialEvent : GameEvent
             _eventCoroutine = null;
         }
 
-        // Todo: Release the event info
-        // if (_info.IsFromAddressables) Addressables.Release(_info);
-        // else Destroy(_info);
+        _info.DestroyInfo();
         _info = null;
         _eventQueue.Clear();
 
-        GameEventPool<SequentialEvent>.Release(this);
+        GameEventPool<SequentialEvent, SequentialEventInfo>.Release(this);
 
         base.TerminateEvent();
     }
@@ -78,7 +77,7 @@ public class SequentialEvent : GameEvent
     /****** Private Members ******/
 
     private SequentialEventInfo _info       = null;
-    private Queue<GameEvent> _eventQueue    = new Queue<GameEvent>();
+    private Queue<IGameEvent> _eventQueue    = new Queue<IGameEvent>();
     private Coroutine _eventCoroutine       = null;
 
     private int _currentEventIndex = 0;
@@ -89,11 +88,12 @@ public class SequentialEvent : GameEvent
 
         while (0 < _eventQueue.Count)
         {
-            GameEvent evt = _eventQueue.Dequeue();
+            IGameEvent evt = _eventQueue.Peek();
             GameEventManager.Instance.Submit(evt);
 
             yield return new WaitUntil(() => evt.Status == EventStatus.Terminated);
 
+            _eventQueue.Dequeue();
             _currentEventIndex++;
         }
 

@@ -17,7 +17,7 @@ public class StoryEventInfo : GameEventInfo
     public int      ReadEntryCount { get { return _readEntryCount; } private set { _readEntryCount = value; }}
     public bool     IsOnMap { get { return _isOnMap; } private set { _isOnMap = value; }}
 
-    public void Initialize(Stage storyStage, int storyNumber, int readBlockCount, int readEntryCount, bool isOnMap)
+    public void Initialize(Stage storyStage, int storyNumber, int readBlockCount, int readEntryCount, bool isOnMap, bool isRuntimeInstance = false)
     {
         Assert.IsTrue( false == IsInitialized,          "Duplicate initialization of GameEventInfo is not allowed." );
         Assert.IsTrue( Stage.StageCount != storyStage,  "Story stage should be set." );
@@ -32,7 +32,7 @@ public class StoryEventInfo : GameEventInfo
         ReadEntryCount      = readEntryCount;
         IsOnMap             = isOnMap;
         IsInitialized       = true;
-        IsFromAddressables  = false;
+        IsRuntimeInstance   = true;
     }
 
 

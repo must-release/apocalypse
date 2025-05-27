@@ -12,13 +12,13 @@ public class DataSaveEventInfo : GameEventInfo
 
     public int  SlotNum { get { return _slotNum; } private set { _slotNum = value; }}
 
-    public void Initialize(int slotNum)
+    public void Initialize(int slotNum, bool isRuntimeInstnace = false)
     {
         Assert.IsTrue( false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed." );
 
-        SlotNum                 = slotNum;
-        IsInitialized           = true;
-        IsFromAddressables      = false;
+        SlotNum             = slotNum;
+        IsInitialized       = true;
+        IsRuntimeInstance   = true;
     }
 
 

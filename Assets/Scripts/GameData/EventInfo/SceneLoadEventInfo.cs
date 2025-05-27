@@ -13,13 +13,13 @@ public class SceneLoadEventInfo : GameEventInfo
 
     public SceneName LoadingScene { get { return _loadingScene; } private set { _loadingScene = value; }}
 
-    public void Initialize(SceneName loadingScene)
+    public void Initialize(SceneName loadingScene, bool isRuntimeInstance = false)
     {
         Assert.IsTrue( false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed." );
 
         LoadingScene        = loadingScene;
         IsInitialized       = true;
-        IsFromAddressables  = false;
+        IsRuntimeInstance   = true;
     }
 
 

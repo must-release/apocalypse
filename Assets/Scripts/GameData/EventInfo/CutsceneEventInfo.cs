@@ -9,12 +9,12 @@ public class CutsceneEventInfo : GameEventInfo
 {
     /****** Public Members ******/
 
-    public void Initialize()
+    public void Initialize(bool isRuntimeInstance = false)
     {
         Assert.IsTrue(false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed.");
 
         IsInitialized       = true;
-        IsFromAddressables  = false;
+        IsRuntimeInstance   = true;
     }
 
 

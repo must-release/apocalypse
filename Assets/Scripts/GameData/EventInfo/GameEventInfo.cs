@@ -20,13 +20,18 @@ public abstract class GameEventInfo : ScriptableObject
         protected set => _isInitialized = value;
     }
 
-    public bool IsFromAddressables
+    public void DestroyInfo()
     {
-        get => _isFromAddressables;
-        protected set => _isFromAddressables = value;
+        if (_isRuntimeResource)
+            Destroy(this);
     }
 
     /****** Protected Members ******/
+
+    protected bool IsRuntimeInstance
+    {
+        set => _isRuntimeResource = value;
+    }
 
     // Called when script is loaded
     protected abstract void OnEnable();
@@ -39,6 +44,6 @@ public abstract class GameEventInfo : ScriptableObject
 
     [SerializeField, HideInInspector] private GameEventType      _eventType       = GameEventType.GameEventTypeCount;
     [SerializeField, HideInInspector] private bool               _isInitialized   = false;
-    
-    private bool _isFromAddressables = true;
+
+    private bool _isRuntimeResource = false;
 }
