@@ -2,7 +2,6 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-using UIEnums;
 using TMPro;
 
 public class ChoiceUIController : MonoBehaviour, IUIController<SubUI>

@@ -1,10 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
-using UIEnums;
 
 /* Part of UIController which manages Title UI logic */
 

@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using UIEnums;
-
 public class PreferenceUIController : MonoBehaviour, IUIController<SubUI>
 {
     /****** Public Members ******/

@@ -18,13 +18,13 @@ MonoBehaviour:
   - SystemType: 1
     SystemPrefab: {fileID: 6512353817814910308, guid: 49fbe70ca4050406185ba397a98f7c0a, type: 3}
   - SystemType: 2
-    SystemPrefab: {fileID: 2946220226567375908, guid: a3e53f8cab3004401bb184e00ade1e23, type: 3}
-  - SystemType: 3
     SystemPrefab: {fileID: 5718220516380037790, guid: 42777774230b34b95957a4eca362218e, type: 3}
-  - SystemType: 4
+  - SystemType: 3
     SystemPrefab: {fileID: 5143865251147100248, guid: bd3e01bc6564c4a8c94fea6f8867e3b3, type: 3}
-  - SystemType: 5
+  - SystemType: 4
     SystemPrefab: {fileID: 8164242956727869630, guid: d55beac891a6945d89aea05acf75b25f, type: 3}
+  - SystemType: 5
+    SystemPrefab: {fileID: 2946220226567375908, guid: a3e53f8cab3004401bb184e00ade1e23, type: 3}
   - SystemType: 6
     SystemPrefab: {fileID: 5495079965888669101, guid: 4bc9378af7492452d925f2889aae43dd, type: 3}
   - SystemType: 7

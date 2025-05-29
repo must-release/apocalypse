@@ -17,7 +17,7 @@ public class HeroineRunningLowerState : HeroineLowerStateBase
 
     }
 
-    public override void OnExit()
+    public override void OnExit(HeroineLowerState _)
     {
     }
 
@@ -57,9 +57,9 @@ public class HeroineRunningLowerState : HeroineLowerStateBase
         StateController.ChangeState(HeroineLowerState.Jumping);
     }
 
-    public override void Aim(bool isAiming)
+    public override void Aim(Vector3 aim)
     {
-        if (false == isAiming) return;
+        if (Vector3.zero == aim) return;
 
         StateController.ChangeState(HeroineLowerState.Aiming);
     }

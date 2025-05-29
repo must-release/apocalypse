@@ -139,6 +139,13 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
         CurrentAvatar.OnUpdate();
     }
 
+    private void FixedUpdate()
+    {
+        if (false == _isInitilized) return;
+
+        CurrentAvatar.OnFixedUpdate();
+    }
+
     private IEnumerator StartDamageImmuneState()
     {
         _isDamageImmune = true;
@@ -167,6 +174,7 @@ public interface IPlayerAvatar : IAsyncLoadObject
     void ControlAvatar(ControlInfo controlInfo);
     void ActivateAvatar(bool value);
     void OnUpdate();
+    void OnFixedUpdate();
     void OnAir();
     void OnGround();
     void OnDamaged(DamageInfo damageInfo);

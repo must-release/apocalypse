@@ -6,41 +6,42 @@ using UnityEngine.Assertions;
 using UnityEngine.AddressableAssets;
 
 
-public class SequentialEvent : GameEventBase<SequentialEventInfo>
+public class SequentialEvent : GameEventBase<SequentialEventInfo>, IEventContainer
 {
     /****** Public Members ******/
 
     public override bool            ShouldBeSaved   => true;
-    public override GameEventInfo   EventInfo       => _info;
     public override GameEventType   EventType       => GameEventType.Sequential;
 
 
-    public override void Initialize(SequentialEventInfo eventInfo, IGameEvent parentEvent = null)
+    public override void Initialize(SequentialEventInfo eventInfo)
     {
-        Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "GameEventInfo is not valid");
+        base.Initialize(eventInfo);
 
-        _info       = eventInfo;
-        Status      = EventStatus.Waiting;
-        ParentEvent = parentEvent;  
+        _currentEventIndex = Info.StartIndex;
 
-        _currentEventIndex = _info.StartIndex;
-
-        for (int i = _currentEventIndex; i < _info.EventInfos.Count; ++i)
+        for (int i = _currentEventIndex; i < Info.EventInfos.Count; ++i)
         {
-            GameEventInfo info = _info.EventInfos[i];
-            IGameEvent evt = GameEventFactory.CreateFromInfo(info, this);
+            GameEventInfo info = Info.EventInfos[i];
+            IGameEvent evt = GameEventFactory.CreateFromInfo(info);
             _eventQueue.Enqueue(evt);
+            evt.EventContainer = this;
         }
     }
 
-    public void AddEvent(IGameEvent gameEvent)
+    public void AddNewEvent(IGameEvent newEvent)
     {
-        Assert.IsTrue(null != gameEvent, "GameEvent is null");
-        Assert.IsTrue(gameEvent.Status == EventStatus.Waiting, "GameEvent is not in waiting state");
+        Assert.IsTrue(null != newEvent, "GameEvent is null");
+        Assert.IsTrue(newEvent.Status == EventStatus.Waiting, "GameEvent is not in waiting state");
 
+        Info.EventInfos.Add(newEvent.EventInfo);
+        _eventQueue.Enqueue(newEvent);
+        newEvent.EventContainer = this;
+    }
 
-        _info.EventInfos.Add(gameEvent.EventInfo);
-        _eventQueue.Enqueue(gameEvent);
+    public bool IsContainingEvent(IGameEvent findingEvent)
+    {
+        return _eventQueue.Contains(findingEvent);
     }
 
     public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
@@ -64,8 +65,8 @@ public class SequentialEvent : GameEventBase<SequentialEventInfo>
             _eventCoroutine = null;
         }
 
-        _info.DestroyInfo();
-        _info = null;
+        Info.DestroyInfo();
+        Info = null;
         _eventQueue.Clear();
 
         GameEventPool<SequentialEvent, SequentialEventInfo>.Release(this);
@@ -73,14 +74,21 @@ public class SequentialEvent : GameEventBase<SequentialEventInfo>
         base.TerminateEvent();
     }
 
+    public override void UpdateStatus()
+    {
+        base.UpdateStatus();
+
+        Info.StartIndex = _currentEventIndex;
+        _eventQueue.Peek().UpdateStatus();
+    }
+
 
     /****** Private Members ******/
 
-    private SequentialEventInfo _info       = null;
-    private Queue<IGameEvent> _eventQueue    = new Queue<IGameEvent>();
-    private Coroutine _eventCoroutine       = null;
-
-    private int _currentEventIndex = 0;
+    private Queue<IGameEvent>   _eventQueue = new Queue<IGameEvent>();
+        
+    private Coroutine   _eventCoroutine     = null;
+    private int         _currentEventIndex  = 0;
 
     private IEnumerator RunSequentially()
     {

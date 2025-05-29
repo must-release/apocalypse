@@ -2,9 +2,10 @@
 using UnityEngine;
 using StageEnums;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 
-[Serializable]
+[JsonObject(MemberSerialization.Fields)]
 public class UserData
 {
     /****** Public Memebers *******/
@@ -14,18 +15,16 @@ public class UserData
     public PlayerType   LastCharacter { get => (PlayerType)_lastCharacter; set => _lastCharacter = (int)value; }
     public string   PlayTime { get => _playTime; set => _playTime = value; }
     public string   SaveTime { get => _saveTime; set => _saveTime = value; }
-    public List<GameEventInfo> ActiveEventInfoList { get => _activeEventInfoList; set => _activeEventInfoList = value; }
+    public List<GameEventDTO> ActiveEventDTOList { get => _activeEventDTOList; set => _activeEventDTOList = value; }
     public Texture2D SlotImage
     {
         get
         {
             byte[] imageBytes = Convert.FromBase64String(_slotImage);
 
-            // convert byte array to Texture2D
-            Texture2D texture = new Texture2D(2, 2); // Initial size doesn't matter, LoadImage resizes it
+            Texture2D texture = new Texture2D(2, 2);
             if (texture.LoadImage(imageBytes))
             {
-                // Convert Texture2D to Sprite
                 return texture;
             }
             else
@@ -35,25 +34,21 @@ public class UserData
         }
         set
         {
-            // Get PNG data
             byte[] imageBytes = value.EncodeToPNG();
-
-            // Convert PNG data to Base64 string
             _slotImage = Convert.ToBase64String(imageBytes);
         }
     }
 
-    public UserData(Stage curStage, int curMap, List<GameEventInfo> infoList, PlayerType lastChar, string playTime, string saveTime)
+    public UserData(Stage curStage, int curMap, List<GameEventDTO> dtoList, PlayerType lastChar, string playTime, string saveTime)
     {
-        CurrentStage    = curStage;
-        CurrentMap      = curMap;
-        LastCharacter   = lastChar;
-        PlayTime        = playTime;
-        SaveTime        = saveTime;
-        ActiveEventInfoList    = infoList;
+        CurrentStage        = curStage;
+        CurrentMap          = curMap;
+        LastCharacter       = lastChar;
+        PlayTime            = playTime;
+        SaveTime            = saveTime;
+        ActiveEventDTOList  = dtoList;
     }
 
-    // Update user data
     public void UpdatePlayerData(Stage stage, int map, PlayerType character)
     {
         CurrentStage    = stage;
@@ -64,11 +59,12 @@ public class UserData
 
     /****** Private Members ******/
 
-    [SerializeField] private int _currentStage = (int)Stage.StageCount;
-    [SerializeField] private int _currentMap = 0;
-    [SerializeField] private int _lastCharacter = (int)PlayerType.PlayerCount;
-    [SerializeField] private string _playTime = "00:00:00";
-    [SerializeField] private string _saveTime = "00:00:00";
-    [SerializeField] private string _slotImage = null; // Base64 string for the image
-    [SerializeField] private List<GameEventInfo> _activeEventInfoList = null;
+    private int    _currentStage   = (int)Stage.StageCount;
+    private int    _currentMap     = 0;
+    private int    _lastCharacter  = (int)PlayerType.PlayerCount;
+    private string _playTime       = "00:00:00";
+    private string _saveTime       = "00:00:00";
+    private string _slotImage      = null; // Base64 string for the image
+
+    private List<GameEventDTO> _activeEventDTOList = null;
 }

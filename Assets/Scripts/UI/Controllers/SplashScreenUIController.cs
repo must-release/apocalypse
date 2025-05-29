@@ -1,4 +1,3 @@
-using UIEnums;
 using UnityEngine;
 
 public class SplashScreenUIController : MonoBehaviour, IUIController<BaseUI>

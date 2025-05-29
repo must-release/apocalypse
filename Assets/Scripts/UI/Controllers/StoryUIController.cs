@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using UIEnums;
-
 /* Part of UIController which manages Story UI logic */
 
 public class StoryUIController : MonoBehaviour, IUIController<BaseUI>

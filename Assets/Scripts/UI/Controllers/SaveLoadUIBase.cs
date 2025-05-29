@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
-using UIEnums;
 using System;
 
 
@@ -45,7 +44,7 @@ public class SaveLoadUIBase : MonoBehaviour
 
     protected bool TryClosingConfirmPanel()
     {
-        if ( _confirmPanel.gameObject.activeInHierarchy )
+        if (_confirmPanel.gameObject.activeInHierarchy)
         {
             _confirmPanel.gameObject.SetActive(false);
             return true;
@@ -65,11 +64,10 @@ public class SaveLoadUIBase : MonoBehaviour
         _selectedSlot           =   null;
         _currentPage            =   1;
         _saveOrLoad             =   SubUI.SubUICount;
-        _pageNumberText.text    =   _currentPage + "/" + (DataManager.SLOT_NUM / _slots.childCount);
+        _pageNumberText.text    =   _currentPage + "/" + (DataManager.SlotNumber / _slots.childCount);
         
         _previousButton.gameObject.SetActive(false);
         _nextButton.gameObject.SetActive(true);
-        _confirmButton.onClick.RemoveAllListeners();
     }
 
     protected virtual void Start()
@@ -114,7 +112,7 @@ public class SaveLoadUIBase : MonoBehaviour
         _nextButton             =   transform.Find(_PageButtonsName).GetChild(1).GetComponent<Button>();
         _slots                  =   transform.Find(_SlotsName);
         _pageNumberText         =   transform.Find(_PageNumberName).GetComponent<TextMeshProUGUI>();
-        _pageNumberText.text    =   _currentPage + "/" + (DataManager.SLOT_NUM / _slots.childCount);
+        _pageNumberText.text    =   _currentPage + "/" + (DataManager.SlotNumber / _slots.childCount);
         _confirmPanel           =   transform.Find(_ConfirmPanelName);
         _confirmText            =   _confirmPanel.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
         _confirmButton          =   _confirmPanel.GetChild(0).GetChild(1).GetComponent<Button>();
@@ -146,7 +144,6 @@ public class SaveLoadUIBase : MonoBehaviour
         }
     }
 
-    // When player clicked data slot
     private void OnSlotClick(int index)
     {
         // Return when slot is empty and it's load UI
@@ -163,10 +160,10 @@ public class SaveLoadUIBase : MonoBehaviour
         _currentPage++;
 
         // Is this Last page?
-        if (_currentPage == DataManager.SLOT_NUM / _slots.childCount) _nextButton.gameObject.SetActive(false);
+        if (_currentPage == DataManager.SlotNumber / _slots.childCount) _nextButton.gameObject.SetActive(false);
         else _previousButton.gameObject.SetActive(true);
 
-        _pageNumberText.text = _currentPage + "/" + (DataManager.SLOT_NUM / _slots.childCount);
+        _pageNumberText.text = _currentPage + "/" + (DataManager.SlotNumber / _slots.childCount);
 
         // Update data slots
         SetDataSlots();
@@ -180,9 +177,8 @@ public class SaveLoadUIBase : MonoBehaviour
         if (_currentPage == 1) _previousButton.gameObject.SetActive(false);
         else _nextButton.gameObject.SetActive(true);
 
-        _pageNumberText.text = _currentPage + "/" + (DataManager.SLOT_NUM / _slots.childCount);
+        _pageNumberText.text = _currentPage + "/" + (DataManager.SlotNumber / _slots.childCount);
 
-        // Updata data slots
         SetDataSlots();
     }
 

@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using EventEnums;
+using NUnit.Framework;
 
 public class GameEventManager : MonoBehaviour
 {
@@ -29,12 +30,14 @@ public class GameEventManager : MonoBehaviour
     {
         if (gameEvent.CheckCompatibility(_activeEventTypeCounts))
         {
-            Debug.Log($"Activating Event : {gameEvent.EventType}");
+            Logger.Write(LogCategory.Event, $"Activating Event : {gameEvent.EventType}, Instace : {gameEvent.EventId}", LogLevel.Log, true);
+            if (gameEvent.IsExclusiveEvent && _activeEvents.Count > 0)
+                TerminateNonExclusiveEvents(gameEvent);
             Activate(gameEvent);
         }
         else
         {
-            Debug.Log($"Enque Event to Waiting Queue : {gameEvent.EventType}");
+            Logger.Write(LogCategory.Event, $"Enque Event to Waiting Queue : {gameEvent.EventType}, Instace : {gameEvent.EventId}", LogLevel.Log, true);
             _waitingQueue.Enqueue(gameEvent);
         }
     }
@@ -45,8 +48,11 @@ public class GameEventManager : MonoBehaviour
 
         foreach (var gameEvent in _activeEvents)
         {
-            if (gameEvent.ShouldBeSaved)
+            if (gameEvent.ShouldBeSaved && null == gameEvent.EventContainer)
+            {
+                gameEvent.UpdateStatus();
                 infoList.Add(gameEvent.EventInfo);
+            }
         }
 
         return infoList;
@@ -102,7 +108,9 @@ public class GameEventManager : MonoBehaviour
 
             if (waiting.CheckCompatibility(_activeEventTypeCounts))
             {
-                Debug.Log($"Process Waiting Event : {waiting.EventType}");
+                Logger.Write(LogCategory.Event, $"Process Waiting Event : {waiting.EventType}, Instace : {waiting.EventId}", LogLevel.Log, true);
+                if (waiting.IsExclusiveEvent && _activeEvents.Count > 0)
+                    TerminateNonExclusiveEvents(waiting);
                 Activate(waiting);
             }
             else
@@ -117,4 +125,21 @@ public class GameEventManager : MonoBehaviour
             _waitingQueue.Enqueue(tempQueue.Dequeue());
         }
     }
+
+    private void TerminateNonExclusiveEvents(IGameEvent exclusiveEvent)
+    {
+        Assert.IsTrue(exclusiveEvent.IsExclusiveEvent, "The event must be an exclusive event to terminate others.");
+
+        for (int i = _activeEvents.Count - 1; i >= 0; i--)
+        {
+            var activeEvent = _activeEvents[i];
+            if (ReferenceEquals(activeEvent, exclusiveEvent) || ReferenceEquals(activeEvent, exclusiveEvent.EventContainer))
+                continue;
+
+            activeEvent.TerminateEvent();
+        }
+
+        _waitingQueue.Clear();
+    }
+
 }

@@ -37,7 +37,7 @@ public class HeroineAttackingLowerState : HeroineLowerStateBase
         }
     }
 
-    public override void OnExit()
+    public override void OnExit(HeroineLowerState _)
     {
 
     }

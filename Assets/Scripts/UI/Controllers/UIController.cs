@@ -1,16 +1,19 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
-using UIEnums;
 using System.Collections;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using AssetEnums;
 using UnityEngine.EventSystems;
+using NUnit.Framework;
 
 public class UIController : MonoBehaviour, IAsyncLoadObject
 {
+    /****** Public Members ******/
+
     public static UIController Instance { get; private set; }
+
     public bool IsStoryPanelClicked
     {
         get 
@@ -21,7 +24,6 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
         }
         set { _isStoryPanelClicked = value; }
     }
-    
     public bool IsLoaded => _isLoaded;
 
     public void ChangeBaseUI(BaseUI baseUI)
@@ -75,54 +77,50 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
         }
     }
 
-    // Turn Every Sub UI Off
     public void TurnEverySubUIOff()
     {
         while(UIModel.Instance.CurrentSubUI != SubUI.None)
         {
-            // End current sub UI
             _curUIController.ExitUI();
             UIModel.Instance.PopCurrentSubUI();
 
-            // Set current UI controller to previous sub UI
             SetUIController(UIModel.Instance.CurrentSubUI);
         }
     }
 
-    // Get current UI. Return both base UI and sub UI
     public void GetCurrentUI(out BaseUI baseUI, out SubUI subUI)
     {
         baseUI = UIModel.Instance.CurrentBaseUI;
         subUI = UIModel.Instance.CurrentSubUI;
     }
 
-    // Set choice info
     public void SetChoiceInfo(List<string> choiceList)
     {
         UIModel.Instance.ChoiceList = choiceList;
         UIModel.Instance.SelectedChoice = null;
     }
 
-    // Get selected choice
     public string GetSelectedChoice() { return UIModel.Instance.SelectedChoice; }
-
-    // Cancel current UI
     public void CancelCurrentUI() { _curUIController.Cancel(); }
 
 
     /***** Private Members ******/
 
-    private const string _BaseUIName = "Base UI";
-    private const string _SubUIName = "Sub UI";
+    [SerializeField] private Transform _baseUITransform = null;
+    [SerializeField] private Transform _subUITransform  = null;
 
-    private IUIController _curUIController;
-    private Dictionary<BaseUI, IUIController> _baseUIDictionary;
-    private Dictionary<SubUI, IUIController> _subUIDictionary;
-    private bool _isStoryPanelClicked;
-    private bool _isLoaded;
+    private Dictionary<BaseUI, IUIController>   _baseUIDictionary   = new();
+    private Dictionary<SubUI, IUIController>    _subUIDictionary    = new();
+
+    private IUIController   _curUIController        = null;
+    private bool            _isStoryPanelClicked    = false;
+    private bool            _isLoaded               = false;
 
     private void Awake()
     {
+        Assert.IsTrue(null != _baseUITransform, "Base UI Transform is not assigned in the editor.");
+        Assert.IsTrue(null != _subUITransform, "Sub UI Transform is not assigned in the editor.");
+
         if (null == Instance)
         {
             Instance = this;
@@ -136,9 +134,6 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
 
     private void Start()
     {
-        _isStoryPanelClicked = false;
-        _isLoaded = false;
-
         StartCoroutine(LoadUIControllers());
     }
 
@@ -146,38 +141,26 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
     {
     }
 
-    // Load baseUI, subUI Controllers
     private IEnumerator LoadUIControllers()
     {
-        _baseUIDictionary = new Dictionary<BaseUI, IUIController>();
-        _subUIDictionary = new Dictionary<SubUI, IUIController>();
+        var handle = Addressables.LoadAssetAsync<UIAsset>(AssetPath.UIAsset);
+        yield return handle;
 
-        Transform baseUITransform = transform.Find(_BaseUIName);
-        Transform subUITransform = transform.Find(_SubUIName);
-
-        foreach ( UIAsset.BaseUIName baseUI in Enum.GetValues(typeof(UIAsset.BaseUIName)))
+        if (AsyncOperationStatus.Failed == handle.Status)
         {
-            string assetPath = UIAsset.PathPrefix + baseUI.ToString();
-            AsyncOperationHandle<GameObject> loadHandle = Addressables.LoadAssetAsync<GameObject>(assetPath);
-            yield return loadHandle;
+            Debug.LogError("Failed to load UIAsset");
+            yield break;
+        }
 
-            GameObject uiObject;
-            if (loadHandle.Status == AsyncOperationStatus.Succeeded)
-            {
-                uiObject = Instantiate(loadHandle.Result, baseUITransform);
-                Debug.Log("Load Complete : [" + assetPath + "]");
-            }
-            else
-            {
-                Debug.LogError("Load Failed : [" + assetPath + "]");
-                yield break;
-            }
+        var baseUIAsset = handle.Result.BaseUIAssets;
+        var subUIAsset  = handle.Result.SubUIAssets;
 
-            foreach ( IUIController<BaseUI> uiController in uiObject.GetComponents<IUIController<BaseUI>>() )
-            {
-                BaseUI uiType = uiController.UIType;
-                _baseUIDictionary.Add(uiType, uiController);
-            }
+        foreach(var baseUIEntry in baseUIAsset)
+        {
+            GameObject uiObject = Instantiate(baseUIEntry.BaseUIPrefab, _baseUITransform);
+            uiObject.name = baseUIEntry.BaseUIType.ToString() + " UI";
+
+            _baseUIDictionary.Add(baseUIEntry.BaseUIType, uiObject.GetComponent<IUIController<BaseUI>>());
 
             // Execute Awake, Start method of uiObject
             yield return null;
@@ -190,29 +173,12 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
             uiObject.SetActive(false);
         }
 
-        foreach ( UIAsset.SubUIName subUI in Enum.GetValues(typeof(UIAsset.SubUIName)))
+        foreach (var subUIEntry in subUIAsset)
         {
-            string assetPath = UIAsset.PathPrefix + subUI.ToString();
-            AsyncOperationHandle<GameObject> loadHandle = Addressables.LoadAssetAsync<GameObject>(assetPath);
-            yield return loadHandle;
+            GameObject uiObject = Instantiate(subUIEntry.SubUIPrefab, _subUITransform);
+            uiObject.name = subUIEntry.SubUIType.ToString() + " UI";
 
-            GameObject uiObject;
-            if (loadHandle.Status == AsyncOperationStatus.Succeeded)
-            {
-                uiObject = Instantiate(loadHandle.Result, subUITransform);
-                Debug.Log("Load Complete : [" + assetPath + "]");
-            }
-            else
-            {
-                Debug.LogError("Load Failed : [" + assetPath + "]");
-                yield break;
-            }
-
-            foreach ( IUIController<SubUI> uiController in uiObject.GetComponents<IUIController<SubUI>>() )
-            {
-                SubUI uiType = uiController.UIType;
-                _subUIDictionary.Add(uiType, uiController);
-            }
+            _subUIDictionary.Add(subUIEntry.SubUIType, uiObject.GetComponent<IUIController<SubUI>>());
 
             // Execute Awake, Start method of uiObject
             yield return null;

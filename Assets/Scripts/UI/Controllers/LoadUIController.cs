@@ -1,15 +1,15 @@
 using System.Collections.Generic;
-using UIEnums;
-using UnityEditor.SceneManagement;
-
 
 public class LoadUIController : SaveLoadUIBase, IUIController<SubUI>
 {
     /****** Public Methods ******/
+    public SubUI UIType => SubUI.Load;
 
     public void EnterUI()
     {
         gameObject.SetActive(true);
+
+        UpdateDataSlots();
     }
 
 
@@ -31,8 +31,6 @@ public class LoadUIController : SaveLoadUIBase, IUIController<SubUI>
             UIController.Instance.TurnSubUIOff(UIType);
     }
 
-    public SubUI UIType => SubUI.Load; 
-
 
     /****** Protected Members ******/
 
@@ -53,19 +51,14 @@ public class LoadUIController : SaveLoadUIBase, IUIController<SubUI>
     private const string _LoadConfirmText   =   "Load Data?";
     private const string _LoadLabelText     =   "LOAD";
 
-    // Load saved data of the selected slot
     private void LoadSavedData()
     {
-        // Get slot number
         int slotNum = SelectedSlot.slotNumber;
 
-        // Close confirm panel
         TryClosingConfirmPanel();
 
-        // Turn every sub UI off
         UIController.Instance.TurnEverySubUIOff();
 
-        // Generate Load Game Event Stream. Load data of the selected slot
         var loadEvent = GameEventFactory.CreateSequentialEvent(new List<IGameEvent>
         {
             GameEventFactory.CreateDataLoadEvent(slotNum, false, false),

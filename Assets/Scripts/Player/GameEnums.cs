@@ -2,11 +2,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace UIEnums
-{
-    public enum BaseUI { SplashScreen, Title, Control, Story, Cutscene, Loading, GameOver, BaseUICount }
-    public enum SubUI { None, Pause, Save, Load, Choice, Preference, KeySettings, Saving, SubUICount }
-}
 
 namespace StageEnums
 {
@@ -53,21 +48,6 @@ namespace ScreenEffectEnums
 
 namespace AssetEnums
 {
-    public static class UIAsset
-    {
-        public static readonly string PathPrefix = "UIAssets/";
-
-        public enum BaseUIName
-        {
-            SplashScreenUI, TitleUI, ControlUI, StoryUI, CutsceneUI, LoadingUI, GameOverUI
-        }
-
-        public enum SubUIName
-        {
-            ChoiceUI, PauseUI, SaveLoadUI, PreferenceUI, KeySettingsUI, SavingUI
-        }
-    }
-
     public static class SequentialEventInfoAsset
     {
         public static class Common

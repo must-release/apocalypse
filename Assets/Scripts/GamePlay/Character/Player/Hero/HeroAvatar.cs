@@ -23,6 +23,11 @@ public class HeroAvatar : MonoBehaviour, IPlayerAvatar
         // TODO: Add update logic here
     }
 
+    public void OnFixedUpdate()
+    {
+
+    }
+
     public void OnAir()
     {
         // TODO: Add logic for when the avatar is in the air

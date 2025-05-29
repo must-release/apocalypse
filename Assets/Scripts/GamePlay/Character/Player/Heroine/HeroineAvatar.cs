@@ -77,6 +77,13 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
         _upperState.OnUpdate();
     }
 
+    public void OnFixedUpdate()
+    {
+        Assert.IsTrue(IsLoaded, "Avatar is not loaded yet");
+
+        _lowerState.OnFixedUpdate();
+    }
+
     public void OnAir()
     {
         _lowerState.OnAir();
@@ -105,7 +112,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
 
         Debug.Log("Lower : " + _lowerState.StateType.ToString() + " -> " + state.ToString());
 
-        _lowerState.OnExit();
+        _lowerState.OnExit(state);
         _lowerState = _lowerStateTable[state];
         _lowerState.OnEnter();
 
@@ -165,7 +172,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
         if (controlInfo.isJumpStarted) _lowerState.StartJump();
         _lowerState.CheckJumping(controlInfo.isJumping);
         if (controlInfo.tag) _lowerState.Tag();
-        _lowerState.Aim(controlInfo.aim != Vector3.zero);
+        _lowerState.Aim(controlInfo.aim);
         if (controlInfo.attack) _lowerState.Attack();
 
         // Change player state according to the object control info

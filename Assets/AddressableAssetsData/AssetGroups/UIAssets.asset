@@ -13,75 +13,8 @@ MonoBehaviour:
   m_Name: UIAssets
   m_EditorClassIdentifier: 
   m_GroupName: UIAssets
-  m_Data:
-    m_SerializedData: []
   m_GUID: 94403c2add1ff42e0987a0a91be9f3c5
-  m_SerializeEntries:
-  - m_GUID: b8d8727eb096e428abf204562586e3b6
-    m_Address: UIAssets/ChoiceUI
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 320fc7da5c5e44c31904488402bae1b5
-    m_Address: UIAssets/ControlUI
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2ac8dccfde85541a9aa02c48d321c6b9
-    m_Address: UIAssets/CutsceneUI
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 18a309f9c56a64b24974c149c771cd4a
-    m_Address: UIAssets/GameOverUI
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 951932497f8af4384bf7d08dab86a7cd
-    m_Address: UIAssets/KeySettingsUI
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 22736069c367245d49f3b556febaf998
-    m_Address: UIAssets/LoadingUI
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f420cb082c1da4a5a96fdc1db78ee2a5
-    m_Address: UIAssets/PauseUI
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b13d9a74265374a0399a155c994cbd40
-    m_Address: UIAssets/PreferenceUI
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a50f8580b7ba1443ca0f0e6156d2b973
-    m_Address: UIAssets/SaveLoadUI
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 50933c0cf80944f1fa9fcef32662f398
-    m_Address: UIAssets/SavingUI
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 349688599337e44cbabb202fa4389530
-    m_Address: UIAssets/SplashScreenUI
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e6e7d997c704443d498954646c80d46c
-    m_Address: UIAssets/StoryUI
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6749bdd00e01d4e5d9851790aee15113
-    m_Address: UIAssets/TitleUI
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 0018d54b9f5f74640839669867571db9, type: 2}
   m_SchemaSet:

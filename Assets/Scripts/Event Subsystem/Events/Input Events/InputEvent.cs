@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UIEnums;
 
 [System.Serializable]
 public class InputEvent : MonoBehaviour

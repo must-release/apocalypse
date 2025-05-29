@@ -34,7 +34,7 @@ public class NormalInfectee : EnemyController
         defaultDamageInfo   = new DamageInfo(gameObject, 1);
         weaponType          = WeaponType.Scratch;
         weapons             = new Queue<IWeapon>();
-        aimingDots          = new List<GameObject>();
+        aimingDots          = new List<AimingDot>();
         weaponOffset        = new Vector3(2.5f, 0, 0);
         useShortRangeWeapon = true;
         weaponCount         = 1;

@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UIEnums;
 using EventEnums;
 using UnityEngine.Assertions;
 using System.Collections.Generic;
@@ -15,17 +14,7 @@ public class CutsceneEvent : GameEventBase<CutsceneEventInfo>
     /****** Public Members ******/
 
     public override bool            ShouldBeSaved   => false;
-    public override GameEventInfo   EventInfo       => _info;
     public override GameEventType   EventType       => GameEventType.Cutscene;
-
-    public override void Initialize(CutsceneEventInfo eventInfo, IGameEvent parentEvent = null)
-    {
-        Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "Event info is not valid.");
-
-        _info       = eventInfo;
-        Status      = EventStatus.Waiting;
-        ParentEvent = parentEvent;
-    }   
 
     public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
     {
@@ -39,7 +28,7 @@ public class CutsceneEvent : GameEventBase<CutsceneEventInfo>
 
     public override void PlayEvent()
     {
-        Assert.IsTrue(null != _info, "Event info is not set.");
+        Assert.IsTrue(null != Info, "Event info is not set.");
 
         base.PlayEvent();
         _eventCoroutine = StartCoroutine(PlayEventCoroutine());
@@ -47,7 +36,7 @@ public class CutsceneEvent : GameEventBase<CutsceneEventInfo>
 
     public override void TerminateEvent()
     {
-        Assert.IsTrue(null != _info, "Event info is not set before termination");
+        Assert.IsTrue(null != Info, "Event info is not set before termination");
 
 
         if ( _eventCoroutine != null )
@@ -56,8 +45,8 @@ public class CutsceneEvent : GameEventBase<CutsceneEventInfo>
             _eventCoroutine = null;
         }
 
-        _info.DestroyInfo();
-        _info = null;
+        Info.DestroyInfo();
+        Info = null;
 
         GameEventPool<CutsceneEvent, CutsceneEventInfo>.Release(this);
 
@@ -68,11 +57,10 @@ public class CutsceneEvent : GameEventBase<CutsceneEventInfo>
     /****** Private Members ******/
 
     private Coroutine       _eventCoroutine     = null;
-    private GameEventInfo   _info  = null;
 
     private IEnumerator PlayEventCoroutine()
     {
-        Assert.IsTrue(null != _info, "Event info is not set.");
+        Assert.IsTrue(null != Info, "Event info is not set.");
 
         // Change to cutscene UI
         UIController.Instance.ChangeBaseUI(BaseUI.Cutscene);

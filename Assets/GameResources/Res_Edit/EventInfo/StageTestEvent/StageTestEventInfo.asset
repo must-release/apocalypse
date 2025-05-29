@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b894d79f237ceeb4c9f6c146282d41ac, type: 3}
+  m_Name: StageTestEventInfo
+  m_EditorClassIdentifier: 
+  _eventType: 11
+  _isInitialized: 1
+  _eventInfos:
+  - {fileID: 11400000, guid: 39811bef3c930d544ab9a8046da0bc6d, type: 2}
+  - {fileID: 11400000, guid: 6870d125b2ac7af40acfd6b3db2897d4, type: 2}
+  - {fileID: 11400000, guid: cea5b13c3b98c9848a54b27db9b173c4, type: 2}
+  - {fileID: 11400000, guid: 3c223b717b255674880e86481e9dce85, type: 2}
+  _startIndex: 0

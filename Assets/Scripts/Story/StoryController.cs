@@ -44,6 +44,17 @@ public class StoryController : MonoBehaviour
             nameText = storyScreen.Find(dialogueBoxName).Find(nameTextName).GetComponent<TextMeshProUGUI>();
             dialogueText = storyScreen.Find(dialogueBoxName).Find(dialogueTextName).GetComponent<TextMeshProUGUI>();
         }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+    }
+
+    private void Start()
+    {
+        var canvas = GetComponent<Canvas>();
+        canvas.worldCamera = Camera.main;
     }
 
     // Start Story Mode with given info
@@ -216,10 +227,10 @@ public class StoryController : MonoBehaviour
         }
     }
 
-    // Get current story progress info
-    public (int, int) GetStoryProgressInfo()
+    public void GetStoryProgressInfo(out int readBlockCount, out int readEntryCount)
     {
-        return (StoryModel.Instance.ReadBlockCount, StoryModel.Instance.ReadEntryCount);
+        readBlockCount = StoryModel.Instance.ReadBlockCount;
+        readEntryCount = StoryModel.Instance.ReadEntryCount;
     }
 }
 

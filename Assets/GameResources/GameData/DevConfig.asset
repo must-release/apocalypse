@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9de5ac663db044fb0b407a45abe43682, type: 3}
   m_Name: DevConfig
   m_EditorClassIdentifier: 
-  StartEvent: {fileID: 11400000, guid: 5972bd2c1a22b4c449917fe3627e693e, type: 2}
+  StartEvent: {fileID: 11400000, guid: a46570c2ab43ae946822bf7c8a34dff7, type: 2}

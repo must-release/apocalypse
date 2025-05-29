@@ -53,7 +53,7 @@ public class HeroineClimbingLowerState : HeroineLowerStateBase
         }
     }
 
-    public override void OnExit()
+    public override void OnExit(HeroineLowerState _)
     {
         PlayerMotion.SetGravityScale(PlayerInfo.Gravity);
         StateAnimator.speed = 1.0f;

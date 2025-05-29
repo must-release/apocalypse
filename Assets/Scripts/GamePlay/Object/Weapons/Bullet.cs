@@ -7,6 +7,7 @@ public class Bullet : LongRangeWeaponBase
     public override WeaponType  WeaponType          => WeaponType.Bullet;
     public override bool        CanDamagePlayer     => false;
     public override float       FireSpeed           => 30f;
+    public override float       GravityScale        => _GravityScale;
     public override float       ActiveDuration      => 5f;
     public override float       PostDelay           => 0f;
 

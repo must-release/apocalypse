@@ -9,9 +9,10 @@ public abstract class GranadeBase : LongRangeWeaponBase
     public abstract EffectType GranadeEffect { get; }
 
     public override bool CanDamagePlayer    => false;
-    public override float FireSpeed         => 13f;
+    public override float FireSpeed         => 15f;
+    public override float GravityScale      => _GravityScale;
     public override float ActiveDuration    => 1f;
-    public override float PostDelay         => 1f;
+    public override float PostDelay         => 0.5f;
 
     public override void Attack(Vector3 direction)
     {
@@ -70,7 +71,7 @@ public abstract class GranadeBase : LongRangeWeaponBase
 
     /****** Private Members ******/
 
-    private const float _GravityScale           = 3f;
+    private const float _GravityScale           = 2f;
     private const float _AngleSpeed             = 240;
     private const float _InitialAngularDrag     = 0.05f;
     private const float _AngularDragAfterHit    = 3f;

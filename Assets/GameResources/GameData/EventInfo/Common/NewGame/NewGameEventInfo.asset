@@ -9,14 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff105c13181cb48d98a4c07e5f41d922, type: 3}
+  m_Script: {fileID: 11500000, guid: b894d79f237ceeb4c9f6c146282d41ac, type: 3}
   m_Name: NewGameEventInfo
   m_EditorClassIdentifier: 
   _eventType: 11
   _isInitialized: 1
   _eventInfos:
-  - {fileID: 11400000, guid: eff65d3fe808848149759f2a46b05690, type: 2}
-  - {fileID: 11400000, guid: f9849c5e8fdc44220b41cf7b7f319131, type: 2}
-  - {fileID: 11400000, guid: 5eb9ca2868edc794fa8788c4712d9289, type: 2}
-  - {fileID: 11400000, guid: a1a0ac7d8d1594c438f77dbb525a7caa, type: 2}
-  - {fileID: 11400000, guid: ea5078fa36c404705b9d7ab3258037ba, type: 2}
+  - {fileID: 11400000, guid: 489bc970eea7ee54388629412caba933, type: 2}
+  - {fileID: 11400000, guid: e6676c48a9951ea4b8973538776b9a54, type: 2}
+  - {fileID: 11400000, guid: 65c26692d7f89d146b722469e7e6c24a, type: 2}
+  - {fileID: 11400000, guid: 8711976ba4c7a2745b1b7f0fadd55cf0, type: 2}
+  - {fileID: 11400000, guid: fa50ac8cdfd937e429d1811294ca1d5b, type: 2}
+  _startIndex: 0

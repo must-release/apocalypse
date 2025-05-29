@@ -6,6 +6,7 @@ public abstract class LongRangeWeaponBase : WeaponBase
     /****** Public Members ******/
 
     public abstract float FireSpeed { get; }
+    public abstract float GravityScale   { get; }
 
     public override void Attack(Vector3 direction)
     {

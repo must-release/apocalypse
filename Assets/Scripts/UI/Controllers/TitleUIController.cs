@@ -2,7 +2,6 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-using UIEnums;
 using UnityEngine.AddressableAssets;
 using AssetEnums;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -66,7 +65,7 @@ public class TitleUIController : MonoBehaviour, IUIController<BaseUI>, IAsyncLoa
         yield return continueGameEvent;
         if (continueGameEvent.Status == AsyncOperationStatus.Succeeded)
         {
-            _continueGameEventInfo = continueGameEvent.Result;
+            _continueGameEventInfo = continueGameEvent.Result.Clone();
         }
         else
         {
@@ -77,7 +76,7 @@ public class TitleUIController : MonoBehaviour, IUIController<BaseUI>, IAsyncLoa
         yield return newGameEvent;
         if (newGameEvent.Status == AsyncOperationStatus.Succeeded)
         {
-            _newGameEventInfo = newGameEvent.Result;
+            _newGameEventInfo = newGameEvent.Result.Clone();
         }
         else
         {

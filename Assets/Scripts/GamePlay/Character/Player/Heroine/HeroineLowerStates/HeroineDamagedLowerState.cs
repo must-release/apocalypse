@@ -28,7 +28,7 @@ public class HeroineDamagedLowerState : HeroineLowerStateBase
         PlayerMotion.SetVelocity(Vector2.zero);
     }
 
-    public override void OnExit()
+    public override void OnExit(HeroineLowerState _)
     {
 
     }

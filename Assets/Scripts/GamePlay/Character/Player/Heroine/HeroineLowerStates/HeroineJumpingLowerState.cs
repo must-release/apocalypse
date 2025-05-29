@@ -16,36 +16,26 @@ public class HeroineJumpingLowerState : HeroineLowerStateBase
             StateAnimator.Play(AnimatorState.HeroineLower.JumpingStart);
             _isStartingJump = true;
             _isJumping      = true;
-            _isFalling      = false;
         }
         else
         {
-            StateAnimator.Play(AnimatorState.HeroineLower.JumpingDown);
+            StateAnimator.Play(AnimatorState.HeroineLower.JumpingLoop);
             _isStartingJump = false;
             _isJumping      = false;
-            _isFalling      = true;
         }
     }
 
     public override void OnUpdate()
     {
-        if (0 < PlayerInfo.CurrentVelocity.y)
-        {
-            if (false == _isJumping)
+        if (0 < PlayerInfo.CurrentVelocity.y && false ==_isJumping)
                 ApplyJumpCut();
 
-            if (_isStartingJump)
-                ChangeToJumpingUpAnimation();
-        }
+        if (_isStartingJump)
+            ChangeToJumpingLoopAnimation();
 
-        if (false == _isJumping && 0 < PlayerInfo.CurrentVelocity.y)
-            ApplyJumpCut();
-
-        if (false == _isFalling && PlayerInfo.CurrentVelocity.y < 0)
-            ChangeToJumpingDownAnimation();
     }
 
-    public override void OnExit()
+    public override void OnExit(HeroineLowerState _)
     {
         if (null != _landCoroutine)
         {
@@ -119,7 +109,6 @@ public class HeroineJumpingLowerState : HeroineLowerStateBase
 
     private bool _isStartingJump    = false;
     private bool _isJumping         = false;
-    private bool _isFalling         = false;
 
     private void ApplyJumpCut()
     {
@@ -128,23 +117,15 @@ public class HeroineJumpingLowerState : HeroineLowerStateBase
             PlayerInfo.CurrentVelocity.y - _JumpFallSpeed * PlayerInfo.JumpingSpeed * Time.deltaTime));
     }
 
-    private void ChangeToJumpingUpAnimation()
+    private void ChangeToJumpingLoopAnimation()
     {
         if (StateAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
             return;
 
-        StateAnimator.Play(AnimatorState.HeroineLower.JumpingUp);
+        StateAnimator.Play(AnimatorState.HeroineLower.JumpingLoop);
         StateAnimator.Update(0.0f);
 
         _isStartingJump = false;
-    }
-
-    private void ChangeToJumpingDownAnimation()
-    {
-        StateAnimator.Play(AnimatorState.HeroineLower.JumpingDown);
-        StateAnimator.Update(0.0f);
-
-        _isFalling = true;
     }
 
     private IEnumerator LandOnGround()

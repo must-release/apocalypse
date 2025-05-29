@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UIEnums;
 using EventEnums;
 using UnityEngine.Assertions;
 
@@ -14,17 +13,7 @@ public class SceneActivateEvent : GameEventBase<SceneActivateEventInfo>
     /****** Public Members *****/
 
     public override bool            ShouldBeSaved   => false;
-    public override GameEventInfo   EventInfo       => _info;
     public override GameEventType   EventType       => GameEventType.SceneActivate;
-
-    public override void Initialize(SceneActivateEventInfo eventInfo, IGameEvent parentEvent = null)
-    {
-        Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "Event info is not valid.");
-
-        _info       = eventInfo;
-        Status      = EventStatus.Waiting;
-        ParentEvent = parentEvent;
-    }
 
     public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
     {
@@ -43,7 +32,7 @@ public class SceneActivateEvent : GameEventBase<SceneActivateEventInfo>
 
     public override void PlayEvent()
     {
-        Assert.IsTrue(null != _info, "Event info is not set.");
+        Assert.IsTrue(null != Info, "Event info is not set.");
 
         base.PlayEvent();
         _eventCoroutine = StartCoroutine(PlayEventCoroutine());
@@ -52,7 +41,7 @@ public class SceneActivateEvent : GameEventBase<SceneActivateEventInfo>
     public override void TerminateEvent()
     {
         Assert.IsTrue(false == SceneController.Instance.IsSceneLoading, "Should not be terminated when scene is not loaded yet.");
-        Assert.IsTrue(null != _info, "Event info is not set before termination");
+        Assert.IsTrue(null != Info, "Event info is not set before termination");
 
         if (_eventCoroutine != null)
         {
@@ -60,8 +49,8 @@ public class SceneActivateEvent : GameEventBase<SceneActivateEventInfo>
             _eventCoroutine = null;
         }
 
-        _info.DestroyInfo();
-        _info = null;
+        Info.DestroyInfo();
+        Info = null;
 
         GameEventPool<SceneActivateEvent, SceneActivateEventInfo>.Release(this);
 
@@ -71,18 +60,17 @@ public class SceneActivateEvent : GameEventBase<SceneActivateEventInfo>
 
     /****** Private Members ******/
 
-    private Coroutine               _eventCoroutine         = null;
-    private SceneActivateEventInfo  _info                   = null;
+    private Coroutine _eventCoroutine = null;
 
     private IEnumerator PlayEventCoroutine()
     {
-        Assert.IsTrue(null != _info, "Event info is not set.");
+        Assert.IsTrue(null != Info, "Event info is not set.");
 
 
         // If scene is still loading
         if (SceneController.Instance.IsSceneLoading)
         {
-            if (_info.ShouldTurnOnLoadingUI)
+            if (Info.ShouldTurnOnLoadingUI)
                 UIController.Instance.ChangeBaseUI(BaseUI.Loading);
 
             yield return new WaitWhile(() => SceneController.Instance.IsSceneLoading);

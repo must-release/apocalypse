@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UIEnums;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.AddressableAssets;

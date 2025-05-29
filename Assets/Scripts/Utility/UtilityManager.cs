@@ -56,6 +56,7 @@ public class UtilityManager : MonoBehaviour
         {
             utility.ResetTool();
         }
+        activeUtilities.Clear();
     }
 }
 

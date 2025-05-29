@@ -4,7 +4,6 @@ using ScreenEffectEnums;
 using StageEnums;
 using System;
 using System.Collections.Generic;
-using UIEnums;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -22,6 +21,13 @@ public static class GameEventFactory
         return evt;
     }
 
+    public static IGameEvent CreateChoiceEvent(ChoiceEventDTO dto)
+    {
+        Assert.IsTrue(null != dto, "Cannot create ChoiceEvent from null DTO");
+
+        return CreateChoiceEvent(dto.ChoiceList);
+    }
+
     public static IGameEvent CreateCutsceneEvent()
     {
         var info = ScriptableObject.CreateInstance<CutsceneEventInfo>();
@@ -30,6 +36,12 @@ public static class GameEventFactory
         var evt = GameEventPool<CutsceneEvent, CutsceneEventInfo>.Get(EventHost, "CutsceneEvent");
         evt.Initialize(info);
         return evt;
+    }
+
+    public static IGameEvent CreateCutsceneEvent(CutsceneEventDTO dto)
+    {
+        Assert.IsTrue(null != dto, "Cannot create DataLoadEvent from null DTO");
+        return CreateCutsceneEvent();
     }
 
     public static IGameEvent CreateDataLoadEvent(int slotNum, bool isNewGame = false, bool isContinueGame = false)
@@ -42,6 +54,12 @@ public static class GameEventFactory
         return evt;
     }
 
+    public static IGameEvent CreateDataLoadEvent(DataLoadEventDTO dto)
+    {
+        Assert.IsTrue(null != dto, "Cannot create DataSaveEvent from null DTO");
+        return CreateDataLoadEvent(dto.SlotNum, dto.IsNewGame, dto.IsContinueGame);
+    }
+
     public static IGameEvent CreateDataSaveEvent(int slotNum)
     {
         var info = ScriptableObject.CreateInstance<DataSaveEventInfo>();
@@ -50,6 +68,12 @@ public static class GameEventFactory
         var evt = GameEventPool<DataSaveEvent, DataSaveEventInfo>.Get(EventHost, $"DataSaveEvent_{slotNum}");
         evt.Initialize(info);
         return evt;
+    }
+
+    public static IGameEvent CreateDataSaveEvent(DataSaveEventDTO dto)
+    {
+        Assert.IsTrue(null != dto, "Cannot create DataSaveEvent from null DTO");
+        return CreateDataSaveEvent(dto.SlotNum);
     }
 
     public static IGameEvent CreateSceneActivateEvent(bool ShouldTurnOnLoadingUI = true)
@@ -62,6 +86,12 @@ public static class GameEventFactory
         return evt;
     }
 
+    public static IGameEvent CreateSceneActivateEvent(SceneActivateEventDTO dto)
+    {
+        Assert.IsTrue(null != dto, "Cannot create SceneActivateEvent from null DTO");
+        return CreateSceneActivateEvent(dto.ShouldTurnOnLoadingUI);
+    }
+
     public static IGameEvent CreateSceneLoadEvent(SceneName loadingScene)
     {
         var info = ScriptableObject.CreateInstance<SceneLoadEventInfo>();
@@ -70,6 +100,12 @@ public static class GameEventFactory
         var evt = GameEventPool<SceneLoadEvent, SceneLoadEventInfo>.Get(EventHost, $"SceneLoadEvent_{loadingScene}");
         evt.Initialize(info);
         return evt;
+    }
+
+    public static IGameEvent CreateSceneLoadEvent(SceneLoadEventDTO dto)
+    {
+        Assert.IsTrue(null != dto, "Cannot create SceneLoadEvent from null DTO");
+        return CreateSceneLoadEvent(dto.LoadingScene);
     }
 
     public static IGameEvent CreateScreenEffectEvent(ScreenEffect screenEffectType)
@@ -82,6 +118,12 @@ public static class GameEventFactory
         return evt;
     }
 
+    public static IGameEvent CreateScreenEffectEvent(ScreenEffectEventDTO dto)
+    {
+        Assert.IsTrue(null != dto, "Cannot create ScreenEffectEvent from null DTO");
+        return CreateScreenEffectEvent(dto.ScreenEffectType);
+    }
+
     public static IGameEvent CreateStoryEvent(Stage storyStage, int storyNumber, int readBlockCount, int readEntryCount, bool isOnMap)
     {
         var info = ScriptableObject.CreateInstance<StoryEventInfo>();
@@ -90,6 +132,12 @@ public static class GameEventFactory
         var evt = GameEventPool<StoryEvent, StoryEventInfo>.Get(EventHost, $"StoryEvent_{storyStage}_{storyNumber}");
         evt.Initialize(info);
         return evt;
+    }
+
+    public static IGameEvent CreateStoryEvent(StoryEventDTO dto)
+    {
+        Assert.IsTrue(null != dto, "Cannot create StoryEvent from null DTO");
+        return CreateStoryEvent(dto.StoryStage, dto.StoryNumber, dto.ReadBlockCount, dto.ReadEntryCount, dto.IsOnMap);
     }
 
     public static IGameEvent CreateUIChangeEvent(BaseUI targetUI)
@@ -102,32 +150,61 @@ public static class GameEventFactory
         return evt;
     }
 
-    public static IGameEvent CreateSequentialEvent(List<IGameEvent> gameEvents)
+    public static IGameEvent CreateUIChangeEvent(UIChangeEventDTO dto)
+    {
+        Assert.IsTrue(null != dto, "Cannot create UIChangeEvent from null DTO");
+        return CreateUIChangeEvent(dto.TargetUI);
+    }
+
+    public static IGameEvent CreateSequentialEvent(List<IGameEvent> gameEvents, int startIndex = 0)
     {
         Assert.IsTrue(null != gameEvents && 0 < gameEvents.Count, "GameEvents list is null or empty");
 
         var info = ScriptableObject.CreateInstance<SequentialEventInfo>();
-        info.Initialize(new List<GameEventInfo>());
+        info.Initialize(new List<GameEventInfo>(), startIndex);
 
         SequentialEvent evt = GameEventPool<SequentialEvent, SequentialEventInfo>.Get(EventHost, "SequentialEvent");
         evt.Initialize(info);
 
         foreach (var gameEvent in gameEvents)
         {
-            evt.AddEvent(gameEvent);
+            evt.AddNewEvent(gameEvent);
         }
 
         return evt;
     }
 
-    public static IGameEvent CreateFromInfo<TEventInfo>(TEventInfo info, IGameEvent parentEvent = null)
+    public static IGameEvent CreateSequentialEvent(SequentialEventDTO dto)
+    {
+        Assert.IsTrue(null != dto, "Cannot create SequentialEvent from null DTO");
+
+        var eventList = new List<IGameEvent>();
+
+        foreach (var eventDTO in dto.EventDTOs)
+        {
+            eventList.Add(CreateFromDTO(eventDTO));
+        }
+
+        return CreateSequentialEvent(eventList, dto.StartIndex);
+    }
+
+    public static IGameEvent CreateFromInfo<TEventInfo>(TEventInfo info)
         where TEventInfo : GameEventInfo
     {
         Assert.IsTrue(null != info, "Cannot create event from null info");
-        Assert.IsTrue(true == _eventCreators.ContainsKey(info.EventType), $"No factory registered for GameEventType: {info.EventType}");
+        Assert.IsTrue(true == _eventCreatorsFromInfo.ContainsKey(info.EventType), $"No info creator registered for GameEventType: {info.EventType}");
 
-        return _eventCreators[info.EventType].Invoke(info, parentEvent);
+        return _eventCreatorsFromInfo[info.EventType].Invoke(info);
     }
+
+    public static IGameEvent CreateFromDTO(GameEventDTO dto)
+    {
+        Assert.IsTrue(null != dto, "Cannot create event from null DTO");
+        Assert.IsTrue(true == _eventCreatorsFromDTO.ContainsKey(dto.EventType), $"No dto creator registered for GameEventType: {dto.EventType}");
+
+        return _eventCreatorsFromDTO[dto.EventType].Invoke(dto);
+    }
+
 
     /****** Private Members *******/
 
@@ -147,29 +224,44 @@ public static class GameEventFactory
         }
     }
 
-    private static readonly Dictionary<GameEventType, Func<GameEventInfo, IGameEvent, IGameEvent>> _eventCreators =
-        new Dictionary<GameEventType, Func<GameEventInfo, IGameEvent, IGameEvent>>
+    private static readonly Dictionary<GameEventType, Func<GameEventInfo, IGameEvent>> _eventCreatorsFromInfo =
+        new Dictionary<GameEventType, Func<GameEventInfo, IGameEvent>>
     {
-        { GameEventType.Choice,         (info, parentEvent) => CreateFromInfo<ChoiceEvent, ChoiceEventInfo>(info as ChoiceEventInfo, parentEvent) },
-        { GameEventType.Cutscene,       (info, parentEvent) => CreateFromInfo<CutsceneEvent, CutsceneEventInfo>(info as CutsceneEventInfo, parentEvent) },
-        { GameEventType.DataLoad,       (info, parentEvent) => CreateFromInfo<DataLoadEvent,DataLoadEventInfo>(info as DataLoadEventInfo, parentEvent) },
-        { GameEventType.DataSave,       (info, parentEvent) => CreateFromInfo<DataSaveEvent, DataSaveEventInfo>(info as DataSaveEventInfo, parentEvent) },
-        { GameEventType.SceneActivate,  (info, parentEvent) => CreateFromInfo<SceneActivateEvent, SceneActivateEventInfo>(info as SceneActivateEventInfo, parentEvent) },
-        { GameEventType.SceneLoad,      (info, parentEvent) => CreateFromInfo<SceneLoadEvent, SceneLoadEventInfo>(info as SceneLoadEventInfo, parentEvent) },
-        { GameEventType.ScreenEffect,   (info, parentEvent) => CreateFromInfo<ScreenEffectEvent, ScreenEffectEventInfo>(info as ScreenEffectEventInfo, parentEvent) },
-        { GameEventType.Sequential,     (info, parentEvent) => CreateFromInfo<SequentialEvent, SequentialEventInfo>(info as SequentialEventInfo, parentEvent) },
-        { GameEventType.Story,          (info, parentEvent) => CreateFromInfo<StoryEvent, StoryEventInfo>(info as StoryEventInfo, parentEvent) },
-        { GameEventType.UIChange,       (info, parentEvent) => CreateFromInfo<UIChangeEvent, UIChangeEventInfo>(info as UIChangeEventInfo, parentEvent) },
+        { GameEventType.Choice,         info => CreateFromInfo<ChoiceEvent, ChoiceEventInfo>(info as ChoiceEventInfo) },
+        { GameEventType.Cutscene,       info => CreateFromInfo<CutsceneEvent, CutsceneEventInfo>(info as CutsceneEventInfo)},
+        { GameEventType.DataLoad,       info => CreateFromInfo<DataLoadEvent, DataLoadEventInfo>(info as DataLoadEventInfo) },
+        { GameEventType.DataSave,       info => CreateFromInfo<DataSaveEvent, DataSaveEventInfo>(info as DataSaveEventInfo) },
+        { GameEventType.SceneActivate,  info => CreateFromInfo<SceneActivateEvent, SceneActivateEventInfo >(info as SceneActivateEventInfo) },
+        { GameEventType.SceneLoad,      info => CreateFromInfo<SceneLoadEvent, SceneLoadEventInfo>(info as SceneLoadEventInfo) },
+        { GameEventType.ScreenEffect,   info => CreateFromInfo<ScreenEffectEvent, ScreenEffectEventInfo>(info as ScreenEffectEventInfo) },
+        { GameEventType.Sequential,     info => CreateFromInfo<SequentialEvent, SequentialEventInfo>(info as SequentialEventInfo) },   
+        { GameEventType.Story,          info => CreateFromInfo<StoryEvent, StoryEventInfo>(info as StoryEventInfo) },
+        { GameEventType.UIChange,       info => CreateFromInfo<UIChangeEvent, UIChangeEventInfo>(info as UIChangeEventInfo) },
     };
 
-    private static IGameEvent CreateFromInfo<TEvent, TInfo>(TInfo info, IGameEvent parentEvent)
+    private static readonly Dictionary<GameEventType, Func<GameEventDTO, IGameEvent>> _eventCreatorsFromDTO =
+        new Dictionary<GameEventType, Func<GameEventDTO, IGameEvent>>
+    {
+        { GameEventType.Choice,         dto => CreateChoiceEvent(dto as ChoiceEventDTO) },
+        { GameEventType.Cutscene,       dto => CreateCutsceneEvent(dto as CutsceneEventDTO) },
+        { GameEventType.DataLoad,       dto => CreateDataLoadEvent(dto as DataLoadEventDTO) },
+        { GameEventType.DataSave,       dto => CreateDataSaveEvent(dto as DataSaveEventDTO) },
+        { GameEventType.SceneActivate,  dto => CreateSceneActivateEvent(dto as SceneActivateEventDTO) },
+        { GameEventType.SceneLoad,      dto => CreateSceneLoadEvent(dto as SceneLoadEventDTO) },
+        { GameEventType.ScreenEffect,   dto => CreateScreenEffectEvent(dto as ScreenEffectEventDTO) },
+        { GameEventType.Sequential,     dto => CreateSequentialEvent(dto as SequentialEventDTO) },   
+        { GameEventType.Story,          dto => CreateStoryEvent(dto as StoryEventDTO) },
+        { GameEventType.UIChange,       dto => CreateUIChangeEvent(dto as UIChangeEventDTO) },
+    };
+
+    private static IGameEvent CreateFromInfo<TEvent, TInfo>(TInfo info)
         where TEvent : GameEventBase<TInfo>
         where TInfo : GameEventInfo
     {
         Assert.IsTrue(null != info, "Cannot create Event from null info");
 
         var gameEvent = GameEventPool<TEvent, TInfo>.Get(EventHost, info.EventType.ToString());
-        gameEvent.Initialize(info, parentEvent);
+        gameEvent.Initialize(info);
 
         return gameEvent;
     }

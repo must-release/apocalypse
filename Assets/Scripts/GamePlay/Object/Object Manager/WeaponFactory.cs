@@ -42,7 +42,7 @@ public class WeaponFactory : MonoBehaviour
         }
     }
 
-    public IEnumerator AsyncPoolAimingDots(WeaponType weaponType, List<GameObject> aimingDots, int poolNum)
+    public IEnumerator AsyncPoolAimingDots(WeaponType weaponType, List<AimingDot> aimingDots, int poolNum)
     {
         AsyncOperationHandle<GameObject> loadingDot = Addressables.InstantiateAsync(WeaponAsset.GetAimingDotPath(weaponType));
         yield return loadingDot;
@@ -54,12 +54,12 @@ public class WeaponFactory : MonoBehaviour
             loadedDot.SetActive(false);
 
             // Copy dots
-            aimingDots.Add(loadedDot);
+            aimingDots.Add(loadedDot.GetComponent<AimingDot>());
             for (int i = 0; i < poolNum - 1; i++)
             {
                 GameObject dotCopy = Instantiate(loadedDot);
-                aimingDots.Add(dotCopy);
-                aimingDots[i].GetComponent<AimingDot>().NextDot = aimingDots[i + 1].GetComponent<AimingDot>();
+                aimingDots.Add(dotCopy.GetComponent<AimingDot>());
+                aimingDots[i].NextDot = aimingDots[i + 1];
             }
         }
         else

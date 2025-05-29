@@ -9,17 +9,7 @@ public class UIChangeEvent : GameEventBase<UIChangeEventInfo>
     /****** Public Members ******/
 
     public override bool            ShouldBeSaved   => false;
-    public override GameEventInfo   EventInfo       => _info;
     public override GameEventType   EventType       => GameEventType.UIChange;
-
-    public override void Initialize(UIChangeEventInfo eventInfo, IGameEvent parentEvent = null)
-    {
-        Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "Event info is not valid.");
-
-        _info       = eventInfo;
-        Status      = EventStatus.Waiting;
-        ParentEvent = parentEvent;
-    }
 
     public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
     {
@@ -28,31 +18,25 @@ public class UIChangeEvent : GameEventBase<UIChangeEventInfo>
         return true;
     }
 
-    // Play change UI event
     public override void PlayEvent()
     {
-        Assert.IsTrue(null != _info, "Event info is not initialized");
+        Assert.IsTrue(null != Info, "Event info is not initialized");
 
         base.PlayEvent();
-        UIController.Instance.ChangeBaseUI(_info.TargetUI); 
+        UIController.Instance.ChangeBaseUI(Info.TargetUI); 
 
         TerminateEvent();
     }
 
     public override void TerminateEvent()
     {
-        Assert.IsTrue(null != _info, "Event info is not set before termination");
+        Assert.IsTrue(null != Info, "Event info is not set before termination");
 
-        _info.DestroyInfo();
-        _info = null;
+        Info.DestroyInfo();
+        Info = null;
 
         GameEventPool<UIChangeEvent, UIChangeEventInfo>.Release(this);
 
         base.TerminateEvent();
     }
-
-
-    /****** Private Members ******/
-
-    private UIChangeEventInfo _info = null;
 }

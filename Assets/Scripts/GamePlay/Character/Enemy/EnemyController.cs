@@ -19,7 +19,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
     protected DamageInfo defaultDamageInfo;
     protected WeaponType weaponType;
     protected Queue<IWeapon> weapons;
-    protected List<GameObject> aimingDots;
+    protected List<AimingDot> aimingDots;
     protected Vector3 weaponOffset;
     protected bool useShortRangeWeapon;
     protected int weaponCount;

@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using EventEnums;
 using UnityEngine.Assertions;
-using UnityEngine.AddressableAssets;
 
 /*
  * Load Game Data
@@ -12,18 +10,9 @@ public class DataLoadEvent : GameEventBase<DataLoadEventInfo>
 {
     /****** Public Members ******/
 
-    public override bool            ShouldBeSaved   => false; 
-    public override GameEventInfo   EventInfo       => _info;
-    public override GameEventType   EventType       => GameEventType.DataLoad;
-
-    public override void Initialize(DataLoadEventInfo eventInfo, IGameEvent parentEvent = null)
-    {
-        Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "Event info is not valid");
-
-        _info       = eventInfo;
-        Status      = EventStatus.Waiting;
-        ParentEvent = parentEvent;
-    }
+    public override bool ShouldBeSaved      => false;
+    public override bool IsExclusiveEvent   => true;
+    public override GameEventType EventType => GameEventType.DataLoad;
 
     public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
     {
@@ -42,33 +31,54 @@ public class DataLoadEvent : GameEventBase<DataLoadEventInfo>
 
     public override void PlayEvent()
     {
-        Assert.IsTrue( null != _info, "Event info is not initialized" );
-
+        Assert.IsTrue(null != Info, "Event info is not initialized");
 
         base.PlayEvent();
 
-        if (_info.IsNewGame) // Create new game data
+        if (Info.IsNewGame)
         {
             DataManager.Instance.CreateNewGameData();
         }
-        else // Load game data
+        else
         {
-            // Load data and get starting event
-            List<GameEventInfo> activeEventInfoList = _info.IsContinueGame ? 
-                DataManager.Instance.LoadRecentData():
-                DataManager.Instance.LoadGameData(_info.SlotNum);
+            List<GameEventDTO> dtoList = Info.IsContinueGame ?
+                DataManager.Instance.LoadRecentData() :
+                DataManager.Instance.LoadGameData(Info.SlotNum);
 
-            // Apply starting event
-            if( null == activeEventInfoList) // When there is no starting event, concat UI change event to current event chain
+            if (null == dtoList)
             {
-                // TODO : GameEventList에 추가하는 방식으로 변경
-                // UIChangeEvent uiEvent = CreateInstance<UIChangeEvent>();
-                // uiEvent.changingUI = BaseUI.Control;
-                // ConcatEvent(uiEvent);
+                var uiEvent = GameEventFactory.CreateUIChangeEvent(BaseUI.Control);
+
+                if (null != EventContainer)
+                {
+                    EventContainer.AddNewEvent(uiEvent);
+                }
+                else
+                {
+                    GameEventManager.Instance.Submit(uiEvent);
+                }
             }
-            else // When there is starting event, concat it to current event chain
+            else
             {
-                //ConcatEvent(startingEvent);
+                if (null == EventContainer)
+                {
+                    foreach (GameEventDTO eventDTO in dtoList)
+                    {
+                        var gameEvent = GameEventFactory.CreateFromDTO(eventDTO);
+                        GameEventManager.Instance.Submit(gameEvent);
+                    }
+                }
+                else
+                {
+                    EventContainer.OnTerminate += () =>
+                    {
+                        foreach (GameEventDTO eventDTO in dtoList)
+                        {
+                            var gameEvent = GameEventFactory.CreateFromDTO(eventDTO);
+                            GameEventManager.Instance.Submit(gameEvent);
+                        }
+                    };
+                }
             }
         }
 
@@ -77,32 +87,14 @@ public class DataLoadEvent : GameEventBase<DataLoadEventInfo>
 
     public override void TerminateEvent()
     {
-        Assert.IsTrue(null != _info, "Event info is not set before termination");
+        Assert.IsTrue(null != Info, "Event info is not set before termination");
 
 
-        _info.DestroyInfo();
-        _info = null;
+        Info.DestroyInfo();
+        Info = null;
 
         GameEventPool<DataLoadEvent, DataLoadEventInfo>.Release(this);
 
         base.TerminateEvent();
     }
-
-
-    /****** Private Members ******/
-
-    private DataLoadEventInfo _info = null;
-
-    // // Concat starting event to current event chain
-    // private void ConcatEvent(GameEvent startingEvent)
-    // {
-    //     GameEvent lastEvent = this;
-
-    //     while (lastEvent.NextEvent != null)
-    //     {
-    //         lastEvent = lastEvent.NextEvent;
-    //     }
-
-    //     //lastEvent.NextEvent = startingEvent;
-    // }
 }

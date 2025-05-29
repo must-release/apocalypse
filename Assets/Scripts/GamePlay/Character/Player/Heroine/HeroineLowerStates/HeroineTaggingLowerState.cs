@@ -26,7 +26,7 @@ public class HeroineTaggingLowerState : HeroineLowerStateBase
         StateController.ChangeState(nextState);
     }
 
-    public override void OnExit()
+    public override void OnExit(HeroineLowerState _)
     {
         
     }

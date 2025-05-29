@@ -2,7 +2,6 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
-using UIEnums;
 using UnityEngine.AddressableAssets;
 using AssetEnums;
 using UnityEngine.ResourceManagement.AsyncOperations;

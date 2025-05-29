@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using UIEnums;
 using EventEnums;
 using System.Collections;
 using UnityEngine.Assertions;
@@ -14,18 +13,7 @@ public class ChoiceEvent : GameEventBase<ChoiceEventInfo>
     /****** Public Members ******/
 
     public override bool            ShouldBeSaved   => false;
-    public override GameEventInfo   EventInfo       => _info;
     public override GameEventType   EventType       => GameEventType.Choice;
-
-
-    public override void Initialize(ChoiceEventInfo eventInfo, IGameEvent parentEvent = null)
-    {
-        Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "Event info is not valid.");
-
-        _info       = eventInfo;
-        Status      = EventStatus.Waiting;
-        ParentEvent = parentEvent;
-    }
 
     public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
     {
@@ -39,7 +27,7 @@ public class ChoiceEvent : GameEventBase<ChoiceEventInfo>
 
     public override void PlayEvent()
     {
-        Assert.IsTrue( null != _info, "Event info is not set");
+        Assert.IsTrue( null != Info, "Event info is not set");
 
         base.PlayEvent();
         _eventCoroutine = StartCoroutine(PlayEventCoroutine());
@@ -47,7 +35,7 @@ public class ChoiceEvent : GameEventBase<ChoiceEventInfo>
 
     public override void TerminateEvent()
     {
-        Assert.IsTrue(null != _info, "Event info is not set before termination");
+        Assert.IsTrue(null != Info, "Event info is not set before termination");
 
 
         if (null != _eventCoroutine)
@@ -56,8 +44,8 @@ public class ChoiceEvent : GameEventBase<ChoiceEventInfo>
             _eventCoroutine = null;
         }
 
-        _info.DestroyInfo();
-        _info = null;
+        Info.DestroyInfo();
+        Info = null;
 
         GameEventPool<ChoiceEvent, ChoiceEventInfo>.Release(this);
 
@@ -68,15 +56,14 @@ public class ChoiceEvent : GameEventBase<ChoiceEventInfo>
     /****** Private Members ******/
 
     private Coroutine       _eventCoroutine     = null;
-    private ChoiceEventInfo _info               = null;
 
     private IEnumerator PlayEventCoroutine()
     {
-        Assert.IsTrue(null != _info, "Event info is not set");
+        Assert.IsTrue(null != Info, "Event info is not set");
 
 
         // Set choice info and switch to choice UI
-        UIController.Instance.SetChoiceInfo(_info.ChoiceList);
+        UIController.Instance.SetChoiceInfo(Info.ChoiceList);
         UIController.Instance.TurnSubUIOn(SubUI.Choice);
 
         // Wait for player to select a choice
@@ -92,7 +79,7 @@ public class ChoiceEvent : GameEventBase<ChoiceEventInfo>
 
         // Get the selected choice and process it
         string selectedChoice       = UIController.Instance.GetSelectedChoice();
-        bool shouldGenerateResponse = _info.ChoiceList == null;
+        bool shouldGenerateResponse = Info.ChoiceList == null;
 
         StoryController.Instance.ProcessSelectedChoice(selectedChoice, shouldGenerateResponse);
 

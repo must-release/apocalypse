@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UIEnums;
 using System.Collections.Generic;
 
 public class CutsceneUIController : MonoBehaviour, IUIController<BaseUI>

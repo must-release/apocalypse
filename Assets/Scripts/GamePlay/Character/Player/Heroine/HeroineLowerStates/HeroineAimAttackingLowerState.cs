@@ -7,24 +7,28 @@ public class HeroineAimAttackingLowerState : HeroineLowerStateBase
 
     public override void OnEnter()
     {
-        StateAnimator.Play(AnimatorState.HeroineLower.Attacking);
-        PlayerWeapon.Attack();
+        StateAnimator.Play(AnimatorState.HeroineLower.AimAttacking);
+        
+        postDelay = PlayerWeapon.Attack();
+        passedTime = 0f;
     }
 
     public override void OnUpdate()
     {
         var stateInfo = StateAnimator.GetCurrentAnimatorStateInfo(0);
 
-        if (1.0f <= stateInfo.normalizedTime)
+        passedTime += Time.deltaTime;
+
+        if (1.0f <= stateInfo.normalizedTime && postDelay < passedTime)
         {
             var nextState = PlayerInfo.StandingGround == null ? HeroineLowerState.Jumping : HeroineLowerState.Idle;
             StateController.ChangeState(nextState);
         }
     }
 
-    public override void OnExit()
+    public override void OnExit(HeroineLowerState _)
     {
-
+        PlayerWeapon.RotateWeaponPivot(0);
     }
 
     public override void Damaged()
@@ -36,4 +40,10 @@ public class HeroineAimAttackingLowerState : HeroineLowerStateBase
     /****** Protected Members ******/
 
     protected override string AnimationClipPath => AnimationClipAsset.HeroineLower.AimAttacking;
+
+
+    /****** Private Members ******/
+
+    private float postDelay     = 0f;
+    private float passedTime    = 0f;
 }

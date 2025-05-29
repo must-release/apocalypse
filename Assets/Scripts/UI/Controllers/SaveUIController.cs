@@ -2,8 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
-using UIEnums;
-
 
 public class SaveUIController : SaveLoadUIBase, IUIController<SubUI>
 {
@@ -54,13 +52,12 @@ public class SaveUIController : SaveLoadUIBase, IUIController<SubUI>
     private const string _SaveConfirmText   =   "Save Data?";
     private const string _SaveLabelText     =   "Save";
 
-    // Save current player data at the selected slot
     private void SaveAtSelectedSlot()
     {
-        // Close confirm panel
         TryClosingConfirmPanel();
-
-        // Generate Save Game Event Stream. Save data at the selected slot
-        GameEventManager.Instance.Submit(GameEventFactory.CreateDataSaveEvent(SelectedSlot.slotNumber));
+        
+        var dataSaveEvent = GameEventFactory.CreateDataSaveEvent(SelectedSlot.slotNumber);
+        dataSaveEvent.OnTerminate += UpdateDataSlots;
+        GameEventManager.Instance.Submit(dataSaveEvent);
     }
 }

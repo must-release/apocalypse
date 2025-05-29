@@ -1,6 +1,4 @@
 using UnityEngine;
-using System.Collections;
-using UIEnums;
 
 public class SavingUIController : MonoBehaviour, IUIController<SubUI>
 {

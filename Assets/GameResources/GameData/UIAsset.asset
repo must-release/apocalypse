@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b294393d74cd79241bc8f03db4967769, type: 3}
+  m_Name: UIAsset
+  m_EditorClassIdentifier: 
+  BaseUIAssets:
+  - BaseUIType: 0
+    BaseUIPrefab: {fileID: 6537404814778997045, guid: 349688599337e44cbabb202fa4389530, type: 3}
+  - BaseUIType: 1
+    BaseUIPrefab: {fileID: 2167880898992625747, guid: 6749bdd00e01d4e5d9851790aee15113, type: 3}
+  - BaseUIType: 2
+    BaseUIPrefab: {fileID: 7050243958051337017, guid: 320fc7da5c5e44c31904488402bae1b5, type: 3}
+  - BaseUIType: 3
+    BaseUIPrefab: {fileID: 6491722798794624084, guid: e6e7d997c704443d498954646c80d46c, type: 3}
+  - BaseUIType: 4
+    BaseUIPrefab: {fileID: 2974617646221253443, guid: 2ac8dccfde85541a9aa02c48d321c6b9, type: 3}
+  - BaseUIType: 5
+    BaseUIPrefab: {fileID: 8509419201965254650, guid: 22736069c367245d49f3b556febaf998, type: 3}
+  - BaseUIType: 6
+    BaseUIPrefab: {fileID: 1133341190455217051, guid: 18a309f9c56a64b24974c149c771cd4a, type: 3}
+  SubUIAssets:
+  - SubUIType: 1
+    SubUIPrefab: {fileID: 4610294886931917369, guid: b8d8727eb096e428abf204562586e3b6, type: 3}
+  - SubUIType: 2
+    SubUIPrefab: {fileID: 8226638444233040373, guid: f420cb082c1da4a5a96fdc1db78ee2a5, type: 3}
+  - SubUIType: 3
+    SubUIPrefab: {fileID: 2224329957305955082, guid: e524141c59110c849aecae0cf40e0a54, type: 3}
+  - SubUIType: 4
+    SubUIPrefab: {fileID: 2224329957305955082, guid: a50f8580b7ba1443ca0f0e6156d2b973, type: 3}
+  - SubUIType: 5
+    SubUIPrefab: {fileID: 5933391303787302307, guid: b13d9a74265374a0399a155c994cbd40, type: 3}
+  - SubUIType: 6
+    SubUIPrefab: {fileID: 1255220752906931467, guid: 951932497f8af4384bf7d08dab86a7cd, type: 3}
+  - SubUIType: 7
+    SubUIPrefab: {fileID: 4916531501952696058, guid: 50933c0cf80944f1fa9fcef32662f398, type: 3}
