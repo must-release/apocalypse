@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using EventEnums;
 using UnityEngine.Assertions;
 using System;
 
@@ -27,6 +26,7 @@ public class ChoiceEventInfo : GameEventInfo
     {
         var clone = Instantiate(this);
         clone._choiceList = new List<string>(_choiceList);
+        clone.IsRuntimeInstance = true;
 
         return clone;
     }

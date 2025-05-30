@@ -103,9 +103,8 @@ public class DataManager : MonoBehaviour, IAsyncLoadObject
     private Dictionary<Stage, Texture2D>    _stageSlotImage    = new();
     private JsonSerializerSettings          _jsonSettings      = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
 
-    private UserData    _currentData    = null;
-    private bool        _isLoaded       = false;
-
+    private UserData    _currentData;
+    private bool        _isLoaded;
     private void Awake()
     {
         if (Instance == null)

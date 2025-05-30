@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using EventEnums;
 using UnityEngine.Assertions;
 using System;
 
@@ -23,7 +22,10 @@ public class SceneActivateEventInfo : GameEventInfo
 
     public override GameEventInfo Clone()
     {
-        return Instantiate(this);
+        var clone = Instantiate(this);
+        clone.IsRuntimeInstance = true;
+
+        return clone;
     }
 
     public override GameEventDTO ToDTO()

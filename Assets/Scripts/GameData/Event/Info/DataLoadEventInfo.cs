@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using EventEnums;
 using UnityEngine.Assertions;
 using System;
 
@@ -28,7 +27,10 @@ public class DataLoadEventInfo : GameEventInfo
 
     public override GameEventInfo Clone()
     {
-        return Instantiate(this);
+        var clone = Instantiate(this);
+        clone.IsRuntimeInstance = true;
+
+        return clone;
     }
 
     /****** Protected Members ******/

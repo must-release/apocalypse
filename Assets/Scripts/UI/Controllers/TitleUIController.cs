@@ -3,12 +3,13 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
-using AssetEnums;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class TitleUIController : MonoBehaviour, IUIController<BaseUI>, IAsyncLoadObject
+public class TitleUIController : MonoBehaviour, IUIController<BaseUI>
 {
     /****** Public Members ******/
+
+    public BaseUI UIType => BaseUI.Title;
 
     public void EnterUI()
 	{
@@ -25,20 +26,13 @@ public class TitleUIController : MonoBehaviour, IUIController<BaseUI>, IAsyncLoa
         gameObject.SetActive(false);
 	}
 
-    public void Cancel() { return; }
-
-    public BaseUI UIType => BaseUI.Title;
-
-    public bool IsLoaded => _isLoaded;
+    public void Cancel() { }
 
 
     /****** Private Members ******/
     
 	private const string    _ButtonsName            = "Buttons";
 	private List<Button>    _buttonList             = new List<Button>();
-    private GameEventInfo   _continueGameEventInfo  = null;
-    private GameEventInfo   _newGameEventInfo       = null;
-    private bool            _isLoaded               = false;
 
     private void Awake()
     {
@@ -54,59 +48,23 @@ public class TitleUIController : MonoBehaviour, IUIController<BaseUI>, IAsyncLoa
         _buttonList[3].onClick.AddListener(OnPreferenceClick);
     }
 
-    private void Start()
-    {
-        StartCoroutine(AsyncLoadGameEventInfos());
-    }
-
-    private IEnumerator AsyncLoadGameEventInfos()
-    {
-        var continueGameEvent = Addressables.LoadAssetAsync<GameEventInfo>(SequentialEventInfoAsset.Common.ContinueGame);
-        yield return continueGameEvent;
-        if (continueGameEvent.Status == AsyncOperationStatus.Succeeded)
-        {
-            _continueGameEventInfo = continueGameEvent.Result.Clone();
-        }
-        else
-        {
-            Debug.LogError("Failed to load ContinueGame event info.");
-        }
-
-        var newGameEvent = Addressables.LoadAssetAsync<GameEventInfo>(SequentialEventInfoAsset.Common.NewGame);
-        yield return newGameEvent;
-        if (newGameEvent.Status == AsyncOperationStatus.Succeeded)
-        {
-            _newGameEventInfo = newGameEvent.Result.Clone();
-        }
-        else
-        {
-            Debug.LogError("Failed to load NewGame event info.");
-        }
-
-        _isLoaded = true;   
-    }
-
 	private void OnContinueGameClick()
 	{
-        // Generate Load game event stream, but load most recent saved data
-        GameEventManager.Instance.Submit(GameEventFactory.CreateFromInfo(_continueGameEventInfo));
+        GameEventManager.Instance.Submit(GameEventFactory.CreateCommonEvent(CommonEventType.Continue));
 	}
 
 	private void OnNewGameClick()
 	{
-        // Generate new game event stream
-        GameEventManager.Instance.Submit(GameEventFactory.CreateFromInfo(_newGameEventInfo));
+        GameEventManager.Instance.Submit(GameEventFactory.CreateCommonEvent(CommonEventType.NewGame));
     }
 
     private void OnLoadGameClick()
     {
-        // Turn Load UI On
         UIController.Instance.TurnSubUIOn(SubUI.Load);
     }
 
 	private void OnPreferenceClick()
 	{
-        // Turn Preference UI On
         UIController.Instance.TurnSubUIOn(SubUI.Preference);
     }
 }

@@ -44,7 +44,7 @@ public class SceneController : MonoBehaviour
 
     /****** Private Members ******/
 
-    private IScene _currentScene = null;
+    private IScene _currentScene;
 
     private void Awake()
     {

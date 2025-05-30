@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using EventEnums;
 using UnityEngine.Assertions;
 using System;
 using Unity.VisualScripting;
@@ -32,6 +31,7 @@ public class SequentialEventInfo : GameEventInfo
     public override GameEventInfo Clone()
     {
         var clone = Instantiate(this);
+        clone.IsRuntimeInstance = true;
         clone._eventInfos = new List<GameEventInfo>();
         foreach(var info in _eventInfos)
         {

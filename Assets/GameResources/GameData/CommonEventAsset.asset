@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ce43cc51ac44569822e73bd7325523, type: 3}
+  m_Name: CommonEventAsset
+  m_EditorClassIdentifier: 
+  CommonEventAssets:
+  - commonEventType: 0
+    CommonEvent: {fileID: 11400000, guid: 5972bd2c1a22b4c449917fe3627e693e, type: 2}
+  - commonEventType: 1
+    CommonEvent: {fileID: 11400000, guid: cf972ddc543a06347a540e66108cb234, type: 2}
+  - commonEventType: 2
+    CommonEvent: {fileID: 11400000, guid: 56abb2212a431453ba8ffb279164e657, type: 2}
+  - commonEventType: 3
+    CommonEvent: {fileID: 11400000, guid: 42fe051c02dd20243b494e2923c482b0, type: 2}
+  - commonEventType: 4
+    CommonEvent: {fileID: 11400000, guid: 1952a00e2df54c849b076402ee8de4db, type: 2}

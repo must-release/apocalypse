@@ -1,7 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using EventEnums;
-
 
 [Serializable]
 public abstract class GameEventInfo : ScriptableObject

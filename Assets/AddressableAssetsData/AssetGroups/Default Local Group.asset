@@ -25,11 +25,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1952a00e2df54c849b076402ee8de4db
-    m_Address: Common/GameOverEventInfo
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 21d804a5df5e78540b501e41c88a45d7
     m_Address: AnimationClip/Heroine/Lower/AimAttacking
     m_ReadOnly: 0
@@ -50,18 +45,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2746eb0f1398db84b8a25ef3fb4343c5
-    m_Address: Common/GameStartEventInfo
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 310a6e0dc1c000b46b051f8b8971779f
     m_Address: AnimationClip/Heroine/Lower/ClimbingUp
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 42fe051c02dd20243b494e2923c482b0
-    m_Address: Common/ReturnToTitleEventInfo
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -85,11 +70,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 56abb2212a431453ba8ffb279164e657
-    m_Address: Common/NewGameEventInfo
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 57a79a535975e95468b6f57e9ef9a17a
     m_Address: GameData/EffectAsset
     m_ReadOnly: 0
@@ -102,6 +82,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 60e10db1fffeb2a48bf48a68f01b4c2f
     m_Address: AnimationClip/Heroine/Upper/TopAttacking
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6345950feffdd4a00a99ba55312b5d4d
+    m_Address: GameData/CommonEventAsset
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -167,11 +152,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c6e648afd644f81419dd6489b2529834
     m_Address: AnimationClip/Heroine/Upper/Disabled
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: cf972ddc543a06347a540e66108cb234
-    m_Address: Common/ContinueGameEventInfo
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

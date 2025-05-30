@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using AssetEnums;
 using UnityEngine.EventSystems;
 using NUnit.Framework;
 
@@ -90,13 +89,13 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
 
     public void GetCurrentUI(out BaseUI baseUI, out SubUI subUI)
     {
-        baseUI = UIModel.Instance.CurrentBaseUI;
-        subUI = UIModel.Instance.CurrentSubUI;
+        baseUI  = UIModel.Instance.CurrentBaseUI;
+        subUI   = UIModel.Instance.CurrentSubUI;
     }
 
     public void SetChoiceInfo(List<string> choiceList)
     {
-        UIModel.Instance.ChoiceList = choiceList;
+        UIModel.Instance.ChoiceList     = choiceList;
         UIModel.Instance.SelectedChoice = null;
     }
 
@@ -106,15 +105,15 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
 
     /***** Private Members ******/
 
-    [SerializeField] private Transform _baseUITransform = null;
-    [SerializeField] private Transform _subUITransform  = null;
+    [SerializeField] private Transform _baseUITransform;
+    [SerializeField] private Transform _subUITransform;
 
     private Dictionary<BaseUI, IUIController>   _baseUIDictionary   = new();
     private Dictionary<SubUI, IUIController>    _subUIDictionary    = new();
 
-    private IUIController   _curUIController        = null;
-    private bool            _isStoryPanelClicked    = false;
-    private bool            _isLoaded               = false;
+    private IUIController   _curUIController;
+    private bool            _isStoryPanelClicked;
+    private bool            _isLoaded;
 
     private void Awake()
     {

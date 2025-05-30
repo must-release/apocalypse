@@ -1,5 +1,4 @@
 using ScreenEffectEnums;
-using EventEnums;
 using UnityEngine;
 using UnityEngine.Assertions;
 using System;
@@ -26,7 +25,10 @@ public class ScreenEffectEventInfo : GameEventInfo
 
     public override GameEventInfo Clone()
     {
-        return Instantiate(this);
+        var clone = Instantiate(this);
+        clone.IsRuntimeInstance = true;
+
+        return clone;
     }
 
     public override GameEventDTO ToDTO()

@@ -1,5 +1,4 @@
-﻿using EventEnums;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 [JsonObject(MemberSerialization.OptOut)]
 public class GameEventDTO

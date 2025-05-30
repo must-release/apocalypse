@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: ReturnToTitleEventInfo
   m_EditorClassIdentifier: 
   _eventType: 11
-  _isInitialized: 0
-  _eventInfos: []
+  _isInitialized: 1
+  _eventInfos:
+  - {fileID: 11400000, guid: 2c53c8ca1a64e4f518bf9d15fbbc800f, type: 2}
+  - {fileID: 11400000, guid: 0f446e03c8eab43458fd1b7904b70088, type: 2}
+  - {fileID: 11400000, guid: 610ae3b154b5d480f80416c171073888, type: 2}
   _startIndex: 0
