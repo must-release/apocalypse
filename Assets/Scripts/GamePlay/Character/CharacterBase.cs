@@ -7,7 +7,7 @@ public abstract class CharacterBase : MonoBehaviour, ICharacter, IMotionControll
 {
     /****** Public Members ******/
 
-    public FacingDirection FacingDirection 
+    public FacingDirection  CurrentFacingDirection 
     { 
         get 
         { 
@@ -15,10 +15,10 @@ public abstract class CharacterBase : MonoBehaviour, ICharacter, IMotionControll
             else return FacingDirection.Left; 
         } 
     }
-    public ControlInfo  CurrentControlInfo  { get; protected set; } = null;
-    public GameObject   StandingGround      { get; protected set; } = null;
-    public DamageInfo   RecentDamagedInfo   { get; protected set; } = null;
-    public Vector2      CurrentVelocity     
+    public ControlInfo      CurrentControlInfo  { get; protected set; }
+    public GameObject       StandingGround      { get; protected set; }
+    public DamageInfo       RecentDamagedInfo   { get; protected set; }
+    public Vector2          CurrentVelocity     
     { 
         get 
         { 
@@ -26,13 +26,14 @@ public abstract class CharacterBase : MonoBehaviour, ICharacter, IMotionControll
             return _rigidbody.linearVelocity; 
         } 
     }
-    public Vector2      CurrentPosition     { get { return transform.position; } }
-    public float        CharacterHeight     { get; protected set; } = -1;
-    public float        MovingSpeed         { get; protected set; } = -1;
-    public float        JumpingSpeed        { get; protected set; } = -1;
-    public float        Gravity             { get; protected set; } = -1;
-    public int          MaxHitPoint         { get; protected set; } = -1;
-    public int          CurrentHitPoint     { get; protected set; } = -1;
+    public Vector2          CurrentPosition     { get { return transform.position; } }
+
+    public virtual float    MovingSpeed         { get; protected set; }
+    public virtual float    JumpingSpeed        { get; protected set; }
+    public virtual float    Gravity             { get; protected set; }
+    public virtual int      MaxHitPoint         { get; protected set; }
+    public int              CurrentHitPoint     { get; protected set; }
+    public float            CharacterHeight     { get; protected set; }
 
     public abstract bool IsPlayer { get; }
     public abstract void ControlCharacter(ControlInfo controlInfo);
@@ -109,9 +110,9 @@ public abstract class CharacterBase : MonoBehaviour, ICharacter, IMotionControll
     public void SetFacingDirection(FacingDirection direction)
     {
         if (direction == FacingDirection.Right)
-            transform.localScale = new Vector3(1, 1, 1);
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
         else if (direction == FacingDirection.Left)
-            transform.localScale = new Vector3(-1, 1, 1);
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
     }
 
 
@@ -159,7 +160,7 @@ public abstract class CharacterBase : MonoBehaviour, ICharacter, IMotionControll
 
     private List<InteractionObject> _interactableObjects   = new List<InteractionObject>();
     private List<InteractionObject> _interactingObjects    = new List<InteractionObject>();
-    private Rigidbody2D _rigidbody = null;
+    private Rigidbody2D _rigidbody;
 
     private void OnCollisionExit2D(Collision2D collision)
     {

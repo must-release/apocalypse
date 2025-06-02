@@ -53,7 +53,7 @@ public class HeroineJumpingLowerState : HeroineLowerStateBase
 
         // set direction
         FacingDirection direction = move < 0 ? FacingDirection.Left : FacingDirection.Right;
-        if (direction != PlayerInfo.FacingDirection)
+        if (direction != PlayerInfo.CurrentFacingDirection)
         {
             PlayerMotion.SetFacingDirection(direction);
         }

@@ -67,7 +67,7 @@ public class HeroAimingUpperState : PlayerUpperStateBase<HeroUpperState>
     private void SetDirection()
     {
         var direction = PlayerInfo.CurrentPosition.x < _aimingPosition.x ? FacingDirection.Right : FacingDirection.Left;
-        if (direction != PlayerInfo.FacingDirection)
+        if (direction != PlayerInfo.CurrentFacingDirection)
         {
             PlayerMotion.SetFacingDirection(direction);
         }

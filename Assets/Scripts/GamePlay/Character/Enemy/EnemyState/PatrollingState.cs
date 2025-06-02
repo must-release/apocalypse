@@ -12,7 +12,7 @@ public class PatrollingState : EnemyStateBase
     public override void OnEnter()
     {
         // Set initial info for patrolling
-        enemyController.SetPatrolInfo();
+        enemyController.StartPatrol();
     }
 
     public override void OnUpdate()

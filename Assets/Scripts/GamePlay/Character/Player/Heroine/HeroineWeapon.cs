@@ -53,6 +53,6 @@ public class HeroineWeapon : PlayerWeaponBase
 
     /****** Private Members ******/
 
-    private float _fireSpeed    = 0f;
-    private float _gravityScale = 0f;
+    private float _fireSpeed;
+    private float _gravityScale;
 }

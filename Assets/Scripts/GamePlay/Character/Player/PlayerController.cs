@@ -128,9 +128,9 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
 
     private Dictionary<PlayerType, IPlayerAvatar> _avatarDictionary;
 
-    private Rigidbody2D _playerRigid    = null;
-    private bool _isInitilized          = false;
-    private bool _isDamageImmune        = false;
+    private Rigidbody2D _playerRigid;
+    private bool _isInitilized;
+    private bool _isDamageImmune;
 
     private void Update()
     {

@@ -43,26 +43,21 @@ public class NormalInfectee : EnemyController
         attackRange = 1.5f;
     }
 
-    protected override void StartEnemy()
+    protected override void Start()
     {
+        base.Start();
+
         MovingSpeed     = 3f;
         CurrentHitPoint = MAX_HIT_POINT;
-
-        patrolLeftEnd   = 0;
-        patrolRightEnd  = 0;
-        wait            = false;
-        waitingTime     = 0;
-        attacked        = false;
-        attackingTime   = 0;
     }
 
     // Set initial info for patrolling
-    public override void SetPatrolInfo()
+    public override void StartPatrol()
     {
         patrolRightEnd  = transform.position.x + PATROL_RANGE_MAX / 2;
         patrolLeftEnd   = transform.position.x - PATROL_RANGE_MAX / 2;
-        waitingTime     = 0;
-        wait            = false;
+        waitingTime = 0;
+        wait = false;
     }
 
     // Called every frame when patrolling
@@ -87,20 +82,25 @@ public class NormalInfectee : EnemyController
         PatrolDirection(transform.localScale.x > 0);
     }
 
+    public override void StartChasing()
+    {
+        
+    }
+
     // Called every frame when chasing
-    public override void ChasePlayer()
+    public override void Chase()
     {
         // Look at the player
         int direction = ChasingTarget.position.x > transform.position.x ? 1: -1;
         if(transform.localScale.x * direction < 0) Flip();
 
-        if (CanMoveAhead() && math.abs(ChasingTarget.position.x - transform.position.x) > 0.1f) 
+        if (CanMoveAhead && math.abs(ChasingTarget.position.x - transform.position.x) > 0.1f) 
             enemyRigid.linearVelocity = new Vector2(direction * MovingSpeed, enemyRigid.linearVelocity.y);
         else
             enemyRigid.linearVelocity = Vector2.zero;
     }
 
-    public override void SetAttackInfo()
+    public override void StartAttack()
     {
         waitingTime     = 0;
         wait            = true;
@@ -142,7 +142,7 @@ public class NormalInfectee : EnemyController
     private void PatrolDirection(bool isPatrollingRight)
     {
         // There is no ground ahead, or there is obstacle ahead
-        if (!CanMoveAhead())
+        if (false == CanMoveAhead)
         {
             // Update patrol end
             if (isPatrollingRight) patrolRightEnd = transform.position.x;

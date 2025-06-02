@@ -12,7 +12,7 @@ public class AttackingState : EnemyStateBase
 
     public override void OnEnter()
     {
-        enemyController.SetAttackInfo();
+        enemyController.StartAttack();
     }
 
     public override void OnUpdate()
@@ -26,5 +26,5 @@ public class AttackingState : EnemyStateBase
 
     }
 
-    public override void DetectedPlayer() { return; }
+    public override void DetectedPlayer() { }
 }

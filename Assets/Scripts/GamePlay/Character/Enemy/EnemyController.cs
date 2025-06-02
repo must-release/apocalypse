@@ -6,10 +6,51 @@ using UnityEngine;
 
 public abstract class EnemyController : CharacterBase, IAsyncLoadObject
 {
-    public GameObject DetectedPlayer { get; set; }
-    public Transform ChasingTarget { get; set; }
+    /****** Public Members ******/
+
+    public GameObject   DetectedPlayer { get; set; }
+    public Transform    ChasingTarget { get; set; }
     public override bool IsPlayer => false;
-    public bool IsLoaded => isLoaded;
+    public bool IsLoaded => _isLoaded;
+
+    public void ChangeState(EnemyState state)
+    {
+        currentState.OnExit(state);
+        currentState = enemyStateDictionary[state];
+        currentState.OnEnter();
+    }
+
+    public void SetDefaultDamageArea(bool value)
+    {
+        defalutDamageArea.gameObject.SetActive(value);
+    }
+
+    public override void OnDamaged(DamageInfo damageInfo)
+    {
+        RecentDamagedInfo = damageInfo;
+        CurrentHitPoint -= RecentDamagedInfo.damageValue;
+
+        currentState.OnDamaged();
+    }
+
+    public bool CheckPlayerEnemyDistance()
+    {
+        if (null == DetectedPlayer)
+            return false;
+
+        return (transform.position - DetectedPlayer.transform.position).magnitude < attackRange;
+    }
+
+    public abstract void StartPatrol();
+    public abstract void Patrol();
+    public abstract void StartChasing();
+    public abstract void Chase();
+    public abstract void StartAttack();
+    public abstract bool Attack(); // return if attack is over
+
+
+    /****** Protected Members ******/
+    protected bool CanMoveAhead => terrainChecker.CanMoveAhead();
 
     // Common variables
     protected Rigidbody2D enemyRigid;
@@ -37,16 +78,6 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
     protected Vector2 rangeOffset;
     protected float attackRange;
 
-    private EnemyStateBase currentState;
-    private Dictionary<EnemyState, EnemyStateBase> enemyStateDictionary;
-    private TerrainChecker terrainChecker;
-    private PlayerDetector playerDetector;
-    private DamageArea defalutDamageArea;
-    private bool isLoaded = false;
-
-
-
-    /****** Initailizing Enemy Character ******/
 
     // Awake ememy character. Activated on Awake()
     protected override void Awake() 
@@ -62,18 +93,34 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
         StartCoroutine(AsyncEnemyInitialze());
     }
 
-    // Start enemy character. Activated on Start().
-    protected override void Start() 
+    protected virtual void Update()
     {
-        base.Start();
+        // Wait for async loading
+        if (!_isLoaded) return;
 
-        StartEnemy();
+        if (DetectedPlayer = playerDetector.DetectPlayer())
+            currentState.DetectedPlayer();
+
+        currentState.OnUpdate();
     }
-    protected virtual void StartEnemy(){ }
+
+    protected abstract void InitializeTerrainChecker();
+    protected abstract void InitializePlayerDetector();
+    protected abstract void InitializeDamageAndWeapon();
+
+
+    /****** Private Memvers ******/
+
+    private Dictionary<EnemyState, EnemyStateBase> enemyStateDictionary;
+    private EnemyStateBase currentState;
+    private TerrainChecker terrainChecker;
+    private PlayerDetector playerDetector;
+    private DamageArea defalutDamageArea;
+    private bool _isLoaded;
 
     private void OnEnable() 
     {
-        if( isLoaded )
+        if( _isLoaded )
         {
             // Start current state when enabled
             currentState.OnEnter();
@@ -88,7 +135,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
         yield return LoadWeaponsAndDots();
         SetDamageArea();
         
-        isLoaded = true;
+        _isLoaded = true;
     }
 
     // Get enemyState prefab and set state components 
@@ -167,64 +214,4 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
         defalutDamageArea = dmgAreaObj.AddComponent<DamageArea>();
         defalutDamageArea.SetDamageArea(transform.GetComponent<Collider2D>(), defaultDamageInfo, true);
     }
-
-
-    /****** Operate Enemy Character ******/
-
-    // Update enemy character every frame
-    private void Update() 
-    {   
-        // Wait for async loading
-        if(!isLoaded) return; 
-
-        if( DetectedPlayer = playerDetector.DetectPlayer() )
-            currentState.DetectedPlayer();
-
-        currentState.OnUpdate();
-
-        UpdateEnemy(); 
-    }
-    protected virtual void UpdateEnemy() { }
-
-    // Check if enemy can go ahead
-    protected bool CanMoveAhead() { return terrainChecker.CanMoveAhead(); }
-
-    public void ChangeState(EnemyState state)
-    {
-        currentState.OnExit(state);
-        currentState = enemyStateDictionary[state];
-        currentState.OnEnter();
-    }
-
-    public void SetDefaultDamageArea(bool value)
-    {
-        defalutDamageArea.gameObject.SetActive(value);
-    }
-
-    public override void OnDamaged(DamageInfo damageInfo)
-    {
-        RecentDamagedInfo = damageInfo;
-        CurrentHitPoint -= RecentDamagedInfo.damageValue;
-
-        currentState.OnDamaged();
-    }
-
-    public bool CheckPlayerEnemyDistance()
-    {
-        if ( null == DetectedPlayer )
-            return false;
-            
-        return (transform.position - DetectedPlayer.transform.position).magnitude < attackRange;
-    }
-
-    /****** Abstract Functions ******/
-    public abstract void SetPatrolInfo();
-    public abstract void Patrol();
-    public abstract void ChasePlayer();
-    public abstract void SetAttackInfo();
-    public abstract bool Attack(); // return if attack is over
-    protected abstract void InitializeTerrainChecker();
-    protected abstract void InitializePlayerDetector();
-    protected abstract void InitializeDamageAndWeapon();
-
 }

@@ -22,13 +22,15 @@ public class ChasingState : EnemyStateBase
         if ( null == enemyController.ChasingTarget )
             Debug.LogError("There's nobody to chase!");
 
+        enemyController.StartChasing();
+
         forgettingTime = 0;
     }
 
     public override void OnUpdate()
     {
         // Chase detected player
-        enemyController.ChasePlayer();
+        enemyController.Chase();
 
         if ( enemyController.CheckPlayerEnemyDistance() )
         {

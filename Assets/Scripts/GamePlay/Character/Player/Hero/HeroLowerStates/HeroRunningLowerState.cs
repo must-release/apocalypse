@@ -31,7 +31,7 @@ public class HeroRunningLowerState : PlayerLowerState<HeroLowerState>
 
         // set direction
         FacingDirection direction = move < 0 ? FacingDirection.Left : FacingDirection.Right;
-        if (direction != PlayerInfo.FacingDirection)
+        if (direction != PlayerInfo.CurrentFacingDirection)
         {
             PlayerMotion.SetFacingDirection(direction);
         }

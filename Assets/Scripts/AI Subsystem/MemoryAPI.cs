@@ -65,7 +65,7 @@ public class MemoryAPI : MonoBehaviour
         webRequest.downloadHandler = new DownloadHandlerBuffer();
         webRequest.SetRequestHeader("Content-Type", "application/json");
 
-        // Send the request and wait for a response
+        // Send the request and _isWaiting for a response
         yield return webRequest.SendWebRequest();
 
         if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
@@ -118,7 +118,7 @@ public class MemoryAPI : MonoBehaviour
         webRequest.downloadHandler = new DownloadHandlerBuffer();
         webRequest.SetRequestHeader("Content-Type", "application/json");
 
-        // Send the request and wait for a response
+        // Send the request and _isWaiting for a response
         yield return webRequest.SendWebRequest();
 
         if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
@@ -168,7 +168,7 @@ public class MemoryAPI : MonoBehaviour
         webRequest.downloadHandler = new DownloadHandlerBuffer();
         webRequest.SetRequestHeader("Content-Type", "application/json");
 
-        // Send the request and wait for a response
+        // Send the request and _isWaiting for a response
         yield return webRequest.SendWebRequest();
 
         if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
@@ -205,7 +205,7 @@ public class MemoryAPI : MonoBehaviour
         webRequest.downloadHandler = new DownloadHandlerBuffer();
         webRequest.SetRequestHeader("Content-Type", "application/json");
 
-        // Send the request and wait for a response
+        // Send the request and _isWaiting for a response
         yield return webRequest.SendWebRequest();
 
         if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
