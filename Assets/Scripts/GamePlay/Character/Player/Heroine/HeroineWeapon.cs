@@ -39,17 +39,15 @@ public class HeroineWeapon : PlayerWeaponBase
 
     /****** Protected Members ******/
 
-    protected override IEnumerator Start()
+    // TODO: Must not get example weapon from PoolHandler
+    protected override void SetWeaponInfo()
     {
-        yield return base.Start();
-
-        Assert.IsTrue(CurrentWeapon is LongRangeWeaponBase, "Weapon of the Heroine must be a long range weapon");
-
-        var heroineWeapon   = CurrentWeapon as LongRangeWeaponBase;
+        var heroineWeapon   = WeaponPool.Get() as LongRangeWeaponBase;
         _fireSpeed          = heroineWeapon.FireSpeed;
         _gravityScale       = heroineWeapon.GravityScale;
+        
+        WeaponPool.Return(heroineWeapon);
     }
-
 
     /****** Private Members ******/
 

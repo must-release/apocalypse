@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
+using NUnit.Framework;
 
 public abstract class EnemyController : CharacterBase, IAsyncLoadObject
 {
@@ -52,7 +54,16 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
 
 
     /****** Protected Members ******/
+
     protected bool CanMoveAhead => _terrainChecker.CanMoveAhead();
+    protected WeaponPoolHandler WeaponPool
+    {
+        get
+        {
+            Assert.IsTrue(null != _weaponPoolHandler, $"{weaponType} weapon is not loaded");
+            return _weaponPoolHandler;
+        }
+    }
 
     // Common variables
     protected Rigidbody2D enemyRigid;
@@ -61,12 +72,8 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
     // Damage & Weapon Info
     protected DamageInfo defaultDamageInfo;
     protected WeaponType weaponType;
-    protected Queue<IWeapon> weapons;
-    protected List<AimingDot> aimingDots;
     protected Vector3 weaponOffset;
     protected bool useShortRangeWeapon;
-    protected int weaponCount;
-    protected int aimingDotsCount;
 
 
     // Terrain checking params
@@ -92,8 +99,8 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
         InitializeTerrainChecker();
         InitializePlayerDetector();
         InitializeDamageAndWeapon();
-        
-        StartCoroutine(AsyncEnemyInitialze());
+
+        AsyncEnemyInitialze().Forget();
     }
 
     protected virtual void Update()
@@ -121,11 +128,12 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
 
     private Dictionary<EnemyState, EnemyStateBase> enemyStateDictionary;
 
-    private EnemyStateBase  _currentState;
-    private TerrainChecker  _terrainChecker;
-    private PlayerDetector  _playerDetector;
-    private DamageArea      _defalutDamageArea;
-    private Collider2D      _enemyCollider;
+    private EnemyStateBase      _currentState;
+    private WeaponPoolHandler   _weaponPoolHandler;
+    private TerrainChecker      _terrainChecker;
+    private PlayerDetector      _playerDetector;
+    private DamageArea          _defalutDamageArea;
+    private Collider2D          _enemyCollider;
 
     private bool _isLoaded;
 
@@ -138,12 +146,12 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
         }
     }
 
-    IEnumerator AsyncEnemyInitialze()
+    private async UniTask AsyncEnemyInitialze()
     {
-        yield return SetStateDictionary();
-        if(checkTerrain) yield return SetTerrainChecker();
-        yield return SetPlayerDetector();
-        yield return LoadWeapons();
+        await SetStateDictionary().ToUniTask();
+        if (checkTerrain) await SetTerrainChecker().ToUniTask();
+        await SetPlayerDetector().ToUniTask();
+        await LoadWeapons();
         SetDamageArea();
         
         _isLoaded = true;
@@ -208,10 +216,10 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
         }
     }
 
-    IEnumerator LoadWeapons()
+    private async UniTask LoadWeapons()
     {
         if ( WeaponType.WeaponTypeCount != weaponType )
-            yield return WeaponFactory.Instance.AsyncPoolWeapons(gameObject, weaponType, weapons, weaponCount, useShortRangeWeapon);
+            _weaponPoolHandler = await WeaponFactory.Instance.AsyncLoadWeaponPoolHandler(weaponType);
     }
 
     // Create default damage area child object

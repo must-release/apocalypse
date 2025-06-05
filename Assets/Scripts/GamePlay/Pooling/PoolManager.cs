@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.Assertions;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 [DisallowMultipleComponent]
 public class PoolManager : MonoBehaviour, IGamePlayInitializer
@@ -13,12 +14,12 @@ public class PoolManager : MonoBehaviour, IGamePlayInitializer
 
     public bool IsInitialized { get; private set; }
 
-    public IEnumerator AsyncRegisterPool<TEnum, TPoolObject>(TEnum id, GameObject prefab, int preloadCount, string poolContainerPath)
+    public IEnumerator AsyncRegisterPool<TEnum, TPoolObject>(TEnum id, AssetReferenceGameObject prefab, int preloadCount, string poolContainerPath)
         where TEnum : struct, Enum
         where TPoolObject : IPoolable
     {
         var pools = PoolHolder<TEnum, TPoolObject>.Pools;
-        Assert.IsTrue(false == pools.ContainsKey(id), $"Pool for enum '{id.ToString()}' is already registered.");
+        Assert.IsTrue(false == pools.ContainsKey(id), $"Pool for enum '{id}' is already registered.");
 
 
         if (false == _poolConainterObjects.ContainsKey(poolContainerPath))

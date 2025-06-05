@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -16,10 +18,10 @@ public abstract class PlayerWeaponBase : MonoBehaviour, IAsyncLoadObject
 
     public float Attack()
     {
-        IWeapon weapon = _pooledWeapons.Dequeue();
+        IWeapon weapon = WeaponPool.Get();
         weapon.SetLocalPosition(_shootingPoint.position);
         weapon.Attack((_shootingPoint.position - _weaponPivot.position).normalized);
-        _pooledWeapons.Enqueue(weapon);
+        weapon.OnAfterWeaponUse += () => { WeaponPool.Return(weapon); };
 
         return weapon.PostDelay;
     }
@@ -57,19 +59,21 @@ public abstract class PlayerWeaponBase : MonoBehaviour, IAsyncLoadObject
             return _pooledAimingDots;
         }
     }
-    protected IWeapon CurrentWeapon
+    protected WeaponPoolHandler WeaponPool
     {
         get
         {
-            Assert.IsTrue(0 < _pooledWeapons.Count, $"{PlayerWeaponType} is not pooled");
-            return _pooledWeapons.Peek();
+            Assert.IsTrue(null != _weaponPoolHandler, $"{PlayerWeaponType} Weapon is not pooled.");
+            return _weaponPoolHandler;
         }
     }
 
-    protected virtual IEnumerator Start()
+    protected virtual void Start()
     {
-        yield return LoadWeaponsAndDots();
+        LoadWeaponsAndDots().Forget();
     }
+
+    protected abstract void SetWeaponInfo();
 
     /****** Private Members ******/
 
@@ -81,6 +85,7 @@ public abstract class PlayerWeaponBase : MonoBehaviour, IAsyncLoadObject
 
     private Queue<IWeapon>      _pooledWeapons      = new Queue<IWeapon>();
     private List<AimingDot>     _pooledAimingDots   = new List<AimingDot>();
+    private WeaponPoolHandler   _weaponPoolHandler;
 
     private Transform _aimingDotsTransform;
 
@@ -92,14 +97,16 @@ public abstract class PlayerWeaponBase : MonoBehaviour, IAsyncLoadObject
         Assert.IsTrue(_weaponPivot != null, "Weapon pivot is not assigned.");
         Assert.IsTrue(_shootingPoint != null, "Shooting point is not assigned.");
 
-        _aimingDotsTransform = (new GameObject("PooledAimingDots")).transform;
+        _aimingDotsTransform = new GameObject("PooledAimingDots").transform;
         _aimingDotsTransform.SetParent(transform, false);
     }
 
-    private IEnumerator LoadWeaponsAndDots()
+    private async UniTask LoadWeaponsAndDots()
     {
-        yield return WeaponFactory.Instance.AsyncPoolWeapons(_playerObject, PlayerWeaponType, _pooledWeapons, _WeaponPoolCount);
-        yield return WeaponFactory.Instance.AsyncPoolAimingDots(PlayerWeaponType, _pooledAimingDots, _aimingDotsTransform);
+        _weaponPoolHandler = await WeaponFactory.Instance.AsyncLoadWeaponPoolHandler(PlayerWeaponType);
+        await WeaponFactory.Instance.AsyncPoolAimingDots(PlayerWeaponType, _pooledAimingDots, _aimingDotsTransform);
+
+        SetWeaponInfo();
 
         _isLoaded = true;
     }

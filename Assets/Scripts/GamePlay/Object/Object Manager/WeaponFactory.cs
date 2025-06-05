@@ -3,8 +3,8 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
-using System;
 using NUnit.Framework;
+using Cysharp.Threading.Tasks;
 
 public class WeaponFactory : MonoBehaviour, IGamePlayInitializer
 {
@@ -12,42 +12,33 @@ public class WeaponFactory : MonoBehaviour, IGamePlayInitializer
 
     public bool IsInitialized { get; private set; }
 
-    public IEnumerator AsyncPoolWeapons(GameObject owner, 
-                                        WeaponType weaponType, 
-                                        Queue<IWeapon> weapons, 
-                                        int poolNum,
-                                        bool attachToOwner = false
-    )
+    public async UniTask<WeaponPoolHandler> AsyncLoadWeaponPoolHandler(WeaponType weaponType)
     {
-        yield return null;
-        //         AsyncOperationHandle<GameObject> handle = Addressables.InstantiateAsync(AssetPath.WeaponAsset);
-        //         yield return handle;
-        //         if (handle.Status == AsyncOperationStatus.Succeeded)
-        //         {
-        //             // Copy Weapon 
-        //             GameObject loadedWeapon = handle.Result;
-        //             CreateAndEnqueueWeapon(loadedWeapon, owner, weapons, poolNum, attachToOwner);
-        //         }
-        //         else
-        //         {
-        //             Debug.LogError("Failed to load the weapon: " + WeaponAsset.GetWeaponPath(weaponType));
-        //         }
+        if (false == _weaponPoolHandlers.ContainsKey(weaponType))
+        {
+            await PoolManager.Instance.AsyncRegisterPool<WeaponType, IWeapon>(weaponType,
+                _weaponPoolObjectInfo[weaponType].ObjectReference, _weaponPoolObjectInfo[weaponType].PoolCount, $"WeaponPool/{weaponType}").ToUniTask();
+
+            _weaponPoolHandlers.Add(weaponType, new WeaponPoolHandler(weaponType));
+        }
+
+        return _weaponPoolHandlers[weaponType];
     }
 
-    public IEnumerator AsyncPoolAimingDots(WeaponType weaponType, List<AimingDot> aimingDots, Transform parentTransform)
+    public async UniTask AsyncPoolAimingDots(WeaponType weaponType, List<AimingDot> aimingDots, Transform parentTransform)
     {
-        Assert.IsTrue(_aimingDotPrefabs.ContainsKey(weaponType), $"{weaponType.ToString()} does not have aiming dots.");
+        Assert.IsTrue(_aimingDotPoolObjectInfo.ContainsKey(weaponType), $"{weaponType} does not have aiming dots.");
 
-        var poolingDot = _aimingDotPrefabs[weaponType];
+        var poolingDot = _aimingDotPoolObjectInfo[weaponType];
         for (int i = 0; i < poolingDot.PoolCount; i++)
         {
-            var handle = Addressables.InstantiateAsync(poolingDot.Prefab, parentTransform);
-            yield return handle;
+            var handle = Addressables.InstantiateAsync(poolingDot.ObjectReference, parentTransform);
+            await handle.ToUniTask();
 
             if (AsyncOperationStatus.Failed == handle.Status)
             {
                 Logger.Write(LogCategory.AssetLoad, $"Failed to instantiate {weaponType} aiming dot.");
-                yield break;
+                return;
             }
 
             GameObject dotCopy = handle.Result;
@@ -62,20 +53,21 @@ public class WeaponFactory : MonoBehaviour, IGamePlayInitializer
 
     /****** Private Members ******/
 
-    private struct PooledPrefabInfo
+    private struct PoolObjectInfo
     {
-        public GameObject Prefab;
+        public AssetReferenceGameObject ObjectReference;
         public int PoolCount;
 
-        public PooledPrefabInfo(GameObject prefab, int poolCount)
+        public PoolObjectInfo(AssetReferenceGameObject objectReference, int poolCount)
         {
-            Prefab = prefab;
+            ObjectReference = objectReference;
             PoolCount = poolCount;
         }
     }
 
-    private Dictionary<WeaponType, PooledPrefabInfo> _weaponPrefabs      = new();
-    private Dictionary<WeaponType, PooledPrefabInfo> _aimingDotPrefabs   = new();
+    private Dictionary<WeaponType, PoolObjectInfo>      _weaponPoolObjectInfo       = new();
+    private Dictionary<WeaponType, PoolObjectInfo>      _aimingDotPoolObjectInfo    = new();
+    private Dictionary<WeaponType, WeaponPoolHandler>   _weaponPoolHandlers         = new();
 
     private void Awake()
     {
@@ -108,33 +100,13 @@ public class WeaponFactory : MonoBehaviour, IGamePlayInitializer
         var weaponAssets = handle.Result.WeaponAssets;
         foreach (var weaponEntry in weaponAssets)
         {
-            _weaponPrefabs.Add(weaponEntry.WeaponType, new PooledPrefabInfo(weaponEntry.WeaponPrefab, weaponEntry.WeaponPoolCount));
-            if (null != weaponEntry.AimingDotPrefab)
+            _weaponPoolObjectInfo.Add(weaponEntry.WeaponType, new PoolObjectInfo(weaponEntry.WeaponReference, weaponEntry.WeaponPoolCount));
+            if (null != weaponEntry.AimingDotReference)
             {
-                _aimingDotPrefabs.Add(weaponEntry.WeaponType, new PooledPrefabInfo(weaponEntry.AimingDotPrefab, weaponEntry.AimingDotPoolCount));
+                _aimingDotPoolObjectInfo.Add(weaponEntry.WeaponType, new PoolObjectInfo(weaponEntry.AimingDotReference, weaponEntry.AimingDotPoolCount));
             }
         }
 
         IsInitialized = true;
-    }
-
-    private void CreateAndEnqueueWeapon(GameObject loadedWeapon,
-                                        GameObject owner,
-                                        Queue<IWeapon> weapons,
-                                        int count,
-                                        bool attachToOwner
-)
-    {
-        for (int i = count; 0 < i; i--)
-        {
-            GameObject weaponInstance = (i == 1) ? loadedWeapon : Instantiate(loadedWeapon);
-            IWeapon weapon = weaponInstance.GetComponent<IWeapon>();
-            weapon.SetOwner(owner);
-            weapons.Enqueue(weapon);
-            weaponInstance.SetActive(false);
-
-            if (attachToOwner)
-                weaponInstance.transform.SetParent(owner.transform, false);
-        }
     }
 }

@@ -45,6 +45,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2b0e4690616789249ab354120d9bae48
+    m_Address: Assets/GameResources/Prefab/Effect/Normal Explosion.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 310a6e0dc1c000b46b051f8b8971779f
     m_Address: AnimationClip/Heroine/Lower/ClimbingUp
     m_ReadOnly: 0
@@ -60,8 +65,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 44f4ba2d9722d45938f232218644072c
+    m_Address: Assets/GameResources/Prefab/Object/BulletAimingDot.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 46f48a4c9d4c00e45b87004799e089dc
     m_Address: AnimationClip/Heroine/Upper/LookingUp
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4a295e6efadfc2a42a61deb8d0f6c5cd
+    m_Address: Assets/GameResources/Prefab/Weapon/PigeonPoop.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -72,6 +87,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 57a79a535975e95468b6f57e9ef9a17a
     m_Address: GameData/EffectAsset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5b4c77301741f42a9a928370b2f7b18d
+    m_Address: Assets/GameResources/Prefab/Object/Bullet.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -87,6 +107,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6345950feffdd4a00a99ba55312b5d4d
     m_Address: GameData/CommonEventAsset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6795b9326aaad4deabbf2a9c3c8d0353
+    m_Address: Assets/GameResources/Prefab/Object/Scratch.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -111,7 +136,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8025b6630582a244099fead019c914a0
-    m_Address: AimingDot/NormalGranade
+    m_Address: Assets/GameResources/Prefab/Object/GranadeAimingDot.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -146,7 +171,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b8b8ab37253debd49a64878161d4319d
-    m_Address: Weapon/NormalGranade
+    m_Address: Assets/GameResources/Prefab/Weapon/NormalGranade.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

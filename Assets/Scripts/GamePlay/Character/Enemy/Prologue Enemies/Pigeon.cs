@@ -93,29 +93,33 @@ public class Pigeon : EnemyController
 
     public override bool Attack()
     {
-        IWeapon scratch = weapons.Peek();
+        IWeapon poop = WeaponPool.Get();
 
         if (false == _isAttackFinished)
         {
-            scratch.SetLocalPosition(weaponOffset);
-            scratch.Attack(Vector3.zero);
+            poop.SetLocalPosition(weaponOffset);
+            poop.Attack(Vector3.zero);
             _isAttackFinished = true;
         }
 
         // Wait a little while attacking
         _attackingTime += Time.deltaTime;
-        if (_attackingTime < scratch.ActiveDuration)
+        if (_attackingTime < poop.ActiveDuration)
             return false;
 
         // Wait a little after attacking
         if (_isWaiting)
         {
+            Chase();
+
             _waitingTime += Time.deltaTime;
-            if (scratch.PostDelay < _waitingTime)
+            if (poop.PostDelay < _waitingTime)
                 _isWaiting = false;
 
             return false;
         }
+
+        WeaponPool.Return(poop);
 
         return true;
     }
@@ -142,13 +146,9 @@ public class Pigeon : EnemyController
     protected override void InitializeDamageAndWeapon()
     {
         defaultDamageInfo   = new DamageInfo(gameObject, 1);
-        weaponType          = WeaponType.Scratch;
-        weapons             = new Queue<IWeapon>();
-        aimingDots          = new List<AimingDot>();
+        weaponType          = WeaponType.PigeonPoop;
         weaponOffset        = new Vector3(2.5f, 0, 0);
         useShortRangeWeapon = false;
-        weaponCount         = 3;
-        aimingDotsCount     = 0;
 
         _minAttackRange     = Mathf.Sqrt(_MinHorizontalDistanceFromPlayer * _MinHorizontalDistanceFromPlayer + _MinVerticalDistanceFromPlayer * _MinVerticalDistanceFromPlayer);
         _maxAttackRange     = Mathf.Sqrt(_MaxHorizontalDistanceFromPlayer * _MaxHorizontalDistanceFromPlayer + _MaxVerticalDistanceFromPlayer* _MaxVerticalDistanceFromPlayer);

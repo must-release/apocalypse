@@ -26,7 +26,7 @@ public static class PoolInitializer
         foreach (var effectEntry in effectAsset.EffectAssets)
         {
             yield return PoolManager.Instance.AsyncRegisterPool<EffectType, IEffect>(effectEntry.EffectType, effectEntry.EffectPrefab, 
-                effectEntry.PoolCount, $"EffectPool/{effectEntry.EffectType.ToString()}");
+                effectEntry.PoolCount, $"EffectPool/{effectEntry.EffectType}");
         }
 
         Logger.Write(LogCategory.AssetLoad, "EffectAsset load complete.", LogLevel.Log, true);

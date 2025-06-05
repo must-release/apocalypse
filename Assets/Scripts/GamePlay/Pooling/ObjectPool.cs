@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -8,27 +9,37 @@ public class ObjectPool<T> where T : IPoolable
 {
     /****** Public Members ******/
 
-    public ObjectPool(GameObject prefab, Transform parent = null)
+    public ObjectPool(AssetReferenceGameObject objectReference, Transform parent = null)
     {
-        _prefab = prefab;
+        _objectReference = objectReference;
         _parent = parent;
     }
 
     public IEnumerator Preload(int count)
     {
+        var loadHandle = _objectReference.LoadAssetAsync<GameObject>();
+        yield return loadHandle;
+
+        if (loadHandle.Status != AsyncOperationStatus.Succeeded)
+        {
+            Logger.Write(LogCategory.AssetLoad, $"Failed to load prefab: {_objectReference.RuntimeKey}");
+            yield break;
+        }
+
+        _loadedPrefab = loadHandle.Result;
+
         for (int i = 0; i < count; i++)
         {
-            var handle = Addressables.InstantiateAsync(_prefab, _parent);
-            yield return handle; 
+            var handle = Addressables.InstantiateAsync(_objectReference, _parent);
+            yield return handle;
 
-            if (AsyncOperationStatus.Failed == handle.Status)
+            if (handle.Status != AsyncOperationStatus.Succeeded)
             {
-                Logger.Write(LogCategory.AssetLoad, $"Failed to instatiate {_prefab.name}.");
+                Logger.Write(LogCategory.AssetLoad, $"Failed to instantiate prefab: {_objectReference.RuntimeKey}");
                 yield break;
             }
 
             handle.Result.SetActive(false);
-
             Return(handle.Result.GetComponent<T>());
         }
     }
@@ -50,15 +61,21 @@ public class ObjectPool<T> where T : IPoolable
     /****** Private Members ******/
 
     private readonly Queue<T>   _pool = new Queue<T>();
-    private readonly GameObject _prefab;
     private readonly Transform  _parent;
+    private readonly AssetReferenceGameObject _objectReference;
+
+    private GameObject _loadedPrefab;
 
     private T CreateAdditionalInstance()
     {
-        Logger.Write(LogCategory.AssetLoad, $"Loading additional {_prefab.name} instance! This may cause frame drop.");
+        if (null == _loadedPrefab)
+        {
+            Logger.Write(LogCategory.AssetLoad, $"Tried to instantiate {_objectReference.RuntimeKey} before loading it!");
+            return default;
+        }
 
-        var instance = Object.Instantiate(_prefab, _parent);
-        instance.SetActive(false);
-        return instance.GetComponent<T>();
+        var go = Object.Instantiate(_loadedPrefab, _parent);
+        go.SetActive(false);
+        return go.GetComponent<T>();
     }
 }

@@ -33,12 +33,8 @@ public class NormalInfectee : EnemyController
     {
         defaultDamageInfo   = new DamageInfo(gameObject, 1);
         weaponType          = WeaponType.Scratch;
-        weapons             = new Queue<IWeapon>();
-        aimingDots          = new List<AimingDot>();
         weaponOffset        = new Vector3(2.5f, 0, 0);
         useShortRangeWeapon = true;
-        weaponCount         = 1;
-        aimingDotsCount     = 0;
 
         attackRange = 1.5f;
     }
@@ -111,7 +107,7 @@ public class NormalInfectee : EnemyController
 
     public override bool Attack()
     {
-        IWeapon scratch = weapons.Peek();
+        IWeapon scratch = WeaponPool.Get();
 
         if ( false == attacked )
         {

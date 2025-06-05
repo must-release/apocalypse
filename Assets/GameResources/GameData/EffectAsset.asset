@@ -14,5 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EffectAssets:
   - EffectType: 0
-    EffectPrefab: {fileID: 1168515416129473990, guid: 2b0e4690616789249ab354120d9bae48, type: 3}
+    EffectPrefab:
+      m_AssetGUID: 2b0e4690616789249ab354120d9bae48
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 1
     PoolCount: 10

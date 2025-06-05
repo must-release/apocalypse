@@ -64,8 +64,7 @@ public abstract class GranadeBase : LongRangeWeaponBase
 
         ShowExplosionEffect();
         ActiveDamageArea();
-
-        gameObject.SetActive(false);
+        DisableWeapon();
     }
 
 

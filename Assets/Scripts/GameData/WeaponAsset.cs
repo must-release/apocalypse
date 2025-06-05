@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 [CreateAssetMenu(fileName = "WeaponAsset", menuName = "GameData/WeaponAsset")]
 public class WeaponAsset : ScriptableObject
@@ -29,8 +30,8 @@ public class WeaponAsset : ScriptableObject
 public class WeaponEntry
 {
     public WeaponType WeaponType;
-    public GameObject WeaponPrefab;
+    public AssetReferenceGameObject WeaponReference;
     public int WeaponPoolCount;
-    public GameObject AimingDotPrefab;
+    public AssetReferenceGameObject AimingDotReference;
     public int AimingDotPoolCount;
 }
