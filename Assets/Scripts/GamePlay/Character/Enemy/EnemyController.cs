@@ -8,21 +8,31 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
 {
     /****** Public Members ******/
 
-    public GameObject   DetectedPlayer { get; set; }
-    public Transform    ChasingTarget { get; set; }
+    public GameObject   DetectedPlayer  { get; set; }
+    public Transform    ChasingTarget   { get; set; }
     public override bool IsPlayer => false;
+    public virtual bool IsPlayerInAttackRange
+    {
+        get
+        {
+            if (null == DetectedPlayer)
+                return false;
+
+            return (transform.position - DetectedPlayer.transform.position).magnitude < attackRange;
+        }
+    }
     public bool IsLoaded => _isLoaded;
 
     public void ChangeState(EnemyState state)
     {
-        currentState.OnExit(state);
-        currentState = enemyStateDictionary[state];
-        currentState.OnEnter();
+        _currentState.OnExit(state);
+        _currentState = enemyStateDictionary[state];
+        _currentState.OnEnter();
     }
 
     public void SetDefaultDamageArea(bool value)
     {
-        defalutDamageArea.gameObject.SetActive(value);
+        _defalutDamageArea.gameObject.SetActive(value);
     }
 
     public override void OnDamaged(DamageInfo damageInfo)
@@ -30,15 +40,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
         RecentDamagedInfo = damageInfo;
         CurrentHitPoint -= RecentDamagedInfo.damageValue;
 
-        currentState.OnDamaged();
-    }
-
-    public bool CheckPlayerEnemyDistance()
-    {
-        if (null == DetectedPlayer)
-            return false;
-
-        return (transform.position - DetectedPlayer.transform.position).magnitude < attackRange;
+        _currentState.OnDamaged();
     }
 
     public abstract void StartPatrol();
@@ -50,7 +52,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
 
 
     /****** Protected Members ******/
-    protected bool CanMoveAhead => terrainChecker.CanMoveAhead();
+    protected bool CanMoveAhead => _terrainChecker.CanMoveAhead();
 
     // Common variables
     protected Rigidbody2D enemyRigid;
@@ -84,7 +86,8 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
     { 
         base.Awake();
 
-        enemyRigid = GetComponent<Rigidbody2D>();
+        enemyRigid      = GetComponent<Rigidbody2D>();
+        _enemyCollider  = GetComponent<Collider2D>();
     
         InitializeTerrainChecker();
         InitializePlayerDetector();
@@ -98,10 +101,15 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
         // Wait for async loading
         if (!_isLoaded) return;
 
-        if (DetectedPlayer = playerDetector.DetectPlayer())
-            currentState.DetectedPlayer();
+        if (DetectedPlayer = _playerDetector.DetectPlayer())
+            _currentState.DetectedPlayer();
 
-        currentState.OnUpdate();
+        _currentState.OnUpdate();
+    }
+
+    protected void ChangeColliderToTriggerMode(bool value)
+    {
+        _enemyCollider.isTrigger = value;
     }
 
     protected abstract void InitializeTerrainChecker();
@@ -112,10 +120,13 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
     /****** Private Memvers ******/
 
     private Dictionary<EnemyState, EnemyStateBase> enemyStateDictionary;
-    private EnemyStateBase currentState;
-    private TerrainChecker terrainChecker;
-    private PlayerDetector playerDetector;
-    private DamageArea defalutDamageArea;
+
+    private EnemyStateBase  _currentState;
+    private TerrainChecker  _terrainChecker;
+    private PlayerDetector  _playerDetector;
+    private DamageArea      _defalutDamageArea;
+    private Collider2D      _enemyCollider;
+
     private bool _isLoaded;
 
     private void OnEnable() 
@@ -123,7 +134,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
         if( _isLoaded )
         {
             // Start current state when enabled
-            currentState.OnEnter();
+            _currentState.OnEnter();
         }
     }
 
@@ -132,7 +143,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
         yield return SetStateDictionary();
         if(checkTerrain) yield return SetTerrainChecker();
         yield return SetPlayerDetector();
-        yield return LoadWeaponsAndDots();
+        yield return LoadWeapons();
         SetDamageArea();
         
         _isLoaded = true;
@@ -154,7 +165,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
                 if (!enemyStateDictionary.ContainsKey(state.GetState())) 
                     enemyStateDictionary[state.GetState()] = state;
             }
-            currentState = enemyStateDictionary[EnemyState.Patrolling];
+            _currentState = enemyStateDictionary[EnemyState.Patrolling];
         }
         else
         {
@@ -170,8 +181,8 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
 
         if(checker.Status == AsyncOperationStatus.Succeeded)
         {
-            terrainChecker = checker.Result.GetComponent<TerrainChecker>();
-            terrainChecker.SetTerrainChecker(groundCheckingDistance, groundCheckingVector,
+            _terrainChecker = checker.Result.GetComponent<TerrainChecker>();
+            _terrainChecker.SetTerrainChecker(groundCheckingDistance, groundCheckingVector,
                  ObstacleCheckingDistance);
         }
         else
@@ -188,8 +199,8 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
 
         if (detector.Status == AsyncOperationStatus.Succeeded)
         {
-            playerDetector = detector.Result.GetComponent<PlayerDetector>();
-            playerDetector.SetPlayerDetector(detectRange, rangeOffset);
+            _playerDetector = detector.Result.GetComponent<PlayerDetector>();
+            _playerDetector.SetPlayerDetector(detectRange, rangeOffset);
         }
         else
         {
@@ -197,13 +208,10 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
         }
     }
 
-    IEnumerator LoadWeaponsAndDots()
+    IEnumerator LoadWeapons()
     {
         if ( WeaponType.WeaponTypeCount != weaponType )
             yield return WeaponFactory.Instance.AsyncPoolWeapons(gameObject, weaponType, weapons, weaponCount, useShortRangeWeapon);
-
-        if ( 0 < aimingDotsCount )
-            yield return WeaponFactory.Instance.AsyncPoolAimingDots(weaponType, aimingDots, aimingDotsCount);
     }
 
     // Create default damage area child object
@@ -211,7 +219,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
     {
         GameObject dmgAreaObj = new GameObject("Default Damage Area");
         dmgAreaObj.transform.SetParent(transform, false);
-        defalutDamageArea = dmgAreaObj.AddComponent<DamageArea>();
-        defalutDamageArea.SetDamageArea(transform.GetComponent<Collider2D>(), defaultDamageInfo, true);
+        _defalutDamageArea = dmgAreaObj.AddComponent<DamageArea>();
+        _defalutDamageArea.SetDamageArea(transform.GetComponent<Collider2D>(), defaultDamageInfo, true);
     }
 }

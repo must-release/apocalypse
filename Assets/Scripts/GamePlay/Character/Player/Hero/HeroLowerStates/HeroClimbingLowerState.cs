@@ -50,7 +50,7 @@ public class HeroClimbingLowerState : PlayerLowerState<HeroLowerState>
         if (0 < PlayerInfo.CurrentVelocity.y)
         {
             // Move player on the upside of the ladder
-            PlayerMotion.TeleportTo(PlayerInfo.CurrentPosition + Vector2.up * PlayerInfo.CharacterHeight / 2);
+            PlayerMotion.TeleportTo(PlayerInfo.CurrentPosition + Vector3.up * PlayerInfo.CharacterHeight / 2);
 
             StateController.ChangeState(HeroLowerState.Idle);
         }

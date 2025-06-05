@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab3eb8028c411314380b4b211df95564, type: 3}
+  m_Name: WeaponAsset
+  m_EditorClassIdentifier: 
+  WeaponAssets:
+  - WeaponType: 0
+    WeaponPrefab: {fileID: 5025456995951049547, guid: 5b4c77301741f42a9a928370b2f7b18d, type: 3}
+    WeaponPoolCount: 20
+    AimingDotPrefab: {fileID: 2641791517935389264, guid: 44f4ba2d9722d45938f232218644072c, type: 3}
+    AimingDotPoolCount: 20
+  - WeaponType: 1
+    WeaponPrefab: {fileID: 2639566619613538428, guid: b8b8ab37253debd49a64878161d4319d, type: 3}
+    WeaponPoolCount: 20
+    AimingDotPrefab: {fileID: 2641791517935389264, guid: 8025b6630582a244099fead019c914a0, type: 3}
+    AimingDotPoolCount: 20
+  - WeaponType: 2
+    WeaponPrefab: {fileID: 8940304331900491188, guid: 6795b9326aaad4deabbf2a9c3c8d0353, type: 3}
+    WeaponPoolCount: 1
+    AimingDotPrefab: {fileID: 0}
+    AimingDotPoolCount: 0
+  - WeaponType: 3
+    WeaponPrefab: {fileID: 8298019885348205445, guid: 4a295e6efadfc2a42a61deb8d0f6c5cd, type: 3}
+    WeaponPoolCount: 10
+    AimingDotPrefab: {fileID: 0}
+    AimingDotPoolCount: 0

@@ -32,7 +32,7 @@ public class ChasingState : EnemyStateBase
         // Chase detected player
         enemyController.Chase();
 
-        if ( enemyController.CheckPlayerEnemyDistance() )
+        if ( enemyController.IsPlayerInAttackRange )
         {
             enemyController.ChangeState(EnemyState.Attacking); 
             return;

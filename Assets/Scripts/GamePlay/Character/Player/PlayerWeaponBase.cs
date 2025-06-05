@@ -78,10 +78,11 @@ public abstract class PlayerWeaponBase : MonoBehaviour, IAsyncLoadObject
     [SerializeField] private Transform  _shootingPoint  = null;
 
     private const int _WeaponPoolCount      = 15;
-    private const int _AimingDotsPoolCount  = 20;
 
     private Queue<IWeapon>      _pooledWeapons      = new Queue<IWeapon>();
     private List<AimingDot>     _pooledAimingDots   = new List<AimingDot>();
+
+    private Transform _aimingDotsTransform;
 
     private bool _isLoaded = false;
 
@@ -90,12 +91,15 @@ public abstract class PlayerWeaponBase : MonoBehaviour, IAsyncLoadObject
         Assert.IsTrue(_playerObject != null, "Player object is not assigned.");
         Assert.IsTrue(_weaponPivot != null, "Weapon pivot is not assigned.");
         Assert.IsTrue(_shootingPoint != null, "Shooting point is not assigned.");
+
+        _aimingDotsTransform = (new GameObject("PooledAimingDots")).transform;
+        _aimingDotsTransform.SetParent(transform, false);
     }
 
     private IEnumerator LoadWeaponsAndDots()
     {
         yield return WeaponFactory.Instance.AsyncPoolWeapons(_playerObject, PlayerWeaponType, _pooledWeapons, _WeaponPoolCount);
-        yield return WeaponFactory.Instance.AsyncPoolAimingDots(PlayerWeaponType, _pooledAimingDots, _AimingDotsPoolCount);
+        yield return WeaponFactory.Instance.AsyncPoolAimingDots(PlayerWeaponType, _pooledAimingDots, _aimingDotsTransform);
 
         _isLoaded = true;
     }

@@ -15,3 +15,4 @@ MonoBehaviour:
   EffectAssets:
   - EffectType: 0
     EffectPrefab: {fileID: 1168515416129473990, guid: 2b0e4690616789249ab354120d9bae48, type: 3}
+    PoolCount: 10

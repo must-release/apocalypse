@@ -7,7 +7,7 @@ public interface ICharacterInfo
     GameObject          StandingGround              { get; }
     DamageInfo          RecentDamagedInfo           { get; }
     Vector2             CurrentVelocity             { get; }
-    Vector2             CurrentPosition             { get; }
+    Vector3             CurrentPosition             { get; }
 
     float       CharacterHeight     { get; }
     float       MovingSpeed         { get; }

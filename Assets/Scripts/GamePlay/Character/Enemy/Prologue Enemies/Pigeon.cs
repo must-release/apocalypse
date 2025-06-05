@@ -9,6 +9,18 @@ public class Pigeon : EnemyController
 
     public override float   MovingSpeed => 2f;
     public override int     MaxHitPoint => 2;
+    public override bool IsPlayerInAttackRange
+    {
+        get
+        {
+            Assert.IsTrue(0 != _minAttackRange && 0 != _maxAttackRange, "Initialization of damage and weapon must be preceded.");
+
+            if (null == DetectedPlayer) return false;
+
+            var distance = (CurrentPosition - ChasingTarget.position).magnitude;
+            return _minAttackRange < distance && distance < _maxAttackRange;
+        }
+    }
 
     public override void StartPatrol()
     {
@@ -17,7 +29,7 @@ public class Pigeon : EnemyController
         _waitingTime    = 0;
         _isWaiting      = false;
 
-        _pigeonCollider.isTrigger = false;
+        ChangeColliderToTriggerMode(false);
     }
 
     public override void Patrol()
@@ -56,7 +68,7 @@ public class Pigeon : EnemyController
 
     public override void StartChasing()
     {
-        _pigeonCollider.isTrigger = true;
+        ChangeColliderToTriggerMode(true);
 
         SetGravityScale(0);
     }
@@ -129,23 +141,23 @@ public class Pigeon : EnemyController
 
     protected override void InitializeDamageAndWeapon()
     {
-        defaultDamageInfo = new DamageInfo(gameObject, 1);
-        weaponType = WeaponType.Scratch;
-        weapons = new Queue<IWeapon>();
-        aimingDots = new List<AimingDot>();
-        weaponOffset = new Vector3(2.5f, 0, 0);
-        useShortRangeWeapon = true;
-        weaponCount = 1;
-        aimingDotsCount = 0;
+        defaultDamageInfo   = new DamageInfo(gameObject, 1);
+        weaponType          = WeaponType.Scratch;
+        weapons             = new Queue<IWeapon>();
+        aimingDots          = new List<AimingDot>();
+        weaponOffset        = new Vector3(2.5f, 0, 0);
+        useShortRangeWeapon = false;
+        weaponCount         = 3;
+        aimingDotsCount     = 0;
 
-        attackRange = 1.5f;
+        _minAttackRange     = Mathf.Sqrt(_MinHorizontalDistanceFromPlayer * _MinHorizontalDistanceFromPlayer + _MinVerticalDistanceFromPlayer * _MinVerticalDistanceFromPlayer);
+        _maxAttackRange     = Mathf.Sqrt(_MaxHorizontalDistanceFromPlayer * _MaxHorizontalDistanceFromPlayer + _MaxVerticalDistanceFromPlayer* _MaxVerticalDistanceFromPlayer);
     }
 
     protected override void Start()
     {
         base.Start();
 
-        _pigeonCollider = GetComponent<Collider2D>();
         CurrentHitPoint = MaxHitPoint;
     }
 
@@ -165,14 +177,13 @@ public class Pigeon : EnemyController
     private const float _MinPatrolRange = 5f;
     private const float _StandingTime   = 5f;
 
-
-    private Collider2D _pigeonCollider;
-
     private float   _patrolLeftEnd, _patrolRightEnd; // Each end side of the patrol range
     private bool    _isWaiting;
     private float   _waitingTime;
     private bool    _isAttackFinished;
     private float   _attackingTime;
+    private float   _minAttackRange;
+    private float   _maxAttackRange;
 
     private void UpdatePatrolRange()
     {

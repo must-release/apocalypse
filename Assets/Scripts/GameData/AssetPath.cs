@@ -11,4 +11,6 @@ public static class AssetPath
     public const string UIAsset             = "GameData/UIAsset";
 
     public const string CommonEventAsset    = "GameData/CommonEventAsset";
+
+    public const string WeaponAsset         = "GameData/WeaponAsset";
 }

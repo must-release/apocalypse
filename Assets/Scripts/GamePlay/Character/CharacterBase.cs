@@ -26,7 +26,7 @@ public abstract class CharacterBase : MonoBehaviour, ICharacter, IMotionControll
             return _rigidbody.linearVelocity; 
         } 
     }
-    public Vector2          CurrentPosition     { get { return transform.position; } }
+    public Vector3          CurrentPosition     { get { return transform.position; } }
 
     public virtual float    MovingSpeed         { get; protected set; }
     public virtual float    JumpingSpeed        { get; protected set; }

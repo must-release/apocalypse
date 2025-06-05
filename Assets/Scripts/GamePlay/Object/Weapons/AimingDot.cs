@@ -6,7 +6,7 @@ public class AimingDot : MonoBehaviour
 {
     public AimingDot NextDot { get; set; }
 
-    public void InactiveNextDots()
+    private void InactiveNextDots()
     {
         NextDot?.InactiveNextDots();
         gameObject.SetActive(false);

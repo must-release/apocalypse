@@ -17,4 +17,5 @@ public class EffectEntry
 {
     public EffectType EffectType;
     public GameObject EffectPrefab;
+    public int PoolCount;
 }

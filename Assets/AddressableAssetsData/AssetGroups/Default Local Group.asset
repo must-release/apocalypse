@@ -175,6 +175,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f9940c4d84a1d924a90b6e666bfd8789
+    m_Address: GameData/WeaponAsset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fabff87f59888014d8f83aaaba902c81
     m_Address: AnimationClip/Heroine/Lower/Aiming
     m_ReadOnly: 0

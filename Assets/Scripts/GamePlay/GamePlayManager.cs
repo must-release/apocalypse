@@ -1,19 +1,20 @@
+using NUnit.Framework;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GamePlayManager : MonoBehaviour, IAsyncLoadObject
 {
     /****** Public Members ******/
 
-    public static GamePlayManager Instance { get; private set; } = null;
+    public static GamePlayManager Instance { get; private set; }
 
-    public bool IsCutscenePlaying { get; private set; } = false;
+    public bool IsCutscenePlaying { get; private set; }
 
-    public bool IsLoaded => _isPoolLoaded;
+    public bool IsLoaded { get; private set; }
 
     public void PlayCutscene() { StartCoroutine(CutsceneCoroutine()); }
 
-    // Initialize Player transform, info
     public void InitializePlayerCharacter(Transform player, PlayerType character)
     {
         CharacterManager.Instance.SetPlayerCharacter(player, character);
@@ -31,10 +32,18 @@ public class GamePlayManager : MonoBehaviour, IAsyncLoadObject
         GameEventManager.Instance.Submit(GameEventFactory.CreateCommonEvent(CommonEventType.GameOver));
     }
 
+    public void RegisterGamePlayInitializer(IGamePlayInitializer poolingSystem)
+    {
+        Assert.IsTrue(false == _initializerList.Contains(poolingSystem), "The pooling system is already Registered.");
+
+        _initializerList.Add(poolingSystem);
+    }
+
 
     /****** Private Members ******/
 
-    private bool _isPoolLoaded  = false;
+    private readonly List<IGamePlayInitializer> _initializerList = new List<IGamePlayInitializer>();
+
 
     private void Awake()
     {
@@ -50,14 +59,19 @@ public class GamePlayManager : MonoBehaviour, IAsyncLoadObject
 
     private void Start()
     {
-        StartCoroutine(AsyncLoadObjectPool());
+        StartCoroutine(AsyncWaitForInitialization());
     }
 
-    private IEnumerator AsyncLoadObjectPool()
+    private IEnumerator AsyncWaitForInitialization()
     {
-        yield return PooInitializer.AsyncLoadPool();
+        yield return null; // Wait for initializers to be registered
 
-        _isPoolLoaded = true;
+        foreach (var initializer in _initializerList)
+        {
+            yield return new WaitUntil(()=> initializer.IsInitialized);
+        }
+
+        IsLoaded = true;
     }
 
     private IEnumerator CutsceneCoroutine()
