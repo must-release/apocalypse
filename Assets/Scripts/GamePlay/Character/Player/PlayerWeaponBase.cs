@@ -12,25 +12,26 @@ public abstract class PlayerWeaponBase : MonoBehaviour, IAsyncLoadObject
     public bool IsLoaded => _isLoaded;
 
     public abstract float       ReloadTime          { get; }
-    public abstract WeaponType  PlayerWeaponType    { get; }
+    public abstract ProjectileType  PlayerWeaponType    { get; }
 
     public abstract void Aim(bool isAiming);
 
     public float Attack()
     {
-        IWeapon weapon = WeaponPool.Get();
-        weapon.SetLocalPosition(_shootingPoint.position);
-        weapon.Attack((_shootingPoint.position - _weaponPivot.position).normalized);
-        weapon.OnAfterWeaponUse += () => { WeaponPool.Return(weapon); };
+        IProjectile weapon = WeaponPool.Get();
+        weapon.SetOwner(_playerObject);
+        weapon.SetProjectilePosition(_shootingPoint.position);
+        weapon.Fire((_shootingPoint.position - _weaponPivot.position).normalized);
+        weapon.OnProjectileExpired += () => { WeaponPool.Return(weapon); };
 
-        return weapon.PostDelay;
+        return weapon.PostFireDelay;
     }
 
     public void AimAttack(Vector2 direction)
     {
-        IWeapon weapon = _pooledWeapons.Dequeue();
-        weapon.SetLocalPosition(_shootingPoint.position);
-        weapon.Attack(direction.normalized);
+        IProjectile weapon = _pooledWeapons.Dequeue();
+        weapon.SetProjectilePosition(_shootingPoint.position);
+        weapon.Fire(direction.normalized);
         _pooledWeapons.Enqueue(weapon);
     }
 
@@ -59,7 +60,7 @@ public abstract class PlayerWeaponBase : MonoBehaviour, IAsyncLoadObject
             return _pooledAimingDots;
         }
     }
-    protected WeaponPoolHandler WeaponPool
+    protected ProjectilePoolHandler WeaponPool
     {
         get
         {
@@ -83,9 +84,9 @@ public abstract class PlayerWeaponBase : MonoBehaviour, IAsyncLoadObject
 
     private const int _WeaponPoolCount      = 15;
 
-    private Queue<IWeapon>      _pooledWeapons      = new Queue<IWeapon>();
+    private Queue<IProjectile>      _pooledWeapons      = new Queue<IProjectile>();
     private List<AimingDot>     _pooledAimingDots   = new List<AimingDot>();
-    private WeaponPoolHandler   _weaponPoolHandler;
+    private ProjectilePoolHandler   _weaponPoolHandler;
 
     private Transform _aimingDotsTransform;
 
@@ -103,8 +104,8 @@ public abstract class PlayerWeaponBase : MonoBehaviour, IAsyncLoadObject
 
     private async UniTask LoadWeaponsAndDots()
     {
-        _weaponPoolHandler = await WeaponFactory.Instance.AsyncLoadWeaponPoolHandler(PlayerWeaponType);
-        await WeaponFactory.Instance.AsyncPoolAimingDots(PlayerWeaponType, _pooledAimingDots, _aimingDotsTransform);
+        _weaponPoolHandler = await ProjectileFactory.Instance.AsyncLoadPoolHandler(PlayerWeaponType);
+        await ProjectileFactory.Instance.AsyncPoolAimingDots(PlayerWeaponType, _pooledAimingDots, _aimingDotsTransform);
 
         SetWeaponInfo();
 

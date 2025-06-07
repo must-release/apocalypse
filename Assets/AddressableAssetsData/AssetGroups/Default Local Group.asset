@@ -201,7 +201,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f9940c4d84a1d924a90b6e666bfd8789
-    m_Address: GameData/WeaponAsset
+    m_Address: GameData/ProjectileAsset
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

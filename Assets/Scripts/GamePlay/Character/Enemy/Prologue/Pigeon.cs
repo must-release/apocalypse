@@ -88,23 +88,19 @@ public class Pigeon : EnemyController
         _isAttackFinished   = false;
         _attackingTime      = 0;
 
+        _pigeonPoop = WeaponPool.Get();
+        _pigeonPoop.SetOwner(gameObject);
+        _pigeonPoop.SetProjectilePosition(CurrentPosition);
+        _pigeonPoop.Fire((ChasingTarget.position - CurrentPosition).normalized);
+
         SetVelocity(Vector2.zero);
     }
 
     public override bool Attack()
     {
-        IWeapon poop = WeaponPool.Get();
-
-        if (false == _isAttackFinished)
-        {
-            poop.SetLocalPosition(weaponOffset);
-            poop.Attack(Vector3.zero);
-            _isAttackFinished = true;
-        }
-
         // Wait a little while attacking
         _attackingTime += Time.deltaTime;
-        if (_attackingTime < poop.ActiveDuration)
+        if (_attackingTime < _pigeonPoop.FireDuration)
             return false;
 
         // Wait a little after attacking
@@ -113,13 +109,14 @@ public class Pigeon : EnemyController
             Chase();
 
             _waitingTime += Time.deltaTime;
-            if (poop.PostDelay < _waitingTime)
+            if (_pigeonPoop.PostFireDelay < _waitingTime)
                 _isWaiting = false;
 
             return false;
         }
 
-        WeaponPool.Return(poop);
+        WeaponPool.Return(_pigeonPoop);
+        _pigeonPoop = null;
 
         return true;
     }
@@ -146,7 +143,7 @@ public class Pigeon : EnemyController
     protected override void InitializeDamageAndWeapon()
     {
         defaultDamageInfo   = new DamageInfo(gameObject, 1);
-        weaponType          = WeaponType.PigeonPoop;
+        weaponType          = ProjectileType.PigeonPoop;
         weaponOffset        = new Vector3(2.5f, 0, 0);
         useShortRangeWeapon = false;
 
@@ -176,6 +173,8 @@ public class Pigeon : EnemyController
     private const float _MaxPatrolRange = 10f;
     private const float _MinPatrolRange = 5f;
     private const float _StandingTime   = 5f;
+
+    private IProjectile _pigeonPoop;
 
     private float   _patrolLeftEnd, _patrolRightEnd; // Each end side of the patrol range
     private bool    _isWaiting;

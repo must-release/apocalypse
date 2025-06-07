@@ -40,7 +40,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
     public override void OnDamaged(DamageInfo damageInfo)
     {
         RecentDamagedInfo = damageInfo;
-        CurrentHitPoint -= RecentDamagedInfo.damageValue;
+        CurrentHitPoint -= RecentDamagedInfo.DamageValue;
 
         _currentState.OnDamaged();
     }
@@ -56,7 +56,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
     /****** Protected Members ******/
 
     protected bool CanMoveAhead => _terrainChecker.CanMoveAhead();
-    protected WeaponPoolHandler WeaponPool
+    protected ProjectilePoolHandler WeaponPool
     {
         get
         {
@@ -69,9 +69,9 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
     protected Rigidbody2D enemyRigid;
 
 
-    // Damage & Weapon Info
+    // Damage & Projectile Info
     protected DamageInfo defaultDamageInfo;
-    protected WeaponType weaponType;
+    protected ProjectileType weaponType;
     protected Vector3 weaponOffset;
     protected bool useShortRangeWeapon;
 
@@ -129,7 +129,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
     private Dictionary<EnemyState, EnemyStateBase> enemyStateDictionary;
 
     private EnemyStateBase      _currentState;
-    private WeaponPoolHandler   _weaponPoolHandler;
+    private ProjectilePoolHandler   _weaponPoolHandler;
     private TerrainChecker      _terrainChecker;
     private PlayerDetector      _playerDetector;
     private DamageArea          _defalutDamageArea;
@@ -218,8 +218,8 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
 
     private async UniTask LoadWeapons()
     {
-        if ( WeaponType.WeaponTypeCount != weaponType )
-            _weaponPoolHandler = await WeaponFactory.Instance.AsyncLoadWeaponPoolHandler(weaponType);
+        if ( ProjectileType.ProjectileTypeCount != weaponType )
+            _weaponPoolHandler = await ProjectileFactory.Instance.AsyncLoadPoolHandler(weaponType);
     }
 
     // Create default damage area child object

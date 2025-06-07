@@ -17,7 +17,7 @@ public class ChasingState : EnemyStateBase
         if ( enemyController.DetectedPlayer )
             enemyController.ChasingTarget = enemyController.DetectedPlayer.transform;
         else if ( null != enemyController.RecentDamagedInfo )
-            enemyController.ChasingTarget = enemyController.RecentDamagedInfo.attacker.transform;
+            enemyController.ChasingTarget = enemyController.RecentDamagedInfo.Attacker.transform;
         
         if ( null == enemyController.ChasingTarget )
             Debug.LogError("There's nobody to chase!");

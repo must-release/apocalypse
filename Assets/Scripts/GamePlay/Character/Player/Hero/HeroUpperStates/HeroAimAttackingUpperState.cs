@@ -8,7 +8,7 @@ public class HeroAimAttackingUpperState : PlayerUpperStateBase<HeroUpperState>
 
     public override void OnEnter()
     {
-        //_attackCoolTime = OwnerController.CurrentAvatar.Attack();
+        //_attackCoolTime = OwnerController.CurrentAvatar.Fire();
     }
 
     public override void OnUpdate()

@@ -52,7 +52,7 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
         if ( _isDamageImmune ) return;
 
         RecentDamagedInfo = damageInfo;
-        CurrentHitPoint -= RecentDamagedInfo.damageValue;
+        CurrentHitPoint -= RecentDamagedInfo.DamageValue;
 
         if (CurrentHitPoint <= 0)
         {

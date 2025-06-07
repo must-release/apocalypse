@@ -1,19 +1,19 @@
 using UnityEngine;
 
-public class Bullet : LongRangeWeaponBase
+public class Bullet : ProjectileBase
 {
     /****** Public Members ******/
 
-    public override WeaponType  WeaponType          => WeaponType.Bullet;
+    public override ProjectileType  CurrentPojectileType          => ProjectileType.Bullet;
     public override bool        CanDamagePlayer     => false;
     public override float       FireSpeed           => 30f;
     public override float       GravityScale        => _GravityScale;
-    public override float       ActiveDuration      => 5f;
-    public override float       PostDelay           => 0f;
+    public override float       FireDuration      => 5f;
+    public override float       PostFireDelay           => 0f;
 
-    public override void Attack(Vector3 direction)
+    public override void Fire(Vector3 direction)
     {
-        base.Attack(direction);
+        base.Fire(direction);
 
         _bulletRigid.linearVelocity = direction * FireSpeed;
     }
@@ -27,7 +27,7 @@ public class Bullet : LongRangeWeaponBase
         _bulletRigid = GetComponent<Rigidbody2D>();
         _bulletRigid.gravityScale = _GravityScale;
 
-        WeaponDamageInfo.damageValue = _Damage;
+        ProjectileDamageInfo.DamageValue = _Damage;
     }
 
 
@@ -38,4 +38,16 @@ public class Bullet : LongRangeWeaponBase
     private const int   _Damage         = 1;
 
     private Rigidbody2D _bulletRigid = null;
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.transform.TryGetComponent(out CharacterBase character))
+        {
+            if (false == character.IsPlayer)
+            {
+                character.OnDamaged(ProjectileDamageInfo);
+                return;
+            }
+        }
+    }
 }

@@ -4,50 +4,8 @@ using UnityEngine;
 
 public class NormalInfectee : EnemyController
 {
-    private const int MAX_HIT_POINT = 3;
-    private const float PATROL_RANGE_MAX = 30;
-    private const float PATROL_RANGE_MIN = 5;
-    private const float STANDING_TIME = 5f;
+    /****** Public Members ******/
 
-    private float patrolLeftEnd, patrolRightEnd; // Each end side of the patrol range
-    private bool wait;
-    private float waitingTime;
-    private bool attacked;
-    private float attackingTime;
-
-    protected override void InitializeTerrainChecker()
-    {
-        groundCheckingDistance      = 3f;
-        groundCheckingVector        = new Vector3(1, - 1, 0);
-        ObstacleCheckingDistance    = 2f;
-        checkTerrain                = true;
-    }
-
-    protected override void InitializePlayerDetector()
-    {
-        detectRange = new Vector2(25, 5);
-        rangeOffset = new Vector2(3, 0);
-    }
-
-    protected override void InitializeDamageAndWeapon()
-    {
-        defaultDamageInfo   = new DamageInfo(gameObject, 1);
-        weaponType          = WeaponType.Scratch;
-        weaponOffset        = new Vector3(2.5f, 0, 0);
-        useShortRangeWeapon = true;
-
-        attackRange = 1.5f;
-    }
-
-    protected override void Start()
-    {
-        base.Start();
-
-        MovingSpeed     = 3f;
-        CurrentHitPoint = MAX_HIT_POINT;
-    }
-
-    // Set initial info for patrolling
     public override void StartPatrol()
     {
         patrolRightEnd  = transform.position.x + PATROL_RANGE_MAX / 2;
@@ -56,7 +14,6 @@ public class NormalInfectee : EnemyController
         wait = false;
     }
 
-    // Called every frame when patrolling
     public override void Patrol()
     {
         // Wait a little if patrol area is too small
@@ -83,7 +40,6 @@ public class NormalInfectee : EnemyController
         
     }
 
-    // Called every frame when chasing
     public override void Chase()
     {
         // Look at the player
@@ -100,40 +56,87 @@ public class NormalInfectee : EnemyController
     {
         waitingTime     = 0;
         wait            = true;
-        attacked        = false;
-        attackingTime   = 0;
         enemyRigid.linearVelocity = Vector2.zero;
+
+        _scratch.gameObject.SetActive(true);
+        ActiveDamageArea();
     }
 
     public override bool Attack()
     {
-        IWeapon scratch = WeaponPool.Get();
-
-        if ( false == attacked )
-        {
-            scratch.SetLocalPosition(weaponOffset);
-            scratch.Attack(Vector3.zero);
-            attacked = true;
-        }
-
-        // Wait a little while attacking
-        attackingTime += Time.deltaTime;
-        if ( attackingTime < scratch.ActiveDuration )
-            return false;
-
-        // Wait a little after attacking
         if ( wait )
         {
             waitingTime += Time.deltaTime;
-            if ( scratch.PostDelay < waitingTime )
+            if (2 < waitingTime )
                 wait = false;
 
             return false;
         }
 
+        _scratch.gameObject.SetActive(false);
+
         return true;
     }
 
+    public override void ControlCharacter(ControlInfo controlInfo) { }
+
+
+    /****** Protected Members ******/
+
+    protected override void Start()
+    {
+        base.Start();
+
+        MovingSpeed = 3f;
+        CurrentHitPoint = MAX_HIT_POINT;
+
+        _attackDamageInfo.Attacker = gameObject;
+
+    }
+
+    protected override void InitializeTerrainChecker()
+    {
+        groundCheckingDistance = 3f;
+        groundCheckingVector = new Vector3(1, -1, 0);
+        ObstacleCheckingDistance = 2f;
+        checkTerrain = true;
+    }
+
+    protected override void InitializePlayerDetector()
+    {
+        detectRange = new Vector2(25, 5);
+        rangeOffset = new Vector2(3, 0);
+    }
+
+    protected override void InitializeDamageAndWeapon()
+    {
+        defaultDamageInfo = new DamageInfo(gameObject, 1);
+        weaponOffset = new Vector3(2.5f, 0, 0);
+        useShortRangeWeapon = true;
+        weaponType = ProjectileType.ProjectileTypeCount;
+
+        attackRange = 1.5f;
+    }
+
+    protected override void OnAir() { }
+    protected override void OnGround() { }
+
+
+    /****** Private Members ******/
+
+    //TODO: scratch should be controlled in animator
+    [SerializeField] Transform _scratch;
+
+    private DamageInfo _attackDamageInfo = new DamageInfo();
+
+    private const int MAX_HIT_POINT = 3;
+    private const float PATROL_RANGE_MAX = 30;
+    private const float PATROL_RANGE_MIN = 5;
+    private const float STANDING_TIME = 5f;
+
+    private float patrolLeftEnd, patrolRightEnd; // Each end side of the patrol range
+    private bool wait;
+    private float waitingTime;
 
     private void PatrolDirection(bool isPatrollingRight)
     {
@@ -175,8 +178,17 @@ public class NormalInfectee : EnemyController
             transform.localScale.y, transform.localScale.z);
     }
 
+    private void ActiveDamageArea()
+    {
+        Collider2D[] hits = Physics2D.OverlapBoxAll(_scratch.position, new Vector2(2,2), 0f, 1 << LayerMask.NameToLayer(Layer.Character));
 
-    public override void ControlCharacter(ControlInfo controlInfo) { }
-    protected override void OnAir() { }
-    protected override void OnGround() { }
+        foreach (var hit in hits)
+        {
+            var player = hit.GetComponent<ICharacter>();
+            if (true == player.IsPlayer)
+            {
+                player.OnDamaged(_attackDamageInfo);
+            }
+        }
+    }
 }

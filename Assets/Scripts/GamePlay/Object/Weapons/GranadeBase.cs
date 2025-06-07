@@ -2,21 +2,21 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
-public abstract class GranadeBase : LongRangeWeaponBase
+public abstract class GranadeBase : ProjectileBase
 {
     /****** Public Members ******/
 
     public abstract EffectType GranadeEffect { get; }
 
-    public override bool CanDamagePlayer    => false;
+    public override bool  CanDamagePlayer    => false;
     public override float FireSpeed         => 15f;
     public override float GravityScale      => _GravityScale;
-    public override float ActiveDuration    => 1f;
-    public override float PostDelay         => 0.5f;
+    public override float FireDuration      => 1f;
+    public override float PostFireDelay     => 0.5f;
 
-    public override void Attack(Vector3 direction)
+    public override void Fire(Vector3 direction)
     {
-        base.Attack(direction);
+        base.Fire(direction);
 
         _granadeRigid.linearVelocity    = direction * FireSpeed;
         _granadeRigid.angularVelocity   = _AngleSpeed;
@@ -27,8 +27,15 @@ public abstract class GranadeBase : LongRangeWeaponBase
         base.SetOwner(owner);
 
         _ownerCollider = owner.GetComponent<Collider2D>();
+        Physics2D.IgnoreCollision(_ownerCollider, _granadeCollider);
     }
 
+    public override void OnGetFromPool()
+    {
+        base.OnGetFromPool();
+
+        _granadeRigid.angularDamping = _InitialAngularDrag;
+    }
 
     /****** Protected Members ******/
 
@@ -39,19 +46,8 @@ public abstract class GranadeBase : LongRangeWeaponBase
         _granadeRigid       = GetComponent<Rigidbody2D>();
         _granadeCollider    = GetComponent<Collider2D>();
 
-        _granadeRigid.gravityScale      = _GravityScale;
-        WeaponDamageInfo.damageValue    = _Damage;
-    }
-
-    protected override void OnEnable()
-    {
-        base.OnEnable();
-
-        _granadeRigid.angularDamping = _InitialAngularDrag;
-
-        if (_ownerCollider)
-            Physics2D.IgnoreCollision(_ownerCollider, _granadeCollider);
-
+        _granadeRigid.gravityScale          = _GravityScale;
+        ProjectileDamageInfo.DamageValue    = _Damage;
     }
 
     protected virtual void Explode()
@@ -64,7 +60,7 @@ public abstract class GranadeBase : LongRangeWeaponBase
 
         ShowExplosionEffect();
         ActiveDamageArea();
-        DisableWeapon();
+        ExpireProjectile();
     }
 
 
@@ -78,10 +74,10 @@ public abstract class GranadeBase : LongRangeWeaponBase
     private const int   _Damage                 = 1;
     private const float _DamageRadius           = 3f;
 
-    private Rigidbody2D _granadeRigid       = null;
-    private Collider2D  _granadeCollider    = null;
-    private Collider2D  _ownerCollider      = null;
-    private Coroutine   _countDownCoroutine = null;
+    private Rigidbody2D _granadeRigid;
+    private Collider2D  _granadeCollider;
+    private Collider2D  _ownerCollider;
+    private Coroutine   _countDownCoroutine;
 
     private IEnumerator StartCountDown()
     {
@@ -94,14 +90,27 @@ public abstract class GranadeBase : LongRangeWeaponBase
     {
         _granadeRigid.angularDamping = _AngularDragAfterHit;
 
-        if (null == _countDownCoroutine)
-            _countDownCoroutine = StartCoroutine(StartCountDown());
-
         if (collision.transform.TryGetComponent(out CharacterBase character))
         {
             if (false == character.CompareTag("Player"))
             {
                 Explode();
+                return;
+            }
+        }
+
+        if (null == _countDownCoroutine)
+            _countDownCoroutine = StartCoroutine(StartCountDown());
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.transform.TryGetComponent(out CharacterBase character))
+        {
+            if (false == character.CompareTag("Player"))
+            {
+                Explode();
+                return;
             }
         }
     }
@@ -125,7 +134,7 @@ public abstract class GranadeBase : LongRangeWeaponBase
             var enemy = hit.GetComponent<ICharacter>();
             if (false == enemy.IsPlayer)
             {
-                enemy.OnDamaged(WeaponDamageInfo);
+                enemy.OnDamaged(ProjectileDamageInfo);
             }
         }
     }

@@ -9,7 +9,7 @@ public class HeroiAttackingUpperState : PlayerUpperStateBase<HeroUpperState>
     public override void OnEnter()
     {
         // Execute attack and get attacking motion time
-        //_attackingTime = OwnerController.CurrentAvatar.Attack();
+        //_attackingTime = OwnerController.CurrentAvatar.Fire();
     }
 
     public override void OnUpdate()

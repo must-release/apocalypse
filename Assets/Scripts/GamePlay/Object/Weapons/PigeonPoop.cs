@@ -1,19 +1,19 @@
 using UnityEngine;
 
-public class PigeonPoop : LongRangeWeaponBase
+public class PigeonPoop : ProjectileBase
 {
     /****** Public Members ******/
 
-    public override WeaponType  WeaponType          => WeaponType.PigeonPoop;
+    public override ProjectileType  CurrentPojectileType          => ProjectileType.PigeonPoop;
     public override bool        CanDamagePlayer     => true;
-    public override float       FireSpeed           => 30f;
+    public override float       FireSpeed           => 10f;
     public override float       GravityScale        => _GravityScale;
-    public override float       ActiveDuration      => 1f;
-    public override float       PostDelay           => 1f;
+    public override float       FireDuration      => 1f;
+    public override float       PostFireDelay           => 1f;
 
-    public override void Attack(Vector3 direction)
+    public override void Fire(Vector3 direction)
     {
-        base.Attack(direction);
+        base.Fire(direction);
 
         _poopRigid.linearVelocity = direction * FireSpeed;
     }
@@ -27,7 +27,7 @@ public class PigeonPoop : LongRangeWeaponBase
         _poopRigid = GetComponent<Rigidbody2D>();
         _poopRigid.gravityScale = _GravityScale;
 
-        WeaponDamageInfo.damageValue = _Damage;
+        ProjectileDamageInfo.DamageValue = _Damage;
     }
 
 
@@ -37,5 +37,17 @@ public class PigeonPoop : LongRangeWeaponBase
     private const float _GravityScale   = 0;
     private const int   _Damage         = 1;
 
-    private Rigidbody2D _poopRigid = null;
+    private Rigidbody2D _poopRigid;
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.transform.TryGetComponent(out CharacterBase character))
+        {
+            if (character.IsPlayer)
+            {
+                character.OnDamaged(ProjectileDamageInfo);
+                return;
+            }
+        }
+    }
 }

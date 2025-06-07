@@ -40,7 +40,7 @@ public class HeroDamagedLowerState : PlayerLowerState<HeroLowerState>
 
     private void KnockBack()
     {
-        Vector3 attackerPos = PlayerInfo.RecentDamagedInfo.attacker.transform.position;
+        Vector3 attackerPos = PlayerInfo.RecentDamagedInfo.Attacker.transform.position;
         int direction       = PlayerInfo.CurrentPosition.x > attackerPos.x ? 1 : -1;
 
         PlayerMotion.SetVelocity(new Vector2(direction * _KnockBackSpeed, _KnockBackSpeed));

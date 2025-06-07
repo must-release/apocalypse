@@ -1,15 +1,15 @@
 using UnityEngine;
 
-public class DamageInfo
+public class DamageInfo 
 {
-    public DamageInfo(GameObject gameObject = null, int damageValue = 1, bool isSingleHit = false)
+    public DamageInfo(GameObject attacker = null, int damageValue = 1, bool isContinuousHit = false)
     {   
-        attacker = gameObject;
-        this.damageValue = damageValue;
-        this.isSingleHit = isSingleHit;
+        Attacker        = attacker;
+        DamageValue     = damageValue;
+        IsContinuousHit = isContinuousHit;
     }
 
-    public GameObject   attacker;
-    public int          damageValue;
-    public bool         isSingleHit;
+    public GameObject   Attacker        { get; set; }
+    public int          DamageValue     { get; set; }
+    public bool         IsContinuousHit { get; set; }
 }

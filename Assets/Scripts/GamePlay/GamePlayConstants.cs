@@ -2,16 +2,16 @@
 using UnityEngine.Assertions;
 
 
-public enum WeaponType : byte
+public enum ProjectileType : byte
 {
-    // Player weapon
+    // Player
     Bullet, NormalGranade,
 
-    // Monster weapon
-    Scratch, PigeonPoop,
+    // Monster
+    PigeonPoop,
 
     // Enum count
-    WeaponTypeCount
+    ProjectileTypeCount
 }
 
 public enum EffectType : byte
@@ -25,6 +25,6 @@ public static class Layer
 {
     public const string Ground      = "Ground";
     public const string Character   = "Character";
-    public const string Weapon      = "Weapon";
+    public const string Projectile  = "Projectile";
     public const string Obstacle    = "Obstacle";
 }

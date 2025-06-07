@@ -7,8 +7,8 @@ public class HeroineWeapon : PlayerWeaponBase
 {
     /****** Public Members ******/
 
-    public override float       ReloadTime          => 0.5f;
-    public override WeaponType  PlayerWeaponType    => WeaponType.NormalGranade;
+    public override float           ReloadTime          => 0.5f;
+    public override ProjectileType  PlayerWeaponType    => ProjectileType.NormalGranade;
 
     public override void Aim(bool isAiming)
     {
@@ -42,7 +42,7 @@ public class HeroineWeapon : PlayerWeaponBase
     // TODO: Must not get example weapon from PoolHandler
     protected override void SetWeaponInfo()
     {
-        var heroineWeapon   = WeaponPool.Get() as LongRangeWeaponBase;
+        var heroineWeapon   = WeaponPool.Get();
         _fireSpeed          = heroineWeapon.FireSpeed;
         _gravityScale       = heroineWeapon.GravityScale;
         

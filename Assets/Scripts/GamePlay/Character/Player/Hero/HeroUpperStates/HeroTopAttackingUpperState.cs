@@ -12,7 +12,7 @@ public class HeroTopAttackingUpperState : PlayerUpperStateBase<HeroUpperState>
         //OwnerController.CurrentAvatar.RotateUpperBody(90);
 
         // Execute top attack and get attacking motion time
-        //_attackCoolTime = OwnerController.CurrentAvatar.Attack();
+        //_attackCoolTime = OwnerController.CurrentAvatar.Fire();
     }
 
     public override void OnUpdate()

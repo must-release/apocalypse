@@ -88,9 +88,9 @@ public class HeroAvatar : MonoBehaviour, IPlayerAvatar
 
     public float Attack()
     {
-        WeaponBase bullet = weapons.Dequeue();
+        ProjectileBase bullet = weapons.Dequeue();
         bullet.transform.position = shootingPoint.position;
-        bullet.Attack((shootingPoint.position - shootingPointPivot.position).normalized);
+        bullet.Fire((shootingPoint.position - shootingPointPivot.position).normalized);
         weapons.Enqueue(bullet);
         return attackCoolTime;
     }
@@ -98,7 +98,7 @@ public class HeroAvatar : MonoBehaviour, IPlayerAvatar
     /****** Private Members ******/
 
     private PlayerController playerController;
-    private Queue<WeaponBase> weapons;
+    private Queue<ProjectileBase> weapons;
     private List<GameObject> aimingDots;
     private int aimingDotsCount;
     private Transform shootingPointPivot;
@@ -108,7 +108,7 @@ public class HeroAvatar : MonoBehaviour, IPlayerAvatar
 
     private void Awake() {
         playerController = transform.parent.GetComponent<PlayerController>();
-        weapons = new Queue<WeaponBase>();
+        weapons = new Queue<ProjectileBase>();
         aimingDots = new List<GameObject>();
         aimingDotsCount = 40;
         shootingPointPivot = transform.Find("Shooting Point Pivot");

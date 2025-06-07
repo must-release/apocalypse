@@ -5,8 +5,8 @@ public class NormalGranade : GranadeBase
 {
     /****** Public Members ******/
 
-    public override WeaponType  WeaponType      => WeaponType.NormalGranade;
-    public override EffectType  GranadeEffect   => EffectType.NormalExplosion;
+    public override ProjectileType  CurrentPojectileType        => ProjectileType.NormalGranade;
+    public override EffectType  GranadeEffect                   => EffectType.NormalExplosion;
 
 
     /****** Protected Members ******/

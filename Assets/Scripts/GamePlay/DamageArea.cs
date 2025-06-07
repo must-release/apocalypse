@@ -27,7 +27,7 @@ public class DamageArea : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other) 
     {
-        if (_damageInfo.isSingleHit)
+        if (_damageInfo.IsContinuousHit)
             return;
 
         if (other.TryGetComponent(out ICharacter character))
@@ -39,7 +39,7 @@ public class DamageArea : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (false == _damageInfo.isSingleHit)
+        if (true == _damageInfo.IsContinuousHit)
             return;
 
         if (other.TryGetComponent(out ICharacter character))
