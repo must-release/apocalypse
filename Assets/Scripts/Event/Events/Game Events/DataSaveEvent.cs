@@ -56,7 +56,7 @@ public class DataSaveEvent : GameEventBase<DataSaveEventInfo>
 
     /****** Private Members ******/
 
-    Coroutine _eventCoroutine = null;
+    Coroutine _eventCoroutine;
 
     private IEnumerator PlayEventCoroutine()
     {

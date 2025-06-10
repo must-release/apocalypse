@@ -1,75 +1,82 @@
+﻿using NUnit.Framework;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class HeroAimingUpperState : PlayerUpperStateBase<HeroUpperState>
+public class HeroAimingUpperState : HeroUpperStateBase
 {
     /****** Public Members ******/
 
     public override HeroUpperState StateType => HeroUpperState.Aiming;
 
+    public override void InitializeState(IStateController<HeroUpperState> stateController, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    {
+        base.InitializeState(stateController, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        Assert.IsTrue(StateAnimator.HasState(0, _AimingStateHash), "Hero animator does not have aiming upper state.");
+    }
+
     public override void OnEnter()
     {
-        // Enable fixed update
-        _fixedUpdateFlag = true;
+        StateAnimator.Play(_AimingStateHash);
+        StateAnimator.Update(0.0f);
+
+        _aimingPosition = Vector3.zero;
     }
 
     public override void OnUpdate()
     {
-        // Set player's looking direction
         SetDirection();
 
-        // Rotate upper body toward the aiming position
-        //OwnerController.CurrentAvatar.RotateUpperBody(_aimingPosition);
+        PlayerWeapon.RotateWeaponPivot(_aimingPosition);
     }
 
-    private void FixedUpdate() 
-    {   
-        if(false == _fixedUpdateFlag) return;
-
-        //OwnerController.CurrentAvatar.Aim(true);
+    public override void OnFixedUpdate()
+    {
+        PlayerWeapon.Aim(true);
     }
 
     public override void OnExit(HeroUpperState nextState)
     {
-        // Turn off player's aiming state
-        //OwnerController.CurrentAvatar.Aim(false);
+        PlayerWeapon.Aim(false);
 
-        // Recover player's upper body rotation when not attacking
-        // if(nextState != HeroUpperState.AimAttacking)
-        //     OwnerController.CurrentAvatar.RotateUpperBody(0);
-
-        // Disable fixed update
-        _fixedUpdateFlag = false;
-    }
-
-    public override void OnAir() 
-    { 
-        StateController.ChangeState(HeroUpperState.Jumping); 
-    }
-
-    public override void Attack() 
-    {
-        StateController.ChangeState(HeroUpperState.AimAttacking); 
+        if (HeroUpperState.AimAttacking != nextState)
+            PlayerWeapon.SetWeaponPivotRotation(0);
     }
 
     public override void Aim(Vector3 aim)
     {
         if (Vector3.zero == aim)
-            StateController.ChangeState(HeroUpperState.Idle); 
-        else
-            _aimingPosition = aim;
+            StateController.ChangeState(HeroUpperState.Idle);
+
+        _aimingPosition = aim;
     }
+
+    public override void Attack()
+    {
+        StateController.ChangeState(HeroUpperState.AimAttacking);
+    }
+
+    public override void OnAir()
+    {
+        StateController.ChangeState(HeroUpperState.Jumping);
+    }
+
+    public override void Disable()
+    {
+        StateController.ChangeState(HeroUpperState.Disabled);
+    }
+
+
 
     /****** Private Members ******/
 
-    private Vector3 _aimingPosition     = Vector3.zero;
-    private bool    _fixedUpdateFlag    = false;
+    private readonly int _AimingStateHash = AnimatorState.Hero.GetHash(HeroUpperState.Attacking);
+
+    private Vector3 _aimingPosition = Vector3.zero;
 
     private void SetDirection()
     {
         var direction = PlayerInfo.CurrentPosition.x < _aimingPosition.x ? FacingDirection.Right : FacingDirection.Left;
         if (direction != PlayerInfo.CurrentFacingDirection)
-        {
             PlayerMotion.SetFacingDirection(direction);
-        }
     }
 }

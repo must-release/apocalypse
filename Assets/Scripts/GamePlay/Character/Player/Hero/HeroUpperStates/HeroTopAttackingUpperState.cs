@@ -1,57 +1,70 @@
+﻿using NUnit.Framework;
 using UnityEngine;
 
-public class HeroTopAttackingUpperState : PlayerUpperStateBase<HeroUpperState>
+public class HeroTopAttackingUpperState : HeroUpperStateBase
 {
     /****** Public Members ******/
 
     public override HeroUpperState StateType => HeroUpperState.TopAttacking;
 
+    public override void InitializeState(IStateController<HeroUpperState> stateController, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    {
+        base.InitializeState(stateController, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        Assert.IsTrue(StateAnimator.HasState(0, _TopAttackingStateHash), "Hero animator does not have top attacking upper state.");
+    }
+
     public override void OnEnter()
     {
-        // Rotate upper body by 90 degree
-        //OwnerController.CurrentAvatar.RotateUpperBody(90);
+        StateAnimator.Play(_TopAttackingStateHash);
+        StateAnimator.Update(0.0f);
 
-        // Execute top attack and get attacking motion time
-        //_attackCoolTime = OwnerController.CurrentAvatar.Fire();
+        PlayerWeapon.SetWeaponPivotRotation(90);
+        _attackCoolTime = PlayerWeapon.Attack();
+
     }
 
     public override void OnUpdate()
     {
-        // Wait for attacking animation
         _attackCoolTime -= Time.deltaTime;
 
         if (0 < _attackCoolTime) return;
 
-        StateController.ChangeState(HeroUpperState.LookingUp);
+        var nextState = _shouldContinueAttack ? HeroUpperState.TopAttacking : HeroUpperState.LookingUp;
+        StateController.ChangeState(nextState);
     }
 
     public override void OnExit(HeroUpperState nextState)
     {
-        // Recover upper body rotation when not looking up
-        if (HeroUpperState.LookingUp == nextState)
-            return;
-
-        //OwnerController.CurrentAvatar.RotateUpperBody(0);
+        if (HeroUpperState.TopAttacking != nextState)
+            PlayerWeapon.SetWeaponPivotRotation(0);
     }
 
-    public override void Attack() 
-    { 
-        StateController.ChangeState(HeroUpperState.TopAttacking); 
+    public override void Attack()
+    {
+        base.Attack();
+
+        _shouldContinueAttack = true;
     }
-    
+
     public override void LookUp(bool lookUp)
-    { 
-        if(lookUp) return;
+    {
+        if (lookUp) return;
 
-        var nextState = PlayerInfo.StandingGround == null ? HeroUpperState.Jumping : HeroUpperState.Idle;
+        var nextState = PlayerInfo.StandingGround == null ? HeroUpperState.Disabled : HeroUpperState.Idle;
         StateController.ChangeState(nextState);
     }
 
-    /****** Protected Members ******/
+    public override void Disable()
+    {
+        StateController.ChangeState(HeroUpperState.Disabled);
+    }
 
-    protected override string AnimationClipPath => "";
+
 
     /****** Private Members ******/
 
-    private float _attackCoolTime = 0;
+    private readonly int _TopAttackingStateHash = AnimatorState.Hero.GetHash(HeroUpperState.TopAttacking);
+
+    private float   _attackCoolTime;
+    private bool    _shouldContinueAttack;
 }

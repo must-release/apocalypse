@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class PatrollingState : EnemyStateBase
 {
-    protected override void StartEnemyState()
+    protected override void Awake()
     {
-
+        base.Awake();
     }
 
     public override EnemyState GetState() { return EnemyState.Patrolling; }

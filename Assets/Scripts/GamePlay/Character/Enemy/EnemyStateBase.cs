@@ -18,7 +18,6 @@ public abstract class EnemyStateBase : MonoBehaviour
     public abstract void OnUpdate();
     public abstract void OnExit(EnemyState nextState);
     public abstract void DetectedPlayer();
-    protected abstract void StartEnemyState();
 
 
     /*** Virtual Functions ***/
@@ -31,14 +30,12 @@ public abstract class EnemyStateBase : MonoBehaviour
     }
 
 
-    /*** private Function ***/
-    private void Start()
+    protected virtual void Awake()
     {
         enemyTransform  =   transform.parent;
         enemyController =   enemyTransform.GetComponent<EnemyController>();
         enemySprite     =   enemyTransform.GetComponent<SpriteRenderer>();
         enemyRigid      =   enemyTransform.GetComponent<Rigidbody2D>();
 
-        StartEnemyState();
     }
 }

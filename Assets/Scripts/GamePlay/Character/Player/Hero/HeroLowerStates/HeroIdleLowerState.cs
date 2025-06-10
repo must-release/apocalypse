@@ -1,13 +1,23 @@
+﻿using NUnit.Framework;
 using UnityEngine;
 
-public class HeroIdleLowerState : PlayerLowerState<HeroLowerState>
+public class HeroIdleLowerState : HeroLowerStateBase
 {
+    /****** Public Members ******/
 
-    public override HeroLowerState  StateType               => HeroLowerState.Idle;
-    public override bool            ShouldDisableUpperBody  => false; 
+    public override HeroLowerState StateType    => HeroLowerState.Idle;
+    public override bool ShouldDisableUpperBody => false;
+
+    public override void InitializeState(IStateController<HeroLowerState> stateController, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    {
+        base.InitializeState(stateController, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        Assert.IsTrue(StateAnimator.HasState(0, _IdleStateHash), "Hero animator does not have idle lower state.");
+    }
 
     public override void OnEnter()
     {
+        StateAnimator.Play(_IdleStateHash);
+        StateAnimator.Update(0.0f);
         PlayerMotion.SetVelocity(Vector2.zero);
     }
 
@@ -16,12 +26,12 @@ public class HeroIdleLowerState : PlayerLowerState<HeroLowerState>
 
     }
 
-    public override void OnExit()
+    public override void OnExit(HeroLowerState _)
     {
 
     }
 
-    public override void Jump()
+    public override void StartJump()
     {
         PlayerMotion.SetVelocity(new Vector2(PlayerInfo.CurrentVelocity.x, PlayerInfo.JumpingSpeed));
         StateController.ChangeState(HeroLowerState.Jumping);
@@ -32,9 +42,9 @@ public class HeroIdleLowerState : PlayerLowerState<HeroLowerState>
         StateController.ChangeState(HeroLowerState.Jumping);
     }
 
-    public override void Aim(bool isAiming)
+    public override void Aim(Vector3 aim)
     {
-        if (false == isAiming) return;
+        if (Vector3.zero == aim) return;
 
         StateController.ChangeState(HeroLowerState.Aiming);
     }
@@ -55,4 +65,14 @@ public class HeroIdleLowerState : PlayerLowerState<HeroLowerState>
 
         StateController.ChangeState(HeroLowerState.Climbing);
     }
+
+    public override void Damaged()
+    {
+        StateController.ChangeState(HeroLowerState.Damaged);
+    }
+
+
+    /****** Private Members ******/
+
+    private readonly int _IdleStateHash = AnimatorState.Hero.GetHash(HeroLowerState.Idle);
 }

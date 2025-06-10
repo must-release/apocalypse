@@ -1,14 +1,31 @@
+using NUnit.Framework;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class HeroineLookingUpUpperState : HeroineUpperStateBase
 {
+    /****** Public Members ******/
 
     public override HeroineUpperState StateType => HeroineUpperState.LookingUp;
 
+    public override void InitializeState(IStateController<HeroineUpperState> stateController
+                                         , IMotionController playerMotion
+                                         , ICharacterInfo playerInfo
+                                         , Animator stateAnimator
+                                         , PlayerWeaponBase playerWeapon
+    )
+    {
+        base.InitializeState(stateController, playerMotion, playerInfo, stateAnimator, playerWeapon);
+
+        Assert.IsTrue(StateAnimator.HasState(0, _IdleLookingUpStateHash), "Animator does not have idle looking up state.");
+        Assert.IsTrue(StateAnimator.HasState(0, _RunningLookingUpStateHash), "Animator does not have running looking up state.");
+    }
+
     public override void OnEnter()
     {
-        // Rotate upper body by 90 degree
-        //OwnerController.CurrentAvatar.RotateUpperBody(90);
+        var nextStateHash = Mathf.Approximately(PlayerInfo.CurrentVelocity.x, 0) ? _IdleLookingUpStateHash : _RunningLookingUpStateHash;
+        StateAnimator.Play(nextStateHash, 0, LowerBodyStateInfo.AnimationNormalizedTime);
+        StateAnimator.Update(0.0f);
     }
 
     public override void OnUpdate()
@@ -18,11 +35,7 @@ public class HeroineLookingUpUpperState : HeroineUpperStateBase
 
     public override void OnExit(HeroineUpperState nextState)
     {
-        // Recover upper body rotation when not attacking
-        if (HeroineUpperState.TopAttacking == nextState)
-            return;
-        
-        //OwnerController.CurrentAvatar.RotateUpperBody(0);
+
     }
 
     public override void LookUp(bool lookUp) 
@@ -33,12 +46,24 @@ public class HeroineLookingUpUpperState : HeroineUpperStateBase
         StateController.ChangeState(nextState);
     }
 
+    public override void Move()
+    {
+        var stateInfo = StateAnimator.GetCurrentAnimatorStateInfo(0);
+
+        if (AnimatorState.Heroine.GetHash(HeroineUpperState.Idle, "LookingUp") == stateInfo.fullPathHash)
+        {
+
+        }
+    }
+
     public override void Disable()
     {
         StateController.ChangeState(HeroineUpperState.Disabled);
     }
 
-    /****** Protected Members ******/
 
-    protected override string AnimationClipPath => AnimationClipAsset.HeroineUpper.LookingUp;
+    /****** Private Members ******/
+
+    private readonly int _IdleLookingUpStateHash    = AnimatorState.Heroine.GetHash(HeroineUpperState.Idle, "LookingUp");
+    private readonly int _RunningLookingUpStateHash = AnimatorState.Heroine.GetHash(HeroineUpperState.Running, "LookingUp");
 }

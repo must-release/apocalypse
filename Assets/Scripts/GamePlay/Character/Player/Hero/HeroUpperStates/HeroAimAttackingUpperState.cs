@@ -1,65 +1,61 @@
+﻿using NUnit.Framework;
 using UnityEngine;
 
-public class HeroAimAttackingUpperState : PlayerUpperStateBase<HeroUpperState>
+public class HeroAimAttackingUpperState : HeroUpperStateBase
 {
     /****** Public Members ******/
 
     public override HeroUpperState StateType => HeroUpperState.AimAttacking;
 
+    public override void InitializeState(IStateController<HeroUpperState> stateController, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    {
+        base.InitializeState(stateController, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        Assert.IsTrue(StateAnimator.HasState(0, _AimAttackingStateHash), "Hero animator does not have aim attacking upper state.");
+    }
+
     public override void OnEnter()
     {
-        //_attackCoolTime = OwnerController.CurrentAvatar.Fire();
+        StateAnimator.Play(_AimAttackingStateHash);
+
+        postDelay = PlayerWeapon.Attack();
     }
 
     public override void OnUpdate()
     {
-        // Wait for attacking animation
-        _attackCoolTime -= Time.deltaTime;
+        var stateInfo = StateAnimator.GetCurrentAnimatorStateInfo(0);
 
-        if ( 0 < _attackCoolTime )
+        postDelay -= Time.deltaTime;
+
+        if (1.0f <= stateInfo.normalizedTime && postDelay < 0)
+        {
             StateController.ChangeState(HeroUpperState.Aiming);
-
-        // Set player's looking direction
-        SetDirection();
-
-        // Rotate upper body toward the aiming position
-        //StateController.CurrentAvatar.RotateUpperBody(_aimingPosition);
+        }
     }
 
     public override void OnExit(HeroUpperState nextState)
     {
-        // Recover player's upper body rotation when not aiming or attacking
-        if (HeroUpperState.Aiming == nextState || HeroUpperState.AimAttacking == nextState)
-            return;
-
-        //OwnerController.CurrentAvatar.RotateUpperBody(0);
+        if (HeroUpperState.Aiming != nextState)
+        {
+            PlayerWeapon.SetWeaponPivotRotation(0);
+            PlayerWeapon.Aim(false);
+        }
     }
-
-    public override void Disable() { StateController.ChangeState(HeroUpperState.Disabled); }
-
-    public override void Attack() { StateController.ChangeState(HeroUpperState.AimAttacking); }
 
     public override void Aim(Vector3 aim)
     {
         if (Vector3.zero == aim)
-            StateController.ChangeState(HeroUpperState.Idle); 
-        else
-            _aimingPosition = aim;
+            StateController.ChangeState(HeroUpperState.Idle);
+    }
+
+    public override void Disable()
+    {
+        StateController.ChangeState(HeroUpperState.Disabled);
     }
 
 
     /****** Private Members ******/
 
-    private float           _attackCoolTime = 0;
-    private Vector3         _aimingPosition = Vector3.zero;
+    private readonly int _AimAttackingStateHash = AnimatorState.Hero.GetHash(HeroUpperState.AimAttacking);
 
-    // Set player's looking direction
-    private void SetDirection()
-    {
-        var direction = PlayerInfo.CurrentPosition.x < _aimingPosition.x ? FacingDirection.Right : FacingDirection.Left;
-        if (direction != PlayerInfo.CurrentFacingDirection)
-        {
-            PlayerMotion.SetFacingDirection(direction);
-        }
-    }
+    private float postDelay = 0f;
 }

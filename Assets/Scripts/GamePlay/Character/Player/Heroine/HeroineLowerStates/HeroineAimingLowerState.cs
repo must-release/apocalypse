@@ -8,7 +8,7 @@ public class HeroineAimingLowerState : HeroineLowerStateBase
     public override void OnEnter()
     {
         PlayerMotion.SetVelocity(Vector3.zero);
-        StateAnimator.Play(AnimatorState.HeroineLower.Aiming);
+        StateAnimator.Play(AnimatorState.Heroine.GetHash(StateType));
 
         _aimingPosition = Vector3.zero;
     }
@@ -30,7 +30,7 @@ public class HeroineAimingLowerState : HeroineLowerStateBase
         PlayerWeapon.Aim(false);
 
         if (HeroineLowerState.AimAttacking != nextState)
-            PlayerWeapon.RotateWeaponPivot(0);
+            PlayerWeapon.SetWeaponPivotRotation(0);
     }
 
     public override void Aim(Vector3 aim) 
@@ -55,12 +55,6 @@ public class HeroineAimingLowerState : HeroineLowerStateBase
     {
         StateController.ChangeState(HeroineLowerState.Damaged); 
     }
-
-
-
-    /****** Protected Members ******/
-
-    protected override string AnimationClipPath => AnimationClipAsset.HeroineLower.Aiming;
 
 
     /****** Private Members ******/

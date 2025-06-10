@@ -27,7 +27,7 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
-    AimingDotPoolCount: 10
+    AimingDotPoolCount: 30
   - SelectedProjectileType: 1
     ProjectileReference:
       m_AssetGUID: b8b8ab37253debd49a64878161d4319d
@@ -42,7 +42,7 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
-    AimingDotPoolCount: 10
+    AimingDotPoolCount: 20
   - SelectedProjectileType: 2
     ProjectileReference:
       m_AssetGUID: 4a295e6efadfc2a42a61deb8d0f6c5cd

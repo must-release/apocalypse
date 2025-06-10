@@ -85,10 +85,10 @@ public class Pigeon : EnemyController
     {
         _waitingTime        = 0;
         _isWaiting          = true;
-        _isAttackFinished   = false;
         _attackingTime      = 0;
 
         _pigeonPoop = WeaponPool.Get();
+        _pigeonPoop.OnProjectileExpired += () => WeaponPool.Return(_pigeonPoop);
         _pigeonPoop.SetOwner(gameObject);
         _pigeonPoop.SetProjectilePosition(CurrentPosition);
         _pigeonPoop.Fire((ChasingTarget.position - CurrentPosition).normalized);
@@ -114,9 +114,6 @@ public class Pigeon : EnemyController
 
             return false;
         }
-
-        WeaponPool.Return(_pigeonPoop);
-        _pigeonPoop = null;
 
         return true;
     }
@@ -179,7 +176,6 @@ public class Pigeon : EnemyController
     private float   _patrolLeftEnd, _patrolRightEnd; // Each end side of the patrol range
     private bool    _isWaiting;
     private float   _waitingTime;
-    private bool    _isAttackFinished;
     private float   _attackingTime;
     private float   _minAttackRange;
     private float   _maxAttackRange;

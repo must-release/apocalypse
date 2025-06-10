@@ -18,11 +18,11 @@ public class Ladder : InteractionObject
 
         if (character.transform.position.y > ladderGround.position.y) // if character is standing over the ladder
         {
-            return controlInfo.climb = controlInfo.upDown < 0;
+            return controlInfo.Climb = controlInfo.upDown < 0;
         }
         else // if character is standing under the ladder
         { 
-            return controlInfo.climb = controlInfo.upDown > 0;
+            return controlInfo.Climb = controlInfo.upDown > 0;
         }
     }
 
@@ -48,7 +48,7 @@ public class Ladder : InteractionObject
             character.transform.position.y < bottom.position.y ||
             character.StandingGround || controlInfo.isJumping)
         {
-            return controlInfo.climb = false;
+            return controlInfo.Climb = false;
         }
         else return true;
     }

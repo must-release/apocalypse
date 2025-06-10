@@ -7,7 +7,7 @@ public class HeroineAimAttackingLowerState : HeroineLowerStateBase
 
     public override void OnEnter()
     {
-        StateAnimator.Play(AnimatorState.HeroineLower.AimAttacking);
+        StateAnimator.Play(AnimatorState.Heroine.GetHash(StateType));
         
         postDelay = PlayerWeapon.Attack();
         passedTime = 0f;
@@ -28,18 +28,13 @@ public class HeroineAimAttackingLowerState : HeroineLowerStateBase
 
     public override void OnExit(HeroineLowerState _)
     {
-        PlayerWeapon.RotateWeaponPivot(0);
+        PlayerWeapon.SetWeaponPivotRotation(0);
     }
 
     public override void Damaged()
     {
         StateController.ChangeState(HeroineLowerState.Damaged);
     }
-
-
-    /****** Protected Members ******/
-
-    protected override string AnimationClipPath => AnimationClipAsset.HeroineLower.AimAttacking;
 
 
     /****** Private Members ******/

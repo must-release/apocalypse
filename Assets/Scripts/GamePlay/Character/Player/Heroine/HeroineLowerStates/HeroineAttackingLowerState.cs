@@ -9,25 +9,12 @@ public class HeroineAttackingLowerState : HeroineLowerStateBase
     {
         PlayerMotion.SetVelocity(new Vector2(0, PlayerInfo.CurrentVelocity.y));
 
-        StateAnimator.Play(AnimatorState.HeroineLower.Attacking);
+        StateAnimator.Play(AnimatorState.Heroine.GetHash(StateType));
         StateAnimator.Update(0.0f);
-
-        _timer = 0;
-        _isAttackTriggered = false;
-        _attackTriggerTime = StateAnimationClip.length * _AttackTriggerRatio;
     }
 
     public override void OnUpdate()
     {
-        _timer += Time.deltaTime;
-
-        if (false == _isAttackTriggered && _attackTriggerTime < _timer )
-        {
-            _isAttackTriggered = true;
-            PlayerWeapon.Attack();
-        }
-
-
         var stateInfo = StateAnimator.GetCurrentAnimatorStateInfo(0);
 
         if (1.0f <= stateInfo.normalizedTime)
@@ -47,17 +34,9 @@ public class HeroineAttackingLowerState : HeroineLowerStateBase
         StateController.ChangeState(HeroineLowerState.Damaged);
     }
 
-
-    /****** Protected Members ******/
-
-    protected override string AnimationClipPath => AnimationClipAsset.HeroineLower.Attacking;
-
-
-    /****** Private Members ******/
-
-    private const float _AttackTriggerRatio = 1.0f / 3.0f;
-
-    private float   _timer              = 0.0f;
-    private float   _attackTriggerTime  = 0.0f;
-    private bool    _isAttackTriggered  = false;
+    // Called by animation event in HeroineAttackingLowerState.anim
+    public void ThrowGranade()
+    {
+        PlayerWeapon.Attack();
+    }
 }

@@ -1,12 +1,21 @@
+﻿using NUnit.Framework;
 using UnityEngine;
 
-public class HeroDisabledUpperState : PlayerUpperStateBase<HeroUpperState>
+public class HeroDisabledUpperState : HeroUpperStateBase
 {
+    /****** Public Members ******/
+
     public override HeroUpperState StateType => HeroUpperState.Disabled;
+
+    public override void InitializeState(IStateController<HeroUpperState> stateController, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    {
+        base.InitializeState(stateController, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        Assert.IsTrue(StateAnimator.HasState(0, _DisableStateHash), $"Hero animator does not have disabled upper state.");
+    }
 
     public override void OnEnter()
     {
-
+        StateAnimator.Play(_DisableStateHash);
     }
     public override void OnUpdate()
     {
@@ -14,12 +23,15 @@ public class HeroDisabledUpperState : PlayerUpperStateBase<HeroUpperState>
     }
     public override void OnExit(HeroUpperState _)
     {
-
     }
 
     public override void Enable()
     {
-        var nextState = PlayerInfo.StandingGround == null ? HeroUpperState.Jumping : HeroUpperState.Idle;
-        StateController.ChangeState(nextState);
+        StateController.ChangeState(HeroUpperState.Idle);
     }
+
+
+    /****** Private Members ******/
+
+    private readonly int _DisableStateHash = AnimatorState.Hero.GetHash(HeroUpperState.Disabled);
 }

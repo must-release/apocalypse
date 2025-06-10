@@ -49,5 +49,10 @@ public class PigeonPoop : ProjectileBase
                 return;
             }
         }
+
+        if (false == collision.isTrigger)
+        {
+            ExpireProjectile();
+        }
     }
 }

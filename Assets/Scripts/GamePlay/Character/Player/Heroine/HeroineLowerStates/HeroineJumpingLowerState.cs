@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using System.Collections;
 using UnityEditor;
 using UnityEngine;
@@ -9,17 +10,31 @@ public class HeroineJumpingLowerState : HeroineLowerStateBase
     public override HeroineLowerState   StateType               => HeroineLowerState.Jumping;
     public override bool                ShouldDisableUpperBody  => true;
 
+    public override void InitializeState(IStateController<HeroineLowerState> stateController, 
+                                          IMotionController playerPhysics, 
+                                          ICharacterInfo playerInfo, 
+                                          Animator stateAnimator,
+                                          PlayerWeaponBase playerWeapon
+    )
+    {
+        base.InitializeState(stateController, playerPhysics, playerInfo, stateAnimator, playerWeapon);
+
+        Assert.IsTrue(StateAnimator.HasState(0, _JumpingStartStateHash), "Animator does not have jumping start state.");
+        Assert.IsTrue(StateAnimator.HasState(0, _JumpingLoopStateHash), "Animator does not have jumping loop state.");
+        Assert.IsTrue(StateAnimator.HasState(0, _JumpingEndStateHash), "Animator does not have jumping end state.");
+    }
+
     public override void OnEnter()
     {
         if (0 < PlayerInfo.CurrentVelocity.y)
         {
-            StateAnimator.Play(AnimatorState.HeroineLower.JumpingStart);
+            StateAnimator.Play(_JumpingStartStateHash);
             _isStartingJump = true;
             _isJumping      = true;
         }
         else
         {
-            StateAnimator.Play(AnimatorState.HeroineLower.JumpingLoop);
+            StateAnimator.Play(_JumpingLoopStateHash);
             _isStartingJump = false;
             _isJumping      = false;
         }
@@ -97,24 +112,24 @@ public class HeroineJumpingLowerState : HeroineLowerStateBase
     }
 
 
-    /****** Protected Members ******/
-
-    protected override string AnimationClipPath => AnimationClipAsset.HeroineLower.JumpingStart;
-
     /****** Private Members ******/
 
-    private const float _JumpFallSpeed = 10f;
+    private readonly int _JumpingStartStateHash = AnimatorState.Heroine.GetHash(HeroineLowerState.Jumping, "Start");
+    private readonly int _JumpingLoopStateHash  = AnimatorState.Heroine.GetHash(HeroineLowerState.Jumping, "Loop");
+    private readonly int _JumpingEndStateHash   = AnimatorState.Heroine.GetHash(HeroineLowerState.Jumping, "End");
+    private const float  _JumpFallSpeed         = 10f;
 
     private Coroutine _landCoroutine = null;
 
-    private bool _isStartingJump    = false;
-    private bool _isJumping         = false;
+    private bool _isStartingJump;
+    private bool _isJumping;
 
     private void ApplyJumpCut()
     {
         PlayerMotion.SetVelocity(new Vector2(
             PlayerInfo.CurrentVelocity.x,
-            PlayerInfo.CurrentVelocity.y - _JumpFallSpeed * PlayerInfo.JumpingSpeed * Time.deltaTime));
+            PlayerInfo.CurrentVelocity.y - _JumpFallSpeed * PlayerInfo.JumpingSpeed * Time.deltaTime
+        ));
     }
 
     private void ChangeToJumpingLoopAnimation()
@@ -122,7 +137,7 @@ public class HeroineJumpingLowerState : HeroineLowerStateBase
         if (StateAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
             return;
 
-        StateAnimator.Play(AnimatorState.HeroineLower.JumpingLoop);
+        StateAnimator.Play(_JumpingLoopStateHash);
         StateAnimator.Update(0.0f);
 
         _isStartingJump = false;
@@ -130,7 +145,7 @@ public class HeroineJumpingLowerState : HeroineLowerStateBase
 
     private IEnumerator LandOnGround()
     {
-        StateAnimator.Play(AnimatorState.HeroineLower.JumpingEnd);
+        StateAnimator.Play(_JumpingEndStateHash);
         StateAnimator.Update(0.0f);
 
         yield return new WaitWhile(() => StateAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);

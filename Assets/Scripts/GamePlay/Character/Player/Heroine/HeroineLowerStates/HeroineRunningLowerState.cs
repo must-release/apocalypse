@@ -9,7 +9,8 @@ public class HeroineRunningLowerState : HeroineLowerStateBase
 
     public override void OnEnter()
     {
-        StateAnimator.Play(AnimatorState.HeroineLower.Running);
+        StateAnimator.Play(AnimatorState.Heroine.GetHash(StateType));
+        StateAnimator.Update(0.0f);
     }
 
     public override void OnUpdate()
@@ -80,8 +81,4 @@ public class HeroineRunningLowerState : HeroineLowerStateBase
     {
         StateController.ChangeState(HeroineLowerState.Damaged);
     }
-
-    /****** Protected Members ******/
-
-    protected override string AnimationClipPath => AnimationClipAsset.HeroineLower.Running;
 }

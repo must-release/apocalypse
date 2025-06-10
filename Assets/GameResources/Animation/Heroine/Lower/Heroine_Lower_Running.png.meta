@@ -1,7 +1,37 @@
 fileFormatVersion: 2
 guid: 8f2eb1cd207804ecc89eefc81ea021c2
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: -2289979358568752229
+    second: Heroine_Lower_Running_0
+  - first:
+      213: -106184709835058247
+    second: Heroine_Lower_Running_1
+  - first:
+      213: -300975506229041900
+    second: Heroine_Lower_Running_2
+  - first:
+      213: 2352984574967973157
+    second: Heroine_Lower_Running_3
+  - first:
+      213: -1489735429136277300
+    second: Heroine_Lower_Running_4
+  - first:
+      213: 3184036991469609334
+    second: Heroine_Lower_Running_5
+  - first:
+      213: -3516260707369309966
+    second: Heroine_Lower_Running_6
+  - first:
+      213: 831756449841360666
+    second: Heroine_Lower_Running_7
+  - first:
+      213: -3257645820556482812
+    second: Heroine_Lower_Running_8
+  - first:
+      213: -7260796247683709165
+    second: Heroine_Lower_Running_9
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -81,33 +111,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
     buildTarget: Standalone
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: iOS
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -151,8 +155,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 96eac86b18ace45ea81210e0ce80b458
-      internalID: -85360486
+      spriteID: 6d733e5168e68b94d94defa3f59ee9e1
+      internalID: 1085877886
       vertices: []
       indices: 
       edges: []
@@ -173,8 +177,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 490279687932d4363b7b30bb5b7e8d1f
-      internalID: 483449921
+      spriteID: e8851d0c3f9086b4c9714f6bfe61c3af
+      internalID: 279253782
       vertices: []
       indices: 
       edges: []
@@ -195,8 +199,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dc3f92c46641f4f079e96c97355fd227
-      internalID: 102472727
+      spriteID: 1c830913071a1a64798899cf157be986
+      internalID: 1718833895
       vertices: []
       indices: 
       edges: []
@@ -217,8 +221,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dac661b6198a7451caf8656c39908c51
-      internalID: -2136742185
+      spriteID: ad436ff0858407f4784f49317119c393
+      internalID: -1965492714
       vertices: []
       indices: 
       edges: []
@@ -239,8 +243,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2bd1c968be5fe4f9db52c47bdd7ffc8a
-      internalID: -361337139
+      spriteID: 043d327f8a43bd543a94418b474e73b7
+      internalID: -852529765
       vertices: []
       indices: 
       edges: []
@@ -261,8 +265,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5ce9fcf2488434a8ba3014c4ab9967e4
-      internalID: -142913320
+      spriteID: f492c5d5aa560764995bdc7080c0027c
+      internalID: -277341548
       vertices: []
       indices: 
       edges: []
@@ -283,8 +287,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0bdf993322cf94fe9b19369b5dde3105
-      internalID: 197612962
+      spriteID: 955d397426250d641924f2de5a28fbee
+      internalID: 1665211783
       vertices: []
       indices: 
       edges: []
@@ -305,8 +309,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3baaa205d76e8430b8e09051569a8fa7
-      internalID: 927350448
+      spriteID: 1e3fac8de02bc9845848604483380120
+      internalID: 1335729570
       vertices: []
       indices: 
       edges: []
@@ -327,8 +331,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 33bee4251e6c64f4e88507dd41c78179
-      internalID: 699015460
+      spriteID: 02e9fff535a5f094582ff1f9ae353acd
+      internalID: -1236826688
       vertices: []
       indices: 
       edges: []
@@ -349,8 +353,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6b96b40f068ca4fcd8a261aa870e275c
-      internalID: -66026953
+      spriteID: e3be99e02dc1f8545b55176047d44d51
+      internalID: -861825687
       vertices: []
       indices: 
       edges: []
@@ -359,7 +363,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 0d8d78a623c82424ba1f988d781034ec
     internalID: 0
     vertices: []
     indices: 
@@ -367,18 +371,20 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":128.0,"y":128.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Heroine_Lower_Running_0: -85360486
-      Heroine_Lower_Running_1: 483449921
-      Heroine_Lower_Running_2: 102472727
-      Heroine_Lower_Running_3: -2136742185
-      Heroine_Lower_Running_4: -361337139
-      Heroine_Lower_Running_5: -142913320
-      Heroine_Lower_Running_6: 197612962
-      Heroine_Lower_Running_7: 927350448
-      Heroine_Lower_Running_8: 699015460
-      Heroine_Lower_Running_9: -66026953
+      Heroine_Lower_Running_0: 1085877886
+      Heroine_Lower_Running_1: 279253782
+      Heroine_Lower_Running_2: 1718833895
+      Heroine_Lower_Running_3: -1965492714
+      Heroine_Lower_Running_4: -852529765
+      Heroine_Lower_Running_5: -277341548
+      Heroine_Lower_Running_6: 1665211783
+      Heroine_Lower_Running_7: 1335729570
+      Heroine_Lower_Running_8: -1236826688
+      Heroine_Lower_Running_9: -861825687
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

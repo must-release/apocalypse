@@ -7,8 +7,10 @@ public class DamagedState : EnemyStateBase
     private Color initialColor;
     private float flickeredTime;
 
-    protected override void StartEnemyState()
+    protected override void Awake()
     {
+        base.Awake();
+
         initialColor = enemySprite.color;
         flickeredTime = 0;
     }

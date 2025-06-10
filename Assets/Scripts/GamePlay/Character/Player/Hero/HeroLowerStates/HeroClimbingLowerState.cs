@@ -1,22 +1,21 @@
+﻿using NUnit.Framework;
 using UnityEngine;
 
-public class HeroClimbingLowerState : PlayerLowerState<HeroLowerState>
+public class HeroClimbingLowerState : HeroLowerStateBase
 {
     /****** Public Members ******/
 
-    public override HeroLowerState  StateType               => HeroLowerState.Climbing;
-    public override bool            ShouldDisableUpperBody  => true;
+    public override HeroLowerState StateType    => HeroLowerState.Climbing;
+    public override bool ShouldDisableUpperBody => true;
 
-    public override void InitializeState(IStateController<HeroLowerState> stateController, 
-                                         IMotionController playerPhysics, 
-                                         ICharacterInfo playerInfo, 
-                                         Animator StateAnimator,
-                                         PlayerWeaponBase playerWeapon
-    )
+    public override void InitializeState(IStateController<HeroLowerState> stateController, IMotionController playerPhysics, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
     {
-        base.InitializeState(stateController, playerPhysics, playerInfo, StateAnimator, playerWeapon);
+        base.InitializeState(stateController, playerPhysics, playerInfo, stateAnimator, playerWeapon);
 
-        _climbingSpeed      = playerInfo.MovingSpeed;
+        Assert.IsTrue(StateAnimator.HasState(0, _ClimbingDownStateHash), "Hero animator does not have climbing down lower state.");
+        Assert.IsTrue(StateAnimator.HasState(0, _ClimbingUpStateHash), "Hero animator does not have climbing up lower state.");
+
+        _climbingSpeed      = playerInfo.MovingSpeed * 2.0f / 3.0f;
         _climbUpHeight      = 0.1f;
         _climbDownHeight    = playerInfo.CharacterHeight / 2 + 0.2f;
     }
@@ -24,25 +23,49 @@ public class HeroClimbingLowerState : PlayerLowerState<HeroLowerState>
     public override void OnEnter()
     {
         PlayerMotion.SetGravityScale(0);
+        StateAnimator.Play(_ClimbingUpStateHash);
+
+        _climbingObject = PlayerInfo.CurrentControlInfo.climbingObject.transform;
 
         MoveNearToClimbingObject();
     }
 
     public override void OnUpdate()
     {
+        if (false == Mathf.Approximately(PlayerInfo.CurrentPosition.x, _climbingObject.position.x))
+        {
+            PlayerMotion.TeleportTo(new Vector2(_climbingObject.position.x, PlayerInfo.CurrentPosition.y));
+        }
 
+        float verticalVelocity = PlayerInfo.CurrentVelocity.y;
+        if (Mathf.Approximately(verticalVelocity, 0f))
+        {
+            StateAnimator.speed = 0.0f;
+        }
+        else
+        {
+            var nextClipHash = verticalVelocity > 0 ? _ClimbingUpStateHash : _ClimbingDownStateHash;
+
+            if (StateAnimator.GetCurrentAnimatorStateInfo(0).fullPathHash != nextClipHash)
+            {
+                StateAnimator.Play(nextClipHash);
+            }
+
+            StateAnimator.speed = 1.0f;
+        }
     }
 
-    public override void OnExit()
+    public override void OnExit(HeroLowerState _)
     {
         PlayerMotion.SetGravityScale(PlayerInfo.Gravity);
+        StateAnimator.speed = 1.0f;
     }
 
     public override void UpDown(int upDown)
     {
         PlayerMotion.SetVelocity(Vector2.up * upDown * _climbingSpeed);
     }
-    
+
     public override void Climb(bool climb)
     {
         if (climb) return;
@@ -56,32 +79,40 @@ public class HeroClimbingLowerState : PlayerLowerState<HeroLowerState>
         }
         else
         {
-            // Climbed down the climing object
+            // Climbed down the climbing object
             var nextState = PlayerInfo.StandingGround == null ? HeroLowerState.Jumping : HeroLowerState.Idle;
             StateController.ChangeState(nextState);
         }
     }
 
-    public override void Jump()
+    public override void StartJump()
     {
         PlayerMotion.SetVelocity(new Vector2(PlayerInfo.CurrentVelocity.x, PlayerInfo.JumpingSpeed / 3));
 
         StateController.ChangeState(HeroLowerState.Jumping);
     }
 
+    public override void Damaged()
+    {
+        StateController.ChangeState(HeroLowerState.Damaged);
+    }
+
 
     /****** Private Members ******/
 
-    private float _climbingSpeed    = 0.0f;
-    private float _climbUpHeight    = 0.0f;
-    private float _climbDownHeight  = 0.0f;
+    private readonly int _ClimbingUpStateHash   = AnimatorState.Hero.GetHash(HeroLowerState.Climbing, "Down");
+    private readonly int _ClimbingDownStateHash = AnimatorState.Hero.GetHash(HeroLowerState.Climbing, "Up");
+
+    private float _climbingSpeed;
+    private float _climbUpHeight;
+    private float _climbDownHeight;
+
+    private Transform _climbingObject;
 
     private void MoveNearToClimbingObject()
     {
-        Transform climbingObject = PlayerInfo.CurrentControlInfo.climbingObject.transform;
+        float offset = 0 < PlayerInfo.CurrentControlInfo.upDown ? _climbUpHeight : -_climbDownHeight;
 
-        float offset = 0 < PlayerInfo.CurrentControlInfo.upDown ? _climbUpHeight :  -_climbDownHeight;
-
-        PlayerMotion.TeleportTo(new Vector2(climbingObject.position.x, PlayerInfo.CurrentPosition.y + offset));
+        PlayerMotion.TeleportTo(new Vector2(_climbingObject.position.x, PlayerInfo.CurrentPosition.y + offset));
     }
 }

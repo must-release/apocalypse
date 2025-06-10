@@ -21,6 +21,7 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
     {
         Assert.IsTrue(null != ProjectileDamageInfo.Attacker, $"Onwer of the {CurrentPojectileType} is not set.");
         Assert.IsTrue(_isPositionSet, $"Position of the {CurrentPojectileType} is not set.");
+        Assert.IsTrue(null != OnProjectileExpired, $"OnProjectileExpired is not set in {CurrentPojectileType}.");
 
         _isFired = true;
         transform.localRotation = Quaternion.FromToRotation(Vector3.right, direction);

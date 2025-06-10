@@ -4,12 +4,12 @@ public class Bullet : ProjectileBase
 {
     /****** Public Members ******/
 
-    public override ProjectileType  CurrentPojectileType          => ProjectileType.Bullet;
-    public override bool        CanDamagePlayer     => false;
-    public override float       FireSpeed           => 30f;
-    public override float       GravityScale        => _GravityScale;
-    public override float       FireDuration      => 5f;
-    public override float       PostFireDelay           => 0f;
+    public override ProjectileType  CurrentPojectileType    => ProjectileType.Bullet;
+    public override bool            CanDamagePlayer         => false;
+    public override float           FireSpeed               => 15f;
+    public override float           GravityScale            => _GravityScale;
+    public override float           FireDuration            => 5f;
+    public override float           PostFireDelay           => 0.5f;
 
     public override void Fire(Vector3 direction)
     {
@@ -46,8 +46,14 @@ public class Bullet : ProjectileBase
             if (false == character.IsPlayer)
             {
                 character.OnDamaged(ProjectileDamageInfo);
+                ExpireProjectile();
                 return;
             }
+        }
+
+        if (false == collision.isTrigger)
+        {
+            ExpireProjectile();
         }
     }
 }

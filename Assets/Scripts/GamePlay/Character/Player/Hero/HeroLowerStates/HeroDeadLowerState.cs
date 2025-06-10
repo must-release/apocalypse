@@ -1,39 +1,51 @@
+﻿using NUnit.Framework;
 using System.Collections;
 using UnityEngine;
 
-public class HeroDeadLowerState : PlayerLowerState<HeroLowerState>
+public class HeroDeadLowerState : HeroLowerStateBase
 {
     /****** Public Members ******/
 
-    public override HeroLowerState  StateType               => HeroLowerState.Dead;
-    public override bool            ShouldDisableUpperBody  => true; 
+    public override HeroLowerState StateType    => HeroLowerState.Dead;
+    public override bool ShouldDisableUpperBody => true;
+
+    public override void InitializeState(IStateController<HeroLowerState> stateController, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    {
+        base.InitializeState(stateController, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        Assert.IsTrue(StateAnimator.HasState(0, _HeroDeadStateHash), "Hero animator does not have dead lower state.");
+    }
 
     public override void OnEnter()
     {
         PlayerMotion.SetVelocity(Vector2.zero);
-        _deadStateCoroutine = StartCoroutine(ProcessDeadState());
+        StateAnimator.Play(_HeroDeadStateHash);
+        StateAnimator.Update(0.0f);
+
+        _isAnimationPlaying = true;
     }
 
     public override void OnUpdate()
     {
+        if (false == _isAnimationPlaying) return;
 
+        var stateInfo = StateAnimator.GetCurrentAnimatorStateInfo(0);
+
+        if (1.0f <= stateInfo.normalizedTime)
+        {
+            CharacterManager.Instance.ProcessPlayersDeath();
+            _isAnimationPlaying = false;
+        }
     }
 
-    public override void OnExit()
+    public override void OnExit(HeroLowerState _)
     {
 
-    }
-
-    private IEnumerator ProcessDeadState()
-    {
-        yield return new WaitForSeconds(_AnimationPlayTime);
-
-        CharacterManager.Instance.ProcessPlayersDeath();
     }
 
 
     /****** Private Members ******/
 
-    private const float _AnimationPlayTime  = 2f;
-    private Coroutine _deadStateCoroutine   = null;
+    private readonly int _HeroDeadStateHash = AnimatorState.Hero.GetHash(HeroLowerState.Dead);
+
+    private bool _isAnimationPlaying = false;
 }

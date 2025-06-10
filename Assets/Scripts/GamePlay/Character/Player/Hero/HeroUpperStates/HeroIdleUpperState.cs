@@ -1,12 +1,21 @@
+using NUnit.Framework;
 using UnityEngine;
 
-public class HeroIdleUpperState : PlayerUpperStateBase<HeroUpperState>
+public class HeroIdleUpperState : HeroUpperStateBase
 {
+    /****** Public Members ******/
+
     public override HeroUpperState StateType => HeroUpperState.Idle;
+
+    public override void InitializeState(IStateController<HeroUpperState> stateController, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    {
+        base.InitializeState(stateController, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        Assert.IsTrue(StateAnimator.HasState(0, _IdleStateHash), $"Hero animator does not have idle upper state.");
+    }
 
     public override void OnEnter()
     {
-
+        StateAnimator.Play(_IdleStateHash);
     }
     public override void OnUpdate()
     {
@@ -17,25 +26,36 @@ public class HeroIdleUpperState : PlayerUpperStateBase<HeroUpperState>
 
     }
 
-    public override void Move() 
-    { 
-        StateController.ChangeState(HeroUpperState.Running); 
+    public override void Move()
+    {
+        StateController.ChangeState(HeroUpperState.Running);
     }
 
-    public override void OnAir() 
-    { 
-        StateController.ChangeState(HeroUpperState.Jumping); 
+    public override void Attack()
+    {
+        StateController.ChangeState(HeroUpperState.Attacking);
     }
 
-    public override void LookUp(bool lookUp) 
-    { 
+    public override void LookUp(bool lookUp)
+    {
         if (false == lookUp) return;
 
         StateController.ChangeState(HeroUpperState.LookingUp);
     }
 
-    public override void Attack() 
-    { 
-        StateController.ChangeState(HeroUpperState.Attacking);
+    public override void Aim(Vector3 aim)
+    {
+        if (Vector3.zero == aim) return;
+        StateController.ChangeState(HeroUpperState.Aiming);
     }
+
+    public override void Disable()
+    {
+        StateController.ChangeState(HeroUpperState.Disabled);
+    }
+
+
+    /****** Private Members ******/
+
+    private readonly int _IdleStateHash = AnimatorState.Hero.GetHash(HeroUpperState.Idle);
 }

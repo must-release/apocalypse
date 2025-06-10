@@ -19,18 +19,6 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
             if (false == _heroineWeapon.IsLoaded)
                 return false;
 
-            foreach (var lower in _lowerStateTable.Values)
-            {
-                if (false == lower.IsLoaded)
-                    return false;
-            }
-
-            foreach (var upper in _upperStateTable.Values)
-            {
-                if (false == upper.IsLoaded)
-                    return false;
-            }
-
             return true;
         }
     }
@@ -60,13 +48,16 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
         Assert.IsTrue(_lowerStateTable.ContainsKey(HeroineLowerState.Idle), "Idle state not found");
         Assert.IsTrue(_upperStateTable.ContainsKey(HeroineUpperState.Idle), "Idle state not found");
 
-        gameObject.SetActive(value);
-
-        if (value)
+        if (false == value)
         {
-            _lowerState = _lowerStateTable[HeroineLowerState.Idle];
-            _upperState = _upperStateTable[HeroineUpperState.Idle];
+            _lowerState?.OnExit(HeroineLowerState.Idle);
+            _upperState?.OnExit(HeroineUpperState.Idle);
         }
+
+        _lowerState = _lowerStateTable[HeroineLowerState.Idle];
+        _upperState = _upperStateTable[HeroineUpperState.Idle];
+
+        gameObject.SetActive(value);
     }
 
     public void OnUpdate()
@@ -110,11 +101,11 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
     {
         Assert.IsTrue(_lowerStateTable.ContainsKey(state), "Invalid Lower State");
 
-        Debug.Log("Lower : " + _lowerState.StateType.ToString() + " -> " + state.ToString());
-
         _lowerState.OnExit(state);
         _lowerState = _lowerStateTable[state];
         _lowerState.OnEnter();
+
+        _upperState.LowerBodyStateInfo = _lowerState;
 
         if (_lowerState.ShouldDisableUpperBody)
             _upperState.Disable();
@@ -126,10 +117,9 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
     {
         Assert.IsTrue(_upperStateTable.ContainsKey(state), "Invalid Upper State");
 
-        Debug.Log("Upper : " + _upperState.StateType.ToString() + " -> " + state.ToString());
-
         _upperState.OnExit(state);
         _upperState = _upperStateTable[state];
+        _upperState.LowerBodyStateInfo = _lowerState;
         _upperState.OnEnter();
     }
 
@@ -152,7 +142,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
     {
         Assert.IsTrue(null != _lowerAnimator, "Lower Animator is not assigned.");
         Assert.IsTrue(null != _upperAnimator, "Upper Animator is not assigned.");
-        _heroineWeapon = GetComponentInChildren<HeroineWeapon>();
+        _heroineWeapon = GetComponent<HeroineWeapon>();
         Assert.IsTrue(null != _heroineWeapon, "Heroine Weapon is not assigned.");
     }
 
@@ -176,7 +166,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
         if (controlInfo.attack) _lowerState.Attack();
 
         // Change player state according to the object control info
-        _lowerState.Climb(controlInfo.climb);
+        _lowerState.Climb(controlInfo.Climb);
         _lowerState.Push(controlInfo.push);
         _lowerState.UpDown(controlInfo.upDown);
     }

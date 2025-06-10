@@ -19,10 +19,10 @@ public abstract class PlayerWeaponBase : MonoBehaviour, IAsyncLoadObject
     public float Attack()
     {
         IProjectile weapon = WeaponPool.Get();
+        weapon.OnProjectileExpired += () => WeaponPool.Return(weapon);
         weapon.SetOwner(_playerObject);
         weapon.SetProjectilePosition(_shootingPoint.position);
         weapon.Fire((_shootingPoint.position - _weaponPivot.position).normalized);
-        weapon.OnProjectileExpired += () => { WeaponPool.Return(weapon); };
 
         return weapon.PostFireDelay;
     }
@@ -43,7 +43,7 @@ public abstract class PlayerWeaponBase : MonoBehaviour, IAsyncLoadObject
         _weaponPivot.rotation = Quaternion.Euler(0, 0, flip + angle);
     }
 
-    public void RotateWeaponPivot(float rotateAngle)
+    public void SetWeaponPivotRotation(float rotateAngle)
     {
         _weaponPivot.localRotation = Quaternion.Euler(0, 0, rotateAngle);
     }
@@ -82,15 +82,13 @@ public abstract class PlayerWeaponBase : MonoBehaviour, IAsyncLoadObject
     [SerializeField] private Transform  _weaponPivot    = null;
     [SerializeField] private Transform  _shootingPoint  = null;
 
-    private const int _WeaponPoolCount      = 15;
-
     private Queue<IProjectile>      _pooledWeapons      = new Queue<IProjectile>();
-    private List<AimingDot>     _pooledAimingDots   = new List<AimingDot>();
+    private List<AimingDot>         _pooledAimingDots   = new List<AimingDot>();
     private ProjectilePoolHandler   _weaponPoolHandler;
 
     private Transform _aimingDotsTransform;
 
-    private bool _isLoaded = false;
+    private bool _isLoaded;
 
     private void Awake()
     {
@@ -105,7 +103,7 @@ public abstract class PlayerWeaponBase : MonoBehaviour, IAsyncLoadObject
     private async UniTask LoadWeaponsAndDots()
     {
         _weaponPoolHandler = await ProjectileFactory.Instance.AsyncLoadPoolHandler(PlayerWeaponType);
-        await ProjectileFactory.Instance.AsyncPoolAimingDots(PlayerWeaponType, _pooledAimingDots, _aimingDotsTransform);
+        await ProjectileFactory.Instance.AsyncPoolAimingDots(PlayerWeaponType,  _pooledAimingDots, _aimingDotsTransform);
 
         SetWeaponInfo();
 

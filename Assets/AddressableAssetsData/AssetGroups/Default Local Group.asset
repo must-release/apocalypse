@@ -71,7 +71,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 46f48a4c9d4c00e45b87004799e089dc
-    m_Address: AnimationClip/Heroine/Upper/LookingUp
+    m_Address: AnimationClip/Heroine/Upper/IdleLookingUp
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

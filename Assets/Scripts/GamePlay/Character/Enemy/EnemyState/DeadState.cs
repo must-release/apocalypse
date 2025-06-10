@@ -5,8 +5,10 @@ public class DeadState : EnemyStateBase
     private Color enemyColor;
     private const float FADE_OUT_TIME = 1f;
 
-    protected override void StartEnemyState()
+    protected override void Awake()
     {
+        base.Awake();
+
         enemyColor = Color.white;
     }
 

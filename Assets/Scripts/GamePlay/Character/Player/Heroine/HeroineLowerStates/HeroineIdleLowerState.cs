@@ -8,7 +8,7 @@ public class HeroineIdleLowerState : HeroineLowerStateBase
 
     public override void OnEnter()
     {
-        StateAnimator.Play(AnimatorState.HeroineLower.Idle);
+        StateAnimator.Play(AnimatorState.Heroine.GetHash(StateType));
         StateAnimator.Update(0.0f);
         PlayerMotion.SetVelocity(Vector2.zero);
     }
@@ -67,9 +67,4 @@ public class HeroineIdleLowerState : HeroineLowerStateBase
     {
         StateController.ChangeState(HeroineLowerState.Damaged);
     }
-
-
-    /****** Protected Members ******/
-
-    protected override string AnimationClipPath => AnimationClipAsset.HeroineLower.Idle;
 }

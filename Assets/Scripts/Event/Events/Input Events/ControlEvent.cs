@@ -53,7 +53,7 @@ public class ControlEvent : InputEvent, KeySettingsObserver
         if (Input.GetKey(leftButton)) controlInfo.move -= 1;
         controlInfo.stop = prevMove != 0 && controlInfo.move == 0;
 
-        // Set lookUp & climb & stop control
+        // Set lookUp & Climb & stop control
         int prevUpDown = controlInfo.upDown;
         controlInfo.upDown = 0;
         if(Input.GetKey(upButton)) controlInfo.upDown += 1;

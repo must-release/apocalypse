@@ -29,8 +29,11 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
         // Initially change character
         CurrentPlayerType   = player;
         CurrentAvatar       = _avatarDictionary[CurrentPlayerType];
+        var turningOffType  = (CurrentPlayerType == PlayerType.Hero) ? PlayerType.Heroine : PlayerType.Hero;
+        var turningOffAvatar = _avatarDictionary[turningOffType];
 
         CurrentAvatar.ActivateAvatar(true);
+        turningOffAvatar.ActivateAvatar(false);
 
         _isInitilized = true;
     }
@@ -45,6 +48,11 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
 
         ControlInteractionObjects(controlInfo);
         CurrentAvatar.ControlAvatar(controlInfo);
+
+        if (controlInfo.tag)
+        {
+            ChangePlayer();
+        }
     }
 
     public override void OnDamaged(DamageInfo damageInfo) 
@@ -67,11 +75,11 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
     }
 
     // Change player character
-    public void ChangePlayer(PlayerType player)
+    public void ChangePlayer()
     {
         CurrentAvatar.ActivateAvatar(false);
 
-        CurrentPlayerType   = player;
+        CurrentPlayerType   = (CurrentPlayerType == PlayerType.Hero) ? PlayerType.Heroine : PlayerType.Hero;
         CurrentAvatar       = _avatarDictionary[CurrentPlayerType];
 
         CurrentAvatar.ActivateAvatar(true);
@@ -103,7 +111,7 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
         CurrentHitPoint             = MaxHitPoint;
         _playerRigid.gravityScale   = Gravity;
 
-        //RegisterAvatar(PlayerType.Hero, _heroTransform);
+        RegisterAvatar(PlayerType.Hero, _heroTransform);
         RegisterAvatar(PlayerType.Heroine, _heroineTransform);
     }
 
@@ -170,7 +178,7 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
 
 public interface IPlayerAvatar : IAsyncLoadObject
 {
-    void InitializeAvatar(IMotionController playerPhysics, ICharacterInfo playerInfo);
+    void InitializeAvatar(IMotionController playerMotion, ICharacterInfo playerInfo);
     void ControlAvatar(ControlInfo controlInfo);
     void ActivateAvatar(bool value);
     void OnUpdate();

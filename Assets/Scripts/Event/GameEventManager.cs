@@ -29,16 +29,24 @@ public class GameEventManager : MonoBehaviour, IAsyncLoadObject
 
     public void Submit(IGameEvent gameEvent)
     {
+        Assert.IsTrue(null != gameEvent, "Submitted game event is null.");
+        Assert.IsTrue(EventStatus.Waiting == gameEvent.Status, $"Submitted event {gameEvent.EventType} is not it waiting status.");
+
         if (gameEvent.CheckCompatibility(_activeEventTypeCounts))
         {
             Logger.Write(LogCategory.Event, $"Activating Event : {gameEvent.EventType}, Instace : {gameEvent.EventId}", LogLevel.Log, true);
+
             if (gameEvent.IsExclusiveEvent && _activeEvents.Count > 0)
+            {
                 TerminateNonExclusiveEvents(gameEvent);
+            }
+
             Activate(gameEvent);
         }
         else
         {
             Logger.Write(LogCategory.Event, $"Enque Event to Waiting Queue : {gameEvent.EventType}, Instace : {gameEvent.EventId}", LogLevel.Log, true);
+
             _waitingQueue.Enqueue(gameEvent);
         }
     }

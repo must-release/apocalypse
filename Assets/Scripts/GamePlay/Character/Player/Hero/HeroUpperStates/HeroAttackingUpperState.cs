@@ -1,46 +1,67 @@
+﻿using NUnit.Framework;
 using UnityEngine;
 
-public class HeroiAttackingUpperState : PlayerUpperStateBase<HeroUpperState>
+public class HeroAttackingUpperState : HeroUpperStateBase
 {
     /****** Public Members ******/
 
     public override HeroUpperState StateType => HeroUpperState.Attacking;
 
+    public override void InitializeState(IStateController<HeroUpperState> stateController, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    {
+        base.InitializeState(stateController, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        Assert.IsTrue(StateAnimator.HasState(0, _AttackingStateHash), "Hero animator does not have attacking upper state.");
+    }
+
     public override void OnEnter()
     {
-        // Execute attack and get attacking motion time
-        //_attackingTime = OwnerController.CurrentAvatar.Fire();
+        StateAnimator.Play(_AttackingStateHash);
+        StateAnimator.Update(0.0f);
+
+        _attackCoolTime         = PlayerWeapon.Attack();
+        _shouldContinueAttack   = false;
     }
 
     public override void OnUpdate()
     {
-        // Wait for attacking animation
-        _attackingTime -= Time.deltaTime;
+        _attackCoolTime -= Time.deltaTime;
 
-        if (0 < _attackingTime) return;
+        if (0 < _attackCoolTime) return;
 
-        var nextState = PlayerInfo.StandingGround == null ? HeroUpperState.Jumping : HeroUpperState.Idle;
+        var nextState = _shouldContinueAttack ? HeroUpperState.Attacking : HeroUpperState.Idle;
         StateController.ChangeState(nextState);
     }
 
     public override void OnExit(HeroUpperState _)
     {
-        
+
     }
 
-    public override void LookUp(bool lookUp) 
-    { 
+    public override void Attack()
+    {
+        base.Attack();
+
+        _shouldContinueAttack = true;
+    }
+
+    public override void LookUp(bool lookUp)
+    {
         if (false == lookUp) return;
 
         StateController.ChangeState(HeroUpperState.LookingUp);
     }
-    
-    public override void Attack() 
-    { 
-        StateController.ChangeState(HeroUpperState.Attacking); 
+
+    public override void Disable()
+    {
+        StateController.ChangeState(HeroUpperState.Disabled);
     }
+
+
 
     /****** Private Members ******/
 
-    private float _attackingTime = 0;
+    private readonly int _AttackingStateHash = AnimatorState.Hero.GetHash(HeroUpperState.Attacking);
+
+    private float   _attackCoolTime;
+    private bool    _shouldContinueAttack;
 }

@@ -6,7 +6,7 @@ public class HeroineRunningUpperState : HeroineUpperStateBase
 
     public override void OnEnter()
     {
-        StateAnimator.Play(AnimatorState.HeroineUpper.Running);
+        StateAnimator.Play(AnimatorState.Heroine.GetHash(StateType), 0, LowerBodyStateInfo.AnimationNormalizedTime);
     }
     public override void OnUpdate()
     {
@@ -33,8 +33,4 @@ public class HeroineRunningUpperState : HeroineUpperStateBase
     {
         StateController.ChangeState(HeroineUpperState.Disabled);
     }
-
-    /****** Protected Members ******/
-
-    protected override string AnimationClipPath => AnimationClipAsset.HeroineUpper.Running;
 }

@@ -6,7 +6,7 @@ public class HeroineIdleUpperState : HeroineUpperStateBase
 
     public override void OnEnter()
     {
-        StateAnimator.Play(AnimatorState.HeroineUpper.Idle);
+        StateAnimator.Play(AnimatorState.Heroine.GetHash(StateType));
     }
     public override void OnUpdate()
     {
@@ -33,10 +33,4 @@ public class HeroineIdleUpperState : HeroineUpperStateBase
     {
         StateController.ChangeState(HeroineUpperState.Disabled);
     }
-
-
-
-    /****** Protected Members ******/
-
-    protected override string AnimationClipPath => AnimationClipAsset.HeroineUpper.Idle;
 }

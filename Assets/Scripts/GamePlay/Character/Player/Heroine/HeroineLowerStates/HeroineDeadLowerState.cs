@@ -11,7 +11,7 @@ public class HeroineDeadLowerState : HeroineLowerStateBase
     public override void OnEnter()
     {
         PlayerMotion.SetVelocity(Vector2.zero);
-        StateAnimator.Play(AnimatorState.HeroineLower.Dead);
+        StateAnimator.Play(AnimatorState.Heroine.GetHash(StateType));
         StateAnimator.Update(0.0f);
 
         _isAnimationPlaying = true;
@@ -34,11 +34,6 @@ public class HeroineDeadLowerState : HeroineLowerStateBase
     {
 
     }
-
-
-    /****** Protected Members ******/
-
-    protected override string AnimationClipPath => AnimationClipAsset.HeroineLower.Dead;
 
 
     /****** Private Members ******/

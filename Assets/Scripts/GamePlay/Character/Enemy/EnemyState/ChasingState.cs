@@ -5,8 +5,10 @@ public class ChasingState : EnemyStateBase
     private const float FORGET_TIME = 10f;
     private float forgettingTime;
 
-    protected override void StartEnemyState()
+    protected override void Awake()
     {
+        base.Awake();
+
         forgettingTime = 0;
     }
 

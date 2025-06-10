@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using UnityEngine;
 
 public class HeroineClimbingLowerState : HeroineLowerStateBase
@@ -16,6 +17,9 @@ public class HeroineClimbingLowerState : HeroineLowerStateBase
     {
         base.InitializeState(stateController, playerPhysics, playerInfo, stateAnimator, playerWeapon);
 
+        Assert.IsTrue(StateAnimator.HasState(0, _ClimbingDownStateHash), "Animator does not have climbing down state.");
+        Assert.IsTrue(StateAnimator.HasState(0, _ClimbingUpStateHash), "Animator does not have climbing up state.");
+
         _climbingSpeed      = playerInfo.MovingSpeed * 2.0f / 3.0f;
         _climbUpHeight      = 0.1f;
         _climbDownHeight    = playerInfo.CharacterHeight / 2 + 0.2f;
@@ -24,7 +28,7 @@ public class HeroineClimbingLowerState : HeroineLowerStateBase
     public override void OnEnter()
     {
         PlayerMotion.SetGravityScale(0);
-        StateAnimator.Play(AnimatorState.HeroineLower.ClimbingUp);
+        StateAnimator.Play(_ClimbingUpStateHash);
 
         _climbingObject = PlayerInfo.CurrentControlInfo.climbingObject.transform;
 
@@ -34,20 +38,23 @@ public class HeroineClimbingLowerState : HeroineLowerStateBase
     public override void OnUpdate()
     {
         if (false == Mathf.Approximately(PlayerInfo.CurrentPosition.x, _climbingObject.position.x))
-            PlayerMotion.TeleportTo(new Vector2(_climbingObject.position.x , PlayerInfo.CurrentPosition.y));
+        {
+            PlayerMotion.TeleportTo(new Vector2(_climbingObject.position.x, PlayerInfo.CurrentPosition.y));
+        }
 
         float verticalVelocity = PlayerInfo.CurrentVelocity.y;
-
         if (Mathf.Approximately(verticalVelocity, 0f))
         {
             StateAnimator.speed = 0.0f;
         }
         else
         {
-            var nextClip = verticalVelocity > 0 ? AnimatorState.HeroineLower.ClimbingUp : AnimatorState.HeroineLower.ClimbingDown;
+            var nextClipHash = verticalVelocity > 0 ? _ClimbingUpStateHash : _ClimbingDownStateHash;
 
-            if (false == StateAnimator.GetCurrentAnimatorStateInfo(0).IsName(nextClip.ToString()))
-                StateAnimator.Play(nextClip);
+            if (StateAnimator.GetCurrentAnimatorStateInfo(0).fullPathHash != nextClipHash)
+            {
+                StateAnimator.Play(nextClipHash);
+            }
 
             StateAnimator.speed = 1.0f;
         }
@@ -96,17 +103,16 @@ public class HeroineClimbingLowerState : HeroineLowerStateBase
     }
 
 
-    /****** Protected Members ******/
-
-    protected override string AnimationClipPath => AnimationClipAsset.HeroineLower.ClimbingUp;
-
-
     /****** Private Members ******/
 
-    private float _climbingSpeed    = 0.0f;
-    private float _climbUpHeight    = 0.0f;
-    private float _climbDownHeight  = 0.0f;
-    private Transform _climbingObject = null;
+    private readonly int _ClimbingUpStateHash   = AnimatorState.Heroine.GetHash(HeroineLowerState.Climbing, "Down");
+    private readonly int _ClimbingDownStateHash = AnimatorState.Heroine.GetHash(HeroineLowerState.Climbing, "Up");
+
+    private float   _climbingSpeed;
+    private float   _climbUpHeight;
+    private float   _climbDownHeight;
+
+    private Transform _climbingObject;
 
     private void MoveNearToClimbingObject()
     {

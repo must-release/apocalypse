@@ -139,7 +139,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
 
     private void OnEnable() 
     {
-        if( _isLoaded )
+        if(_isLoaded)
         {
             // Start current state when enabled
             _currentState.OnEnter();

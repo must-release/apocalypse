@@ -3,9 +3,9 @@ using UnityEngine;
 public class AttackingState : EnemyStateBase
 {
 
-    protected override void StartEnemyState()
+    protected override void Awake()
     {
-
+        base.Awake();
     }
 
     public override EnemyState GetState() { return EnemyState.Attacking; }
