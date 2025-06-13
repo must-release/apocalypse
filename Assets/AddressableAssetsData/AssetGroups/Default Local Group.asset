@@ -55,6 +55,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 40efd301c201f4313ac1ae1c43a9ae5d
+    m_Address: Stage/Test_2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 434906e8cc1cc33459cdb40cc2fc7207
     m_Address: AnimationClip/Heroine/Lower/Pushing
     m_ReadOnly: 0
@@ -111,7 +116,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6795b9326aaad4deabbf2a9c3c8d0353
-    m_Address: Assets/GameResources/Prefab/Object/Scratch.prefab
+    m_Address: Assets/GameResources/Prefab/Projectile/Scratch.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

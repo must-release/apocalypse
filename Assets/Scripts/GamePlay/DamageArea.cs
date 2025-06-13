@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using UnityEngine;
 
 public class DamageArea : MonoBehaviour
@@ -19,15 +20,25 @@ public class DamageArea : MonoBehaviour
         _isDamagingPlayer           = isDamagingPlayer;
     }
 
+    public void SetDamageArea(DamageInfo damageInfo, bool isDamagingPlayer)
+    {
+        Collider2D damageCollider = GetComponent<Collider2D>();
+        Assert.IsTrue(damageCollider != null, "DamageArea must have a Collider2D component.");
+
+        damageCollider.isTrigger    = true;
+        gameObject.layer            = LayerMask.NameToLayer("Default");
+        _damageInfo                 = damageInfo;
+        _isDamagingPlayer           = isDamagingPlayer;
+    }
 
     /****** Private Members ******/
 
-    private DamageInfo  _damageInfo          = null;
-    private bool        _isDamagingPlayer    = false;
+    private DamageInfo  _damageInfo;
+    private bool        _isDamagingPlayer;
 
     private void OnTriggerStay2D(Collider2D other) 
     {
-        if (_damageInfo.IsContinuousHit)
+        if (false == _damageInfo.IsContinuousHit)
             return;
 
         if (other.TryGetComponent(out ICharacter character))
@@ -39,7 +50,7 @@ public class DamageArea : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (true == _damageInfo.IsContinuousHit)
+        if (_damageInfo.IsContinuousHit)
             return;
 
         if (other.TryGetComponent(out ICharacter character))

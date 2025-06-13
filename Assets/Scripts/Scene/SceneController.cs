@@ -4,7 +4,8 @@ using NUnit.Framework;
 
 /* 
  * SceneConroller initializes maps when starting the StageScene.
- * It also creates next map for the player. */
+ * It also creates next map for the player. 
+ */
 
 
 public class SceneController : MonoBehaviour

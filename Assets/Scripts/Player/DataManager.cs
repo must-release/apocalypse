@@ -24,7 +24,7 @@ public class DataManager : MonoBehaviour, IAsyncLoadObject
     {
         PlayerType  lastChar    = PlayerType.Heroine;
         Stage       curStage    = Stage.Test;
-        int         curMap      = 1;
+        int         curMap      = 2;
         string      saveTime    = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         string      playTime    = "00:00"; 
 

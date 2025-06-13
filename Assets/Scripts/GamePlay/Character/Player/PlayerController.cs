@@ -57,7 +57,7 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
 
     public override void OnDamaged(DamageInfo damageInfo) 
     {
-        if ( _isDamageImmune ) return;
+        if (_isDamageImmune) return;
 
         RecentDamagedInfo = damageInfo;
         CurrentHitPoint -= RecentDamagedInfo.DamageValue;
@@ -132,7 +132,7 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
     [SerializeField] private Transform _heroineTransform;
 
     private const int   _MaxHitPoint        = 3;
-    private const float _DamageImmuneTime   = 1f;
+    private const float _DamageImmuneTime   = 2f;
 
     private Dictionary<PlayerType, IPlayerAvatar> _avatarDictionary;
 
