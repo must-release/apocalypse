@@ -99,7 +99,7 @@ public abstract class GranadeBase : ProjectileBase
             }
         }
 
-        if (null == _countDownCoroutine)
+        if (null == _countDownCoroutine && gameObject.activeInHierarchy)
             _countDownCoroutine = StartCoroutine(StartCountDown());
     }
 

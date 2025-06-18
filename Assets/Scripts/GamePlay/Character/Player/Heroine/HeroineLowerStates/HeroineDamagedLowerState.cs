@@ -9,6 +9,8 @@ public class HeroineDamagedLowerState : HeroineLowerStateBase
 
     public override void OnEnter()
     {
+        StateAnimator.Play(_DamagedStateHash);
+
         _sternedTime = 0f;
 
         KnockBack();
@@ -35,6 +37,8 @@ public class HeroineDamagedLowerState : HeroineLowerStateBase
 
 
     /****** Private Members ******/
+
+    private readonly int _DamagedStateHash = AnimatorState.Heroine.GetHash(HeroineLowerState.Damaged);
 
     private const float _SternTime      = 0.4f;
     private const float _KnockBackSpeed = 6f;

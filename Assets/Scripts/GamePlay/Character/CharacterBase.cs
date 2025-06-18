@@ -30,6 +30,7 @@ public abstract class CharacterBase : MonoBehaviour, ICharacter, IMotionControll
 
     public virtual float    MovingSpeed         { get; protected set; }
     public virtual float    JumpingSpeed        { get; protected set; }
+    public virtual bool     IsMoving            { get { return Mathf.Abs(CurrentVelocity.x) > 0.01f; } }
     public virtual float    Gravity             { get; protected set; }
     public virtual int      MaxHitPoint         { get; protected set; }
     public int              CurrentHitPoint     { get; protected set; }

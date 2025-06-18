@@ -1,12 +1,26 @@
+using NUnit.Framework;
 using UnityEngine;
 
 public class HeroineIdleUpperState : HeroineUpperStateBase
 {
     public override HeroineUpperState StateType => HeroineUpperState.Idle;
 
+    public override void InitializeState(IStateController<HeroineUpperState> stateController
+                                     , IMotionController playerMotion
+                                     , ICharacterInfo playerInfo
+                                     , Animator stateAnimator
+                                     , PlayerWeaponBase playerWeapon
+)
+    {
+        base.InitializeState(stateController, playerMotion, playerInfo, stateAnimator, playerWeapon);
+
+        Assert.IsTrue(StateAnimator.HasState(0, _IdleStateHash), "Animator does not have idle upper state.");
+    }
+
     public override void OnEnter()
     {
-        StateAnimator.Play(AnimatorState.Heroine.GetHash(StateType));
+        StateAnimator.Play(_IdleStateHash, 0, LowerBodyStateInfo.AnimationNormalizedTime);
+        StateAnimator.Update(0.0f);
     }
     public override void OnUpdate()
     {
@@ -33,4 +47,9 @@ public class HeroineIdleUpperState : HeroineUpperStateBase
     {
         StateController.ChangeState(HeroineUpperState.Disabled);
     }
+
+
+    /****** Private Members ******/
+
+    private static readonly int _IdleStateHash = AnimatorState.Heroine.GetHash(HeroineUpperState.Idle);
 }

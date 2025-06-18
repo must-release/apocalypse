@@ -12,6 +12,7 @@ public interface ICharacterInfo
     float       CharacterHeight     { get; }
     float       MovingSpeed         { get; }
     float       JumpingSpeed        { get; }
+    bool        IsMoving            { get; }
     float       Gravity             { get; }
     int         MaxHitPoint         { get; }
     int         CurrentHitPoint     { get; }

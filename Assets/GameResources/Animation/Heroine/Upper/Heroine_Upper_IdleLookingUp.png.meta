@@ -1,31 +1,31 @@
 fileFormatVersion: 2
-guid: e3cbfa692b6404ec79ea56a3b337fd1d
+guid: 137a0abcfe0ec37478ac8557cd7e495c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7745088750353045504
-    second: Heroine_Lower_Idle_0
+      213: 2794925943222850800
+    second: Heroine_Upper_IdleLookingUp_0
   - first:
-      213: 5616815491924155201
-    second: Heroine_Lower_Idle_1
+      213: 2195864457376709159
+    second: Heroine_Upper_IdleLookingUp_1
   - first:
-      213: 1324413102284152642
-    second: Heroine_Lower_Idle_2
+      213: -9020358256683183540
+    second: Heroine_Upper_IdleLookingUp_2
   - first:
-      213: 1662585208142445276
-    second: Heroine_Lower_Idle_3
+      213: -4959611965979029434
+    second: Heroine_Upper_IdleLookingUp_3
   - first:
-      213: 4187121788585635350
-    second: Heroine_Lower_Idle_4
+      213: 6871767877544609389
+    second: Heroine_Upper_IdleLookingUp_4
   - first:
-      213: -3073008356091170361
-    second: Heroine_Lower_Idle_5
+      213: 1141827379518402446
+    second: Heroine_Upper_IdleLookingUp_5
   - first:
-      213: 4958709428376650164
-    second: Heroine_Lower_Idle_6
+      213: -714273660014976689
+    second: Heroine_Upper_IdleLookingUp_6
   - first:
-      213: -3008753376398600226
-    second: Heroine_Lower_Idle_7
+      213: 8499233774064755124
+    second: Heroine_Upper_IdleLookingUp_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -134,7 +134,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Heroine_Lower_Idle_0
+      name: Heroine_Upper_IdleLookingUp_0
       rect:
         serializedVersion: 2
         x: 0
@@ -149,14 +149,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5a7a4337274cffe4d98618ebd0fa9a80
-      internalID: 2040970863
+      spriteID: d726a7d9eeeaa50409d12f6d5dc335a5
+      internalID: -2139902390
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Heroine_Lower_Idle_1
+      name: Heroine_Upper_IdleLookingUp_1
       rect:
         serializedVersion: 2
         x: 128
@@ -171,14 +171,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 902f4967713b69e40a4f78e8bc6d27a6
-      internalID: 578057945
+      spriteID: 9d15183c347e300468b17ddf8582208b
+      internalID: 166953136
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Heroine_Lower_Idle_2
+      name: Heroine_Upper_IdleLookingUp_2
       rect:
         serializedVersion: 2
         x: 256
@@ -193,14 +193,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f911b5fd3ba56c44bbd0c04b3cfca494
-      internalID: 728373020
+      spriteID: 39fc56d8f3cddbb4e97df646277e1c4e
+      internalID: -1072141748
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Heroine_Lower_Idle_3
+      name: Heroine_Upper_IdleLookingUp_3
       rect:
         serializedVersion: 2
         x: 384
@@ -215,14 +215,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a1a01e8cd2e7e484487d82aeabeb6832
-      internalID: 1037415729
+      spriteID: 97574d562a97e6d4481de842f2941092
+      internalID: 486825084
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Heroine_Lower_Idle_4
+      name: Heroine_Upper_IdleLookingUp_4
       rect:
         serializedVersion: 2
         x: 512
@@ -237,14 +237,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 97950cdad79b4a843bf906edeeaea2df
-      internalID: -1751442783
+      spriteID: 327c9c37db67bb243ab951d5f19c29ba
+      internalID: -1418661310
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Heroine_Lower_Idle_5
+      name: Heroine_Upper_IdleLookingUp_5
       rect:
         serializedVersion: 2
         x: 640
@@ -259,14 +259,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 79d97da3d23084e46a1bcc5ade1e989a
-      internalID: -974569947
+      spriteID: 0b03189088134b1419000879dcd36861
+      internalID: -1935727944
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Heroine_Lower_Idle_6
+      name: Heroine_Upper_IdleLookingUp_6
       rect:
         serializedVersion: 2
         x: 768
@@ -281,14 +281,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9cf8e9dfeb3cb2d4d852bd65444dc758
-      internalID: -394439458
+      spriteID: 55dd1b849308bf1409410906a58aa0d0
+      internalID: -627348702
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Heroine_Lower_Idle_7
+      name: Heroine_Upper_IdleLookingUp_7
       rect:
         serializedVersion: 2
         x: 896
@@ -303,8 +303,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 42c1f82c4c80511468c8fc9da204eb10
-      internalID: -1977084812
+      spriteID: 8fea5a75c4576bd4ba79d2883493606a
+      internalID: 938204512
       vertices: []
       indices: 
       edges: []
@@ -313,7 +313,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 23a7e752ca8bab4409d2c4e8d557e8fc
+    spriteID: 0d36a13d884a6184c8cc483728b9b43f
     internalID: 0
     vertices: []
     indices: 
@@ -325,14 +325,14 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":128.0,"y":128.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Heroine_Lower_Idle_0: 2040970863
-      Heroine_Lower_Idle_1: 578057945
-      Heroine_Lower_Idle_2: 728373020
-      Heroine_Lower_Idle_3: 1037415729
-      Heroine_Lower_Idle_4: -1751442783
-      Heroine_Lower_Idle_5: -974569947
-      Heroine_Lower_Idle_6: -394439458
-      Heroine_Lower_Idle_7: -1977084812
+      Heroine_Upper_IdleLookingUp_0: -2139902390
+      Heroine_Upper_IdleLookingUp_1: 166953136
+      Heroine_Upper_IdleLookingUp_2: -1072141748
+      Heroine_Upper_IdleLookingUp_3: 486825084
+      Heroine_Upper_IdleLookingUp_4: -1418661310
+      Heroine_Upper_IdleLookingUp_5: -1935727944
+      Heroine_Upper_IdleLookingUp_6: -627348702
+      Heroine_Upper_IdleLookingUp_7: 938204512
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -23,7 +23,7 @@ public class HeroineLookingUpUpperState : HeroineUpperStateBase
 
     public override void OnEnter()
     {
-        var nextStateHash = Mathf.Approximately(PlayerInfo.CurrentVelocity.x, 0) ? _IdleLookingUpStateHash : _RunningLookingUpStateHash;
+        var nextStateHash = PlayerInfo.IsMoving ? _RunningLookingUpStateHash : _IdleLookingUpStateHash;
         StateAnimator.Play(nextStateHash, 0, LowerBodyStateInfo.AnimationNormalizedTime);
         StateAnimator.Update(0.0f);
     }
@@ -50,9 +50,21 @@ public class HeroineLookingUpUpperState : HeroineUpperStateBase
     {
         var stateInfo = StateAnimator.GetCurrentAnimatorStateInfo(0);
 
-        if (AnimatorState.Heroine.GetHash(HeroineUpperState.Idle, "LookingUp") == stateInfo.fullPathHash)
+        if (_IdleLookingUpStateHash == stateInfo.shortNameHash)
         {
+            StateAnimator.Play(_RunningLookingUpStateHash, 0, LowerBodyStateInfo.AnimationNormalizedTime);
+            StateAnimator.Update(0.0f);
+        }
+    }
 
+    public override void Stop()
+    {
+        var stateInfo = StateAnimator.GetCurrentAnimatorStateInfo(0);
+
+        if (_RunningLookingUpStateHash == stateInfo.shortNameHash)
+        {
+            StateAnimator.Play(_IdleLookingUpStateHash, 0, LowerBodyStateInfo.AnimationNormalizedTime);
+            StateAnimator.Update(0.0f);
         }
     }
 

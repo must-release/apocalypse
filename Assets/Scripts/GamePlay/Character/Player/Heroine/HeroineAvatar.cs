@@ -56,6 +56,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
 
         _lowerState = _lowerStateTable[HeroineLowerState.Idle];
         _upperState = _upperStateTable[HeroineUpperState.Idle];
+        _upperState.LowerBodyStateInfo = _lowerState;
 
         gameObject.SetActive(value);
     }

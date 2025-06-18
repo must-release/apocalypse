@@ -87,8 +87,15 @@ public class ControlEvent : InputEvent, KeySettingsObserver
         Vector3 prevAim = controlInfo.aim;
         if (Input.GetKey(aimButton))
         {
-            Vector3 mousePosition = Input.mousePosition; 
-            controlInfo.aim = Camera.main.ScreenToWorldPoint(mousePosition);
+            Vector3 mousePosition = Input.mousePosition;
+
+            float planeZ = 0f;
+            float distance = Mathf.Abs(Camera.main.transform.position.z - planeZ);
+
+            Vector3 screenPos = new Vector3(mousePosition.x, mousePosition.y, distance);
+            Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
+
+            controlInfo.aim = worldPos;
         }
         else
         {
@@ -97,7 +104,6 @@ public class ControlEvent : InputEvent, KeySettingsObserver
         return prevAim != Vector3.zero || controlInfo.aim != Vector3.zero;
     }
 
-    // Check compatibiliry with event list and current UI
     public override bool CheckCompatibility(List<InputEvent> eventList, BaseUI baseUI, SubUI subUI)
     {
         bool isEventListEmpty = eventList.Count == 0;
@@ -106,7 +112,6 @@ public class ControlEvent : InputEvent, KeySettingsObserver
         return isEventListEmpty && isValidUI;
     }
 
-    // Play pause event
     public override void PlayEvent()
     {
         // Control player character according to control info

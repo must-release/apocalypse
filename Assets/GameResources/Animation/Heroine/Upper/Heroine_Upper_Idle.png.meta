@@ -1,7 +1,31 @@
 fileFormatVersion: 2
 guid: 18d592c93ee534009a5111e98835c1c5
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 8404056187915158070
+    second: Heroine_Upper_Idle_0
+  - first:
+      213: -4668087220356205179
+    second: Heroine_Upper_Idle_1
+  - first:
+      213: -472801576622378188
+    second: Heroine_Upper_Idle_2
+  - first:
+      213: -1487881707194000681
+    second: Heroine_Upper_Idle_3
+  - first:
+      213: 9057162545062515174
+    second: Heroine_Upper_Idle_4
+  - first:
+      213: 8044121216509173416
+    second: Heroine_Upper_Idle_5
+  - first:
+      213: 6269395723241543854
+    second: Heroine_Upper_Idle_6
+  - first:
+      213: -4898494045568005707
+    second: Heroine_Upper_Idle_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -81,33 +105,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
     buildTarget: Standalone
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: iOS
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -151,8 +149,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 15f1bb290db7f4735b9d4ff5a6d0ed18
-      internalID: -563804858
+      spriteID: 905cb1f0a7145fc4b9274cfc9d758c9b
+      internalID: -1499945567
       vertices: []
       indices: 
       edges: []
@@ -173,8 +171,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7f4f882daabb744128424c71d4343809
-      internalID: 105536174
+      spriteID: 09bf987285e6a594b840464508277f8c
+      internalID: 414435975
       vertices: []
       indices: 
       edges: []
@@ -195,8 +193,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1657260ce9af746efaf166fd037823d9
-      internalID: 12105512
+      spriteID: 7e4331d265a15eb4fb719b1ed15e1945
+      internalID: -1103735517
       vertices: []
       indices: 
       edges: []
@@ -217,8 +215,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 668fd78701ef6427fb5ddf2258525928
-      internalID: -1737423936
+      spriteID: 5cd98d57188000f42aa407c7a31c4e1e
+      internalID: -621975040
       vertices: []
       indices: 
       edges: []
@@ -239,8 +237,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d681d3b60cba74f5d8f32780a1644f52
-      internalID: -1511972158
+      spriteID: d56079e6d01cffb4382fa35da007aef9
+      internalID: -1048024719
       vertices: []
       indices: 
       edges: []
@@ -261,8 +259,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d559ddcd9b37541d3961794c66894c29
-      internalID: -1542794479
+      spriteID: e277649d320f3b942818665c6eb5ee77
+      internalID: 2103235889
       vertices: []
       indices: 
       edges: []
@@ -283,8 +281,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 84f3f89e026b145cba6fa54dee41a74d
-      internalID: 912429833
+      spriteID: 52551a56a2f19c24e98ec88de1c63c2a
+      internalID: -1369267965
       vertices: []
       indices: 
       edges: []
@@ -305,8 +303,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 630c81b8d8207459fb78d21436dc8ca0
-      internalID: 929660651
+      spriteID: 701265225807d9d4997d75ea372a9d13
+      internalID: -702418912
       vertices: []
       indices: 
       edges: []
@@ -315,7 +313,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: cdea98d0f44b56546a3600595b0ea43e
     internalID: 0
     vertices: []
     indices: 
@@ -323,16 +321,18 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":128.0,"y":128.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Heroine_Upper_Idle_0: -563804858
-      Heroine_Upper_Idle_1: 105536174
-      Heroine_Upper_Idle_2: 12105512
-      Heroine_Upper_Idle_3: -1737423936
-      Heroine_Upper_Idle_4: -1511972158
-      Heroine_Upper_Idle_5: -1542794479
-      Heroine_Upper_Idle_6: 912429833
-      Heroine_Upper_Idle_7: 929660651
+      Heroine_Upper_Idle_0: -1499945567
+      Heroine_Upper_Idle_1: 414435975
+      Heroine_Upper_Idle_2: -1103735517
+      Heroine_Upper_Idle_3: -621975040
+      Heroine_Upper_Idle_4: -1048024719
+      Heroine_Upper_Idle_5: 2103235889
+      Heroine_Upper_Idle_6: -1369267965
+      Heroine_Upper_Idle_7: -702418912
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

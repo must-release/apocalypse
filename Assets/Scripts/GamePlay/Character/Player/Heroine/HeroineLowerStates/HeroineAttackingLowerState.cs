@@ -29,6 +29,11 @@ public class HeroineAttackingLowerState : HeroineLowerStateBase
 
     }
 
+    public override void UpDown(int upDown)
+    {
+        _isLookingUp = upDown > 0;
+    }
+
     public override void Damaged()
     {
         StateController.ChangeState(HeroineLowerState.Damaged);
@@ -37,6 +42,15 @@ public class HeroineAttackingLowerState : HeroineLowerStateBase
     // Called by animation event in HeroineAttackingLowerState.anim
     public void ThrowGranade()
     {
+        if (_isLookingUp)
+            PlayerWeapon.SetWeaponPivotRotation(70);
+
         PlayerWeapon.Attack();
+        PlayerWeapon.SetWeaponPivotRotation(0);
     }
+
+
+    /****** Private Members ******/
+
+    bool _isLookingUp;
 }
