@@ -31,15 +31,14 @@ public class TitleUIController : MonoBehaviour, IUIController<BaseUI>
 
     /****** Private Members ******/
     
-	private const string    _ButtonsName            = "Buttons";
-	private List<Button>    _buttonList             = new List<Button>();
+    [SerializeField] private Transform _buttonsTransform;
+	private List<Button> _buttonList = new List<Button>();
 
     private void Awake()
     {
-        Transform buttons = transform.Find(_ButtonsName);
-        for (int i = 0; i < buttons.childCount; i++)
+        for (int i = 0; i < _buttonsTransform.childCount; i++)
         {
-            _buttonList.Add(buttons.GetChild(i).GetComponent<Button>());
+            _buttonList.Add(_buttonsTransform.GetChild(i).GetComponent<Button>());
         }
 
         _buttonList[0].onClick.AddListener(OnContinueGameClick);
