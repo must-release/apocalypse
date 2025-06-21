@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using StageEnums;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -10,7 +9,7 @@ public class UserData
 {
     /****** Public Memebers *******/
 
-    public Stage    CurrentStage { get => (Stage)_currentStage; set => _currentStage = (int)value; }
+    public ChapterType    CurrentStage { get => (ChapterType)_currentStage; set => _currentStage = (int)value; }
     public int      CurrentMap { get => _currentMap; set => _currentMap = value; }
     public PlayerType   LastCharacter { get => (PlayerType)_lastCharacter; set => _lastCharacter = (int)value; }
     public string   PlayTime { get => _playTime; set => _playTime = value; }
@@ -39,7 +38,7 @@ public class UserData
         }
     }
 
-    public UserData(Stage curStage, int curMap, List<GameEventDTO> dtoList, PlayerType lastChar, string playTime, string saveTime)
+    public UserData(ChapterType curStage, int curMap, List<GameEventDTO> dtoList, PlayerType lastChar, string playTime, string saveTime)
     {
         CurrentStage        = curStage;
         CurrentMap          = curMap;
@@ -49,7 +48,7 @@ public class UserData
         ActiveEventDTOList  = dtoList;
     }
 
-    public void UpdatePlayerData(Stage stage, int map, PlayerType character)
+    public void UpdatePlayerData(ChapterType stage, int map, PlayerType character)
     {
         CurrentStage    = stage;
         CurrentMap      = map;
@@ -59,7 +58,7 @@ public class UserData
 
     /****** Private Members ******/
 
-    private int    _currentStage   = (int)Stage.StageCount;
+    private int    _currentStage   = (int)ChapterType.ChapterTypeCount;
     private int    _currentMap     = 0;
     private int    _lastCharacter  = (int)PlayerType.PlayerCount;
     private string _playTime       = "00:00:00";

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using SceneEnums;
 using UnityEngine.Assertions;
 using System;
 
@@ -10,9 +9,9 @@ public class SceneLoadEventInfo : GameEventInfo
 {
     /****** Public Members ******/
 
-    public SceneName LoadingScene { get { return _loadingScene; } private set { _loadingScene = value; }}
+    public SceneType LoadingScene { get { return _loadingScene; } private set { _loadingScene = value; }}
 
-    public void Initialize(SceneName loadingScene, bool isRuntimeInstance = false)
+    public void Initialize(SceneType loadingScene, bool isRuntimeInstance = false)
     {
         Assert.IsTrue( false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed." );
 
@@ -48,12 +47,12 @@ public class SceneLoadEventInfo : GameEventInfo
 
     protected override void OnValidate()
     {
-        if ( SceneName.SceneNameCount != LoadingScene )
+        if ( SceneType.SceneTypeCount != LoadingScene )
             IsInitialized = true;
     }
 
 
     /****** Private Members ******/
 
-    [SerializeField] private SceneName _loadingScene = SceneName.SceneNameCount;
+    [SerializeField] private SceneType _loadingScene = SceneType.SceneTypeCount;
 }

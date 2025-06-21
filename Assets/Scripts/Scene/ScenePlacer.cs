@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using SceneEnums;
 using System.Linq;
 
 public class ScenePlacer : MonoBehaviour
@@ -28,14 +27,14 @@ public class ScenePlacer : MonoBehaviour
     public void PlaceSceneObjects()
     {
         // Check current scene
-        SceneName currentScene = SceneLoader.Instance.CurrentScene;
+        SceneType currentScene = SceneLoader.Instance.CurrentScene;
 
         switch (currentScene)
         {
-            case SceneName.TitleScene:
+            case SceneType.TitleScene:
                 PlaceTitleSceneObjects();
                 break;
-            case SceneName.StageScene:
+            case SceneType.StageScene:
                 PlaceStageSceneObjects();
                 break;
             default:

@@ -1,8 +1,4 @@
 ﻿using Newtonsoft.Json;
-using ScreenEffectEnums;
-using System.Collections.Generic;
-using UnityEditor.SceneManagement;
-using UnityEngine;
 
 
 [JsonObject(MemberSerialization.OptOut)]

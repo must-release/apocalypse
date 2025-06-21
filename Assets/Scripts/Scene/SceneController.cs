@@ -1,6 +1,7 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using Cysharp.Threading.Tasks;
 using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /* 
  * SceneConroller initializes maps when starting the StageScene.
@@ -24,22 +25,26 @@ public class SceneController : MonoBehaviour
             return _currentScene.CanMoveToNextScene;
         }
     }
+    public Transform PlayerTransform
+    {
+        get
+        {
+            Assert.IsTrue(null != _currentScene, "Current scene is not initialized.");
+            return _currentScene.PlayerTransform;
+        }
+    }
 
-
-    public void LoadGameScene(SceneEnums.SceneName loadingScene) 
-    { 
-        StartCoroutine(AsyncLoadGameScene(loadingScene)); 
+    public void LoadGameScene(SceneType loadingScene) 
+    {
+        AsyncLoadGameScene(loadingScene).Forget();
     }
 
     public void ActivateGameScene()
     {
-        UtilityManager.Instance.ResetUtilityTools();
-        SceneLoader.Instance.SetActiveSceneObjects(true);
-    }
+        Assert.IsTrue(null != _currentScene, "Current scene is not initialized.");
 
-    public Transform FindPlayerTransform()
-    {
-        return SceneLoader.Instance.Player;
+        UtilityManager.Instance.ResetUtilityTools();
+        _currentScene.ActivateScene();
     }
 
 
@@ -53,7 +58,7 @@ public class SceneController : MonoBehaviour
         {
             Instance = this;
 
-            FindCurrentScene();
+            _currentScene = FindCurrentScene();
         }
         else
         {
@@ -62,38 +67,33 @@ public class SceneController : MonoBehaviour
         }
     }
 
-    private IEnumerator AsyncLoadGameScene(SceneEnums.SceneName loadingScene)
+    private async UniTask AsyncLoadGameScene(SceneType loadingScene)
     {
         IsSceneLoading = true;
 
-        AsyncOperation asyncLoad = SceneLoader.Instance.AsyncLoadScene(loadingScene);
-        yield return new WaitUntil(() => asyncLoad.isDone);
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(loadingScene.ToString());
+        await asyncLoad.ToUniTask();
 
-        FindCurrentScene();
-
-        yield return SceneLoader.Instance.LoadAssets();
-
-        ScenePlacer.Instance.PlaceSceneObjects();
+        _currentScene = FindCurrentScene();
+        await _currentScene.AsyncInitializeScene();
 
         IsSceneLoading = false;
     }
 
-    private void FindCurrentScene()
+    private IScene FindCurrentScene()
     {
         MonoBehaviour[] behaviours = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
         foreach (var behaviour in behaviours)
         {
             if (behaviour is IScene scene)
             {
-                _currentScene = scene;
-                break;
+                return scene;
             }
         }
 
-        if (null == _currentScene)
-        {
-            Debug.LogWarning("No IScene implementation found in the current scene.");
-        }
+        Logger.Write(LogCategory.GameScene, "No IScene implementation found in the current scene.", LogLevel.Error, true);
+
+        return null;
     }
 }
 

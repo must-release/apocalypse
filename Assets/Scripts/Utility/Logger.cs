@@ -5,6 +5,7 @@ public enum LogCategory
     Default,
     Event,
     GamePlay,
+    GameScene,
     AssetLoad
 }
 

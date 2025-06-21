@@ -1,32 +1,25 @@
 using UnityEngine;
-using StageEnums;
 
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
 
     public PlayerType   CurrentPlayerType   { get; private set; }
-    public Stage        CurrentStage        { get; private set; }
-    public int          CurrentMapNumber    { get; private set; }
+    public ChapterType  CurrentChapter      { get; private set; }
+    public int          CurrentStage        { get; private set; }
 
-    public void SetPlayerData(Stage stage, int map, PlayerType playerType)
+    public void SetPlayerData(ChapterType chapter, int stage, PlayerType playerType)
     {
         CurrentPlayerType   = playerType;
+        CurrentChapter      = chapter;
         CurrentStage        = stage;
-        CurrentMapNumber    = map;
     }
 
-    public void GetPlayerData(out Stage stage, out int map, out PlayerType PlayerType)
+    public void GetPlayerData(out ChapterType chapter, out int stage, out PlayerType PlayerType)
     {
         PlayerType  = CurrentPlayerType;
+        chapter     = CurrentChapter;
         stage       = CurrentStage;
-        map         = CurrentMapNumber;
-    }
-
-    public void GetStageMapInfo(out string stage, out int map)
-    {
-        stage = CurrentStage.ToString();
-        map = CurrentMapNumber;
     }
 
     private void Awake()

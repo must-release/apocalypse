@@ -1,4 +1,3 @@
-using ScreenEffectEnums;
 using UnityEngine;
 using UnityEngine.Assertions;
 using System;

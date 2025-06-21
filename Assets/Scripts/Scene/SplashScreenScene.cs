@@ -1,12 +1,29 @@
-using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 
 public class SplashScreenScene : MonoBehaviour, IScene
 {
+    /****** Public Members ******/
+
     public bool CanMoveToNextScene { get; private set; } = false;
+    public SceneType CurrentSceneType => SceneType.SplashScreenScene;
+    public Transform PlayerTransform => null; // Splash screen does not have a player transform
+
+    public async UniTask AsyncInitializeScene()
+    {
+        await UniTask.CompletedTask;
+    }
+
+    public void ActivateScene()
+    {
+        // This scene does not require any activation logic.
+    }
+
+    /****** Private Members ******/
 
     private IEnumerator Start()
     {

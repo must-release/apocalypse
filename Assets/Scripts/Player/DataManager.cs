@@ -5,7 +5,6 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
-using StageEnums;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using Newtonsoft.Json;
@@ -23,7 +22,7 @@ public class DataManager : MonoBehaviour, IAsyncLoadObject
     public void CreateNewGameData()
     {
         PlayerType  lastChar    = PlayerType.Heroine;
-        Stage       curStage    = Stage.Test;
+        ChapterType       curStage    = ChapterType.Test;
         int         curMap      = 2;
         string      saveTime    = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         string      playTime    = "00:00"; 
@@ -100,7 +99,7 @@ public class DataManager : MonoBehaviour, IAsyncLoadObject
 
     /****** Private Members ******/
 
-    private Dictionary<Stage, Texture2D>    _stageSlotImage    = new();
+    private Dictionary<ChapterType, Texture2D>    _stageSlotImage    = new();
     private JsonSerializerSettings          _jsonSettings      = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
 
     private UserData    _currentData;
@@ -127,13 +126,13 @@ public class DataManager : MonoBehaviour, IAsyncLoadObject
     private IEnumerator LoadStageImage()
     {
         string rootKey  = "Stage Slot Image/";
-        string test     = rootKey + Stage.Test.ToString();
+        string test     = rootKey + ChapterType.Test.ToString();
 
         AsyncOperationHandle<Texture2D> handle = Addressables.LoadAssetAsync<Texture2D>(test);
         yield return handle;
         if (handle.Status == AsyncOperationStatus.Succeeded)
         {
-            _stageSlotImage.Add(Stage.Test, handle.Result);
+            _stageSlotImage.Add(ChapterType.Test, handle.Result);
         }
         else
         {
@@ -145,7 +144,7 @@ public class DataManager : MonoBehaviour, IAsyncLoadObject
     {
         IsSaving = true;
 
-        PlayerManager.Instance.GetPlayerData(out Stage stage, out int map, out PlayerType character);
+        PlayerManager.Instance.GetPlayerData(out ChapterType stage, out int map, out PlayerType character);
         _currentData.UpdatePlayerData(stage, map, character);
 
         // Wait for a frame before taking a screenshot

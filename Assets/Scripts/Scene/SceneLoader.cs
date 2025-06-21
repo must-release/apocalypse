@@ -1,4 +1,3 @@
-using SceneEnums;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +10,7 @@ public class SceneLoader : MonoBehaviour
 {
     public static SceneLoader Instance;
 
-    public SceneName CurrentScene { get; private set; }
+    public SceneType CurrentScene { get; private set; }
     public GameObject SceneObjects { get; private set; }
     public Transform Player { get; private set; }
     public Queue<MapInfo> Maps { get; private set; }
@@ -40,7 +39,7 @@ public class SceneLoader : MonoBehaviour
     }
 
     // Asynchronously load scene
-    public AsyncOperation AsyncLoadScene(SceneName loadingScene)
+    public AsyncOperation AsyncLoadScene(SceneType loadingScene)
     {
         CurrentScene = loadingScene;
 
@@ -48,7 +47,7 @@ public class SceneLoader : MonoBehaviour
     }
 
     // Load Assets
-    public Coroutine LoadAssets() 
+    public IEnumerator LoadAssets() 
     {
         // Destroy all previous scene objects
         foreach (Transform child in SceneObjects.transform)
@@ -57,31 +56,22 @@ public class SceneLoader : MonoBehaviour
         }
         Maps.Clear();
 
-        switch (CurrentScene)
-        {
-            case SceneName.TitleScene:
-                return StartCoroutine(LoadTitleAssets());
-            case SceneName.StageScene:
-                return StartCoroutine(LoadStageAssets());
-            default:
-                Debug.Log("Asset Load Fail : Invalid Scene");
-                return null;
-        }
+        yield return LoadStageAssets();
     }
 
     // Load stage scene assets
     IEnumerator LoadStageAssets()
     {
         // Get map data
-        PlayerManager.Instance.GetStageMapInfo(out string stage, out int map);
-        string map1 = "Stage/" + stage + '_' + map;
-        string map2 = "Stage/" + stage + '_' + (map + 1);
+//         PlayerManager.Instance.GetStageMapInfo(out string stage, out int map);
+//         string map1 = "Stage/" + stage + '_' + map;
+//         string map2 = "Stage/" + stage + '_' + (map + 1);
 
         // Load first map
-        yield return StartCoroutine(LoadMap(map1));
+/*        yield return AsyncLoadStage(map1);*/
 
         // Load second map
-        //yield return StartCoroutine(LoadMap(map2));
+        //yield return StartCoroutine(AsyncLoadStage(map2));
 
         // Load player objects
         yield return LoadPlayer();
@@ -149,13 +139,13 @@ public class SceneLoader : MonoBehaviour
     }
 
     // Return scene name string
-    private string GetSceneName(SceneEnums.SceneName loadingScene)
+    private string GetSceneName(SceneType loadingScene)
     {
         switch (loadingScene)
         {
-            case SceneEnums.SceneName.TitleScene:
+            case SceneType.TitleScene:
                 return "TitleScene";
-            case SceneEnums.SceneName.StageScene:
+            case SceneType.StageScene:
                 return "StageScene";
             default:
                 return null;

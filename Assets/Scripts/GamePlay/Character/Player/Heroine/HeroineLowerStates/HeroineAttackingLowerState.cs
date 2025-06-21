@@ -52,5 +52,5 @@ public class HeroineAttackingLowerState : HeroineLowerStateBase
 
     /****** Private Members ******/
 
-    bool _isLookingUp;
+    private bool _isLookingUp;
 }

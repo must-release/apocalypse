@@ -3,17 +3,10 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 
-namespace StageEnums
-{
-    public enum Stage { Test, Prologue, Library, Event, StageCount }
-}
+public enum ChapterType { Test, Prologue, Library, Event, ChapterTypeCount }
 
-namespace SceneEnums
-{
-    public enum SceneName { SplashScreenScene, TitleScene, StageScene, BossScene, SceneNameCount }
-}
 
-namespace ScreenEffectEnums
-{
-    public enum ScreenEffect { FadeIn, FadeOut, ScreenEffectCount }
-}
+public enum SceneType { SplashScreenScene, TitleScene, StageScene, BossScene, SceneTypeCount }
+
+
+public enum ScreenEffect { FadeIn, FadeOut, ScreenEffectCount }

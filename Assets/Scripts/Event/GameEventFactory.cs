@@ -1,7 +1,4 @@
-﻿using SceneEnums;
-using ScreenEffectEnums;
-using StageEnums;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -120,7 +117,7 @@ public static class GameEventFactory
         return CreateSceneActivateEvent(dto.ShouldTurnOnLoadingUI);
     }
 
-    public static IGameEvent CreateSceneLoadEvent(SceneName loadingScene)
+    public static IGameEvent CreateSceneLoadEvent(SceneType loadingScene)
     {
         var info = ScriptableObject.CreateInstance<SceneLoadEventInfo>();
         info.Initialize(loadingScene);
@@ -152,7 +149,7 @@ public static class GameEventFactory
         return CreateScreenEffectEvent(dto.ScreenEffectType);
     }
 
-    public static IGameEvent CreateStoryEvent(Stage storyStage, int storyNumber, int readBlockCount, int readEntryCount, bool isOnMap)
+    public static IGameEvent CreateStoryEvent(ChapterType storyStage, int storyNumber, int readBlockCount, int readEntryCount, bool isOnMap)
     {
         var info = ScriptableObject.CreateInstance<StoryEventInfo>();
         info.Initialize(storyStage, storyNumber, readBlockCount, readEntryCount, isOnMap);

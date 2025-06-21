@@ -1,5 +1,3 @@
-using UnityEngine;
-using StageEnums;
 using System.Collections.Generic;
 
 public class CancelEvent : InputEvent, KeySettingsObserver
