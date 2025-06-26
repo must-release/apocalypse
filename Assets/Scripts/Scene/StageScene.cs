@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -41,11 +42,9 @@ public class StageScene : MonoBehaviour, IScene
     private async UniTask AsyncLoadStageAssets()
     {
         PlayerManager.Instance.GetPlayerData(out ChapterType chapter, out int stage, out PlayerType _);
-        string firstStage   = $"Stage/{chapter}_{stage}";
-        string secondStage  = $"Stage/{chapter}_{stage + 1}";
+        string currentStage = $"Stage/{chapter}_{stage}";
 
-        await AsyncLoadStage(firstStage);
-        //await AsyncLoadStage(secondStage);
+        await AsyncLoadStage(currentStage);
         await AsyncLoadPlayer();
 
         PlaceStageObjects();
@@ -62,22 +61,22 @@ public class StageScene : MonoBehaviour, IScene
             await UniTask.CompletedTask;
         }
 
-        if (loadHandle.Result.TryGetComponent(out StageManager stageManager))
-        {
-            if (_MaxStageCount <= _stageQueue.Count)
-            {
-                _stageQueue.Dequeue().DestroyStage();
-            }
-            _stageQueue.Enqueue(stageManager);
-
-            await stageManager.AsyncInitializeStage();
-
-            stageManager.gameObject.SetActive(false);
-        }
-        else
+        StageManager stageManager = loadHandle.Result.GetComponent<StageManager>();
+        if (null == stageManager)
         {
             Logger.Write(LogCategory.AssetLoad, $"Stage {stage} does not have a StageManager component", LogLevel.Error, true);
+            await UniTask.CompletedTask;
         }
+ 
+        if (_MaxStageCount <= _stageQueue.Count)
+        {
+            _stageQueue.Dequeue().DestroyStage();
+        }
+        _stageQueue.Enqueue(stageManager);
+
+        await stageManager.AsyncInitializeStage();
+
+        stageManager.gameObject.SetActive(false);
     }
 
     private async UniTask AsyncLoadPlayer()
@@ -107,5 +106,7 @@ public class StageScene : MonoBehaviour, IScene
 
         StageManager currentStage = _stageQueue.Peek();
         _playerTransform.position = currentStage.PlayerStartPosition;
+
+        Logger.Write(LogCategory.GameScene, $"Placing player at {currentStage.PlayerStartPosition} in stage", LogLevel.Log, true);
     }
 }

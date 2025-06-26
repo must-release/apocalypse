@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using NUnit.Framework;
+using UnityEngine;
 using UnityEngine.Tilemaps;
 
 [CreateAssetMenu(fileName = "NewObjectReplacementTile", menuName = "2D/Tiles/Object Replacement Tile")]
@@ -18,7 +19,14 @@ public class ObjectReplacementTile : TileBase
 
     public override bool StartUp(Vector3Int position, ITilemap tilemap, GameObject instantiated)
     {
+        _color = Color.white;
+
         return false;
+    }
+
+    public void HideTile()
+    {
+        _color = Color.clear;
     }
 
 

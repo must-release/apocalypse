@@ -14,7 +14,6 @@ public class SceneController : MonoBehaviour
     /****** Public Members ******/
 
     public static SceneController Instance { get; private set; }
-
     public bool IsSceneLoading { get; private set; }
     public bool CanMoveToNextScene
     {

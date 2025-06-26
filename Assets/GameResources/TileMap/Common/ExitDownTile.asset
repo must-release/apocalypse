@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a46e8e821cd483488d29022178da14b, type: 3}
-  m_Name: NormalInfectee
+  m_Name: ExitDownTile
   m_EditorClassIdentifier: 
-  _sprite: {fileID: 21300000, guid: 01a386bf64f411a4cacf6f38a1cf65f0, type: 3}
+  _sprite: {fileID: 21300000, guid: d7fca8e1189b7204da740c8fcf1fde3d, type: 3}
   _color: {r: 1, g: 1, b: 1, a: 1}
   _flags: 3
   _colliderType: 0
-  gameObject: {fileID: 4058898675561586481, guid: d750e2b6377e846d8b209313004fba21, type: 3}
+  gameObject: {fileID: 1239059364190813484, guid: de14bd7156e4a41109e21a7d77896b9d, type: 3}
