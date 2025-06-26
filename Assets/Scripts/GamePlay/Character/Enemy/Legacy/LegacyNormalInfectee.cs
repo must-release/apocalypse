@@ -174,7 +174,7 @@
 //     {
 //         if (groundCheck != null)
 //         {
-//             Gizmos.color = Color.red;
+//             Gizmos._color = Color.red;
 //             Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius); // Draw ground detection range in the Scene view.
 //         }
 //     }

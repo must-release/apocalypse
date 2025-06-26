@@ -85,7 +85,7 @@
 //                 PatrolAroundPlayer(); // Patrol around the player's position
 //             }
 
-//             // Update moving direction for sprite orientation
+//             // Update moving direction for _sprite orientation
 //             if (direction != movingdirection)
 //             {
 //                 transform.localScale = new Vector3(-transform.localScale.x,

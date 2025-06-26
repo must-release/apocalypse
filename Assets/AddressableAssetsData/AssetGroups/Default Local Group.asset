@@ -121,7 +121,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 67d9aa8ec88a248c487b0b675a9e6846
-    m_Address: StoryScripts/Prologue_1
+    m_Address: StoryScripts/Prologue_0
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

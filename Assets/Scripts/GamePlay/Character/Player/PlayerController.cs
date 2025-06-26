@@ -95,21 +95,20 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
 
         base.Awake();
         
-        _avatarDictionary = new Dictionary<PlayerType, IPlayerAvatar>();
-        _playerRigid      = GetComponent<Rigidbody2D>();
+        _avatarDictionary   = new Dictionary<PlayerType, IPlayerAvatar>();
+        _playerRigid        = GetComponent<Rigidbody2D>();
+        CharacterHeight     = GetComponent<BoxCollider2D>().size.y * transform.localScale.y;
+        MovingSpeed         = 8f;
+        JumpingSpeed        = 14f;
+        Gravity             = 4f;
+        MaxHitPoint         = _MaxHitPoint;
+        CurrentHitPoint     = MaxHitPoint;
+        _playerRigid.gravityScale = Gravity;
     }
 
     protected override void Start()
     {
         base.Start();
-
-        CharacterHeight             = GetComponent<CapsuleCollider2D>().size.y * transform.localScale.y;
-        MovingSpeed                 = 8f;
-        JumpingSpeed                = 14f;
-        Gravity                     = 4f;
-        MaxHitPoint                 = _MaxHitPoint;
-        CurrentHitPoint             = MaxHitPoint;
-        _playerRigid.gravityScale   = Gravity;
 
         RegisterAvatar(PlayerType.Hero, _heroTransform);
         RegisterAvatar(PlayerType.Heroine, _heroineTransform);
@@ -122,9 +121,18 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
 
     protected override void OnGround()
     {
+        Debug.Log($"PlayerController.OnGround() called for {CurrentPlayerType}");
+
         CurrentAvatar.OnGround();
     }
 
+    protected override void FixedUpdate()
+    {
+        base.FixedUpdate();
+
+        if (false == _isInitilized) return;
+        CurrentAvatar.OnFixedUpdate();
+    }
 
     /****** Private Members ******/
 
@@ -145,13 +153,6 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
         if (false == _isInitilized) return;
 
         CurrentAvatar.OnUpdate();
-    }
-
-    private void FixedUpdate()
-    {
-        if (false == _isInitilized) return;
-
-        CurrentAvatar.OnFixedUpdate();
     }
 
     private IEnumerator StartDamageImmuneState()

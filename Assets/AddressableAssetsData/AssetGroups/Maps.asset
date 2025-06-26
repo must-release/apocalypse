@@ -13,25 +13,8 @@ MonoBehaviour:
   m_Name: Maps
   m_EditorClassIdentifier: 
   m_GroupName: Maps
-  m_Data:
-    m_SerializedData: []
   m_GUID: bbb192d43ffd34d8fb0fc1527097ddff
-  m_SerializeEntries:
-  - m_GUID: 8cb194ece59d24e609acc52c05ef0a02
-    m_Address: MAP_TEST_0
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b4ae9e8a9ccb44c00bf85459bbbd0386
-    m_Address: MAP_TEST_1
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8052f54242de0ef41b69e9ff253b841f
-    m_Address: MAP_TEST_3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 0018d54b9f5f74640839669867571db9, type: 2}
   m_SchemaSet:

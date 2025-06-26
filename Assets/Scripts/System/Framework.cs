@@ -30,7 +30,7 @@ public class Framework : MonoBehaviour
 
         Debug.Log("Framework Init Complete");
 
-        SubmitStartEvent();
+        SubmitBootstrapEvent();
     }
 
     private IEnumerator LoadDevConfig()
@@ -83,18 +83,18 @@ public class Framework : MonoBehaviour
     }
 
 
-    private void SubmitStartEvent()
+    private void SubmitBootstrapEvent()
     {
         Assert.IsTrue(null != _devConfig, "DevConfig not loaded");
 
-        if (null != _devConfig.StartEvent)
+        if (null != _devConfig.BootstrapEvent)
         {
-            var startEvent = GameEventFactory.CreateFromInfo(_devConfig.StartEvent);
+            var startEvent = GameEventFactory.CreateFromInfo(_devConfig.BootstrapEvent);
             GameEventManager.Instance.Submit(startEvent);
         }
         else
         {
-            Debug.Log("There is no Starting Event.");
+            Debug.Log("There is no Bootstrap Event.");
         }
     }
 }

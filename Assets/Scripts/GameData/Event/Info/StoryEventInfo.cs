@@ -18,8 +18,8 @@ public class StoryEventInfo : GameEventInfo
     public void Initialize(ChapterType storyStage, int storyNumber, int readBlockCount, int readEntryCount, bool isOnMap, bool isRuntimeInstance = false)
     {
         Assert.IsTrue( false == IsInitialized,          "Duplicate initialization of GameEventInfo is not allowed." );
-        Assert.IsTrue( ChapterType.ChapterTypeCount != storyStage,  "Story stage should be set." );
-        Assert.IsTrue( 0 < storyNumber,                 "Stage Number must be positive number." );
+        Assert.IsTrue( ChapterType.ChapterTypeCount != storyStage,  "Story chapter should be set." );
+        Assert.IsTrue( 0 <= storyNumber,                "Story number can not be negative.");
         Assert.IsTrue( 0 <= readBlockCount,             "Read block count can not be negative." );
         Assert.IsTrue( 0 <= readEntryCount,             "Read entry count can not be negative." );
         

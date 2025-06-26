@@ -83,6 +83,13 @@ public class NormalInfectee : EnemyController
 
     /****** Protected Members ******/
 
+    protected override void Awake()
+    {
+        base.Awake();
+
+        CharacterHeight = GetComponent<BoxCollider2D>().size.y * transform.localScale.y;
+    }
+
     protected override void Start()
     {
         base.Start();
@@ -104,7 +111,7 @@ public class NormalInfectee : EnemyController
 
     protected override void InitializePlayerDetector()
     {
-        detectRange = new Vector2(25, 5);
+        detectRange = new Vector2(10, 2);
         rangeOffset = new Vector2(3, 0);
     }
 

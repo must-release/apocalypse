@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Assertions;
 
+[RequireComponent(typeof(BoxCollider2D), typeof(Rigidbody2D))]
 public abstract class CharacterBase : MonoBehaviour, ICharacter, IMotionController, ICharacterInfo
 {
     /****** Public Members ******/
@@ -121,12 +122,17 @@ public abstract class CharacterBase : MonoBehaviour, ICharacter, IMotionControll
 
     protected virtual void Awake() 
     { 
-        _rigidbody = GetComponent<Rigidbody2D>();
+        _rigidbody  = GetComponent<Rigidbody2D>();
+        _collider   = GetComponent<BoxCollider2D>();
 
         gameObject.layer = LayerMask.NameToLayer(Layer.Character); 
+
     }
 
-    protected virtual void Start() { }
+    protected virtual void Start() 
+    {
+        CreateGroundCheckPoint();
+    }
 
     protected abstract void OnAir();
     protected abstract void OnGround();
@@ -156,47 +162,57 @@ public abstract class CharacterBase : MonoBehaviour, ICharacter, IMotionControll
         }
     }
 
+    protected virtual void FixedUpdate()
+    {
+        GroundCheck();
+    }
 
     /****** Private Members ******/
 
     private List<InteractionObject> _interactableObjects   = new List<InteractionObject>();
     private List<InteractionObject> _interactingObjects    = new List<InteractionObject>();
     private Rigidbody2D _rigidbody;
+    private BoxCollider2D _collider;
+    private Transform _groundCheckPoint;
+    private Vector2 _groundCheckSize;
+    private bool _wasGrounded;
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void CreateGroundCheckPoint()
     {
-        if(collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        Assert.IsTrue(0 != CharacterHeight, $"CharacterHeight of {gameObject.name} is not set.");
+
+        _groundCheckPoint = new GameObject("GroundCheckPoint").transform;
+        _groundCheckPoint.SetParent(transform, false);
+        _groundCheckPoint.localPosition = Vector3.zero;
+        _groundCheckPoint.Translate(Vector3.down * CharacterHeight / 2f, Space.Self);
+
+        _groundCheckSize = new Vector2(_collider.size.x * 0.9f, 0.1f);
+    }    
+
+    private void GroundCheck()
+    {
+        Collider2D hit = Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, 0, LayerMask.GetMask(Layer.Ground));
+
+        bool isGrounded = hit != null;
+
+        if (false == _wasGrounded && isGrounded)
         {
-            if(collision.gameObject == StandingGround)
-            {
-                StandingGround = null;
-                if(gameObject.activeSelf)
-                    StartCoroutine(OnAirDelay());
-            }
+            OnGround();
+            StandingGround = hit.gameObject;
         }
+        else if (_wasGrounded && false == isGrounded)
+        {
+            StandingGround = null;
+            if (gameObject.activeInHierarchy)
+                StartCoroutine(OnAirDelay());
+        }
+
+        _wasGrounded = isGrounded;
     }
    
     private IEnumerator OnAirDelay()
     {
         yield return new WaitForSeconds(0.1f);
         if(StandingGround == null) OnAir();
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if ((collision.gameObject.layer == LayerMask.NameToLayer("Ground")) && StandingOnGround(collision))
-        {
-            OnGround();
-            StandingGround = collision.gameObject;
-        }
-    } 
-
-    // Check angle between character and ground
-    private bool StandingOnGround(Collision2D collision)
-    {
-        Vector2 normal = collision.contacts[0].normal;
-        float angle = Vector2.Angle(normal, Vector2.up);
-        if(angle > 45) return false;
-        else return true;
     }
 }

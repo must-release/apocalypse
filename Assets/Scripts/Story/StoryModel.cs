@@ -47,6 +47,12 @@ public class StoryModel : MonoBehaviour
         AsyncOperationHandle<TextAsset> story = Addressables.LoadAssetAsync<TextAsset>(storyInfo);
         yield return story;
 
+        if (story.Status != AsyncOperationStatus.Succeeded)
+        {
+            Debug.LogError($"Failed to load story: {storyInfo}. Status: {story.Status}");
+            yield break; // Exit if loading failed
+        }
+
         // Convert XML file to StoryBlocks object
         string xmlContent = story.Result.text;
         StoryBlocks storyBlocks = DeserializeFromXml<StoryBlocks>(xmlContent);

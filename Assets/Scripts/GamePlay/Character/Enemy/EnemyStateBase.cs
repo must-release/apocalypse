@@ -36,6 +36,5 @@ public abstract class EnemyStateBase : MonoBehaviour
         enemyController =   enemyTransform.GetComponent<EnemyController>();
         enemySprite     =   enemyTransform.GetComponent<SpriteRenderer>();
         enemyRigid      =   enemyTransform.GetComponent<Rigidbody2D>();
-
     }
 }

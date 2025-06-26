@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a46e8e821cd483488d29022178da14b, type: 3}
+  m_Name: KillZone
+  m_EditorClassIdentifier: 
+  _sprite: {fileID: 21300000, guid: 27c880ab5defa9b469e7804ce6357460, type: 3}
+  _color: {r: 1, g: 1, b: 1, a: 1}
+  _flags: 3
+  _colliderType: 1
+  gameObject: {fileID: 3346939393888050184, guid: ae0f2de7cb9c27045a779bfee96a51fa, type: 3}

@@ -17,8 +17,6 @@ public class StageScene : MonoBehaviour, IScene
     public async UniTask AsyncInitializeScene()
     {
         await AsyncLoadStageAssets();
-
-        ScenePlacer.Instance.PlaceSceneObjects();
     }
 
     public void ActivateScene()
