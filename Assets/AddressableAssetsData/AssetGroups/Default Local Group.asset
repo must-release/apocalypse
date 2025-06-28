@@ -25,6 +25,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 10932c516ffe242458e9ab51eb011f7c
+    m_Address: Stage/Test_1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 21d804a5df5e78540b501e41c88a45d7
     m_Address: AnimationClip/Heroine/Lower/AimAttacking
     m_ReadOnly: 0
@@ -72,6 +77,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 44f4ba2d9722d45938f232218644072c
     m_Address: Assets/GameResources/Prefab/Object/BulletAimingDot.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 46e1e95dcc1634b6ba9e7fafdaeab656
+    m_Address: Stage/Test_3
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -167,11 +177,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a41cf3ddefe94614abe33cb23ed89c4e
     m_Address: AnimationClip/Heroine/Lower/ClimbingDown
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ade2c1ebec7694965baac8700146f158
-    m_Address: Stage/Test_1
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

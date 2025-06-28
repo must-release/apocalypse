@@ -21,14 +21,14 @@ public class DataManager : MonoBehaviour, IAsyncLoadObject
 
     public void CreateNewGameData()
     {
-        PlayerType  lastChar    = PlayerType.Heroine;
-        ChapterType       curStage    = ChapterType.Test;
-        int         curMap      = 2;
+        PlayerType  lastChar    = PlayerType.Hero;
+        ChapterType curChapter  = ChapterType.Test;
+        int         curStage    = 1;
         string      saveTime    = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         string      playTime    = "00:00"; 
 
-        _currentData = new UserData(curStage, curMap, null, lastChar, playTime, saveTime);
-        PlayerManager.Instance.SetPlayerData(curStage, curMap, lastChar);
+        _currentData = new UserData(curChapter, curStage, null, lastChar, playTime, saveTime);
+        PlayerManager.Instance.SetPlayerData(curChapter, curStage, lastChar);
     }
 
     public void SaveUserData(List<GameEventDTO> dtoList, int slotNum, bool takeScreenShot)

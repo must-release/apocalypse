@@ -3,12 +3,13 @@ using NUnit.Framework;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static SnapPoint;
 
 public class StageManager : MonoBehaviour
 {
     /****** Public Members ******/
 
-    public Vector3 PlayerStartPosition
+    public Vector3      PlayerStartPosition
     {
         get
         {
@@ -16,9 +17,11 @@ public class StageManager : MonoBehaviour
             return _playerStart.StartPosition;
         }
     }
-    public SnapPoint EnterSnapPoint { get; private set; }
-    public SnapPoint ExitSnapPoint  { get; private set; }
+    public SnapPoint    EnterSnapPoint { get; private set; }
+    public SnapPoint    ExitSnapPoint  { get; private set; }
     
+    public bool CanGoBackToPreviousStage => _canGoBackToPreviousStage;
+
     public async UniTask AsyncInitializeStage()
     {
         InitializeTilemap();
@@ -32,6 +35,46 @@ public class StageManager : MonoBehaviour
     public void DestroyStage()
     {
         Destroy(gameObject);
+    }
+
+    public void SetupEntranceBarrier()
+    {
+        Assert.IsTrue(null != EnterSnapPoint, $"EnterSnapPoint is not set in the {_chapterType}_{_stageIndex}.");
+        Assert.IsTrue(false == _canGoBackToPreviousStage, $"Cannot setup entrance barrier in the {_chapterType}_{_stageIndex}. Going back to previous stage is allowed.");
+        Assert.IsTrue(null != _tilemap, $"Tilemap component is missing it the {_chapterType}_{_stageIndex}.");
+
+        GameObject barrier  = new GameObject("EntranceBarrier");
+        BoxCollider2D collider = barrier.AddComponent<BoxCollider2D>();
+        barrier.transform.SetParent(gameObject.transform, false);
+        barrier.transform.position = EnterSnapPoint.GetPairPosition();
+
+        BoundsInt bounds = _tilemap.cellBounds;
+        if (EnterSnapPoint.Direction == SnapPoint.SnapDirection.Left || EnterSnapPoint.Direction == SnapPoint.SnapDirection.Right)
+        {
+            collider.size = new Vector2(1, bounds.size.y);
+            Vector3 vec = barrier.transform.position;
+            vec.y = transform.position.y;
+            barrier.transform.position = vec;
+        }
+        else
+        {
+            collider.size = new Vector2(bounds.size.x, 1);
+            Vector3 vec = barrier.transform.position;
+            vec.x = transform.position.x;
+            barrier.transform.position = vec;
+        }
+    }
+
+    public void SnapToPoint(SnapPoint targetPoint)
+    {
+        Assert.IsTrue(null != targetPoint, $"Trying to snap null point in the {_chapterType}_{_stageIndex}.");
+        Assert.IsTrue(2 == (int)SnapPointType.SnapPointTypeCount, "SnapPointType enum should have exactly 2 values.");
+
+        Vector3 moveVec = (targetPoint.Type == SnapPoint.SnapPointType.Enter)
+            ? targetPoint.GetPairPosition() - ExitSnapPoint.transform.position
+            : targetPoint.GetPairPosition() - EnterSnapPoint.transform.position;
+
+        transform.Translate(moveVec);
     }
 
 

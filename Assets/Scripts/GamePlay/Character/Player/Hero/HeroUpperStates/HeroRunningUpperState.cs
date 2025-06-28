@@ -16,6 +16,7 @@ public class HeroRunningUpperState : HeroUpperStateBase
     public override void OnEnter()
     {
         StateAnimator.Play(_RunningStateHash, 0, LowerBodyStateInfo.AnimationNormalizedTime);
+        StateAnimator.Update(0.0f);
     }
     public override void OnUpdate()
     {

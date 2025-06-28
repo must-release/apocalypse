@@ -16,6 +16,7 @@ public class HeroIdleUpperState : HeroUpperStateBase
     public override void OnEnter()
     {
         StateAnimator.Play(_IdleStateHash);
+        StateAnimator.Update(0.0f);
     }
     public override void OnUpdate()
     {
