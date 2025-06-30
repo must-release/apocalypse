@@ -2,7 +2,7 @@ using NUnit.Framework;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
-public class HazardObject : MonoBehaviour, IMapObject
+public class HazardObject : MonoBehaviour, IStageObject
 {
     /****** Private Members ******/
 

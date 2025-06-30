@@ -3,6 +3,7 @@ using NUnit.Framework;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+
 using static SnapPoint;
 
 public class StageManager : MonoBehaviour
@@ -42,27 +43,27 @@ public class StageManager : MonoBehaviour
         Assert.IsTrue(null != EnterSnapPoint, $"EnterSnapPoint is not set in the {_chapterType}_{_stageIndex}.");
         Assert.IsTrue(false == _canGoBackToPreviousStage, $"Cannot setup entrance barrier in the {_chapterType}_{_stageIndex}. Going back to previous stage is allowed.");
         Assert.IsTrue(null != _tilemap, $"Tilemap component is missing it the {_chapterType}_{_stageIndex}.");
+        Assert.IsTrue(4 == (int)SnapDirection.SnapDirectionCount, "SnapDirection enum should have exactly 4 values.");
 
-        GameObject barrier  = new GameObject("EntranceBarrier");
-        BoxCollider2D collider = barrier.AddComponent<BoxCollider2D>();
+        GameObject      barrier     = new GameObject("EntranceBarrier");
+        BoxCollider2D   collider    = barrier.AddComponent<BoxCollider2D>();
         barrier.transform.SetParent(gameObject.transform, false);
         barrier.transform.position = EnterSnapPoint.GetPairPosition();
 
-        BoundsInt bounds = _tilemap.cellBounds;
-        if (EnterSnapPoint.Direction == SnapPoint.SnapDirection.Left || EnterSnapPoint.Direction == SnapPoint.SnapDirection.Right)
+        BoundsInt   bounds  = _tilemap.cellBounds;
+        Vector3     barrPos = barrier.transform.position;
+
+        if (EnterSnapPoint.Direction == SnapDirection.Left || EnterSnapPoint.Direction == SnapDirection.Right)
         {
-            collider.size = new Vector2(1, bounds.size.y);
-            Vector3 vec = barrier.transform.position;
-            vec.y = transform.position.y;
-            barrier.transform.position = vec;
+            collider.size   = new Vector2(1, bounds.size.y);
+            barrPos.y       = transform.position.y;
         }
         else
         {
-            collider.size = new Vector2(bounds.size.x, 1);
-            Vector3 vec = barrier.transform.position;
-            vec.x = transform.position.x;
-            barrier.transform.position = vec;
+            collider.size   = new Vector2(bounds.size.x, 1);
+            barrPos.x       = transform.position.x;
         }
+        barrier.transform.position = barrPos;
     }
 
     public void SnapToPoint(SnapPoint targetPoint)
@@ -70,7 +71,7 @@ public class StageManager : MonoBehaviour
         Assert.IsTrue(null != targetPoint, $"Trying to snap null point in the {_chapterType}_{_stageIndex}.");
         Assert.IsTrue(2 == (int)SnapPointType.SnapPointTypeCount, "SnapPointType enum should have exactly 2 values.");
 
-        Vector3 moveVec = (targetPoint.Type == SnapPoint.SnapPointType.Enter)
+        Vector3 moveVec = (targetPoint.Type == SnapPointType.Enter)
             ? targetPoint.GetPairPosition() - ExitSnapPoint.transform.position
             : targetPoint.GetPairPosition() - EnterSnapPoint.transform.position;
 
@@ -112,8 +113,8 @@ public class StageManager : MonoBehaviour
             replacementTile.HideTile();
             replacementTile.RefreshTile(cellPos, _tilemap);
 
-            Vector3 worldPos = _tilemap.GetCellCenterWorld(cellPos);
-            GameObject replacingObject = Instantiate(replacementTile.ReplacingObject, worldPos, Quaternion.identity, _tilemap.transform);
+            Vector3     worldPos        = _tilemap.GetCellCenterWorld(cellPos);
+            GameObject  replacingObject = Instantiate(replacementTile.ReplacingObject, worldPos, Quaternion.identity, _tilemap.transform);
 
             if (replacingObject.TryGetComponent(out PlayerStart playerStart))
             {
@@ -135,9 +136,9 @@ public class StageManager : MonoBehaviour
     private void SetSnapPoint(SnapPoint snapPoint)
     {
         Assert.IsTrue(null != snapPoint, "SnapPoint cannot be null.");
-        Assert.IsTrue(2 == (int)SnapPoint.SnapPointType.SnapPointTypeCount, "SnapPointType enum should have exactly 2 values.");
+        Assert.IsTrue(2 == (int)SnapPointType.SnapPointTypeCount, "SnapPointType enum should have exactly 2 values.");
 
-        if (snapPoint.Type == SnapPoint.SnapPointType.Enter)
+        if (snapPoint.Type == SnapPointType.Enter)
         {
             EnterSnapPoint = snapPoint;
         }
