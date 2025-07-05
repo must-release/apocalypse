@@ -1,11 +1,11 @@
 using System.Collections;
 using UnityEngine;
 
-public class HeroineDeadLowerState : HeroineLowerStateBase
+public class HeroineDeadLowerState : HeroineLowerState
 {
     /****** Public Members ******/
 
-    public override HeroineLowerState   StateType               => HeroineLowerState.Dead;
+    public override HeroineLowerStateType   StateType               => HeroineLowerStateType.Dead;
     public override bool                ShouldDisableUpperBody  => true; 
 
     public override void OnEnter()
@@ -30,7 +30,7 @@ public class HeroineDeadLowerState : HeroineLowerStateBase
         }
     }
 
-    public override void OnExit(HeroineLowerState _)
+    public override void OnExit(HeroineLowerStateType _)
     {
 
     }

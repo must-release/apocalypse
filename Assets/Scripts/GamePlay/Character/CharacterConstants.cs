@@ -1,24 +1,88 @@
 using UnityEngine;
 
 public enum PlayerType { Hero, Heroine, PlayerCount }
-public enum HeroineLowerState { Idle, Running, Jumping, Aiming, Attacking, AimAttacking, Climbing, Pushing, Tagging, Damaged, Dead, HeroLowerStateCount }
-public enum HeroineUpperState { Disabled, Idle, Running, LookingUp, Attacking, TopAttacking, HeroUpperStateCount }
-public enum HeroLowerState { Idle, Running, Jumping, Aiming, AimAttacking, Climbing, Pushing, Tagging, Damaged, Dead, HeroineLowerStateCount }
-public enum HeroUpperState { Disabled, Idle, Running, Jumping, LookingUp, Aiming, Attacking, TopAttacking, AimAttacking, HeroineUpperStateCount }
 public enum EnemyState { Patrolling, Chasing, Attacking, Damaged, Dead, EnemyStateCount }
 public enum FacingDirection { Left, Right, FacingDirectionCount }
 
-public static class AnimatorState
+public abstract class StateType
 {
-    public static class Hero
+    public string Name { get; private set; }
+    public override string ToString() => Name;
+    public override bool Equals(object obj)
     {
-        public static int GetHash(HeroLowerState state, string variation = "") => Animator.StringToHash($"Hero_Lower_{state}{variation}");
-        public static int GetHash(HeroUpperState state, string variation = "") => Animator.StringToHash($"Hero_Upper_{state}{variation}");
+        if (obj is StateType stateType)
+        {
+            if (stateType.Name == Name)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    public override int GetHashCode()
+    {
+        return Name.GetHashCode();
     }
 
-    public static class Heroine
-    {
-        public static int GetHash(HeroineLowerState state, string variation = "") => Animator.StringToHash($"Heroine_Lower_{state}{variation}");
-        public static int GetHash(HeroineUpperState state, string variation = "") => Animator.StringToHash($"Heroine_Upper_{state}{variation}");
-    }
+    protected StateType(string name) { Name = name; }
+}
+
+public class LowerStateType : StateType
+{
+    public static readonly LowerStateType Idle          = new LowerStateType("Idle");
+    public static readonly LowerStateType Running       = new LowerStateType("Running");
+    public static readonly LowerStateType Jumping       = new LowerStateType("Jumping");
+    public static readonly LowerStateType Aiming        = new LowerStateType("Aiming");
+    public static readonly LowerStateType AimAttacking  = new LowerStateType("AimAttacking");
+    public static readonly LowerStateType Climbing      = new LowerStateType("Climbing");
+    public static readonly LowerStateType Pushing       = new LowerStateType("Pushing");
+    public static readonly LowerStateType Tagging       = new LowerStateType("Tagging");
+    public static readonly LowerStateType Damaged       = new LowerStateType("Damaged");
+    public static readonly LowerStateType Dead          = new LowerStateType("Dead");
+
+    protected LowerStateType(string name) : base(name) {}
+}
+
+public class UpperStateType : StateType
+{   
+    public static readonly UpperStateType Disabled     = new UpperStateType("Disabled");
+    public static readonly UpperStateType Idle         = new UpperStateType("Idle");
+    public static readonly UpperStateType Running      = new UpperStateType("Running");
+    public static readonly UpperStateType LookingUp    = new UpperStateType("LookingUp");
+
+    protected UpperStateType(string name) : base(name) {}
+}
+
+public class HeroineLowerStateType : LowerStateType
+{
+    private HeroineLowerStateType(string name) : base(name) { }
+
+    public static readonly HeroineLowerStateType Attacking = new HeroineLowerStateType("Attacking");
+}
+
+public class HeroineUpperStateType : UpperStateType
+{
+    private HeroineUpperStateType(string name) : base(name) {}
+}
+
+public class HeroLowerStateTYpe : LowerStateType
+{
+    private HeroLowerStateTYpe(string name) : base(name) {}
+}
+
+public class HeroUpperStateType : UpperStateType
+{
+    private HeroUpperStateType(string name) : base(name) { }
+
+    public static readonly HeroUpperStateType Jumping = new HeroUpperStateType("Jumping");
+    public static readonly HeroUpperStateType Aiming = new HeroUpperStateType("Aiming");
+    public static readonly HeroUpperStateType Attacking = new HeroUpperStateType("Attacking");
+    public static readonly HeroUpperStateType TopAttacking = new HeroUpperStateType("TopAttacking");
+    public static readonly HeroUpperStateType AimAttacking = new HeroUpperStateType("Aiming");
+}
+
+public static class AnimatorState
+{
+    public static int GetHash(PlayerType player, LowerStateType state, string variation = "") => Animator.StringToHash($"{player}_Lower_{state}{variation}");
+    public static int GetHash(PlayerType player, UpperStateType state, string variation = "") => Animator.StringToHash($"{player}_Upper_{state}{variation}");
 }

@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class HeroineAimingLowerState : HeroineLowerStateBase
+public class HeroineAimingLowerState : HeroineLowerState
 {
-    public override HeroineLowerState   StateType               => HeroineLowerState.Aiming;
+    public override HeroineLowerStateType   StateType               => HeroineLowerStateType.Aiming;
     public override bool                ShouldDisableUpperBody  => true;
 
     public override void OnEnter()
@@ -25,35 +25,35 @@ public class HeroineAimingLowerState : HeroineLowerStateBase
         PlayerWeapon.Aim(true);
     }
 
-    public override void OnExit(HeroineLowerState nextState)
+    public override void OnExit(HeroineLowerStateType nextState)
     {
         PlayerWeapon.Aim(false);
 
-        if (HeroineLowerState.AimAttacking != nextState)
+        if (HeroineLowerStateType.AimAttacking != nextState)
             PlayerWeapon.SetWeaponPivotRotation(0);
     }
 
     public override void Aim(Vector3 aim) 
     { 
         if(Vector3.zero == aim) 
-            StateController.ChangeState(HeroineLowerState.Idle);
+            StateController.ChangeState(HeroineLowerStateType.Idle);
 
         _aimingPosition = aim;
     }
 
     public override void Attack()
     {
-        StateController.ChangeState(HeroineLowerState.AimAttacking);
+        StateController.ChangeState(HeroineLowerStateType.AimAttacking);
     }
 
     public override void OnAir() 
     {
-        StateController.ChangeState(HeroineLowerState.Jumping); 
+        StateController.ChangeState(HeroineLowerStateType.Jumping); 
     }
 
     public override void Damaged()
     {
-        StateController.ChangeState(HeroineLowerState.Damaged); 
+        StateController.ChangeState(HeroineLowerStateType.Damaged); 
     }
 
 

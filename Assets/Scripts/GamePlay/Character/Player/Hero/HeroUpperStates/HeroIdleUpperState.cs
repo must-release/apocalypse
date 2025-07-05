@@ -5,9 +5,9 @@ public class HeroIdleUpperState : HeroUpperStateBase
 {
     /****** Public Members ******/
 
-    public override HeroUpperState StateType => HeroUpperState.Idle;
+    public override HeroUpperStateType StateType => HeroUpperStateType.Idle;
 
-    public override void InitializeState(IStateController<HeroUpperState> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    public override void InitializeState(IStateController<HeroUpperStateType> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
     {
         base.InitializeState(stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
         Assert.IsTrue(StateAnimator.HasState(0, _IdleStateHash), $"Hero animator does not have idle upper state.");
@@ -22,7 +22,7 @@ public class HeroIdleUpperState : HeroUpperStateBase
     {
 
     }
-    public override void OnExit(HeroUpperState _)
+    public override void OnExit(HeroUpperStateType _)
     {
 
     }
@@ -32,34 +32,34 @@ public class HeroIdleUpperState : HeroUpperStateBase
         if (HorizontalDirection.None == horizontalInput)
             return;
 
-        StateController.ChangeState(HeroUpperState.Running);
+        StateController.ChangeState(HeroUpperStateType.Running);
     }
 
     public override void Attack()
     {
-        StateController.ChangeState(HeroUpperState.Attacking);
+        StateController.ChangeState(HeroUpperStateType.Attacking);
     }
 
     public override void LookUp(bool lookUp)
     {
         if (false == lookUp) return;
 
-        StateController.ChangeState(HeroUpperState.LookingUp);
+        StateController.ChangeState(HeroUpperStateType.LookingUp);
     }
 
     public override void Aim(Vector3 aim)
     {
         if (Vector3.zero == aim) return;
-        StateController.ChangeState(HeroUpperState.Aiming);
+        StateController.ChangeState(HeroUpperStateType.Aiming);
     }
 
     public override void Disable()
     {
-        StateController.ChangeState(HeroUpperState.Disabled);
+        StateController.ChangeState(HeroUpperStateType.Disabled);
     }
 
 
     /****** Private Members ******/
 
-    private readonly int _IdleStateHash = AnimatorState.Hero.GetHash(HeroUpperState.Idle);
+    private readonly int _IdleStateHash = AnimatorState.Hero.GetHash(HeroUpperStateType.Idle);
 }

@@ -1,5 +1,5 @@
 ﻿
-public interface ILowerBodyStateInfo
+public interface ILowerStateInfo
 {
     float AnimationNormalizedTime { get; }
 }

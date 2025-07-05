@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class HeroAimingLowerState : HeroLowerStateBase
 {
-    public override HeroLowerState StateType    => HeroLowerState.Aiming;
+    public override HeroLowerStateType StateType    => HeroLowerStateType.Aiming;
     public override bool ShouldDisableUpperBody => false;
 
-    public override void InitializeState(IStateController<HeroLowerState> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    public override void InitializeState(IStateController<HeroLowerStateType> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
     {
         base.InitializeState(stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
 
@@ -25,7 +25,7 @@ public class HeroAimingLowerState : HeroLowerStateBase
 
     }
 
-    public override void OnExit(HeroLowerState nextState)
+    public override void OnExit(HeroLowerStateType nextState)
     {
 
     }
@@ -33,26 +33,26 @@ public class HeroAimingLowerState : HeroLowerStateBase
     public override void Aim(Vector3 aim)
     {
         if (Vector3.zero == aim)
-            StateController.ChangeState(HeroLowerState.Idle);
+            StateController.ChangeState(HeroLowerStateType.Idle);
     }
 
     public override void Attack()
     {
-        StateController.ChangeState(HeroLowerState.AimAttacking);
+        StateController.ChangeState(HeroLowerStateType.AimAttacking);
     }
 
     public override void OnAir()
     {
-        StateController.ChangeState(HeroLowerState.Jumping);
+        StateController.ChangeState(HeroLowerStateType.Jumping);
     }
 
     public override void Damaged()
     {
-        StateController.ChangeState(HeroLowerState.Damaged);
+        StateController.ChangeState(HeroLowerStateType.Damaged);
     }
 
 
     /****** Private Members ******/
     
-    private readonly int _AimingStateHash = AnimatorState.Hero.GetHash(HeroLowerState.Aiming);
+    private readonly int _AimingStateHash = AnimatorState.Hero.GetHash(HeroLowerStateType.Aiming);
 }

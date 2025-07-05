@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class HeroineRunningLowerState : HeroineLowerStateBase
+public class HeroineRunningLowerState : HeroineLowerState
 {
     /****** Public Members ******/
 
-    public override HeroineLowerState   StateType               => HeroineLowerState.Running;
+    public override HeroineLowerStateType   StateType               => HeroineLowerStateType.Running;
     public override bool                ShouldDisableUpperBody  => false;
 
     public override void OnEnter()
@@ -18,7 +18,7 @@ public class HeroineRunningLowerState : HeroineLowerStateBase
 
     }
 
-    public override void OnExit(HeroineLowerState _)
+    public override void OnExit(HeroineLowerStateType _)
     {
     }
 
@@ -26,7 +26,7 @@ public class HeroineRunningLowerState : HeroineLowerStateBase
     {
         if (HorizontalDirection.None == horizontalInput)
         {
-            StateController.ChangeState(HeroineLowerState.Idle);
+            StateController.ChangeState(HeroineLowerStateType.Idle);
             return;
         }
 
@@ -43,30 +43,30 @@ public class HeroineRunningLowerState : HeroineLowerStateBase
 
     public override void Attack()
     {
-        StateController.ChangeState(HeroineLowerState.Attacking);
+        StateController.ChangeState(HeroineLowerStateType.Attacking);
     }
 
     public override void StartJump()
     {
         PlayerMotion.SetVelocity(new Vector2(PlayerInfo.CurrentVelocity.x, PlayerInfo.JumpingSpeed));
-        StateController.ChangeState(HeroineLowerState.Jumping);
+        StateController.ChangeState(HeroineLowerStateType.Jumping);
     }
 
     public override void OnAir()
     {
-        StateController.ChangeState(HeroineLowerState.Jumping);
+        StateController.ChangeState(HeroineLowerStateType.Jumping);
     }
 
     public override void Aim(Vector3 aim)
     {
         if (Vector3.zero == aim) return;
 
-        StateController.ChangeState(HeroineLowerState.Aiming);
+        StateController.ChangeState(HeroineLowerStateType.Aiming);
     }
 
     public override void Tag()
     {
-        StateController.ChangeState(HeroineLowerState.Tagging);
+        StateController.ChangeState(HeroineLowerStateType.Tagging);
     }
 
     public override void UpDown(VerticalDirection verticalInput)
@@ -79,12 +79,12 @@ public class HeroineRunningLowerState : HeroineLowerStateBase
 
         if ((curPos.y < refPos.y && VerticalDirection.Up == verticalInput) || (refPos.y < curPos.y && VerticalDirection.Down == verticalInput))
         {
-            StateController.ChangeState(HeroineLowerState.Climbing);
+            StateController.ChangeState(HeroineLowerStateType.Climbing);
         }
     }
 
     public override void Damaged()
     {
-        StateController.ChangeState(HeroineLowerState.Damaged);
+        StateController.ChangeState(HeroineLowerStateType.Damaged);
     }
 }

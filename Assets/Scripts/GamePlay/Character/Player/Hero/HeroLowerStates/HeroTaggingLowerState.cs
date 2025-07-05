@@ -4,7 +4,7 @@ public class HeroTaggingLowerState : HeroLowerStateBase
 {
     /****** Public Members ******/
 
-    public override HeroLowerState StateType    => HeroLowerState.Tagging;
+    public override HeroLowerStateType StateType    => HeroLowerStateType.Tagging;
     public override bool ShouldDisableUpperBody => true;
 
     public override void OnEnter()
@@ -20,11 +20,11 @@ public class HeroTaggingLowerState : HeroLowerStateBase
 
         if (_time < _taggingTime) return;
 
-        var nextState = _isOnAir ? HeroLowerState.Jumping : HeroLowerState.Idle;
+        var nextState = _isOnAir ? HeroLowerStateType.Jumping : HeroLowerStateType.Idle;
         StateController.ChangeState(nextState);
     }
 
-    public override void OnExit(HeroLowerState _)
+    public override void OnExit(HeroLowerStateType _)
     {
 
     }

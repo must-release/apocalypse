@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-using ILowerStateController = IStateController<HeroLowerState>;
-using IUpperStateController = IStateController<HeroUpperState>;
+using ILowerStateController = IStateController<HeroLowerStateType>;
+using IUpperStateController = IStateController<HeroUpperStateType>;
 
 
 public class HeroAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController, IUpperStateController
@@ -48,17 +48,17 @@ public class HeroAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController, I
 
     public void ActivateAvatar(bool value)
     {
-        Assert.IsTrue(_lowerStateTable.ContainsKey(HeroLowerState.Idle), "Idle state not found");
-        Assert.IsTrue(_upperStateTable.ContainsKey(HeroUpperState.Idle), "Idle state not found");
+        Assert.IsTrue(_lowerStateTable.ContainsKey(HeroLowerStateType.Idle), "Idle state not found");
+        Assert.IsTrue(_upperStateTable.ContainsKey(HeroUpperStateType.Idle), "Idle state not found");
 
         if (false == value)
         {
-            _lowerState?.OnExit(HeroLowerState.Idle);
-            _upperState?.OnExit(HeroUpperState.Idle);
+            _lowerState?.OnExit(HeroLowerStateType.Idle);
+            _upperState?.OnExit(HeroUpperStateType.Idle);
         }
 
-        _lowerState = _lowerStateTable[HeroLowerState.Idle];
-        _upperState = _upperStateTable[HeroUpperState.Idle];
+        _lowerState = _lowerStateTable[HeroLowerStateType.Idle];
+        _upperState = _upperStateTable[HeroUpperStateType.Idle];
 
         gameObject.SetActive(value);
     }
@@ -97,11 +97,11 @@ public class HeroAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController, I
 
     public void OnDead()
     {
-        ChangeState(HeroLowerState.Dead);
+        ChangeState(HeroLowerStateType.Dead);
         _upperState.Disable();
     }
 
-    public void ChangeState(HeroLowerState state)
+    public void ChangeState(HeroLowerStateType state)
     {
         Assert.IsTrue(_lowerStateTable.ContainsKey(state), "Invalid Lower State");
 
@@ -119,7 +119,7 @@ public class HeroAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController, I
             _upperState.Enable();
     }
 
-    public void ChangeState(HeroUpperState state)
+    public void ChangeState(HeroUpperStateType state)
     {
         Assert.IsTrue(_upperStateTable.ContainsKey(state), "Invalid Upper State");
 
@@ -137,8 +137,8 @@ public class HeroAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController, I
     [SerializeField] private Animator _lowerAnimator;
     [SerializeField] private Animator _upperAnimator;
 
-    private Dictionary<HeroLowerState, HeroLowerStateBase> _lowerStateTable = new();
-    private Dictionary<HeroUpperState, HeroUpperStateBase> _upperStateTable = new();
+    private Dictionary<HeroLowerStateType, HeroLowerStateBase> _lowerStateTable = new();
+    private Dictionary<HeroUpperStateType, HeroUpperStateBase> _upperStateTable = new();
 
     private IObjectInteractor   _objectInteractor;
     private IMotionController   _playerMotion;
@@ -193,7 +193,7 @@ public class HeroAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController, I
         foreach (var lower in lowers)
         {
             lower.InitializeState(this, _objectInteractor, _playerMotion, _playerInfo, _lowerAnimator, _heroWeapon);
-            HeroLowerState state = lower.StateType;
+            HeroLowerStateType state = lower.StateType;
             _lowerStateTable.Add(state, lower);
         }
 
@@ -202,7 +202,7 @@ public class HeroAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController, I
         foreach (var upper in uppers)
         {
             upper.InitializeState(this, _objectInteractor, _playerMotion, _playerInfo, _upperAnimator, _heroWeapon);
-            HeroUpperState state = upper.StateType;
+            HeroUpperStateType state = upper.StateType;
             _upperStateTable.Add(state, upper);
         }
     }

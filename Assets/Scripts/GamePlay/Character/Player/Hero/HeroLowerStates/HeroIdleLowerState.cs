@@ -5,10 +5,10 @@ public class HeroIdleLowerState : HeroLowerStateBase
 {
     /****** Public Members ******/
 
-    public override HeroLowerState StateType    => HeroLowerState.Idle;
+    public override HeroLowerStateType StateType    => HeroLowerStateType.Idle;
     public override bool ShouldDisableUpperBody => false;
 
-    public override void InitializeState(IStateController<HeroLowerState> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    public override void InitializeState(IStateController<HeroLowerStateType> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
     {
         base.InitializeState(stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
         Assert.IsTrue(StateAnimator.HasState(0, _IdleStateHash), "Hero animator does not have idle lower state.");
@@ -26,7 +26,7 @@ public class HeroIdleLowerState : HeroLowerStateBase
 
     }
 
-    public override void OnExit(HeroLowerState _)
+    public override void OnExit(HeroLowerStateType _)
     {
 
     }
@@ -34,48 +34,48 @@ public class HeroIdleLowerState : HeroLowerStateBase
     public override void StartJump()
     {
         PlayerMotion.SetVelocity(new Vector2(PlayerInfo.CurrentVelocity.x, PlayerInfo.JumpingSpeed));
-        StateController.ChangeState(HeroLowerState.Jumping);
+        StateController.ChangeState(HeroLowerStateType.Jumping);
     }
 
     public override void OnAir()
     {
-        StateController.ChangeState(HeroLowerState.Jumping);
+        StateController.ChangeState(HeroLowerStateType.Jumping);
     }
 
     public override void Aim(Vector3 aim)
     {
         if (Vector3.zero == aim) return;
 
-        StateController.ChangeState(HeroLowerState.Aiming);
+        StateController.ChangeState(HeroLowerStateType.Aiming);
     }
 
     public override void Move(HorizontalDirection horizontalInput)
     {
         if (HorizontalDirection.None != horizontalInput)
         {
-            StateController.ChangeState(HeroLowerState.Running);
+            StateController.ChangeState(HeroLowerStateType.Running);
         }
     }
 
     public override void Tag()
     {
-        StateController.ChangeState(HeroLowerState.Tagging);
+        StateController.ChangeState(HeroLowerStateType.Tagging);
     }
 
     public override void Climb(bool climb)
     {
         if (false == climb) return;
 
-        StateController.ChangeState(HeroLowerState.Climbing);
+        StateController.ChangeState(HeroLowerStateType.Climbing);
     }
 
     public override void Damaged()
     {
-        StateController.ChangeState(HeroLowerState.Damaged);
+        StateController.ChangeState(HeroLowerStateType.Damaged);
     }
 
 
     /****** Private Members ******/
 
-    private readonly int _IdleStateHash = AnimatorState.Hero.GetHash(HeroLowerState.Idle);
+    private readonly int _IdleStateHash = AnimatorState.Hero.GetHash(HeroLowerStateType.Idle);
 }

@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class HeroineAttackingLowerState : HeroineLowerStateBase
+public class HeroineAttackingLowerState : HeroineLowerState
 {
-    public override HeroineLowerState StateType => HeroineLowerState.Attacking;
+    public override HeroineLowerStateType StateType => HeroineLowerStateType.Attacking;
     public override bool ShouldDisableUpperBody => true;
 
     public override void OnEnter()
@@ -19,12 +19,12 @@ public class HeroineAttackingLowerState : HeroineLowerStateBase
 
         if (1.0f <= stateInfo.normalizedTime)
         {
-            var nextState = PlayerInfo.StandingGround == null ? HeroineLowerState.Jumping : HeroineLowerState.Idle;
+            var nextState = PlayerInfo.StandingGround == null ? HeroineLowerStateType.Jumping : HeroineLowerStateType.Idle;
             StateController.ChangeState(nextState);
         }
     }
 
-    public override void OnExit(HeroineLowerState _)
+    public override void OnExit(HeroineLowerStateType _)
     {
 
     }
@@ -36,7 +36,7 @@ public class HeroineAttackingLowerState : HeroineLowerStateBase
 
     public override void Damaged()
     {
-        StateController.ChangeState(HeroineLowerState.Damaged);
+        StateController.ChangeState(HeroineLowerStateType.Damaged);
     }
 
     // Called by animation event in HeroineAttackingLowerState.anim

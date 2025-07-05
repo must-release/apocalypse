@@ -3,14 +3,14 @@ using System.Collections;
 using UnityEditor;
 using UnityEngine;
 
-public class HeroineJumpingLowerState : HeroineLowerStateBase
+public class HeroineJumpingLowerState : HeroineLowerState
 {
     /****** Public Members ******/
 
-    public override HeroineLowerState   StateType               => HeroineLowerState.Jumping;
+    public override HeroineLowerStateType   StateType               => HeroineLowerStateType.Jumping;
     public override bool                ShouldDisableUpperBody  => true;
 
-    public override void InitializeState(IStateController<HeroineLowerState> stateController,
+    public override void InitializeState(IStateController<HeroineLowerStateType> stateController,
                                         IObjectInteractor objectInteractor,
                                         IMotionController playerPhysics,
                                         ICharacterInfo playerInfo,
@@ -50,7 +50,7 @@ public class HeroineJumpingLowerState : HeroineLowerStateBase
 
     }
 
-    public override void OnExit(HeroineLowerState _)
+    public override void OnExit(HeroineLowerStateType _)
     {
         if (null != _landCoroutine)
         {
@@ -80,7 +80,7 @@ public class HeroineJumpingLowerState : HeroineLowerStateBase
 
     public override void Attack()
     {
-        StateController.ChangeState(HeroineLowerState.Attacking);
+        StateController.ChangeState(HeroineLowerStateType.Attacking);
     }
 
     public override void OnGround()
@@ -93,7 +93,7 @@ public class HeroineJumpingLowerState : HeroineLowerStateBase
         if (null == ObjectInteractor.CurrentClimbableObject || VerticalDirection.Up != verticalInput) 
             return;
 
-        StateController.ChangeState(HeroineLowerState.Climbing);
+        StateController.ChangeState(HeroineLowerStateType.Climbing);
     }
 
     public override void CheckJumping(bool isJumping)
@@ -108,15 +108,15 @@ public class HeroineJumpingLowerState : HeroineLowerStateBase
 
     public override void Damaged()
     {
-        StateController.ChangeState(HeroineLowerState.Damaged);
+        StateController.ChangeState(HeroineLowerStateType.Damaged);
     }
 
 
     /****** Private Members ******/
 
-    private readonly int _JumpingStartStateHash = AnimatorState.Heroine.GetHash(HeroineLowerState.Jumping, "Start");
-    private readonly int _JumpingLoopStateHash  = AnimatorState.Heroine.GetHash(HeroineLowerState.Jumping, "Loop");
-    private readonly int _JumpingEndStateHash   = AnimatorState.Heroine.GetHash(HeroineLowerState.Jumping, "End");
+    private readonly int _JumpingStartStateHash = AnimatorState.Heroine.GetHash(HeroineLowerStateType.Jumping, "Start");
+    private readonly int _JumpingLoopStateHash  = AnimatorState.Heroine.GetHash(HeroineLowerStateType.Jumping, "Loop");
+    private readonly int _JumpingEndStateHash   = AnimatorState.Heroine.GetHash(HeroineLowerStateType.Jumping, "End");
     private const float  _JumpFallSpeed         = 10f;
 
     private Coroutine _landCoroutine = null;
@@ -150,6 +150,6 @@ public class HeroineJumpingLowerState : HeroineLowerStateBase
 
         yield return new WaitWhile(() => StateAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
 
-        StateController.ChangeState(HeroineLowerState.Idle);
+        StateController.ChangeState(HeroineLowerStateType.Idle);
     }
 }

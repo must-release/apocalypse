@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class HeroLowerStateBase : PlayerStateBase<HeroLowerState>, ILowerBodyStateInfo
+public abstract class HeroLowerStateBase : PlayerStateBase<HeroLowerStateType>, ILowerStateInfo
 {
     /****** Public Members ******/
 
@@ -10,7 +10,7 @@ public abstract class HeroLowerStateBase : PlayerStateBase<HeroLowerState>, ILow
 
     public abstract void OnEnter();
     public abstract void OnUpdate();
-    public abstract void OnExit(HeroLowerState nextState);
+    public abstract void OnExit(HeroLowerStateType nextState);
 
 
     public virtual void StartJump() { }

@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class HeroineRunningUpperState : HeroineUpperStateBase
+public class HeroineRunningUpperState : IHeroineUpperState
 {
-    public override HeroineUpperState StateType => HeroineUpperState.Running;
+    public override HeroineUpperStateType StateType => HeroineUpperStateType.Running;
 
     public override void OnEnter()
     {
@@ -12,7 +12,7 @@ public class HeroineRunningUpperState : HeroineUpperStateBase
     {
 
     }
-    public override void OnExit(HeroineUpperState _)
+    public override void OnExit(HeroineUpperStateType _)
     {
 
     }
@@ -21,7 +21,7 @@ public class HeroineRunningUpperState : HeroineUpperStateBase
     { 
         if (false == lookUp) return;
 
-        StateController.ChangeState(HeroineUpperState.LookingUp);
+        StateController.ChangeState(HeroineUpperStateType.LookingUp);
     }
 
     public override void Move(HorizontalDirection horizontalInput)
@@ -29,11 +29,11 @@ public class HeroineRunningUpperState : HeroineUpperStateBase
         if (HorizontalDirection.None != horizontalInput)
             return;
 
-        StateController.ChangeState(HeroineUpperState.Idle);
+        StateController.ChangeState(HeroineUpperStateType.Idle);
     }
 
     public override void Disable()
     {
-        StateController.ChangeState(HeroineUpperState.Disabled);
+        StateController.ChangeState(HeroineUpperStateType.Disabled);
     }
 }

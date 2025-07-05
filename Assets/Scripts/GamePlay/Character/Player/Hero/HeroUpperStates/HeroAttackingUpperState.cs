@@ -5,9 +5,9 @@ public class HeroAttackingUpperState : HeroUpperStateBase
 {
     /****** Public Members ******/
 
-    public override HeroUpperState StateType => HeroUpperState.Attacking;
+    public override HeroUpperStateType StateType => HeroUpperStateType.Attacking;
 
-    public override void InitializeState(IStateController<HeroUpperState> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    public override void InitializeState(IStateController<HeroUpperStateType> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
     {
         base.InitializeState(stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
         Assert.IsTrue(StateAnimator.HasState(0, _AttackingStateHash), "Hero animator does not have attacking upper state.");
@@ -28,11 +28,11 @@ public class HeroAttackingUpperState : HeroUpperStateBase
 
         if (0 < _attackCoolTime) return;
 
-        var nextState = _shouldContinueAttack ? HeroUpperState.Attacking : HeroUpperState.Idle;
+        var nextState = _shouldContinueAttack ? HeroUpperStateType.Attacking : HeroUpperStateType.Idle;
         StateController.ChangeState(nextState);
     }
 
-    public override void OnExit(HeroUpperState _)
+    public override void OnExit(HeroUpperStateType _)
     {
 
     }
@@ -48,19 +48,19 @@ public class HeroAttackingUpperState : HeroUpperStateBase
     {
         if (false == lookUp) return;
 
-        StateController.ChangeState(HeroUpperState.LookingUp);
+        StateController.ChangeState(HeroUpperStateType.LookingUp);
     }
 
     public override void Disable()
     {
-        StateController.ChangeState(HeroUpperState.Disabled);
+        StateController.ChangeState(HeroUpperStateType.Disabled);
     }
 
 
 
     /****** Private Members ******/
 
-    private readonly int _AttackingStateHash = AnimatorState.Hero.GetHash(HeroUpperState.Attacking);
+    private readonly int _AttackingStateHash = AnimatorState.Hero.GetHash(HeroUpperStateType.Attacking);
 
     private float   _attackCoolTime;
     private bool    _shouldContinueAttack;

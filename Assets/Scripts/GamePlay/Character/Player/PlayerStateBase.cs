@@ -1,16 +1,13 @@
-using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.Assertions;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
-public abstract class PlayerStateBase<TStateEnum> : MonoBehaviour where TStateEnum : System.Enum
+public abstract class PlayerStateBase<TState> : MonoBehaviour where TState : StateType
 {
     /****** Public Members ******/
 
-    public abstract TStateEnum StateType { get; }
+    public abstract TState StateType { get; }
 
-    public virtual void InitializeState(IStateController<TStateEnum> stateController,
+    public virtual void InitializeState(IStateController<TState> stateController,
                                         IObjectInteractor objectInteractor,
                                         IMotionController playerMotion,
                                         ICharacterInfo playerInfo,
@@ -33,10 +30,9 @@ public abstract class PlayerStateBase<TStateEnum> : MonoBehaviour where TStateEn
         StateAnimator       = stateAnimator;
     }
 
-
     /****** Protected Members ******/
 
-    protected IStateController<TStateEnum>  StateController     { get; private set; }
+    protected IStateController<TState>      StateController { get; private set; }
     protected IObjectInteractor             ObjectInteractor { get; private set; }
     protected IMotionController             PlayerMotion        { get; private set; }
     protected ICharacterInfo                PlayerInfo          { get; private set; }

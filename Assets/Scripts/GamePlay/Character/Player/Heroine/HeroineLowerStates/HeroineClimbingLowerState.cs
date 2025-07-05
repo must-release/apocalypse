@@ -1,14 +1,14 @@
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class HeroineClimbingLowerState : HeroineLowerStateBase
+public class HeroineClimbingLowerState : HeroineLowerState
 {
     /****** Public Members ******/
 
-    public override HeroineLowerState   StateType               => HeroineLowerState.Climbing;
+    public override HeroineLowerStateType   StateType               => HeroineLowerStateType.Climbing;
     public override bool                ShouldDisableUpperBody  => true;
 
-    public override void InitializeState(IStateController<HeroineLowerState> stateController,
+    public override void InitializeState(IStateController<HeroineLowerStateType> stateController,
                                         IObjectInteractor objectInteractor,
                                         IMotionController playerPhysics,
                                         ICharacterInfo playerInfo,
@@ -44,7 +44,7 @@ public class HeroineClimbingLowerState : HeroineLowerStateBase
         CheckIfCanClimbFurther();
     }
 
-    public override void OnExit(HeroineLowerState _)
+    public override void OnExit(HeroineLowerStateType _)
     {
         PlayerMotion.SetGravityScale(PlayerInfo.Gravity);
         _climbingObject.OnClimbEnd(ObjectInteractor); 
@@ -61,24 +61,24 @@ public class HeroineClimbingLowerState : HeroineLowerStateBase
     {
         PlayerMotion.SetVelocity(new Vector2(PlayerInfo.CurrentVelocity.x, PlayerInfo.JumpingSpeed / 3));
 
-        StateController.ChangeState(HeroineLowerState.Jumping);
+        StateController.ChangeState(HeroineLowerStateType.Jumping);
     }
 
     public override void Damaged()
     {
-        StateController.ChangeState(HeroineLowerState.Damaged);
+        StateController.ChangeState(HeroineLowerStateType.Damaged);
     }
 
     public override void OnGround()
     {
-        StateController.ChangeState(HeroineLowerState.Idle);
+        StateController.ChangeState(HeroineLowerStateType.Idle);
     }
 
 
     /****** Private Members ******/
 
-    private readonly int _ClimbingUpStateHash   = AnimatorState.Heroine.GetHash(HeroineLowerState.Climbing, "Down");
-    private readonly int _ClimbingDownStateHash = AnimatorState.Heroine.GetHash(HeroineLowerState.Climbing, "Up");
+    private readonly int _ClimbingUpStateHash   = AnimatorState.Heroine.GetHash(HeroineLowerStateType.Climbing, "Down");
+    private readonly int _ClimbingDownStateHash = AnimatorState.Heroine.GetHash(HeroineLowerStateType.Climbing, "Up");
 
     private float   _climbingSpeed;
     private float   _climbUpHeight;
@@ -122,12 +122,12 @@ public class HeroineClimbingLowerState : HeroineLowerStateBase
         {
             // Movement player on the upside of the ladder
             PlayerMotion.TeleportTo(PlayerInfo.CurrentPosition + Vector3.up * (PlayerInfo.CharacterHeight / 2 + 0.8f));
-            StateController.ChangeState(HeroineLowerState.Idle);
+            StateController.ChangeState(HeroineLowerStateType.Idle);
         }
         else
         {
             // Climbed down the climbing object
-            var nextState = PlayerInfo.StandingGround == null ? HeroineLowerState.Jumping : HeroineLowerState.Idle;
+            var nextState = PlayerInfo.StandingGround == null ? HeroineLowerStateType.Jumping : HeroineLowerStateType.Idle;
             StateController.ChangeState(nextState);
         }
     }

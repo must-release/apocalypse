@@ -5,9 +5,9 @@ public class HeroTopAttackingUpperState : HeroUpperStateBase
 {
     /****** Public Members ******/
 
-    public override HeroUpperState StateType => HeroUpperState.TopAttacking;
+    public override HeroUpperStateType StateType => HeroUpperStateType.TopAttacking;
 
-    public override void InitializeState(IStateController<HeroUpperState> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    public override void InitializeState(IStateController<HeroUpperStateType> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
     {
         base.InitializeState(stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
         Assert.IsTrue(StateAnimator.HasState(0, _TopAttackingStateHash), "Hero animator does not have top attacking upper state.");
@@ -29,13 +29,13 @@ public class HeroTopAttackingUpperState : HeroUpperStateBase
 
         if (0 < _attackCoolTime) return;
 
-        var nextState = _shouldContinueAttack ? HeroUpperState.TopAttacking : HeroUpperState.LookingUp;
+        var nextState = _shouldContinueAttack ? HeroUpperStateType.TopAttacking : HeroUpperStateType.LookingUp;
         StateController.ChangeState(nextState);
     }
 
-    public override void OnExit(HeroUpperState nextState)
+    public override void OnExit(HeroUpperStateType nextState)
     {
-        if (HeroUpperState.TopAttacking != nextState)
+        if (HeroUpperStateType.TopAttacking != nextState)
             PlayerWeapon.SetWeaponPivotRotation(0);
     }
 
@@ -50,20 +50,20 @@ public class HeroTopAttackingUpperState : HeroUpperStateBase
     {
         if (lookUp) return;
 
-        var nextState = PlayerInfo.StandingGround == null ? HeroUpperState.Disabled : HeroUpperState.Idle;
+        var nextState = PlayerInfo.StandingGround == null ? HeroUpperStateType.Disabled : HeroUpperStateType.Idle;
         StateController.ChangeState(nextState);
     }
 
     public override void Disable()
     {
-        StateController.ChangeState(HeroUpperState.Disabled);
+        StateController.ChangeState(HeroUpperStateType.Disabled);
     }
 
 
 
     /****** Private Members ******/
 
-    private readonly int _TopAttackingStateHash = AnimatorState.Hero.GetHash(HeroUpperState.TopAttacking);
+    private readonly int _TopAttackingStateHash = AnimatorState.Hero.GetHash(HeroUpperStateType.TopAttacking);
 
     private float   _attackCoolTime;
     private bool    _shouldContinueAttack;

@@ -1,11 +1,11 @@
 using NUnit.Framework;
 using UnityEngine;
 
-public class HeroineIdleUpperState : HeroineUpperStateBase
+public class HeroineIdleUpperState : IHeroineUpperState
 {
-    public override HeroineUpperState StateType => HeroineUpperState.Idle;
+    public override HeroineUpperStateType StateType => HeroineUpperStateType.Idle;
 
-    public override void InitializeState(IStateController<HeroineUpperState> stateController,
+    public override void InitializeState(IStateController<HeroineUpperStateType> stateController,
                                         IObjectInteractor objectInteractor,
                                         IMotionController playerMotion,
                                         ICharacterInfo playerInfo,
@@ -26,7 +26,7 @@ public class HeroineIdleUpperState : HeroineUpperStateBase
     {
 
     }
-    public override void OnExit(HeroineUpperState _)
+    public override void OnExit(HeroineUpperStateType _)
     {
 
     }
@@ -36,23 +36,23 @@ public class HeroineIdleUpperState : HeroineUpperStateBase
         if (HorizontalDirection.None == horizontalInput)
             return;
 
-        StateController.ChangeState(HeroineUpperState.Running); 
+        StateController.ChangeState(HeroineUpperStateType.Running); 
     }
 
     public override void LookUp(bool lookUp) 
     { 
         if (false == lookUp) return;
 
-        StateController.ChangeState(HeroineUpperState.LookingUp);
+        StateController.ChangeState(HeroineUpperStateType.LookingUp);
     }
 
     public override void Disable()
     {
-        StateController.ChangeState(HeroineUpperState.Disabled);
+        StateController.ChangeState(HeroineUpperStateType.Disabled);
     }
 
 
     /****** Private Members ******/
 
-    private static readonly int _IdleStateHash = AnimatorState.Heroine.GetHash(HeroineUpperState.Idle);
+    private static readonly int _IdleStateHash = AnimatorState.Heroine.GetHash(HeroineUpperStateType.Idle);
 }

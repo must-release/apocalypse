@@ -6,10 +6,10 @@ public class HeroDeadLowerState : HeroLowerStateBase
 {
     /****** Public Members ******/
 
-    public override HeroLowerState StateType    => HeroLowerState.Dead;
+    public override HeroLowerStateType StateType    => HeroLowerStateType.Dead;
     public override bool ShouldDisableUpperBody => true;
 
-    public override void InitializeState(IStateController<HeroLowerState> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    public override void InitializeState(IStateController<HeroLowerStateType> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
     {
         base.InitializeState(stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
         Assert.IsTrue(StateAnimator.HasState(0, _HeroDeadStateHash), "Hero animator does not have dead lower state.");
@@ -37,7 +37,7 @@ public class HeroDeadLowerState : HeroLowerStateBase
         }
     }
 
-    public override void OnExit(HeroLowerState _)
+    public override void OnExit(HeroLowerStateType _)
     {
 
     }
@@ -45,7 +45,7 @@ public class HeroDeadLowerState : HeroLowerStateBase
 
     /****** Private Members ******/
 
-    private readonly int _HeroDeadStateHash = AnimatorState.Hero.GetHash(HeroLowerState.Dead);
+    private readonly int _HeroDeadStateHash = AnimatorState.Hero.GetHash(HeroLowerStateType.Dead);
 
     private bool _isAnimationPlaying = false;
 }

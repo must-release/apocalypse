@@ -2,13 +2,13 @@ using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class HeroineLookingUpUpperState : HeroineUpperStateBase
+public class HeroineLookingUpUpperState : IHeroineUpperState
 {
     /****** Public Members ******/
 
-    public override HeroineUpperState StateType => HeroineUpperState.LookingUp;
+    public override HeroineUpperStateType StateType => HeroineUpperStateType.LookingUp;
 
-    public override void InitializeState(IStateController<HeroineUpperState> stateController,
+    public override void InitializeState(IStateController<HeroineUpperStateType> stateController,
                                         IObjectInteractor objectInteractor,
                                         IMotionController playerMotion,
                                         ICharacterInfo playerInfo,
@@ -33,7 +33,7 @@ public class HeroineLookingUpUpperState : HeroineUpperStateBase
 
     }
 
-    public override void OnExit(HeroineUpperState nextState)
+    public override void OnExit(HeroineUpperStateType nextState)
     {
 
     }
@@ -42,7 +42,7 @@ public class HeroineLookingUpUpperState : HeroineUpperStateBase
     { 
         if(lookUp) return;
 
-        var nextState = PlayerInfo.StandingGround == null ? HeroineUpperState.Disabled : HeroineUpperState.Idle;
+        var nextState = PlayerInfo.StandingGround == null ? HeroineUpperStateType.Disabled : HeroineUpperStateType.Idle;
         StateController.ChangeState(nextState);
     }
 
@@ -71,12 +71,12 @@ public class HeroineLookingUpUpperState : HeroineUpperStateBase
 
     public override void Disable()
     {
-        StateController.ChangeState(HeroineUpperState.Disabled);
+        StateController.ChangeState(HeroineUpperStateType.Disabled);
     }
 
 
     /****** Private Members ******/
 
-    private readonly int _IdleLookingUpStateHash    = AnimatorState.Heroine.GetHash(HeroineUpperState.Idle, "LookingUp");
-    private readonly int _RunningLookingUpStateHash = AnimatorState.Heroine.GetHash(HeroineUpperState.Running, "LookingUp");
+    private readonly int _IdleLookingUpStateHash    = AnimatorState.Heroine.GetHash(HeroineUpperStateType.Idle, "LookingUp");
+    private readonly int _RunningLookingUpStateHash = AnimatorState.Heroine.GetHash(HeroineUpperStateType.Running, "LookingUp");
 }

@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class HeroineTaggingLowerState : HeroineLowerStateBase
+public class HeroineTaggingLowerState : HeroineLowerState
 {
     /****** Public Members ******/
 
-    public override HeroineLowerState   StateType               => HeroineLowerState.Tagging;
+    public override HeroineLowerStateType   StateType               => HeroineLowerStateType.Tagging;
     public override bool                ShouldDisableUpperBody  => true;
 
     public override void OnEnter()
@@ -22,11 +22,11 @@ public class HeroineTaggingLowerState : HeroineLowerStateBase
 
         if (_time < _taggingTime) return;
 
-        var nextState = _isOnAir ? HeroineLowerState.Jumping : HeroineLowerState.Idle;
+        var nextState = _isOnAir ? HeroineLowerStateType.Jumping : HeroineLowerStateType.Idle;
         StateController.ChangeState(nextState);
     }
 
-    public override void OnExit(HeroineLowerState _)
+    public override void OnExit(HeroineLowerStateType _)
     {
         
     }

@@ -5,9 +5,9 @@ public class HeroJumpingUpperState : HeroUpperStateBase
 {
     /****** Public Members ******/
 
-    public override HeroUpperState StateType => HeroUpperState.Jumping;
+    public override HeroUpperStateType StateType => HeroUpperStateType.Jumping;
 
-    public override void InitializeState(IStateController<HeroUpperState> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    public override void InitializeState(IStateController<HeroUpperStateType> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
     {
         base.InitializeState(stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
         Assert.IsTrue(StateAnimator.HasState(0, _JumpingStateHash), $"Hero animator does not have jumping upper state.");
@@ -21,12 +21,12 @@ public class HeroJumpingUpperState : HeroUpperStateBase
     {
 
     }
-    public override void OnExit(HeroUpperState _)
+    public override void OnExit(HeroUpperStateType _)
     {
     }
 
 
     /****** Private Members ******/
 
-    private readonly int _JumpingStateHash = AnimatorState.Hero.GetHash(HeroUpperState.Jumping);
+    private readonly int _JumpingStateHash = AnimatorState.Hero.GetHash(HeroUpperStateType.Jumping);
 }

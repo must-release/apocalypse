@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class HeroineDamagedLowerState : HeroineLowerStateBase
+public class HeroineDamagedLowerState : HeroineLowerState
 {
     /****** Public Members ******/
 
-    public override HeroineLowerState   StateType               => HeroineLowerState.Damaged;
+    public override HeroineLowerStateType   StateType               => HeroineLowerStateType.Damaged;
     public override bool                ShouldDisableUpperBody  => true;
 
     public override void OnEnter()
@@ -26,11 +26,11 @@ public class HeroineDamagedLowerState : HeroineLowerStateBase
         if (null == PlayerInfo.StandingGround)
             return;
 
-        StateController.ChangeState(HeroineLowerState.Idle);
+        StateController.ChangeState(HeroineLowerStateType.Idle);
         PlayerMotion.SetVelocity(Vector2.zero);
     }
 
-    public override void OnExit(HeroineLowerState _)
+    public override void OnExit(HeroineLowerStateType _)
     {
 
     }
@@ -38,7 +38,7 @@ public class HeroineDamagedLowerState : HeroineLowerStateBase
 
     /****** Private Members ******/
 
-    private readonly int _DamagedStateHash = AnimatorState.Heroine.GetHash(HeroineLowerState.Damaged);
+    private readonly int _DamagedStateHash = AnimatorState.Heroine.GetHash(HeroineLowerStateType.Damaged);
 
     private const float _SternTime      = 0.4f;
     private const float _KnockBackSpeed = 6f;

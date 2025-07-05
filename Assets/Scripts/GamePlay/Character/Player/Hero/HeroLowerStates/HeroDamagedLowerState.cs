@@ -4,7 +4,7 @@ public class HeroDamagedLowerState : HeroLowerStateBase
 {
     /****** Public Members ******/
 
-    public override HeroLowerState StateType    => HeroLowerState.Damaged;
+    public override HeroLowerStateType StateType    => HeroLowerStateType.Damaged;
     public override bool ShouldDisableUpperBody => true;
 
     public override void OnEnter()
@@ -24,11 +24,11 @@ public class HeroDamagedLowerState : HeroLowerStateBase
         if (null == PlayerInfo.StandingGround)
             return;
 
-        StateController.ChangeState(HeroLowerState.Idle);
+        StateController.ChangeState(HeroLowerStateType.Idle);
         PlayerMotion.SetVelocity(Vector2.zero);
     }
 
-    public override void OnExit(HeroLowerState _)
+    public override void OnExit(HeroLowerStateType _)
     {
 
     }

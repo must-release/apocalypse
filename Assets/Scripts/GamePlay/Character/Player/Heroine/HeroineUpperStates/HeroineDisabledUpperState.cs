@@ -1,23 +1,26 @@
 using UnityEngine;
 
-public class HeroineDisabledUpperState : HeroineUpperStateBase
+public class HeroineDisabledUpperState : IHeroineUpperState
 {
-    public override HeroineUpperState StateType => HeroineUpperState.Disabled;
+    public override UpperStateType StateType => HeroineUpperStateType.Disabled;
 
     public override void OnEnter()
     {
-        StateAnimator.Play(AnimatorState.Heroine.GetHash(StateType));
+        StateAnimator.Play(AnimatorState.GetHash(PlayerType.Heroine, StateType));
     }
+
     public override void OnUpdate()
     {
 
     }
-    public override void OnExit(HeroineUpperState _)
+
+    public override void OnExit(UpperStateType _)
     {
+
     }
 
     public override void Enable()
     {
-        StateController.ChangeState(HeroineUpperState.Idle);
+        StateController.ChangeState(HeroineUpperStateType.Idle);
     }
 }

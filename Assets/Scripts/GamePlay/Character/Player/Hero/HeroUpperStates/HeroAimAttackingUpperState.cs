@@ -5,9 +5,9 @@ public class HeroAimAttackingUpperState : HeroUpperStateBase
 {
     /****** Public Members ******/
 
-    public override HeroUpperState StateType => HeroUpperState.AimAttacking;
+    public override HeroUpperStateType StateType => HeroUpperStateType.AimAttacking;
 
-    public override void InitializeState(IStateController<HeroUpperState> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    public override void InitializeState(IStateController<HeroUpperStateType> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
     {
         base.InitializeState(stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
         Assert.IsTrue(StateAnimator.HasState(0, _AimAttackingStateHash), "Hero animator does not have aim attacking upper state.");
@@ -28,13 +28,13 @@ public class HeroAimAttackingUpperState : HeroUpperStateBase
 
         if (1.0f <= stateInfo.normalizedTime && postDelay < 0)
         {
-            StateController.ChangeState(HeroUpperState.Aiming);
+            StateController.ChangeState(HeroUpperStateType.Aiming);
         }
     }
 
-    public override void OnExit(HeroUpperState nextState)
+    public override void OnExit(HeroUpperStateType nextState)
     {
-        if (HeroUpperState.Aiming != nextState)
+        if (HeroUpperStateType.Aiming != nextState)
         {
             PlayerWeapon.SetWeaponPivotRotation(0);
             PlayerWeapon.Aim(false);
@@ -44,18 +44,18 @@ public class HeroAimAttackingUpperState : HeroUpperStateBase
     public override void Aim(Vector3 aim)
     {
         if (Vector3.zero == aim)
-            StateController.ChangeState(HeroUpperState.Idle);
+            StateController.ChangeState(HeroUpperStateType.Idle);
     }
 
     public override void Disable()
     {
-        StateController.ChangeState(HeroUpperState.Disabled);
+        StateController.ChangeState(HeroUpperStateType.Disabled);
     }
 
 
     /****** Private Members ******/
 
-    private readonly int _AimAttackingStateHash = AnimatorState.Hero.GetHash(HeroUpperState.AimAttacking);
+    private readonly int _AimAttackingStateHash = AnimatorState.Hero.GetHash(HeroUpperStateType.AimAttacking);
 
     private float postDelay = 0f;
 }

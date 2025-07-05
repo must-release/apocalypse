@@ -6,10 +6,10 @@ public class HeroJumpingLowerState : HeroLowerStateBase
 {
     /****** Public Members ******/
 
-    public override HeroLowerState StateType    => HeroLowerState.Jumping;
+    public override HeroLowerStateType StateType    => HeroLowerStateType.Jumping;
     public override bool ShouldDisableUpperBody => false;
 
-    public override void InitializeState(IStateController<HeroLowerState> stateController, IObjectInteractor objectInteractor, IMotionController playerPhysics, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    public override void InitializeState(IStateController<HeroLowerStateType> stateController, IObjectInteractor objectInteractor, IMotionController playerPhysics, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
     {
         base.InitializeState(stateController, objectInteractor, playerPhysics, playerInfo, stateAnimator, playerWeapon);
 
@@ -44,7 +44,7 @@ public class HeroJumpingLowerState : HeroLowerStateBase
 
     }
 
-    public override void OnExit(HeroLowerState _)
+    public override void OnExit(HeroLowerStateType _)
     {
         if (null != _landCoroutine)
         {
@@ -81,7 +81,7 @@ public class HeroJumpingLowerState : HeroLowerStateBase
     {
         if (false == climb) return;
 
-        StateController.ChangeState(HeroLowerState.Climbing);
+        StateController.ChangeState(HeroLowerStateType.Climbing);
     }
 
     public override void CheckJumping(bool isJumping)
@@ -96,15 +96,15 @@ public class HeroJumpingLowerState : HeroLowerStateBase
 
     public override void Damaged()
     {
-        StateController.ChangeState(HeroLowerState.Damaged);
+        StateController.ChangeState(HeroLowerStateType.Damaged);
     }
 
 
     /****** Private Members ******/
 
-    private readonly int _JumpingStartStateHash = AnimatorState.Hero.GetHash(HeroLowerState.Jumping, "Start");
-    private readonly int _JumpingLoopStateHash  = AnimatorState.Hero.GetHash(HeroLowerState.Jumping, "Loop");
-    private readonly int _JumpingEndStateHash   = AnimatorState.Hero.GetHash(HeroLowerState.Jumping, "End");
+    private readonly int _JumpingStartStateHash = AnimatorState.Hero.GetHash(HeroLowerStateType.Jumping, "Start");
+    private readonly int _JumpingLoopStateHash  = AnimatorState.Hero.GetHash(HeroLowerStateType.Jumping, "Loop");
+    private readonly int _JumpingEndStateHash   = AnimatorState.Hero.GetHash(HeroLowerStateType.Jumping, "End");
     private const float _JumpFallSpeed = 10f;
 
     private Coroutine _landCoroutine = null;
@@ -138,6 +138,6 @@ public class HeroJumpingLowerState : HeroLowerStateBase
 
         yield return new WaitWhile(() => StateAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
 
-        StateController.ChangeState(HeroLowerState.Idle);
+        StateController.ChangeState(HeroLowerStateType.Idle);
     }
 }

@@ -5,9 +5,9 @@ public class HeroDisabledUpperState : HeroUpperStateBase
 {
     /****** Public Members ******/
 
-    public override HeroUpperState StateType => HeroUpperState.Disabled;
+    public override HeroUpperStateType StateType => HeroUpperStateType.Disabled;
 
-    public override void InitializeState(IStateController<HeroUpperState> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    public override void InitializeState(IStateController<HeroUpperStateType> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
     {
         base.InitializeState(stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
         Assert.IsTrue(StateAnimator.HasState(0, _DisableStateHash), $"Hero animator does not have disabled upper state.");
@@ -21,17 +21,17 @@ public class HeroDisabledUpperState : HeroUpperStateBase
     {
 
     }
-    public override void OnExit(HeroUpperState _)
+    public override void OnExit(HeroUpperStateType _)
     {
     }
 
     public override void Enable()
     {
-        StateController.ChangeState(HeroUpperState.Idle);
+        StateController.ChangeState(HeroUpperStateType.Idle);
     }
 
 
     /****** Private Members ******/
 
-    private readonly int _DisableStateHash = AnimatorState.Hero.GetHash(HeroUpperState.Disabled);
+    private readonly int _DisableStateHash = AnimatorState.Hero.GetHash(HeroUpperStateType.Disabled);
 }
