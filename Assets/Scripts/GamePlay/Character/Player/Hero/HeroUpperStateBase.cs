@@ -15,7 +15,7 @@ public abstract class HeroUpperStateBase : PlayerStateBase<HeroUpperState>
     public abstract void OnExit(HeroUpperState nextState);
 
     public virtual void OnFixedUpdate() { }
-    public virtual void Move() { }
+    public virtual void Move(HorizontalDirection horizontalInput) { }
     public virtual void Attack() { }
     public virtual void LookUp(bool lookUp) { }
     public virtual void Jump() { }

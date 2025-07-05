@@ -6,9 +6,9 @@ public class HeroAimingLowerState : HeroLowerStateBase
     public override HeroLowerState StateType    => HeroLowerState.Aiming;
     public override bool ShouldDisableUpperBody => false;
 
-    public override void InitializeState(IStateController<HeroLowerState> stateController, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    public override void InitializeState(IStateController<HeroLowerState> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
     {
-        base.InitializeState(stateController, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        base.InitializeState(stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
 
         Assert.IsTrue(StateAnimator.HasState(0, _AimingStateHash), "Hero animator does not have aiming lower state.");
     }

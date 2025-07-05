@@ -1,24 +1,13 @@
 using UnityEngine;
 
-public class ControlInfo
+public class ControlInfo : IReadOnlyControlInfo
 {
-    // Input Control
-    public int move;
-    public bool stop;
-    public int upDown;
-    public bool isJumpStarted;
-    public bool isJumping;
-    public bool attack;
-    public bool assistAttack;
-    public Vector3 aim;
-    public bool specialAttack;
-    public bool tag;
-    public bool tryInteract;
+    public HorizontalDirection  HorizontalInput { get; set; }
+    public VerticalDirection    VerticalInput   { get; set; }
+    public Vector3              AimingPosition  { get; set; }
 
-    // Object Control
-    public bool Climb { get; set; }
-    public GameObject climbingObject;
-    public bool push;
-    public bool interact;
-
+    public bool IsJumpStarted   { get; set; }
+    public bool IsJumping       { get; set; }
+    public bool IsAttacking     { get; set; }
+    public bool IsTagging       { get; set; }
 }

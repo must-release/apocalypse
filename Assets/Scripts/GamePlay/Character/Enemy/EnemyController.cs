@@ -50,7 +50,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
     public abstract void StartChasing();
     public abstract void Chase();
     public abstract void StartAttack();
-    public abstract bool Attack(); // return if attack is over
+    public abstract bool Attack(); // return if IsAttacking is over
 
 
     /****** Protected Members ******/

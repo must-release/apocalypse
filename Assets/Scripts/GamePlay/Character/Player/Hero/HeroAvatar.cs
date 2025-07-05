@@ -25,18 +25,20 @@ public class HeroAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController, I
     }
 
 
-    public void InitializeAvatar(IMotionController playerMotion, ICharacterInfo playerInfo)
+    public void InitializeAvatar(IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo)
     {
+        Assert.IsTrue(null != objectInteractor, "Object interactor is null");
         Assert.IsTrue(null != playerMotion, "Player Physics is null");
         Assert.IsTrue(null != playerInfo, "Player Info is null");
 
+        _objectInteractor = objectInteractor;
         _playerMotion = playerMotion;
         _playerInfo = playerInfo;
 
         RegisterStates();
     }
 
-    public void ControlAvatar(ControlInfo controlInfo)
+    public void ControlAvatar(IReadOnlyControlInfo controlInfo)
     {
         Assert.IsTrue(null != controlInfo, "Control info is null");
 
@@ -138,6 +140,7 @@ public class HeroAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController, I
     private Dictionary<HeroLowerState, HeroLowerStateBase> _lowerStateTable = new();
     private Dictionary<HeroUpperState, HeroUpperStateBase> _upperStateTable = new();
 
+    private IObjectInteractor   _objectInteractor;
     private IMotionController   _playerMotion;
     private ICharacterInfo      _playerInfo;
     private HeroLowerStateBase  _lowerState;
@@ -160,31 +163,24 @@ public class HeroAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController, I
         _upperState.OnEnter();
     }
 
-    private void ControlLowerBody(ControlInfo controlInfo)
+    private void ControlLowerBody(IReadOnlyControlInfo controlInfo)
     {
-        // Change player state according to the input control info
-        if (controlInfo.move != 0) _lowerState.Move(controlInfo.move);
-        else if (controlInfo.stop) _lowerState.Stop();
-        if (controlInfo.isJumpStarted) _lowerState.StartJump();
-        _lowerState.CheckJumping(controlInfo.isJumping);
-        if (controlInfo.tag) _lowerState.Tag();
-        _lowerState.Aim(controlInfo.aim);
-
-        // Change player state according to the object control info
-        _lowerState.Climb(controlInfo.Climb);
-        _lowerState.Push(controlInfo.push);
-        _lowerState.UpDown(controlInfo.upDown);
+        _lowerState.Move(controlInfo.HorizontalInput);
+        if (controlInfo.IsJumpStarted) _lowerState.StartJump();
+        _lowerState.CheckJumping(controlInfo.IsJumping);
+        if (controlInfo.IsTagging) _lowerState.Tag();
+        _lowerState.Aim(controlInfo.AimingPosition);
+        _lowerState.UpDown(controlInfo.VerticalInput);
     }
 
-    private void ControlUpperBody(ControlInfo controlInfo)
+    private void ControlUpperBody(IReadOnlyControlInfo controlInfo)
     {
-        if (controlInfo.move != 0) _upperState.Move();
-        else if (controlInfo.stop) _upperState.Stop();
-        if (controlInfo.isJumpStarted) _upperState.Jump();
-        _upperState.Aim(controlInfo.aim);
-        if (controlInfo.upDown > 0) _upperState.LookUp(true);
+        _upperState.Move(controlInfo.HorizontalInput);
+        if (controlInfo.IsJumpStarted) _upperState.Jump();
+        _upperState.Aim(controlInfo.AimingPosition);
+        if (VerticalDirection.Up == controlInfo.VerticalInput) _upperState.LookUp(true);
         else _upperState.LookUp(false);
-        if (controlInfo.attack) _upperState.Attack();
+        if (controlInfo.IsAttacking) _upperState.Attack();
     }
 
     private void RegisterStates()
@@ -196,7 +192,7 @@ public class HeroAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController, I
         Assert.IsTrue(0 < lowers.Length, "No HeroLowerState components found in children.");
         foreach (var lower in lowers)
         {
-            lower.InitializeState(this, _playerMotion, _playerInfo, _lowerAnimator, _heroWeapon);
+            lower.InitializeState(this, _objectInteractor, _playerMotion, _playerInfo, _lowerAnimator, _heroWeapon);
             HeroLowerState state = lower.StateType;
             _lowerStateTable.Add(state, lower);
         }
@@ -205,7 +201,7 @@ public class HeroAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController, I
         Assert.IsTrue(0 < uppers.Length, "No HeroUpperState components found in children.");
         foreach (var upper in uppers)
         {
-            upper.InitializeState(this, _playerMotion, _playerInfo, _upperAnimator, _heroWeapon);
+            upper.InitializeState(this, _objectInteractor, _playerMotion, _playerInfo, _upperAnimator, _heroWeapon);
             HeroUpperState state = upper.StateType;
             _upperStateTable.Add(state, upper);
         }

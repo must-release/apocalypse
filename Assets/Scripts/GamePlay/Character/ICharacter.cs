@@ -4,6 +4,6 @@ public interface ICharacter
 {
     bool IsPlayer { get; }
 
-    void ControlCharacter(ControlInfo controlInfo);
+    void ControlCharacter(IReadOnlyControlInfo controlInfo);
     void OnDamaged(DamageInfo damageInfo);
 }

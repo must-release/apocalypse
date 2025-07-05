@@ -10,14 +10,14 @@ public class HeroineJumpingLowerState : HeroineLowerStateBase
     public override HeroineLowerState   StateType               => HeroineLowerState.Jumping;
     public override bool                ShouldDisableUpperBody  => true;
 
-    public override void InitializeState(IStateController<HeroineLowerState> stateController, 
-                                          IMotionController playerPhysics, 
-                                          ICharacterInfo playerInfo, 
-                                          Animator stateAnimator,
-                                          PlayerWeaponBase playerWeapon
-    )
+    public override void InitializeState(IStateController<HeroineLowerState> stateController,
+                                        IObjectInteractor objectInteractor,
+                                        IMotionController playerPhysics,
+                                        ICharacterInfo playerInfo,
+                                        Animator stateAnimator,
+                                        PlayerWeaponBase playerWeapon)
     {
-        base.InitializeState(stateController, playerPhysics, playerInfo, stateAnimator, playerWeapon);
+        base.InitializeState(stateController, objectInteractor, playerPhysics, playerInfo, stateAnimator, playerWeapon);
 
         Assert.IsTrue(StateAnimator.HasState(0, _JumpingStartStateHash), "Animator does not have jumping start state.");
         Assert.IsTrue(StateAnimator.HasState(0, _JumpingLoopStateHash), "Animator does not have jumping loop state.");
@@ -59,24 +59,23 @@ public class HeroineJumpingLowerState : HeroineLowerStateBase
         }
     }
 
-    public override void Move(int move)
+    public override void Move(HorizontalDirection horizontalInput)
     {
-        if (0 == move) return;
+        if (HorizontalDirection.None == horizontalInput)
+        {
+            PlayerMotion.SetVelocity(new Vector2(0, PlayerInfo.CurrentVelocity.y));
+            return;
+        }
 
-        // move player
-        PlayerMotion.SetVelocity(new Vector2(move * PlayerInfo.MovingSpeed, PlayerInfo.CurrentVelocity.y));
+        // Movement player
+        PlayerMotion.SetVelocity(new Vector2((int)horizontalInput * PlayerInfo.MovingSpeed, PlayerInfo.CurrentVelocity.y));
 
         // set direction
-        FacingDirection direction = move < 0 ? FacingDirection.Left : FacingDirection.Right;
+        FacingDirection direction = (HorizontalDirection.Left == horizontalInput) ? FacingDirection.Left : FacingDirection.Right;
         if (direction != PlayerInfo.CurrentFacingDirection)
         {
             PlayerMotion.SetFacingDirection(direction);
         }
-    }
-
-    public override void Stop()
-    {
-        PlayerMotion.SetVelocity(new Vector2(0, PlayerInfo.CurrentVelocity.y));
     }
 
     public override void Attack()
@@ -89,9 +88,10 @@ public class HeroineJumpingLowerState : HeroineLowerStateBase
         _landCoroutine = StartCoroutine(LandOnGround());
     }
 
-    public override void Climb(bool climb) 
+    public override void UpDown(VerticalDirection verticalInput)
     {
-        if (false == climb) return;
+        if (null == ObjectInteractor.CurrentClimbableObject || VerticalDirection.Up != verticalInput) 
+            return;
 
         StateController.ChangeState(HeroineLowerState.Climbing);
     }

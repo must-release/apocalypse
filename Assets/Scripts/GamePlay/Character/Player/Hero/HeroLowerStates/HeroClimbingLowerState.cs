@@ -8,9 +8,9 @@ public class HeroClimbingLowerState : HeroLowerStateBase
     public override HeroLowerState StateType    => HeroLowerState.Climbing;
     public override bool ShouldDisableUpperBody => true;
 
-    public override void InitializeState(IStateController<HeroLowerState> stateController, IMotionController playerPhysics, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    public override void InitializeState(IStateController<HeroLowerState> stateController, IObjectInteractor objectInteractor, IMotionController playerPhysics, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
     {
-        base.InitializeState(stateController, playerPhysics, playerInfo, stateAnimator, playerWeapon);
+        base.InitializeState(stateController, objectInteractor, playerPhysics, playerInfo, stateAnimator, playerWeapon);
 
         Assert.IsTrue(StateAnimator.HasState(0, _ClimbingDownStateHash), "Hero animator does not have climbing down lower state.");
         Assert.IsTrue(StateAnimator.HasState(0, _ClimbingUpStateHash), "Hero animator does not have climbing up lower state.");
@@ -25,16 +25,16 @@ public class HeroClimbingLowerState : HeroLowerStateBase
         PlayerMotion.SetGravityScale(0);
         StateAnimator.Play(_ClimbingUpStateHash);
 
-        _climbingObject = PlayerInfo.CurrentControlInfo.climbingObject.transform;
+        _climbingObject = ObjectInteractor.CurrentClimbableObject;
 
         MoveNearToClimbingObject();
     }
 
     public override void OnUpdate()
     {
-        if (false == Mathf.Approximately(PlayerInfo.CurrentPosition.x, _climbingObject.position.x))
+        if (false == Mathf.Approximately(PlayerInfo.CurrentPosition.x, _climbingObject.GetClimbReferencePoint().x))
         {
-            PlayerMotion.TeleportTo(new Vector2(_climbingObject.position.x, PlayerInfo.CurrentPosition.y));
+            PlayerMotion.TeleportTo(new Vector2(_climbingObject.GetClimbReferencePoint().x, PlayerInfo.CurrentPosition.y));
         }
 
         float verticalVelocity = PlayerInfo.CurrentVelocity.y;
@@ -61,9 +61,9 @@ public class HeroClimbingLowerState : HeroLowerStateBase
         StateAnimator.speed = 1.0f;
     }
 
-    public override void UpDown(int upDown)
+    public override void UpDown(VerticalDirection verticalInput)
     {
-        PlayerMotion.SetVelocity(Vector2.up * upDown * _climbingSpeed);
+        PlayerMotion.SetVelocity(Vector2.up * (int)verticalInput * _climbingSpeed);
     }
 
     public override void Climb(bool climb)
@@ -72,7 +72,7 @@ public class HeroClimbingLowerState : HeroLowerStateBase
 
         if (0 < PlayerInfo.CurrentVelocity.y)
         {
-            // Move player on the upside of the ladder
+            // Movement player on the upside of the ladder
             PlayerMotion.TeleportTo(PlayerInfo.CurrentPosition + Vector3.up * PlayerInfo.CharacterHeight / 2);
 
             StateController.ChangeState(HeroLowerState.Idle);
@@ -107,12 +107,12 @@ public class HeroClimbingLowerState : HeroLowerStateBase
     private float _climbUpHeight;
     private float _climbDownHeight;
 
-    private Transform _climbingObject;
+    private IClimbable _climbingObject;
 
     private void MoveNearToClimbingObject()
     {
-        float offset = 0 < PlayerInfo.CurrentControlInfo.upDown ? _climbUpHeight : -_climbDownHeight;
+        float offset = PlayerInfo.CurrentPosition.y < _climbingObject.GetClimbReferencePoint().y ? _climbUpHeight : -_climbDownHeight;
 
-        PlayerMotion.TeleportTo(new Vector2(_climbingObject.position.x, PlayerInfo.CurrentPosition.y + offset));
+        PlayerMotion.TeleportTo(new Vector2(_climbingObject.GetClimbReferencePoint().x, PlayerInfo.CurrentPosition.y + offset));
     }
 }

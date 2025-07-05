@@ -8,9 +8,9 @@ public class HeroRunningLowerState : HeroLowerStateBase
     public override HeroLowerState StateType    => HeroLowerState.Running;
     public override bool ShouldDisableUpperBody => false;
 
-    public override void InitializeState(IStateController<HeroLowerState> stateController, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    public override void InitializeState(IStateController<HeroLowerState> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
     {
-        base.InitializeState(stateController, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        base.InitializeState(stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
         Assert.IsTrue(StateAnimator.HasState(0, _RunningStateHash), "Hero animator does not have running lower state.");
     }
 
@@ -29,24 +29,23 @@ public class HeroRunningLowerState : HeroLowerStateBase
     {
     }
 
-    public override void Move(int move)
+    public override void Move(HorizontalDirection horizontalInput)
     {
-        if (0 == move) return;
+        if (HorizontalDirection.None ==  horizontalInput)
+        {
+            StateController.ChangeState(HeroLowerState.Idle);
+            return;
+        }
 
-        // move player
-        PlayerMotion.SetVelocity(new Vector2(move * PlayerInfo.MovingSpeed, PlayerInfo.CurrentVelocity.y));
+        // Movement player
+        PlayerMotion.SetVelocity(new Vector2((int)horizontalInput * PlayerInfo.MovingSpeed, PlayerInfo.CurrentVelocity.y));
 
         // set direction
-        FacingDirection direction = move < 0 ? FacingDirection.Left : FacingDirection.Right;
+        FacingDirection direction = (horizontalInput == HorizontalDirection.Left) ? FacingDirection.Left : FacingDirection.Right;
         if (direction != PlayerInfo.CurrentFacingDirection)
         {
             PlayerMotion.SetFacingDirection(direction);
         }
-    }
-
-    public override void Stop()
-    {
-        StateController.ChangeState(HeroLowerState.Idle);
     }
 
     public override void StartJump()

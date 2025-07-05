@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using NUnit.Framework;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -94,13 +95,18 @@ public class StageManager : MonoBehaviour
         _tilemap = GetComponentInChildren<Tilemap>();
         Assert.IsTrue(null != _tilemap, $"Tilemap component is missing in the {_chapterType}_{_stageIndex}.");
 
-        BoundsInt bounds = _tilemap.cellBounds;
-        TileBase[] allTiles = _tilemap.GetTilesBlock(bounds);
+        BoundsInt   bounds      = _tilemap.cellBounds;
+        TileBase[]  allTiles    = _tilemap.GetTilesBlock(bounds);
+        bool[]      visitedTile = new bool[allTiles.Length];
 
         int width = bounds.size.x;
 
         for (int i = 0; i < allTiles.Length; i++)
         {
+            if (visitedTile[i])
+                continue;
+
+            visitedTile[i] = true;
             TileBase tile = allTiles[i];
             ObjectReplacementTile replacementTile = tile as ObjectReplacementTile;
             if (null == replacementTile)
@@ -124,6 +130,10 @@ public class StageManager : MonoBehaviour
             {
                 SetSnapPoint(snapPoint);
             }
+            else if (replacingObject.TryGetComponent(out IPartObject partObject))
+            {
+                SearchPartsAndMakeCompositeObject(i, visitedTile, partObject);
+            }
         }
     }
 
@@ -146,6 +156,62 @@ public class StageManager : MonoBehaviour
         {
             ExitSnapPoint = snapPoint;
         }
+    }
+
+    private void SearchPartsAndMakeCompositeObject(int curTileIdx, bool[] visitedTile, IPartObject partObject)
+    {
+        Assert.IsTrue(null != _tilemap, $"Tilemap is missing in the {_chapterType}_{_stageIndex}.");
+
+        BoundsInt           bounds      = _tilemap.cellBounds;
+        TileBase[]          allTiles    = _tilemap.GetTilesBlock(bounds);
+        ICompositeObject    composite   = partObject.CreateCompositeObjectFrame();
+        Queue<Vector3Int>   queue       = new();
+
+
+        int width   = bounds.size.x;
+        int height  = bounds.size.y;
+        int xPos    = curTileIdx % width;
+        int yPos    = curTileIdx / width;
+        int[] dx    = { 1, 0, -1, 0 };
+        int[] dy    = { 0, 1, 0, -1 };
+
+        composite.AddPart(partObject);
+        queue.Enqueue(new Vector3Int(bounds.x + xPos, bounds.y + yPos, bounds.z));
+        while (0 < queue.Count)
+        {
+            Vector3Int pos = queue.Dequeue();
+            
+            for (int i = 0; i < 4; ++i)
+            {
+                Vector3Int nextPos = pos;
+                nextPos.x += dx[i];
+                nextPos.y += dy[i];
+                int localX = nextPos.x - bounds.xMin;
+                int localY = nextPos.y - bounds.yMin;
+                int idx = localY * width + localX;
+
+                if (bounds.Contains(nextPos)
+                    && false == visitedTile[idx]
+                    && allTiles[idx] is ObjectReplacementTile replacementTile
+                    && replacementTile.ReplacingObject.TryGetComponent(out IPartObject otherPart)
+                    && partObject.IsPartOfSameCompositeObject(otherPart)
+                )
+                {
+                    visitedTile[idx] = true;
+
+                    replacementTile.HideTile();
+                    replacementTile.RefreshTile(nextPos, _tilemap);
+
+                    Vector3 worldPos = _tilemap.GetCellCenterWorld(nextPos);
+                    GameObject replacingObject = Instantiate(replacementTile.ReplacingObject, worldPos, Quaternion.identity, _tilemap.transform);
+
+                    composite.AddPart(replacingObject.GetComponent<IPartObject>());
+                    queue.Enqueue(nextPos);
+                }
+            }
+        }
+
+        composite.Initialize();
     }
 
     private async UniTask WaitForAsyncObjects()

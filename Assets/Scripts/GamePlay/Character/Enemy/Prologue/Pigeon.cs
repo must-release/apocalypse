@@ -118,7 +118,7 @@ public class Pigeon : EnemyController
         return true;
     }
 
-    public override void ControlCharacter(ControlInfo controlInfo) { }
+    public override void ControlCharacter(IReadOnlyControlInfo controlInfo) { }
 
 
     /****** Protected Members ******/

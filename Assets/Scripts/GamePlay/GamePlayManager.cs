@@ -22,7 +22,7 @@ public class GamePlayManager : MonoBehaviour, IAsyncLoadObject
         CameraController.Instance.AttachCamera(player, 0.1f);
     }
 
-    public void ControlPlayerCharacter(ControlInfo controlInfo)
+    public void ControlPlayerCharacter(IReadOnlyControlInfo controlInfo)
     {
         CharacterManager.Instance.ExecutePlayerControl(controlInfo);
     }

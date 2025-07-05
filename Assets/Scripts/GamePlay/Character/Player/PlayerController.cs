@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class PlayerController : CharacterBase, IAsyncLoadObject
+public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteractor
 {
     /****** Public Members ******/
 
-    public IPlayerAvatar        CurrentAvatar       { get; private set; } = null;
-    public PlayerType           CurrentPlayerType   { get; private set; } = PlayerType.PlayerCount;
+    public IPlayerAvatar        CurrentAvatar           { get; private set; }
+    public PlayerType           CurrentPlayerType       { get; private set; } = PlayerType.PlayerCount;
+    public IClimbable           CurrentClimbableObject  { get; set; }
+    public Collider2D           ClimberCollider         { get; private set; }
 
     public override bool IsPlayer => true;
     public bool IsLoaded
@@ -38,18 +40,14 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
         _isInitilized = true;
     }
 
-    // Control player according to the control info
-    public override void ControlCharacter(ControlInfo controlInfo)
+    public override void ControlCharacter(IReadOnlyControlInfo controlInfo)
     {
         Assert.IsTrue(null != controlInfo, "Control info is null");
         Assert.IsTrue(null != CurrentAvatar, "Current avatar is null");
 
-        CurrentControlInfo = controlInfo;
-
-        ControlInteractionObjects(controlInfo);
         CurrentAvatar.ControlAvatar(controlInfo);
 
-        if (controlInfo.tag)
+        if (controlInfo.IsTagging)
         {
             ChangePlayer();
         }
@@ -74,7 +72,6 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
         CurrentAvatar.OnDamaged(damageInfo);
     }
 
-    // Change player character
     public void ChangePlayer()
     {
         CurrentAvatar.ActivateAvatar(false);
@@ -98,6 +95,7 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
         _avatarDictionary   = new Dictionary<PlayerType, IPlayerAvatar>();
         _playerRigid        = GetComponent<Rigidbody2D>();
         CharacterHeight     = GetComponent<BoxCollider2D>().size.y * transform.localScale.y;
+        ClimberCollider     = GetComponent<Collider2D>();
         MovingSpeed         = 8f;
         JumpingSpeed        = 14f;
         Gravity             = 4f;
@@ -172,15 +170,15 @@ public class PlayerController : CharacterBase, IAsyncLoadObject
         IPlayerAvatar avatar = root.GetComponent<IPlayerAvatar>();
         Assert.IsTrue(null != avatar, $"{type} avatar (IPlayerAvatar) not found in {root.name}");
         _avatarDictionary.Add(type, avatar);
-        avatar.InitializeAvatar(this, this);
+        avatar.InitializeAvatar(this, this, this);
     }
 }
 
 
 public interface IPlayerAvatar : IAsyncLoadObject
 {
-    void InitializeAvatar(IMotionController playerMotion, ICharacterInfo playerInfo);
-    void ControlAvatar(ControlInfo controlInfo);
+    void InitializeAvatar(IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo);
+    void ControlAvatar(IReadOnlyControlInfo controlInfo);
     void ActivateAvatar(bool value);
     void OnUpdate();
     void OnFixedUpdate();

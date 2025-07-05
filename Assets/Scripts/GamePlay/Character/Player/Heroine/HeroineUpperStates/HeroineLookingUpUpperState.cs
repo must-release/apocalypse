@@ -8,14 +8,14 @@ public class HeroineLookingUpUpperState : HeroineUpperStateBase
 
     public override HeroineUpperState StateType => HeroineUpperState.LookingUp;
 
-    public override void InitializeState(IStateController<HeroineUpperState> stateController
-                                         , IMotionController playerMotion
-                                         , ICharacterInfo playerInfo
-                                         , Animator stateAnimator
-                                         , PlayerWeaponBase playerWeapon
-    )
+    public override void InitializeState(IStateController<HeroineUpperState> stateController,
+                                        IObjectInteractor objectInteractor,
+                                        IMotionController playerMotion,
+                                        ICharacterInfo playerInfo,
+                                        Animator stateAnimator,
+                                        PlayerWeaponBase playerWeapon)
     {
-        base.InitializeState(stateController, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        base.InitializeState(stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
 
         Assert.IsTrue(StateAnimator.HasState(0, _IdleLookingUpStateHash), "Animator does not have idle looking up state.");
         Assert.IsTrue(StateAnimator.HasState(0, _RunningLookingUpStateHash), "Animator does not have running looking up state.");
@@ -46,26 +46,27 @@ public class HeroineLookingUpUpperState : HeroineUpperStateBase
         StateController.ChangeState(nextState);
     }
 
-    public override void Move()
+    public override void Move(HorizontalDirection horizontalInput)
     {
         var stateInfo = StateAnimator.GetCurrentAnimatorStateInfo(0);
 
-        if (_IdleLookingUpStateHash == stateInfo.shortNameHash)
+        if (HorizontalDirection.None == horizontalInput)
         {
-            StateAnimator.Play(_RunningLookingUpStateHash, 0, LowerBodyStateInfo.AnimationNormalizedTime);
-            StateAnimator.Update(0.0f);
+            if (_RunningLookingUpStateHash == stateInfo.shortNameHash)
+            {
+                StateAnimator.Play(_IdleLookingUpStateHash, 0, LowerBodyStateInfo.AnimationNormalizedTime);
+                StateAnimator.Update(0.0f);
+            }
         }
-    }
-
-    public override void Stop()
-    {
-        var stateInfo = StateAnimator.GetCurrentAnimatorStateInfo(0);
-
-        if (_RunningLookingUpStateHash == stateInfo.shortNameHash)
+        else
         {
-            StateAnimator.Play(_IdleLookingUpStateHash, 0, LowerBodyStateInfo.AnimationNormalizedTime);
-            StateAnimator.Update(0.0f);
+            if (_IdleLookingUpStateHash == stateInfo.shortNameHash)
+            {
+                StateAnimator.Play(_RunningLookingUpStateHash, 0, LowerBodyStateInfo.AnimationNormalizedTime);
+                StateAnimator.Update(0.0f);
+            }
         }
+
     }
 
     public override void Disable()

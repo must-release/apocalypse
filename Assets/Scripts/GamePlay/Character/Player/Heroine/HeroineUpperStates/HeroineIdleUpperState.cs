@@ -5,14 +5,14 @@ public class HeroineIdleUpperState : HeroineUpperStateBase
 {
     public override HeroineUpperState StateType => HeroineUpperState.Idle;
 
-    public override void InitializeState(IStateController<HeroineUpperState> stateController
-                                     , IMotionController playerMotion
-                                     , ICharacterInfo playerInfo
-                                     , Animator stateAnimator
-                                     , PlayerWeaponBase playerWeapon
-)
+    public override void InitializeState(IStateController<HeroineUpperState> stateController,
+                                        IObjectInteractor objectInteractor,
+                                        IMotionController playerMotion,
+                                        ICharacterInfo playerInfo,
+                                        Animator stateAnimator,
+                                        PlayerWeaponBase playerWeapon)
     {
-        base.InitializeState(stateController, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        base.InitializeState(stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
 
         Assert.IsTrue(StateAnimator.HasState(0, _IdleStateHash), "Animator does not have idle upper state.");
     }
@@ -31,8 +31,11 @@ public class HeroineIdleUpperState : HeroineUpperStateBase
 
     }
 
-    public override void Move()
+    public override void Move(HorizontalDirection horizontalInput)
     {
+        if (HorizontalDirection.None == horizontalInput)
+            return;
+
         StateController.ChangeState(HeroineUpperState.Running); 
     }
 

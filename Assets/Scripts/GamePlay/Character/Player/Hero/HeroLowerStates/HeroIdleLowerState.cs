@@ -8,9 +8,9 @@ public class HeroIdleLowerState : HeroLowerStateBase
     public override HeroLowerState StateType    => HeroLowerState.Idle;
     public override bool ShouldDisableUpperBody => false;
 
-    public override void InitializeState(IStateController<HeroLowerState> stateController, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    public override void InitializeState(IStateController<HeroLowerState> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
     {
-        base.InitializeState(stateController, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        base.InitializeState(stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
         Assert.IsTrue(StateAnimator.HasState(0, _IdleStateHash), "Hero animator does not have idle lower state.");
     }
 
@@ -49,9 +49,12 @@ public class HeroIdleLowerState : HeroLowerStateBase
         StateController.ChangeState(HeroLowerState.Aiming);
     }
 
-    public override void Move(int move)
+    public override void Move(HorizontalDirection horizontalInput)
     {
-        StateController.ChangeState(HeroLowerState.Running);
+        if (HorizontalDirection.None != horizontalInput)
+        {
+            StateController.ChangeState(HeroLowerState.Running);
+        }
     }
 
     public override void Tag()

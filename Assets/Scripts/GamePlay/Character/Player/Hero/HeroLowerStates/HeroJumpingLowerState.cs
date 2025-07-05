@@ -9,9 +9,9 @@ public class HeroJumpingLowerState : HeroLowerStateBase
     public override HeroLowerState StateType    => HeroLowerState.Jumping;
     public override bool ShouldDisableUpperBody => false;
 
-    public override void InitializeState(IStateController<HeroLowerState> stateController, IMotionController playerPhysics, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    public override void InitializeState(IStateController<HeroLowerState> stateController, IObjectInteractor objectInteractor, IMotionController playerPhysics, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
     {
-        base.InitializeState(stateController, playerPhysics, playerInfo, stateAnimator, playerWeapon);
+        base.InitializeState(stateController, objectInteractor, playerPhysics, playerInfo, stateAnimator, playerWeapon);
 
         Assert.IsTrue(StateAnimator.HasState(0, _JumpingStartStateHash), "Hero animator does not have jumping start lower state.");
         Assert.IsTrue(StateAnimator.HasState(0, _JumpingLoopStateHash), "Hero animator does not have jumping loop lower state.");
@@ -53,24 +53,23 @@ public class HeroJumpingLowerState : HeroLowerStateBase
         }
     }
 
-    public override void Move(int move)
+    public override void Move(HorizontalDirection horizontalInput)
     {
-        if (0 == move) return;
+        if (HorizontalDirection.None == horizontalInput)
+        {
+            PlayerMotion.SetVelocity(new Vector2(0, PlayerInfo.CurrentVelocity.y));
+            return;
+        }
 
-        // move player
-        PlayerMotion.SetVelocity(new Vector2(move * PlayerInfo.MovingSpeed, PlayerInfo.CurrentVelocity.y));
+        // Movement player
+        PlayerMotion.SetVelocity(new Vector2((int)horizontalInput * PlayerInfo.MovingSpeed, PlayerInfo.CurrentVelocity.y));
 
         // set direction
-        FacingDirection direction = move < 0 ? FacingDirection.Left : FacingDirection.Right;
+        FacingDirection direction = horizontalInput == HorizontalDirection.Left ? FacingDirection.Left : FacingDirection.Right;
         if (direction != PlayerInfo.CurrentFacingDirection)
         {
             PlayerMotion.SetFacingDirection(direction);
         }
-    }
-
-    public override void Stop()
-    {
-        PlayerMotion.SetVelocity(new Vector2(0, PlayerInfo.CurrentVelocity.y));
     }
 
     public override void OnGround()

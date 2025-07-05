@@ -35,7 +35,7 @@ public class CharacterManager : MonoBehaviour
     }
 
     // Execute control of the player character
-    public void ExecutePlayerControl(ControlInfo controlInfo)
+    public void ExecutePlayerControl(IReadOnlyControlInfo controlInfo)
     {
         Assert.IsTrue(null != controlInfo, "Control info is null");
         Assert.IsTrue(null != _playerController, "Player controller is not initialized");

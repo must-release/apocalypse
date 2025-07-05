@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -24,18 +23,20 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
     }
 
 
-    public void InitializeAvatar(IMotionController playerMotion, ICharacterInfo playerInfo)
+    public void InitializeAvatar(IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo)
     {
+        Assert.IsTrue(null != objectInteractor, "Object interactor is null");
         Assert.IsTrue(null != playerMotion, "Player Physics is null");
         Assert.IsTrue(null != playerInfo, "Player Info is null");
 
-        _playerMotion   = playerMotion;
-        _playerInfo     = playerInfo;
+        _objectInteractor   = objectInteractor;
+        _playerMotion       = playerMotion;
+        _playerInfo         = playerInfo;
 
         RegisterStates();
     }
 
-    public void ControlAvatar(ControlInfo controlInfo)
+    public void ControlAvatar(IReadOnlyControlInfo controlInfo)
     {
         Assert.IsTrue(null != controlInfo, "Control info is null");
 
@@ -102,6 +103,8 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
     {
         Assert.IsTrue(_lowerStateTable.ContainsKey(state), "Invalid Lower State");
 
+        Logger.Write(LogCategory.GamePlay, $"{_lowerState} -> {state}");
+
         _lowerState.OnExit(state);
         _lowerState = _lowerStateTable[state];
         _lowerState.OnEnter();
@@ -127,17 +130,18 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
 
     /****** Private Members ******/
 
-    [SerializeField] private Animator _lowerAnimator = null;
-    [SerializeField] private Animator _upperAnimator = null;
+    [SerializeField] private Animator _lowerAnimator;
+    [SerializeField] private Animator _upperAnimator;
 
     private Dictionary<HeroineLowerState, HeroineLowerStateBase> _lowerStateTable = new Dictionary<HeroineLowerState, HeroineLowerStateBase>();
     private Dictionary<HeroineUpperState, HeroineUpperStateBase> _upperStateTable = new Dictionary<HeroineUpperState, HeroineUpperStateBase>();
 
-    private IMotionController       _playerMotion       = null;
-    private ICharacterInfo          _playerInfo         = null;
-    private HeroineLowerStateBase   _lowerState         = null;
-    private HeroineUpperStateBase   _upperState         = null;
-    private HeroineWeapon           _heroineWeapon      = null;
+    private IObjectInteractor       _objectInteractor;
+    private IMotionController       _playerMotion;
+    private ICharacterInfo          _playerInfo;
+    private HeroineLowerStateBase   _lowerState;
+    private HeroineUpperStateBase   _upperState;
+    private HeroineWeapon           _heroineWeapon;
 
     private void Awake()
     {
@@ -155,30 +159,23 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
         _upperState.OnEnter();
     }
 
-    private void ControlLowerBody(ControlInfo controlInfo)
+    private void ControlLowerBody(IReadOnlyControlInfo controlInfo)
     {
-        // Change player state according to the input control info
-        if (controlInfo.move != 0) _lowerState.Move(controlInfo.move);
-        else if (controlInfo.stop) _lowerState.Stop();
-        if (controlInfo.isJumpStarted) _lowerState.StartJump();
-        _lowerState.CheckJumping(controlInfo.isJumping);
-        if (controlInfo.tag) _lowerState.Tag();
-        _lowerState.Aim(controlInfo.aim);
-        if (controlInfo.attack) _lowerState.Attack();
-
-        // Change player state according to the object control info
-        _lowerState.Climb(controlInfo.Climb);
-        _lowerState.Push(controlInfo.push);
-        _lowerState.UpDown(controlInfo.upDown);
+        _lowerState.Move(controlInfo.HorizontalInput);
+        if (controlInfo.IsJumpStarted) _lowerState.StartJump();
+        _lowerState.CheckJumping(controlInfo.IsJumping);
+        if (controlInfo.IsTagging) _lowerState.Tag();
+        _lowerState.Aim(controlInfo.AimingPosition);
+        if (controlInfo.IsAttacking) _lowerState.Attack();
+        _lowerState.UpDown(controlInfo.VerticalInput);
     }
 
-    private void ControlUpperBody(ControlInfo controlInfo)
-    {  
-        if (controlInfo.move != 0) _upperState.Move();
-        else if (controlInfo.stop) _upperState.Stop();
-        if (controlInfo.isJumping) _upperState.Jump();
-        _upperState.Aim(controlInfo.aim);
-        if (controlInfo.upDown > 0) _upperState.LookUp(true);
+    private void ControlUpperBody(IReadOnlyControlInfo controlInfo)
+    {
+        _upperState.Move(controlInfo.HorizontalInput);
+        if (controlInfo.IsJumpStarted) _upperState.Jump();
+        _upperState.Aim(controlInfo.AimingPosition);
+        if (VerticalDirection.Up == controlInfo.VerticalInput) _upperState.LookUp(true);
         else _upperState.LookUp(false);
     }
 
@@ -191,7 +188,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
         Assert.IsTrue(0 < lowers.Length, "No HeroineLowerState components found in children.");
         foreach (var lower in lowers)
         {
-            lower.InitializeState(this ,_playerMotion, _playerInfo, _lowerAnimator, _heroineWeapon);
+            lower.InitializeState(this, _objectInteractor, _playerMotion, _playerInfo, _lowerAnimator, _heroineWeapon);
             HeroineLowerState state = lower.StateType;
             _lowerStateTable.Add(state, lower);
         }
@@ -200,7 +197,7 @@ public class HeroineAvatar : MonoBehaviour, IPlayerAvatar, ILowerStateController
         Assert.IsTrue(0 < uppers.Length, "No HeroineUpperState components found in children.");
         foreach (var upper in uppers)
         {
-            upper.InitializeState(this, _playerMotion, _playerInfo, _upperAnimator, _heroineWeapon);
+            upper.InitializeState(this, _objectInteractor, _playerMotion, _playerInfo, _upperAnimator, _heroineWeapon);
             HeroineUpperState state = upper.StateType;
             _upperStateTable.Add(state, upper);
         }

@@ -9,9 +9,9 @@ public class HeroDeadLowerState : HeroLowerStateBase
     public override HeroLowerState StateType    => HeroLowerState.Dead;
     public override bool ShouldDisableUpperBody => true;
 
-    public override void InitializeState(IStateController<HeroLowerState> stateController, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    public override void InitializeState(IStateController<HeroLowerState> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
     {
-        base.InitializeState(stateController, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        base.InitializeState(stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
         Assert.IsTrue(StateAnimator.HasState(0, _HeroDeadStateHash), "Hero animator does not have dead lower state.");
     }
 

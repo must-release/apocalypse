@@ -63,11 +63,11 @@
 //         {
 //             nextDecisionTime = Time.time + decisionInterval;
 
-//             // Determine direction to move horizontally towards the player
+//             // Determine direction to Movement horizontally towards the player
 //             int direction = DetectedPlayer.transform.position.x > transform.position.x ? 1 : -1;
 //             float targetY = DetectedPlayer.transform.position.y + floatHeight;
 
-//             // Move towards the player's x position and then start patrolling around it
+//             // Movement towards the player's x position and then start patrolling around it
 //             if (!isPatrolling)
 //             {
 //                 float targetX = DetectedPlayer.transform.position.x;
@@ -103,7 +103,7 @@
 //         float targetX = playerX + movingdirection * patrolRange;
 //         float targetY = DetectedPlayer.transform.position.y + floatHeight;
 
-//         // Move back and forth within the patrol range around the player's x position
+//         // Movement back and forth within the patrol range around the player's x position
 //         Vector2 targetPosition = new Vector2(targetX, targetY);
 //         Vector2 directionToMove = (targetPosition - (Vector2)transform.position).normalized;
 //         enemyRigid.velocity = new Vector2(directionToMove.x * movingSpeed, directionToMove.y * movingSpeed);

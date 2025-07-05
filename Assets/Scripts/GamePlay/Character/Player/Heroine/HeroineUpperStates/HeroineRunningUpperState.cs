@@ -23,10 +23,13 @@ public class HeroineRunningUpperState : HeroineUpperStateBase
 
         StateController.ChangeState(HeroineUpperState.LookingUp);
     }
-    
-    public override void Stop() 
+
+    public override void Move(HorizontalDirection horizontalInput)
     {
-        StateController.ChangeState(HeroineUpperState.Idle); 
+        if (HorizontalDirection.None != horizontalInput)
+            return;
+
+        StateController.ChangeState(HeroineUpperState.Idle);
     }
 
     public override void Disable()

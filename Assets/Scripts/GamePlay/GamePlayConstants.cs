@@ -1,7 +1,8 @@
 
 using UnityEngine.Assertions;
 
-
+public enum HorizontalDirection { None = 0, Right = 1, Left = -1 }
+public enum VerticalDirection   { None = 0, Up = 1, Down = -1 }
 public enum ProjectileType : byte
 {
     // Player

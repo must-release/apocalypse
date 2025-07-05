@@ -8,7 +8,7 @@
 //     private int movingdirection; // Direction of enemy movement: 1 for right, -1 for left.
 //     private bool patrolling; // Indicates whether the enemy is currently patrolling.
 
-//     public float patrolDistance = 5f; // Maximum distance the enemy can move in each direction while patrolling.
+//     public float patrolDistance = 5f; // Maximum distance the enemy can Movement in each direction while patrolling.
 //     public Transform groundCheck; // Ground Check position for detecting if the enemy is on the ground.
 //     public float groundCheckRadius = 0.1f; // Radius for ground detection.
 //     public LayerMask groundLayer; // Layer used to determine what is considered ground.
@@ -136,7 +136,7 @@
 //                 transform.localScale.y, transform.localScale.z);
 //         }
 
-//         // Move while patrolling.
+//         // Movement while patrolling.
 //         float targetPositionX = initialLocalPosition.x + movingdirection * patrolDistance;
 //         Vector2 targetLocalPosition = new Vector2(targetPositionX, transform.localPosition.y);
 //         Vector2 direction = (targetLocalPosition - (Vector2)transform.localPosition).normalized;

@@ -124,7 +124,7 @@ public class StoryModel : MonoBehaviour
         }
         else
         {
-            if (storyBlockQueue.Count > 0) // Move to next story block
+            if (storyBlockQueue.Count > 0) // Movement to next story block
             {
                 // player read all entries in previous story block
                 StoryBlock nextBlock = storyBlockQueue.Dequeue();

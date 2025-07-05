@@ -22,24 +22,23 @@ public class HeroineRunningLowerState : HeroineLowerStateBase
     {
     }
 
-    public override void Move(int move)
+    public override void Move(HorizontalDirection horizontalInput)
     {
-        if (0 == move) return;
+        if (HorizontalDirection.None == horizontalInput)
+        {
+            StateController.ChangeState(HeroineLowerState.Idle);
+            return;
+        }
 
-        // move player
-        PlayerMotion.SetVelocity(new Vector2(move * PlayerInfo.MovingSpeed, PlayerInfo.CurrentVelocity.y));
+        // Movement player
+        PlayerMotion.SetVelocity(new Vector2((int)horizontalInput * PlayerInfo.MovingSpeed, PlayerInfo.CurrentVelocity.y));
 
         // set direction
-        FacingDirection direction = move < 0 ? FacingDirection.Left : FacingDirection.Right;
+        FacingDirection direction = (HorizontalDirection.Left == horizontalInput) ? FacingDirection.Left : FacingDirection.Right;
         if (direction != PlayerInfo.CurrentFacingDirection)
         {
             PlayerMotion.SetFacingDirection(direction);
         }
-    }
-
-    public override void Stop()
-    {
-        StateController.ChangeState(HeroineLowerState.Idle);
     }
 
     public override void Attack()
@@ -70,11 +69,18 @@ public class HeroineRunningLowerState : HeroineLowerStateBase
         StateController.ChangeState(HeroineLowerState.Tagging);
     }
 
-    public override void Climb(bool climb) 
+    public override void UpDown(VerticalDirection verticalInput)
     {
-        if (false == climb) return;
+        if (null == ObjectInteractor.CurrentClimbableObject || VerticalDirection.None == verticalInput) 
+            return;
 
-        StateController.ChangeState(HeroineLowerState.Climbing);
+        var refPos = ObjectInteractor.CurrentClimbableObject.GetClimbReferencePoint();
+        var curPos = PlayerInfo.CurrentPosition;
+
+        if ((curPos.y < refPos.y && VerticalDirection.Up == verticalInput) || (refPos.y < curPos.y && VerticalDirection.Down == verticalInput))
+        {
+            StateController.ChangeState(HeroineLowerState.Climbing);
+        }
     }
 
     public override void Damaged()

@@ -2,13 +2,14 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Assertions;
+using Unity.VisualScripting;
 
 [RequireComponent(typeof(BoxCollider2D), typeof(Rigidbody2D))]
 public abstract class CharacterBase : MonoBehaviour, ICharacter, IMotionController, ICharacterInfo
 {
     /****** Public Members ******/
 
-    public FacingDirection  CurrentFacingDirection 
+    public FacingDirection      CurrentFacingDirection 
     { 
         get 
         { 
@@ -16,10 +17,9 @@ public abstract class CharacterBase : MonoBehaviour, ICharacter, IMotionControll
             else return FacingDirection.Left; 
         } 
     }
-    public ControlInfo      CurrentControlInfo  { get; protected set; }
-    public GameObject       StandingGround      { get; protected set; }
-    public DamageInfo       RecentDamagedInfo   { get; protected set; }
-    public Vector2          CurrentVelocity     
+    public GameObject           StandingGround      { get; protected set; }
+    public DamageInfo           RecentDamagedInfo   { get; protected set; }
+    public Vector2              CurrentVelocity     
     { 
         get 
         { 
@@ -27,7 +27,7 @@ public abstract class CharacterBase : MonoBehaviour, ICharacter, IMotionControll
             return _rigidbody.linearVelocity; 
         } 
     }
-    public Vector3          CurrentPosition     { get { return transform.position; } }
+    public Vector3              CurrentPosition     { get { return transform.position; } }
 
     public virtual float    MovingSpeed         { get; protected set; }
     public virtual float    JumpingSpeed        { get; protected set; }
@@ -38,7 +38,7 @@ public abstract class CharacterBase : MonoBehaviour, ICharacter, IMotionControll
     public float            CharacterHeight     { get; protected set; }
 
     public abstract bool IsPlayer { get; }
-    public abstract void ControlCharacter(ControlInfo controlInfo);
+    public abstract void ControlCharacter(IReadOnlyControlInfo controlInfo);
     public abstract void OnDamaged(DamageInfo damageInfo);
 
     public void RecognizeInteractionObject(InteractionObject obj)
@@ -123,7 +123,7 @@ public abstract class CharacterBase : MonoBehaviour, ICharacter, IMotionControll
     protected virtual void Awake() 
     { 
         _rigidbody  = GetComponent<Rigidbody2D>();
-        _collider   = GetComponent<BoxCollider2D>();
+        _bodyCollider   = GetComponent<BoxCollider2D>();
 
         gameObject.layer = LayerMask.NameToLayer(Layer.Character); 
 
@@ -131,36 +131,11 @@ public abstract class CharacterBase : MonoBehaviour, ICharacter, IMotionControll
 
     protected virtual void Start() 
     {
-        CreateGroundCheckPoint();
+        CreateGroundSensor();
     }
 
     protected abstract void OnAir();
     protected abstract void OnGround();
-
-    protected void ControlInteractionObjects(ControlInfo controlInfo)
-    {
-        // Control interacting objects
-        for (int i = _interactingObjects.Count - 1; i >= 0; i--)
-        {
-            if(!_interactingObjects[i].CheckInteractingControl(this, controlInfo))
-            {
-                _interactingObjects[i].EndInteraction(this, controlInfo);
-                _interactableObjects.Add(_interactingObjects[i]);
-                _interactingObjects.RemoveAt(i);
-            }
-        }
-
-        // Control interactable objects
-        for (int i = _interactableObjects.Count - 1; i >= 0; i--)
-        {
-            if(_interactableObjects[i].CheckInteractableControl(this, controlInfo))
-            {
-                _interactableObjects[i].StartInteraction(this, controlInfo);
-                _interactingObjects.Add(_interactableObjects[i]);
-                _interactableObjects.RemoveAt(i);
-            }
-        }
-    }
 
     protected virtual void FixedUpdate()
     {
@@ -172,12 +147,12 @@ public abstract class CharacterBase : MonoBehaviour, ICharacter, IMotionControll
     private List<InteractionObject> _interactableObjects   = new List<InteractionObject>();
     private List<InteractionObject> _interactingObjects    = new List<InteractionObject>();
     private Rigidbody2D _rigidbody;
-    private BoxCollider2D _collider;
+    private BoxCollider2D _bodyCollider;
     private Transform _groundCheckPoint;
     private Vector2 _groundCheckSize;
     private bool _wasGrounded;
 
-    private void CreateGroundCheckPoint()
+    private void CreateGroundSensor()
     {
         Assert.IsTrue(0 != CharacterHeight, $"CharacterHeight of {gameObject.name} is not set.");
 
@@ -186,7 +161,7 @@ public abstract class CharacterBase : MonoBehaviour, ICharacter, IMotionControll
         _groundCheckPoint.localPosition = Vector3.zero;
         _groundCheckPoint.Translate(Vector3.down * CharacterHeight / 2f, Space.Self);
 
-        _groundCheckSize = new Vector2(_collider.size.x * 0.9f, 0.1f);
+        _groundCheckSize = new Vector2(_bodyCollider.size.x * 0.9f, 0.1f);
     }    
 
     private void GroundCheck()

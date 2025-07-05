@@ -19,12 +19,11 @@ public abstract class HeroineLowerStateBase : PlayerStateBase<HeroineLowerState>
     public virtual void OnAir() { }
     public virtual void Aim(Vector3 aim) { }
     public virtual void Attack() { }
-    public virtual void Move(int move) { }
+    public virtual void Move(HorizontalDirection horizontalInput) { }
     public virtual void Tag() { }
     public virtual void Climb(bool climb) { }
     public virtual void OnGround() { }
-    public virtual void Stop() { }
     public virtual void Push(bool push) { }
-    public virtual void UpDown(int upDown) { }
+    public virtual void UpDown(VerticalDirection verticalDirection ) { }
     public virtual void Damaged() { }
 }

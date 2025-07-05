@@ -29,9 +29,9 @@ public class HeroineAttackingLowerState : HeroineLowerStateBase
 
     }
 
-    public override void UpDown(int upDown)
+    public override void UpDown(VerticalDirection verticalInput)
     {
-        _isLookingUp = upDown > 0;
+        _isLookingUp = (VerticalDirection.Up == verticalInput);
     }
 
     public override void Damaged()

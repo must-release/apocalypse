@@ -8,9 +8,9 @@ public class HeroAimingUpperState : HeroUpperStateBase
 
     public override HeroUpperState StateType => HeroUpperState.Aiming;
 
-    public override void InitializeState(IStateController<HeroUpperState> stateController, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    public override void InitializeState(IStateController<HeroUpperState> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
     {
-        base.InitializeState(stateController, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        base.InitializeState(stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
         Assert.IsTrue(StateAnimator.HasState(0, _AimingStateHash), "Hero animator does not have aiming upper state.");
     }
 

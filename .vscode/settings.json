@@ -3,6 +3,7 @@
     "files.exclude": {
         "**/.vs/**": true,
         "**/.vscode/**": false,
+        "**/GEMINI.md":true,
         "**/bin/**": true,
         "**/obj/**": true,
         "**/Library/**": true,
