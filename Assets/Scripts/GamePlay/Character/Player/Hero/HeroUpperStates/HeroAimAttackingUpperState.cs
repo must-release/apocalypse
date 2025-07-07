@@ -1,38 +1,46 @@
 ﻿using NUnit.Framework;
 using UnityEngine;
 
-public class HeroAimAttackingUpperState : HeroUpperStateBase
+public class HeroAimAttackingUpperState : PlayerUpperState
 {
     /****** Public Members ******/
 
-    public override HeroUpperStateType StateType => HeroUpperStateType.AimAttacking;
+    public override UpperStateType CurrentState => HeroUpperStateType.AimAttacking;
 
-    public override void InitializeState(IStateController<HeroUpperStateType> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    public override void InitializeState(PlayerAvatarType owningAvatar
+                                        , IStateController<UpperStateType> stateController
+                                        , IObjectInteractor objectInteractor
+                                        , IMotionController playerMotion
+                                        , ICharacterInfo playerInfo
+                                        , Animator stateAnimator
+                                        , PlayerWeaponBase playerWeapon)
     {
-        base.InitializeState(stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
-        Assert.IsTrue(StateAnimator.HasState(0, _AimAttackingStateHash), "Hero animator does not have aim attacking upper state.");
+        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
+
+        Assert.IsTrue(PlayerAvatarType.Hero == owningAvatar, $"State {CurrentState} can only be used by Hero avatar.");
+        Assert.IsTrue(StateAnimator.HasState(0, _AimAttackingStateHash), $"Animator of {owningAvatar} does not have {CurrentState} upper state.");
     }
 
     public override void OnEnter()
     {
         StateAnimator.Play(_AimAttackingStateHash);
 
-        postDelay = PlayerWeapon.Attack();
+        _postDelay = PlayerWeapon.Attack();
     }
 
     public override void OnUpdate()
     {
         var stateInfo = StateAnimator.GetCurrentAnimatorStateInfo(0);
 
-        postDelay -= Time.deltaTime;
+        _postDelay -= Time.deltaTime;
 
-        if (1.0f <= stateInfo.normalizedTime && postDelay < 0)
+        if (1.0f <= stateInfo.normalizedTime && _postDelay < 0)
         {
             StateController.ChangeState(HeroUpperStateType.Aiming);
         }
     }
 
-    public override void OnExit(HeroUpperStateType nextState)
+    public override void OnExit(UpperStateType nextState)
     {
         if (HeroUpperStateType.Aiming != nextState)
         {
@@ -44,18 +52,18 @@ public class HeroAimAttackingUpperState : HeroUpperStateBase
     public override void Aim(Vector3 aim)
     {
         if (Vector3.zero == aim)
-            StateController.ChangeState(HeroUpperStateType.Idle);
+            StateController.ChangeState(UpperStateType.Idle);
     }
 
     public override void Disable()
     {
-        StateController.ChangeState(HeroUpperStateType.Disabled);
+        StateController.ChangeState(UpperStateType.Disabled);
     }
 
 
     /****** Private Members ******/
 
-    private readonly int _AimAttackingStateHash = AnimatorState.Hero.GetHash(HeroUpperStateType.AimAttacking);
+    private readonly int _AimAttackingStateHash = AnimatorState.GetHash(PlayerAvatarType.Hero, HeroUpperStateType.AimAttacking);
 
-    private float postDelay = 0f;
+    private float _postDelay;
 }

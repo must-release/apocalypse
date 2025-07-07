@@ -39,7 +39,7 @@ public class StageScene : MonoBehaviour, IScene
 
     private async UniTask AsyncLoadEssentialStages()
     {
-        PlayerManager.Instance.GetPlayerData(out ChapterType chapter, out int stage, out PlayerType _);
+        PlayerManager.Instance.GetPlayerData(out ChapterType chapter, out int stage, out PlayerAvatarType _);
         
         string currentStagePath = $"Stage/{chapter}_{stage}";
         _currentStage = await AsyncLoadStage(currentStagePath);

@@ -21,13 +21,13 @@ public class DataManager : MonoBehaviour, IAsyncLoadObject
 
     public void CreateNewGameData()
     {
-        PlayerType  lastChar    = PlayerType.Hero;
+        PlayerAvatarType  lastChar    = PlayerAvatarType.Hero;
         ChapterType curChapter  = ChapterType.Test;
         int         curStage    = 1;
         string      saveTime    = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         string      playTime    = "00:00"; 
 
-        _currentData = new UserData(curChapter, curStage, null, lastChar, playTime, saveTime);
+        _currentData = new SaveData(curChapter, curStage, null, lastChar, playTime, saveTime);
         PlayerManager.Instance.SetPlayerData(curChapter, curStage, lastChar);
     }
 
@@ -36,17 +36,17 @@ public class DataManager : MonoBehaviour, IAsyncLoadObject
         StartCoroutine(AsyncSaveUserData(dtoList, slotNum, takeScreenShot));
     }
 
-    public List<UserData> GetAllUserData()
+    public List<SaveData> GetAllUserData()
     {
-        List<UserData> allData = new List<UserData>();
+        List<SaveData> allData = new List<SaveData>();
 
         for(int slotNum = 0; slotNum < SlotNumber; slotNum++)
         {
-            string path = Application.persistentDataPath + "/userData" + slotNum + ".json";
+            string path = Application.persistentDataPath + "/saveData" + slotNum + ".json";
             if (File.Exists(path))
             {
                 string json = File.ReadAllText(path);
-                UserData data = JsonConvert.DeserializeObject<UserData>(json, _jsonSettings);
+                SaveData data = JsonConvert.DeserializeObject<SaveData>(json, _jsonSettings);
                 allData.Add(data);
             }
             else
@@ -60,25 +60,25 @@ public class DataManager : MonoBehaviour, IAsyncLoadObject
 
     public List<GameEventDTO> LoadGameData(int slotNum)
     {
-        string path = Application.persistentDataPath + "/userData" + slotNum + ".json";
+        string path = Application.persistentDataPath + "/saveData" + slotNum + ".json";
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path);
-            _currentData = JsonConvert.DeserializeObject<UserData>(json, _jsonSettings);
+            _currentData = JsonConvert.DeserializeObject<SaveData>(json, _jsonSettings);
         }
         else
         {
             Debug.Log("Trying to read empty slot");
         }
 
-        PlayerManager.Instance.SetPlayerData(_currentData.CurrentStage, _currentData.CurrentMap, _currentData.LastCharacter);
+        PlayerManager.Instance.SetPlayerData(_currentData.CurrentStage, _currentData.CurrentMap, _currentData.StartCharacter);
 
         return _currentData.ActiveEventDTOList;
     }
 
     public List<GameEventDTO> LoadRecentData()
     {
-        List<UserData> allData = GetAllUserData();
+        List<SaveData> allData = GetAllUserData();
 
         // Parse string to DateTime by using DateTime.TryParseExact method
         // Use "yyyy-MM-dd HH:mm" format and CultureInfo.InvariantCulture
@@ -91,7 +91,7 @@ public class DataManager : MonoBehaviour, IAsyncLoadObject
             })
             .FirstOrDefault();
 
-        PlayerManager.Instance.SetPlayerData(_currentData.CurrentStage, _currentData.CurrentMap, _currentData.LastCharacter);
+        PlayerManager.Instance.SetPlayerData(_currentData.CurrentStage, _currentData.CurrentMap, _currentData.StartCharacter);
 
         return _currentData.ActiveEventDTOList;
     }
@@ -102,7 +102,7 @@ public class DataManager : MonoBehaviour, IAsyncLoadObject
     private Dictionary<ChapterType, Texture2D>    _stageSlotImage    = new();
     private JsonSerializerSettings          _jsonSettings      = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
 
-    private UserData    _currentData;
+    private SaveData    _currentData;
     private bool        _isLoaded;
     private void Awake()
     {
@@ -144,7 +144,7 @@ public class DataManager : MonoBehaviour, IAsyncLoadObject
     {
         IsSaving = true;
 
-        PlayerManager.Instance.GetPlayerData(out ChapterType stage, out int map, out PlayerType character);
+        PlayerManager.Instance.GetPlayerData(out ChapterType stage, out int map, out PlayerAvatarType character);
         _currentData.UpdatePlayerData(stage, map, character);
 
         // Wait for a frame before taking a screenshot
@@ -166,7 +166,7 @@ public class DataManager : MonoBehaviour, IAsyncLoadObject
         _currentData.SaveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         _currentData.ActiveEventDTOList = eventList;
 
-        string path = Application.persistentDataPath + "/userData" + slotNum + ".json";
+        string path = Application.persistentDataPath + "/saveData" + slotNum + ".json";
         string json =JsonConvert.SerializeObject(_currentData, new JsonSerializerSettings
         {
             TypeNameHandling = TypeNameHandling.All

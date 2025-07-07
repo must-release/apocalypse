@@ -2,16 +2,24 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class HeroAimingUpperState : HeroUpperStateBase
+public class HeroAimingUpperState : PlayerUpperState
 {
     /****** Public Members ******/
 
-    public override HeroUpperStateType StateType => HeroUpperStateType.Aiming;
+    public override UpperStateType CurrentState => HeroUpperStateType.Aiming;
 
-    public override void InitializeState(IStateController<HeroUpperStateType> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    public override void InitializeState(PlayerAvatarType owningAvatar
+                                        , IStateController<UpperStateType> stateController
+                                        , IObjectInteractor objectInteractor
+                                        , IMotionController playerMotion
+                                        , ICharacterInfo playerInfo
+                                        , Animator stateAnimator
+                                        , PlayerWeaponBase playerWeapon)
     {
-        base.InitializeState(stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
-        Assert.IsTrue(StateAnimator.HasState(0, _AimingStateHash), "Hero animator does not have aiming upper state.");
+        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
+
+        Assert.IsTrue(PlayerAvatarType.Hero == owningAvatar, $"State {CurrentState} can only be used by Hero avatar.");
+        Assert.IsTrue(StateAnimator.HasState(0, _AimingStateHash), $"Animator of {owningAvatar} does not have {CurrentState} upper state.");
     }
 
     public override void OnEnter()
@@ -34,7 +42,7 @@ public class HeroAimingUpperState : HeroUpperStateBase
         PlayerWeapon.Aim(true);
     }
 
-    public override void OnExit(HeroUpperStateType nextState)
+    public override void OnExit(UpperStateType nextState)
     {
         PlayerWeapon.Aim(false);
 
@@ -62,16 +70,15 @@ public class HeroAimingUpperState : HeroUpperStateBase
 
     public override void Disable()
     {
-        StateController.ChangeState(HeroUpperStateType.Disabled);
+        StateController.ChangeState(UpperStateType.Disabled);
     }
-
 
 
     /****** Private Members ******/
 
-    private readonly int _AimingStateHash = AnimatorState.Hero.GetHash(HeroUpperStateType.Attacking);
+    private readonly int _AimingStateHash = AnimatorState.GetHash(PlayerAvatarType.Hero, HeroUpperStateType.Attacking);
 
-    private Vector3 _aimingPosition = Vector3.zero;
+    private Vector3 _aimingPosition;
 
     private void SetDirection()
     {

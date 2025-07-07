@@ -70,7 +70,7 @@ public class StoryEvent : GameEventBase<StoryEventInfo>
 
         // Start Story
         InputEventProducer.Instance.LockInput(true);
-        string story = "StoryScripts/" + Info.StoryStage.ToString() + '_' + Info.StoryNumber;
+        string story = "StoryScript/" + Info.StoryStage.ToString() + '_' + Info.StoryNumber;
         yield return StoryController.Instance.StartStory(story, Info.ReadBlockCount, Info.ReadEntryCount);
         InputEventProducer.Instance.LockInput(false);
 

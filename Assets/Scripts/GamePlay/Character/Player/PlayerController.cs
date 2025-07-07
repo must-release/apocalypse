@@ -8,7 +8,7 @@ public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteract
     /****** Public Members ******/
 
     public IPlayerAvatar        CurrentAvatar           { get; private set; }
-    public PlayerType           CurrentPlayerType       { get; private set; } = PlayerType.PlayerCount;
+    public PlayerAvatarType           CurrentPlayerType       { get; private set; } = PlayerAvatarType.PlayerAvatarTypeCount;
     public IClimbable           CurrentClimbableObject  { get; set; }
     public Collider2D           ClimberCollider         { get; private set; }
 
@@ -26,12 +26,12 @@ public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteract
         }
     }
 
-    public void InitializePlayer(PlayerType player)
+    public void InitializePlayer(PlayerAvatarType player)
     {
         // Initially change character
         CurrentPlayerType   = player;
         CurrentAvatar       = _avatarDictionary[CurrentPlayerType];
-        var turningOffType  = (CurrentPlayerType == PlayerType.Hero) ? PlayerType.Heroine : PlayerType.Hero;
+        var turningOffType  = (CurrentPlayerType == PlayerAvatarType.Hero) ? PlayerAvatarType.Heroine : PlayerAvatarType.Hero;
         var turningOffAvatar = _avatarDictionary[turningOffType];
 
         CurrentAvatar.ActivateAvatar(true);
@@ -76,7 +76,7 @@ public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteract
     {
         CurrentAvatar.ActivateAvatar(false);
 
-        CurrentPlayerType   = (CurrentPlayerType == PlayerType.Hero) ? PlayerType.Heroine : PlayerType.Hero;
+        CurrentPlayerType   = (CurrentPlayerType == PlayerAvatarType.Hero) ? PlayerAvatarType.Heroine : PlayerAvatarType.Hero;
         CurrentAvatar       = _avatarDictionary[CurrentPlayerType];
 
         CurrentAvatar.ActivateAvatar(true);
@@ -92,7 +92,7 @@ public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteract
 
         base.Awake();
         
-        _avatarDictionary   = new Dictionary<PlayerType, IPlayerAvatar>();
+        _avatarDictionary   = new Dictionary<PlayerAvatarType, IPlayerAvatar>();
         _playerRigid        = GetComponent<Rigidbody2D>();
         CharacterHeight     = GetComponent<BoxCollider2D>().size.y * transform.localScale.y;
         ClimberCollider     = GetComponent<Collider2D>();
@@ -108,8 +108,8 @@ public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteract
     {
         base.Start();
 
-        RegisterAvatar(PlayerType.Hero, _heroTransform);
-        RegisterAvatar(PlayerType.Heroine, _heroineTransform);
+        RegisterAvatar(PlayerAvatarType.Hero, _heroTransform);
+        RegisterAvatar(PlayerAvatarType.Heroine, _heroineTransform);
     }
 
     protected override void OnAir()
@@ -140,7 +140,7 @@ public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteract
     private const int   _MaxHitPoint        = 3;
     private const float _DamageImmuneTime   = 2f;
 
-    private Dictionary<PlayerType, IPlayerAvatar> _avatarDictionary;
+    private Dictionary<PlayerAvatarType, IPlayerAvatar> _avatarDictionary;
 
     private Rigidbody2D _playerRigid;
     private bool _isInitilized;
@@ -162,9 +162,9 @@ public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteract
         _isDamageImmune = false;
     }
 
-    private void RegisterAvatar(PlayerType type, Transform root)
+    private void RegisterAvatar(PlayerAvatarType type, Transform root)
     {
-        Assert.IsTrue(type < PlayerType.PlayerCount, $"{type} is not a valid player type");
+        Assert.IsTrue(type < PlayerAvatarType.PlayerAvatarTypeCount, $"{type} is not a valid player type");
         Assert.IsTrue(null != root, $"{type} avatar root is null");
 
         IPlayerAvatar avatar = root.GetComponent<IPlayerAvatar>();

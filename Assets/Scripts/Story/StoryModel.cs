@@ -43,7 +43,6 @@ public class StoryModel : MonoBehaviour
 
     IEnumerator AsyncLoadStoryText(string storyInfo)
     {
-        // Load story
         AsyncOperationHandle<TextAsset> story = Addressables.LoadAssetAsync<TextAsset>(storyInfo);
         yield return story;
 

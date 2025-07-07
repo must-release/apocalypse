@@ -9,7 +9,7 @@ public class CharacterManager : MonoBehaviour
     public static CharacterManager Instance { get; private set; }
 
 
-    public void SetPlayerCharacter(Transform player, PlayerType who)
+    public void SetPlayerCharacter(Transform player, PlayerAvatarType who)
     {
         // Find player controller
          if(player.TryGetComponent(out _playerController) == false)

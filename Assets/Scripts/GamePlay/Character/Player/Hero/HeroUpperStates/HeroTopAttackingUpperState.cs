@@ -1,16 +1,24 @@
 ﻿using NUnit.Framework;
 using UnityEngine;
 
-public class HeroTopAttackingUpperState : HeroUpperStateBase
+public class HeroTopAttackingUpperState : PlayerUpperState
 {
     /****** Public Members ******/
 
-    public override HeroUpperStateType StateType => HeroUpperStateType.TopAttacking;
+    public override UpperStateType CurrentState => HeroUpperStateType.TopAttacking;
 
-    public override void InitializeState(IStateController<HeroUpperStateType> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
+    public override void InitializeState(PlayerAvatarType owningAvatar
+                                        , IStateController<UpperStateType> stateController
+                                        , IObjectInteractor objectInteractor
+                                        , IMotionController playerMotion
+                                        , ICharacterInfo playerInfo 
+                                        , Animator stateAnimator    
+                                        , PlayerWeaponBase playerWeapon)
     {
-        base.InitializeState(stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
-        Assert.IsTrue(StateAnimator.HasState(0, _TopAttackingStateHash), "Hero animator does not have top attacking upper state.");
+        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
+
+        Assert.IsTrue(PlayerAvatarType.Hero == owningAvatar, $"State {CurrentState} can only be used by Hero avatar.");
+        Assert.IsTrue(StateAnimator.HasState(0, _TopAttackingStateHash), $"Animator of {owningAvatar} does not have {CurrentState} upper state.");
     }
 
     public override void OnEnter()
@@ -20,7 +28,6 @@ public class HeroTopAttackingUpperState : HeroUpperStateBase
 
         PlayerWeapon.SetWeaponPivotRotation(90);
         _attackCoolTime = PlayerWeapon.Attack();
-
     }
 
     public override void OnUpdate()
@@ -29,11 +36,11 @@ public class HeroTopAttackingUpperState : HeroUpperStateBase
 
         if (0 < _attackCoolTime) return;
 
-        var nextState = _shouldContinueAttack ? HeroUpperStateType.TopAttacking : HeroUpperStateType.LookingUp;
+        var nextState = _shouldContinueAttack ? HeroUpperStateType.TopAttacking : UpperStateType.LookingUp;
         StateController.ChangeState(nextState);
     }
 
-    public override void OnExit(HeroUpperStateType nextState)
+    public override void OnExit(UpperStateType nextState)
     {
         if (HeroUpperStateType.TopAttacking != nextState)
             PlayerWeapon.SetWeaponPivotRotation(0);
@@ -50,20 +57,19 @@ public class HeroTopAttackingUpperState : HeroUpperStateBase
     {
         if (lookUp) return;
 
-        var nextState = PlayerInfo.StandingGround == null ? HeroUpperStateType.Disabled : HeroUpperStateType.Idle;
+        var nextState = PlayerInfo.StandingGround == null ? UpperStateType.Disabled : UpperStateType.Idle;
         StateController.ChangeState(nextState);
     }
 
     public override void Disable()
     {
-        StateController.ChangeState(HeroUpperStateType.Disabled);
+        StateController.ChangeState(UpperStateType.Disabled);
     }
-
 
 
     /****** Private Members ******/
 
-    private readonly int _TopAttackingStateHash = AnimatorState.Hero.GetHash(HeroUpperStateType.TopAttacking);
+    private readonly int _TopAttackingStateHash = AnimatorState.GetHash(PlayerAvatarType.Hero, HeroUpperStateType.TopAttacking);
 
     private float   _attackCoolTime;
     private bool    _shouldContinueAttack;

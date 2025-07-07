@@ -1,43 +1,9 @@
 ﻿using NUnit.Framework;
 using UnityEngine;
 
-public class HeroRunningUpperState : HeroUpperStateBase
+public class HeroRunningUpperState : CommonRunningUpperState
 {
     /****** Public Members ******/
-
-    public override HeroUpperStateType StateType => HeroUpperStateType.Running;
-
-    public override void InitializeState(IStateController<HeroUpperStateType> stateController, IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, Animator stateAnimator, PlayerWeaponBase playerWeapon)
-    {
-        base.InitializeState(stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
-        Assert.IsTrue(StateAnimator.HasState(0, _RunningStateHash), "Hero animator does not have running upper state.");
-    }
-
-    public override void OnEnter()
-    {
-        StateAnimator.Play(_RunningStateHash, 0, LowerBodyStateInfo.AnimationNormalizedTime);
-        StateAnimator.Update(0.0f);
-    }
-    public override void OnUpdate()
-    {
-
-    }
-    public override void OnExit(HeroUpperStateType _)
-    {
-
-    }
-
-    public override void LookUp(bool lookUp)
-    {
-        if (false == lookUp) return;
-
-        StateController.ChangeState(HeroUpperStateType.LookingUp);
-    }
-
-    public override void Stop()
-    {
-        StateController.ChangeState(HeroUpperStateType.Idle);
-    }
 
     public override void Attack()
     {
@@ -46,17 +12,9 @@ public class HeroRunningUpperState : HeroUpperStateBase
 
     public override void Aim(Vector3 aim)
     {
-        if (Vector3.zero == aim) return;
+        if (Vector3.zero == aim) 
+            return;
+
         StateController.ChangeState(HeroUpperStateType.Aiming);
     }
-
-    public override void Disable()
-    {
-        StateController.ChangeState(HeroUpperStateType.Disabled);
-    }
-
-
-    /****** Private Members ******/
-
-    private readonly int _RunningStateHash = AnimatorState.Hero.GetHash(HeroUpperStateType.Running);
 }

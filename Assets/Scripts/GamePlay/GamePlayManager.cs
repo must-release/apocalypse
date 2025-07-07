@@ -15,7 +15,7 @@ public class GamePlayManager : MonoBehaviour, IAsyncLoadObject
 
     public void PlayCutscene() { StartCoroutine(CutsceneCoroutine()); }
 
-    public void InitializePlayerCharacter(Transform player, PlayerType character)
+    public void InitializePlayerCharacter(Transform player, PlayerAvatarType character)
     {
         CharacterManager.Instance.SetPlayerCharacter(player, character);
 

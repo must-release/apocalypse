@@ -79,7 +79,7 @@ public class SceneActivateEvent : GameEventBase<SceneActivateEventInfo>
         Transform player = SceneController.Instance.PlayerTransform;
         if (player)
         {
-            PlayerType character = PlayerManager.Instance.CurrentPlayerType;
+            PlayerAvatarType character = PlayerManager.Instance.CurrentPlayerType;
             GamePlayManager.Instance.InitializePlayerCharacter(player, character);
         }
 

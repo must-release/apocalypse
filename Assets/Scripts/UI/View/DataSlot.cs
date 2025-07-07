@@ -4,7 +4,7 @@ using TMPro;
 
 public class DataSlot
 {
-    public UserData slotData;
+    public SaveData slotData;
     public Button slotButton;
     public int slotNumber;
 
@@ -22,7 +22,7 @@ public class DataSlot
         slotButton = slot.GetComponent<Button>();
     }
 
-    public void SetSlotInfo(UserData data, int idx)
+    public void SetSlotInfo(SaveData data, int idx)
     {
         if (data != null) // When there is data
         {

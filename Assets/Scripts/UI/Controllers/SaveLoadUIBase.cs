@@ -98,7 +98,7 @@ public class SaveLoadUIBase : MonoBehaviour
     private Button _confirmButton;
     private Button _cancelButton;
     private List<DataSlot> _slotList;
-    private List<UserData> _dataList;
+    private List<SaveData> _dataList;
     private DataSlot _selectedSlot;
     private int _currentPage;
     private SubUI _saveOrLoad;
