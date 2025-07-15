@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _eventType: 6
   _isInitialized: 1
-  _slotNum: -1
-  _isNewGame: 1
+  _slotType: 18
+  _loadingChapter: 0
+  _loadingStage: 0
   _isContinueGame: 0
+  _isCreatingNewData: 1

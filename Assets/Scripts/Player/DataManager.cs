@@ -19,16 +19,13 @@ public class DataManager : MonoBehaviour, IAsyncLoadObject
     public bool IsSaving    { get; private set; }
     public bool IsLoaded    => _isLoaded;  
 
-    public void CreateNewGameData()
+    public void CreateSaveData(ChapterType curChapter = ChapterType.Test, int curStage = 1, PlayerAvatarType startAvatar = PlayerAvatarType.Hero)
     {
-        PlayerAvatarType  lastChar    = PlayerAvatarType.Hero;
-        ChapterType curChapter  = ChapterType.Test;
-        int         curStage    = 1;
-        string      saveTime    = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-        string      playTime    = "00:00"; 
+        string saveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+        string playTime = "00:00"; 
 
-        _currentData = new SaveData(curChapter, curStage, null, lastChar, playTime, saveTime);
-        PlayerManager.Instance.SetPlayerData(curChapter, curStage, lastChar);
+        _currentData = new SaveData(curChapter, curStage, null, startAvatar, playTime, saveTime);
+        PlayerManager.Instance.SetPlayerData(curChapter, curStage, startAvatar);
     }
 
     public void SaveUserData(List<GameEventDTO> dtoList, int slotNum, bool takeScreenShot)

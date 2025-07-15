@@ -9,18 +9,33 @@ public class DataLoadEventInfo : GameEventInfo
 {
     /****** Public Members ******/
 
-    public int SlotNum { get { return _slotNum; } private set { _slotNum = value; }}
-    public bool IsNewGame { get {return _isNewGame; } private set { _isNewGame = value; }}
-    public bool IsContinueGame { get { return _isContinueGame; } private set { _isContinueGame = value; }}
-    
-    public void Initialize(int slotNum, bool isNewGame, bool isContinueGame, bool isRuntimeInstance = false)
-    {
-        Assert.IsTrue( false == IsInitialized,          "Duplicate initialization of GameEventInfo is not allowed." );
-        Assert.IsFalse( isNewGame && isContinueGame,    "It can't be both New Game and Continue Game." );
+    public DataSlotType SlotType                { get { return _slotType; } private set { _slotType = value; }}
+    public ChapterType  LoadingChapter          { get { return _loadingChapter; } private set { _loadingChapter = value; } }
+    public int          LoadingStage            { get { return _loadingStage; } private set { _loadingStage = value; } }
+    public bool         IsContinueGame          { get { return _isContinueGame; } private set { _isContinueGame = value; }}
+    public bool         IsCreatingNewData       { get { return _isCreatingNewData; } private set { _isCreatingNewData = value; } }
 
-        SlotNum             = slotNum;
-        IsNewGame           = isNewGame;
-        IsContinueGame      = isContinueGame;
+    public void Initialize() // Default initialization is continue game
+    {
+        IsContinueGame      = true;
+        IsInitialized       = true;
+        IsRuntimeInstance   = true;
+    }
+
+    public void Initialize(DataSlotType slotType)
+    {
+        Assert.IsTrue(slotType != DataSlotType.DataSlotTypeCount, "Invalid data slot type for DataLoadEventInfo initialization.");
+
+        _slotType               = slotType;
+        IsInitialized           = true;
+        IsRuntimeInstance       = true;
+    }
+
+    public void Initialize(ChapterType loadingChapter, int loadingStage)
+    {
+        _isCreatingNewData  = true;
+        _loadingChapter     = loadingChapter;
+        _loadingStage       = loadingStage;
         IsInitialized       = true;
         IsRuntimeInstance   = true;
     }
@@ -35,6 +50,7 @@ public class DataLoadEventInfo : GameEventInfo
 
     /****** Protected Members ******/
 
+
     protected override void OnEnable()
     {
         EventType = GameEventType.DataLoad;
@@ -42,26 +58,27 @@ public class DataLoadEventInfo : GameEventInfo
 
     protected override void OnValidate()
     {
-        if (_isNewGame && _isContinueGame)
-            Debug.LogError("New Game 이면서 Continue Game 일 수는 없습니다.");
-
-        if (0 < _slotNum || IsNewGame || IsContinueGame)
-            IsInitialized = true;
+        Assert.IsTrue(_isCreatingNewData ^ _isContinueGame, "Both continue game and loading from slot cannot be executed.");
     }
+
     public override GameEventDTO ToDTO()
     {
         return new DataLoadEventDTO
         {
-            EventType       = EventType,
-            IsNewGame       = _isNewGame,
-            IsContinueGame  = _isContinueGame,
-            SlotNum         = _slotNum
+            EventType           = EventType,
+            SlotType            = _slotType,
+            LoadingChapter      = _loadingChapter,
+            LoadingStage        = _loadingStage,
+            IsContinueGame      = _isContinueGame,
+            IsCreatingNewData   = _isCreatingNewData
         };
     }
 
     /****** Private Members ******/
 
-    [SerializeField] private int    _slotNum        = -1; // Number of the data slot to load data
-    [SerializeField] private bool   _isNewGame      = false; // If true, create new game data
-    [SerializeField] private bool   _isContinueGame = false; // If true, load most recent saved data
+    [SerializeField] private DataSlotType   _slotType           = DataSlotType.DataSlotTypeCount;
+    [SerializeField] private ChapterType    _loadingChapter     = ChapterType.ChapterTypeCount;
+    [SerializeField] private int            _loadingStage       = 0;
+    [SerializeField] private bool           _isContinueGame     = false; // If true, load most recent saved data
+    [SerializeField] private bool           _isCreatingNewData  = false; // If true, load from a specific data slot, otherwise create new data
 }

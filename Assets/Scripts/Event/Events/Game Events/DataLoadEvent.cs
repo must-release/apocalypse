@@ -34,50 +34,34 @@ public class DataLoadEvent : GameEventBase<DataLoadEventInfo>
 
         base.PlayEvent();
 
-        if (Info.IsNewGame)
+        if (Info.IsCreatingNewData)
         {
-            DataManager.Instance.CreateNewGameData();
+            DataManager.Instance.CreateSaveData(Info.LoadingChapter, Info.LoadingStage);
         }
         else
         {
-            List<GameEventDTO> dtoList = Info.IsContinueGame ?
-                DataManager.Instance.LoadRecentData() :
-                DataManager.Instance.LoadGameData(Info.SlotNum);
+            List<GameEventDTO> dtoList = Info.IsContinueGame
+                ? DataManager.Instance.LoadRecentData()
+                : DataManager.Instance.LoadGameData((int)Info.SlotType);
 
-            if (null == dtoList)
+            if (null == EventContainer)
             {
-                var uiEvent = GameEventFactory.CreateUIChangeEvent(BaseUI.Control);
-
-                if (null != EventContainer)
+                foreach (GameEventDTO eventDTO in dtoList)
                 {
-                    EventContainer.AddNewEvent(uiEvent);
-                }
-                else
-                {
-                    GameEventManager.Instance.Submit(uiEvent);
+                    var gameEvent = GameEventFactory.CreateFromDTO(eventDTO);
+                    GameEventManager.Instance.Submit(gameEvent);
                 }
             }
             else
             {
-                if (null == EventContainer)
+                EventContainer.OnTerminate += () =>
                 {
                     foreach (GameEventDTO eventDTO in dtoList)
                     {
                         var gameEvent = GameEventFactory.CreateFromDTO(eventDTO);
                         GameEventManager.Instance.Submit(gameEvent);
                     }
-                }
-                else
-                {
-                    EventContainer.OnTerminate += () =>
-                    {
-                        foreach (GameEventDTO eventDTO in dtoList)
-                        {
-                            var gameEvent = GameEventFactory.CreateFromDTO(eventDTO);
-                            GameEventManager.Instance.Submit(gameEvent);
-                        }
-                    };
-                }
+                };
             }
         }
 

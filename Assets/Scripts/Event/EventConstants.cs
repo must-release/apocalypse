@@ -1,7 +1,7 @@
     public enum GameEventType
     {
         Story, Tutorial, Cutscene, MapTransition, UIChange,
-        DataSave, DataLoad, SceneLoad, SceneActivate, Choice, ScreenEffect, Sequential,
+        DataSave, DataLoad, SceneLoad, SceneActivate, Choice, ScreenEffect, Sequential, StageTransition,
 
         GameEventTypeCount
     };

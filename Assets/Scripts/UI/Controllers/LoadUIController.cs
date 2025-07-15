@@ -61,7 +61,7 @@ public class LoadUIController : SaveLoadUIBase, IUIController<SubUI>
 
         var loadEvent = GameEventFactory.CreateSequentialEvent(new List<IGameEvent>
         {
-            GameEventFactory.CreateDataLoadEvent(slotNum, false, false),
+            GameEventFactory.CreateDataLoadEvent((DataSlotType)slotNum),
             GameEventFactory.CreateSceneLoadEvent(SceneType.StageScene),
             GameEventFactory.CreateSceneActivateEvent()
         });
