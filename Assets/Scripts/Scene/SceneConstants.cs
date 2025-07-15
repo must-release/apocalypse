@@ -11,4 +11,9 @@ public static class ChapterStageCount
                 return 0;
         }
     }
+
+    public static bool IsStageIndexValid(ChapterType chapter, int stage)
+    {
+        return (0 < stage) && (stage <= GetStageCount(chapter));
+    }
 }

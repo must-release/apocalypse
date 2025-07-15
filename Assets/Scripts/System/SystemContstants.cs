@@ -1,8 +1,7 @@
 public enum SystemType
 {
-    // Don't change the sequence
     GameManager,
-    AISystem, UISystem, UtilitySystem, Cameras, StorySystem, GamePlaySystem, GameSceneSystem,
+    Camera, AISystem, UISystem, UtilitySystem, StorySystem, GamePlaySystem, GameSceneSystem,
     EventSystem,
 
     SystemTypeCount

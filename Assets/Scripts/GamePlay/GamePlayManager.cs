@@ -8,9 +8,7 @@ public class GamePlayManager : MonoBehaviour, IAsyncLoadObject
     /****** Public Members ******/
 
     public static GamePlayManager Instance { get; private set; }
-
     public bool IsCutscenePlaying { get; private set; }
-
     public bool IsLoaded { get; private set; }
 
     public void PlayCutscene() { StartCoroutine(CutsceneCoroutine()); }

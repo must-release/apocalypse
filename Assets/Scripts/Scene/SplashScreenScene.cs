@@ -1,8 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 
 public class SplashScreenScene : MonoBehaviour, IScene

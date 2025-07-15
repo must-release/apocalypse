@@ -1,5 +1,5 @@
 using Cysharp.Threading.Tasks;
-using NUnit.Framework;
+using UnityEngine.Assertions;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -27,6 +27,7 @@ public class StageManager : MonoBehaviour
     public async UniTask AsyncInitializeStage()
     {
         InitializeTilemap();
+        SetStageTransitionInfo();
         await WaitForAsyncObjects();
 
         Assert.IsTrue(null != _playerStart, $"PlayerStart component is missing in the {_chapterType}_{_stageIndex}.");
@@ -70,6 +71,8 @@ public class StageManager : MonoBehaviour
     public void SnapToPoint(SnapPoint targetPoint)
     {
         Assert.IsTrue(null != targetPoint, $"Trying to snap null point in the {_chapterType}_{_stageIndex}.");
+        Assert.IsTrue(null != EnterSnapPoint, $"EnterSnapPoint is not set in the {_chapterType}_{_stageIndex}.");
+        Assert.IsTrue(null != ExitSnapPoint, $"ExitSnapPoint is not set in the {_chapterType}_{_stageIndex}.");
         Assert.IsTrue(2 == (int)SnapPointType.SnapPointTypeCount, "SnapPointType enum should have exactly 2 values.");
 
         Vector3 moveVec = (targetPoint.Type == SnapPointType.Enter)
@@ -83,12 +86,20 @@ public class StageManager : MonoBehaviour
     /****** Private Members ******/
 
     [Header("Stage Settings")]
-    [SerializeField] private ChapterType _chapterType;
-    [SerializeField] private int _stageIndex;
-    [SerializeField] private bool _canGoBackToPreviousStage;
+    [SerializeField] private ChapterType    _chapterType;
+    [SerializeField] private int            _stageIndex;
+    [SerializeField] private bool           _canGoBackToPreviousStage;
 
-    private Tilemap _tilemap;
-    private PlayerStart _playerStart;
+    private const int _StageTranisitionTriggerCount = 2;
+
+    private List<StageTransitionTrigger> _stageTransitionTriggers = new List<StageTransitionTrigger>();
+    private Tilemap                     _tilemap;
+    private PlayerStart                 _playerStart;
+
+    private void OnValidate()
+    {
+        gameObject.name = $"{_chapterType}_{_stageIndex}";
+    }
 
     private void InitializeTilemap()
     {
@@ -122,17 +133,25 @@ public class StageManager : MonoBehaviour
             Vector3     worldPos        = _tilemap.GetCellCenterWorld(cellPos);
             GameObject  replacingObject = Instantiate(replacementTile.ReplacingObject, worldPos, Quaternion.identity, _tilemap.transform);
 
-            if (replacingObject.TryGetComponent(out PlayerStart playerStart))
+            if (replacingObject.TryGetComponent(out IStageElement stageElement))
             {
-                SetPlayerStart(playerStart);
-            }
-            else if (replacingObject.TryGetComponent(out SnapPoint snapPoint))
-            {
-                SetSnapPoint(snapPoint);
-            }
-            else if (replacingObject.TryGetComponent(out IPartObject partObject))
-            {
-                SearchPartsAndMakeCompositeObject(i, visitedTile, partObject);
+                if (stageElement is PlayerStart playerStart)
+                {
+                    SetPlayerStart(playerStart);
+                }
+                else if (stageElement is SnapPoint snapPoint)
+                {
+                    SetSnapPoint(snapPoint);
+                }
+                else if (stageElement is StageTransitionTrigger transitionTrigger)
+                {
+                    Assert.IsTrue(_stageTransitionTriggers.Count < _StageTranisitionTriggerCount, $"More than {_StageTranisitionTriggerCount} stage transition trigger is found.");
+                    _stageTransitionTriggers.Add(transitionTrigger);
+                }
+                else if (stageElement is IPartObject partObject)
+                {
+                    SearchPartsAndMakeCompositeObject(i, visitedTile, partObject);
+                }
             }
         }
     }
@@ -212,6 +231,44 @@ public class StageManager : MonoBehaviour
         }
 
         composite.Initialize();
+    }
+
+    private void SetStageTransitionInfo()
+    {
+        Assert.IsTrue(null != EnterSnapPoint, $"EnterSnapPoint is not set in the {_chapterType}_{_stageIndex}.");
+        Assert.IsTrue(null != ExitSnapPoint, $"ExitSnapPoint is not set in the {_chapterType}_{_stageIndex}.");
+        Assert.IsTrue(_stageTransitionTriggers.Count <= _StageTranisitionTriggerCount, $"Stage transition triggers are not set correctly in the {_chapterType}_{_stageIndex}.");
+
+        foreach (var trigger in _stageTransitionTriggers)
+        {
+            var distFromEnter = Vector3.Distance(trigger.transform.position, EnterSnapPoint.transform.position);
+            var distFromExit = Vector3.Distance(trigger.transform.position, ExitSnapPoint.transform.position);
+
+            if (distFromEnter < distFromExit)
+            {
+                if (ChapterStageCount.IsStageIndexValid(_chapterType, _stageIndex - 1))
+                {
+                    ChapterType targetChapter = _chapterType;
+                    int targetStage = _stageIndex - 1;
+                    trigger.RegisterTransitionEvent(() => CreateAndPlayStageTransitionEvent(targetChapter, targetStage));
+                }
+            }
+            else
+            {
+                if (ChapterStageCount.IsStageIndexValid(_chapterType, _stageIndex + 1))
+                {
+                    ChapterType targetChapter = _chapterType;
+                    int targetStage = _stageIndex + 1;
+                    trigger.RegisterTransitionEvent(() => CreateAndPlayStageTransitionEvent(targetChapter, targetStage));
+                }
+            }
+        }
+    }
+
+    private void CreateAndPlayStageTransitionEvent(ChapterType targetChapter, int targetStage)
+    {
+        var stageTransitionEvent = GameEventFactory.CreateStageTransitionEvent(targetChapter, targetStage);
+        GameEventManager.Instance.Submit(stageTransitionEvent);
     }
 
     private async UniTask WaitForAsyncObjects()

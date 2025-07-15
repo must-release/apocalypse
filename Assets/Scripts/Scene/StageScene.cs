@@ -1,8 +1,5 @@
 using Cysharp.Threading.Tasks;
 using NUnit.Framework;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -45,7 +42,7 @@ public class StageScene : MonoBehaviour, IScene
         _currentStage = await AsyncLoadStage(currentStagePath);
         _currentStage.gameObject.SetActive(false);
 
-        if (_currentStage.CanGoBackToPreviousStage && IsStageIndexValid(chapter, stage - 1))
+        if (_currentStage.CanGoBackToPreviousStage && ChapterStageCount.IsStageIndexValid(chapter, stage - 1))
         {
             string prevStagePath = $"Stage/{chapter}_{stage - 1}";
             _prevStage = await AsyncLoadStage(prevStagePath);
@@ -56,7 +53,7 @@ public class StageScene : MonoBehaviour, IScene
             _currentStage.SetupEntranceBarrier();
         }
 
-        if (IsStageIndexValid(chapter, stage + 1))
+        if (ChapterStageCount.IsStageIndexValid(chapter, stage + 1))
         {
             string nextStagePath = $"Stage/{chapter}_{stage + 1}";
             _nextStage = await AsyncLoadStage(nextStagePath);
@@ -75,7 +72,7 @@ public class StageScene : MonoBehaviour, IScene
             await UniTask.CompletedTask;
         }
 
-         StageManager stageManager = loadHandle.Result.GetComponent<StageManager>();
+        StageManager stageManager = loadHandle.Result.GetComponent<StageManager>();
         if (null == stageManager)
         {
             Logger.Write(LogCategory.AssetLoad, $"Stage {stage} does not have a StageManager component", LogLevel.Error, true);
@@ -118,8 +115,4 @@ public class StageScene : MonoBehaviour, IScene
         Logger.Write(LogCategory.GameScene, $"Placing player at {_currentStage.PlayerStartPosition} in stage", LogLevel.Log, true);
     }
 
-    private bool IsStageIndexValid(ChapterType chapter, int stage)
-    {
-        return 0 < stage && stage <= ChapterStageCount.GetStageCount(chapter);
-    }
 }

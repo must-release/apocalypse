@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using UnityEngine;
 
-public class SnapPoint : MonoBehaviour
+public class SnapPoint : MonoBehaviour, IStageElement
 {
     /****** Public Members ******/
 
