@@ -5,15 +5,15 @@ using System;
 
 [Serializable]
 [CreateAssetMenu(fileName = "NewStoryEventInfo", menuName = "EventInfo/StoryEvent", order = 0)]
-public class StoryEventInfo : GameEventInfo
+public class StoryEventInfo : GameEventInfo, ISerializableEventInfo
 {
     /****** Public Members ******/
 
-    public ChapterType    StoryStage      => _storyStage;
-    public int      StoryNumber     => _storyNumber;
-    public int      ReadBlockCount  => _readBlockCount;
-    public int      ReadEntryCount  => _readEntryCount;  
-    public bool     IsOnMap         => _isOnMap;    
+    public ChapterType  StoryStage      => _storyStage;
+    public int          StoryNumber     => _storyNumber;
+    public int          ReadBlockCount  => _readBlockCount;
+    public int          ReadEntryCount  => _readEntryCount;  
+    public bool         IsOnMap         => _isOnMap;    
 
     public void Initialize(ChapterType storyStage, int storyNumber, int readBlockCount, int readEntryCount, bool isOnMap, bool isRuntimeInstance = false)
     {
@@ -47,7 +47,7 @@ public class StoryEventInfo : GameEventInfo
         return clone;
     }
 
-    public override GameEventDTO ToDTO()
+    public GameEventDTO ToDTO()
     {
         return new StoryEventDTO
         {
@@ -76,9 +76,9 @@ public class StoryEventInfo : GameEventInfo
 
 
     /****** Private Members ******/
-    [SerializeField] private ChapterType  _storyStage         = ChapterType.ChapterTypeCount;
-    [SerializeField] private int    _storyNumber        = 0;
-    [SerializeField] private int    _readBlockCount     = 0;
-    [SerializeField] private int    _readEntryCount     = 0;
-    [SerializeField] private bool   _isOnMap            = false; // If story is played on the map
+    [SerializeField] private ChapterType    _storyStage         = ChapterType.ChapterTypeCount;
+    [SerializeField] private int            _storyNumber        = 0;
+    [SerializeField] private int            _readBlockCount     = 0;
+    [SerializeField] private int            _readEntryCount     = 0;
+    [SerializeField] private bool           _isOnMap            = false; // If story is played on the map
 }

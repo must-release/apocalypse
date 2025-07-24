@@ -5,7 +5,7 @@ using System;
 
 [Serializable]
 [CreateAssetMenu(fileName = "NewDataSaveEventInfo", menuName = "EventInfo/DataSaveEvent", order = 0)]
-public class DataSaveEventInfo : GameEventInfo
+public class DataSaveEventInfo : GameEventInfo, ISerializableEventInfo
 {
     /****** Public Members ******/
 
@@ -42,7 +42,7 @@ public class DataSaveEventInfo : GameEventInfo
             IsInitialized = true;
     }
 
-    public override GameEventDTO ToDTO()
+    public GameEventDTO ToDTO()
     {
         return new DataSaveEventDTO
         {

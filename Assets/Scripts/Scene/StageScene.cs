@@ -97,6 +97,15 @@ public class StageScene : MonoBehaviour, IScene
         _isMonitoringPlayer = false;
     }
 
+    public void RespawnPlayer()
+    {
+        Assert.IsTrue(null != _currentStage, "Current stage is not initialized.");
+        Assert.IsTrue(null != _playerTransform, "Player transform is not initialized.");
+
+        _playerTransform.position = _currentStage.PlayerStartPosition;
+        Logger.Write(LogCategory.GameScene, $"Respawning player at {_currentStage.PlayerStartPosition}", LogLevel.Log, true);
+    }
+
 
     /****** Private Members ******/
 

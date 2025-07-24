@@ -12,7 +12,7 @@ public class KillZone : MonoBehaviour
             if (character.IsPlayer)
             {
                 await UniTask.Delay(_KillDelay, cancellationToken: this.GetCancellationTokenOnDestroy());
-                GameEventManager.Instance.Submit(GameEventFactory.CreateCommonEvent(CommonEventType.Continue));
+                GameEventManager.Instance.Submit(GameEventFactory.CreateFallDeathEvent(1));
             }
         }
     }

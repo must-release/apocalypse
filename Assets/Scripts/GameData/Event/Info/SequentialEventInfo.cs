@@ -2,12 +2,13 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Assertions;
 using System;
+using System.Linq;
 using Unity.VisualScripting;
 
 
 [Serializable]
 [CreateAssetMenu(menuName = "EventInfo/SequentialEventInfo", fileName = "NewSequentialEventInfo")]
-public class SequentialEventInfo : GameEventInfo
+public class SequentialEventInfo : GameEventInfo, ISerializableEventInfo
 {
     /****** Public Members ******/
 
@@ -41,12 +42,12 @@ public class SequentialEventInfo : GameEventInfo
         return clone;
     }
 
-    public override GameEventDTO ToDTO()
+    public GameEventDTO ToDTO()
     {
         return new SequentialEventDTO
         {
             EventType   = EventType,
-            EventDTOs  = _eventInfos.ConvertAll(info => info.ToDTO()),
+            EventDTOs  = _eventInfos.ConvertAll(info => (info as ISerializableEventInfo)?.ToDTO()).Where(dto => dto != null).ToList(),
             StartIndex  = _startIndex
         };
     }

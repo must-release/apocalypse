@@ -30,14 +30,6 @@ public class ScreenEffectEventInfo : GameEventInfo
         return clone;
     }
 
-    public override GameEventDTO ToDTO()
-    {
-        return new ScreenEffectEventDTO
-        {
-            EventType = EventType,
-            ScreenEffectType = _screenEffectType
-        };
-    }
 
     /****** Protected Members ******/
 

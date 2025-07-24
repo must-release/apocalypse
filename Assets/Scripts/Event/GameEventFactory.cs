@@ -175,12 +175,6 @@ public static class GameEventFactory
         return evt;
     }
 
-    public static IGameEvent CreateScreenEffectEvent(ScreenEffectEventDTO dto)
-    {
-        Assert.IsTrue(null != dto, "Cannot create ScreenEffectEvent from null DTO");
-        return CreateScreenEffectEvent(dto.ScreenEffectType);
-    }
-
     public static IGameEvent CreateStoryEvent(ChapterType storyStage, int storyNumber, int readBlockCount, int readEntryCount, bool isOnMap)
     {
         var info = ScriptableObject.CreateInstance<StoryEventInfo>();
@@ -255,10 +249,14 @@ public static class GameEventFactory
         return evt;
     }
 
-    public static IGameEvent CreateStageTransitionEvent(StageTransitionEventDTO dto)
+    public static IGameEvent CreateFallDeathEvent(int hpDamage = 10)
     {
-        Assert.IsTrue(null != dto, "Cannot create StageTransitionEvent from null DTO");
-        return CreateStageTransitionEvent(dto.TargetChapter, dto.TargetStage);
+        var info = ScriptableObject.CreateInstance<FallDeathEventInfo>();
+        info.Initialize(hpDamage);
+
+        var evt = GameEventPool<FallDeathEvent, FallDeathEventInfo>.Get(EventHost, $"FallDeathEvent_{hpDamage}");
+        evt.Initialize(info);
+        return evt;
     }
 
     public static IGameEvent CreateFromInfo<TEventInfo>(TEventInfo info)
@@ -323,9 +321,7 @@ public static class GameEventFactory
         { GameEventType.DataSave,           dto => CreateDataSaveEvent(dto as DataSaveEventDTO) },
         { GameEventType.SceneActivate,      dto => CreateSceneActivateEvent(dto as SceneActivateEventDTO) },
         { GameEventType.SceneLoad,          dto => CreateSceneLoadEvent(dto as SceneLoadEventDTO) },
-        { GameEventType.ScreenEffect,       dto => CreateScreenEffectEvent(dto as ScreenEffectEventDTO) },
         { GameEventType.Sequential,         dto => CreateSequentialEvent(dto as SequentialEventDTO) },   
-        { GameEventType.StageTransition,    dto => CreateStageTransitionEvent(dto as StageTransitionEventDTO) },
         { GameEventType.Story,              dto => CreateStoryEvent(dto as StoryEventDTO) },
         { GameEventType.UIChange,           dto => CreateUIChangeEvent(dto as UIChangeEventDTO) },
     };

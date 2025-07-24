@@ -8,8 +8,8 @@ public class StageTransitionEventInfo : GameEventInfo
 {
     /****** Public Members ******/
 
-    public ChapterType TargetChapter { get { return _targetChapter; } private set { _targetChapter = value; } }
-    public int TargetStage { get { return _targetStage; } private set { _targetStage = value; } }
+    public ChapterType  TargetChapter   { get { return _targetChapter; } private set { _targetChapter = value; } }
+    public int          TargetStage     { get { return _targetStage; } private set { _targetStage = value; } }
 
     public void Initialize(ChapterType targetChapter, int targetStage)
     {
@@ -44,18 +44,9 @@ public class StageTransitionEventInfo : GameEventInfo
         }
     }
 
-    public override GameEventDTO ToDTO()
-    {
-        return new StageTransitionEventDTO
-        {
-            EventType = EventType,
-            TargetChapter = _targetChapter,
-            TargetStage = _targetStage
-        };
-    }
 
     /****** Private Members ******/
 
-    [SerializeField] private ChapterType _targetChapter = ChapterType.ChapterTypeCount;
-    [SerializeField] private int _targetStage = 0;
+    [SerializeField] private ChapterType    _targetChapter  = ChapterType.ChapterTypeCount;
+    [SerializeField] private int            _targetStage    = 0;
 }

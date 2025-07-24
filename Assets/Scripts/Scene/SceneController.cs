@@ -60,6 +60,18 @@ public class SceneController : MonoBehaviour
         }
     }
 
+    public void ExecutePlayerRespawn()
+    {
+        if (_currentScene is StageScene stageScene)
+        {
+            stageScene.RespawnPlayer();
+        }
+        else
+        {
+            Logger.Write(LogCategory.GameScene, "Current scene is not a StageScene. Cannot execute player respawn.", LogLevel.Warning, true);
+        }
+    }
+
 
     /****** Private Members ******/
 

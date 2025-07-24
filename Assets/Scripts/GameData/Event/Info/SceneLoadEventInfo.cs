@@ -5,13 +5,13 @@ using System;
 
 [Serializable]
 [CreateAssetMenu(fileName = "NewSceneLoadEventInfo", menuName = "EventInfo/SceneLoadEvent", order = 0)]
-public class SceneLoadEventInfo : GameEventInfo
+public class SceneLoadEventInfo : GameEventInfo, ISerializableEventInfo
 {
     /****** Public Members ******/
 
     public SceneType LoadingScene { get { return _loadingScene; } private set { _loadingScene = value; }}
 
-    public void Initialize(SceneType loadingScene, bool isRuntimeInstance = false)
+    public void Initialize(SceneType loadingScene)
     {
         Assert.IsTrue( false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed." );
 
@@ -28,7 +28,7 @@ public class SceneLoadEventInfo : GameEventInfo
         return clone;
     }
 
-    public override GameEventDTO ToDTO()
+    public GameEventDTO ToDTO()
     {
         return new SceneLoadEventDTO
         {

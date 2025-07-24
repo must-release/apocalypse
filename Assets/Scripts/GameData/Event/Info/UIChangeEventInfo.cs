@@ -5,7 +5,7 @@ using System;
 
 [Serializable]
 [CreateAssetMenu(fileName = "NewUIChangeEventInfo", menuName = "EventInfo/UIChangeEvent", order = 0)]
-public class UIChangeEventInfo : GameEventInfo
+public class UIChangeEventInfo : GameEventInfo, ISerializableEventInfo
 {
     /****** Public Members ******/
 
@@ -29,7 +29,7 @@ public class UIChangeEventInfo : GameEventInfo
     }
 
 
-    public override GameEventDTO ToDTO()
+    public GameEventDTO ToDTO()
     {
         return new UIChangeEventDTO
         {

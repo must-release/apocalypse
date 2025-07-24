@@ -4,7 +4,7 @@ using System;
 
 [Serializable]
 [CreateAssetMenu(fileName = "NewCutsceneEventInfo", menuName = "EventInfo/CutsceneEvent", order = 0)]
-public class CutsceneEventInfo : GameEventInfo
+public class CutsceneEventInfo : GameEventInfo, ISerializableEventInfo
 {
     /****** Public Members ******/
 
@@ -24,7 +24,7 @@ public class CutsceneEventInfo : GameEventInfo
         return clone;
     }
 
-    public override GameEventDTO ToDTO()
+    public GameEventDTO ToDTO()
     {
         return new CutsceneEventDTO
         {

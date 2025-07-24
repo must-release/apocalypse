@@ -5,7 +5,7 @@ using System;
 
 [Serializable]
 [CreateAssetMenu(fileName = "NewSceneActivateEventInfo", menuName = "EventInfo/SceneActivateEvent", order = 0)]
-public class SceneActivateEventInfo : GameEventInfo
+public class SceneActivateEventInfo : GameEventInfo, ISerializableEventInfo
 {
     /****** Public Members ******/
 
@@ -28,7 +28,7 @@ public class SceneActivateEventInfo : GameEventInfo
         return clone;
     }
 
-    public override GameEventDTO ToDTO()
+    public GameEventDTO ToDTO()
     {
         return new SceneActivateEventDTO
         {

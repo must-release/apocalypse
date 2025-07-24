@@ -2,8 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Assertions;
-using System;
-using UnityEngine.AddressableAssets;
+using System.Linq;
 
 
 public class DataSaveEvent : GameEventBase<DataSaveEventInfo>
@@ -69,7 +68,7 @@ public class DataSaveEvent : GameEventBase<DataSaveEventInfo>
             shouldTakeScreenShot = false;
             eventList.Add(GameEventFactory.CreateUIChangeEvent(BaseUI.Control).EventInfo);
         }
-        var dtoList = eventList.ConvertAll(eventInfo => eventInfo.ToDTO());
+        var dtoList = eventList.ConvertAll(eventInfo => (eventInfo as ISerializableEventInfo)?.ToDTO()).Where(dto => dto != null).ToList();
         DataManager.Instance.SaveUserData(dtoList, Info.SlotNum, shouldTakeScreenShot);
 
         yield return new WaitWhile(() => DataManager.Instance.IsSaving);

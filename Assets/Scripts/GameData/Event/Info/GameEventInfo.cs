@@ -25,7 +25,6 @@ public abstract class GameEventInfo : ScriptableObject
     }
 
     public abstract GameEventInfo Clone();
-    public abstract GameEventDTO ToDTO();
 
     /****** Protected Members ******/
 

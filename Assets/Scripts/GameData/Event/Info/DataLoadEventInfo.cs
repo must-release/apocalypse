@@ -5,7 +5,7 @@ using System;
 
 [Serializable]
 [CreateAssetMenu(fileName = "NewDataLoadEventInfo", menuName = "EventInfo/DataLoadEvent", order = 0)]
-public class DataLoadEventInfo : GameEventInfo
+public class DataLoadEventInfo : GameEventInfo, ISerializableEventInfo
 {
     /****** Public Members ******/
 
@@ -61,7 +61,7 @@ public class DataLoadEventInfo : GameEventInfo
         Assert.IsTrue(_isCreatingNewData ^ _isContinueGame, "Both continue game and loading from slot cannot be executed.");
     }
 
-    public override GameEventDTO ToDTO()
+    public GameEventDTO ToDTO()
     {
         return new DataLoadEventDTO
         {

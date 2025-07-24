@@ -5,7 +5,7 @@ using System;
 
 [Serializable]
 [CreateAssetMenu(fileName = "NewChoiceEventInfo", menuName = "EventInfo/ChoiceEvent", order = 0)]
-public class ChoiceEventInfo : GameEventInfo
+public class ChoiceEventInfo : GameEventInfo, ISerializableEventInfo
 {
     /****** Public Members ******/
 
@@ -31,7 +31,7 @@ public class ChoiceEventInfo : GameEventInfo
         return clone;
     }
 
-    public override GameEventDTO ToDTO()
+    public GameEventDTO ToDTO()
     {
         return new ChoiceEventDTO
         {
