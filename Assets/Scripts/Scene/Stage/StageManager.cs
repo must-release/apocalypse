@@ -11,7 +11,7 @@ public class StageManager : MonoBehaviour
 {
     /****** Public Members ******/
 
-    public Vector3      PlayerStartPosition
+    public Vector3          PlayerStartPosition
     {
         get
         {
@@ -19,20 +19,26 @@ public class StageManager : MonoBehaviour
             return _playerStart.StartPosition;
         }
     }
-    public SnapPoint    EnterSnapPoint { get; private set; }
-    public SnapPoint    ExitSnapPoint  { get; private set; }
-    
+    public SnapPoint        EnterSnapPoint  { get; private set; }
+    public SnapPoint        ExitSnapPoint   { get; private set; }
+    public BoxCollider2D    StageBoundary   { get; private set; }
+    public FollowCamera     StageCamera     { get; private set; }
+    public ChapterType      ChapterType     => _chapterType;
+    public int              StageIndex      => _stageIndex;
+
     public bool CanGoBackToPreviousStage => _canGoBackToPreviousStage;
 
     public async UniTask AsyncInitializeStage()
     {
         InitializeTilemap();
-        SetStageTransitionInfo();
+        SetStageBoundary();
+        SetupStageCamera();
         await WaitForAsyncObjects();
 
         Assert.IsTrue(null != _playerStart, $"PlayerStart component is missing in the {_chapterType}_{_stageIndex}.");
         Assert.IsTrue(null != EnterSnapPoint, $"EnterSnapPoint component is missing in the {_chapterType}_{_stageIndex}.");
         Assert.IsTrue(null != ExitSnapPoint, $"ExitSnapPoint component is missing in the {_chapterType}_{_stageIndex}.");
+        Assert.IsTrue(null != StageCamera, $"StageCamera component is missing in the {_chapterType}_{_stageIndex}.");
     }
 
     public void DestroyStage()
@@ -40,10 +46,10 @@ public class StageManager : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void SetupEntranceBarrier()
+    public void BlockReturnToPreviousStage()
     {
         Assert.IsTrue(null != EnterSnapPoint, $"EnterSnapPoint is not set in the {_chapterType}_{_stageIndex}.");
-        Assert.IsTrue(false == _canGoBackToPreviousStage, $"Cannot setup entrance barrier in the {_chapterType}_{_stageIndex}. Going back to previous stage is allowed.");
+        Assert.IsTrue(false == _canGoBackToPreviousStage, $"Cannot block return to previous stage in the {_chapterType}_{_stageIndex}. Going back to previous stage is allowed.");
         Assert.IsTrue(null != _tilemap, $"Tilemap component is missing it the {_chapterType}_{_stageIndex}.");
         Assert.IsTrue(4 == (int)SnapDirection.SnapDirectionCount, "SnapDirection enum should have exactly 4 values.");
 
@@ -91,8 +97,6 @@ public class StageManager : MonoBehaviour
     [SerializeField] private bool           _canGoBackToPreviousStage;
 
     private const int _StageTranisitionTriggerCount = 2;
-
-    private List<StageTransitionTrigger> _stageTransitionTriggers = new List<StageTransitionTrigger>();
     private Tilemap                     _tilemap;
     private PlayerStart                 _playerStart;
 
@@ -142,11 +146,6 @@ public class StageManager : MonoBehaviour
                 else if (stageElement is SnapPoint snapPoint)
                 {
                     SetSnapPoint(snapPoint);
-                }
-                else if (stageElement is StageTransitionTrigger transitionTrigger)
-                {
-                    Assert.IsTrue(_stageTransitionTriggers.Count < _StageTranisitionTriggerCount, $"More than {_StageTranisitionTriggerCount} stage transition trigger is found.");
-                    _stageTransitionTriggers.Add(transitionTrigger);
                 }
                 else if (stageElement is IPartObject partObject)
                 {
@@ -233,43 +232,25 @@ public class StageManager : MonoBehaviour
         composite.Initialize();
     }
 
-    private void SetStageTransitionInfo()
+    private void SetStageBoundary()
     {
-        Assert.IsTrue(null != EnterSnapPoint, $"EnterSnapPoint is not set in the {_chapterType}_{_stageIndex}.");
-        Assert.IsTrue(null != ExitSnapPoint, $"ExitSnapPoint is not set in the {_chapterType}_{_stageIndex}.");
-        Assert.IsTrue(_stageTransitionTriggers.Count <= _StageTranisitionTriggerCount, $"Stage transition triggers are not set correctly in the {_chapterType}_{_stageIndex}.");
-
-        foreach (var trigger in _stageTransitionTriggers)
-        {
-            var distFromEnter = Vector3.Distance(trigger.transform.position, EnterSnapPoint.transform.position);
-            var distFromExit = Vector3.Distance(trigger.transform.position, ExitSnapPoint.transform.position);
-
-            if (distFromEnter < distFromExit)
-            {
-                if (ChapterStageCount.IsStageIndexValid(_chapterType, _stageIndex - 1))
-                {
-                    ChapterType targetChapter = _chapterType;
-                    int targetStage = _stageIndex - 1;
-                    trigger.RegisterTransitionEvent(() => CreateAndPlayStageTransitionEvent(targetChapter, targetStage));
-                }
-            }
-            else
-            {
-                if (ChapterStageCount.IsStageIndexValid(_chapterType, _stageIndex + 1))
-                {
-                    ChapterType targetChapter = _chapterType;
-                    int targetStage = _stageIndex + 1;
-                    trigger.RegisterTransitionEvent(() => CreateAndPlayStageTransitionEvent(targetChapter, targetStage));
-                }
-            }
-        }
+        StageBoundary = GetComponentInChildren<StageBoundary>()?.GetComponent<BoxCollider2D>();
+        Assert.IsTrue(null != StageBoundary, $"StageBoundary is not set in the {_chapterType}_{_stageIndex}.");
     }
 
-    private void CreateAndPlayStageTransitionEvent(ChapterType targetChapter, int targetStage)
+    private void SetupStageCamera()
     {
-        var stageTransitionEvent = GameEventFactory.CreateStageTransitionEvent(targetChapter, targetStage);
-        GameEventManager.Instance.Submit(stageTransitionEvent);
+        Assert.IsTrue(null != StageBoundary, $"StageBoundary is not set in the {_chapterType}_{_stageIndex}.");
+
+        GameObject cameraObject = new GameObject("FollowCamera");
+        cameraObject.transform.SetParent(transform, false);
+        cameraObject.transform.position = new Vector3(0, 0, -10);
+        
+        StageCamera = cameraObject.AddComponent<FollowCamera>();
+        StageCamera.Initialize(StageBoundary);
     }
+
+
 
     private async UniTask WaitForAsyncObjects()
     {

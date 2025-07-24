@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine.Assertions;
+using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
+using UnityEngine;
 
 /*
  * Stage Transition Event
@@ -17,7 +20,12 @@ public class StageTransitionEvent : GameEventBase<StageTransitionEventInfo>
     {
         Assert.IsTrue(null != activeEventTypeCounts, "activeEventTypeCounts is null.");
 
-        return activeEventTypeCounts.Count == 0;
+        if (activeEventTypeCounts.ContainsKey(GameEventType.StageTransition))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public override void PlayEvent()
@@ -25,11 +33,7 @@ public class StageTransitionEvent : GameEventBase<StageTransitionEventInfo>
         Assert.IsTrue(null != Info, "Event info is not initialized");
 
         base.PlayEvent();
-
-        var dataLoadEvent = GameEventFactory.CreateDataLoadEvent(Info.TargetChapter, Info.TargetStage);
-        GameEventManager.Instance.Submit(dataLoadEvent);
-
-        TerminateEvent();
+        AsyncPlayEvent().Forget();
     }
 
     public override void TerminateEvent()
@@ -42,5 +46,20 @@ public class StageTransitionEvent : GameEventBase<StageTransitionEventInfo>
         GameEventPool<StageTransitionEvent, StageTransitionEventInfo>.Release(this);
 
         base.TerminateEvent();
+    }
+
+
+    /****** Private Members ******/
+
+    private async UniTask AsyncPlayEvent()
+    {
+        Assert.IsTrue(null != Info, "Event info is not initialized");
+
+        PlayerManager.Instance.GetPlayerData(out ChapterType _, out int _, out PlayerAvatarType playerType);
+        PlayerManager.Instance.SetPlayerData(Info.TargetChapter, Info.TargetStage, playerType);
+
+        await SceneController.Instance.AsyncExecuteStageTransition();
+
+        TerminateEvent();
     }
 }
