@@ -46,6 +46,20 @@ public class SceneController : MonoBehaviour
         _currentScene.ActivateScene();
     }
 
+    public async UniTask AsyncExecuteStageTransition()
+    {
+        if (_currentScene is StageScene stageScene)
+        {
+            stageScene.StopPlayerPositionMonitoring();
+            await stageScene.AsyncUpdateStagesForTransition();
+            stageScene.ActivateScene();
+        }
+        else
+        {
+            Logger.Write(LogCategory.GameScene, "Current scene is not a StageScene. Cannot execute stage transition.", LogLevel.Warning, true);
+        }
+    }
+
 
     /****** Private Members ******/
 
