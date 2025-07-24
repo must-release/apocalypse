@@ -1,37 +1,37 @@
 fileFormatVersion: 2
-guid: 37bcec3683c41af46ae141b8fa91577e
+guid: 52d1c69c1313ca448b0d1d0f61f60cfe
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4845883897651099870
-    second: Heroine_Upper_RunningLookingUp_0
+      213: -4409210722433418433
+    second: Heroine_Upper_RunnningLookingUp_0
   - first:
-      213: 2530392013701624885
-    second: Heroine_Upper_RunningLookingUp_1
+      213: -7306672928763996985
+    second: Heroine_Upper_RunnningLookingUp_1
   - first:
-      213: -4541292119614526708
-    second: Heroine_Upper_RunningLookingUp_2
+      213: 692030002282121463
+    second: Heroine_Upper_RunnningLookingUp_2
   - first:
-      213: -6706931915876823085
-    second: Heroine_Upper_RunningLookingUp_3
+      213: -5237006048995021437
+    second: Heroine_Upper_RunnningLookingUp_3
   - first:
-      213: 4816717478420578758
-    second: Heroine_Upper_RunningLookingUp_4
+      213: 7622618855577591170
+    second: Heroine_Upper_RunnningLookingUp_4
   - first:
-      213: 4912820968380436626
-    second: Heroine_Upper_RunningLookingUp_5
+      213: -7044043175236005056
+    second: Heroine_Upper_RunnningLookingUp_5
   - first:
-      213: 2333724487465125447
-    second: Heroine_Upper_RunningLookingUp_6
+      213: 8559627785567933063
+    second: Heroine_Upper_RunnningLookingUp_6
   - first:
-      213: -8423240178784686465
-    second: Heroine_Upper_RunningLookingUp_7
+      213: 6084438989780037688
+    second: Heroine_Upper_RunnningLookingUp_7
   - first:
-      213: -6815821058277575062
-    second: Heroine_Upper_RunningLookingUp_8
+      213: 634699966208076485
+    second: Heroine_Upper_RunnningLookingUp_8
   - first:
-      213: -6557762581842993399
-    second: Heroine_Upper_RunningLookingUp_9
+      213: -7186447396174420174
+    second: Heroine_Upper_RunnningLookingUp_9
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -78,7 +78,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 128
+  spritePixelsToUnits: 1280
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -145,8 +145,8 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -155,8 +155,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2630777d0fa7eb24696398afef08631f
-      internalID: -1142927110
+      spriteID: 9f5a2cccd1b4f1348acab26b271b0f6c
+      internalID: -624146750
       vertices: []
       indices: 
       edges: []
@@ -165,10 +165,10 @@ TextureImporter:
       name: Heroine_Upper_RunningLookingUp_1
       rect:
         serializedVersion: 2
-        x: 128
+        x: 1280
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -177,8 +177,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0132d984bf74b6f4584e742f6e0b4e6d
-      internalID: 912259012
+      spriteID: adee2e65c76b79f43962507061c30607
+      internalID: 911595991
       vertices: []
       indices: 
       edges: []
@@ -187,10 +187,10 @@ TextureImporter:
       name: Heroine_Upper_RunningLookingUp_2
       rect:
         serializedVersion: 2
-        x: 256
+        x: 2560
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -199,8 +199,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8de7c853b7bbb614e86406de7e1cb278
-      internalID: -2095026190
+      spriteID: aa948efab5aed3149a24e3696afd78ef
+      internalID: 617893050
       vertices: []
       indices: 
       edges: []
@@ -209,10 +209,10 @@ TextureImporter:
       name: Heroine_Upper_RunningLookingUp_3
       rect:
         serializedVersion: 2
-        x: 384
+        x: 3840
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -221,8 +221,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a2d51b956e4fb534caa06550432e7a28
-      internalID: 1259489612
+      spriteID: 1677d6b090039a44d80f608d56c905ac
+      internalID: 1929431328
       vertices: []
       indices: 
       edges: []
@@ -231,10 +231,10 @@ TextureImporter:
       name: Heroine_Upper_RunningLookingUp_4
       rect:
         serializedVersion: 2
-        x: 512
+        x: 5120
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -243,8 +243,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 76ce6c9d03bf7f5418cebee9f63ac82a
-      internalID: -1860397095
+      spriteID: 9fe06cd4e8aa0e444b79620358e17875
+      internalID: -298083622
       vertices: []
       indices: 
       edges: []
@@ -253,10 +253,10 @@ TextureImporter:
       name: Heroine_Upper_RunningLookingUp_5
       rect:
         serializedVersion: 2
-        x: 640
+        x: 6400
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -265,8 +265,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6587040af5db2ee46bb7d5f594afc19e
-      internalID: 132814646
+      spriteID: 74ca75034b20c184698251205e225fe4
+      internalID: 1945242644
       vertices: []
       indices: 
       edges: []
@@ -275,10 +275,10 @@ TextureImporter:
       name: Heroine_Upper_RunningLookingUp_6
       rect:
         serializedVersion: 2
-        x: 768
+        x: 7680
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -287,8 +287,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 80a777f98d5fa5c44b47d447a96fc082
-      internalID: 1599958766
+      spriteID: 398140b0ab38d8e4ba516bd44e92ad8a
+      internalID: 1435645758
       vertices: []
       indices: 
       edges: []
@@ -297,10 +297,10 @@ TextureImporter:
       name: Heroine_Upper_RunningLookingUp_7
       rect:
         serializedVersion: 2
-        x: 896
+        x: 8960
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -309,8 +309,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b07f28e79332b134b94170b9b27eea83
-      internalID: 611697738
+      spriteID: ff48a5170b1a45f4ebf5bae6ee18d164
+      internalID: -809910677
       vertices: []
       indices: 
       edges: []
@@ -319,10 +319,10 @@ TextureImporter:
       name: Heroine_Upper_RunningLookingUp_8
       rect:
         serializedVersion: 2
-        x: 1024
+        x: 10240
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -331,8 +331,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0ced95fa0dfbabd42a53d4d165f4aa30
-      internalID: -1762040164
+      spriteID: e5cc0fcde861a9b40956081f9930c0ba
+      internalID: -1217518015
       vertices: []
       indices: 
       edges: []
@@ -341,10 +341,10 @@ TextureImporter:
       name: Heroine_Upper_RunningLookingUp_9
       rect:
         serializedVersion: 2
-        x: 1152
+        x: 11520
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -353,8 +353,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1e819d7f2961ba5459a266b4ad969cbc
-      internalID: 1069149172
+      spriteID: 9efcf0fa2b6a3bb42a5a82f47e7f194b
+      internalID: 1697964450
       vertices: []
       indices: 
       edges: []
@@ -363,7 +363,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 04b6ff7398a3db4418099d9ded8d634a
+    spriteID: 9065bed681465c7409a82b2bd76f9589
     internalID: 0
     vertices: []
     indices: 
@@ -373,18 +373,18 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":128.0,"y":128.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":1280.0,"y":1280.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Heroine_Upper_RunningLookingUp_0: -1142927110
-      Heroine_Upper_RunningLookingUp_1: 912259012
-      Heroine_Upper_RunningLookingUp_2: -2095026190
-      Heroine_Upper_RunningLookingUp_3: 1259489612
-      Heroine_Upper_RunningLookingUp_4: -1860397095
-      Heroine_Upper_RunningLookingUp_5: 132814646
-      Heroine_Upper_RunningLookingUp_6: 1599958766
-      Heroine_Upper_RunningLookingUp_7: 611697738
-      Heroine_Upper_RunningLookingUp_8: -1762040164
-      Heroine_Upper_RunningLookingUp_9: 1069149172
+      Heroine_Upper_RunningLookingUp_0: -624146750
+      Heroine_Upper_RunningLookingUp_1: 911595991
+      Heroine_Upper_RunningLookingUp_2: 617893050
+      Heroine_Upper_RunningLookingUp_3: 1929431328
+      Heroine_Upper_RunningLookingUp_4: -298083622
+      Heroine_Upper_RunningLookingUp_5: 1945242644
+      Heroine_Upper_RunningLookingUp_6: 1435645758
+      Heroine_Upper_RunningLookingUp_7: -809910677
+      Heroine_Upper_RunningLookingUp_8: -1217518015
+      Heroine_Upper_RunningLookingUp_9: 1697964450
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

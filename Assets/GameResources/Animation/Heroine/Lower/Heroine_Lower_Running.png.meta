@@ -78,7 +78,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 128
+  spritePixelsToUnits: 1280
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -145,18 +145,18 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 6d733e5168e68b94d94defa3f59ee9e1
-      internalID: 1085877886
+      spriteID: b9b588df7eb5830e0800000000000000
+      internalID: -2289979358568752229
       vertices: []
       indices: 
       edges: []
@@ -165,20 +165,20 @@ TextureImporter:
       name: Heroine_Lower_Running_1
       rect:
         serializedVersion: 2
-        x: 128
+        x: 1280
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: e8851d0c3f9086b4c9714f6bfe61c3af
-      internalID: 279253782
+      spriteID: 9b314b9a191c68ef0800000000000000
+      internalID: -106184709835058247
       vertices: []
       indices: 
       edges: []
@@ -187,20 +187,20 @@ TextureImporter:
       name: Heroine_Lower_Running_2
       rect:
         serializedVersion: 2
-        x: 256
+        x: 2560
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 1c830913071a1a64798899cf157be986
-      internalID: 1718833895
+      spriteID: 415ef192f58b2dbf0800000000000000
+      internalID: -300975506229041900
       vertices: []
       indices: 
       edges: []
@@ -209,20 +209,20 @@ TextureImporter:
       name: Heroine_Lower_Running_3
       rect:
         serializedVersion: 2
-        x: 384
+        x: 3840
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: ad436ff0858407f4784f49317119c393
-      internalID: -1965492714
+      spriteID: 52580f8110b77a020800000000000000
+      internalID: 2352984574967973157
       vertices: []
       indices: 
       edges: []
@@ -231,20 +231,20 @@ TextureImporter:
       name: Heroine_Lower_Running_4
       rect:
         serializedVersion: 2
-        x: 512
+        x: 5120
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 043d327f8a43bd543a94418b474e73b7
-      internalID: -852529765
+      spriteID: cc0a4092585635be0800000000000000
+      internalID: -1489735429136277300
       vertices: []
       indices: 
       edges: []
@@ -253,20 +253,20 @@ TextureImporter:
       name: Heroine_Lower_Running_5
       rect:
         serializedVersion: 2
-        x: 640
+        x: 6400
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: f492c5d5aa560764995bdc7080c0027c
-      internalID: -277341548
+      spriteID: 671ef3426c8ff2c20800000000000000
+      internalID: 3184036991469609334
       vertices: []
       indices: 
       edges: []
@@ -275,20 +275,20 @@ TextureImporter:
       name: Heroine_Lower_Running_6
       rect:
         serializedVersion: 2
-        x: 768
+        x: 7680
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 955d397426250d641924f2de5a28fbee
-      internalID: 1665211783
+      spriteID: 2f8a69f348bb33fc0800000000000000
+      internalID: -3516260707369309966
       vertices: []
       indices: 
       edges: []
@@ -297,20 +297,20 @@ TextureImporter:
       name: Heroine_Lower_Running_7
       rect:
         serializedVersion: 2
-        x: 896
+        x: 8960
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 1e3fac8de02bc9845848604483380120
-      internalID: 1335729570
+      spriteID: a1f2f64951efa8b00800000000000000
+      internalID: 831756449841360666
       vertices: []
       indices: 
       edges: []
@@ -319,20 +319,20 @@ TextureImporter:
       name: Heroine_Lower_Running_8
       rect:
         serializedVersion: 2
-        x: 1024
+        x: 10240
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 02e9fff535a5f094582ff1f9ae353acd
-      internalID: -1236826688
+      spriteID: 407e1bdc2648ac2d0800000000000000
+      internalID: -3257645820556482812
       vertices: []
       indices: 
       edges: []
@@ -341,20 +341,20 @@ TextureImporter:
       name: Heroine_Lower_Running_9
       rect:
         serializedVersion: 2
-        x: 1152
+        x: 11520
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: e3be99e02dc1f8545b55176047d44d51
-      internalID: -861825687
+      spriteID: 317c25638487c3b90800000000000000
+      internalID: -7260796247683709165
       vertices: []
       indices: 
       edges: []
@@ -363,7 +363,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 0d8d78a623c82424ba1f988d781034ec
+    spriteID: f22dda08f8a9fb344a702c4cbd00e5c2
     internalID: 0
     vertices: []
     indices: 
@@ -373,18 +373,18 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":128.0,"y":128.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":1280.0,"y":1280.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Heroine_Lower_Running_0: 1085877886
-      Heroine_Lower_Running_1: 279253782
-      Heroine_Lower_Running_2: 1718833895
-      Heroine_Lower_Running_3: -1965492714
-      Heroine_Lower_Running_4: -852529765
-      Heroine_Lower_Running_5: -277341548
-      Heroine_Lower_Running_6: 1665211783
-      Heroine_Lower_Running_7: 1335729570
-      Heroine_Lower_Running_8: -1236826688
-      Heroine_Lower_Running_9: -861825687
+      Heroine_Lower_Running_0: -2289979358568752229
+      Heroine_Lower_Running_1: -106184709835058247
+      Heroine_Lower_Running_2: -300975506229041900
+      Heroine_Lower_Running_3: 2352984574967973157
+      Heroine_Lower_Running_4: -1489735429136277300
+      Heroine_Lower_Running_5: 3184036991469609334
+      Heroine_Lower_Running_6: -3516260707369309966
+      Heroine_Lower_Running_7: 831756449841360666
+      Heroine_Lower_Running_8: -3257645820556482812
+      Heroine_Lower_Running_9: -7260796247683709165
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

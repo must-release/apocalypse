@@ -1,37 +1,37 @@
 fileFormatVersion: 2
-guid: ec48388ae99224221a9ef33eef4430b5
+guid: bfd2cf6be2c6c424092675988ef874d5
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7452178423589463199
-    second: Heroine_Upper_Running_0
+      213: 6538415029075001314
+    second: Heroine_Upper_Running 1_0
   - first:
-      213: 7724878115374471079
-    second: Heroine_Upper_Running_1
+      213: 5853483215739378489
+    second: Heroine_Upper_Running 1_1
   - first:
-      213: 3789044482005406524
-    second: Heroine_Upper_Running_2
+      213: 2992467157217261699
+    second: Heroine_Upper_Running 1_2
   - first:
-      213: 8670989658863251708
-    second: Heroine_Upper_Running_3
+      213: 6009104770636600808
+    second: Heroine_Upper_Running 1_3
   - first:
-      213: 4020996825247953697
-    second: Heroine_Upper_Running_4
+      213: -4672144460255574499
+    second: Heroine_Upper_Running 1_4
   - first:
-      213: 5843643454101955445
-    second: Heroine_Upper_Running_5
+      213: 5175464639483461823
+    second: Heroine_Upper_Running 1_5
   - first:
-      213: 6059152708338302708
-    second: Heroine_Upper_Running_6
+      213: -2146345080746572552
+    second: Heroine_Upper_Running 1_6
   - first:
-      213: 8461795739395119767
-    second: Heroine_Upper_Running_7
+      213: 4258560167287025167
+    second: Heroine_Upper_Running 1_7
   - first:
-      213: -8677083863798429005
-    second: Heroine_Upper_Running_8
+      213: -5876684210787109104
+    second: Heroine_Upper_Running 1_8
   - first:
-      213: -8263108525634183217
-    second: Heroine_Upper_Running_9
+      213: 1263260421259423221
+    second: Heroine_Upper_Running 1_9
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -78,7 +78,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 128
+  spritePixelsToUnits: 1280
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -145,8 +145,8 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -155,8 +155,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: afb1834bf617b2949b12544f59536051
-      internalID: -1275934315
+      spriteID: c55820735d6aba042a1533d78cb0e8ec
+      internalID: 1771985939
       vertices: []
       indices: 
       edges: []
@@ -165,10 +165,10 @@ TextureImporter:
       name: Heroine_Upper_Running_1
       rect:
         serializedVersion: 2
-        x: 128
+        x: 1280
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -177,8 +177,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3a4b4bde6cb05554fa676e0426c587b5
-      internalID: 1518870232
+      spriteID: 0fc7f03daab6120459c2ac53df5b671a
+      internalID: 9428710
       vertices: []
       indices: 
       edges: []
@@ -187,10 +187,10 @@ TextureImporter:
       name: Heroine_Upper_Running_2
       rect:
         serializedVersion: 2
-        x: 256
+        x: 2560
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -199,8 +199,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 35213563a61252446bf64129129bb753
-      internalID: 890232930
+      spriteID: b45d4b1fa67dae742a93d7e79c57d8f0
+      internalID: -1140853330
       vertices: []
       indices: 
       edges: []
@@ -209,10 +209,10 @@ TextureImporter:
       name: Heroine_Upper_Running_3
       rect:
         serializedVersion: 2
-        x: 384
+        x: 3840
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -221,8 +221,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c83823e8122cef04584bc36e0745f121
-      internalID: -95349988
+      spriteID: 16b5ad5a52473cf469c192b9cb822890
+      internalID: -1017337702
       vertices: []
       indices: 
       edges: []
@@ -231,10 +231,10 @@ TextureImporter:
       name: Heroine_Upper_Running_4
       rect:
         serializedVersion: 2
-        x: 512
+        x: 5120
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -243,8 +243,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 09bcc4bade2a8a343aba010f2b7f7565
-      internalID: 1028945344
+      spriteID: e7d47b3aae49afe48be5b6c456b3e5d6
+      internalID: 1873484337
       vertices: []
       indices: 
       edges: []
@@ -253,10 +253,10 @@ TextureImporter:
       name: Heroine_Upper_Running_5
       rect:
         serializedVersion: 2
-        x: 640
+        x: 6400
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -265,8 +265,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cf662000b9019c6499798701d1e0737c
-      internalID: -1201596457
+      spriteID: 35a4e66e3cf25f046938f941a756042f
+      internalID: 285476528
       vertices: []
       indices: 
       edges: []
@@ -275,10 +275,10 @@ TextureImporter:
       name: Heroine_Upper_Running_6
       rect:
         serializedVersion: 2
-        x: 768
+        x: 7680
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -287,8 +287,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3197af6a90f5945488e24ffd1d5d1890
-      internalID: -2136437049
+      spriteID: 45770bf18184362458b61015e650b214
+      internalID: -1959340293
       vertices: []
       indices: 
       edges: []
@@ -297,10 +297,10 @@ TextureImporter:
       name: Heroine_Upper_Running_7
       rect:
         serializedVersion: 2
-        x: 896
+        x: 8960
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -309,8 +309,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6116c2e45d3838545b5b0e9671cdde09
-      internalID: -783837147
+      spriteID: d8d9316b84b6cac4aaf01492ef175a65
+      internalID: -1950311195
       vertices: []
       indices: 
       edges: []
@@ -319,10 +319,10 @@ TextureImporter:
       name: Heroine_Upper_Running_8
       rect:
         serializedVersion: 2
-        x: 1024
+        x: 10240
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -331,8 +331,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1e569e6b5b81c3143a08fdd9de352378
-      internalID: -407061646
+      spriteID: 3381760e7d93186478ab7097c30c352c
+      internalID: 1744772903
       vertices: []
       indices: 
       edges: []
@@ -341,10 +341,10 @@ TextureImporter:
       name: Heroine_Upper_Running_9
       rect:
         serializedVersion: 2
-        x: 1152
+        x: 11520
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -353,8 +353,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dc11402c36debb94f9a585210f74867a
-      internalID: -1573571191
+      spriteID: 0394c513cbce3c741977c501c03919f3
+      internalID: -1352391963
       vertices: []
       indices: 
       edges: []
@@ -363,7 +363,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: ecdc333533a214344af38f4d1913537f
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -373,18 +373,18 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":128.0,"y":128.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":1280.0,"y":1280.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Heroine_Upper_Running_0: -1275934315
-      Heroine_Upper_Running_1: 1518870232
-      Heroine_Upper_Running_2: 890232930
-      Heroine_Upper_Running_3: -95349988
-      Heroine_Upper_Running_4: 1028945344
-      Heroine_Upper_Running_5: -1201596457
-      Heroine_Upper_Running_6: -2136437049
-      Heroine_Upper_Running_7: -783837147
-      Heroine_Upper_Running_8: -407061646
-      Heroine_Upper_Running_9: -1573571191
+      Heroine_Upper_Running_0: 1771985939
+      Heroine_Upper_Running_1: 9428710
+      Heroine_Upper_Running_2: -1140853330
+      Heroine_Upper_Running_3: -1017337702
+      Heroine_Upper_Running_4: 1873484337
+      Heroine_Upper_Running_5: 285476528
+      Heroine_Upper_Running_6: -1959340293
+      Heroine_Upper_Running_7: -1950311195
+      Heroine_Upper_Running_8: 1744772903
+      Heroine_Upper_Running_9: -1352391963
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
