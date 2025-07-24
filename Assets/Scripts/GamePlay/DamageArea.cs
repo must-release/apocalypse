@@ -5,28 +5,28 @@ public class DamageArea : MonoBehaviour
 {
     /****** Public Members ******/
 
-    public void SetDamageArea(Collider2D characterCollider, DamageInfo damageInfo, bool isDamagingPlayer)
+    public void SetDamageArea(Collider2D characterCollider, DamageInfo damageInfo, bool isDamagingPlayer, int layer)
     {
+        Assert.IsTrue(characterCollider != null, "Character collider must not be null.");
+        Assert.IsTrue(damageInfo != null, "DamageInfo must not be null.");
+        Assert.IsTrue(characterCollider is Collider2D, "Character collider must be of type Collider2D.");
+
         // Add new Collider
         Collider2D damageCollider = gameObject.AddComponent(characterCollider.GetType()) as Collider2D;
 
         // Copy collider values
         CopyCollider2DProperties(characterCollider, damageCollider);
 
-        // Additional settings
-        damageCollider.isTrigger    = true;
-        gameObject.layer            = LayerMask.NameToLayer("Default");
-        _damageInfo                 = damageInfo;
-        _isDamagingPlayer           = isDamagingPlayer;
+        SetDamageArea(damageInfo, isDamagingPlayer, layer);
     }
 
-    public void SetDamageArea(DamageInfo damageInfo, bool isDamagingPlayer)
+    public void SetDamageArea(DamageInfo damageInfo, bool isDamagingPlayer, int layer)
     {
         Collider2D damageCollider = GetComponent<Collider2D>();
         Assert.IsTrue(damageCollider != null, "DamageArea must have a Collider2D component.");
 
         damageCollider.isTrigger    = true;
-        gameObject.layer            = LayerMask.NameToLayer("Default");
+        gameObject.layer            = layer;
         _damageInfo                 = damageInfo;
         _isDamagingPlayer           = isDamagingPlayer;
     }

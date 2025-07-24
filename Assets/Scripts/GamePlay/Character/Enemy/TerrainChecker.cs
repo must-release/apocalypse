@@ -1,84 +1,91 @@
 using UnityEngine;
 using Unity.Mathematics;
+using UnityEngine.Assertions;
 
 public class TerrainChecker : MonoBehaviour 
 {
-    private Transform checker;
-    private float groundCheckingDistance;
-    private Vector3 groundCheckingVector;
-    private float obstacleCheckingDistance;
-    private LayerMask groundLayer, obstacleLayer;
-    private ContactFilter2D groundFilter, obstacleFilter;
-    RaycastHit2D[] groundHits, obstaclesHits;
-
-
-    private void Start() {
-        checker = transform.parent;
-
-        groundLayer = LayerMask.GetMask(Layer.Ground);
-        obstacleLayer = LayerMask.GetMask("Default", Layer.Ground);
-
-        // Set up filters
-        groundFilter = new ContactFilter2D();
-        groundFilter.SetLayerMask(groundLayer);
-        groundFilter.useTriggers = false;
-
-        obstacleFilter = new ContactFilter2D();
-        obstacleFilter.SetLayerMask(obstacleLayer);
-        obstacleFilter.useTriggers = false;
-
-        // Hit buffers
-        groundHits = new RaycastHit2D[1];
-        obstaclesHits = new RaycastHit2D[1];
-    }
+    /****** Public Members ******/
 
     public void SetTerrainChecker(float gndChkdist, Vector3 gndChkAngle, float obsChkDist)
     {
-        groundCheckingDistance = gndChkdist;
-        groundCheckingVector = gndChkAngle.normalized;
-        obstacleCheckingDistance = obsChkDist;
+        _groundCheckingDistance = gndChkdist;
+        _groundCheckingVector = gndChkAngle.normalized;
+        _obstacleCheckingDistance = obsChkDist;
     }
 
-    // Check if there is ground ahead, and no obstacles
     public bool CanMoveAhead()
     {
-        return IsGroundAhead() && !IsObstacleAhead();
+        return CheckIsGroundAhead() && !CheckIsObstacleAhead();
     }
 
-    private bool IsGroundAhead()
-    {
-        groundCheckingVector.x = checker.localScale.x > 0 ? math.abs(groundCheckingVector.x) : -math.abs(groundCheckingVector.x);
 
-        int hitCount = Physics2D.Raycast(checker.position, groundCheckingVector, groundFilter, 
-            groundHits, groundCheckingDistance);
+    /****** Private Members ******/
+
+    private Transform _checker;
+    private float _groundCheckingDistance;
+    private Vector3 _groundCheckingVector;
+    private float _obstacleCheckingDistance;
+    private LayerMask _groundLayer, _obstacleLayer;
+    private ContactFilter2D _groundFilter, _obstacleFilter;
+    private RaycastHit2D[] _groundHits, _obstaclesHits;
+
+
+    private void Start()
+    {
+        _checker = transform.parent;
+        Assert.IsTrue(null != _checker, "Parent transform is not assigned.");
+
+        _groundLayer = LayerMask.GetMask(Layer.Ground);
+        _obstacleLayer = LayerMask.GetMask(Layer.Obstacle);
+
+        _groundFilter = new ContactFilter2D();
+        _groundFilter.SetLayerMask(_groundLayer);
+        _groundFilter.useTriggers = false;
+
+        _obstacleFilter = new ContactFilter2D();
+        _obstacleFilter.SetLayerMask(_obstacleLayer);
+        _obstacleFilter.useTriggers = true;
+
+        _groundHits = new RaycastHit2D[1];
+        _obstaclesHits = new RaycastHit2D[1];
+    }
+
+    private bool CheckIsGroundAhead()
+    {
+        if (_checker == null) return false;
+
+        _groundCheckingVector.x = _checker.localScale.x > 0 ? math.abs(_groundCheckingVector.x) : -math.abs(_groundCheckingVector.x);
+
+        int hitCount = Physics2D.Raycast(_checker.position, _groundCheckingVector, _groundFilter, 
+            _groundHits, _groundCheckingDistance);
 
         return hitCount > 0;
     }
 
-    private bool IsObstacleAhead()
+    private bool CheckIsObstacleAhead()
     {
-        int direction = checker.localScale.x > 0 ? 1 : -1;
+        int direction = _checker.localScale.x > 0 ? 1 : -1;
 
-        int hitCount = Physics2D.Raycast(checker.position, Vector3.right * direction, obstacleFilter, 
-            obstaclesHits, obstacleCheckingDistance);
+        var frontHit = Physics2D.Raycast(_checker.position, Vector3.right * direction, _obstacleCheckingDistance, LayerMask.GetMask(Layer.Obstacle, Layer.Ground));
+        var gorundHit = Physics2D.Raycast(_checker.position, _groundCheckingVector, _groundCheckingDistance, LayerMask.GetMask(Layer.Obstacle));
 
-        return hitCount > 0;
+        return frontHit.collider != null || gorundHit.collider != null;
     }
 
 
     private void OnDrawGizmosSelected()
     {
-        if(checker == null) return;
+        if (_checker == null) return;
 
-        groundCheckingVector.x = checker.localScale.x > 0 ? math.abs(groundCheckingVector.x) : -math.abs(groundCheckingVector.x);
-        int direction = checker.localScale.x > 0 ? 1 : -1;
+        _groundCheckingVector.x = _checker.localScale.x > 0 ? math.abs(_groundCheckingVector.x) : -math.abs(_groundCheckingVector.x);
+        int direction = _checker.localScale.x > 0 ? 1 : -1;
 
         Gizmos.color = Color.red;
-        Vector3 start = checker.position;
-        Vector3 end = start + groundCheckingVector * groundCheckingDistance;
+        Vector3 start = _checker.position;
+        Vector3 end = start + _groundCheckingVector * _groundCheckingDistance;
         Gizmos.DrawLine(start, end);
 
-        end = start + Vector3.right * direction * obstacleCheckingDistance;
+        end = start + Vector3.right * direction * _obstacleCheckingDistance;
         Gizmos.DrawLine(start, end);
     }
 }

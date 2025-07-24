@@ -19,6 +19,6 @@ public class HazardObject : MonoBehaviour, IStageObject
 
         DamageArea damageArea = _damageArea.gameObject.AddComponent<DamageArea>();
         _damageInfo = new DamageInfo(gameObject, _damageValue, _isContinuousHit);
-        damageArea.SetDamageArea(_damageArea, _damageInfo, true);
+        damageArea.SetDamageArea(_damageArea, _damageInfo, true, LayerMask.NameToLayer(Layer.Obstacle));
     }
 }

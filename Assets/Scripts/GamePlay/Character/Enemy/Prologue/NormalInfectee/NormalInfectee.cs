@@ -192,7 +192,7 @@ public class NormalInfectee : EnemyController
         foreach (var hit in hits)
         {
             var player = hit.GetComponent<ICharacter>();
-            if (true == player.IsPlayer)
+            if (true == player?.IsPlayer)
             {
                 player.OnDamaged(_attackDamageInfo);
             }
