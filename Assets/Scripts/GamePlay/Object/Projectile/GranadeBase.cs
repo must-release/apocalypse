@@ -132,7 +132,7 @@ public abstract class GranadeBase : ProjectileBase
         foreach (var hit in hits)
         {
             var enemy = hit.GetComponent<ICharacter>();
-            if (false == enemy.IsPlayer)
+            if (false == enemy?.IsPlayer)
             {
                 enemy.OnDamaged(ProjectileDamageInfo);
             }

@@ -25,29 +25,12 @@ public class TerrainChecker : MonoBehaviour
     private float _groundCheckingDistance;
     private Vector3 _groundCheckingVector;
     private float _obstacleCheckingDistance;
-    private LayerMask _groundLayer, _obstacleLayer;
-    private ContactFilter2D _groundFilter, _obstacleFilter;
-    private RaycastHit2D[] _groundHits, _obstaclesHits;
 
 
     private void Start()
     {
         _checker = transform.parent;
         Assert.IsTrue(null != _checker, "Parent transform is not assigned.");
-
-        _groundLayer = LayerMask.GetMask(Layer.Ground);
-        _obstacleLayer = LayerMask.GetMask(Layer.Obstacle);
-
-        _groundFilter = new ContactFilter2D();
-        _groundFilter.SetLayerMask(_groundLayer);
-        _groundFilter.useTriggers = false;
-
-        _obstacleFilter = new ContactFilter2D();
-        _obstacleFilter.SetLayerMask(_obstacleLayer);
-        _obstacleFilter.useTriggers = true;
-
-        _groundHits = new RaycastHit2D[1];
-        _obstaclesHits = new RaycastHit2D[1];
     }
 
     private bool CheckIsGroundAhead()
@@ -56,20 +39,21 @@ public class TerrainChecker : MonoBehaviour
 
         _groundCheckingVector.x = _checker.localScale.x > 0 ? math.abs(_groundCheckingVector.x) : -math.abs(_groundCheckingVector.x);
 
-        int hitCount = Physics2D.Raycast(_checker.position, _groundCheckingVector, _groundFilter, 
-            _groundHits, _groundCheckingDistance);
+        var groundHit = Physics2D.Raycast(_checker.position, _groundCheckingVector, _groundCheckingDistance, LayerMask.GetMask(Layer.Ground));
 
-        return hitCount > 0;
+        return groundHit.collider != null;
     }
 
     private bool CheckIsObstacleAhead()
     {
         int direction = _checker.localScale.x > 0 ? 1 : -1;
+         _groundCheckingVector.x = _checker.localScale.x > 0 ? math.abs(_groundCheckingVector.x) : -math.abs(_groundCheckingVector.x);
+
 
         var frontHit = Physics2D.Raycast(_checker.position, Vector3.right * direction, _obstacleCheckingDistance, LayerMask.GetMask(Layer.Obstacle, Layer.Ground));
-        var gorundHit = Physics2D.Raycast(_checker.position, _groundCheckingVector, _groundCheckingDistance, LayerMask.GetMask(Layer.Obstacle));
+        var bottomHit = Physics2D.Raycast(_checker.position, _groundCheckingVector, _groundCheckingDistance, LayerMask.GetMask(Layer.Obstacle));
 
-        return frontHit.collider != null || gorundHit.collider != null;
+        return frontHit.collider != null || bottomHit.collider != null;
     }
 
 
