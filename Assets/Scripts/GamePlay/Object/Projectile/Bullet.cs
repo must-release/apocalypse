@@ -47,8 +47,9 @@ public class Bullet : ProjectileBase
             {
                 character.OnDamaged(ProjectileDamageInfo);
                 ExpireProjectile();
-                return;
             }
+            
+            return;
         }
 
         if (false == collision.isTrigger)

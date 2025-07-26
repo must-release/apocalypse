@@ -100,18 +100,24 @@ public abstract class GranadeBase : ProjectileBase
         }
 
         if (null == _countDownCoroutine && gameObject.activeInHierarchy)
-            _countDownCoroutine = StartCoroutine(StartCountDown());
+                _countDownCoroutine = StartCoroutine(StartCountDown());
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.transform.TryGetComponent(out CharacterBase character))
+        if (LayerMask.NameToLayer(Layer.Character) == collision.gameObject.layer)
         {
-            if (false == character.CompareTag("Player"))
+            if (false == collision.CompareTag("Player"))
             {
                 Explode();
                 return;
             }
+        }
+
+        if (LayerMask.NameToLayer(Layer.Projectile) == collision.gameObject.layer)
+        {
+            Explode();
+            return;
         }
     }
 
