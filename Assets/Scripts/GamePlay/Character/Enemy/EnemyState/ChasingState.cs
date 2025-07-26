@@ -31,6 +31,12 @@ public class ChasingState : EnemyStateBase
 
     public override void OnUpdate()
     {
+        if (null == enemyController.ChasingTarget)
+        {
+            enemyController.ChangeState(EnemyState.Patrolling);
+            return;
+        }
+
         // Chase detected player
         enemyController.Chase();
 

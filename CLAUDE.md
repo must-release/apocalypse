@@ -125,3 +125,10 @@ This is a Unity 6000.1.2f1 2D action/platformer game called "apocalypse". The ga
 - **Stage Prefabs**: `Assets/GameResources/Stage/`
 - **UI Assets**: Organized in Addressables UIAssets group
 - **Scripts**: `Assets/Scripts/` with clear subsystem organization
+
+## Commit Guidelines
+
+When creating commits:
+- Use concise, descriptive commit messages
+- Do not include Claude AI attribution or co-author information in commit messages
+- Focus on the what and why of the changes
