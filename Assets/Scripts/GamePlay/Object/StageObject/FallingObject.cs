@@ -1,27 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class FallingObject : MonoBehaviour
+[RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
+public class FallingObject : MonoBehaviour, IStageObject
 {
-    private Rigidbody2D rb;
+    /****** Private Members ******/
 
-    void Start()
+    [Header("Damage Setting")]
+    [SerializeField] private int _damageValue;
+
+    private Rigidbody2D _rb;
+
+    private void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        rb.bodyType = RigidbodyType2D.Kinematic;
+        _rb = GetComponent<Rigidbody2D>();
+        _rb.bodyType = RigidbodyType2D.Kinematic;
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Bullet"))
-        {
-            rb.bodyType = RigidbodyType2D.Dynamic;
-        }
+        int otherLayer = other.gameObject.layer;
 
-        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        if (otherLayer == LayerMask.NameToLayer(Layer.Projectile))
         {
-            Destroy(gameObject);
+            _rb.bodyType = RigidbodyType2D.Dynamic;
+        }
+        else if (otherLayer == LayerMask.NameToLayer(Layer.Character) && false == other.CompareTag("Player"))
+        {
+            DamageInfo damageInfo = new DamageInfo(gameObject, _damageValue, false);
+            other.gameObject.GetComponent<ICharacter>()?.OnDamaged(damageInfo);
+        }
+        else if (otherLayer == LayerMask.NameToLayer(Layer.Ground) && _rb.linearVelocityY < 0)
+        {
+            gameObject.SetActive(false);
         }
     }
 }
