@@ -24,7 +24,7 @@ public class DataLoadEventInfo : GameEventInfo, ISerializableEventInfo
 
     public void Initialize(DataSlotType slotType)
     {
-        Assert.IsTrue(slotType != DataSlotType.DataSlotTypeCount, "Invalid data slot type for DataLoadEventInfo initialization.");
+        Debug.Assert(slotType != DataSlotType.DataSlotTypeCount, "Invalid data slot type for DataLoadEventInfo initialization.");
 
         _slotType               = slotType;
         IsInitialized           = true;
@@ -58,7 +58,7 @@ public class DataLoadEventInfo : GameEventInfo, ISerializableEventInfo
 
     protected override void OnValidate()
     {
-        Assert.IsTrue(_isCreatingNewData ^ _isContinueGame, "Both continue game and loading from slot cannot be executed.");
+        Debug.Assert(_isCreatingNewData ^ _isContinueGame, "Both continue game and loading from slot cannot be executed.");
     }
 
     public GameEventDTO ToDTO()

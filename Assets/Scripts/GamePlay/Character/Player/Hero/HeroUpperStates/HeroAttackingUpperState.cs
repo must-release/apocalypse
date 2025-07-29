@@ -17,8 +17,8 @@ public class HeroAttackingUpperState : PlayerUpperState
     {
         base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
 
-        Assert.IsTrue(PlayerAvatarType.Hero == owningAvatar, $"State {CurrentState} can only be used by Hero avatar.");
-        Assert.IsTrue(StateAnimator.HasState(0, _AttackingStateHash), $"Animator of {owningAvatar} does not have {CurrentState} upper state.");
+        Debug.Assert(PlayerAvatarType.Hero == owningAvatar, $"State {CurrentState} can only be used by Hero avatar.");
+        Debug.Assert(StateAnimator.HasState(0, _AttackingStateHash), $"Animator of {owningAvatar} does not have {CurrentState} upper state.");
     }
 
     public override void OnEnter()

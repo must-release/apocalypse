@@ -15,7 +15,7 @@ public class StageManager : MonoBehaviour
     {
         get
         {
-            Assert.IsTrue(null != _playerStart, $"PlayerStart component is missing in the {_chapterType}_{_stageIndex}.");
+            Debug.Assert(null != _playerStart, $"PlayerStart component is missing in the {_chapterType}_{_stageIndex}.");
             return _playerStart.StartPosition;
         }
     }
@@ -35,10 +35,10 @@ public class StageManager : MonoBehaviour
         SetupStageCamera();
         await WaitForAsyncObjects();
 
-        Assert.IsTrue(null != _playerStart, $"PlayerStart component is missing in the {_chapterType}_{_stageIndex}.");
-        Assert.IsTrue(null != EnterSnapPoint, $"EnterSnapPoint component is missing in the {_chapterType}_{_stageIndex}.");
-        Assert.IsTrue(null != ExitSnapPoint, $"ExitSnapPoint component is missing in the {_chapterType}_{_stageIndex}.");
-        Assert.IsTrue(null != StageCamera, $"StageCamera component is missing in the {_chapterType}_{_stageIndex}.");
+        Debug.Assert(null != _playerStart, $"PlayerStart component is missing in the {_chapterType}_{_stageIndex}.");
+        Debug.Assert(null != EnterSnapPoint, $"EnterSnapPoint component is missing in the {_chapterType}_{_stageIndex}.");
+        Debug.Assert(null != ExitSnapPoint, $"ExitSnapPoint component is missing in the {_chapterType}_{_stageIndex}.");
+        Debug.Assert(null != StageCamera, $"StageCamera component is missing in the {_chapterType}_{_stageIndex}.");
     }
 
     public void DestroyStage()
@@ -48,10 +48,10 @@ public class StageManager : MonoBehaviour
 
     public void BlockReturnToPreviousStage()
     {
-        Assert.IsTrue(null != EnterSnapPoint, $"EnterSnapPoint is not set in the {_chapterType}_{_stageIndex}.");
-        Assert.IsTrue(false == _canGoBackToPreviousStage, $"Cannot block return to previous stage in the {_chapterType}_{_stageIndex}. Going back to previous stage is allowed.");
-        Assert.IsTrue(null != _tilemap, $"Tilemap component is missing it the {_chapterType}_{_stageIndex}.");
-        Assert.IsTrue(4 == (int)SnapDirection.SnapDirectionCount, "SnapDirection enum should have exactly 4 values.");
+        Debug.Assert(null != EnterSnapPoint, $"EnterSnapPoint is not set in the {_chapterType}_{_stageIndex}.");
+        Debug.Assert(false == _canGoBackToPreviousStage, $"Cannot block return to previous stage in the {_chapterType}_{_stageIndex}. Going back to previous stage is allowed.");
+        Debug.Assert(null != _tilemap, $"Tilemap component is missing it the {_chapterType}_{_stageIndex}.");
+        Debug.Assert(4 == (int)SnapDirection.SnapDirectionCount, "SnapDirection enum should have exactly 4 values.");
 
         GameObject      barrier     = new GameObject("EntranceBarrier");
         BoxCollider2D   collider    = barrier.AddComponent<BoxCollider2D>();
@@ -76,10 +76,10 @@ public class StageManager : MonoBehaviour
 
     public void SnapToPoint(SnapPoint targetPoint)
     {
-        Assert.IsTrue(null != targetPoint, $"Trying to snap null point in the {_chapterType}_{_stageIndex}.");
-        Assert.IsTrue(null != EnterSnapPoint, $"EnterSnapPoint is not set in the {_chapterType}_{_stageIndex}.");
-        Assert.IsTrue(null != ExitSnapPoint, $"ExitSnapPoint is not set in the {_chapterType}_{_stageIndex}.");
-        Assert.IsTrue(2 == (int)SnapPointType.SnapPointTypeCount, "SnapPointType enum should have exactly 2 values.");
+        Debug.Assert(null != targetPoint, $"Trying to snap null point in the {_chapterType}_{_stageIndex}.");
+        Debug.Assert(null != EnterSnapPoint, $"EnterSnapPoint is not set in the {_chapterType}_{_stageIndex}.");
+        Debug.Assert(null != ExitSnapPoint, $"ExitSnapPoint is not set in the {_chapterType}_{_stageIndex}.");
+        Debug.Assert(2 == (int)SnapPointType.SnapPointTypeCount, "SnapPointType enum should have exactly 2 values.");
 
         Vector3 moveVec = (targetPoint.Type == SnapPointType.Enter)
             ? targetPoint.GetPairPosition() - ExitSnapPoint.transform.position
@@ -108,7 +108,7 @@ public class StageManager : MonoBehaviour
     private void InitializeTilemap()
     {
         _tilemap = GetComponentInChildren<Tilemap>();
-        Assert.IsTrue(null != _tilemap, $"Tilemap component is missing in the {_chapterType}_{_stageIndex}.");
+        Debug.Assert(null != _tilemap, $"Tilemap component is missing in the {_chapterType}_{_stageIndex}.");
 
         BoundsInt   bounds      = _tilemap.cellBounds;
         TileBase[]  allTiles    = _tilemap.GetTilesBlock(bounds);
@@ -157,14 +157,14 @@ public class StageManager : MonoBehaviour
 
     private void SetPlayerStart(PlayerStart playerStart)
     {
-        Assert.IsTrue(null != playerStart, "PlayerStart cannot be null.");
+        Debug.Assert(null != playerStart, "PlayerStart cannot be null.");
         _playerStart = playerStart;
     }
 
     private void SetSnapPoint(SnapPoint snapPoint)
     {
-        Assert.IsTrue(null != snapPoint, "SnapPoint cannot be null.");
-        Assert.IsTrue(2 == (int)SnapPointType.SnapPointTypeCount, "SnapPointType enum should have exactly 2 values.");
+        Debug.Assert(null != snapPoint, "SnapPoint cannot be null.");
+        Debug.Assert(2 == (int)SnapPointType.SnapPointTypeCount, "SnapPointType enum should have exactly 2 values.");
 
         if (snapPoint.Type == SnapPointType.Enter)
         {
@@ -178,7 +178,7 @@ public class StageManager : MonoBehaviour
 
     private void SearchPartsAndMakeCompositeObject(int curTileIdx, bool[] visitedTile, IPartObject partObject)
     {
-        Assert.IsTrue(null != _tilemap, $"Tilemap is missing in the {_chapterType}_{_stageIndex}.");
+        Debug.Assert(null != _tilemap, $"Tilemap is missing in the {_chapterType}_{_stageIndex}.");
 
         BoundsInt           bounds      = _tilemap.cellBounds;
         TileBase[]          allTiles    = _tilemap.GetTilesBlock(bounds);
@@ -235,12 +235,12 @@ public class StageManager : MonoBehaviour
     private void SetStageBoundary()
     {
         StageBoundary = GetComponentInChildren<StageBoundary>()?.GetComponent<BoxCollider2D>();
-        Assert.IsTrue(null != StageBoundary, $"StageBoundary is not set in the {_chapterType}_{_stageIndex}.");
+        Debug.Assert(null != StageBoundary, $"StageBoundary is not set in the {_chapterType}_{_stageIndex}.");
     }
 
     private void SetupStageCamera()
     {
-        Assert.IsTrue(null != StageBoundary, $"StageBoundary is not set in the {_chapterType}_{_stageIndex}.");
+        Debug.Assert(null != StageBoundary, $"StageBoundary is not set in the {_chapterType}_{_stageIndex}.");
 
         GameObject cameraObject = new GameObject("FollowCamera");
         cameraObject.transform.SetParent(transform, false);

@@ -21,7 +21,7 @@ public class LadderTopPart : LadderPart
 
     private void Awake()
     {
-        Assert.IsTrue(null != _topTrigger, "Trigger is not assigned.");
+        Debug.Assert(null != _topTrigger, "Trigger is not assigned.");
 
         _bodyCollider = GetComponent<Collider2D>();
 
@@ -34,7 +34,7 @@ public class LadderTopPart : LadderPart
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Assert.IsTrue(null != OnClimberEnter, "On Climber Enter action is not assigned in the LadderTopPart");
+        Debug.Assert(null != OnClimberEnter, "On Climber Enter action is not assigned in the LadderTopPart");
 
         if (collision.gameObject.TryGetComponent(out IClimber climber))
         {
@@ -45,7 +45,7 @@ public class LadderTopPart : LadderPart
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        Assert.IsTrue(null != OnClimberExit, "On Climber exit action is not assigned in the LadderTopPart");
+        Debug.Assert(null != OnClimberExit, "On Climber exit action is not assigned in the LadderTopPart");
 
         if (collision.gameObject.TryGetComponent(out IClimber climber))
         {

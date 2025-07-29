@@ -7,9 +7,9 @@ public class DamageArea : MonoBehaviour
 
     public void SetDamageArea(Collider2D characterCollider, DamageInfo damageInfo, bool isDamagingPlayer, int layer)
     {
-        Assert.IsTrue(characterCollider != null, "Character collider must not be null.");
-        Assert.IsTrue(damageInfo != null, "DamageInfo must not be null.");
-        Assert.IsTrue(characterCollider is Collider2D, "Character collider must be of type Collider2D.");
+        Debug.Assert(characterCollider != null, "Character collider must not be null.");
+        Debug.Assert(damageInfo != null, "DamageInfo must not be null.");
+        Debug.Assert(characterCollider is Collider2D, "Character collider must be of type Collider2D.");
 
         // Add new Collider
         Collider2D damageCollider = gameObject.AddComponent(characterCollider.GetType()) as Collider2D;
@@ -23,7 +23,7 @@ public class DamageArea : MonoBehaviour
     public void SetDamageArea(DamageInfo damageInfo, bool isDamagingPlayer, int layer)
     {
         Collider2D damageCollider = GetComponent<Collider2D>();
-        Assert.IsTrue(damageCollider != null, "DamageArea must have a Collider2D component.");
+        Debug.Assert(damageCollider != null, "DamageArea must have a Collider2D component.");
 
         damageCollider.isTrigger    = true;
         gameObject.layer            = layer;

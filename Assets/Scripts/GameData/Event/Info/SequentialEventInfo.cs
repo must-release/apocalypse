@@ -21,7 +21,7 @@ public class SequentialEventInfo : GameEventInfo, ISerializableEventInfo
 
     public void Initialize(List<GameEventInfo> infos, int startInex)
     {
-        Assert.IsTrue(infos != null , "GameEventInfo list is null");
+        Debug.Assert(infos != null , "GameEventInfo list is null");
 
         _eventInfos         = infos;
         _startIndex         = startInex;

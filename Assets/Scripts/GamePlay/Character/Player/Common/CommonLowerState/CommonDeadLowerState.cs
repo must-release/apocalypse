@@ -19,7 +19,7 @@ public class CommonDeadLowerState : PlayerLowerState
         base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
 
         _deadStateHash = AnimatorState.GetHash(owningAvatar, CurrentState);
-        Assert.IsTrue(StateAnimator.HasState(0, AnimatorState.GetHash(owningAvatar, CurrentState)), $"Animator of {owningAvatar} does not have {CurrentState} lower state.");
+        Debug.Assert(StateAnimator.HasState(0, AnimatorState.GetHash(owningAvatar, CurrentState)), $"Animator of {owningAvatar} does not have {CurrentState} lower state.");
     }
 
     public override void OnEnter()

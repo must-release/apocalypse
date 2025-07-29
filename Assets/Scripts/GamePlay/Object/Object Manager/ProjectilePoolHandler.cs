@@ -15,7 +15,7 @@ public class ProjectilePoolHandler : IPoolHandler<IProjectile>
 
     public void Return(IProjectile weapon)
     {
-        Assert.IsTrue(null != weapon, $"Trying to return null {_projectileType}.");
+        Debug.Assert(null != weapon, $"Trying to return null {_projectileType}.");
 
         PoolManager.Instance.Return(_projectileType, weapon);
     }

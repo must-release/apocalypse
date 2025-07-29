@@ -23,7 +23,7 @@ public abstract class CharacterBase : MonoBehaviour, ICharacter, IMotionControll
     { 
         get 
         { 
-            Assert.IsTrue(null != _rigidbody, "Rigidbody2D is not assigned.");
+            Debug.Assert(null != _rigidbody, "Rigidbody2D is not assigned.");
             return _rigidbody.linearVelocity; 
         } 
     }
@@ -69,42 +69,42 @@ public abstract class CharacterBase : MonoBehaviour, ICharacter, IMotionControll
 
     public void SetVelocity(Vector2 velocity)
     {
-        Assert.IsTrue(null != _rigidbody, "Rigidbody2D is not assigned.");
+        Debug.Assert(null != _rigidbody, "Rigidbody2D is not assigned.");
 
         _rigidbody.linearVelocity = velocity;
     }
 
     public void AddForce(Vector2 force, ForceMode2D mode = ForceMode2D.Force)
     {
-        Assert.IsTrue(null != _rigidbody, "Rigidbody2D is not assigned.");
+        Debug.Assert(null != _rigidbody, "Rigidbody2D is not assigned.");
 
         _rigidbody.AddForce(force, mode);
     }
 
     public void ResetVelocity()
     {
-        Assert.IsTrue(null != _rigidbody, "Rigidbody2D is not assigned.");
+        Debug.Assert(null != _rigidbody, "Rigidbody2D is not assigned.");
 
         _rigidbody.linearVelocity = Vector2.zero;
     }
 
     public void SetAngularVelocity(float angularVelocity)
     {
-        Assert.IsTrue(null != _rigidbody, "Rigidbody2D is not assigned.");
+        Debug.Assert(null != _rigidbody, "Rigidbody2D is not assigned.");
 
         _rigidbody.angularVelocity = angularVelocity;
     }
 
     public void SetGravityScale(float scale)
     {
-        Assert.IsTrue(null != _rigidbody, "Rigidbody2D is not assigned.");
+        Debug.Assert(null != _rigidbody, "Rigidbody2D is not assigned.");
 
         _rigidbody.gravityScale = scale;
     }
 
     public void TeleportTo(Vector2 position)
     {
-        Assert.IsTrue(null != _rigidbody, "Rigidbody2D is not assigned.");
+        Debug.Assert(null != _rigidbody, "Rigidbody2D is not assigned.");
 
         _rigidbody.MovePosition(position);
     }
@@ -154,7 +154,7 @@ public abstract class CharacterBase : MonoBehaviour, ICharacter, IMotionControll
 
     private void CreateGroundSensor()
     {
-        Assert.IsTrue(0 != CharacterHeight, $"CharacterHeight of {gameObject.name} is not set.");
+        Debug.Assert(0 != CharacterHeight, $"CharacterHeight of {gameObject.name} is not set.");
 
         _groundCheckPoint = new GameObject("GroundCheckPoint").transform;
         _groundCheckPoint.SetParent(transform, false);

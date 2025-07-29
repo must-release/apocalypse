@@ -16,12 +16,12 @@ public abstract class PlayerStateBase<TState> : MonoBehaviour, IPlayerState<TSta
                                         , PlayerWeaponBase playerWeapon
     )
     {
-        Assert.IsTrue(null != stateController, $"StateController in {CurrentState} is not assigned.");
-        Assert.IsTrue(null != objectInteractor, $"ObjectInteractor in {CurrentState} is not assigned.");
-        Assert.IsTrue(null != playerMotion, $"PlayerMotion in {CurrentState} is not assigned.");
-        Assert.IsTrue(null != playerInfo, $"PlayerInfo in {CurrentState} is not assigned.");
-        Assert.IsTrue(null != stateAnimator, $"StateAnimator in {CurrentState} is not assigned.");
-        Assert.IsTrue(null != playerWeapon, $"PlayerWeapon in {CurrentState} is not assigned.");
+        Debug.Assert(null != stateController, $"StateController in {CurrentState} is not assigned.");
+        Debug.Assert(null != objectInteractor, $"ObjectInteractor in {CurrentState} is not assigned.");
+        Debug.Assert(null != playerMotion, $"PlayerMotion in {CurrentState} is not assigned.");
+        Debug.Assert(null != playerInfo, $"PlayerInfo in {CurrentState} is not assigned.");
+        Debug.Assert(null != stateAnimator, $"StateAnimator in {CurrentState} is not assigned.");
+        Debug.Assert(null != playerWeapon, $"PlayerWeapon in {CurrentState} is not assigned.");
 
         OwningAvatar        = owningAvatar;
         StateController     = stateController;

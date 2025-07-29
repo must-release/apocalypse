@@ -21,8 +21,8 @@ public class ProjectileAsset : ScriptableObject
 
     private void ValidateAsset()
     {
-        Assert.IsTrue(ProjectileAssets.Count == (int)ProjectileType.ProjectileTypeCount, "Projectile count mismatch with ProjectileType enum.");
-        Assert.IsTrue(ProjectileAssets.Count == ProjectileAssets.Distinct().Count(), "There are duplicate items in projectile asset.");
+        Debug.Assert(ProjectileAssets.Count == (int)ProjectileType.ProjectileTypeCount, "Projectile count mismatch with ProjectileType enum.");
+        Debug.Assert(ProjectileAssets.Count == ProjectileAssets.Distinct().Count(), "There are duplicate items in projectile asset.");
     }
 }
 

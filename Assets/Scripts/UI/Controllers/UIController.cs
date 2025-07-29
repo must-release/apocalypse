@@ -117,8 +117,8 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
 
     private void Awake()
     {
-        Assert.IsTrue(null != _baseUITransform, "Base UI Transform is not assigned in the editor.");
-        Assert.IsTrue(null != _subUITransform, "Sub UI Transform is not assigned in the editor.");
+        Debug.Assert(null != _baseUITransform, "Base UI Transform is not assigned in the editor.");
+        Debug.Assert(null != _subUITransform, "Sub UI Transform is not assigned in the editor.");
 
         if (null == Instance)
         {

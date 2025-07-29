@@ -14,7 +14,7 @@ public class DataSaveEvent : GameEventBase<DataSaveEventInfo>
 
     public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
     {
-        Assert.IsTrue(null != activeEventTypeCounts, "activeEventTypeCounts is null.");
+        Debug.Assert(null != activeEventTypeCounts, "activeEventTypeCounts is null.");
 
         foreach (GameEventType eventType in activeEventTypeCounts.Keys)
         {
@@ -27,7 +27,7 @@ public class DataSaveEvent : GameEventBase<DataSaveEventInfo>
 
     public override void PlayEvent()
     {
-        Assert.IsTrue(null != Info, "Event info is not set.");
+        Debug.Assert(null != Info, "Event info is not set.");
 
         base.PlayEvent();
         _eventCoroutine = StartCoroutine(PlayEventCoroutine());
@@ -35,8 +35,8 @@ public class DataSaveEvent : GameEventBase<DataSaveEventInfo>
 
     public override void TerminateEvent()
     {
-        Assert.IsTrue(false == DataManager.Instance.IsSaving, "Should not be terminated when data saving is on progress.");
-        Assert.IsTrue(null != Info, "Event info is not set before termination");
+        Debug.Assert(false == DataManager.Instance.IsSaving, "Should not be terminated when data saving is on progress.");
+        Debug.Assert(null != Info, "Event info is not set before termination");
 
         if (null != _eventCoroutine)
         {

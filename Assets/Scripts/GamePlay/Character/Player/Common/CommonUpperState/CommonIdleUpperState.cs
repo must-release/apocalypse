@@ -16,7 +16,7 @@ public class CommonIdleUpperState : PlayerUpperState
         base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
 
         _IdleStateHash = AnimatorState.GetHash(owningAvatar, CurrentState);
-        Assert.IsTrue(StateAnimator.HasState(0, _IdleStateHash), $"Animator of {owningAvatar} does not have {CurrentState} upper state.");
+        Debug.Assert(StateAnimator.HasState(0, _IdleStateHash), $"Animator of {owningAvatar} does not have {CurrentState} upper state.");
     }
 
     public override void OnEnter()

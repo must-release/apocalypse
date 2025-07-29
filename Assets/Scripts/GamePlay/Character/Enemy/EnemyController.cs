@@ -60,7 +60,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
     {
         get
         {
-            Assert.IsTrue(null != _weaponPoolHandler, $"{weaponType} weapon is not loaded");
+            Debug.Assert(null != _weaponPoolHandler, $"{weaponType} weapon is not loaded");
             return _weaponPoolHandler;
         }
     }

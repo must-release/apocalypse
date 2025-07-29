@@ -7,7 +7,7 @@ public class LadderMiddlePart : LadderPart
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Assert.IsTrue(null != OnClimberEnter, "On Climber Enter action is not assigned in the LadderTopPart");
+        Debug.Assert(null != OnClimberEnter, "On Climber Enter action is not assigned in the LadderTopPart");
 
         if (collision.gameObject.TryGetComponent(out IClimber climber))
         {
@@ -17,7 +17,7 @@ public class LadderMiddlePart : LadderPart
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        Assert.IsTrue(null != OnClimberExit, "On Climber exit action is not assigned in the LadderTopPart");
+        Debug.Assert(null != OnClimberExit, "On Climber exit action is not assigned in the LadderTopPart");
 
         if (collision.gameObject.TryGetComponent(out IClimber climber))
         {

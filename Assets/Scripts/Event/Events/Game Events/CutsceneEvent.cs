@@ -17,7 +17,7 @@ public class CutsceneEvent : GameEventBase<CutsceneEventInfo>
 
     public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
     {
-        Assert.IsTrue(null != activeEventTypeCounts, "activeEventTypeCounts is null.");
+        Debug.Assert(null != activeEventTypeCounts, "activeEventTypeCounts is null.");
 
         if (activeEventTypeCounts.Count == 0)
             return true;
@@ -27,7 +27,7 @@ public class CutsceneEvent : GameEventBase<CutsceneEventInfo>
 
     public override void PlayEvent()
     {
-        Assert.IsTrue(null != Info, "Event info is not set.");
+        Debug.Assert(null != Info, "Event info is not set.");
 
         base.PlayEvent();
         _eventCoroutine = StartCoroutine(PlayEventCoroutine());
@@ -35,7 +35,7 @@ public class CutsceneEvent : GameEventBase<CutsceneEventInfo>
 
     public override void TerminateEvent()
     {
-        Assert.IsTrue(null != Info, "Event info is not set before termination");
+        Debug.Assert(null != Info, "Event info is not set before termination");
 
 
         if ( _eventCoroutine != null )
@@ -59,7 +59,7 @@ public class CutsceneEvent : GameEventBase<CutsceneEventInfo>
 
     private IEnumerator PlayEventCoroutine()
     {
-        Assert.IsTrue(null != Info, "Event info is not set.");
+        Debug.Assert(null != Info, "Event info is not set.");
 
         // Change to cutscene UI
         UIController.Instance.ChangeBaseUI(BaseUI.Cutscene);

@@ -17,7 +17,7 @@ public class CommonAimingLowerState : PlayerLowerState
         base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
 
         _aimingStateHash = AnimatorState.GetHash(owningAvatar, CurrentState);
-        Assert.IsTrue(StateAnimator.HasState(0, _aimingStateHash), $"Animator of {owningAvatar} does not have {CurrentState} lower state.");
+        Debug.Assert(StateAnimator.HasState(0, _aimingStateHash), $"Animator of {owningAvatar} does not have {CurrentState} lower state.");
     }
 
     public override void OnEnter()

@@ -10,8 +10,8 @@ public class UIAsset : ScriptableObject
 
     public void OnValidate()
     {
-        Assert.IsTrue(BaseUIAssets.Count == (int)BaseUI.BaseUICount, "Base UI count mismatch with BaseUI enum.");
-        Assert.IsTrue(SubUIAssets.Count == (int)SubUI.SubUICount - 1, "Sub UI count mismatch with SubUI enum."); // excluding 'none' of SubUI Enum
+        Debug.Assert(BaseUIAssets.Count == (int)BaseUI.BaseUICount, "Base UI count mismatch with BaseUI enum.");
+        Debug.Assert(SubUIAssets.Count == (int)SubUI.SubUICount - 1, "Sub UI count mismatch with SubUI enum."); // excluding 'none' of SubUI Enum
     }
 }
 

@@ -13,7 +13,7 @@ public class StageTransitionEventInfo : GameEventInfo
 
     public void Initialize(ChapterType targetChapter, int targetStage)
     {
-        Assert.IsTrue(ChapterStageCount.IsStageIndexValid(targetChapter, targetStage), $"Invalid target stage: {targetChapter}_{targetStage}");
+        Debug.Assert(ChapterStageCount.IsStageIndexValid(targetChapter, targetStage), $"Invalid target stage: {targetChapter}_{targetStage}");
 
         _targetChapter = targetChapter;
         _targetStage = targetStage;
@@ -40,7 +40,7 @@ public class StageTransitionEventInfo : GameEventInfo
     {
         if (_targetChapter != ChapterType.ChapterTypeCount && _targetStage > 0)
         {
-            Assert.IsTrue(ChapterStageCount.IsStageIndexValid(_targetChapter, _targetStage), $"Invalid target stage: {_targetChapter}_{_targetStage}");
+            Debug.Assert(ChapterStageCount.IsStageIndexValid(_targetChapter, _targetStage), $"Invalid target stage: {_targetChapter}_{_targetStage}");
         }
     }
 

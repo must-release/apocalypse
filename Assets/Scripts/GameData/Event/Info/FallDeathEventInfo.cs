@@ -12,7 +12,7 @@ public class FallDeathEventInfo : GameEventInfo
 
     public void Initialize(int hpDamage = 10)
     {
-        Assert.IsTrue(hpDamage > 0, $"HP damage must be positive: {hpDamage}");
+        Debug.Assert(hpDamage > 0, $"HP damage must be positive: {hpDamage}");
 
         _hpDamage = hpDamage;
         IsInitialized = true;

@@ -19,7 +19,7 @@ public class CommonDamagedLowerState : PlayerLowerState
         base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
 
         _damagedStateHash = AnimatorState.GetHash(owningAvatar, CurrentState);
-        Assert.IsTrue(StateAnimator.HasState(0, _damagedStateHash), $"Animator of {owningAvatar} does not have {CurrentState} lower state.");
+        Debug.Assert(StateAnimator.HasState(0, _damagedStateHash), $"Animator of {owningAvatar} does not have {CurrentState} lower state.");
     }
 
     public override void OnEnter()

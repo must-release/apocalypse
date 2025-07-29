@@ -19,7 +19,7 @@ public class SceneController : MonoBehaviour
     {
         get
         {
-            Assert.IsTrue(null != _currentScene, "Current scene is not initialized.");
+            Debug.Assert(null != _currentScene, "Current scene is not initialized.");
 
             return _currentScene.CanMoveToNextScene;
         }
@@ -28,7 +28,7 @@ public class SceneController : MonoBehaviour
     {
         get
         {
-            Assert.IsTrue(null != _currentScene, "Current scene is not initialized.");
+            Debug.Assert(null != _currentScene, "Current scene is not initialized.");
             return _currentScene.PlayerTransform;
         }
     }
@@ -40,7 +40,7 @@ public class SceneController : MonoBehaviour
 
     public void ActivateGameScene()
     {
-        Assert.IsTrue(null != _currentScene, "Current scene is not initialized.");
+        Debug.Assert(null != _currentScene, "Current scene is not initialized.");
 
         UtilityManager.Instance.ResetUtilityTools();
         _currentScene.ActivateScene();

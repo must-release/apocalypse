@@ -13,7 +13,7 @@ public class SnapPoint : MonoBehaviour, IStageElement
 
     public Vector3 GetPairPosition()
     {
-        Assert.IsTrue(2 == (int)SnapPointType.SnapPointTypeCount, "SnapPointType enum should have exactly 2 values.");
+        Debug.Assert(2 == (int)SnapPointType.SnapPointTypeCount, "SnapPointType enum should have exactly 2 values.");
 
         switch (_type)
         {
@@ -34,7 +34,7 @@ public class SnapPoint : MonoBehaviour, IStageElement
 
     private Vector3 GetDirectionOffset(SnapDirection direction)
     {
-        Assert.IsTrue(4 == (int)SnapDirection.SnapDirectionCount, "SnapDirection enum should have exactly 4 values.");
+        Debug.Assert(4 == (int)SnapDirection.SnapDirectionCount, "SnapDirection enum should have exactly 4 values.");
 
         switch (direction)
         {

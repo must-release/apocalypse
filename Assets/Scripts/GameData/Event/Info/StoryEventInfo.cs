@@ -17,11 +17,11 @@ public class StoryEventInfo : GameEventInfo, ISerializableEventInfo
 
     public void Initialize(ChapterType storyStage, int storyNumber, int readBlockCount, int readEntryCount, bool isOnMap, bool isRuntimeInstance = false)
     {
-        Assert.IsTrue( false == IsInitialized,          "Duplicate initialization of GameEventInfo is not allowed." );
-        Assert.IsTrue( ChapterType.ChapterTypeCount != storyStage,  "Story chapter should be set." );
-        Assert.IsTrue( 0 <= storyNumber,                "Story number can not be negative.");
-        Assert.IsTrue( 0 <= readBlockCount,             "Read block count can not be negative." );
-        Assert.IsTrue( 0 <= readEntryCount,             "Read entry count can not be negative." );
+        Debug.Assert( false == IsInitialized,          "Duplicate initialization of GameEventInfo is not allowed." );
+        Debug.Assert( ChapterType.ChapterTypeCount != storyStage,  "Story chapter should be set." );
+        Debug.Assert( 0 <= storyNumber,                "Story number can not be negative.");
+        Debug.Assert( 0 <= readBlockCount,             "Read block count can not be negative." );
+        Debug.Assert( 0 <= readEntryCount,             "Read entry count can not be negative." );
         
 
         _storyStage         = storyStage;

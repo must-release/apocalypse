@@ -13,8 +13,8 @@ public class ScreenEffectEventInfo : GameEventInfo
     
     public void Initialize(ScreenEffect screenEffectType, bool isRuntimeInstance = false)
     {
-        Assert.IsTrue( false == IsInitialized,                              "Duplicate initialization of GameEventInfo is not allowed." );
-        Assert.IsTrue( ScreenEffect.ScreenEffectCount != screenEffectType,  "Screen effect is not set properly." );
+        Debug.Assert( false == IsInitialized,                              "Duplicate initialization of GameEventInfo is not allowed." );
+        Debug.Assert( ScreenEffect.ScreenEffectCount != screenEffectType,  "Screen effect is not set properly." );
 
 
         ScreenEffectType    = screenEffectType;

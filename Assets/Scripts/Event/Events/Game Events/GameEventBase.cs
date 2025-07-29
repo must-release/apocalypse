@@ -13,7 +13,7 @@ public abstract class GameEventBase<TEventInfo> : MonoBehaviour, IGameEvent wher
         get => _eventContainer;
         set
         {
-            Assert.IsTrue(value.IsContainingEvent(this), "The event container is not containing this event.");
+            Debug.Assert(value.IsContainingEvent(this), "The event container is not containing this event.");
             _eventContainer = value;
         }
     }
@@ -29,7 +29,7 @@ public abstract class GameEventBase<TEventInfo> : MonoBehaviour, IGameEvent wher
 
     public virtual void Initialize(TEventInfo eventInfo)
     {
-        Assert.IsTrue(null != eventInfo && eventInfo.IsInitialized, "Event info is not valid.");
+        Debug.Assert(null != eventInfo && eventInfo.IsInitialized, "Event info is not valid.");
 
         Info    = eventInfo;
         Status  = EventStatus.Waiting;
@@ -41,15 +41,15 @@ public abstract class GameEventBase<TEventInfo> : MonoBehaviour, IGameEvent wher
 
     public virtual void PlayEvent()
     {
-        Assert.IsTrue(EventStatus.Waiting == Status, "Event status must be set as waiting before execution.");
+        Debug.Assert(EventStatus.Waiting == Status, "Event status must be set as waiting before execution.");
 
         Status = EventStatus.Running;
     }
 
     public virtual void TerminateEvent()
     {
-        Assert.IsTrue(EventStatus.Terminated != Status, $"The {EventType} event is already terminated.");
-        Assert.IsTrue(OnTerminate != null, $"Terminate handler for the {EventType} event must be set.");
+        Debug.Assert(EventStatus.Terminated != Status, $"The {EventType} event is already terminated.");
+        Debug.Assert(OnTerminate != null, $"Terminate handler for the {EventType} event must be set.");
 
         Status = EventStatus.Terminated;
         OnTerminate.Invoke();

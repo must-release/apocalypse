@@ -42,8 +42,8 @@ public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteract
 
     public override void ControlCharacter(IReadOnlyControlInfo controlInfo)
     {
-        Assert.IsTrue(null != controlInfo, "Control info is null");
-        Assert.IsTrue(null != CurrentAvatar, "Current avatar is null");
+        Debug.Assert(null != controlInfo, "Control info is null");
+        Debug.Assert(null != CurrentAvatar, "Current avatar is null");
 
         CurrentAvatar.ControlAvatar(controlInfo);
 
@@ -87,8 +87,8 @@ public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteract
 
     protected override void Awake()
     {
-        Assert.IsTrue(null != _heroTransform, "Hero Transform is not assigned in the editor.");
-        Assert.IsTrue(null != _heroineTransform, "Heroine Transform is not assigned in the editor.");
+        Debug.Assert(null != _heroTransform, "Hero Transform is not assigned in the editor.");
+        Debug.Assert(null != _heroineTransform, "Heroine Transform is not assigned in the editor.");
 
         base.Awake();
         
@@ -164,11 +164,11 @@ public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteract
 
     private void RegisterAvatar(PlayerAvatarType type, Transform root)
     {
-        Assert.IsTrue(type < PlayerAvatarType.PlayerAvatarTypeCount, $"{type} is not a valid player type");
-        Assert.IsTrue(null != root, $"{type} avatar root is null");
+        Debug.Assert(type < PlayerAvatarType.PlayerAvatarTypeCount, $"{type} is not a valid player type");
+        Debug.Assert(null != root, $"{type} avatar root is null");
 
         IPlayerAvatar avatar = root.GetComponent<IPlayerAvatar>();
-        Assert.IsTrue(null != avatar, $"{type} avatar (IPlayerAvatar) not found in {root.name}");
+        Debug.Assert(null != avatar, $"{type} avatar (IPlayerAvatar) not found in {root.name}");
         _avatarDictionary.Add(type, avatar);
         avatar.InitializeAvatar(this, this, this);
     }

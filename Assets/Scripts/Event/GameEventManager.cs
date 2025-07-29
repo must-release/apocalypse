@@ -29,8 +29,8 @@ public class GameEventManager : MonoBehaviour, IAsyncLoadObject
 
     public void Submit(IGameEvent gameEvent)
     {
-        Assert.IsTrue(null != gameEvent, "Submitted game event is null.");
-        Assert.IsTrue(EventStatus.Waiting == gameEvent.Status, $"Submitted event {gameEvent.EventType} is not it waiting status.");
+        Debug.Assert(null != gameEvent, "Submitted game event is null.");
+        Debug.Assert(EventStatus.Waiting == gameEvent.Status, $"Submitted event {gameEvent.EventType} is not it waiting status.");
 
         if (gameEvent.CheckCompatibility(_activeEventTypeCounts))
         {
@@ -150,7 +150,7 @@ public class GameEventManager : MonoBehaviour, IAsyncLoadObject
 
     private void TerminateNonExclusiveEvents(IGameEvent exclusiveEvent)
     {
-        Assert.IsTrue(exclusiveEvent.IsExclusiveEvent, "The event must be an exclusive event to terminate others.");
+        Debug.Assert(exclusiveEvent.IsExclusiveEvent, "The event must be an exclusive event to terminate others.");
 
         for (int i = _activeEvents.Count - 1; i >= 0; i--)
         {

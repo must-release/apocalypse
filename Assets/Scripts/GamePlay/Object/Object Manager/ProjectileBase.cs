@@ -19,9 +19,9 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
 
     public virtual void Fire(Vector3 direction)
     {
-        Assert.IsTrue(null != ProjectileDamageInfo.Attacker, $"Onwer of the {CurrentPojectileType} is not set.");
-        Assert.IsTrue(_isPositionSet, $"Position of the {CurrentPojectileType} is not set.");
-        Assert.IsTrue(null != OnProjectileExpired, $"OnProjectileExpired is not set in {CurrentPojectileType}.");
+        Debug.Assert(null != ProjectileDamageInfo.Attacker, $"Onwer of the {CurrentPojectileType} is not set.");
+        Debug.Assert(_isPositionSet, $"Position of the {CurrentPojectileType} is not set.");
+        Debug.Assert(null != OnProjectileExpired, $"OnProjectileExpired is not set in {CurrentPojectileType}.");
 
         _isFired = true;
         transform.localRotation = Quaternion.FromToRotation(Vector3.right, direction);
@@ -29,8 +29,8 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
 
     public virtual void SetOwner(GameObject owner)
     {
-        Assert.IsTrue(null != owner, "Owner of the weapon is not assigned");
-        Assert.IsTrue(null == ProjectileDamageInfo.Attacker, $"Owner of the {CurrentPojectileType} is already set.");
+        Debug.Assert(null != owner, "Owner of the weapon is not assigned");
+        Debug.Assert(null == ProjectileDamageInfo.Attacker, $"Owner of the {CurrentPojectileType} is already set.");
 
         ProjectileDamageInfo.Attacker = owner;
     }
@@ -73,7 +73,7 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
 
     protected void ExpireProjectile()
     {
-        Assert.IsTrue(null != OnProjectileExpired, $"OnProjectileExpired is null in {CurrentPojectileType}.");
+        Debug.Assert(null != OnProjectileExpired, $"OnProjectileExpired is null in {CurrentPojectileType}.");
 
         OnProjectileExpired.Invoke();
     }

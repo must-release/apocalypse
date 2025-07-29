@@ -27,7 +27,7 @@ public class ProjectileFactory : MonoBehaviour, IGamePlayInitializer
 
     public async UniTask AsyncPoolAimingDots(ProjectileType projectileType, List<AimingDot> aimingDots, Transform parentTransform)
     {
-        Assert.IsTrue(_aimingDotPoolObjectInfo.ContainsKey(projectileType), $"{projectileType} does not have aiming dots.");
+        Debug.Assert(_aimingDotPoolObjectInfo.ContainsKey(projectileType), $"{projectileType} does not have aiming dots.");
 
         var poolingDot = _aimingDotPoolObjectInfo[projectileType];
         for (int i = 0; i < poolingDot.PoolCount; i++)

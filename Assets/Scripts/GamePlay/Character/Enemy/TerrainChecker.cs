@@ -30,7 +30,7 @@ public class TerrainChecker : MonoBehaviour
     private void Start()
     {
         _checker = transform.parent;
-        Assert.IsTrue(null != _checker, "Parent transform is not assigned.");
+        Debug.Assert(null != _checker, "Parent transform is not assigned.");
     }
 
     private bool CheckIsGroundAhead()

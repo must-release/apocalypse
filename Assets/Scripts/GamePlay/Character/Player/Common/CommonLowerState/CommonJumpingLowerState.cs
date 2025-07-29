@@ -23,9 +23,9 @@ public class CommonJumpingLowerState : PlayerLowerState
         _jumpingLoopStateHash   = AnimatorState.GetHash(owningAvatar, LowerStateType.Jumping, "Loop");
         _jumpingEndStateHash    = AnimatorState.GetHash(owningAvatar, LowerStateType.Jumping, "End");
 
-        Assert.IsTrue(StateAnimator.HasState(0, _jumpingStartStateHash), $"Animator of {owningAvatar} does not have jumping start lower state.");
-        Assert.IsTrue(StateAnimator.HasState(0, _jumpingLoopStateHash), $"Animator of {owningAvatar} does not have jumping loop lower state.");
-        Assert.IsTrue(StateAnimator.HasState(0, _jumpingEndStateHash), $"Animator of {owningAvatar} does not have jumping end lower state.");
+        Debug.Assert(StateAnimator.HasState(0, _jumpingStartStateHash), $"Animator of {owningAvatar} does not have jumping start lower state.");
+        Debug.Assert(StateAnimator.HasState(0, _jumpingLoopStateHash), $"Animator of {owningAvatar} does not have jumping loop lower state.");
+        Debug.Assert(StateAnimator.HasState(0, _jumpingEndStateHash), $"Animator of {owningAvatar} does not have jumping end lower state.");
     }
 
     public override void OnEnter()

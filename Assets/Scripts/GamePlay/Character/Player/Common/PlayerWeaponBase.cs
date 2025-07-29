@@ -56,7 +56,7 @@ public abstract class PlayerWeaponBase : MonoBehaviour, IAsyncLoadObject
     {
         get
         {
-            Assert.IsTrue(0 < _pooledAimingDots.Count, $"Aiming Dots of {PlayerWeaponType} is not pooled.");
+            Debug.Assert(0 < _pooledAimingDots.Count, $"Aiming Dots of {PlayerWeaponType} is not pooled.");
             return _pooledAimingDots;
         }
     }
@@ -64,7 +64,7 @@ public abstract class PlayerWeaponBase : MonoBehaviour, IAsyncLoadObject
     {
         get
         {
-            Assert.IsTrue(null != _weaponPoolHandler, $"{PlayerWeaponType} Weapon is not pooled.");
+            Debug.Assert(null != _weaponPoolHandler, $"{PlayerWeaponType} Weapon is not pooled.");
             return _weaponPoolHandler;
         }
     }
@@ -92,9 +92,9 @@ public abstract class PlayerWeaponBase : MonoBehaviour, IAsyncLoadObject
 
     private void Awake()
     {
-        Assert.IsTrue(_playerObject != null, "Player object is not assigned.");
-        Assert.IsTrue(_weaponPivot != null, "Weapon pivot is not assigned.");
-        Assert.IsTrue(_shootingPoint != null, "Shooting point is not assigned.");
+        Debug.Assert(_playerObject != null, "Player object is not assigned.");
+        Debug.Assert(_weaponPivot != null, "Weapon pivot is not assigned.");
+        Debug.Assert(_shootingPoint != null, "Shooting point is not assigned.");
 
         _aimingDotsTransform = new GameObject("PooledAimingDots").transform;
         _aimingDotsTransform.SetParent(transform, false);

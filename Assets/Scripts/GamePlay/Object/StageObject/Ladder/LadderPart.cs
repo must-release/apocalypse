@@ -12,7 +12,7 @@ public abstract class LadderPart : MonoBehaviour, IPartObject
 
     public ICompositeObject CreateCompositeObjectFrame()
     {
-        Assert.IsTrue(null != transform.parent.GetComponent<Tilemap>(), "Ladder part must be a child of a Tilemap.");
+        Debug.Assert(null != transform.parent.GetComponent<Tilemap>(), "Ladder part must be a child of a Tilemap.");
 
         GameObject compositeObject = new GameObject("LadderObject");
         compositeObject.transform.parent = transform.parent;

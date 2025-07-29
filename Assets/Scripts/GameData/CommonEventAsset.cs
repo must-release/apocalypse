@@ -19,7 +19,7 @@ public class CommonEventAsset : ScriptableObject
 
     private void ValidateAsset()
     {
-        Assert.IsTrue(CommonEventAssets.Count == (int)CommonEventType.CommonEventTypeCount, "Common event count mismatch with Common event enum.");
+        Debug.Assert(CommonEventAssets.Count == (int)CommonEventType.CommonEventTypeCount, "Common event count mismatch with Common event enum.");
     }
 }
 

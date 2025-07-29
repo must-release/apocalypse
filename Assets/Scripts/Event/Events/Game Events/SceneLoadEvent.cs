@@ -17,7 +17,7 @@ public class SceneLoadEvent : GameEventBase<SceneLoadEventInfo>
 
     public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
     {
-        Assert.IsTrue(null != activeEventTypeCounts, "activeEventTypeCounts is null.");
+        Debug.Assert(null != activeEventTypeCounts, "activeEventTypeCounts is null.");
 
         foreach (GameEventType eventType in activeEventTypeCounts.Keys)
         {
@@ -32,7 +32,7 @@ public class SceneLoadEvent : GameEventBase<SceneLoadEventInfo>
 
     public override void PlayEvent()
     {
-        Assert.IsTrue(null != Info, "Event info is not initialized" );
+        Debug.Assert(null != Info, "Event info is not initialized" );
 
         base.PlayEvent();
         _eventCoroutine = StartCoroutine(PlayEventCoroutine());
@@ -40,7 +40,7 @@ public class SceneLoadEvent : GameEventBase<SceneLoadEventInfo>
 
     public override void TerminateEvent()
     {
-        Assert.IsTrue(null != Info, "Event info is not set before termination");
+        Debug.Assert(null != Info, "Event info is not set before termination");
 
         if (_eventCoroutine != null)
         {

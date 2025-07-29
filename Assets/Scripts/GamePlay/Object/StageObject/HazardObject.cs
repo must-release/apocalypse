@@ -15,7 +15,7 @@ public class HazardObject : MonoBehaviour, IStageObject
 
     private void Awake()
     {
-        Assert.IsTrue(_damageArea != null, $"Damage Area Collider for {gameObject.name} is not assigned in the editor.");
+        Debug.Assert(_damageArea != null, $"Damage Area Collider for {gameObject.name} is not assigned in the editor.");
 
         DamageArea damageArea = _damageArea.gameObject.AddComponent<DamageArea>();
         _damageInfo = new DamageInfo(gameObject, _damageValue, _isContinuousHit);

@@ -13,7 +13,7 @@ public class Pigeon : EnemyController
     {
         get
         {
-            Assert.IsTrue(0 != _minAttackRange && 0 != _maxAttackRange, "Initialization of damage and weapon must be preceded.");
+            Debug.Assert(0 != _minAttackRange && 0 != _maxAttackRange, "Initialization of damage and weapon must be preceded.");
 
             if (null == DetectedPlayer) return false;
 
@@ -205,7 +205,7 @@ public class Pigeon : EnemyController
 
     private void MoveTowardPlayer()
     {
-        Assert.IsTrue(ChasingTarget != null, "Chasing target is null. Can't move toward the Player");
+        Debug.Assert(ChasingTarget != null, "Chasing target is null. Can't move toward the Player");
 
         Vector2 newVelocity = CurrentVelocity;
 

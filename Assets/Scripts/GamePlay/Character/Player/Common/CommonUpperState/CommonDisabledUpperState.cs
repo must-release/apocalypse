@@ -18,7 +18,7 @@ public class CommonDisabledUpperState : PlayerUpperState
         base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
 
         _DisabledStateHash = AnimatorState.GetHash(OwningAvatar, CurrentState);
-        Assert.IsTrue(StateAnimator.HasState(0, _DisabledStateHash), $"Animator of {owningAvatar} does not have {CurrentState} upper state.");
+        Debug.Assert(StateAnimator.HasState(0, _DisabledStateHash), $"Animator of {owningAvatar} does not have {CurrentState} upper state.");
     }
 
     public override void OnEnter()

@@ -13,7 +13,7 @@ public class UIChangeEventInfo : GameEventInfo, ISerializableEventInfo
 
     public void Initialize(BaseUI targetUI, bool isRuntimeInstance = false)
     {
-        Assert.IsTrue(false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed.");
+        Debug.Assert(false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed.");
 
         TargetUI            = targetUI;
         IsInitialized       = true;

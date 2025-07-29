@@ -20,8 +20,8 @@ public class CommonLookingUpUpperState : PlayerUpperState
         _IdleLookingUpStateHash     = AnimatorState.GetHash(owningAvatar, UpperStateType.Idle, "LookingUp");
         _RunningLookingUpStateHash  = AnimatorState.GetHash(owningAvatar, UpperStateType.Running, "LookingUp");
 
-        Assert.IsTrue(StateAnimator.HasState(0, _IdleLookingUpStateHash), $"Animator of {owningAvatar} does not have {CurrentState} upper state.");
-        Assert.IsTrue(StateAnimator.HasState(0, _RunningLookingUpStateHash), $"Animator of {owningAvatar} does not have {CurrentState} upper state.");
+        Debug.Assert(StateAnimator.HasState(0, _IdleLookingUpStateHash), $"Animator of {owningAvatar} does not have {CurrentState} upper state.");
+        Debug.Assert(StateAnimator.HasState(0, _RunningLookingUpStateHash), $"Animator of {owningAvatar} does not have {CurrentState} upper state.");
     }
 
     public override void OnEnter()

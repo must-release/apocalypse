@@ -18,7 +18,7 @@ public class CommonIdleLowerState : PlayerLowerState
         base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
 
         _idleStateHash = AnimatorState.GetHash(OwningAvatar, CurrentState);
-        Assert.IsTrue(StateAnimator.HasState(0, _idleStateHash), $"Animator of {owningAvatar} does not have {CurrentState} lower state.");
+        Debug.Assert(StateAnimator.HasState(0, _idleStateHash), $"Animator of {owningAvatar} does not have {CurrentState} lower state.");
     }
 
     public override void OnEnter()

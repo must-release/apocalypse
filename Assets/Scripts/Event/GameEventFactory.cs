@@ -13,7 +13,7 @@ public static class GameEventFactory
 
     public static IEnumerator LoadCommonGameEvents()
     {
-        Assert.IsTrue(0 == _commonEventInfos.Count, "Duplicate Common event load.");
+        Debug.Assert(0 == _commonEventInfos.Count, "Duplicate Common event load.");
 
         var handle = Addressables.LoadAssetAsync<CommonEventAsset>(AssetPath.CommonEventAsset);
         yield return handle;
@@ -48,7 +48,7 @@ public static class GameEventFactory
 
     public static IGameEvent CreateChoiceEvent(ChoiceEventDTO dto)
     {
-        Assert.IsTrue(null != dto, "Cannot create ChoiceEvent from null DTO");
+        Debug.Assert(null != dto, "Cannot create ChoiceEvent from null DTO");
 
         return CreateChoiceEvent(dto.ChoiceList);
     }
@@ -65,7 +65,7 @@ public static class GameEventFactory
 
     public static IGameEvent CreateCutsceneEvent(CutsceneEventDTO dto)
     {
-        Assert.IsTrue(null != dto, "Cannot create DataLoadEvent from null DTO");
+        Debug.Assert(null != dto, "Cannot create DataLoadEvent from null DTO");
         return CreateCutsceneEvent();
     }
 
@@ -101,7 +101,7 @@ public static class GameEventFactory
 
     public static IGameEvent CreateDataLoadEvent(DataLoadEventDTO dto)
     {
-        Assert.IsTrue(null != dto, "Cannot create DataSaveEvent from null DTO");
+        Debug.Assert(null != dto, "Cannot create DataSaveEvent from null DTO");
 
         if (dto.IsContinueGame)
         {
@@ -129,7 +129,7 @@ public static class GameEventFactory
 
     public static IGameEvent CreateDataSaveEvent(DataSaveEventDTO dto)
     {
-        Assert.IsTrue(null != dto, "Cannot create DataSaveEvent from null DTO");
+        Debug.Assert(null != dto, "Cannot create DataSaveEvent from null DTO");
         return CreateDataSaveEvent(dto.SlotNum);
     }
 
@@ -145,7 +145,7 @@ public static class GameEventFactory
 
     public static IGameEvent CreateSceneActivateEvent(SceneActivateEventDTO dto)
     {
-        Assert.IsTrue(null != dto, "Cannot create SceneActivateEvent from null DTO");
+        Debug.Assert(null != dto, "Cannot create SceneActivateEvent from null DTO");
         return CreateSceneActivateEvent(dto.ShouldTurnOnLoadingUI);
     }
 
@@ -161,7 +161,7 @@ public static class GameEventFactory
 
     public static IGameEvent CreateSceneLoadEvent(SceneLoadEventDTO dto)
     {
-        Assert.IsTrue(null != dto, "Cannot create SceneLoadEvent from null DTO");
+        Debug.Assert(null != dto, "Cannot create SceneLoadEvent from null DTO");
         return CreateSceneLoadEvent(dto.LoadingScene);
     }
 
@@ -187,7 +187,7 @@ public static class GameEventFactory
 
     public static IGameEvent CreateStoryEvent(StoryEventDTO dto)
     {
-        Assert.IsTrue(null != dto, "Cannot create StoryEvent from null DTO");
+        Debug.Assert(null != dto, "Cannot create StoryEvent from null DTO");
         return CreateStoryEvent(dto.StoryStage, dto.StoryNumber, dto.ReadBlockCount, dto.ReadEntryCount, dto.IsOnMap);
     }
 
@@ -203,13 +203,13 @@ public static class GameEventFactory
 
     public static IGameEvent CreateUIChangeEvent(UIChangeEventDTO dto)
     {
-        Assert.IsTrue(null != dto, "Cannot create UIChangeEvent from null DTO");
+        Debug.Assert(null != dto, "Cannot create UIChangeEvent from null DTO");
         return CreateUIChangeEvent(dto.TargetUI);
     }
 
     public static IGameEvent CreateSequentialEvent(List<IGameEvent> gameEvents, int startIndex = 0)
     {
-        Assert.IsTrue(null != gameEvents && 0 < gameEvents.Count, "GameEvents list is null or empty");
+        Debug.Assert(null != gameEvents && 0 < gameEvents.Count, "GameEvents list is null or empty");
 
         var info = ScriptableObject.CreateInstance<SequentialEventInfo>();
         info.Initialize(new List<GameEventInfo>(), startIndex);
@@ -227,7 +227,7 @@ public static class GameEventFactory
 
     public static IGameEvent CreateSequentialEvent(SequentialEventDTO dto)
     {
-        Assert.IsTrue(null != dto, "Cannot create SequentialEvent from null DTO");
+        Debug.Assert(null != dto, "Cannot create SequentialEvent from null DTO");
 
         var eventList = new List<IGameEvent>();
 
@@ -262,16 +262,16 @@ public static class GameEventFactory
     public static IGameEvent CreateFromInfo<TEventInfo>(TEventInfo info)
         where TEventInfo : GameEventInfo
     {
-        Assert.IsTrue(null != info, "Cannot create event from null info");
-        Assert.IsTrue(true == _eventCreatorsFromInfo.ContainsKey(info.EventType), $"No info creator registered for GameEventType: {info.EventType}");
+        Debug.Assert(null != info, "Cannot create event from null info");
+        Debug.Assert(true == _eventCreatorsFromInfo.ContainsKey(info.EventType), $"No info creator registered for GameEventType: {info.EventType}");
 
         return _eventCreatorsFromInfo[info.EventType].Invoke(info);
     }
 
     public static IGameEvent CreateFromDTO(GameEventDTO dto)
     {
-        Assert.IsTrue(null != dto, "Cannot create event from null DTO");
-        Assert.IsTrue(true == _eventCreatorsFromDTO.ContainsKey(dto.EventType), $"No dto creator registered for GameEventType: {dto.EventType}");
+        Debug.Assert(null != dto, "Cannot create event from null DTO");
+        Debug.Assert(true == _eventCreatorsFromDTO.ContainsKey(dto.EventType), $"No dto creator registered for GameEventType: {dto.EventType}");
 
         return _eventCreatorsFromDTO[dto.EventType].Invoke(dto);
     }
@@ -330,7 +330,7 @@ public static class GameEventFactory
         where TEvent : GameEventBase<TInfo>
         where TInfo : GameEventInfo
     {
-        Assert.IsTrue(null != info, "Cannot create Event from null info");
+        Debug.Assert(null != info, "Cannot create Event from null info");
 
         var gameEvent = GameEventPool<TEvent, TInfo>.Get(EventHost, info.EventType.ToString());
         gameEvent.Initialize(info);

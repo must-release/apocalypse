@@ -16,7 +16,7 @@ public class SceneActivateEvent : GameEventBase<SceneActivateEventInfo>
 
     public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
     {
-        Assert.IsTrue(null != activeEventTypeCounts, "activeEventTypeCounts is null.");
+        Debug.Assert(null != activeEventTypeCounts, "activeEventTypeCounts is null.");
 
         foreach (GameEventType eventType in activeEventTypeCounts.Keys)
         {
@@ -31,7 +31,7 @@ public class SceneActivateEvent : GameEventBase<SceneActivateEventInfo>
 
     public override void PlayEvent()
     {
-        Assert.IsTrue(null != Info, "Event info is not set.");
+        Debug.Assert(null != Info, "Event info is not set.");
 
         base.PlayEvent();
         _eventCoroutine = StartCoroutine(PlayEventCoroutine());
@@ -39,8 +39,8 @@ public class SceneActivateEvent : GameEventBase<SceneActivateEventInfo>
 
     public override void TerminateEvent()
     {
-        Assert.IsTrue(false == SceneController.Instance.IsSceneLoading, "Should not be terminated when scene is not loaded yet.");
-        Assert.IsTrue(null != Info, "Event info is not set before termination");
+        Debug.Assert(false == SceneController.Instance.IsSceneLoading, "Should not be terminated when scene is not loaded yet.");
+        Debug.Assert(null != Info, "Event info is not set before termination");
 
         if (_eventCoroutine != null)
         {
@@ -63,7 +63,7 @@ public class SceneActivateEvent : GameEventBase<SceneActivateEventInfo>
 
     private IEnumerator PlayEventCoroutine()
     {
-        Assert.IsTrue(null != Info, "Event info is not set.");
+        Debug.Assert(null != Info, "Event info is not set.");
 
 
         // If scene is still loading

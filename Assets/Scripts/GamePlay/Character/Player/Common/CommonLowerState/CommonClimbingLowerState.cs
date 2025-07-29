@@ -25,8 +25,8 @@ public class CommonClimbingLowerState : PlayerLowerState
         _climbingDownStateHash = AnimatorState.GetHash(owningAvatar, LowerStateType.Climbing, "Down");
         _climbingUpStateHash   = AnimatorState.GetHash(owningAvatar, LowerStateType.Climbing, "Up");
 
-        Assert.IsTrue(StateAnimator.HasState(0, _climbingDownStateHash), $"Animator of {owningAvatar} does not have {CurrentState} down lower state.");
-        Assert.IsTrue(StateAnimator.HasState(0, _climbingUpStateHash), $"Animator of {owningAvatar} does not have {CurrentState} up lower state.");
+        Debug.Assert(StateAnimator.HasState(0, _climbingDownStateHash), $"Animator of {owningAvatar} does not have {CurrentState} down lower state.");
+        Debug.Assert(StateAnimator.HasState(0, _climbingUpStateHash), $"Animator of {owningAvatar} does not have {CurrentState} up lower state.");
     }
 
     public override void OnEnter()

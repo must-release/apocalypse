@@ -10,7 +10,7 @@ public class CutsceneEventInfo : GameEventInfo, ISerializableEventInfo
 
     public void Initialize(bool isRuntimeInstance = false)
     {
-        Assert.IsTrue(false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed.");
+        Debug.Assert(false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed.");
 
         IsInitialized       = true;
         IsRuntimeInstance   = true;

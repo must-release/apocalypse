@@ -13,7 +13,7 @@ public class SceneLoadEventInfo : GameEventInfo, ISerializableEventInfo
 
     public void Initialize(SceneType loadingScene)
     {
-        Assert.IsTrue( false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed." );
+        Debug.Assert( false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed." );
 
         LoadingScene        = loadingScene;
         IsInitialized       = true;

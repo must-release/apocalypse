@@ -16,9 +16,9 @@ public class HeroineAimAttackingLowerState : PlayerLowerState
     {
         base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
 
-        Assert.IsTrue(PlayerAvatarType.Heroine == owningAvatar, "HeroineAttackingLowerState can only be used by Heroine avatar.");
+        Debug.Assert(PlayerAvatarType.Heroine == owningAvatar, "HeroineAttackingLowerState can only be used by Heroine avatar.");
         _aimAttackingStateHash = AnimatorState.GetHash(owningAvatar, CurrentState);
-        Assert.IsTrue(StateAnimator.HasState(0, _aimAttackingStateHash), $"Animator of {owningAvatar} does not have {CurrentState} lower state.");
+        Debug.Assert(StateAnimator.HasState(0, _aimAttackingStateHash), $"Animator of {owningAvatar} does not have {CurrentState} lower state.");
     }
 
     public override void OnEnter()

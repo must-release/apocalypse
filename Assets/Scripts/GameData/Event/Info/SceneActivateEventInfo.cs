@@ -13,7 +13,7 @@ public class SceneActivateEventInfo : GameEventInfo, ISerializableEventInfo
 
     public void Initialize(bool shouldTurnOnLoadingUI, bool isRuntimeInstance = false)
     {
-        Assert.IsTrue(false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed.");
+        Debug.Assert(false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed.");
 
         ShouldTurnOnLoadingUI   = shouldTurnOnLoadingUI;
         IsInitialized           = true;

@@ -22,7 +22,7 @@ public class StageScene : MonoBehaviour, IScene
 
     public async UniTask AsyncUpdateStagesForTransition()
     {
-        Assert.IsTrue(null != _currentStage, "Current stage is not initialized.");
+        Debug.Assert(null != _currentStage, "Current stage is not initialized.");
 
         PlayerManager.Instance.GetPlayerData(out ChapterType chapter, out int stage, out PlayerAvatarType _);
 
@@ -76,8 +76,8 @@ public class StageScene : MonoBehaviour, IScene
 
     public void ActivateScene()
     {
-        Assert.IsTrue(null != _currentStage, "Current stage is not initialized.");
-        Assert.IsTrue(null != _playerTransform, "Player transform is not initialized.");
+        Debug.Assert(null != _currentStage, "Current stage is not initialized.");
+        Debug.Assert(null != _playerTransform, "Player transform is not initialized.");
 
         _currentStage.gameObject.SetActive(true);
         _prevStage?.gameObject.SetActive(_currentStage.CanGoBackToPreviousStage);
@@ -99,8 +99,8 @@ public class StageScene : MonoBehaviour, IScene
 
     public void RespawnPlayer()
     {
-        Assert.IsTrue(null != _currentStage, "Current stage is not initialized.");
-        Assert.IsTrue(null != _playerTransform, "Player transform is not initialized.");
+        Debug.Assert(null != _currentStage, "Current stage is not initialized.");
+        Debug.Assert(null != _playerTransform, "Player transform is not initialized.");
 
         _playerTransform.position = _currentStage.PlayerStartPosition;
         Logger.Write(LogCategory.GameScene, $"Respawning player at {_currentStage.PlayerStartPosition}", LogLevel.Log, true);
@@ -185,7 +185,7 @@ public class StageScene : MonoBehaviour, IScene
 
     private void PlaceStageObjects()
     {
-        Assert.IsTrue(null != _playerTransform, "Player transform is not initialized. Ensure AsyncLoadPlayer is called before placing stage objects.");
+        Debug.Assert(null != _playerTransform, "Player transform is not initialized. Ensure AsyncLoadPlayer is called before placing stage objects.");
 
         _playerTransform.position = _currentStage.PlayerStartPosition;
         _prevStage?.SnapToPoint(_currentStage.EnterSnapPoint);
@@ -233,7 +233,7 @@ public class StageScene : MonoBehaviour, IScene
 
     private bool IsPlayerInStageBoundary(Vector3 playerPosition, BoxCollider2D stageBoundary)
     {
-        Assert.IsTrue(null != stageBoundary, "Stage boundary cannot be null when checking player position.");
+        Debug.Assert(null != stageBoundary, "Stage boundary cannot be null when checking player position.");
         
         Bounds bounds = stageBoundary.bounds;
         return bounds.Contains(playerPosition);

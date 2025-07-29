@@ -11,7 +11,7 @@ public class FollowCamera : MonoBehaviour
     
     public void Initialize(BoxCollider2D stageBoundary)
     {
-        Assert.IsTrue(null != stageBoundary, "StageBoundary cannot be null when initializing FollowCamera.");
+        Debug.Assert(null != stageBoundary, "StageBoundary cannot be null when initializing FollowCamera.");
         
         SetupVirtualCamera();
         SetupConfiner(stageBoundary);
@@ -19,8 +19,8 @@ public class FollowCamera : MonoBehaviour
     
     public void ActivateCamera(Transform playerTransform)
     {
-        Assert.IsTrue(null != VirtualCamera, "VirtualCamera is not initialized.");
-        Assert.IsTrue(null != playerTransform, "Player transform cannot be null.");
+        Debug.Assert(null != VirtualCamera, "VirtualCamera is not initialized.");
+        Debug.Assert(null != playerTransform, "Player transform cannot be null.");
         
         VirtualCamera.Follow = playerTransform;
         VirtualCamera.LookAt = playerTransform;
@@ -31,7 +31,7 @@ public class FollowCamera : MonoBehaviour
     
     public void DeactivateCamera()
     {
-        Assert.IsTrue(null != VirtualCamera, "VirtualCamera is not initialized.");
+        Debug.Assert(null != VirtualCamera, "VirtualCamera is not initialized.");
         
         VirtualCamera.Priority = 0;
         VirtualCamera.Follow = null;
@@ -42,8 +42,8 @@ public class FollowCamera : MonoBehaviour
     
     public void SetCameraTarget(Transform target)
     {
-        Assert.IsTrue(null != VirtualCamera, "VirtualCamera is not initialized.");
-        Assert.IsTrue(null != target, "Target transform cannot be null.");
+        Debug.Assert(null != VirtualCamera, "VirtualCamera is not initialized.");
+        Debug.Assert(null != target, "Target transform cannot be null.");
         
         VirtualCamera.Follow = target;
         VirtualCamera.LookAt = target;
@@ -64,8 +64,8 @@ public class FollowCamera : MonoBehaviour
     
     private void SetupConfiner(BoxCollider2D stageBoundary)
     {
-        Assert.IsTrue(null != VirtualCamera, "VirtualCamera must be initialized before setting up confiner.");
-        Assert.IsTrue(null != stageBoundary, "StageBoundary cannot be null.");
+        Debug.Assert(null != VirtualCamera, "VirtualCamera must be initialized before setting up confiner.");
+        Debug.Assert(null != stageBoundary, "StageBoundary cannot be null.");
         
         CinemachineConfiner2D confiner = VirtualCamera.GetComponent<CinemachineConfiner2D>();
         if (null == confiner)

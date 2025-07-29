@@ -19,7 +19,7 @@ public class PoolManager : MonoBehaviour, IGamePlayInitializer
         where TPoolObject : IPoolable
     {
         var pools = PoolHolder<TEnum, TPoolObject>.Pools;
-        Assert.IsTrue(false == pools.ContainsKey(id), $"Pool for enum '{id}' is already registered.");
+        Debug.Assert(false == pools.ContainsKey(id), $"Pool for enum '{id}' is already registered.");
 
 
         if (false == _poolConainterObjects.ContainsKey(poolContainerPath))
@@ -79,14 +79,14 @@ public class PoolManager : MonoBehaviour, IGamePlayInitializer
 
         internal static TPoolObject Get(TEnum id)
         {
-            Assert.IsTrue(Pools.ContainsKey(id), $"No pool registered for ID '{id}'. Did you call RegisterPool?");
+            Debug.Assert(Pools.ContainsKey(id), $"No pool registered for ID '{id}'. Did you call RegisterPool?");
 
             return Pools[id].Get();
         }
 
         internal static void Return(TEnum id, TPoolObject obj)
         {
-            Assert.IsTrue(Pools.ContainsKey(id), $"No pool registered for ID '{id}'. Did you call RegisterPool?");
+            Debug.Assert(Pools.ContainsKey(id), $"No pool registered for ID '{id}'. Did you call RegisterPool?");
 
             Pools[id].Return(obj);
         }

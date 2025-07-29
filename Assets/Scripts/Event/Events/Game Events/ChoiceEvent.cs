@@ -16,7 +16,7 @@ public class ChoiceEvent : GameEventBase<ChoiceEventInfo>
 
     public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
     {
-        Assert.IsTrue(null != activeEventTypeCounts, "activeEventTypeCounts is null.");
+        Debug.Assert(null != activeEventTypeCounts, "activeEventTypeCounts is null.");
 
         if (activeEventTypeCounts.ContainsKey(GameEventType.Story))
             return true;
@@ -26,7 +26,7 @@ public class ChoiceEvent : GameEventBase<ChoiceEventInfo>
 
     public override void PlayEvent()
     {
-        Assert.IsTrue( null != Info, "Event info is not set");
+        Debug.Assert( null != Info, "Event info is not set");
 
         base.PlayEvent();
         _eventCoroutine = StartCoroutine(PlayEventCoroutine());
@@ -34,7 +34,7 @@ public class ChoiceEvent : GameEventBase<ChoiceEventInfo>
 
     public override void TerminateEvent()
     {
-        Assert.IsTrue(null != Info, "Event info is not set before termination");
+        Debug.Assert(null != Info, "Event info is not set before termination");
 
 
         if (null != _eventCoroutine)
@@ -58,7 +58,7 @@ public class ChoiceEvent : GameEventBase<ChoiceEventInfo>
 
     private IEnumerator PlayEventCoroutine()
     {
-        Assert.IsTrue(null != Info, "Event info is not set");
+        Debug.Assert(null != Info, "Event info is not set");
 
 
         // Set choice info and switch to choice UI

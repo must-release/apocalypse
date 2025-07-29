@@ -21,9 +21,9 @@ public abstract class PlayerAvatarBase : MonoBehaviour, IPlayerAvatar, ILowerSta
 
     public void InitializeAvatar(IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo)
     {
-        Assert.IsTrue(null != objectInteractor, "Object interactor is null");
-        Assert.IsTrue(null != playerMotion, "Player motion is null");
-        Assert.IsTrue(null != playerInfo, "Player info is null");
+        Debug.Assert(null != objectInteractor, "Object interactor is null");
+        Debug.Assert(null != playerMotion, "Player motion is null");
+        Debug.Assert(null != playerInfo, "Player info is null");
 
         _objectInteractor   = objectInteractor;
         _playerMotion       = playerMotion;
@@ -34,7 +34,7 @@ public abstract class PlayerAvatarBase : MonoBehaviour, IPlayerAvatar, ILowerSta
 
     public void ControlAvatar(IReadOnlyControlInfo controlInfo)
     {
-        Assert.IsTrue(null != controlInfo, "Control info is null");
+        Debug.Assert(null != controlInfo, "Control info is null");
 
         ControlLowerBody(controlInfo);
         ControlUpperBody(controlInfo);
@@ -42,8 +42,8 @@ public abstract class PlayerAvatarBase : MonoBehaviour, IPlayerAvatar, ILowerSta
 
     public void ActivateAvatar(bool value)
     {
-        Assert.IsTrue(_lowerStateTable.ContainsKey(LowerStateType.Idle), "Idle state not found");
-        Assert.IsTrue(_upperStateTable.ContainsKey(UpperStateType.Idle), "Idle state not found");
+        Debug.Assert(_lowerStateTable.ContainsKey(LowerStateType.Idle), "Idle state not found");
+        Debug.Assert(_upperStateTable.ContainsKey(UpperStateType.Idle), "Idle state not found");
 
         if (false == value)
         {
@@ -60,7 +60,7 @@ public abstract class PlayerAvatarBase : MonoBehaviour, IPlayerAvatar, ILowerSta
 
     public void OnUpdate()
     {
-        Assert.IsTrue(IsLoaded, "Avatar is not loaded yet");
+        Debug.Assert(IsLoaded, "Avatar is not loaded yet");
 
         LowerState.OnUpdate();
         UpperState.OnUpdate();
@@ -68,7 +68,7 @@ public abstract class PlayerAvatarBase : MonoBehaviour, IPlayerAvatar, ILowerSta
 
     public void OnFixedUpdate()
     {
-        Assert.IsTrue(IsLoaded, "Avatar is not loaded yet");
+        Debug.Assert(IsLoaded, "Avatar is not loaded yet");
 
         LowerState.OnFixedUpdate();
         UpperState.OnFixedUpdate();
@@ -99,7 +99,7 @@ public abstract class PlayerAvatarBase : MonoBehaviour, IPlayerAvatar, ILowerSta
 
     public void ChangeState(LowerStateType state)
     {
-        Assert.IsTrue(_lowerStateTable.ContainsKey(state), "Invalid Lower State");
+        Debug.Assert(_lowerStateTable.ContainsKey(state), "Invalid Lower State");
 
         Logger.Write(LogCategory.GamePlay, $"{LowerState.CurrentState} -> {state}");
 
@@ -117,7 +117,7 @@ public abstract class PlayerAvatarBase : MonoBehaviour, IPlayerAvatar, ILowerSta
 
     public void ChangeState(UpperStateType state)
     {
-        Assert.IsTrue(_upperStateTable.ContainsKey(state), "Invalid Upper State");
+        Debug.Assert(_upperStateTable.ContainsKey(state), "Invalid Upper State");
 
         UpperState.OnExit(state);
         UpperState = _upperStateTable[state];
@@ -149,10 +149,10 @@ public abstract class PlayerAvatarBase : MonoBehaviour, IPlayerAvatar, ILowerSta
 
     private void Awake()
     {
-        Assert.IsTrue(null != _lowerAnimator, $"Lower Animator is not assigned for {CurrentAvatar}.");
-        Assert.IsTrue(null != _upperAnimator, $"Upper Animator is not assigned for {CurrentAvatar}.");
+        Debug.Assert(null != _lowerAnimator, $"Lower Animator is not assigned for {CurrentAvatar}.");
+        Debug.Assert(null != _upperAnimator, $"Upper Animator is not assigned for {CurrentAvatar}.");
         _weapon = GetComponent<PlayerWeaponBase>();
-        Assert.IsTrue(null != _weapon, $"Weapon is not assigned for {CurrentAvatar}.");
+        Debug.Assert(null != _weapon, $"Weapon is not assigned for {CurrentAvatar}.");
     }
 
     private void OnEnable()
@@ -165,28 +165,28 @@ public abstract class PlayerAvatarBase : MonoBehaviour, IPlayerAvatar, ILowerSta
 
     private void RegisterStates()
     {
-        Assert.IsTrue(null != _playerMotion, $"Player Motion is not assigned for {CurrentAvatar}");
-        Assert.IsTrue(null != _playerInfo, $"Player Info is not assigned for {CurrentAvatar}");
+        Debug.Assert(null != _playerMotion, $"Player Motion is not assigned for {CurrentAvatar}");
+        Debug.Assert(null != _playerInfo, $"Player Info is not assigned for {CurrentAvatar}");
 
         var lowers = GetComponentsInChildren<IPlayerLowerState>();
-        Assert.IsTrue(0 < lowers.Length, $"No LowerState components found in children for {CurrentAvatar}");
+        Debug.Assert(0 < lowers.Length, $"No LowerState components found in children for {CurrentAvatar}");
         foreach (var lower in lowers)
         {
             lower.InitializeState(CurrentAvatar, this, _objectInteractor, _playerMotion, _playerInfo, _lowerAnimator, _weapon);
             LowerStateType state = lower.CurrentState;
 
-            Assert.IsTrue(false == _lowerStateTable.ContainsKey(state), $"LowerState {state} already registered for {CurrentAvatar}");
+            Debug.Assert(false == _lowerStateTable.ContainsKey(state), $"LowerState {state} already registered for {CurrentAvatar}");
             _lowerStateTable.Add(state, lower);
         }
 
         var uppers = GetComponentsInChildren<IPlayerUpperState>();
-        Assert.IsTrue(0 < uppers.Length, $"No UpperState components found in children for {CurrentAvatar}");
+        Debug.Assert(0 < uppers.Length, $"No UpperState components found in children for {CurrentAvatar}");
         foreach (var upper in uppers)
         {
             upper.InitializeState(CurrentAvatar, this, _objectInteractor, _playerMotion, _playerInfo, _upperAnimator, _weapon);
             UpperStateType state = upper.CurrentState;
 
-            Assert.IsTrue(false == _upperStateTable.ContainsKey(state), $"UpperState {state} already registered for {CurrentAvatar}");
+            Debug.Assert(false == _upperStateTable.ContainsKey(state), $"UpperState {state} already registered for {CurrentAvatar}");
             _upperStateTable.Add(state, upper);
         }
     }

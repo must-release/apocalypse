@@ -18,7 +18,7 @@ public class StageTransitionEvent : GameEventBase<StageTransitionEventInfo>
 
     public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
     {
-        Assert.IsTrue(null != activeEventTypeCounts, "activeEventTypeCounts is null.");
+        Debug.Assert(null != activeEventTypeCounts, "activeEventTypeCounts is null.");
 
         if (activeEventTypeCounts.ContainsKey(GameEventType.StageTransition))
         {
@@ -30,7 +30,7 @@ public class StageTransitionEvent : GameEventBase<StageTransitionEventInfo>
 
     public override void PlayEvent()
     {
-        Assert.IsTrue(null != Info, "Event info is not initialized");
+        Debug.Assert(null != Info, "Event info is not initialized");
 
         base.PlayEvent();
         AsyncPlayEvent().Forget();
@@ -38,7 +38,7 @@ public class StageTransitionEvent : GameEventBase<StageTransitionEventInfo>
 
     public override void TerminateEvent()
     {
-        Assert.IsTrue(null != Info, "Event info is not set before termination");
+        Debug.Assert(null != Info, "Event info is not set before termination");
 
         Info.DestroyInfo();
         Info = null;
@@ -53,7 +53,7 @@ public class StageTransitionEvent : GameEventBase<StageTransitionEventInfo>
 
     private async UniTask AsyncPlayEvent()
     {
-        Assert.IsTrue(null != Info, "Event info is not initialized");
+        Debug.Assert(null != Info, "Event info is not initialized");
 
         PlayerManager.Instance.GetPlayerData(out ChapterType _, out int _, out PlayerAvatarType playerType);
         PlayerManager.Instance.SetPlayerData(Info.TargetChapter, Info.TargetStage, playerType);

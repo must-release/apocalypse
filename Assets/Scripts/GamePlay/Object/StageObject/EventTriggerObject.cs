@@ -20,8 +20,8 @@ public class EventTriggerObject : MonoBehaviour
 
     private void Awake()
     {
-        Assert.IsTrue(null != _triggerEvent, "EventTriggerObject must have a valid EventInfo assigned.");
-        Assert.IsTrue(null != _debuggingName, "EventTriggerObject must have a valid TextMeshPro assigned for debugging.");
+        Debug.Assert(null != _triggerEvent, "EventTriggerObject must have a valid EventInfo assigned.");
+        Debug.Assert(null != _debuggingName, "EventTriggerObject must have a valid TextMeshPro assigned for debugging.");
 
         GetComponent<Collider2D>().isTrigger = true;
         GetComponent<SpriteRenderer>().enabled = false;

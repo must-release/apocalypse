@@ -11,7 +11,7 @@ public class Framework : MonoBehaviour
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void Main()
     {
-        Assert.IsTrue(null == GameObject.Find("Framework"), "Framework instance already exists.");
+        Debug.Assert(null == GameObject.Find("Framework"), "Framework instance already exists.");
 
         GameObject framework = new GameObject("Framework");
         framework.AddComponent<Framework>();
@@ -83,7 +83,7 @@ public class Framework : MonoBehaviour
 
     private void SubmitBootstrapEvent()
     {
-        Assert.IsTrue(null != _devConfig, "DevConfig not loaded");
+        Debug.Assert(null != _devConfig, "DevConfig not loaded");
 
         if (null != _devConfig.BootstrapEvent)
         {

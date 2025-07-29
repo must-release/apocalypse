@@ -13,9 +13,9 @@ public class ChoiceEventInfo : GameEventInfo, ISerializableEventInfo
     
     public void Initialize(List<string> choices, bool isRuntimeInstance = false)
     {
-        Assert.IsTrue(false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed.");
-        Assert.IsTrue(null != choices, "Choices cannot be null.");
-        Assert.IsTrue(0 < choices.Count, "Choice list must have at least one item.");
+        Debug.Assert(false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed.");
+        Debug.Assert(null != choices, "Choices cannot be null.");
+        Debug.Assert(0 < choices.Count, "Choice list must have at least one item.");
 
         ChoiceList          = new List<string>(choices);
         IsInitialized       = true;

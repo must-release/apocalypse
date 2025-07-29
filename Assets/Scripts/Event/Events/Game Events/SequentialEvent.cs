@@ -28,8 +28,8 @@ public class SequentialEvent : GameEventBase<SequentialEventInfo>, IEventContain
 
     public void AddNewEvent(IGameEvent newEvent)
     {
-        Assert.IsTrue(null != newEvent, "GameEvent is null");
-        Assert.IsTrue(newEvent.Status == EventStatus.Waiting, "GameEvent is not in waiting state");
+        Debug.Assert(null != newEvent, "GameEvent is null");
+        Debug.Assert(newEvent.Status == EventStatus.Waiting, "GameEvent is not in waiting state");
 
         Info.EventInfos.Add(newEvent.EventInfo);
         _eventQueue.Enqueue(newEvent);
@@ -48,7 +48,7 @@ public class SequentialEvent : GameEventBase<SequentialEventInfo>, IEventContain
 
     public override void PlayEvent()
     {
-        Assert.IsTrue( null != _eventQueue, "There are no events to run sequentially" );
+        Debug.Assert( null != _eventQueue, "There are no events to run sequentially" );
 
         base.PlayEvent();
         _eventCoroutine = StartCoroutine(RunSequentially());
@@ -89,7 +89,7 @@ public class SequentialEvent : GameEventBase<SequentialEventInfo>, IEventContain
 
     private IEnumerator RunSequentially()
     {
-        Assert.IsTrue(0 < _eventQueue.Count, "There are no events to run sequentially");
+        Debug.Assert(0 < _eventQueue.Count, "There are no events to run sequentially");
 
         while (0 < _eventQueue.Count)
         {

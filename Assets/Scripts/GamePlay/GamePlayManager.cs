@@ -32,7 +32,7 @@ public class GamePlayManager : MonoBehaviour, IAsyncLoadObject
 
     public void RegisterGamePlayInitializer(IGamePlayInitializer poolingSystem)
     {
-        Assert.IsTrue(false == _initializerList.Contains(poolingSystem), "The pooling system is already Registered.");
+        Debug.Assert(false == _initializerList.Contains(poolingSystem), "The pooling system is already Registered.");
 
         _initializerList.Add(poolingSystem);
     }

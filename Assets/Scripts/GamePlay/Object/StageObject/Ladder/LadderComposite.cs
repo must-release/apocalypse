@@ -9,7 +9,7 @@ public class LadderComposite : MonoBehaviour, IStageObject, ICompositeObject, IC
     public void AddPart(IPartObject partObject)
     {
         LadderPart ladderPart = partObject as LadderPart;
-        Assert.IsTrue(null != ladderPart, $"{partObject} is not a ladder part.");
+        Debug.Assert(null != ladderPart, $"{partObject} is not a ladder part.");
 
         ladderPart.transform.SetParent(transform, true);
         ladderPart.OnClimberEnter += HandleClimberEnter;
@@ -21,8 +21,8 @@ public class LadderComposite : MonoBehaviour, IStageObject, ICompositeObject, IC
 
     public void Initialize()
     {
-        Assert.IsTrue(null != _topPart, "Top part of the ladder is missing.");
-        Assert.IsTrue(null != _downPart, "Down part of the ladder is missing.");
+        Debug.Assert(null != _topPart, "Top part of the ladder is missing.");
+        Debug.Assert(null != _downPart, "Down part of the ladder is missing.");
     }
 
     public Vector3 GetClimbReferencePoint()
@@ -32,7 +32,7 @@ public class LadderComposite : MonoBehaviour, IStageObject, ICompositeObject, IC
 
     public void OnClimbStart(IClimber climber)
     {
-        Assert.IsTrue(_climberCounts.ContainsKey(climber), "Unknown climber is trying to climb the ladder");
+        Debug.Assert(_climberCounts.ContainsKey(climber), "Unknown climber is trying to climb the ladder");
 
         Debug.Log(1);
 
@@ -41,7 +41,7 @@ public class LadderComposite : MonoBehaviour, IStageObject, ICompositeObject, IC
 
     public void OnClimbEnd(IClimber climber)
     {
-        Assert.IsTrue(_climberCounts.ContainsKey(climber), "Unknown climber is trying to stop climbing the ladder");
+        Debug.Assert(_climberCounts.ContainsKey(climber), "Unknown climber is trying to stop climbing the ladder");
 
         Debug.Log(2);
 
@@ -65,7 +65,7 @@ public class LadderComposite : MonoBehaviour, IStageObject, ICompositeObject, IC
 
     private void HandleClimberEnter(IClimber climber)
     {
-        Assert.IsTrue(null != climber, "Climber is null in the ladderComposite.");
+        Debug.Assert(null != climber, "Climber is null in the ladderComposite.");
 
         if (false == _climberCounts.ContainsKey(climber))
         {
@@ -80,8 +80,8 @@ public class LadderComposite : MonoBehaviour, IStageObject, ICompositeObject, IC
 
     private void HandleClimberExit(IClimber climber)
     {
-        Assert.IsTrue(null != climber, "Climber is null in the ladderComposite.");
-        Assert.IsTrue(_climberCounts.ContainsKey(climber), "Unknown climber is trying to exit the ladder.");
+        Debug.Assert(null != climber, "Climber is null in the ladderComposite.");
+        Debug.Assert(_climberCounts.ContainsKey(climber), "Unknown climber is trying to exit the ladder.");
 
         _climberCounts[climber]--;
 
