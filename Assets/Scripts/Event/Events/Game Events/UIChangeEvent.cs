@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-
-using UnityEngine.Assertions;
-using UnityEngine.AddressableAssets;
+using UnityEngine;
 
 public class UIChangeEvent : GameEventBase<UIChangeEventInfo>
 {
