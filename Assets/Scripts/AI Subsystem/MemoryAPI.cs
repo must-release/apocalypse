@@ -85,24 +85,24 @@ public class MemoryAPI : MonoBehaviour
 
 
 
-    public void SaveMemory(Dialogue dialogue)
+    public void SaveMemory(StoryDialogue dialogue)
     {
         StartCoroutine(SaveMemoryCoroutine(dialogue));
     }
-    IEnumerator SaveMemoryCoroutine(Dialogue dialogue)
+    IEnumerator SaveMemoryCoroutine(StoryDialogue dialogue)
     {
         // Set Memory attributes
         SaveMemory memory = new SaveMemory();
         memory.userId = UserID;
         memory.isDescription = false;
 
-        if(dialogue.character.Equals("나"))
-            memory.content = "지성이 " + dialogue.text + "라고 말했다.";
-        else if(dialogue.character.Equals("연아"))
-            memory.content = "나는 " + dialogue.text + "라고 말했다.";
+        if(dialogue.Name.Equals("나"))
+            memory.content = "지성이 " + dialogue.Text + "라고 말했다.";
+        else if(dialogue.Name.Equals("연아"))
+            memory.content = "나는 " + dialogue.Text + "라고 말했다.";
         else
         {
-            memory.content = dialogue.text;
+            memory.content = dialogue.Text;
             memory.isDescription = true;
         }
 
@@ -134,16 +134,16 @@ public class MemoryAPI : MonoBehaviour
 
 
 
-    public Coroutine GenerateResponse(Dialogue dialogue, bool isChatting)
+    public Coroutine GenerateResponse(StoryDialogue dialogue, bool isChatting)
     {
         return StartCoroutine(GenerateResponseCoroutine(dialogue, isChatting));
     }
 
-    IEnumerator GenerateResponseCoroutine(Dialogue dialogue, bool isChating)
+    IEnumerator GenerateResponseCoroutine(StoryDialogue dialogue, bool isChating)
     {
         ResponseMemory memory = new ResponseMemory();
         memory.userId = UserID;
-        memory.content = "지성은 " + dialogue.text + "라고 말했다.";
+        memory.content = "지성은 " + dialogue.Text + "라고 말했다.";
         memory.playTime = "00:00";
         memory.importance = 0.5f;
 

@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<StoryScript>
+  <Block BranchId="common">
+    <!--<CharacterStanding Name="소녀" Animation="Appear"> -->
+    <Dialogue Name="소녀">앞을 봐! 괴물들이 있어!</Dialogue>
+    <Dialogue Name="소녀">어떻게 하지? 돌아가야할까?</Dialogue>
+    <Choice>
+      <PrevDialogue Name="소녀">어떻게 하지? 돌아가야할까?</PrevDialogue>
+      <Options>
+        <Option BranchId="positive">죽이자.</Option>
+        <Option BranchId="negative">돌아가자.</Option>
+        <Option BranchId="negative">귀찮다.</Option>
+      </Options>
+    </Choice>
+  </Block>
+  <Block BranchId="positive">
+    <!--<CharacterStanding Name="소녀" Animation="Move" TargetPosition="Left" IsBlockingAnimation="false"> -->
+    <!--<CharacterStanding Name="나" Animation="Appear" TargetPosition="Right"> -->
+    <Dialogue Name="나">내가 처리할게.</Dialogue>
+    <Dialogue Name="소녀">좋아! 믿고 있을게!</Dialogue>
+  </Block>
+  <Block BranchId="negative">
+    <!--<CharacterStanding Name="소녀" Animation="Move" TargetPosition="Left" IsBlockingAnimation="false"> -->
+    <!--<CharacterStanding Name="나" Animation="Appear" TargetPosition="Right"> -->
+    <Dialogue Name="나">별로 싸우고 싶지 않아.</Dialogue>
+    <Dialogue Name="소녀">하지만 우리의 의지와 상관없이 괴물이 이쪽으로 오고 있어!</Dialogue>
+    <Dialogue Name="소녀">...화이팅!!</Dialogue>
+  </Block>
+  <Block BranchId="common">
+    <Dialogue Name="나">...그래.</Dialogue>
+  </Block>
+</StoryScript>

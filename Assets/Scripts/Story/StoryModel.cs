@@ -19,7 +19,7 @@ public class StoryModel : MonoBehaviour
     public int ReadEntryCount { get; set; } = 0;
     public string CurrentStoryBranch { get; private set; }
     public Queue<StoryEntry> StoryEntryBuffer { get; set; }
-    public Choice ProcessingChoice { get; set; }
+    public StoryChoice ProcessingChoice { get; set; }
 
     private void Awake()
     {
@@ -54,10 +54,10 @@ public class StoryModel : MonoBehaviour
 
         // Convert XML file to StoryBlocks object
         string xmlContent = story.Result.text;
-        StoryBlocks storyBlocks = DeserializeFromXml<StoryBlocks>(xmlContent);
+        StoryScript storyBlocks = DeserializeFromXml<StoryScript>(xmlContent);
 
         // Set story info
-        SetStoryInfo(storyBlocks.blocks);
+        SetStoryInfo(storyBlocks.Blocks);
     }
 
     // Set story information
@@ -65,8 +65,8 @@ public class StoryModel : MonoBehaviour
     {
         storyBlockQueue = new Queue<StoryBlock>(storyBlocks.Skip(ReadBlockCount));
         StoryBlock firstBlock = storyBlockQueue.Dequeue(); // Get first story block
-        CurrentStoryBranch = firstBlock.branchId; // Set current branch id according to the first story block
-        storyEntryQueue = new Queue<StoryEntry>(firstBlock.entries.Skip(ReadEntryCount));
+        CurrentStoryBranch = firstBlock.BranchId; // Set current branch id according to the first story block
+        storyEntryQueue = new Queue<StoryEntry>(firstBlock.Entries.Skip(ReadEntryCount));
     }
 
     // Deserialize XML string to object
@@ -88,13 +88,13 @@ public class StoryModel : MonoBehaviour
     // Set current branch according to selected choice option
     public void SetCurrentBranch(string optionText)
     {
-        if (ProcessingChoice != null && ProcessingChoice.options != null)
+        if (ProcessingChoice != null && ProcessingChoice.Options != null)
         {
-            foreach (var option in ProcessingChoice.options)
+            foreach (var option in ProcessingChoice.Options)
             {
-                if (option.text.Equals(optionText))
+                if (option.Text.Equals(optionText))
                 {
-                    CurrentStoryBranch = option.branchId;
+                    CurrentStoryBranch = option.BranchId;
                     break;
                 }
             }
@@ -113,7 +113,7 @@ public class StoryModel : MonoBehaviour
             StoryEntry nextEntry = storyEntryQueue.Dequeue();
             readEntryCountBuffer++;
 
-            if (nextEntry.isSavePoint) // If next entry is save point, update ReadEntryCount
+            if (nextEntry.IsSavePoint) // If next entry is save point, update ReadEntryCount
             {
                 ReadEntryCount += readEntryCountBuffer;
                 readEntryCountBuffer = 0;
@@ -131,10 +131,10 @@ public class StoryModel : MonoBehaviour
                 ReadEntryCount = readEntryCountBuffer = 0;
 
                 // Play next story block when it is common or is same with current story branch
-                if (nextBlock.branchId == "common" || nextBlock.branchId == CurrentStoryBranch)
+                if (nextBlock.BranchId == "common" || nextBlock.BranchId == CurrentStoryBranch)
                 {
-                    CurrentStoryBranch = nextBlock.branchId;
-                    storyEntryQueue = new Queue<StoryEntry>(nextBlock.entries);
+                    CurrentStoryBranch = nextBlock.BranchId;
+                    storyEntryQueue = new Queue<StoryEntry>(nextBlock.Entries);
                     return storyEntryQueue.Dequeue();
                 }
                 else // Skip to next block

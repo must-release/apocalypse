@@ -112,7 +112,7 @@ public class StoryController : MonoBehaviour
             }
 
             // Complete current playing dialogue entry
-            Dialogue dialogue = dialoguePlayer.PlayingDialgoueEntries[0];
+            StoryDialogue dialogue = dialoguePlayer.PlayingDialgoueEntries[0];
             dialoguePlayer.CompleteDialogue(dialogue, nameText, dialogueText);
         }
         else
@@ -147,18 +147,18 @@ public class StoryController : MonoBehaviour
     // Show story entry on the screen
     public void ShowStoryEntry(StoryEntry entry)
     {
-        if (entry is Dialogue dialogue)
+        if (entry is StoryDialogue dialogue)
         {
             dialoguePlayer.PlayDialogue(dialogue, nameText, dialogueText);
             //MemoryAPI.Instance.SaveMemory(dialogue);
         }
-        else if (entry is Choice choice)
+        else if (entry is StoryChoice choice)
         {
             // Save processing choice
             StoryModel.Instance.ProcessingChoice = choice;
 
             // Extracting the text values from the options
-            List<string> optionTexts = choice.options.Select(option => option.text).ToList();
+            List<string> optionTexts = choice.Options.Select(option => option.Text).ToList();
 
             // Generate show choice event
             var choiceEvent = GameEventFactory.CreateChoiceEvent(optionTexts);
@@ -175,7 +175,7 @@ public class StoryController : MonoBehaviour
     public void ProcessSelectedChoice(string optionText, bool generateResponse)
     {
         // Play selected choice option
-        Dialogue inputDialogue = new Dialogue("나", optionText);
+        StoryDialogue inputDialogue = new StoryDialogue("나", optionText);
         StoryModel.Instance.StoryEntryBuffer.Enqueue(inputDialogue);
         PlayNextScript();
 
@@ -190,7 +190,7 @@ public class StoryController : MonoBehaviour
     }
 
     // Get response of the AI Character
-    IEnumerator GetResponse(Dialogue inputDialogue)
+    IEnumerator GetResponse(StoryDialogue inputDialogue)
     {
         // Set response settings
         isWaitingResponse = true;
@@ -216,7 +216,7 @@ public class StoryController : MonoBehaviour
                 continue;
 
             // Prepare response
-            Dialogue responseDialogue = new Dialogue("연아", line);
+            StoryDialogue responseDialogue = new StoryDialogue("연아", line);
             StoryModel.Instance.StoryEntryBuffer.Enqueue(responseDialogue);
         }
 
