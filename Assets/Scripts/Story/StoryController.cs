@@ -164,6 +164,11 @@ public class StoryController : MonoBehaviour
             var choiceEvent = GameEventFactory.CreateChoiceEvent(optionTexts);
             GameEventManager.Instance.Submit(choiceEvent);
         }
+        else if (entry is StoryCharacterStanding standing)
+        {
+            var standingEvent = GameEventFactory.CreateStandingEvent(standing);
+            GameEventManager.Instance.Submit(standingEvent);
+        }
         else
         {
             Debug.Log("story entry error: no such entry");
