@@ -6,7 +6,8 @@ public class CharacterExpressionAsset : ScriptableObject
 {
     /****** Public Members ******/
 
-    public List<CharacterExpressionEntry> CharacterExpressions;
+    public List<CharacterExpressionEntry> rounExpressions;
+    public List<CharacterExpressionEntry> minaExpressions;
 
 
     /****** Protected Members ******/
@@ -17,9 +18,14 @@ public class CharacterExpressionAsset : ScriptableObject
 
         /* Debug.Assert(CharacterExpressions.Count == (int)ExpressionType.ExpressionTypeCount, "CharacterExpressions count mismatch with ExpressionType enum."); */
 
-        foreach (var entry in CharacterExpressions)
+        foreach (var entry in rounExpressions)
         {
-            Debug.Assert(null != entry.Sprite, $"Character {entry.ExpressionType} expression sprite is not assigned.");
+            Debug.Assert(null != entry.Sprite, $"Character Roun's {entry.ExpressionType} expression sprite is not assigned.");
+        }
+
+        foreach (var entry in minaExpressions)
+        {
+            Debug.Assert(null != entry.Sprite, $"Character Mina's {entry.ExpressionType} expression sprite is not assigned.");
         }
     }
 }

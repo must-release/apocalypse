@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9de5ac663db044fb0b407a45abe43682, type: 3}
   m_Name: DevConfig
   m_EditorClassIdentifier: 
-  BootstrapEvent: {fileID: 11400000, guid: c56c69df71a02bf4cbb2ceba05003865, type: 2}
+  BootstrapEvent: {fileID: 11400000, guid: 42fe051c02dd20243b494e2923c482b0, type: 2}

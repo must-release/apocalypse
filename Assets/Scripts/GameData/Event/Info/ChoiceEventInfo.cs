@@ -39,6 +39,7 @@ public class ChoiceEventInfo : GameEventInfo, ISerializableEventInfo
             ChoiceList = new List<string>(_choiceList)
         };
     }
+    
 
     /****** Protected Members ******/
 

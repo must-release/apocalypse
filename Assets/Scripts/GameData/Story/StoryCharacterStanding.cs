@@ -33,7 +33,7 @@ public class StoryCharacterStanding : StoryEntry
     public bool IsBlockingAnimation = true; // If true, next entry should wait for this animation to be over
 
     [XmlAttribute("AnimationSpeed")]
-    public float AnimationSpeed;
+    public float AnimationSpeed = 1.0f;
 
     [XmlAttribute("TargetPosition")]
     public TargetPositionType TargetPosition;

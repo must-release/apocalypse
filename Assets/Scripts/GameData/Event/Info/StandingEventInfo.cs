@@ -3,6 +3,8 @@ using UnityEngine.Assertions;
 
 public class StandingEventInfo : GameEventInfo
 {
+    /****** Public Members ******/
+
     public string CharacterID { get; private set; }
     public ExpressionType Expression { get; private set; }
     public StoryCharacterStanding.AnimationType Animation { get; private set; }
@@ -12,41 +14,50 @@ public class StandingEventInfo : GameEventInfo
 
     public void Initialize(StoryCharacterStanding standingData)
     {
+        Debug.Assert(false == IsInitialized, "Duplicate initialization of GameEventInfo is not allowed.");
         Debug.Assert(null != standingData, "StandingData cannot be null.");
         Debug.Assert(false == string.IsNullOrEmpty(standingData.Name), "CharacterID cannot be null or empty.");
 
-        EventType = GameEventType.Standing;
-        CharacterID = standingData.Name;
-        Expression = standingData.Expression;
-        Animation = standingData.Animation;
+        EventType           = GameEventType.Standing;
+        CharacterID         = standingData.Name;
+        Expression          = standingData.Expression;
+        Animation           = standingData.Animation;
         IsBlockingAnimation = standingData.IsBlockingAnimation;
-        AnimationSpeed = standingData.AnimationSpeed;
-        TargetPosition = standingData.TargetPosition;
-        IsInitialized = true;
+        AnimationSpeed      = standingData.AnimationSpeed;
+        TargetPosition      = standingData.TargetPosition;
+        IsInitialized       = true;
     }
 
     public override GameEventInfo Clone()
     {
-        StandingEventInfo clone = CreateInstance<StandingEventInfo>();
-        clone.EventType = this.EventType;
-        clone.CharacterID = this.CharacterID;
-        clone.Expression = this.Expression;
-        clone.Animation = this.Animation;
-        clone.IsBlockingAnimation = this.IsBlockingAnimation;
-        clone.AnimationSpeed = this.AnimationSpeed;
-        clone.TargetPosition = this.TargetPosition;
-        clone.IsInitialized = this.IsInitialized;
-        clone.IsRuntimeInstance = true;
+        var clone = Instantiate(this);
+        clone.EventType             = this.EventType;
+        clone.CharacterID           = this.CharacterID;
+        clone.Expression            = this.Expression;
+        clone.Animation             = this.Animation;
+        clone.IsBlockingAnimation   = this.IsBlockingAnimation;
+        clone.AnimationSpeed        = this.AnimationSpeed;
+        clone.TargetPosition        = this.TargetPosition;
+        clone.IsInitialized         = this.IsInitialized;
+        clone.IsRuntimeInstance     = true;
+
         return clone;
     }
 
+
+    /****** protected Members ******/
+
     protected override void OnEnable()
     {
-        // No specific logic needed for now
+        EventType = GameEventType.Standing;
     }
 
     protected override void OnValidate()
     {
-        // No specific logic needed for now
+        Debug.Assert(!string.IsNullOrEmpty(CharacterID), $"[{name}] CharacterID must be set.");
+        Debug.Assert(AnimationSpeed > 0f, $"[{name}] AnimationSpeed must be positive. Current value: {AnimationSpeed}");
+
+        if (!string.IsNullOrEmpty(CharacterID) && AnimationSpeed > 0f)
+            IsInitialized = true;
     }
 }
