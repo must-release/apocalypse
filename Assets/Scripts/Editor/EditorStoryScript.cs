@@ -24,7 +24,7 @@ namespace StoryEditor
         }
 
         public EditorStoryBlock SelectedBlock => 
-            selectedBlockIndex >= 0 && selectedBlockIndex < editorBlocks.Count ? 
+            0 <= selectedBlockIndex && selectedBlockIndex < editorBlocks.Count ? 
             editorBlocks[selectedBlockIndex] : null;
 
         public EditorStoryEntry SelectedEntry =>
@@ -46,7 +46,7 @@ namespace StoryEditor
             selectedBlockIndex = -1;
             selectedEntryIndex = -1;
 
-            if (storyScript?.Blocks != null)
+            if (null != storyScript?.Blocks)
             {
                 foreach (var block in storyScript.Blocks)
                 {
@@ -64,76 +64,76 @@ namespace StoryEditor
             return storyScript;
         }
 
-        public EditorStoryBlock AddBlock(string branchId = null)
+        public EditorStoryBlock AddBlock(string branchName = null)
         {
-            if (string.IsNullOrEmpty(branchId))
+            if (string.IsNullOrEmpty(branchName))
             {
-                branchId = $"Block{editorBlocks.Count + 1}";
+                branchName = $"Block{editorBlocks.Count + 1}";
             }
 
-            var newBlock = new EditorStoryBlock(branchId);
+            var newBlock = new EditorStoryBlock(branchName);
             editorBlocks.Add(newBlock);
             return newBlock;
         }
 
         public bool RemoveBlock(int index)
         {
-            if (index >= 0 && index < editorBlocks.Count)
+            Debug.Assert(0 <= index && index < editorBlocks.Count, "Block index out of range");
+            if (index < 0 || editorBlocks.Count <= index)
+                return false;
+            
+            editorBlocks.RemoveAt(index);
+            if (selectedBlockIndex == index)
             {
-                editorBlocks.RemoveAt(index);
-                if (selectedBlockIndex == index)
-                {
-                    selectedBlockIndex = -1;
-                    selectedEntryIndex = -1;
-                }
-                else if (selectedBlockIndex > index)
-                {
-                    selectedBlockIndex--;
-                }
-                return true;
+                selectedBlockIndex = -1;
+                selectedEntryIndex = -1;
             }
-            return false;
+            else if (selectedBlockIndex > index)
+            {
+                selectedBlockIndex--;
+            }
+            return true;
         }
 
         public bool MoveBlock(int fromIndex, int toIndex)
         {
-            if (fromIndex >= 0 && fromIndex < editorBlocks.Count &&
-                toIndex >= 0 && toIndex < editorBlocks.Count &&
-                fromIndex != toIndex)
+            Debug.Assert(0 <= fromIndex && fromIndex < editorBlocks.Count, "From index out of range");
+            Debug.Assert(0 <= toIndex && toIndex < editorBlocks.Count, "To index out of range");
+            Debug.Assert(fromIndex != toIndex, "From and to indices cannot be the same");
+            if (fromIndex < 0 || editorBlocks.Count <= fromIndex || toIndex < 0 || editorBlocks.Count <= toIndex || fromIndex == toIndex)
+                return false;
+            
+            var block = editorBlocks[fromIndex];
+            editorBlocks.RemoveAt(fromIndex);
+            editorBlocks.Insert(toIndex, block);
+
+            // Update selected index if needed
+            if (selectedBlockIndex == fromIndex)
             {
-                var block = editorBlocks[fromIndex];
-                editorBlocks.RemoveAt(fromIndex);
-                editorBlocks.Insert(toIndex, block);
-
-                // Update selected index if needed
-                if (selectedBlockIndex == fromIndex)
-                {
-                    selectedBlockIndex = toIndex;
-                }
-                else if (selectedBlockIndex > fromIndex && selectedBlockIndex <= toIndex)
-                {
-                    selectedBlockIndex--;
-                }
-                else if (selectedBlockIndex < fromIndex && selectedBlockIndex >= toIndex)
-                {
-                    selectedBlockIndex++;
-                }
-
-                return true;
+                selectedBlockIndex = toIndex;
             }
-            return false;
+            else if (selectedBlockIndex > fromIndex && selectedBlockIndex <= toIndex)
+            {
+                selectedBlockIndex--;
+            }
+            else if (selectedBlockIndex < fromIndex && selectedBlockIndex >= toIndex)
+            {
+                selectedBlockIndex++;
+            }
+
+            return true;
         }
 
-        public List<string> GetAllBranchIds()
+        public List<string> GetAllBranchNames()
         {
-            return editorBlocks.Select(b => b.BranchId).ToList();
+            return editorBlocks.Select(b => b.BranchName).ToList();
         }
 
-        public List<string> GetAvailableBranchIds(int afterBlockIndex)
+        public List<string> GetAvailableBranchNames(int afterBlockIndex)
         {
             return editorBlocks
                 .Skip(afterBlockIndex + 1)
-                .Select(b => b.BranchId)
+                .Select(b => b.BranchName)
                 .ToList();
         }
 
@@ -142,7 +142,7 @@ namespace StoryEditor
             for (int blockIndex = 0; blockIndex < editorBlocks.Count; blockIndex++)
             {
                 var block = editorBlocks[blockIndex];
-                var availableBranches = GetAvailableBranchIds(blockIndex);
+                var availableBranches = GetAvailableBranchNames(blockIndex);
 
                 for (int entryIndex = 0; entryIndex < block.EditorEntries.Count; entryIndex++)
                 {
@@ -151,11 +151,11 @@ namespace StoryEditor
                     {
                         foreach (var option in choice.Options)
                         {
-                            if (!string.IsNullOrEmpty(option.BranchId) && 
-                                !option.BranchId.Equals("common", System.StringComparison.OrdinalIgnoreCase) &&
-                                !availableBranches.Contains(option.BranchId))
+                            if (false == string.IsNullOrEmpty(option.BranchName) && 
+                                false == StoryBlock.IsCommonBranch(option.BranchName) &&
+                                false == availableBranches.Contains(option.BranchName))
                             {
-                                Debug.LogError($"Invalid branch reference '{option.BranchId}' in block '{block.BranchId}' entry {entryIndex + 1}");
+                                Debug.LogError($"Invalid branch reference '{option.BranchName}' in block '{block.BranchName}' entry {entryIndex + 1}");
                                 return false;
                             }
                         }

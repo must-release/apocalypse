@@ -21,8 +21,8 @@ namespace StoryEditor.Controllers
             Warnings.Add(warning);
         }
 
-        public bool HasErrors => Errors.Count > 0;
-        public bool HasWarnings => Warnings.Count > 0;
+        public bool HasErrors => 0 < Errors.Count;
+        public bool HasWarnings => 0 < Warnings.Count;
         public bool HasIssues => HasErrors || HasWarnings;
     }
 
@@ -70,47 +70,44 @@ namespace StoryEditor.Controllers
 
         private void ValidateBasicStructure(ValidationResult result)
         {
-            if (editorStoryScript.EditorBlocks.Count == 0)
+            if (0 == editorStoryScript.EditorBlocks.Count)
             {
                 result.AddWarning("Story script contains no blocks");
                 return;
             }
 
-            // Check for duplicate branch IDs
-            var branchIds = new HashSet<string>();
+            // Check for duplicate branch names
+            var branchNames = new HashSet<string>();
             for (int i = 0; i < editorStoryScript.EditorBlocks.Count; i++)
             {
-                var branchId = editorStoryScript.EditorBlocks[i].BranchId;
+                var branchName = editorStoryScript.EditorBlocks[i].BranchName;
 
-                if (string.IsNullOrWhiteSpace(branchId))
+                if (string.IsNullOrWhiteSpace(branchName))
                 {
-                    result.AddError($"Block {i + 1} has empty or null BranchId");
+                    result.AddError($"Block {i + 1} has empty or null BranchName");
                     continue;
                 }
 
-                if (branchIds.Contains(branchId))
+                if (false == StoryBlock.IsCommonBranch(branchName) && branchNames.Contains(branchName))
                 {
-                    result.AddError($"Duplicate BranchId '{branchId}' found in block {i + 1}");
+                    result.AddError($"Duplicate BranchName '{branchName}' found in block {i + 1}");
                 }
                 else
                 {
-                    branchIds.Add(branchId);
+                    branchNames.Add(branchName);
                 }
             }
         }
 
         private void ValidateBlock(int blockIndex, ValidationResult result)
         {
-            if (blockIndex < 0 || blockIndex >= editorStoryScript.EditorBlocks.Count)
-            {
-                result.AddError($"Invalid block index: {blockIndex}");
-                return;
-            }
+            Debug.Assert(0 <= blockIndex && blockIndex < editorStoryScript.EditorBlocks.Count, "Block index out of range");
+            Debug.Assert(null != result, "ValidationResult cannot be null");
 
             var block = editorStoryScript.EditorBlocks[blockIndex];
-            var blockName = $"Block {blockIndex + 1} ({block.BranchId})";
+            var blockName = $"Block {blockIndex + 1} ({block.BranchName})";
 
-            if (block.EditorEntries.Count == 0)
+            if (0 == block.EditorEntries.Count)
             {
                 result.AddWarning($"{blockName} contains no entries");
                 return;
@@ -125,11 +122,20 @@ namespace StoryEditor.Controllers
 
         private void ValidateEntry(int blockIndex, int entryIndex, ValidationResult result)
         {
+            Debug.Assert(0 <= blockIndex && blockIndex < editorStoryScript.EditorBlocks.Count, "Block index out of range");
+            Debug.Assert(null != result, "ValidationResult cannot be null");
+            if (blockIndex < 0 || editorStoryScript.EditorBlocks.Count <= blockIndex)
+                return;
+            
             var block = editorStoryScript.EditorBlocks[blockIndex];
+            Debug.Assert(0 <= entryIndex && entryIndex < block.EditorEntries.Count, "Entry index out of range");
+            if (entryIndex < 0 || block.EditorEntries.Count <= entryIndex)
+                return;
+            
             var entry = block.EditorEntries[entryIndex];
-            var entryName = $"Block {blockIndex + 1} ({block.BranchId}), Entry {entryIndex + 1}";
+            var entryName = $"Block {blockIndex + 1} ({block.BranchName}), Entry {entryIndex + 1}";
 
-            if (entry.StoryEntry == null)
+            if (null == entry.StoryEntry)
             {
                 result.AddError($"{entryName}: Entry is null");
                 return;
@@ -179,7 +185,7 @@ namespace StoryEditor.Controllers
                 result.AddError($"{entryName}: VFX has no action specified");
             }
 
-            if (vfx.Duration < 0)
+            if (0 > vfx.Duration)
             {
                 result.AddError($"{entryName}: VFX duration cannot be negative");
             }
@@ -191,7 +197,7 @@ namespace StoryEditor.Controllers
             bool hasDialogueBefore = false;
             var block = editorStoryScript.EditorBlocks[blockIndex];
 
-            for (int i = entryIndex - 1; i >= 0; i--)
+            for (int i = entryIndex - 1; 0 <= i; i--)
             {
                 if (block.EditorEntries[i].IsDialogue())
                 {
@@ -200,13 +206,13 @@ namespace StoryEditor.Controllers
                 }
             }
 
-            if (!hasDialogueBefore)
+            if (false == hasDialogueBefore)
             {
                 result.AddError($"{entryName}: Choice has no dialogue before it");
             }
 
             // Validate choice options
-            if (choice.Options == null || choice.Options.Count == 0)
+            if (null == choice.Options || 0 == choice.Options.Count)
             {
                 result.AddError($"{entryName}: Choice has no options");
                 return;
@@ -222,9 +228,9 @@ namespace StoryEditor.Controllers
                     result.AddWarning($"{optionName}: Option has no text");
                 }
 
-                if (string.IsNullOrWhiteSpace(option.BranchId))
+                if (string.IsNullOrWhiteSpace(option.BranchName))
                 {
-                    result.AddError($"{optionName}: Option has no BranchId");
+                    result.AddError($"{optionName}: Option has no BranchName");
                 }
             }
         }
@@ -240,7 +246,7 @@ namespace StoryEditor.Controllers
             for (int blockIndex = 0; blockIndex < editorStoryScript.EditorBlocks.Count; blockIndex++)
             {
                 var block = editorStoryScript.EditorBlocks[blockIndex];
-                var availableBranches = editorStoryScript.GetAvailableBranchIds(blockIndex);
+                var availableBranches = editorStoryScript.GetAvailableBranchNames(blockIndex);
 
                 for (int entryIndex = 0; entryIndex < block.EditorEntries.Count; entryIndex++)
                 {
@@ -248,21 +254,21 @@ namespace StoryEditor.Controllers
                     if (entry.IsChoice())
                     {
                         var choice = entry.AsChoice();
-                        var entryName = $"Block {blockIndex + 1} ({block.BranchId}), Entry {entryIndex + 1}";
+                        var entryName = $"Block {blockIndex + 1} ({block.BranchName}), Entry {entryIndex + 1}";
 
-                        if (choice.Options != null)
+                        if (null != choice.Options)
                         {
                             for (int optionIndex = 0; optionIndex < choice.Options.Count; optionIndex++)
                             {
                                 var option = choice.Options[optionIndex];
                                 var optionName = $"{entryName}, Option {optionIndex + 1}";
 
-                                if (!string.IsNullOrWhiteSpace(option.BranchId) && 
-                                    !option.BranchId.Equals("common", System.StringComparison.OrdinalIgnoreCase))
+                                if (false == string.IsNullOrWhiteSpace(option.BranchName) && 
+                                    false == StoryBlock.IsCommonBranch(option.BranchName))
                                 {
-                                    if (!availableBranches.Contains(option.BranchId))
+                                    if (false == availableBranches.Contains(option.BranchName))
                                     {
-                                        result.AddError($"{optionName}: BranchId '{option.BranchId}' does not exist in subsequent blocks");
+                                        result.AddError($"{optionName}: BranchName '{option.BranchName}' does not exist in subsequent blocks");
                                     }
                                 }
                             }
@@ -286,20 +292,20 @@ namespace StoryEditor.Controllers
             return true;
         }
 
-        public List<string> GetAvailableBranchIds(int afterBlockIndex)
+        public List<string> GetAvailableBranchNames(int afterBlockIndex)
         {
-            return editorStoryScript.GetAvailableBranchIds(afterBlockIndex);
+            return editorStoryScript.GetAvailableBranchNames(afterBlockIndex);
         }
 
-        public bool IsBranchIdValid(string branchId, int excludeBlockIndex = -1)
+        public bool IsBranchNameValid(string branchName, int excludeBlockIndex = -1)
         {
-            if (string.IsNullOrWhiteSpace(branchId))
+            if (string.IsNullOrWhiteSpace(branchName))
                 return false;
 
             for (int i = 0; i < editorStoryScript.EditorBlocks.Count; i++)
             {
                 if (i != excludeBlockIndex && 
-                    editorStoryScript.EditorBlocks[i].BranchId.Equals(branchId, System.StringComparison.OrdinalIgnoreCase))
+                    editorStoryScript.EditorBlocks[i].BranchName.Equals(branchName, System.StringComparison.OrdinalIgnoreCase))
                 {
                     return false;
                 }

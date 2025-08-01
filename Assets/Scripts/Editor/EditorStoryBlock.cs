@@ -7,14 +7,14 @@ namespace StoryEditor
     [System.Serializable]
     public class EditorStoryBlock
     {
-        [SerializeField] private string branchId;
+        [SerializeField] private string branchName;
         [SerializeField] private List<EditorStoryEntry> editorEntries = new List<EditorStoryEntry>();
         [SerializeField] private int selectedEntryIndex = -1;
 
-        public string BranchId 
+        public string BranchName 
         { 
-            get => branchId;
-            set => branchId = value;
+            get => branchName;
+            set => branchName = value;
         }
 
         public List<EditorStoryEntry> EditorEntries => editorEntries;
@@ -26,18 +26,18 @@ namespace StoryEditor
         }
 
         public EditorStoryEntry SelectedEntry => 
-            selectedEntryIndex >= 0 && selectedEntryIndex < editorEntries.Count ? 
+            0 <= selectedEntryIndex && selectedEntryIndex < editorEntries.Count ? 
             editorEntries[selectedEntryIndex] : null;
 
         public EditorStoryBlock()
         {
-            branchId = "";
+            branchName = "";
             editorEntries = new List<EditorStoryEntry>();
         }
 
-        public EditorStoryBlock(string branchId)
+        public EditorStoryBlock(string branchName)
         {
-            this.branchId = branchId;
+            this.branchName = branchName;
             editorEntries = new List<EditorStoryEntry>();
         }
 
@@ -48,7 +48,7 @@ namespace StoryEditor
 
         public void LoadFromStoryBlock(StoryBlock storyBlock)
         {
-            branchId = storyBlock.BranchId ?? "";
+            branchName = storyBlock.BranchName ?? "";
             editorEntries.Clear();
             selectedEntryIndex = -1;
 
@@ -65,7 +65,7 @@ namespace StoryEditor
         {
             return new StoryBlock
             {
-                BranchId = branchId,
+                BranchName = branchName,
                 Entries = editorEntries.Select(ee => ee.StoryEntry).ToList()
             };
         }
@@ -73,7 +73,7 @@ namespace StoryEditor
         public EditorStoryEntry AddDialogue(string character = "독백", string text = "")
         {
             // Find the last dialogue to use its character as default
-            if (string.IsNullOrEmpty(character) || character == "독백")
+            if (string.IsNullOrEmpty(character) || "독백" == character)
             {
                 var lastDialogue = editorEntries
                     .Where(e => e.StoryEntry is StoryDialogue)
@@ -83,7 +83,7 @@ namespace StoryEditor
                 if (lastDialogue != null)
                 {
                     var dialogue = lastDialogue.StoryEntry as StoryDialogue;
-                    if (!string.IsNullOrEmpty(dialogue.Name))
+                    if (false == string.IsNullOrEmpty(dialogue.Name))
                     {
                         character = dialogue.Name;
                     }
@@ -108,7 +108,7 @@ namespace StoryEditor
         {
             // Find the previous dialogue for the choice
             StoryDialogue prevDialogue = null;
-            for (int i = editorEntries.Count - 1; i >= 0; i--)
+            for (int i = editorEntries.Count - 1; 0 <= i; i--)
             {
                 if (editorEntries[i].StoryEntry is StoryDialogue dialogue)
                 {
@@ -117,7 +117,7 @@ namespace StoryEditor
                 }
             }
 
-            if (prevDialogue == null)
+            if (null == prevDialogue)
             {
                 prevDialogue = new StoryDialogue("", "");
             }
@@ -130,54 +130,54 @@ namespace StoryEditor
 
         public bool RemoveEntry(int index)
         {
-            if (index >= 0 && index < editorEntries.Count)
+            Debug.Assert(0 <= index && index < editorEntries.Count, "Entry index out of range");
+            if (index < 0 || editorEntries.Count <= index)
+                return false;
+            
+            editorEntries.RemoveAt(index);
+            if (selectedEntryIndex == index)
             {
-                editorEntries.RemoveAt(index);
-                if (selectedEntryIndex == index)
-                {
-                    selectedEntryIndex = -1;
-                }
-                else if (selectedEntryIndex > index)
-                {
-                    selectedEntryIndex--;
-                }
-                return true;
+                selectedEntryIndex = -1;
             }
-            return false;
+            else if (selectedEntryIndex > index)
+            {
+                selectedEntryIndex--;
+            }
+            return true;
         }
 
         public bool MoveEntry(int fromIndex, int toIndex)
         {
-            if (fromIndex >= 0 && fromIndex < editorEntries.Count &&
-                toIndex >= 0 && toIndex < editorEntries.Count &&
-                fromIndex != toIndex)
+            Debug.Assert(0 <= fromIndex && fromIndex < editorEntries.Count, "From index out of range");
+            Debug.Assert(0 <= toIndex && toIndex < editorEntries.Count, "To index out of range");
+            Debug.Assert(fromIndex != toIndex, "From and to indices cannot be the same");
+            if (fromIndex < 0 || editorEntries.Count <= fromIndex || toIndex < 0 || editorEntries.Count <= toIndex || fromIndex == toIndex)
+                return false;
+
+            var entry = editorEntries[fromIndex];
+            editorEntries.RemoveAt(fromIndex);
+            editorEntries.Insert(toIndex, entry);
+
+            // Update selected index if needed
+            if (selectedEntryIndex == fromIndex)
             {
-                var entry = editorEntries[fromIndex];
-                editorEntries.RemoveAt(fromIndex);
-                editorEntries.Insert(toIndex, entry);
-
-                // Update selected index if needed
-                if (selectedEntryIndex == fromIndex)
-                {
-                    selectedEntryIndex = toIndex;
-                }
-                else if (selectedEntryIndex > fromIndex && selectedEntryIndex <= toIndex)
-                {
-                    selectedEntryIndex--;
-                }
-                else if (selectedEntryIndex < fromIndex && selectedEntryIndex >= toIndex)
-                {
-                    selectedEntryIndex++;
-                }
-
-                return true;
+                selectedEntryIndex = toIndex;
             }
-            return false;
+            else if (selectedEntryIndex > fromIndex && selectedEntryIndex <= toIndex)
+            {
+                selectedEntryIndex--;
+            }
+            else if (selectedEntryIndex < fromIndex && selectedEntryIndex >= toIndex)
+            {
+                selectedEntryIndex++;
+            }
+
+            return true;
         }
 
         public string GetDisplayName()
         {
-            return string.IsNullOrEmpty(branchId) ? "Unnamed Block" : branchId;
+            return string.IsNullOrEmpty(branchName) ? "Unnamed Block" : branchName;
         }
 
         public int GetEntryCount()

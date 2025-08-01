@@ -11,6 +11,9 @@ namespace StoryEditor.Serialization
     {
         public static bool SaveToXml(EditorStoryScript editorStoryScript, string filePath, out string errorMessage)
         {
+            Debug.Assert(null != editorStoryScript, "EditorStoryScript cannot be null");
+            Debug.Assert(false == string.IsNullOrWhiteSpace(filePath), "File path cannot be null or empty");
+            
             errorMessage = "";
 
             try
@@ -20,7 +23,7 @@ namespace StoryEditor.Serialization
 
                 // Validate before saving
                 var validationController = new Controllers.ValidationController(editorStoryScript);
-                if (!validationController.CanSaveStoryScript(out errorMessage))
+                if (false == validationController.CanSaveStoryScript(out errorMessage))
                 {
                     return false;
                 }
@@ -62,12 +65,14 @@ namespace StoryEditor.Serialization
 
         public static bool LoadFromXml(string filePath, out EditorStoryScript editorStoryScript, out string errorMessage)
         {
+            Debug.Assert(false == string.IsNullOrWhiteSpace(filePath), "File path cannot be null or empty");
+            
             editorStoryScript = null;
             errorMessage = "";
 
             try
             {
-                if (!File.Exists(filePath))
+                if (false == File.Exists(filePath))
                 {
                     errorMessage = $"File does not exist: {filePath}";
                     return false;
@@ -95,17 +100,6 @@ namespace StoryEditor.Serialization
                 return false;
             }
         }
-
-
-
-
-
-
-
-
-
-
-
 
         private static void UpdateChoicePrevDialogues(EditorStoryScript editorStoryScript)
         {

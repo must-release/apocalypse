@@ -96,6 +96,10 @@ This is a Unity 6000.1.2f1 2D action/platformer game called "apocalypse". The ga
 - Follow the existing async/await patterns with UniTask
 - Implement proper disposal and cleanup for Addressables handles
 - Maintain the singleton pattern for managers (PlayerManager, DataManager)
+- **Boolean Logic**: In Editor scripts (`Assets/Scripts/Editor/`), use `false == variable` instead of `!variable` for negation checks to improve readability and consistency
+- **Equality Comparison**: In Editor scripts (`Assets/Scripts/Editor/`), use `constant == variable` format for equality operators (==, !=) to prevent accidental assignment
+- **Ordering Comparison**: In Editor scripts (`Assets/Scripts/Editor/`), use only `<` and `<=` operators with smaller value on the left side (e.g., `0 <= index && index < count` instead of `index >= 0 && index < count`)
+- **Precondition Checks**: Use `Debug.Assert` at the beginning of functions to validate preconditions and parameter integrity in development builds
 
 ## Key Dependencies
 

@@ -32,7 +32,7 @@ namespace StoryEditor
 
         public string GetEntryType()
         {
-            if (storyEntry == null) return "Unknown";
+            if (null == storyEntry) return "Unknown";
 
             return storyEntry.GetType().Name switch
             {
@@ -46,7 +46,7 @@ namespace StoryEditor
 
         public string GetDisplayText()
         {
-            if (storyEntry == null) return "Empty Entry";
+            if (null == storyEntry) return "Empty Entry";
 
             return storyEntry switch
             {
@@ -60,13 +60,13 @@ namespace StoryEditor
 
         private string GetChoiceOptionsText(StoryChoice choice)
         {
-            if (choice.Options == null || choice.Options.Count == 0)
+            if (null == choice.Options || 0 == choice.Options.Count)
                 return "No options";
 
             var optionTexts = new string[choice.Options.Count];
             for (int i = 0; i < choice.Options.Count; i++)
             {
-                optionTexts[i] = choice.Options[i].BranchId ?? "undefined";
+                optionTexts[i] = choice.Options[i].BranchName ?? "undefined";
             }
             return string.Join(", ", optionTexts);
         }
@@ -83,7 +83,9 @@ namespace StoryEditor
 
         public void UpdateChoicePrevDialogue(EditorStoryBlock parentBlock, int entryIndex)
         {
-            if (!IsChoice()) return;
+            Debug.Assert(null != parentBlock, "Parent block cannot be null");
+            Debug.Assert(0 <= entryIndex && entryIndex < parentBlock.EditorEntries.Count, "Entry index out of range");
+            Debug.Assert(IsChoice(), "Entry must be a choice type");
 
             var choice = AsChoice();
             StoryDialogue prevDialogue = null;
@@ -100,7 +102,7 @@ namespace StoryEditor
                 }
             }
 
-            if (prevDialogue == null)
+            if (null == prevDialogue)
             {
                 prevDialogue = new StoryDialogue("", "");
             }
@@ -110,7 +112,10 @@ namespace StoryEditor
 
         public bool ValidateEntry(EditorStoryBlock parentBlock, int entryIndex)
         {
-            if (storyEntry == null) return false;
+            Debug.Assert(null != parentBlock, "Parent block cannot be null");
+            Debug.Assert(0 <= entryIndex && entryIndex < parentBlock.EditorEntries.Count, "Entry index out of range");
+            
+            if (null == storyEntry) return false;
 
             if (IsChoice())
             {
@@ -118,7 +123,7 @@ namespace StoryEditor
                 
                 // Check if there's a dialogue before this choice
                 bool hasDialogueBefore = false;
-                for (int i = entryIndex - 1; i >= 0; i--)
+                for (int i = entryIndex - 1; 0 <= i; i--)
                 {
                     if (parentBlock.EditorEntries[i].IsDialogue())
                     {
@@ -127,14 +132,14 @@ namespace StoryEditor
                     }
                 }
 
-                if (!hasDialogueBefore)
+                if (false == hasDialogueBefore)
                 {
                     Debug.LogWarning($"Choice entry at index {entryIndex} has no dialogue before it");
                     return false;
                 }
 
                 // Validate choice options
-                if (choice.Options == null || choice.Options.Count == 0)
+                if (null == choice.Options || 0 == choice.Options.Count)
                 {
                     Debug.LogWarning($"Choice entry at index {entryIndex} has no options");
                     return false;

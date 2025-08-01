@@ -4,8 +4,8 @@ using System.Xml.Serialization;
 [System.Serializable]
 public class StoryChoiceOption
 {
-    [XmlAttribute("BranchId")]
-    public string BranchId;
+    [XmlAttribute("BranchName")]
+    public string BranchName = StoryBlock.CommonBranch;
 
     [XmlText]
     public string Text;

@@ -20,9 +20,9 @@ namespace StoryEditor.Controllers
             this.onSelectionChanged = onSelectionChanged;
         }
 
-        public EditorStoryBlock AddBlock(string branchId = null)
+        public EditorStoryBlock AddBlock(string branchName = null)
         {
-            var newBlock = editorStoryScript.AddBlock(branchId);
+            var newBlock = editorStoryScript.AddBlock(branchName);
             
             // Select the new block
             editorStoryScript.SelectedBlockIndex = editorStoryScript.EditorBlocks.Count - 1;
@@ -36,7 +36,8 @@ namespace StoryEditor.Controllers
 
         public bool RemoveBlock(int index)
         {
-            if (index < 0 || index >= editorStoryScript.EditorBlocks.Count)
+            Debug.Assert(0 <= index && index < editorStoryScript.EditorBlocks.Count, "Block index out of range");
+            if (index < 0 || editorStoryScript.EditorBlocks.Count <= index)
                 return false;
 
             var result = editorStoryScript.RemoveBlock(index);
@@ -52,7 +53,7 @@ namespace StoryEditor.Controllers
 
         public bool RemoveSelectedBlock()
         {
-            if (editorStoryScript.SelectedBlockIndex >= 0)
+            if (0 <= editorStoryScript.SelectedBlockIndex)
             {
                 return RemoveBlock(editorStoryScript.SelectedBlockIndex);
             }
@@ -66,7 +67,7 @@ namespace StoryEditor.Controllers
                 editorStoryScript.SelectedBlockIndex = index;
                 editorStoryScript.SelectedEntryIndex = -1;
 
-                if (index >= 0)
+                if (0 <= index)
                 {
                     editorStoryScript.EditorBlocks[index].SelectedEntryIndex = -1;
                 }
@@ -75,20 +76,22 @@ namespace StoryEditor.Controllers
             }
         }
 
-        public void RenameBlock(int index, string newBranchId)
+        public void RenameBlock(int index, string newBranchName)
         {
-            if (index >= 0 && index < editorStoryScript.EditorBlocks.Count)
-            {
-                editorStoryScript.EditorBlocks[index].BranchId = newBranchId;
-                onBlocksChanged?.Invoke();
-            }
+            Debug.Assert(0 <= index && index < editorStoryScript.EditorBlocks.Count, "Block index out of range");
+            Debug.Assert(false == string.IsNullOrWhiteSpace(newBranchName), "Branch name cannot be null or empty");
+            if (index < 0 || editorStoryScript.EditorBlocks.Count <= index || string.IsNullOrWhiteSpace(newBranchName))
+                return;
+            
+            editorStoryScript.EditorBlocks[index].BranchName = newBranchName;
+            onBlocksChanged?.Invoke();
         }
 
-        public void RenameSelectedBlock(string newBranchId)
+        public void RenameSelectedBlock(string newBranchName)
         {
-            if (editorStoryScript.SelectedBlockIndex >= 0)
+            if (0 <= editorStoryScript.SelectedBlockIndex)
             {
-                RenameBlock(editorStoryScript.SelectedBlockIndex, newBranchId);
+                RenameBlock(editorStoryScript.SelectedBlockIndex, newBranchName);
             }
         }
 
@@ -107,29 +110,29 @@ namespace StoryEditor.Controllers
 
         public bool CanMoveBlockUp(int index)
         {
-            return index > 0 && index < editorStoryScript.EditorBlocks.Count;
+            return 0 < index && editorStoryScript.EditorBlocks.Count > index;
         }
 
         public bool CanMoveBlockDown(int index)
         {
-            return index >= 0 && index < editorStoryScript.EditorBlocks.Count - 1;
+            return 0 <= index && editorStoryScript.EditorBlocks.Count - 1 > index;
         }
 
         public bool MoveBlockUp(int index)
         {
-            if (!CanMoveBlockUp(index)) return false;
+            if (false == CanMoveBlockUp(index)) return false;
             return MoveBlock(index, index - 1);
         }
 
         public bool MoveBlockDown(int index)
         {
-            if (!CanMoveBlockDown(index)) return false;
+            if (false == CanMoveBlockDown(index)) return false;
             return MoveBlock(index, index + 1);
         }
 
         public bool MoveSelectedBlockUp()
         {
-            if (editorStoryScript.SelectedBlockIndex >= 0)
+            if (0 <= editorStoryScript.SelectedBlockIndex)
             {
                 return MoveBlockUp(editorStoryScript.SelectedBlockIndex);
             }
@@ -138,31 +141,31 @@ namespace StoryEditor.Controllers
 
         public bool MoveSelectedBlockDown()
         {
-            if (editorStoryScript.SelectedBlockIndex >= 0)
+            if (0 <= editorStoryScript.SelectedBlockIndex)
             {
                 return MoveBlockDown(editorStoryScript.SelectedBlockIndex);
             }
             return false;
         }
 
-        public List<string> GetAllBranchIds()
+        public List<string> GetAllBranchNames()
         {
-            return editorStoryScript.GetAllBranchIds();
+            return editorStoryScript.GetAllBranchNames();
         }
 
-        public List<string> GetAvailableBranchIds(int afterBlockIndex)
+        public List<string> GetAvailableBranchNames(int afterBlockIndex)
         {
-            return editorStoryScript.GetAvailableBranchIds(afterBlockIndex);
+            return editorStoryScript.GetAvailableBranchNames(afterBlockIndex);
         }
 
-        public bool ValidateBranchId(string branchId, int excludeIndex = -1)
+        public bool ValidateBranchName(string branchName, int excludeIndex = -1)
         {
-            if (string.IsNullOrWhiteSpace(branchId))
+            if (string.IsNullOrWhiteSpace(branchName))
                 return false;
 
             for (int i = 0; i < editorStoryScript.EditorBlocks.Count; i++)
             {
-                if (i != excludeIndex && editorStoryScript.EditorBlocks[i].BranchId == branchId)
+                if (i != excludeIndex && editorStoryScript.EditorBlocks[i].BranchName == branchName)
                 {
                     return false;
                 }
@@ -171,19 +174,19 @@ namespace StoryEditor.Controllers
             return true;
         }
 
-        public string GenerateUniqueBranchId(string baseName = "Block")
+        public string GenerateUniqueBranchName(string baseName = "Block")
         {
             int counter = 1;
-            string candidateId;
+            string candidateName;
 
             do
             {
-                candidateId = $"{baseName}{counter}";
+                candidateName = $"{baseName}{counter}";
                 counter++;
             }
-            while (!ValidateBranchId(candidateId));
+            while (false == ValidateBranchName(candidateName));
 
-            return candidateId;
+            return candidateName;
         }
 
         public EditorStoryBlock GetSelectedBlock()
@@ -203,11 +206,11 @@ namespace StoryEditor.Controllers
 
         public EditorStoryBlock GetBlock(int index)
         {
-            if (index >= 0 && index < editorStoryScript.EditorBlocks.Count)
-            {
-                return editorStoryScript.EditorBlocks[index];
-            }
-            return null;
+            Debug.Assert(0 <= index && index < editorStoryScript.EditorBlocks.Count, "Block index out of range");
+            if (index < 0 || editorStoryScript.EditorBlocks.Count <= index)
+                return null;
+            
+            return editorStoryScript.EditorBlocks[index];
         }
     }
 }

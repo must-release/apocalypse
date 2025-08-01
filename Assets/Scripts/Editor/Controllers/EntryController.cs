@@ -31,7 +31,7 @@ namespace StoryEditor.Controllers
         public EditorStoryEntry AddEntry(EntryType entryType, string character = "독백", string text = "", string action = "", float duration = 0f)
         {
             var selectedBlock = editorStoryScript.SelectedBlock;
-            if (selectedBlock == null)
+            if (null == selectedBlock)
             {
                 Debug.LogWarning("No block selected. Cannot add entry.");
                 return null;
@@ -57,7 +57,7 @@ namespace StoryEditor.Controllers
                     break;
             }
 
-            if (newEntry != null)
+            if (null != newEntry)
             {
                 // Select the new entry
                 editorStoryScript.SelectedEntryIndex = selectedBlock.EditorEntries.Count - 1;
@@ -72,10 +72,14 @@ namespace StoryEditor.Controllers
 
         public bool RemoveEntry(int blockIndex, int entryIndex)
         {
-            if (blockIndex < 0 || blockIndex >= editorStoryScript.EditorBlocks.Count)
+            Debug.Assert(0 <= blockIndex && blockIndex < editorStoryScript.EditorBlocks.Count, "Block index out of range");
+            if (blockIndex < 0 || editorStoryScript.EditorBlocks.Count <= blockIndex)
                 return false;
 
             var block = editorStoryScript.EditorBlocks[blockIndex];
+            Debug.Assert(0 <= entryIndex && entryIndex < block.EditorEntries.Count, "Entry index out of range");
+            if (entryIndex < 0 || block.EditorEntries.Count <= entryIndex)
+                return false;
             var result = block.RemoveEntry(entryIndex);
 
             if (result)
@@ -102,7 +106,7 @@ namespace StoryEditor.Controllers
 
         public bool RemoveSelectedEntry()
         {
-            if (editorStoryScript.SelectedBlockIndex >= 0 && editorStoryScript.SelectedEntryIndex >= 0)
+            if (0 <= editorStoryScript.SelectedBlockIndex && 0 <= editorStoryScript.SelectedEntryIndex)
             {
                 return RemoveEntry(editorStoryScript.SelectedBlockIndex, editorStoryScript.SelectedEntryIndex);
             }
@@ -112,7 +116,7 @@ namespace StoryEditor.Controllers
         public void SelectEntry(int entryIndex)
         {
             var selectedBlock = editorStoryScript.SelectedBlock;
-            if (selectedBlock == null) return;
+            if (null == selectedBlock) return;
 
             if (entryIndex >= -1 && entryIndex < selectedBlock.EditorEntries.Count)
             {
@@ -125,10 +129,15 @@ namespace StoryEditor.Controllers
 
         public bool MoveEntry(int blockIndex, int fromIndex, int toIndex)
         {
-            if (blockIndex < 0 || blockIndex >= editorStoryScript.EditorBlocks.Count)
+            Debug.Assert(0 <= blockIndex && blockIndex < editorStoryScript.EditorBlocks.Count, "Block index out of range");
+            if (blockIndex < 0 || editorStoryScript.EditorBlocks.Count <= blockIndex)
                 return false;
 
             var block = editorStoryScript.EditorBlocks[blockIndex];
+            Debug.Assert(0 <= fromIndex && fromIndex < block.EditorEntries.Count, "From index out of range");
+            Debug.Assert(0 <= toIndex && toIndex < block.EditorEntries.Count, "To index out of range");
+            if (fromIndex < 0 || block.EditorEntries.Count <= fromIndex || toIndex < 0 || block.EditorEntries.Count <= toIndex)
+                return false;
             var result = block.MoveEntry(fromIndex, toIndex);
 
             if (result)
@@ -161,37 +170,37 @@ namespace StoryEditor.Controllers
 
         public bool CanMoveEntryUp(int blockIndex, int entryIndex)
         {
-            if (blockIndex < 0 || blockIndex >= editorStoryScript.EditorBlocks.Count)
+            if (blockIndex < 0 || editorStoryScript.EditorBlocks.Count <= blockIndex)
                 return false;
 
             var block = editorStoryScript.EditorBlocks[blockIndex];
-            return entryIndex > 0 && entryIndex < block.EditorEntries.Count;
+            return 0 < entryIndex && entryIndex < block.EditorEntries.Count;
         }
 
         public bool CanMoveEntryDown(int blockIndex, int entryIndex)
         {
-            if (blockIndex < 0 || blockIndex >= editorStoryScript.EditorBlocks.Count)
+            if (blockIndex < 0 || editorStoryScript.EditorBlocks.Count <= blockIndex)
                 return false;
 
             var block = editorStoryScript.EditorBlocks[blockIndex];
-            return entryIndex >= 0 && entryIndex < block.EditorEntries.Count - 1;
+            return 0 <= entryIndex && entryIndex < block.EditorEntries.Count - 1;
         }
 
         public bool MoveEntryUp(int blockIndex, int entryIndex)
         {
-            if (!CanMoveEntryUp(blockIndex, entryIndex)) return false;
+            if (false == CanMoveEntryUp(blockIndex, entryIndex)) return false;
             return MoveEntry(blockIndex, entryIndex, entryIndex - 1);
         }
 
         public bool MoveEntryDown(int blockIndex, int entryIndex)
         {
-            if (!CanMoveEntryDown(blockIndex, entryIndex)) return false;
+            if (false == CanMoveEntryDown(blockIndex, entryIndex)) return false;
             return MoveEntry(blockIndex, entryIndex, entryIndex + 1);
         }
 
         public bool MoveSelectedEntryUp()
         {
-            if (editorStoryScript.SelectedBlockIndex >= 0 && editorStoryScript.SelectedEntryIndex >= 0)
+            if (0 <= editorStoryScript.SelectedBlockIndex && 0 <= editorStoryScript.SelectedEntryIndex)
             {
                 return MoveEntryUp(editorStoryScript.SelectedBlockIndex, editorStoryScript.SelectedEntryIndex);
             }
@@ -200,7 +209,7 @@ namespace StoryEditor.Controllers
 
         public bool MoveSelectedEntryDown()
         {
-            if (editorStoryScript.SelectedBlockIndex >= 0 && editorStoryScript.SelectedEntryIndex >= 0)
+            if (0 <= editorStoryScript.SelectedBlockIndex && 0 <= editorStoryScript.SelectedEntryIndex)
             {
                 return MoveEntryDown(editorStoryScript.SelectedBlockIndex, editorStoryScript.SelectedEntryIndex);
             }
@@ -209,7 +218,7 @@ namespace StoryEditor.Controllers
 
         public void UpdateChoiceEntry(EditorStoryEntry choiceEntry, int blockIndex, int entryIndex)
         {
-            if (choiceEntry != null && choiceEntry.IsChoice())
+            if (null != choiceEntry && choiceEntry.IsChoice())
             {
                 var block = editorStoryScript.EditorBlocks[blockIndex];
                 choiceEntry.UpdateChoicePrevDialogue(block, entryIndex);
@@ -217,37 +226,37 @@ namespace StoryEditor.Controllers
             }
         }
 
-        public void AddChoiceOption(EditorStoryEntry choiceEntry, string branchId = "common", string text = "")
+        public void AddChoiceOption(EditorStoryEntry choiceEntry, string branchName = null, string text = "")
         {
-            if (choiceEntry != null && choiceEntry.IsChoice())
+            Debug.Assert(null != choiceEntry, "Choice entry cannot be null");
+            Debug.Assert(choiceEntry.IsChoice(), "Entry must be a choice type");
+            
+            var choice = choiceEntry.AsChoice();
+            if (null == choice.Options)
             {
-                var choice = choiceEntry.AsChoice();
-                if (choice.Options == null)
-                {
-                    choice.Options = new List<StoryChoiceOption>();
-                }
-
-                choice.Options.Add(new StoryChoiceOption
-                {
-                    BranchId = branchId,
-                    Text = text
-                });
-
-                onEntriesChanged?.Invoke();
+                choice.Options = new List<StoryChoiceOption>();
             }
+
+            choice.Options.Add(new StoryChoiceOption
+            {
+                BranchName = branchName ?? StoryBlock.CommonBranch,
+                Text = text
+            });
+
+            onEntriesChanged?.Invoke();
         }
 
         public void RemoveChoiceOption(EditorStoryEntry choiceEntry, int optionIndex)
         {
-            if (choiceEntry != null && choiceEntry.IsChoice())
-            {
-                var choice = choiceEntry.AsChoice();
-                if (choice.Options != null && optionIndex >= 0 && optionIndex < choice.Options.Count)
-                {
-                    choice.Options.RemoveAt(optionIndex);
-                    onEntriesChanged?.Invoke();
-                }
-            }
+            Debug.Assert(null != choiceEntry, "Choice entry cannot be null");
+            Debug.Assert(choiceEntry.IsChoice(), "Entry must be a choice type");
+            
+            var choice = choiceEntry.AsChoice();
+            Debug.Assert(null != choice.Options, "Choice options cannot be null");
+            Debug.Assert(0 <= optionIndex && optionIndex < choice.Options.Count, "Option index out of range");
+            
+            choice.Options.RemoveAt(optionIndex);
+            onEntriesChanged?.Invoke();
         }
 
         public EditorStoryEntry GetSelectedEntry()
@@ -267,11 +276,13 @@ namespace StoryEditor.Controllers
 
         public bool ValidateEntry(int blockIndex, int entryIndex)
         {
-            if (blockIndex < 0 || blockIndex >= editorStoryScript.EditorBlocks.Count)
+            Debug.Assert(0 <= blockIndex && blockIndex < editorStoryScript.EditorBlocks.Count, "Block index out of range");
+            if (blockIndex < 0 || editorStoryScript.EditorBlocks.Count <= blockIndex)
                 return false;
 
             var block = editorStoryScript.EditorBlocks[blockIndex];
-            if (entryIndex < 0 || entryIndex >= block.EditorEntries.Count)
+            Debug.Assert(0 <= entryIndex && entryIndex < block.EditorEntries.Count, "Entry index out of range");
+            if (entryIndex < 0 || block.EditorEntries.Count <= entryIndex)
                 return false;
 
             var entry = block.EditorEntries[entryIndex];

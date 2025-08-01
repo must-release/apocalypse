@@ -50,9 +50,16 @@ namespace StoryEditor
 
         private void OnEnable()
         {
-            if (editorStoryScript == null)
+            if (null == editorStoryScript)
             {
                 editorStoryScript = new EditorStoryScript();
+                // Add a default block if none exists
+                if (editorStoryScript.EditorBlocks.Count == 0)
+                {
+                    var defaultBlock = editorStoryScript.AddBlock("Block1");
+                    // Add a default dialogue entry to avoid warnings
+                    defaultBlock.AddDialogue("독백", "새로운 스토리를 시작하세요.");
+                }
             }
 
             InitializeControllers();
@@ -70,7 +77,7 @@ namespace StoryEditor
 
         private void OnGUI()
         {
-            if (editorStoryScript == null) return;
+            if (null == editorStoryScript) return;
 
             DrawMenuBar();
             DrawPanels();
@@ -110,13 +117,19 @@ namespace StoryEditor
             if (validation.HasErrors)
             {
                 GUI.color = Color.red;
-                GUILayout.Label($"Errors: {validation.Errors.Count}", EditorStyles.toolbarButton);
+                if (GUILayout.Button($"Errors: {validation.Errors.Count}", EditorStyles.toolbarButton))
+                {
+                    ShowValidationMessages("Errors", validation.Errors);
+                }
                 GUI.color = Color.white;
             }
             else if (validation.HasWarnings)
             {
                 GUI.color = Color.yellow;
-                GUILayout.Label($"Warnings: {validation.Warnings.Count}", EditorStyles.toolbarButton);
+                if (GUILayout.Button($"Warnings: {validation.Warnings.Count}", EditorStyles.toolbarButton))
+                {
+                    ShowValidationMessages("Warnings", validation.Warnings);
+                }
                 GUI.color = Color.white;
             }
             else
@@ -131,8 +144,9 @@ namespace StoryEditor
 
         private void DrawPanels()
         {
-            var totalRect = GUILayoutUtility.GetRect(0, 0, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
-            totalRect.y += EditorGUIUtility.singleLineHeight + 2; // Account for toolbar
+            var totalRect = position;
+            totalRect.x = 0;
+            totalRect.y = EditorGUIUtility.singleLineHeight + 2; // Account for toolbar
             totalRect.height -= EditorGUIUtility.singleLineHeight + 2;
 
             // Calculate panel rects
@@ -165,7 +179,7 @@ namespace StoryEditor
 
             var currentEvent = Event.current;
 
-            if (currentEvent.type == EventType.MouseDown && currentEvent.button == 0)
+            if (EventType.MouseDown == currentEvent.type && 0 == currentEvent.button)
             {
                 if (leftSplitterRect.Contains(currentEvent.mousePosition))
                 {
@@ -219,19 +233,6 @@ namespace StoryEditor
                 var isSelected = i == editorStoryScript.SelectedBlockIndex;
                 var isDragTarget = isDraggingBlock && draggedBlockIndex != i;
 
-                // Highlight drag target
-                if (isDragTarget)
-                {
-                    var currentEvent = Event.current;
-                    var lastRect = GUILayoutUtility.GetLastRect();
-                    if (lastRect.Contains(currentEvent.mousePosition))
-                    {
-                        GUI.color = Color.cyan;
-                        GUI.Box(new Rect(0, lastRect.y - 2, rect.width, 4), "");
-                        GUI.color = Color.white;
-                    }
-                }
-
                 EditorGUILayout.BeginHorizontal();
 
                 // Selection and name display/editing
@@ -267,17 +268,17 @@ namespace StoryEditor
                     
                     if (GUI.Button(buttonRect, displayName, buttonStyle))
                     {
-                        if (!isDraggingBlock)
+                        if (false == isDraggingBlock)
                         {
                             blockController.SelectBlock(i);
                         }
                     }
 
                     // Double-click to edit name
-                    if (Event.current.type == EventType.MouseDown && Event.current.clickCount == 2 && 
+                    if (EventType.MouseDown == Event.current.type && 2 == Event.current.clickCount && 
                         buttonRect.Contains(Event.current.mousePosition))
                     {
-                        editingBlockName = block.BranchId;
+                        editingBlockName = block.BranchName;
                         isEditingBlockName = true;
                         editingBlockIndex = i;
                         Event.current.Use();
@@ -316,7 +317,7 @@ namespace StoryEditor
             switch (currentEvent.type)
             {
                 case EventType.MouseDown:
-                    if (buttonRect.Contains(currentEvent.mousePosition) && currentEvent.button == 0)
+                    if (buttonRect.Contains(currentEvent.mousePosition) && 0 == currentEvent.button)
                     {
                         draggedBlockIndex = blockIndex;
                         isDraggingBlock = false; // Don't start dragging until mouse moves
@@ -324,7 +325,7 @@ namespace StoryEditor
                     break;
 
                 case EventType.MouseDrag:
-                    if (draggedBlockIndex == blockIndex && !isDraggingBlock)
+                    if (draggedBlockIndex == blockIndex && false == isDraggingBlock)
                     {
                         isDraggingBlock = true;
                         currentEvent.Use();
@@ -367,7 +368,7 @@ namespace StoryEditor
             GUILayout.Label("Story Entries", EditorStyles.boldLabel);
 
             var selectedBlock = editorStoryScript.SelectedBlock;
-            if (selectedBlock == null)
+            if (null == selectedBlock)
             {
                 EditorGUILayout.HelpBox("Select a block to view its entries", MessageType.Info);
                 GUILayout.EndArea();
@@ -382,19 +383,6 @@ namespace StoryEditor
                 var isSelected = i == editorStoryScript.SelectedEntryIndex;
                 var isDragTarget = isDraggingEntry && draggedEntryIndex != i;
 
-                // Highlight drag target
-                if (isDragTarget)
-                {
-                    var currentEvent = Event.current;
-                    var lastRect = GUILayoutUtility.GetLastRect();
-                    if (lastRect.Contains(currentEvent.mousePosition))
-                    {
-                        GUI.color = Color.cyan;
-                        GUI.Box(new Rect(0, lastRect.y - 2, rect.width, 4), "");
-                        GUI.color = Color.white;
-                    }
-                }
-
                 EditorGUILayout.BeginHorizontal();
 
                 var displayText = $"{i + 1}. {entry.GetDisplayText()}";
@@ -406,7 +394,7 @@ namespace StoryEditor
                 
                 if (GUI.Button(buttonRect, displayText, buttonStyle))
                 {
-                    if (!isDraggingEntry)
+                    if (false == isDraggingEntry)
                     {
                         entryController.SelectEntry(i);
                     }
@@ -458,7 +446,7 @@ namespace StoryEditor
             switch (currentEvent.type)
             {
                 case EventType.MouseDown:
-                    if (buttonRect.Contains(currentEvent.mousePosition) && currentEvent.button == 0)
+                    if (buttonRect.Contains(currentEvent.mousePosition) && 0 == currentEvent.button)
                     {
                         draggedEntryIndex = entryIndex;
                         isDraggingEntry = false; // Don't start dragging until mouse moves
@@ -466,7 +454,7 @@ namespace StoryEditor
                     break;
 
                 case EventType.MouseDrag:
-                    if (draggedEntryIndex == entryIndex && !isDraggingEntry)
+                    if (draggedEntryIndex == entryIndex && false == isDraggingEntry)
                     {
                         isDraggingEntry = true;
                         currentEvent.Use();
@@ -513,7 +501,7 @@ namespace StoryEditor
             GUILayout.Label("Entry Editor", EditorStyles.boldLabel);
 
             var selectedEntry = editorStoryScript.SelectedEntry;
-            if (selectedEntry == null)
+            if (null == selectedEntry)
             {
                 EditorGUILayout.HelpBox("Select an entry to edit its properties", MessageType.Info);
                 GUILayout.EndArea();
@@ -593,7 +581,7 @@ namespace StoryEditor
         private void DrawChoiceEditor(StoryChoice choice)
         {
             EditorGUILayout.LabelField("Previous Dialogue:", EditorStyles.boldLabel);
-            if (choice.PrevDialogue != null)
+            if (null != choice.PrevDialogue)
             {
                 EditorGUILayout.LabelField($"Character: {choice.PrevDialogue.Name}");
                 EditorGUILayout.LabelField($"Text: {choice.PrevDialogue.Text}");
@@ -607,7 +595,7 @@ namespace StoryEditor
 
             EditorGUILayout.LabelField("Choice Options:", EditorStyles.boldLabel);
 
-            if (choice.Options == null)
+            if (null == choice.Options)
             {
                 choice.Options = new System.Collections.Generic.List<StoryChoiceOption>();
             }
@@ -631,17 +619,17 @@ namespace StoryEditor
                 
                 EditorGUILayout.EndHorizontal();
 
-                EditorGUILayout.LabelField("Branch ID:");
-                var availableBranches = validationController.GetAvailableBranchIds(editorStoryScript.SelectedBlockIndex);
-                availableBranches.Insert(0, "common");
+                EditorGUILayout.LabelField("Branch Name:");
+                var availableBranches = validationController.GetAvailableBranchNames(editorStoryScript.SelectedBlockIndex);
+                availableBranches.Insert(0, StoryBlock.CommonBranch);
                 
-                var branchIndex = availableBranches.IndexOf(option.BranchId ?? "common");
+                var branchIndex = availableBranches.IndexOf(option.BranchName ?? StoryBlock.CommonBranch);
                 if (branchIndex == -1) branchIndex = 0;
                 
                 var newBranchIndex = EditorGUILayout.Popup(branchIndex, availableBranches.ToArray());
-                if (newBranchIndex != branchIndex && newBranchIndex >= 0 && newBranchIndex < availableBranches.Count)
+                if (branchIndex != newBranchIndex && 0 <= newBranchIndex && newBranchIndex < availableBranches.Count)
                 {
-                    option.BranchId = availableBranches[newBranchIndex];
+                    option.BranchName = availableBranches[newBranchIndex];
                 }
 
                 EditorGUILayout.LabelField("Option Text:");
@@ -655,7 +643,7 @@ namespace StoryEditor
             {
                 choice.Options.Add(new StoryChoiceOption
                 {
-                    BranchId = "common",
+                    BranchName = StoryBlock.CommonBranch,
                     Text = ""
                 });
             }
@@ -665,7 +653,7 @@ namespace StoryEditor
             if (GUILayout.Button("Update Previous Dialogue"))
             {
                 var selectedEntry = editorStoryScript.SelectedEntry;
-                if (selectedEntry != null)
+                if (null != selectedEntry)
                 {
                     entryController.UpdateChoiceEntry(selectedEntry, 
                         editorStoryScript.SelectedBlockIndex, 
@@ -690,7 +678,7 @@ namespace StoryEditor
         private void LoadFile()
         {
             var path = EditorUtility.OpenFilePanel("Load Story Script", "", "xml");
-            if (!string.IsNullOrEmpty(path))
+            if (false == string.IsNullOrEmpty(path))
             {
                 if (StoryScriptSerializer.LoadFromXml(path, out var loadedScript, out var errorMessage))
                 {
@@ -728,7 +716,7 @@ namespace StoryEditor
         private void SaveAsFile()
         {
             var path = EditorUtility.SaveFilePanel("Save Story Script", "", "StoryScript", "xml");
-            if (!string.IsNullOrEmpty(path))
+            if (false == string.IsNullOrEmpty(path))
             {
                 if (StoryScriptSerializer.SaveToXml(editorStoryScript, path, out var errorMessage))
                 {
@@ -742,6 +730,26 @@ namespace StoryEditor
             }
         }
 
+
+        private void ShowValidationMessages(string title, System.Collections.Generic.List<string> messages)
+        {
+            // Show in Unity Console
+            foreach (var message in messages)
+            {
+                if ("Errors" == title)
+                {
+                    Debug.LogError($"[Story Editor] {message}");
+                }
+                else
+                {
+                    Debug.LogWarning($"[Story Editor] {message}");
+                }
+            }
+
+            // Also show as popup dialog
+            var messageText = string.Join("\n• ", messages);
+            EditorUtility.DisplayDialog(title, $"• {messageText}", "OK");
+        }
 
         #endregion
     }
