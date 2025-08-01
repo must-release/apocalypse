@@ -13,6 +13,9 @@ public class StandingEvent : GameEventBase<StandingEventInfo>
     public override bool ShouldBeSaved => false;
     public override GameEventType EventType => GameEventType.Standing;
 
+    public static bool IsBlockingAnimationActive { get; private set; } = false;
+    public static StandingEvent ActiveStandingEvent { get; private set; } = null;
+
     public override bool CheckCompatibility(IReadOnlyDictionary<GameEventType, int> activeEventTypeCounts)
     {
         // StandingEvent can always be activated immediately.
@@ -26,14 +29,36 @@ public class StandingEvent : GameEventBase<StandingEventInfo>
         Debug.Assert(null != Info, "Event info is not set");
 
         base.PlayEvent();
+        ActiveStandingEvent = this;
         _eventCoroutine = StartCoroutine(PlayEventCoroutine());
     }
+
+    public override void TerminateEvent()
+    {
+        Debug.Assert(null != Info, "Event info is not set before termination");
+
+        if (null != _eventCoroutine)
+        {
+            StopCoroutine( _eventCoroutine );
+            _eventCoroutine = null;
+        }
+
+        Info.DestroyInfo();
+        Info = null;
+
+        GameEventPool<StandingEvent, StandingEventInfo>.Release(this);
+
+        base.TerminateEvent();
+    }
     
-    
-    /****** Private Members ******/
+
+    /****** Private Methods ******/
 
     private Coroutine _eventCoroutine = null;
     private CharacterExpressionAsset _characterExpressionAsset;
+    // private Coroutine _fadeCoroutine = null;
+    // private Coroutine _moveCoroutine = null;
+    
 
     private IEnumerator PlayEventCoroutine()
     {
@@ -133,14 +158,22 @@ public class StandingEvent : GameEventBase<StandingEventInfo>
             yield break;
         }
 
+        if (Info.IsBlockingAnimation)
+        {
+            IsBlockingAnimationActive = true;
+            // Wait for animation to finish (already handled by yield return in Fade/Move)
+        }
+
         switch (Info.Animation)
         {
             case StoryCharacterStanding.AnimationType.Appear:
                 characterRectTransform.anchoredPosition = targetPosition;
+
                 yield return Fade(characterImage, 0f, 1f, duration);
                 break;
 
             case StoryCharacterStanding.AnimationType.Disappear:
+
                 yield return Fade(characterImage, 1f, 0f, duration);
                 character.SetActive(false); // Deactivate after fade out
                 break;
@@ -150,12 +183,8 @@ public class StandingEvent : GameEventBase<StandingEventInfo>
                 break;
         }
 
-        if (Info.IsBlockingAnimation)
-        {
-            // Wait for animation to finish (already handled by yield return in Fade/Move)
-        }
-
         TerminateEvent();
+        IsBlockingAnimationActive = false;
     }
 
     private IEnumerator Fade(Image renderer, float startAlpha, float endAlpha, float duration)

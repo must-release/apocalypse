@@ -114,6 +114,12 @@ public class StoryController : MonoBehaviour
     // Play next script on the screen
     public void PlayNextScript()
     {
+        if (StandingEvent.IsBlockingAnimationActive)
+        {
+            // If a blocking animation is active, do not proceed to the next script.
+            return;
+        }
+
         if (dialoguePlayer.PlayingDialgoueEntries.Count > 0)
         {
             if (dialoguePlayer.PlayingDialgoueEntries.Count > 1)
