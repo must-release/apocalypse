@@ -24,7 +24,7 @@ public class StoryCharacterStanding : StoryEntry
     public string Name;
 
     [XmlAttribute("Expression")]
-    public string Expression;
+    public ExpressionType Expression;
 
     [XmlAttribute("Animation")]
     public AnimationType Animation;

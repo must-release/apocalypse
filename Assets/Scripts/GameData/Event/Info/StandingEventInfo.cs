@@ -4,7 +4,7 @@ using UnityEngine.Assertions;
 public class StandingEventInfo : GameEventInfo
 {
     public string CharacterID { get; private set; }
-    public string Expression { get; private set; }
+    public ExpressionType Expression { get; private set; }
     public StoryCharacterStanding.AnimationType Animation { get; private set; }
     public bool IsBlockingAnimation { get; private set; }
     public float AnimationSpeed { get; private set; }
