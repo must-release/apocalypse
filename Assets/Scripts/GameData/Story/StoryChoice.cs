@@ -10,6 +10,7 @@ public class StoryChoice : StoryEntry
     {
         PrevDialogue   = prevDialogue;
         Options        = options;
+        IsSavePoint    = true;
     }
 
     [XmlElement("PrevDialogue")]

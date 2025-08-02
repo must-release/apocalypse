@@ -14,8 +14,9 @@ public class StoryDialogue : StoryEntry
 
     public StoryDialogue(string name, string text)
     {
-        Name = name;
-        Text = text;
+        Name        = name;
+        Text        = text;
+        IsSavePoint = true;
     }
 
     [XmlAttribute("Name")]

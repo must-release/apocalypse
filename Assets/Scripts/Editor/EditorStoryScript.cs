@@ -68,12 +68,55 @@ namespace StoryEditor
         {
             if (string.IsNullOrEmpty(branchName))
             {
-                branchName = $"Block{editorBlocks.Count + 1}";
+                branchName = "Common";
+            }
+            else if (branchName != "Common")
+            {
+                // Only generate unique names for non-Common branches
+                branchName = GenerateUniqueBranchName(branchName);
             }
 
             var newBlock = new EditorStoryBlock(branchName);
             editorBlocks.Add(newBlock);
             return newBlock;
+        }
+
+        private string GenerateUniqueBranchName(string baseName)
+        {
+            // Common branches are always allowed to have duplicate names
+            if (baseName == "Common")
+            {
+                return baseName;
+            }
+
+            // First try the base name without any suffix
+            if (IsUniqueBranchName(baseName))
+            {
+                return baseName;
+            }
+
+            // If not unique, try with numbers
+            int counter = 1;
+            string candidateName;
+            do
+            {
+                candidateName = $"{baseName}{counter}";
+                counter++;
+            }
+            while (false == IsUniqueBranchName(candidateName));
+
+            return candidateName;
+        }
+
+        private bool IsUniqueBranchName(string branchName)
+        {
+            // Common branches are always considered unique (allow duplicates)
+            if (branchName == "Common")
+            {
+                return true;
+            }
+            
+            return editorBlocks.All(block => block.BranchName != branchName);
         }
 
         public bool RemoveBlock(int index)
@@ -99,7 +142,6 @@ namespace StoryEditor
         {
             Debug.Assert(0 <= fromIndex && fromIndex < editorBlocks.Count, "From index out of range");
             Debug.Assert(0 <= toIndex && toIndex < editorBlocks.Count, "To index out of range");
-            Debug.Assert(fromIndex != toIndex, "From and to indices cannot be the same");
             if (fromIndex < 0 || editorBlocks.Count <= fromIndex || toIndex < 0 || editorBlocks.Count <= toIndex || fromIndex == toIndex)
                 return false;
             

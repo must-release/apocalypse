@@ -10,7 +10,6 @@ public class StoryVFX : StoryEntry
     {
         Action      = action;
         Duration    = duration;
-        IsSavePoint = false;
     }
 
     [XmlAttribute("Action")]

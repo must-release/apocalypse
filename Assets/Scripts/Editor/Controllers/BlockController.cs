@@ -83,6 +83,13 @@ namespace StoryEditor.Controllers
             if (index < 0 || editorStoryScript.EditorBlocks.Count <= index || string.IsNullOrWhiteSpace(newBranchName))
                 return;
             
+            // Validate the new branch name (allows Common duplicates)
+            if (false == ValidateBranchName(newBranchName, index))
+            {
+                Debug.LogWarning($"Branch name '{newBranchName}' already exists. Rename operation cancelled.");
+                return;
+            }
+            
             editorStoryScript.EditorBlocks[index].BranchName = newBranchName;
             onBlocksChanged?.Invoke();
         }
@@ -163,6 +170,10 @@ namespace StoryEditor.Controllers
             if (string.IsNullOrWhiteSpace(branchName))
                 return false;
 
+            // Common branches are always valid (allow duplicates)
+            if (branchName == "Common")
+                return true;
+
             for (int i = 0; i < editorStoryScript.EditorBlocks.Count; i++)
             {
                 if (i != excludeIndex && editorStoryScript.EditorBlocks[i].BranchName == branchName)
@@ -174,20 +185,6 @@ namespace StoryEditor.Controllers
             return true;
         }
 
-        public string GenerateUniqueBranchName(string baseName = "Block")
-        {
-            int counter = 1;
-            string candidateName;
-
-            do
-            {
-                candidateName = $"{baseName}{counter}";
-                counter++;
-            }
-            while (false == ValidateBranchName(candidateName));
-
-            return candidateName;
-        }
 
         public EditorStoryBlock GetSelectedBlock()
         {

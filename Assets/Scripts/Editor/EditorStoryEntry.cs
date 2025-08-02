@@ -6,18 +6,11 @@ namespace StoryEditor
     public class EditorStoryEntry
     {
         [SerializeField] private StoryEntry storyEntry;
-        [SerializeField] private bool isExpanded = false;
 
         public StoryEntry StoryEntry 
         { 
             get => storyEntry;
             set => storyEntry = value;
-        }
-
-        public bool IsExpanded 
-        { 
-            get => isExpanded;
-            set => isExpanded = value;
         }
 
         public EditorStoryEntry()
@@ -39,7 +32,6 @@ namespace StoryEditor
                 nameof(StoryDialogue) => "Dialogue",
                 nameof(StoryVFX) => "VFX",
                 nameof(StoryChoice) => "Choice",
-                nameof(StoryCharacterStanding) => "Character",
                 _ => "Unknown"
             };
         }
@@ -50,12 +42,22 @@ namespace StoryEditor
 
             return storyEntry switch
             {
-                StoryDialogue dialogue => $"Dialogue: {dialogue.Name} - {dialogue.Text}",
+                StoryDialogue dialogue => $"Dialogue: {dialogue.Name} - {TruncateText(dialogue.Text, 12)}",
                 StoryVFX vfx => $"VFX: {vfx.Action} ({vfx.Duration}s)",
                 StoryChoice choice => $"Choice: [{GetChoiceOptionsText(choice)}]",
-                StoryCharacterStanding character => $"Character Standing",
                 _ => "Unknown Entry"
             };
+        }
+
+        private string TruncateText(string text, int maxLength)
+        {
+            if (string.IsNullOrEmpty(text))
+                return "";
+            
+            if (text.Length <= maxLength)
+                return text;
+            
+            return text.Substring(0, maxLength) + "...";
         }
 
         private string GetChoiceOptionsText(StoryChoice choice)
@@ -74,12 +76,10 @@ namespace StoryEditor
         public bool IsDialogue() => storyEntry is StoryDialogue;
         public bool IsVFX() => storyEntry is StoryVFX;
         public bool IsChoice() => storyEntry is StoryChoice;
-        public bool IsCharacterStanding() => storyEntry is StoryCharacterStanding;
 
         public StoryDialogue AsDialogue() => storyEntry as StoryDialogue;
         public StoryVFX AsVFX() => storyEntry as StoryVFX;
         public StoryChoice AsChoice() => storyEntry as StoryChoice;
-        public StoryCharacterStanding AsCharacterStanding() => storyEntry as StoryCharacterStanding;
 
         public void UpdateChoicePrevDialogue(EditorStoryBlock parentBlock, int entryIndex)
         {

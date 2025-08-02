@@ -7,8 +7,7 @@ namespace StoryEditor.Controllers
     {
         Dialogue,
         VFX,
-        Choice,
-        CharacterStanding
+        Choice
     }
 
     public class EntryController
@@ -49,11 +48,6 @@ namespace StoryEditor.Controllers
                     break;
                 case EntryType.Choice:
                     newEntry = selectedBlock.AddChoice();
-                    break;
-                case EntryType.CharacterStanding:
-                    // Note: StoryCharacterStanding is not fully implemented in the original interfaces
-                    // This would need to be implemented based on the actual requirements
-                    Debug.LogWarning("CharacterStanding entry type not fully implemented");
                     break;
             }
 
@@ -222,6 +216,31 @@ namespace StoryEditor.Controllers
             {
                 var block = editorStoryScript.EditorBlocks[blockIndex];
                 choiceEntry.UpdateChoicePrevDialogue(block, entryIndex);
+                onEntriesChanged?.Invoke();
+            }
+        }
+
+        public void UpdateAllChoiceEntriesInBlock(int blockIndex)
+        {
+            Debug.Assert(0 <= blockIndex && blockIndex < editorStoryScript.EditorBlocks.Count, "Block index out of range");
+            if (blockIndex < 0 || editorStoryScript.EditorBlocks.Count <= blockIndex)
+                return;
+
+            var block = editorStoryScript.EditorBlocks[blockIndex];
+            bool hasChanges = false;
+
+            for (int i = 0; i < block.EditorEntries.Count; i++)
+            {
+                var entry = block.EditorEntries[i];
+                if (entry.IsChoice())
+                {
+                    entry.UpdateChoicePrevDialogue(block, i);
+                    hasChanges = true;
+                }
+            }
+
+            if (hasChanges)
+            {
                 onEntriesChanged?.Invoke();
             }
         }

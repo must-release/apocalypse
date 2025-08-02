@@ -155,10 +155,6 @@ namespace StoryEditor.Controllers
                     ValidateChoice(choice, blockIndex, entryIndex, entryName, result);
                     break;
 
-                case StoryCharacterStanding character:
-                    ValidateCharacterStanding(character, entryName, result);
-                    break;
-
                 default:
                     result.AddWarning($"{entryName}: Unknown entry type {entry.StoryEntry.GetType().Name}");
                     break;
@@ -193,6 +189,16 @@ namespace StoryEditor.Controllers
 
         private void ValidateChoice(StoryChoice choice, int blockIndex, int entryIndex, string entryName, ValidationResult result)
         {
+            // Check if PrevDialogue is properly set
+            if (null == choice.PrevDialogue)
+            {
+                result.AddError($"{entryName}: Choice has no previous dialogue reference");
+            }
+            else if (string.IsNullOrWhiteSpace(choice.PrevDialogue.Name) && string.IsNullOrWhiteSpace(choice.PrevDialogue.Text))
+            {
+                result.AddError($"{entryName}: Choice previous dialogue is empty");
+            }
+
             // Check if there's a dialogue before this choice
             bool hasDialogueBefore = false;
             var block = editorStoryScript.EditorBlocks[blockIndex];
@@ -235,11 +241,6 @@ namespace StoryEditor.Controllers
             }
         }
 
-        private void ValidateCharacterStanding(StoryCharacterStanding character, string entryName, ValidationResult result)
-        {
-            // Character standing validation would depend on the actual implementation
-            // This is a placeholder for now
-        }
 
         private void ValidateChoiceReferences(ValidationResult result)
         {

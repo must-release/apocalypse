@@ -16,6 +16,6 @@ MonoBehaviour:
   _isInitialized: 1
   _slotType: 18
   _loadingChapter: 0
-  _loadingStage: 0
+  _loadingStage: 1
   _isContinueGame: 0
   _isCreatingNewData: 1

@@ -122,7 +122,17 @@ namespace StoryEditor
                 prevDialogue = new StoryDialogue("", "");
             }
 
-            var newChoice = new StoryChoice(prevDialogue, new List<StoryChoiceOption>());
+            // Create choice with one default option
+            var defaultOptions = new List<StoryChoiceOption>
+            {
+                new StoryChoiceOption
+                {
+                    BranchName = StoryBlock.CommonBranch,
+                    Text = ""
+                }
+            };
+            
+            var newChoice = new StoryChoice(prevDialogue, defaultOptions);
             var editorEntry = new EditorStoryEntry(newChoice);
             editorEntries.Add(editorEntry);
             return editorEntry;
@@ -133,6 +143,36 @@ namespace StoryEditor
             Debug.Assert(0 <= index && index < editorEntries.Count, "Entry index out of range");
             if (index < 0 || editorEntries.Count <= index)
                 return false;
+            
+            // Clear text content before removing to prevent Unity GUI cache issues
+            var entry = editorEntries[index];
+            if (entry.IsDialogue())
+            {
+                var dialogue = entry.AsDialogue();
+                dialogue.Text = "";
+                
+                // Also clear the Unity GUI control's cached text
+                var controlName = $"DialogueText_{dialogue.GetHashCode()}";
+                GUI.FocusControl(controlName);
+                GUI.FocusControl(null); // This forces Unity to save the empty state
+            }
+            else if (entry.IsChoice())
+            {
+                var choice = entry.AsChoice();
+                if (null != choice.Options)
+                {
+                    for (int i = 0; i < choice.Options.Count; i++)
+                    {
+                        var option = choice.Options[i];
+                        option.Text = "";
+                        
+                        // Also clear the Unity GUI control's cached text for each option
+                        var optionControlName = $"ChoiceOption_{choice.GetHashCode()}_{i}";
+                        GUI.FocusControl(optionControlName);
+                        GUI.FocusControl(null);
+                    }
+                }
+            }
             
             editorEntries.RemoveAt(index);
             if (selectedEntryIndex == index)
@@ -150,7 +190,6 @@ namespace StoryEditor
         {
             Debug.Assert(0 <= fromIndex && fromIndex < editorEntries.Count, "From index out of range");
             Debug.Assert(0 <= toIndex && toIndex < editorEntries.Count, "To index out of range");
-            Debug.Assert(fromIndex != toIndex, "From and to indices cannot be the same");
             if (fromIndex < 0 || editorEntries.Count <= fromIndex || toIndex < 0 || editorEntries.Count <= toIndex || fromIndex == toIndex)
                 return false;
 
