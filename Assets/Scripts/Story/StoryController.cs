@@ -64,6 +64,15 @@ public class StoryController : MonoBehaviour
     {
         var canvas = GetComponent<Canvas>();
         canvas.worldCamera = Camera.main;
+
+        foreach (var character in characters)
+        {
+            var view = character.GetComponent<CharacterCGView>();
+            if (view != null)
+            {
+                CharacterCGController.Instance.RegisterCharacter(character.name, view);
+            }
+        }
     }
 
     // Start Story Mode with given info
@@ -114,12 +123,6 @@ public class StoryController : MonoBehaviour
     // Play next script on the screen
     public void PlayNextScript()
     {
-        if (StandingEvent.IsBlockingAnimationActive)
-        {
-            // If a blocking animation is active, do not proceed to the next script.
-            return;
-        }
-
         if (dialoguePlayer.PlayingDialgoueEntries.Count > 0)
         {
             if (dialoguePlayer.PlayingDialgoueEntries.Count > 1)
@@ -163,6 +166,7 @@ public class StoryController : MonoBehaviour
     // Show story entry on the screen
     public void ShowStoryEntry(StoryEntry entry)
     {
+        //
         if (entry is StoryDialogue dialogue)
         {
             dialoguePlayer.PlayDialogue(dialogue, nameText, dialogueText);
@@ -179,11 +183,12 @@ public class StoryController : MonoBehaviour
             // Generate show choice event
             var choiceEvent = GameEventFactory.CreateChoiceEvent(optionTexts);
             GameEventManager.Instance.Submit(choiceEvent);
+
+
         }
         else if (entry is StoryCharacterStanding standing)
         {
-            var standingEvent = GameEventFactory.CreateStandingEvent(standing);
-            GameEventManager.Instance.Submit(standingEvent);
+            CharacterCGController.Instance.HandleCharacterStanding(standing, PlayNextScript);
         }
         else
         {

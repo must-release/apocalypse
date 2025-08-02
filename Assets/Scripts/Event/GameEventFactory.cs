@@ -259,15 +259,7 @@ public static class GameEventFactory
         return evt;
     }
 
-    public static IGameEvent CreateStandingEvent(StoryCharacterStanding standingData)
-    {
-        var info = ScriptableObject.CreateInstance<StandingEventInfo>();
-        info.Initialize(standingData);
-
-        var evt = GameEventPool<StandingEvent, StandingEventInfo>.Get(EventHost, $"StandingEvent_{standingData.Name}");
-        evt.Initialize(info);
-        return evt;
-    }
+    
 
     public static IGameEvent CreateFromInfo<TEventInfo>(TEventInfo info)
         where TEventInfo : GameEventInfo
