@@ -58,7 +58,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -72,7 +72,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 128
+  spritePixelsToUnits: 1280
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -139,18 +139,18 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 6d311d2dd1b3c1e458673486fab920ba
-      internalID: -45013803
+      spriteID: cf92ad25183d8a480800000000000000
+      internalID: -8887621312221402628
       vertices: []
       indices: 
       edges: []
@@ -159,20 +159,20 @@ TextureImporter:
       name: Heroine_Lower_Climbing_1
       rect:
         serializedVersion: 2
-        x: 128
+        x: 1280
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 257e2a344a12ff4458f92e86f6a07efb
-      internalID: -2104859656
+      spriteID: 044024ffcc63c2b80800000000000000
+      internalID: -8418293349378554816
       vertices: []
       indices: 
       edges: []
@@ -181,20 +181,20 @@ TextureImporter:
       name: Heroine_Lower_Climbing_2
       rect:
         serializedVersion: 2
-        x: 256
+        x: 2560
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 983580ec3f69c0540ba666fb6d359369
-      internalID: -1707430224
+      spriteID: 60a9fdf54f29caf10800000000000000
+      internalID: 2282360689448163846
       vertices: []
       indices: 
       edges: []
@@ -203,20 +203,20 @@ TextureImporter:
       name: Heroine_Lower_Climbing_3
       rect:
         serializedVersion: 2
-        x: 384
+        x: 3840
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 0027096b52fd6ff4baeb9d87c395e4fb
-      internalID: -677493634
+      spriteID: f6584ebfb80005f70800000000000000
+      internalID: 9173833042180212079
       vertices: []
       indices: 
       edges: []
@@ -225,20 +225,20 @@ TextureImporter:
       name: Heroine_Lower_Climbing_4
       rect:
         serializedVersion: 2
-        x: 512
+        x: 5120
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: ec44a8acafbcf9046a60e2c093d4a18c
-      internalID: 1252615755
+      spriteID: bbeeb81444bf4a2d0800000000000000
+      internalID: -3268211158988099909
       vertices: []
       indices: 
       edges: []
@@ -247,20 +247,20 @@ TextureImporter:
       name: Heroine_Lower_Climbing_5
       rect:
         serializedVersion: 2
-        x: 640
+        x: 6400
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: cd58aa22dc3a43440a68b6f5a188f369
-      internalID: 435883635
+      spriteID: 8c0e6a8aca60dc460800000000000000
+      internalID: 7263469112652128456
       vertices: []
       indices: 
       edges: []
@@ -269,20 +269,20 @@ TextureImporter:
       name: Heroine_Lower_Climbing_6
       rect:
         serializedVersion: 2
-        x: 768
+        x: 7680
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 22bd615ac27e2ea418b9900bbf0a024a
-      internalID: 1657830376
+      spriteID: 7bc0ce9477b386930800000000000000
+      internalID: 4136621641267154103
       vertices: []
       indices: 
       edges: []
@@ -291,20 +291,20 @@ TextureImporter:
       name: Heroine_Lower_Climbing_7
       rect:
         serializedVersion: 2
-        x: 896
+        x: 8960
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: c57cac9c645388b458c4e00f2e9bbcf5
-      internalID: -1693988775
+      spriteID: f5b62adf09f03dca0800000000000000
+      internalID: -5993429563695010977
       vertices: []
       indices: 
       edges: []
@@ -313,7 +313,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 50aa1d96ebb034243a86fbb587d6c55a
+    spriteID: 7a7a81c8053dd4644bf487793af5b3ad
     internalID: 0
     vertices: []
     indices: 
@@ -323,16 +323,16 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":128.0,"y":128.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":1280.0,"y":1280.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Heroine_Lower_Climbing_0: -45013803
-      Heroine_Lower_Climbing_1: -2104859656
-      Heroine_Lower_Climbing_2: -1707430224
-      Heroine_Lower_Climbing_3: -677493634
-      Heroine_Lower_Climbing_4: 1252615755
-      Heroine_Lower_Climbing_5: 435883635
-      Heroine_Lower_Climbing_6: 1657830376
-      Heroine_Lower_Climbing_7: -1693988775
+      Heroine_Lower_Climbing_0: -8887621312221402628
+      Heroine_Lower_Climbing_1: -8418293349378554816
+      Heroine_Lower_Climbing_2: 2282360689448163846
+      Heroine_Lower_Climbing_3: 9173833042180212079
+      Heroine_Lower_Climbing_4: -3268211158988099909
+      Heroine_Lower_Climbing_5: 7263469112652128456
+      Heroine_Lower_Climbing_6: 4136621641267154103
+      Heroine_Lower_Climbing_7: -5993429563695010977
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

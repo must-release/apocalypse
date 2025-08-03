@@ -58,7 +58,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -72,7 +72,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 128
+  spritePixelsToUnits: 1280
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -139,18 +139,18 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: d726a7d9eeeaa50409d12f6d5dc335a5
-      internalID: -2139902390
+      spriteID: 0f45253565299c620800000000000000
+      internalID: 2794925943222850800
       vertices: []
       indices: 
       edges: []
@@ -159,20 +159,20 @@ TextureImporter:
       name: Heroine_Upper_IdleLookingUp_1
       rect:
         serializedVersion: 2
-        x: 128
+        x: 1280
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 9d15183c347e300468b17ddf8582208b
-      internalID: 166953136
+      spriteID: 72a38dcf617497e10800000000000000
+      internalID: 2195864457376709159
       vertices: []
       indices: 
       edges: []
@@ -181,20 +181,20 @@ TextureImporter:
       name: Heroine_Upper_IdleLookingUp_2
       rect:
         serializedVersion: 2
-        x: 256
+        x: 2560
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 39fc56d8f3cddbb4e97df646277e1c4e
-      internalID: -1072141748
+      spriteID: c4213ab15ff31d280800000000000000
+      internalID: -9020358256683183540
       vertices: []
       indices: 
       edges: []
@@ -203,20 +203,20 @@ TextureImporter:
       name: Heroine_Upper_IdleLookingUp_3
       rect:
         serializedVersion: 2
-        x: 384
+        x: 3840
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 97574d562a97e6d4481de842f2941092
-      internalID: 486825084
+      spriteID: 6401b00b13beb2bb0800000000000000
+      internalID: -4959611965979029434
       vertices: []
       indices: 
       edges: []
@@ -225,20 +225,20 @@ TextureImporter:
       name: Heroine_Upper_IdleLookingUp_4
       rect:
         serializedVersion: 2
-        x: 512
+        x: 5120
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 327c9c37db67bb243ab951d5f19c29ba
-      internalID: -1418661310
+      spriteID: d668cf7f97c6d5f50800000000000000
+      internalID: 6871767877544609389
       vertices: []
       indices: 
       edges: []
@@ -247,20 +247,20 @@ TextureImporter:
       name: Heroine_Upper_IdleLookingUp_5
       rect:
         serializedVersion: 2
-        x: 640
+        x: 6400
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 0b03189088134b1419000879dcd36861
-      internalID: -1935727944
+      spriteID: e8f6207b3f598df00800000000000000
+      internalID: 1141827379518402446
       vertices: []
       indices: 
       edges: []
@@ -269,20 +269,20 @@ TextureImporter:
       name: Heroine_Upper_IdleLookingUp_6
       rect:
         serializedVersion: 2
-        x: 768
+        x: 7680
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 55dd1b849308bf1409410906a58aa0d0
-      internalID: -627348702
+      spriteID: f41a36ef3e36616f0800000000000000
+      internalID: -714273660014976689
       vertices: []
       indices: 
       edges: []
@@ -291,20 +291,20 @@ TextureImporter:
       name: Heroine_Upper_IdleLookingUp_7
       rect:
         serializedVersion: 2
-        x: 896
+        x: 8960
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 8fea5a75c4576bd4ba79d2883493606a
-      internalID: 938204512
+      spriteID: 4b1e12e261853f570800000000000000
+      internalID: 8499233774064755124
       vertices: []
       indices: 
       edges: []
@@ -313,7 +313,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 0d36a13d884a6184c8cc483728b9b43f
+    spriteID: 4ddf018c2812d194b9eae934fda40b1c
     internalID: 0
     vertices: []
     indices: 
@@ -323,16 +323,16 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":128.0,"y":128.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":1280.0,"y":1280.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Heroine_Upper_IdleLookingUp_0: -2139902390
-      Heroine_Upper_IdleLookingUp_1: 166953136
-      Heroine_Upper_IdleLookingUp_2: -1072141748
-      Heroine_Upper_IdleLookingUp_3: 486825084
-      Heroine_Upper_IdleLookingUp_4: -1418661310
-      Heroine_Upper_IdleLookingUp_5: -1935727944
-      Heroine_Upper_IdleLookingUp_6: -627348702
-      Heroine_Upper_IdleLookingUp_7: 938204512
+      Heroine_Upper_IdleLookingUp_0: 2794925943222850800
+      Heroine_Upper_IdleLookingUp_1: 2195864457376709159
+      Heroine_Upper_IdleLookingUp_2: -9020358256683183540
+      Heroine_Upper_IdleLookingUp_3: -4959611965979029434
+      Heroine_Upper_IdleLookingUp_4: 6871767877544609389
+      Heroine_Upper_IdleLookingUp_5: 1141827379518402446
+      Heroine_Upper_IdleLookingUp_6: -714273660014976689
+      Heroine_Upper_IdleLookingUp_7: 8499233774064755124
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

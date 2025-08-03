@@ -1,31 +1,37 @@
 fileFormatVersion: 2
-guid: 6b6484c589c7eab40848537a9e1e475e
+guid: 5bc8740017f1d21458ab7131f6b5a522
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1695478667668016696
-    second: Hero_Upper_Running_0
+      213: -6767107255334805550
+    second: Hero_Upper_Moving_0
   - first:
-      213: 7505757156027404036
-    second: Hero_Upper_Running_1
+      213: 6353303790555117031
+    second: Hero_Upper_Moving_1
   - first:
-      213: -6467936935460041750
-    second: Hero_Upper_Running_2
+      213: 3610168575717935829
+    second: Hero_Upper_Moving_2
   - first:
-      213: 6393126432328403327
-    second: Hero_Upper_Running_3
+      213: 8291507923287349428
+    second: Hero_Upper_Moving_3
   - first:
-      213: 7689434052828035540
-    second: Hero_Upper_Running_4
+      213: 8386270611248126580
+    second: Hero_Upper_Moving_4
   - first:
-      213: 8841478510585641169
-    second: Hero_Upper_Running_5
+      213: -8711938396099450364
+    second: Hero_Upper_Moving_5
   - first:
-      213: 7037320561086492564
-    second: Hero_Upper_Running_6
+      213: 4218487384437823379
+    second: Hero_Upper_Moving_6
   - first:
-      213: 6072319423039904978
-    second: Hero_Upper_Running_7
+      213: -2506131354549447575
+    second: Hero_Upper_Moving_7
+  - first:
+      213: 2106042564059238931
+    second: Hero_Upper_Moving_8
+  - first:
+      213: 4476284337434797596
+    second: Hero_Upper_Moving_9
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -58,7 +64,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -72,7 +78,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 128
+  spritePixelsToUnits: 1280
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -134,13 +140,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Hero_Upper_Running_0
+      name: Hero_Upper_Moving_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -149,20 +155,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 83eca9e7ddc878710800000000000000
-      internalID: 1695478667668016696
+      spriteID: 2dfdcc01ec76612a0800000000000000
+      internalID: -6767107255334805550
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Hero_Upper_Running_1
+      name: Hero_Upper_Moving_1
       rect:
         serializedVersion: 2
-        x: 128
+        x: 1280
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -171,20 +177,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 40f0c5fbd5ec92860800000000000000
-      internalID: 7505757156027404036
+      spriteID: 7e53e22e2287b2850800000000000000
+      internalID: 6353303790555117031
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Hero_Upper_Running_2
+      name: Hero_Upper_Moving_2
       rect:
         serializedVersion: 2
-        x: 256
+        x: 2560
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -193,20 +199,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: aeb864430a54d36a0800000000000000
-      internalID: -6467936935460041750
+      spriteID: 5da02fe2135e91230800000000000000
+      internalID: 3610168575717935829
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Hero_Upper_Running_3
+      name: Hero_Upper_Moving_3
       rect:
         serializedVersion: 2
-        x: 384
+        x: 3840
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -215,20 +221,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f7948133e92f8b850800000000000000
-      internalID: 6393126432328403327
+      spriteID: 4b811e3a68a511370800000000000000
+      internalID: 8291507923287349428
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Hero_Upper_Running_4
+      name: Hero_Upper_Moving_4
       rect:
         serializedVersion: 2
-        x: 512
+        x: 5120
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -237,20 +243,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4d97b9ad78b56ba60800000000000000
-      internalID: 7689434052828035540
+      spriteID: 47a1eb540b4026470800000000000000
+      internalID: 8386270611248126580
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Hero_Upper_Running_5
+      name: Hero_Upper_Moving_5
       rect:
         serializedVersion: 2
-        x: 640
+        x: 6400
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -259,20 +265,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1d8f4b87cdd33ba70800000000000000
-      internalID: 8841478510585641169
+      spriteID: 40ae763cf2af81780800000000000000
+      internalID: -8711938396099450364
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Hero_Upper_Running_6
+      name: Hero_Upper_Moving_6
       rect:
         serializedVersion: 2
-        x: 768
+        x: 7680
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -281,20 +287,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 49fec16d3c599a160800000000000000
-      internalID: 7037320561086492564
+      spriteID: 39712e6fce31b8a30800000000000000
+      internalID: 4218487384437823379
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Hero_Upper_Running_7
+      name: Hero_Upper_Moving_7
       rect:
         serializedVersion: 2
-        x: 896
+        x: 8960
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -303,8 +309,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2dc9ffcb756354450800000000000000
-      internalID: 6072319423039904978
+      spriteID: 9649c93afce683dd0800000000000000
+      internalID: -2506131354549447575
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_Upper_Moving_8
+      rect:
+        serializedVersion: 2
+        x: 10240
+        y: 0
+        width: 1280
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3129a90cd8a2a3d10800000000000000
+      internalID: 2106042564059238931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_Upper_Moving_9
+      rect:
+        serializedVersion: 2
+        x: 11520
+        y: 0
+        width: 1280
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c16227673e4fe1e30800000000000000
+      internalID: 4476284337434797596
       vertices: []
       indices: 
       edges: []
@@ -313,7 +363,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: bcb0d53a26fba984db731513338365da
+    spriteID: 749530a53da200548a6f5a6e8cd13995
     internalID: 0
     vertices: []
     indices: 
@@ -323,16 +373,18 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":128.0,"y":128.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":1280.0,"y":1280.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Hero_Upper_Running_0: 1695478667668016696
-      Hero_Upper_Running_1: 7505757156027404036
-      Hero_Upper_Running_2: -6467936935460041750
-      Hero_Upper_Running_3: 6393126432328403327
-      Hero_Upper_Running_4: 7689434052828035540
-      Hero_Upper_Running_5: 8841478510585641169
-      Hero_Upper_Running_6: 7037320561086492564
-      Hero_Upper_Running_7: 6072319423039904978
+      Hero_Upper_Moving_0: -6767107255334805550
+      Hero_Upper_Moving_1: 6353303790555117031
+      Hero_Upper_Moving_2: 3610168575717935829
+      Hero_Upper_Moving_3: 8291507923287349428
+      Hero_Upper_Moving_4: 8386270611248126580
+      Hero_Upper_Moving_5: -8711938396099450364
+      Hero_Upper_Moving_6: 4218487384437823379
+      Hero_Upper_Moving_7: -2506131354549447575
+      Hero_Upper_Moving_8: 2106042564059238931
+      Hero_Upper_Moving_9: 4476284337434797596
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,7 +1,31 @@
 fileFormatVersion: 2
 guid: 6f26bb1b6e8d94a2e985a3cfb8770bc3
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: -503065239052782964
+    second: Heroine_Lower_Dead_0
+  - first:
+      213: -6822662063359641977
+    second: Heroine_Lower_Dead_1
+  - first:
+      213: 1859533704142911381
+    second: Heroine_Lower_Dead_2
+  - first:
+      213: 1788713430205334505
+    second: Heroine_Lower_Dead_3
+  - first:
+      213: 8004270826454532476
+    second: Heroine_Lower_Dead_4
+  - first:
+      213: 5844455193616153038
+    second: Heroine_Lower_Dead_5
+  - first:
+      213: 4033221189601938799
+    second: Heroine_Lower_Dead_6
+  - first:
+      213: 6669299355868081215
+    second: Heroine_Lower_Dead_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -34,7 +58,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -48,7 +72,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 1280
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -81,33 +105,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
     buildTarget: Standalone
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: iOS
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -141,18 +139,18 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: b46f535967b6d194da21702635582068
-      internalID: 1661435003
+      spriteID: c82796794d0c409f0800000000000000
+      internalID: -503065239052782964
       vertices: []
       indices: 
       edges: []
@@ -161,20 +159,20 @@ TextureImporter:
       name: Heroine_Lower_Dead_1
       rect:
         serializedVersion: 2
-        x: 128
+        x: 1280
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 2c236976f7afb1041b80c0f81fc8e5a1
-      internalID: -894550047
+      spriteID: 7863aea50090151a0800000000000000
+      internalID: -6822662063359641977
       vertices: []
       indices: 
       edges: []
@@ -183,20 +181,20 @@ TextureImporter:
       name: Heroine_Lower_Dead_2
       rect:
         serializedVersion: 2
-        x: 256
+        x: 2560
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 24eed4fcef83e7645b5408c65734ee8e
-      internalID: 2006115480
+      spriteID: 597fd4b3d046ec910800000000000000
+      internalID: 1859533704142911381
       vertices: []
       indices: 
       edges: []
@@ -205,20 +203,20 @@ TextureImporter:
       name: Heroine_Lower_Dead_3
       rect:
         serializedVersion: 2
-        x: 384
+        x: 3840
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: a74694769695f0941a03603022976721
-      internalID: -2097521020
+      spriteID: 9e30c544369c2d810800000000000000
+      internalID: 1788713430205334505
       vertices: []
       indices: 
       edges: []
@@ -227,20 +225,20 @@ TextureImporter:
       name: Heroine_Lower_Dead_4
       rect:
         serializedVersion: 2
-        x: 512
+        x: 5120
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 345ad1e3eb5ff96449fd6bbce7143ba1
-      internalID: -1202623069
+      spriteID: c7148d088e1e41f60800000000000000
+      internalID: 8004270826454532476
       vertices: []
       indices: 
       edges: []
@@ -249,20 +247,20 @@ TextureImporter:
       name: Heroine_Lower_Dead_5
       rect:
         serializedVersion: 2
-        x: 640
+        x: 6400
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: d5007786c525a7c4585107e3b1bdf5d4
-      internalID: 640968143
+      spriteID: ec97d29880dab1150800000000000000
+      internalID: 5844455193616153038
       vertices: []
       indices: 
       edges: []
@@ -271,20 +269,42 @@ TextureImporter:
       name: Heroine_Lower_Dead_6
       rect:
         serializedVersion: 2
-        x: 768
+        x: 7680
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 0faed963c377bcd46acd3e77cf335a7b
-      internalID: 963072782
+      spriteID: f6d4dc29d41e8f730800000000000000
+      internalID: 4033221189601938799
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Heroine_Lower_Dead_7
+      rect:
+        serializedVersion: 2
+        x: 8960
+        y: 0
+        width: 1280
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f3c224fbd6c1e8c50800000000000000
+      internalID: 6669299355868081215
       vertices: []
       indices: 
       edges: []
@@ -293,7 +313,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: b222b9e6d1bd5034281ec792977e215b
     internalID: 0
     vertices: []
     indices: 
@@ -303,15 +323,16 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":128.0,"y":128.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":1280.0,"y":1280.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Heroine_Lower_Dead_0: 1661435003
-      Heroine_Lower_Dead_1: -894550047
-      Heroine_Lower_Dead_2: 2006115480
-      Heroine_Lower_Dead_3: -2097521020
-      Heroine_Lower_Dead_4: -1202623069
-      Heroine_Lower_Dead_5: 640968143
-      Heroine_Lower_Dead_6: 963072782
+      Heroine_Lower_Dead_0: -503065239052782964
+      Heroine_Lower_Dead_1: -6822662063359641977
+      Heroine_Lower_Dead_2: 1859533704142911381
+      Heroine_Lower_Dead_3: 1788713430205334505
+      Heroine_Lower_Dead_4: 8004270826454532476
+      Heroine_Lower_Dead_5: 5844455193616153038
+      Heroine_Lower_Dead_6: 4033221189601938799
+      Heroine_Lower_Dead_7: 6669299355868081215
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

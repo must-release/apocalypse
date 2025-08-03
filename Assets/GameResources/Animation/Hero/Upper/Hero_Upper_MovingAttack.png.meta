@@ -1,7 +1,22 @@
 fileFormatVersion: 2
-guid: 936849349a2f0453fa3a635060bbfe31
+guid: ed1e3dd5fdbafc2488a3c8cf8c847bab
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 3196308662715332267
+    second: Hero_Upper_MovingAttack_0
+  - first:
+      213: 5918881131550960620
+    second: Hero_Upper_MovingAttack_1
+  - first:
+      213: -5520713825194233541
+    second: Hero_Upper_MovingAttack_2
+  - first:
+      213: -6272571683641778710
+    second: Hero_Upper_MovingAttack_3
+  - first:
+      213: -961394749304635269
+    second: Hero_Upper_MovingAttack_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -34,7 +49,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -48,7 +63,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 128
+  spritePixelsToUnits: 1280
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -81,33 +96,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
     buildTarget: Standalone
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: iOS
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -136,111 +125,111 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Heroine_Upper_Attacking_0
+      name: Hero_Upper_MovingAttack_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 2560
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: bc514c62622974d7893f92a8dc36761b
-      internalID: -1081617116
+      spriteID: ba6b6a14bc19b5c20800000000000000
+      internalID: 3196308662715332267
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Heroine_Upper_Attacking_1
+      name: Hero_Upper_MovingAttack_1
       rect:
         serializedVersion: 2
-        x: 128
+        x: 3840
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: d1ede1ae26a2a409db37da563a2c94d3
-      internalID: -1425866791
+      spriteID: ceb6bd19707142250800000000000000
+      internalID: 5918881131550960620
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Heroine_Upper_Attacking_2
+      name: Hero_Upper_MovingAttack_2
       rect:
         serializedVersion: 2
-        x: 256
+        x: 5120
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: bb01dee401e7f46aca08b742e287c997
-      internalID: -1944866707
+      spriteID: b31b5b6a60c7263b0800000000000000
+      internalID: -5520713825194233541
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Heroine_Upper_Attacking_3
+      name: Hero_Upper_MovingAttack_3
       rect:
         serializedVersion: 2
-        x: 384
+        x: 6400
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 37d26b302fcba41fc8078f485b50d607
-      internalID: 1448054460
+      spriteID: aed9b58894953f8a0800000000000000
+      internalID: -6272571683641778710
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Heroine_Upper_Attacking_4
+      name: Hero_Upper_MovingAttack_4
       rect:
         serializedVersion: 2
-        x: 512
+        x: 7680
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 9dadaa8a0bd634fc786c82cbfd4e4ecd
-      internalID: 62797281
+      spriteID: b7085c6b19078a2f0800000000000000
+      internalID: -961394749304635269
       vertices: []
       indices: 
       edges: []
@@ -249,7 +238,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: be32bec3f21564d428923f5edf471b40
     internalID: 0
     vertices: []
     indices: 
@@ -257,13 +246,15 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":1280.0,"y":1280.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Heroine_Upper_Attacking_0: -1081617116
-      Heroine_Upper_Attacking_1: -1425866791
-      Heroine_Upper_Attacking_2: -1944866707
-      Heroine_Upper_Attacking_3: 1448054460
-      Heroine_Upper_Attacking_4: 62797281
+      Hero_Upper_MovingAttack_0: 3196308662715332267
+      Hero_Upper_MovingAttack_1: 5918881131550960620
+      Hero_Upper_MovingAttack_2: -5520713825194233541
+      Hero_Upper_MovingAttack_3: -6272571683641778710
+      Hero_Upper_MovingAttack_4: -961394749304635269
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

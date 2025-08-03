@@ -64,7 +64,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -363,7 +363,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: f22dda08f8a9fb344a702c4cbd00e5c2
+    spriteID: aff965eab2ddf2a498d8ed03c4128edf
     internalID: 0
     vertices: []
     indices: 

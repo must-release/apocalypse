@@ -58,7 +58,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -72,7 +72,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 128
+  spritePixelsToUnits: 1280
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -139,18 +139,18 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 5a7a4337274cffe4d98618ebd0fa9a80
-      internalID: 2040970863
+      spriteID: 008daa6ee251c7b60800000000000000
+      internalID: 7745088750353045504
       vertices: []
       indices: 
       edges: []
@@ -159,20 +159,20 @@ TextureImporter:
       name: Heroine_Lower_Idle_1
       rect:
         serializedVersion: 2
-        x: 128
+        x: 1280
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 902f4967713b69e40a4f78e8bc6d27a6
-      internalID: 578057945
+      spriteID: 14bdc054eefe2fd40800000000000000
+      internalID: 5616815491924155201
       vertices: []
       indices: 
       edges: []
@@ -181,20 +181,20 @@ TextureImporter:
       name: Heroine_Lower_Idle_2
       rect:
         serializedVersion: 2
-        x: 256
+        x: 2560
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: f911b5fd3ba56c44bbd0c04b3cfca494
-      internalID: 728373020
+      spriteID: 24f158113b2416210800000000000000
+      internalID: 1324413102284152642
       vertices: []
       indices: 
       edges: []
@@ -203,20 +203,20 @@ TextureImporter:
       name: Heroine_Lower_Idle_3
       rect:
         serializedVersion: 2
-        x: 384
+        x: 3840
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: a1a01e8cd2e7e484487d82aeabeb6832
-      internalID: 1037415729
+      spriteID: cda36242070b21710800000000000000
+      internalID: 1662585208142445276
       vertices: []
       indices: 
       edges: []
@@ -225,20 +225,20 @@ TextureImporter:
       name: Heroine_Lower_Idle_4
       rect:
         serializedVersion: 2
-        x: 512
+        x: 5120
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 97950cdad79b4a843bf906edeeaea2df
-      internalID: -1751442783
+      spriteID: 61ee1f71515ab1a30800000000000000
+      internalID: 4187121788585635350
       vertices: []
       indices: 
       edges: []
@@ -247,20 +247,20 @@ TextureImporter:
       name: Heroine_Lower_Idle_5
       rect:
         serializedVersion: 2
-        x: 640
+        x: 6400
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 79d97da3d23084e46a1bcc5ade1e989a
-      internalID: -974569947
+      spriteID: 7c1f06f7e2b7a55d0800000000000000
+      internalID: -3073008356091170361
       vertices: []
       indices: 
       edges: []
@@ -269,20 +269,20 @@ TextureImporter:
       name: Heroine_Lower_Idle_6
       rect:
         serializedVersion: 2
-        x: 768
+        x: 7680
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 9cf8e9dfeb3cb2d4d852bd65444dc758
-      internalID: -394439458
+      spriteID: 4b145c6e3ffd0d440800000000000000
+      internalID: 4958709428376650164
       vertices: []
       indices: 
       edges: []
@@ -291,20 +291,20 @@ TextureImporter:
       name: Heroine_Lower_Idle_7
       rect:
         serializedVersion: 2
-        x: 896
+        x: 8960
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 42c1f82c4c80511468c8fc9da204eb10
-      internalID: -1977084812
+      spriteID: ed71107ceb2ce36d0800000000000000
+      internalID: -3008753376398600226
       vertices: []
       indices: 
       edges: []
@@ -313,7 +313,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 23a7e752ca8bab4409d2c4e8d557e8fc
+    spriteID: 6a13cd505b9b88d4ab49fcac2b67e43c
     internalID: 0
     vertices: []
     indices: 
@@ -323,16 +323,16 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":128.0,"y":128.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":1280.0,"y":1280.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Heroine_Lower_Idle_0: 2040970863
-      Heroine_Lower_Idle_1: 578057945
-      Heroine_Lower_Idle_2: 728373020
-      Heroine_Lower_Idle_3: 1037415729
-      Heroine_Lower_Idle_4: -1751442783
-      Heroine_Lower_Idle_5: -974569947
-      Heroine_Lower_Idle_6: -394439458
-      Heroine_Lower_Idle_7: -1977084812
+      Heroine_Lower_Idle_0: 7745088750353045504
+      Heroine_Lower_Idle_1: 5616815491924155201
+      Heroine_Lower_Idle_2: 1324413102284152642
+      Heroine_Lower_Idle_3: 1662585208142445276
+      Heroine_Lower_Idle_4: 4187121788585635350
+      Heroine_Lower_Idle_5: -3073008356091170361
+      Heroine_Lower_Idle_6: 4958709428376650164
+      Heroine_Lower_Idle_7: -3008753376398600226
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
