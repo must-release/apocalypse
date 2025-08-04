@@ -6,6 +6,9 @@ namespace StoryEditor.Controllers
 {
     public class ValidationResult
     {
+
+        /****** Public Members ******/
+
         public bool IsValid { get; set; }
         public List<string> Errors { get; set; } = new List<string>();
         public List<string> Warnings { get; set; } = new List<string>();
@@ -28,11 +31,14 @@ namespace StoryEditor.Controllers
 
     public class ValidationController
     {
-        private EditorStoryScript editorStoryScript;
+
+        /****** Public Members ******/
 
         public ValidationController(EditorStoryScript storyScript)
         {
-            editorStoryScript = storyScript;
+            Debug.Assert(null != storyScript);
+
+            _editorStoryScript = storyScript;
         }
 
         public ValidationResult ValidateAll()
@@ -43,7 +49,7 @@ namespace StoryEditor.Controllers
             ValidateBasicStructure(result);
 
             // Validate each block
-            for (int blockIndex = 0; blockIndex < editorStoryScript.EditorBlocks.Count; blockIndex++)
+            for (int blockIndex = 0; blockIndex < _editorStoryScript.EditorBlocks.Count; blockIndex++)
             {
                 ValidateBlock(blockIndex, result);
             }
@@ -68,9 +74,52 @@ namespace StoryEditor.Controllers
             return result;
         }
 
+        public bool CanSaveStoryScript(out string errorMessage)
+        {
+            var validation = ValidateAll();
+
+            if (validation.HasErrors)
+            {
+                errorMessage = $"Cannot save due to validation errors:\n{string.Join("\n", validation.Errors)}";
+                return false;
+            }
+
+            errorMessage = "";
+            return true;
+        }
+
+        public List<string> GetAvailableBranchNames(int afterBlockIndex)
+        {
+            return _editorStoryScript.GetAvailableBranchNames(afterBlockIndex);
+        }
+
+        public bool IsBranchNameValid(string branchName, int excludeBlockIndex = -1)
+        {
+            if (string.IsNullOrWhiteSpace(branchName))
+                return false;
+
+            for (int i = 0; i < _editorStoryScript.EditorBlocks.Count; i++)
+            {
+                if (excludeBlockIndex != i &&
+                    _editorStoryScript.EditorBlocks[i].BranchName.Equals(branchName, System.StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+
+        /****** Private Members ******/
+
+        private EditorStoryScript _editorStoryScript;
+        
         private void ValidateBasicStructure(ValidationResult result)
         {
-            if (0 == editorStoryScript.EditorBlocks.Count)
+            Debug.Assert(null != result);
+
+            if (0 == _editorStoryScript.EditorBlocks.Count)
             {
                 result.AddWarning("Story script contains no blocks");
                 return;
@@ -78,9 +127,9 @@ namespace StoryEditor.Controllers
 
             // Check for duplicate branch names
             var branchNames = new HashSet<string>();
-            for (int i = 0; i < editorStoryScript.EditorBlocks.Count; i++)
+            for (int i = 0; i < _editorStoryScript.EditorBlocks.Count; i++)
             {
-                var branchName = editorStoryScript.EditorBlocks[i].BranchName;
+                var branchName = _editorStoryScript.EditorBlocks[i].BranchName;
 
                 if (string.IsNullOrWhiteSpace(branchName))
                 {
@@ -101,10 +150,10 @@ namespace StoryEditor.Controllers
 
         private void ValidateBlock(int blockIndex, ValidationResult result)
         {
-            Debug.Assert(0 <= blockIndex && blockIndex < editorStoryScript.EditorBlocks.Count, "Block index out of range");
+            Debug.Assert(0 <= blockIndex && blockIndex < _editorStoryScript.EditorBlocks.Count, "Block index out of range");
             Debug.Assert(null != result, "ValidationResult cannot be null");
 
-            var block = editorStoryScript.EditorBlocks[blockIndex];
+            var block = _editorStoryScript.EditorBlocks[blockIndex];
             var blockName = $"Block {blockIndex + 1} ({block.BranchName})";
 
             if (0 == block.EditorEntries.Count)
@@ -122,14 +171,14 @@ namespace StoryEditor.Controllers
 
         private void ValidateEntry(int blockIndex, int entryIndex, ValidationResult result)
         {
-            Debug.Assert(0 <= blockIndex && blockIndex < editorStoryScript.EditorBlocks.Count, "Block index out of range");
+            Debug.Assert(0 <= blockIndex && blockIndex < _editorStoryScript.EditorBlocks.Count, "Block index out of range");
             Debug.Assert(null != result, "ValidationResult cannot be null");
-            if (blockIndex < 0 || editorStoryScript.EditorBlocks.Count <= blockIndex)
+            if (0 > blockIndex || _editorStoryScript.EditorBlocks.Count <= blockIndex)
                 return;
             
-            var block = editorStoryScript.EditorBlocks[blockIndex];
+            var block = _editorStoryScript.EditorBlocks[blockIndex];
             Debug.Assert(0 <= entryIndex && entryIndex < block.EditorEntries.Count, "Entry index out of range");
-            if (entryIndex < 0 || block.EditorEntries.Count <= entryIndex)
+            if (0 > entryIndex || block.EditorEntries.Count <= entryIndex)
                 return;
             
             var entry = block.EditorEntries[entryIndex];
@@ -163,6 +212,9 @@ namespace StoryEditor.Controllers
 
         private void ValidateDialogue(StoryDialogue dialogue, string entryName, ValidationResult result)
         {
+            Debug.Assert(null != dialogue);
+            Debug.Assert(null != result);
+
             if (string.IsNullOrWhiteSpace(dialogue.Name))
             {
                 result.AddWarning($"{entryName}: Dialogue has no character name");
@@ -176,6 +228,9 @@ namespace StoryEditor.Controllers
 
         private void ValidateVFX(StoryVFX vfx, string entryName, ValidationResult result)
         {
+            Debug.Assert(null != vfx);
+            Debug.Assert(null != result);
+
             if (0 > vfx.Duration)
             {
                 result.AddError($"{entryName}: VFX duration cannot be negative");
@@ -184,6 +239,10 @@ namespace StoryEditor.Controllers
 
         private void ValidateChoice(StoryChoice choice, int blockIndex, int entryIndex, string entryName, ValidationResult result)
         {
+            Debug.Assert(null != choice);
+            Debug.Assert(null != result);
+            Debug.Assert(0 <= blockIndex && blockIndex < _editorStoryScript.EditorBlocks.Count);
+
             // Check if PrevDialogue is properly set
             if (null == choice.PrevDialogue)
             {
@@ -196,7 +255,7 @@ namespace StoryEditor.Controllers
 
             // Check if there's a dialogue before this choice
             bool hasDialogueBefore = false;
-            var block = editorStoryScript.EditorBlocks[blockIndex];
+            var block = _editorStoryScript.EditorBlocks[blockIndex];
 
             for (int i = entryIndex - 1; 0 <= i; i--)
             {
@@ -239,10 +298,12 @@ namespace StoryEditor.Controllers
 
         private void ValidateChoiceReferences(ValidationResult result)
         {
-            for (int blockIndex = 0; blockIndex < editorStoryScript.EditorBlocks.Count; blockIndex++)
+            Debug.Assert(null != result);
+
+            for (int blockIndex = 0; blockIndex < _editorStoryScript.EditorBlocks.Count; blockIndex++)
             {
-                var block = editorStoryScript.EditorBlocks[blockIndex];
-                var availableBranches = editorStoryScript.GetAvailableBranchNames(blockIndex);
+                var block = _editorStoryScript.EditorBlocks[blockIndex];
+                var availableBranches = _editorStoryScript.GetAvailableBranchNames(blockIndex);
 
                 for (int entryIndex = 0; entryIndex < block.EditorEntries.Count; entryIndex++)
                 {
@@ -272,42 +333,6 @@ namespace StoryEditor.Controllers
                     }
                 }
             }
-        }
-
-        public bool CanSaveStoryScript(out string errorMessage)
-        {
-            var validation = ValidateAll();
-            
-            if (validation.HasErrors)
-            {
-                errorMessage = $"Cannot save due to validation errors:\n{string.Join("\n", validation.Errors)}";
-                return false;
-            }
-
-            errorMessage = "";
-            return true;
-        }
-
-        public List<string> GetAvailableBranchNames(int afterBlockIndex)
-        {
-            return editorStoryScript.GetAvailableBranchNames(afterBlockIndex);
-        }
-
-        public bool IsBranchNameValid(string branchName, int excludeBlockIndex = -1)
-        {
-            if (string.IsNullOrWhiteSpace(branchName))
-                return false;
-
-            for (int i = 0; i < editorStoryScript.EditorBlocks.Count; i++)
-            {
-                if (i != excludeBlockIndex && 
-                    editorStoryScript.EditorBlocks[i].BranchName.Equals(branchName, System.StringComparison.OrdinalIgnoreCase))
-                {
-                    return false;
-                }
-            }
-
-            return true;
         }
     }
 }

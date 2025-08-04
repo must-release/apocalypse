@@ -103,10 +103,5 @@ namespace StoryEditor.UI
         {
             GUI.color = Color.white;
         }
-
-        public static void SetDragCursor(bool isDragging, Rect windowRect)
-        {
-            // Mouse cursor change functionality disabled
-        }
     }
 }

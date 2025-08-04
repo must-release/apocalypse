@@ -1,26 +1,30 @@
 using StoryEditor.Controllers;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace StoryEditor.UI
 {
     public class StoryEntryEditorFactory
     {
-        private ValidationController validationController;
-        private EditorStoryScript editorStoryScript;
-        private Dictionary<System.Type, IStoryEntryEditor> editorCache;
+        /****** Public Members ******/
 
         public StoryEntryEditorFactory(ValidationController validationController, EditorStoryScript editorStoryScript)
         {
-            this.validationController = validationController;
-            this.editorStoryScript = editorStoryScript;
-            this.editorCache = new Dictionary<System.Type, IStoryEntryEditor>();
+            Debug.Assert(null != validationController);
+            Debug.Assert(null != editorStoryScript);
+
+            this._validationController = validationController;
+            this._editorStoryScript = editorStoryScript;
+            this._editorCache = new Dictionary<System.Type, IStoryEntryEditor>();
         }
 
         public IStoryEntryEditor GetEditor(EditorStoryEntry entry)
         {
+            Debug.Assert(null != entry);
+
             var entryType = entry.StoryEntry.GetType();
             
-            if (editorCache.TryGetValue(entryType, out var cachedEditor))
+            if (_editorCache.TryGetValue(entryType, out var cachedEditor))
             {
                 return cachedEditor;
             }
@@ -28,7 +32,7 @@ namespace StoryEditor.UI
             var editor = CreateEditor(entry);
             if (null != editor)
             {
-                editorCache[entryType] = editor;
+                _editorCache[entryType] = editor;
             }
             
             return editor;
@@ -36,7 +40,7 @@ namespace StoryEditor.UI
 
         public void NotifyTextRefresh()
         {
-            if (editorCache.TryGetValue(typeof(StoryDialogue), out var dialogueEditor))
+            if (_editorCache.TryGetValue(typeof(StoryDialogue), out var dialogueEditor))
             {
                 if (dialogueEditor is DialogueEditor dialogueEditorInstance)
                 {
@@ -45,13 +49,22 @@ namespace StoryEditor.UI
             }
         }
 
+
+        /****** Private Members ******/
+
+        private ValidationController _validationController;
+        private EditorStoryScript _editorStoryScript;
+        private Dictionary<System.Type, IStoryEntryEditor> _editorCache;
+
         private IStoryEntryEditor CreateEditor(EditorStoryEntry entry)
         {
+            Debug.Assert(null != entry);
+
             return entry.StoryEntry switch
             {
                 StoryDialogue _ => new DialogueEditor(),
                 StoryVFX _ => new VFXEditor(),
-                StoryChoice _ => new ChoiceEditor(validationController, editorStoryScript),
+                StoryChoice _ => new ChoiceEditor(_validationController, _editorStoryScript),
                 StoryCharacterStanding _ => new CharacterStandingEditor(),
                 StoryPlayMode _ => new PlayModeEditor(),
                 StoryBackgroundCG _ => new BackgroundCGEditor(),

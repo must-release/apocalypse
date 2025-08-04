@@ -100,6 +100,25 @@ This is a Unity 6000.1.2f1 2D action/platformer game called "apocalypse". The ga
 - **Equality Comparison**: In Editor scripts (`Assets/Scripts/Editor/`), use `constant == variable` format for equality operators (==, !=) to prevent accidental assignment
 - **Ordering Comparison**: In Editor scripts (`Assets/Scripts/Editor/`), use only `<` and `<=` operators with smaller value on the left side (e.g., `0 <= index && index < count` instead of `index >= 0 && index < count`)
 - **Precondition Checks**: Use `Debug.Assert` at the beginning of functions to validate preconditions and parameter integrity in development builds
+- **Logging:** Use the custom `Logger` class found in `Assets/Scripts/Utility/Logger.cs` for all logging purposes instead of `UnityEngine.Debug`.
+- **Class Structure:** Code within classes should be organized by access modifier in the following order: `public`, `protected`, and then `private`. Each section should be separated by a comment line. There should be two blank lines before each separator and one blank line after.
+    ```csharp
+    public class Example
+    {
+        /****** Public Members ******/
+        public int publicField;
+
+
+        /****** Protected Members ******/
+
+        protected int protectedField;
+
+
+        /****** Private Members ******/
+
+        private int _privateField;
+    }
+    ```
 
 ## Key Dependencies
 

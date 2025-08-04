@@ -8,7 +8,7 @@ namespace StoryEditor.UI
 {
     public class BGMEditor : IStoryEntryEditor
     {
-        private BGMAsset bgmAsset;
+        /****** Public Members ******/
 
         public void Draw(EditorStoryEntry entry)
         {
@@ -18,6 +18,11 @@ namespace StoryEditor.UI
                 DrawBGMEditor(bgm);
             }
         }
+
+        
+        /****** Private Members ******/
+
+        private BGMAsset _bgmAsset;
 
         private void DrawBGMEditor(StoryBGM bgm)
         {
@@ -41,9 +46,9 @@ namespace StoryEditor.UI
 
         private void LoadBGMAssetIfNeeded()
         {
-            if (null == bgmAsset)
+            if (null == _bgmAsset)
             {
-                bgmAsset = Addressables.LoadAssetAsync<BGMAsset>(AD.Audio.AssetPath.BGM).WaitForCompletion();
+                _bgmAsset = Addressables.LoadAssetAsync<BGMAsset>(AD.Audio.AssetPath.BGM).WaitForCompletion();
             }
         }
 
@@ -63,13 +68,13 @@ namespace StoryEditor.UI
 
         private void DrawBGMNameSelection(StoryBGM bgm)
         {
-            if (null == bgmAsset)
+            if (null == _bgmAsset)
             {
                 EditorGUILayout.HelpBox("BGMAsset not found. Please create one in the project.", MessageType.Error);
                 return;
             }
 
-            if (null == bgmAsset.BGMList || 0 == bgmAsset.BGMList.Count)
+            if (null == _bgmAsset.BGMList || 0 == _bgmAsset.BGMList.Count)
             {
                 EditorGUILayout.HelpBox("No BGM clips found in BGMAsset.", MessageType.Warning);
                 return;
@@ -78,7 +83,7 @@ namespace StoryEditor.UI
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("BGM:", EditorStyles.boldLabel, GUILayout.Width(120));
             
-            var availableBGMs = bgmAsset.BGMList.Where(clip => null != clip).ToArray();
+            var availableBGMs = _bgmAsset.BGMList.Where(clip => null != clip).ToArray();
             var bgmNames = availableBGMs.Select(clip => clip.name).ToArray();
             
             var currentIndex = System.Array.IndexOf(bgmNames, bgm.BGMName);

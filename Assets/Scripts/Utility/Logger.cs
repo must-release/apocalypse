@@ -6,7 +6,8 @@ public enum LogCategory
     Event,
     GamePlay,
     GameScene,
-    AssetLoad
+    AssetLoad,
+    StoryScriptEditor
 }
 
 public enum LogLevel

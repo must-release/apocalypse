@@ -5,6 +5,8 @@ namespace StoryEditor.UI
 {
     public class CameraActionEditor : IStoryEntryEditor
     {
+        /****** Public Members ******/
+
         public void Draw(EditorStoryEntry entry)
         {
             var cameraAction = entry.AsCameraAction();
@@ -12,6 +14,9 @@ namespace StoryEditor.UI
 
             DrawCameraActionEditor(cameraAction);
         }
+
+
+        /****** Private Members ******/
 
         private void DrawCameraActionEditor(StoryCameraAction cameraAction)
         {

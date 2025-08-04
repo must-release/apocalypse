@@ -8,7 +8,7 @@ namespace StoryEditor.UI
 {
     public class SFXEditor : IStoryEntryEditor
     {
-        private SFXAsset sfxAsset;
+        /****** Public Members ******/
 
         public void Draw(EditorStoryEntry entry)
         {
@@ -17,6 +17,11 @@ namespace StoryEditor.UI
 
             DrawSFXEditor(storySFX);
         }
+
+        
+        /****** Private Members ******/
+
+        private SFXAsset _sfxAsset;
 
         private void DrawSFXEditor(StorySFX storySFX)
         {
@@ -29,21 +34,21 @@ namespace StoryEditor.UI
 
         private void LoadSFXAssetIfNeeded()
         {
-            if (null == sfxAsset)
+            if (null == _sfxAsset)
             {
-                sfxAsset = Addressables.LoadAssetAsync<SFXAsset>(AD.Audio.AssetPath.SFX).WaitForCompletion();
+                _sfxAsset = Addressables.LoadAssetAsync<SFXAsset>(AD.Audio.AssetPath.SFX).WaitForCompletion();
             }
         }
 
         private void DrawSFXNameSelection(StorySFX storySFX)
         {
-            if (null == sfxAsset)
+            if (null == _sfxAsset)
             {
                 EditorGUILayout.HelpBox("SFXAsset not found. Please create one in the project.", MessageType.Error);
                 return;
             }
 
-            if (null == sfxAsset.SFXList || 0 == sfxAsset.SFXList.Count)
+            if (null == _sfxAsset.SFXList || 0 == _sfxAsset.SFXList.Count)
             {
                 EditorGUILayout.HelpBox("No SFX clips found in SFXAsset.", MessageType.Warning);
                 return;
@@ -52,7 +57,7 @@ namespace StoryEditor.UI
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("SFX:", EditorStyles.boldLabel, GUILayout.Width(120));
             
-            var availableSFXs = sfxAsset.SFXList.Where(clip => null != clip).ToArray();
+            var availableSFXs = _sfxAsset.SFXList.Where(clip => null != clip).ToArray();
             var sfxNames = availableSFXs.Select(clip => clip.name).ToArray();
             
             var currentIndex = System.Array.IndexOf(sfxNames, storySFX.SFXName);

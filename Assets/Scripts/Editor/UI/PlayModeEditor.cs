@@ -5,6 +5,8 @@ namespace StoryEditor.UI
 {
     public class PlayModeEditor : IStoryEntryEditor
     {
+        /****** Public Members ******/
+
         public void Draw(EditorStoryEntry entry)
         {
             var playMode = entry.AsPlayMode();
@@ -14,6 +16,9 @@ namespace StoryEditor.UI
             EditorGUILayout.Space();
             DrawModeDescription(playMode);
         }
+
+
+        /****** Private Members ******/
 
         private void DrawPlayModeField(StoryPlayMode playMode)
         {

@@ -5,6 +5,8 @@ namespace StoryEditor.UI
 {
     public class CharacterStandingEditor : IStoryEntryEditor
     {
+        /****** Public Members ******/
+
         public void Draw(EditorStoryEntry entry)
         {
             var standing = entry.AsCharacterStanding();
@@ -22,6 +24,9 @@ namespace StoryEditor.UI
             EditorGUILayout.Space();
             DrawBlockingAnimationField(standing);
         }
+
+
+        /****** Private Members ******/
 
         private void DrawCharacterNameField(StoryCharacterStanding standing)
         {

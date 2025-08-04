@@ -6,21 +6,30 @@ namespace StoryEditor.UI
 {
     public class StoryEditorPanel
     {
-        private EditorStoryScript editorStoryScript;
-        private EntryController entryController;
-        private StoryEntryEditorFactory editorFactory;
-        private Vector2 scrollPosition;
-        
-        // Track selection to force text refresh
-        private int lastSelectedBlockIndex = -1;
-        private int lastSelectedEntryIndex = -1;
+        /****** Public Members ******/
 
         public StoryEditorPanel(EditorStoryScript storyScript, EntryController entryController, ValidationController validationController)
         {
-            this.editorStoryScript = storyScript;
-            this.entryController = entryController;
-            this.editorFactory = new StoryEntryEditorFactory(validationController, storyScript);
+            Debug.Assert(null != storyScript, "Story script cannot be null");
+            Debug.Assert(null != entryController, "Entry controller cannot be null");
+            Debug.Assert(null != validationController, "Validation controller cannot be null");
+            
+            _editorStoryScript = storyScript;
+            _entryController = entryController;
+            _editorFactory = new StoryEntryEditorFactory(validationController, storyScript);
         }
+
+
+        /****** Private Members ******/
+
+        private EditorStoryScript _editorStoryScript;
+        private EntryController _entryController;
+        private StoryEntryEditorFactory _editorFactory;
+        private Vector2 _scrollPosition;
+        
+        // Track selection to force text refresh
+        private int _lastSelectedBlockIndex = -1;
+        private int _lastSelectedEntryIndex = -1;
 
         public void Draw(Rect rect)
         {
@@ -39,7 +48,7 @@ namespace StoryEditor.UI
 
         private void DrawEditor()
         {
-            var selectedEntry = editorStoryScript.SelectedEntry;
+            var selectedEntry = _editorStoryScript.SelectedEntry;
             if (null == selectedEntry)
             {
                 EditorGUILayout.HelpBox("Select an entry to edit its properties", MessageType.Info);
@@ -47,18 +56,18 @@ namespace StoryEditor.UI
             }
 
             // Check if selection changed and notify factory for text refresh
-            if (lastSelectedBlockIndex != editorStoryScript.SelectedBlockIndex || 
-                lastSelectedEntryIndex != editorStoryScript.SelectedEntryIndex)
+            if (_lastSelectedBlockIndex != _editorStoryScript.SelectedBlockIndex || 
+                _lastSelectedEntryIndex != _editorStoryScript.SelectedEntryIndex)
             {
-                lastSelectedBlockIndex = editorStoryScript.SelectedBlockIndex;
-                lastSelectedEntryIndex = editorStoryScript.SelectedEntryIndex;
-                editorFactory.NotifyTextRefresh();
+                _lastSelectedBlockIndex = _editorStoryScript.SelectedBlockIndex;
+                _lastSelectedEntryIndex = _editorStoryScript.SelectedEntryIndex;
+                _editorFactory.NotifyTextRefresh();
                 
                 // Clear focus to ensure clean transition
                 GUI.FocusControl(null);
             }
 
-            scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
 
             EditorGUILayout.LabelField("Entry Type - " + selectedEntry.GetEntryType(), EditorStyles.boldLabel);
             EditorGUILayout.Space();
@@ -66,13 +75,13 @@ namespace StoryEditor.UI
             // Handle choice entry update before drawing
             if (selectedEntry.StoryEntry is StoryChoice)
             {
-                entryController.UpdateChoiceEntry(selectedEntry, 
-                    editorStoryScript.SelectedBlockIndex, 
-                    editorStoryScript.SelectedEntryIndex);
+                _entryController.UpdateChoiceEntry(selectedEntry, 
+                    _editorStoryScript.SelectedBlockIndex, 
+                    _editorStoryScript.SelectedEntryIndex);
             }
 
             // Use factory to get appropriate editor and draw
-            var editor = editorFactory.GetEditor(selectedEntry);
+            var editor = _editorFactory.GetEditor(selectedEntry);
             if (null != editor)
             {
                 editor.Draw(selectedEntry);
@@ -84,7 +93,5 @@ namespace StoryEditor.UI
 
             EditorGUILayout.EndScrollView();
         }
-
-
     }
 }

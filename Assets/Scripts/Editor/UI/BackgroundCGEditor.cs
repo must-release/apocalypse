@@ -8,7 +8,7 @@ namespace StoryEditor.UI
 {
     public class BackgroundCGEditor : IStoryEntryEditor
     {
-        private BackgroundCGAsset backgroundCGAsset;
+        /****** Public Members ******/
 
         public void Draw(EditorStoryEntry entry)
         {
@@ -17,7 +17,7 @@ namespace StoryEditor.UI
 
             LoadBackgroundCGAssetIfNeeded();
             
-            if (null == backgroundCGAsset)
+            if (null == _backgroundCGAsset)
             {
                 EditorGUILayout.HelpBox("BackgroundCGAsset not found. Please create one in the project.", MessageType.Error);
                 return;
@@ -30,11 +30,16 @@ namespace StoryEditor.UI
             DrawImagePreview(backgroundCG);
         }
 
+        
+        /****** Private Members ******/
+
+        private BackgroundCGAsset _backgroundCGAsset;
+
         private void LoadBackgroundCGAssetIfNeeded()
         {
-            if (null == backgroundCGAsset)
+            if (null == _backgroundCGAsset)
             {
-                backgroundCGAsset = Addressables.LoadAssetAsync<BackgroundCGAsset>(AD.Story.AssetPath.BackgroundCG).WaitForCompletion();
+                _backgroundCGAsset = Addressables.LoadAssetAsync<BackgroundCGAsset>(AD.Story.AssetPath.BackgroundCG).WaitForCompletion();
             }
         }
 
@@ -43,7 +48,7 @@ namespace StoryEditor.UI
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Chapter:", EditorStyles.boldLabel, GUILayout.Width(120));
             
-            var availableChapters = backgroundCGAsset.BackgroundCGAEntries.Select(entry => entry.Chapter).ToArray();
+            var availableChapters = _backgroundCGAsset.BackgroundCGAEntries.Select(entry => entry.Chapter).ToArray();
             var chapterNames = availableChapters.Select(chapter => chapter.ToString()).ToArray();
             
             var currentIndex = System.Array.IndexOf(availableChapters, backgroundCG.Chapter);
@@ -65,7 +70,7 @@ namespace StoryEditor.UI
 
         private void DrawImageNameSelection(StoryBackgroundCG backgroundCG)
         {
-            var chapterEntry = backgroundCGAsset.BackgroundCGAEntries.FirstOrDefault(entry => entry.Chapter == backgroundCG.Chapter);
+            var chapterEntry = _backgroundCGAsset.BackgroundCGAEntries.FirstOrDefault(entry => entry.Chapter == backgroundCG.Chapter);
             if (null == chapterEntry || null == chapterEntry.BackgroundSprites || 0 == chapterEntry.BackgroundSprites.Count)
             {
                 EditorGUILayout.HelpBox("No background sprites found for selected chapter.", MessageType.Warning);
@@ -96,7 +101,7 @@ namespace StoryEditor.UI
 
         private void DrawImagePreview(StoryBackgroundCG backgroundCG)
         {
-            var chapterEntry = backgroundCGAsset.BackgroundCGAEntries.FirstOrDefault(entry => entry.Chapter == backgroundCG.Chapter);
+            var chapterEntry = _backgroundCGAsset.BackgroundCGAEntries.FirstOrDefault(entry => entry.Chapter == backgroundCG.Chapter);
             if (null == chapterEntry || null == chapterEntry.BackgroundSprites)
             {
                 return;

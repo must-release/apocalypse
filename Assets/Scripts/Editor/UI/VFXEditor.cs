@@ -5,6 +5,8 @@ namespace StoryEditor.UI
 {
     public class VFXEditor : IStoryEntryEditor
     {
+        /****** Public Members ******/
+
         public void Draw(EditorStoryEntry entry)
         {
             var vfx = entry.AsVFX();
@@ -14,18 +16,21 @@ namespace StoryEditor.UI
             EditorGUILayout.Space();
             DrawDurationField(vfx);
         }
+        
+        
+        /****** Private Members ******/
 
         private void DrawActionField(StoryVFX vfx)
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("VFX Type:", EditorStyles.boldLabel, GUILayout.Width(120));
-            
+
             var newVFXType = (StoryVFX.VFXType)EditorGUILayout.EnumPopup(vfx.VFX, GUILayout.Width(150));
             if (newVFXType != vfx.VFX)
             {
                 vfx.VFX = newVFXType;
             }
-            
+
             EditorGUILayout.EndHorizontal();
         }
 

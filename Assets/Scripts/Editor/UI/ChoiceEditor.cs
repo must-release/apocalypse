@@ -7,13 +7,15 @@ namespace StoryEditor.UI
 {
     public class ChoiceEditor : IStoryEntryEditor
     {
-        private ValidationController validationController;
-        private EditorStoryScript editorStoryScript;
+        /****** Public Members ******/
 
         public ChoiceEditor(ValidationController validationController, EditorStoryScript editorStoryScript)
         {
-            this.validationController = validationController;
-            this.editorStoryScript = editorStoryScript;
+            Debug.Assert(null != validationController, "Validation controller cannot be null");
+            Debug.Assert(null != editorStoryScript, "Editor story script cannot be null");
+            
+            _validationController = validationController;
+            _editorStoryScript = editorStoryScript;
         }
 
         public void Draw(EditorStoryEntry entry)
@@ -25,6 +27,12 @@ namespace StoryEditor.UI
             EditorGUILayout.Space();
             DrawChoiceOptions(choice);
         }
+
+
+        /****** Private Members ******/
+
+        private ValidationController _validationController;
+        private EditorStoryScript _editorStoryScript;
 
         private void DrawPreviousDialogue(StoryChoice choice)
         {
@@ -74,7 +82,7 @@ namespace StoryEditor.UI
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Branch Name:", GUILayout.Width(100));
-            var availableBranches = validationController.GetAvailableBranchNames(editorStoryScript.SelectedBlockIndex);
+            var availableBranches = _validationController.GetAvailableBranchNames(_editorStoryScript.SelectedBlockIndex);
             availableBranches.Insert(0, StoryBlock.CommonBranch);
             
             var branchIndex = availableBranches.IndexOf(option.BranchName ?? StoryBlock.CommonBranch);
@@ -91,7 +99,7 @@ namespace StoryEditor.UI
         private void DrawOptionText(StoryChoiceOption option, int index)
         {
             EditorGUILayout.LabelField("Option Text:");
-            var selectedEntry = editorStoryScript.SelectedEntry;
+            var selectedEntry = _editorStoryScript.SelectedEntry;
             var choice = selectedEntry.AsChoice();
             var optionControlName = $"ChoiceOption_{choice.GetHashCode()}_{index}";
             GUI.SetNextControlName(optionControlName);

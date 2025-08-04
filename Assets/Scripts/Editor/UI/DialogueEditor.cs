@@ -5,7 +5,7 @@ namespace StoryEditor.UI
 {
     public class DialogueEditor : IStoryEntryEditor
     {
-        private bool needsTextRefresh = false;
+        /****** Public Members ******/
 
         public void Draw(EditorStoryEntry entry)
         {
@@ -23,8 +23,13 @@ namespace StoryEditor.UI
 
         public void SetNeedsTextRefresh(bool needsRefresh)
         {
-            needsTextRefresh = needsRefresh;
+            _needsTextRefresh = needsRefresh;
         }
+
+
+        /****** Private Members ******/
+
+        private bool _needsTextRefresh = false;
 
         private void DrawCharacterField(StoryDialogue dialogue)
         {
@@ -33,7 +38,7 @@ namespace StoryEditor.UI
             var characterOptions = new string[] { "독백", "나", "소녀", "중개상" };
             var currentIndex = System.Array.IndexOf(characterOptions, dialogue.Name);
             if (currentIndex == -1) currentIndex = 0;
-            
+
             var newIndex = EditorGUILayout.Popup(currentIndex, characterOptions, GUILayout.Width(80));
             if (newIndex != currentIndex)
             {
@@ -67,9 +72,9 @@ namespace StoryEditor.UI
             var controlName = $"DialogueText_{dialogue.GetHashCode()}";
             GUI.SetNextControlName(controlName);
             
-            if (needsTextRefresh)
+            if (_needsTextRefresh)
             {
-                needsTextRefresh = false;
+                _needsTextRefresh = false;
                 GUI.FocusControl(null);
             }
             

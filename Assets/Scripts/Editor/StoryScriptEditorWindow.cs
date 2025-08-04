@@ -7,27 +7,8 @@ namespace StoryEditor
 {
     public class StoryScriptEditorWindow : EditorWindow
     {
-        private const float MIN_PANEL_WIDTH = 200f;
-        private const float SPLITTER_WIDTH = 5f;
 
-        [SerializeField] private EditorStoryScript editorStoryScript;
-        [SerializeField] private float leftPanelWidth = 250f;
-        [SerializeField] private float rightPanelWidth = 350f;
-
-        // Controllers
-        private BlockController blockController;
-        private EntryController entryController;
-        private ValidationController validationController;
-
-        // UI Components
-        private StoryEditorToolbar toolbar;
-        private StoryBlockPanel blockPanel;
-        private StoryEntryPanel entryPanel;
-        private StoryEditorPanel editorPanel;
-
-        // Layout state
-        private bool isDraggingSplitter = false;
-        private bool isDraggingRightSplitter = false;
+        /****** Public Members ******/
 
         [MenuItem("Window/Story Script Editor")]
         public static void ShowWindow()
@@ -38,15 +19,40 @@ namespace StoryEditor
             window.Show();
         }
 
+
+        /****** Private Members ******/
+
+        private const float _MinPanelWidth = 200f;
+        private const float _SplitterWidth = 5f;
+
+        [SerializeField] private EditorStoryScript _editorStoryScript;
+        [SerializeField] private float _leftPanelWidth = 250f;
+        [SerializeField] private float _rightPanelWidth = 350f;
+
+        // Controllers
+        private BlockController _blockController;
+        private EntryController _entryController;
+        private ValidationController _validationController;
+
+        // UI Components
+        private StoryEditorToolbar _toolbar;
+        private StoryBlockPanel _blockPanel;
+        private StoryEntryPanel _entryPanel;
+        private StoryEditorPanel _editorPanel;
+
+        // Layout state
+        private bool _isDraggingSplitter = false;
+        private bool _isDraggingRightSplitter = false;
+
         private void OnEnable()
         {
-            if (null == editorStoryScript)
+            if (null == _editorStoryScript)
             {
-                editorStoryScript = new EditorStoryScript();
+                _editorStoryScript = new EditorStoryScript();
                 // Add a default block if none exists
-                if (editorStoryScript.EditorBlocks.Count == 0)
+                if (0 == _editorStoryScript.EditorBlocks.Count)
                 {
-                    var defaultBlock = editorStoryScript.AddBlock("Common");
+                    var defaultBlock = _editorStoryScript.AddBlock("Common");
                     // Add a default dialogue entry to avoid warnings
                     defaultBlock.AddDialogue("독백", "새로운 스토리를 시작하세요.");
                 }
@@ -57,36 +63,36 @@ namespace StoryEditor
 
         private void InitializeControllers()
         {
-            blockController = new BlockController(editorStoryScript);
-            entryController = new EntryController(editorStoryScript);
-            validationController = new ValidationController(editorStoryScript);
+            Debug.Assert(null != _editorStoryScript);
 
-            blockController.SetCallbacks(Repaint, Repaint);
-            entryController.SetCallbacks(Repaint, Repaint);
+            _blockController = new BlockController(_editorStoryScript);
+            _entryController = new EntryController(_editorStoryScript);
+            _validationController = new ValidationController(_editorStoryScript);
+
+            _blockController.SetCallbacks(Repaint, Repaint);
+            _entryController.SetCallbacks(Repaint, Repaint);
 
             // Initialize UI components
-            toolbar = new StoryEditorToolbar(editorStoryScript, validationController);
-            toolbar.SetCallbacks("", () => {
-                editorStoryScript = new EditorStoryScript();
+            _toolbar = new StoryEditorToolbar(_editorStoryScript, _validationController);
+            _toolbar.SetCallbacks("", () => {
+                _editorStoryScript = new EditorStoryScript();
                 InitializeControllers();
                 Repaint();
             }, Repaint);
 
-            blockPanel = new StoryBlockPanel(editorStoryScript, blockController);
-            entryPanel = new StoryEntryPanel(editorStoryScript, entryController);
-            editorPanel = new StoryEditorPanel(editorStoryScript, entryController, validationController);
+            _blockPanel = new StoryBlockPanel(_editorStoryScript, _blockController);
+            _entryPanel = new StoryEntryPanel(_editorStoryScript, _entryController);
+            _editorPanel = new StoryEditorPanel(_editorStoryScript, _entryController, _validationController);
         }
 
         private void OnGUI()
         {
-            if (null == editorStoryScript || null == toolbar) return;
+            if (null == _editorStoryScript || null == _toolbar) return;
 
             // Handle global input for panels
-            blockPanel?.HandleGlobalInput();
+            _blockPanel?.HandleGlobalInput();
 
-            // Drag cursor functionality disabled
-
-            toolbar.Draw();
+            _toolbar.Draw();
             DrawPanels();
         }
 
@@ -98,11 +104,11 @@ namespace StoryEditor
             totalRect.height -= EditorGUIUtility.singleLineHeight + 2;
 
             // Calculate panel rects
-            var leftRect = new Rect(totalRect.x, totalRect.y, leftPanelWidth, totalRect.height);
-            var leftSplitterRect = new Rect(leftRect.xMax, totalRect.y, SPLITTER_WIDTH, totalRect.height);
+            var leftRect = new Rect(totalRect.x, totalRect.y, _leftPanelWidth, totalRect.height);
+            var leftSplitterRect = new Rect(leftRect.xMax, totalRect.y, _SplitterWidth, totalRect.height);
             
-            var rightSplitterRect = new Rect(totalRect.xMax - rightPanelWidth - SPLITTER_WIDTH, totalRect.y, SPLITTER_WIDTH, totalRect.height);
-            var rightRect = new Rect(rightSplitterRect.xMax, totalRect.y, rightPanelWidth, totalRect.height);
+            var rightSplitterRect = new Rect(totalRect.xMax - _rightPanelWidth - _SplitterWidth, totalRect.y, _SplitterWidth, totalRect.height);
+            var rightRect = new Rect(rightSplitterRect.xMax, totalRect.y, _rightPanelWidth, totalRect.height);
             
             var centerRect = new Rect(leftSplitterRect.xMax, totalRect.y, 
                 rightSplitterRect.x - leftSplitterRect.xMax, totalRect.height);
@@ -111,9 +117,9 @@ namespace StoryEditor
             HandleSplitterDragging(leftSplitterRect, rightSplitterRect, totalRect.width);
 
             // Draw panels using components
-            blockPanel?.Draw(leftRect);
-            entryPanel?.Draw(centerRect);
-            editorPanel?.Draw(rightRect);
+            _blockPanel?.Draw(leftRect);
+            _entryPanel?.Draw(centerRect);
+            _editorPanel?.Draw(rightRect);
 
             // Draw splitters
             EditorGUI.DrawRect(leftSplitterRect, Color.gray);
@@ -131,40 +137,40 @@ namespace StoryEditor
             {
                 if (leftSplitterRect.Contains(currentEvent.mousePosition))
                 {
-                    isDraggingSplitter = true;
-                    isDraggingRightSplitter = false;
+                    _isDraggingSplitter = true;
+                    _isDraggingRightSplitter = false;
                     currentEvent.Use();
                 }
                 else if (rightSplitterRect.Contains(currentEvent.mousePosition))
                 {
-                    isDraggingRightSplitter = true;
-                    isDraggingSplitter = false;
+                    _isDraggingRightSplitter = true;
+                    _isDraggingSplitter = false;
                     currentEvent.Use();
                 }
             }
 
-            if (currentEvent.type == EventType.MouseDrag)
+            if (EventType.MouseDrag == currentEvent.type)
             {
-                if (isDraggingSplitter)
+                if (_isDraggingSplitter)
                 {
-                    leftPanelWidth = Mathf.Clamp(currentEvent.mousePosition.x, MIN_PANEL_WIDTH, 
-                        totalWidth - rightPanelWidth - MIN_PANEL_WIDTH - SPLITTER_WIDTH * 2);
+                    _leftPanelWidth = Mathf.Clamp(currentEvent.mousePosition.x, _MinPanelWidth, 
+                        totalWidth - _rightPanelWidth - _MinPanelWidth - _SplitterWidth * 2);
                     Repaint();
                     currentEvent.Use();
                 }
-                else if (isDraggingRightSplitter)
+                else if (_isDraggingRightSplitter)
                 {
-                    rightPanelWidth = Mathf.Clamp(totalWidth - currentEvent.mousePosition.x - SPLITTER_WIDTH, 
-                        MIN_PANEL_WIDTH, totalWidth - leftPanelWidth - MIN_PANEL_WIDTH - SPLITTER_WIDTH * 2);
+                    _rightPanelWidth = Mathf.Clamp(totalWidth - currentEvent.mousePosition.x - _SplitterWidth, 
+                        _MinPanelWidth, totalWidth - _leftPanelWidth - _MinPanelWidth - _SplitterWidth * 2);
                     Repaint();
                     currentEvent.Use();
                 }
             }
 
-            if (currentEvent.type == EventType.MouseUp)
+            if (EventType.MouseUp == currentEvent.type)
             {
-                isDraggingSplitter = false;
-                isDraggingRightSplitter = false;
+                _isDraggingSplitter = false;
+                _isDraggingRightSplitter = false;
             }
         }
     }
