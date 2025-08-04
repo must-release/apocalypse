@@ -98,7 +98,11 @@ namespace StoryEditor
 
         public EditorStoryEntry AddVFX(string action = "", float duration = 0f)
         {
-            var newVFX = new StoryVFX(action, duration);
+            var newVFX = new StoryVFX
+            {
+                VFX = StoryVFX.VFXType.ScreenFadeIn,
+                Duration = duration > 0f ? duration : 1.0f
+            };
             var editorEntry = new EditorStoryEntry(newVFX);
             editorEntries.Add(editorEntry);
             return editorEntry;
@@ -134,6 +138,86 @@ namespace StoryEditor
             
             var newChoice = new StoryChoice(prevDialogue, defaultOptions);
             var editorEntry = new EditorStoryEntry(newChoice);
+            editorEntries.Add(editorEntry);
+            return editorEntry;
+        }
+
+        public EditorStoryEntry AddCharacterStanding(string name = "", string expression = "")
+        {
+            var newStanding = new StoryCharacterStanding
+            {
+                Name = name,
+                Expression = expression,
+                Animation = StoryCharacterStanding.AnimationType.None,
+                TargetPosition = StoryCharacterStanding.TargetPositionType.Center,
+                AnimationSpeed = 1.0f,
+                IsBlockingAnimation = true
+            };
+            var editorEntry = new EditorStoryEntry(newStanding);
+            editorEntries.Add(editorEntry);
+            return editorEntry;
+        }
+
+        public EditorStoryEntry AddPlayMode()
+        {
+            var newPlayMode = new StoryPlayMode
+            {
+                PlayMode = StoryPlayMode.PlayModeType.VisualNovel
+            };
+            var editorEntry = new EditorStoryEntry(newPlayMode);
+            editorEntries.Add(editorEntry);
+            return editorEntry;
+        }
+
+        public EditorStoryEntry AddBackgroundCG()
+        {
+            var newBackgroundCG = new StoryBackgroundCG
+            {
+                Chapter = ChapterType.Test,
+                ImageName = ""
+            };
+            var editorEntry = new EditorStoryEntry(newBackgroundCG);
+            editorEntries.Add(editorEntry);
+            return editorEntry;
+        }
+
+
+        public EditorStoryEntry AddBGM()
+        {
+            var newBGM = new StoryBGM
+            {
+                Action = StoryBGM.BGMAction.Start,
+                BGMName = "",
+                FadeDuration = 1.0f,
+                IsLoop = true
+            };
+            var editorEntry = new EditorStoryEntry(newBGM);
+            editorEntries.Add(editorEntry);
+            return editorEntry;
+        }
+
+        public EditorStoryEntry AddSFX()
+        {
+            var newSFX = new StorySFX
+            {
+                SFXName = ""
+            };
+            var editorEntry = new EditorStoryEntry(newSFX);
+            editorEntries.Add(editorEntry);
+            return editorEntry;
+        }
+
+        public EditorStoryEntry AddCameraAction()
+        {
+            var newCameraAction = new StoryCameraAction
+            {
+                ActionType = StoryCameraAction.CameraActionType.SwitchToCamera,
+                CameraName = "",
+                Duration = 1.0f,
+                Priority = 10,
+                WaitForCompletion = true
+            };
+            var editorEntry = new EditorStoryEntry(newCameraAction);
             editorEntries.Add(editorEntry);
             return editorEntry;
         }

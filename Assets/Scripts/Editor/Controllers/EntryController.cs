@@ -7,7 +7,13 @@ namespace StoryEditor.Controllers
     {
         Dialogue,
         VFX,
-        Choice
+        Choice,
+        CharacterStanding,
+        PlayMode,
+        BackgroundCG,
+        BGM,
+        SFX,
+        CameraAction
     }
 
     public class EntryController
@@ -48,6 +54,24 @@ namespace StoryEditor.Controllers
                     break;
                 case EntryType.Choice:
                     newEntry = selectedBlock.AddChoice();
+                    break;
+                case EntryType.CharacterStanding:
+                    newEntry = selectedBlock.AddCharacterStanding();
+                    break;
+                case EntryType.PlayMode:
+                    newEntry = selectedBlock.AddPlayMode();
+                    break;
+                case EntryType.BackgroundCG:
+                    newEntry = selectedBlock.AddBackgroundCG();
+                    break;
+                case EntryType.BGM:
+                    newEntry = selectedBlock.AddBGM();
+                    break;
+                case EntryType.SFX:
+                    newEntry = selectedBlock.AddSFX();
+                    break;
+                case EntryType.CameraAction:
+                    newEntry = selectedBlock.AddCameraAction();
                     break;
             }
 

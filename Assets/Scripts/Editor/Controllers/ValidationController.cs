@@ -176,11 +176,6 @@ namespace StoryEditor.Controllers
 
         private void ValidateVFX(StoryVFX vfx, string entryName, ValidationResult result)
         {
-            if (string.IsNullOrWhiteSpace(vfx.Action))
-            {
-                result.AddError($"{entryName}: VFX has no action specified");
-            }
-
             if (0 > vfx.Duration)
             {
                 result.AddError($"{entryName}: VFX duration cannot be negative");

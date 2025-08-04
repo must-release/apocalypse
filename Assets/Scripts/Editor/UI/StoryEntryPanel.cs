@@ -44,6 +44,12 @@ namespace StoryEditor.UI
                 menu.AddItem(new GUIContent("Dialogue"), false, () => entryController.AddEntry(EntryType.Dialogue));
                 menu.AddItem(new GUIContent("VFX"), false, () => entryController.AddEntry(EntryType.VFX));
                 menu.AddItem(new GUIContent("Choice"), false, () => entryController.AddEntry(EntryType.Choice));
+                menu.AddItem(new GUIContent("CharacterCG"), false, () => entryController.AddEntry(EntryType.CharacterStanding));
+                menu.AddItem(new GUIContent("PlayMode"), false, () => entryController.AddEntry(EntryType.PlayMode));
+                menu.AddItem(new GUIContent("BackgroundCG"), false, () => entryController.AddEntry(EntryType.BackgroundCG));
+                menu.AddItem(new GUIContent("BGM"), false, () => entryController.AddEntry(EntryType.BGM));
+                menu.AddItem(new GUIContent("SFX"), false, () => entryController.AddEntry(EntryType.SFX));
+                menu.AddItem(new GUIContent("Camera Action"), false, () => entryController.AddEntry(EntryType.CameraAction));
                 menu.DropDown(dropdownRect);
             }
         }

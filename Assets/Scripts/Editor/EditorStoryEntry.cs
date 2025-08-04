@@ -32,6 +32,12 @@ namespace StoryEditor
                 nameof(StoryDialogue) => "Dialogue",
                 nameof(StoryVFX) => "VFX",
                 nameof(StoryChoice) => "Choice",
+                nameof(StoryCharacterStanding) => "CharacterCG",
+                nameof(StoryPlayMode) => "PlayMode",
+                nameof(StoryBackgroundCG) => "BackgroundCG",
+                nameof(StoryBGM) => "BGM",
+                nameof(StorySFX) => "SFX",
+                nameof(StoryCameraAction) => "CameraAction",
                 _ => "Unknown"
             };
         }
@@ -43,8 +49,14 @@ namespace StoryEditor
             return storyEntry switch
             {
                 StoryDialogue dialogue => $"Dialogue: {dialogue.Name} - {TruncateText(dialogue.Text, 12)}",
-                StoryVFX vfx => $"VFX: {vfx.Action} ({vfx.Duration}s)",
+                StoryVFX vfx => $"VFX: {vfx.VFX} ({vfx.Duration}s)",
                 StoryChoice choice => $"Choice: [{GetChoiceOptionsText(choice)}]",
+                StoryCharacterStanding characterCG => $"CharacterCG: {characterCG.Name} ({characterCG.Animation}, {characterCG.TargetPosition})",
+                StoryPlayMode playMode => $"PlayMode: {playMode.PlayMode}",
+                StoryBackgroundCG backgroundCG => $"BackgroundCG: {backgroundCG.Chapter} - {(string.IsNullOrEmpty(backgroundCG.ImageName) ? "No Image" : backgroundCG.ImageName)}",
+                StoryBGM bgm => $"BGM {bgm.Action}: {(bgm.Action == StoryBGM.BGMAction.Start ? (string.IsNullOrEmpty(bgm.BGMName) ? "No BGM" : bgm.BGMName) : "")} (Fade: {bgm.FadeDuration}s{(bgm.Action == StoryBGM.BGMAction.Start ? $", Loop: {bgm.IsLoop}" : "")})",
+                StorySFX sfx => $"SFX: {(string.IsNullOrEmpty(sfx.SFXName) ? "No SFX" : sfx.SFXName)}",
+                StoryCameraAction cameraAction => $"Camera: {cameraAction.ActionType} - {(string.IsNullOrEmpty(cameraAction.CameraName) ? "No Camera" : cameraAction.CameraName)} ({cameraAction.Duration}s)",
                 _ => "Unknown Entry"
             };
         }
@@ -76,10 +88,22 @@ namespace StoryEditor
         public bool IsDialogue() => storyEntry is StoryDialogue;
         public bool IsVFX() => storyEntry is StoryVFX;
         public bool IsChoice() => storyEntry is StoryChoice;
+        public bool IsCharacterStanding() => storyEntry is StoryCharacterStanding;
+        public bool IsPlayMode() => storyEntry is StoryPlayMode;
+        public bool IsBackgroundCG() => storyEntry is StoryBackgroundCG;
+        public bool IsBGM() => storyEntry is StoryBGM;
+        public bool IsSFX() => storyEntry is StorySFX;
+        public bool IsCameraAction() => storyEntry is StoryCameraAction;
 
         public StoryDialogue AsDialogue() => storyEntry as StoryDialogue;
         public StoryVFX AsVFX() => storyEntry as StoryVFX;
         public StoryChoice AsChoice() => storyEntry as StoryChoice;
+        public StoryCharacterStanding AsCharacterStanding() => storyEntry as StoryCharacterStanding;
+        public StoryPlayMode AsPlayMode() => storyEntry as StoryPlayMode;
+        public StoryBackgroundCG AsBackgroundCG() => storyEntry as StoryBackgroundCG;
+        public StoryBGM AsBGM() => storyEntry as StoryBGM;
+        public StorySFX AsSFX() => storyEntry as StorySFX;
+        public StoryCameraAction AsCameraAction() => storyEntry as StoryCameraAction;
 
         public void UpdateChoicePrevDialogue(EditorStoryBlock parentBlock, int entryIndex)
         {
