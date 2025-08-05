@@ -18,13 +18,13 @@ public class StoryCharacterStanding : StoryEntry
         Right
     }
 
-    public enum ExpressionType
+    public enum FacialExpressionType
     {
         Default = 0,
         Smile,
         Cry,
         Rage,
-        ExpressionTypeCount // Keep this last for count
+        FacialExpressionTypeCount // Keep this last for count
     }
 
     public StoryCharacterStanding() { }
@@ -33,7 +33,7 @@ public class StoryCharacterStanding : StoryEntry
     public string Name;
 
     [XmlAttribute("Expression")]
-    public ExpressionType Expression;
+    public FacialExpressionType Expression;
 
     [XmlAttribute("Animation")]
     public AnimationType Animation;

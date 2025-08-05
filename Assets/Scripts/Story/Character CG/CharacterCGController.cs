@@ -6,14 +6,35 @@ using System;
 
 public class CharacterCGController : MonoBehaviour
 {
-    public static CharacterCGController Instance;
+    /****** Public Members ******/
+
+    public static CharacterCGController Instance { get; private set; }
+
+    public void RegisterCharacter(string characterID, CharacterCGView view)
+    {
+        if (false == _characterViews.ContainsKey(characterID))
+        {
+            _characterViews.Add(characterID, view);
+        }
+    }
+
+    public void HandleCharacterStanding(StoryCharacterStanding standingInfo, Action onComplete)
+    {
+        AsyncHandleCharacterStanding(standingInfo, onComplete).Forget();
+    }
+
+
+    /****** Private Members ******/
 
     private CharacterCGModel _model;
     private Dictionary<string, CharacterCGView> _characterViews = new Dictionary<string, CharacterCGView>();
+    private Vector2 _leftPosition = new Vector2(-500, -219);
+    private Vector2 _rightPosition = new Vector2(500, -219);
+    private Vector2 _centerPosition = new Vector2(0, -219);
 
-    void Awake()
+    private void Awake()
     {
-        if (Instance == null)
+        if (null == Instance)
         {
             Instance = this;
             _model = new CharacterCGModel();
@@ -24,58 +45,39 @@ public class CharacterCGController : MonoBehaviour
         }
     }
 
-    async void Start()
+    private async void Start()
     {
-        await _model.LoadCharacterExpressionAsset();
+        await _model.AsyncLoadCharacterExpressionAsset();
     }
 
-    public void RegisterCharacter(string characterID, CharacterCGView view)
-    {
-        if (!_characterViews.ContainsKey(characterID))
-        {
-            _characterViews.Add(characterID, view);
-        }
-    }
-
-    public void HandleCharacterStanding(StoryCharacterStanding standingInfo, Action onComplete)
-    {
-        HandleCharacterStandingAsync(standingInfo, onComplete).Forget();
-    }
-
-    private async UniTaskVoid HandleCharacterStandingAsync(StoryCharacterStanding standingInfo, Action onComplete)
+    private async UniTaskVoid AsyncHandleCharacterStanding(StoryCharacterStanding standingInfo, Action onComplete)
     {
         float duration = 1f / standingInfo.AnimationSpeed;
         Vector2 targetPosition = GetTargetPosition(standingInfo.TargetPosition);
 
         CharacterCGView characterView = GetCharacterView(standingInfo.Name);
-        if (characterView == null)
-        {
-            Debug.LogError($"No available character GameObject found for '{standingInfo.Name}'.");
-            onComplete?.Invoke();
-            return;
-        }
 
         Sprite expressionSprite = _model.GetExpressionSprite(standingInfo.Name, standingInfo.Expression);
-        if (expressionSprite != null)
-        {
-            characterView.SetSprite(expressionSprite);
-        }
+
+        Debug.Assert(null != expressionSprite, "expressionSprite is null.");
+        
+        characterView.SetSprite(expressionSprite);
 
         switch (standingInfo.Animation)
         {
             case StoryCharacterStanding.AnimationType.Appear:
                 characterView.SetPosition(targetPosition);
                 characterView.SetActive(true);
-                await characterView.Fade(0f, 1f, duration);
+                await characterView.AsyncFade(0f, 1f, duration);
                 break;
 
             case StoryCharacterStanding.AnimationType.Disappear:
-                await characterView.Fade(1f, 0f, duration);
+                await characterView.AsyncFade(1f, 0f, duration);
                 characterView.SetActive(false);
                 break;
 
             case StoryCharacterStanding.AnimationType.Move:
-                await characterView.Move(targetPosition, duration);
+                await characterView.AsyncMove(targetPosition, duration);
                 break;
         }
 
@@ -90,14 +92,12 @@ public class CharacterCGController : MonoBehaviour
         }
 
         var inactiveView = _characterViews.Values.FirstOrDefault(v => !v.gameObject.activeInHierarchy);
-        if (inactiveView != null)
-        {
-            inactiveView.name = characterID;
-            _characterViews.Remove(inactiveView.name);
-            _characterViews[characterID] = inactiveView;
-            return inactiveView;
-        }
-        return null;
+        Debug.Assert(null == inactiveView, $"No available character GameObject found for '{characterID}'.");
+
+        inactiveView.name = characterID;
+        _characterViews.Remove(inactiveView.name);
+        _characterViews[characterID] = inactiveView;
+        return inactiveView;
     }
 
     private Vector2 GetTargetPosition(StoryCharacterStanding.TargetPositionType targetPositionType)
@@ -105,12 +105,12 @@ public class CharacterCGController : MonoBehaviour
         switch (targetPositionType)
         {
             case StoryCharacterStanding.TargetPositionType.Left:
-                return new Vector2(-500, -219);
+                return _leftPosition;
             case StoryCharacterStanding.TargetPositionType.Right:
-                return new Vector2(500, -219);
+                return _rightPosition;
             case StoryCharacterStanding.TargetPositionType.Center:
             default:
-                return new Vector2(0, -219);
+                return _centerPosition;
         }
     }
 }

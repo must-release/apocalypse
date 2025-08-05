@@ -1,84 +1,71 @@
-
 using UnityEngine;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 
+[RequireComponent(typeof(Image))]
 public class CharacterCGView : MonoBehaviour
 {
-    private Image _characterImage;
-    private Image CharacterImage
-    {
-        get
-        {
-            if (_characterImage == null)
-            {
-                _characterImage = GetComponent<Image>();
-            }
-            return _characterImage;
-        }
-    }
-
-    private RectTransform _rectTransform;
-    private RectTransform RectTransform
-    {
-        get
-        {
-            if (_rectTransform == null)
-            {
-                _rectTransform = GetComponent<RectTransform>();
-            }
-            return _rectTransform;
-        }
-    }
+    /****** Public Members ******/
 
     public void SetSprite(Sprite sprite)
     {
-        if (CharacterImage != null && sprite != null)
-        {
-            CharacterImage.sprite = sprite;
-            CharacterImage.SetNativeSize();
-        }
+        Debug.Assert(null != sprite, "Sprite to set is null.");
+
+        _characterImage.sprite = sprite;
+        _characterImage.SetNativeSize();
     }
 
-    public async UniTask Fade(float startAlpha, float endAlpha, float duration)
+    public async UniTask AsyncFade(float startAlpha, float endAlpha, float duration)
     {
         float elapsed = 0f;
-        Color color = CharacterImage.color;
+        Color color = _characterImage.color;
 
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
             color.a = Mathf.Lerp(startAlpha, endAlpha, elapsed / duration);
-            CharacterImage.color = color;
+            _characterImage.color = color;
             await UniTask.Yield();
         }
 
         color.a = endAlpha;
-        CharacterImage.color = color;
+        _characterImage.color = color;
     }
 
-    public async UniTask Move(Vector3 targetPosition, float duration)
+    public async UniTask AsyncMove(Vector3 targetPosition, float duration)
     {
         float elapsed = 0f;
-        Vector3 startPosition = RectTransform.anchoredPosition;
+        Vector3 startPosition = _rectTransform.anchoredPosition;
 
         while (elapsed < duration)
-        {
+        { 
             elapsed += Time.deltaTime;
-            RectTransform.anchoredPosition = Vector3.Lerp(startPosition, targetPosition, elapsed / duration);
+            _rectTransform.anchoredPosition = Vector3.Lerp(startPosition, targetPosition, elapsed / duration);
             await UniTask.Yield();
         }
 
-        RectTransform.anchoredPosition = targetPosition;
+        _rectTransform.anchoredPosition = targetPosition;
     }
 
     public void SetPosition(Vector2 position)
     {
-        RectTransform.anchoredPosition = position;
+        _rectTransform.anchoredPosition = position;
     }
 
     public void SetActive(bool active)
     {
         gameObject.SetActive(active);
+    }
+
+
+    /****** Private Members ******/
+
+    private Image _characterImage;
+    private RectTransform _rectTransform;
+
+    private void Awake()
+    {
+        _characterImage = GetComponent<Image>();
+        _rectTransform = GetComponent<RectTransform>();
     }
 }

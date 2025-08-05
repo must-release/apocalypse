@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
@@ -7,63 +6,59 @@ using Cysharp.Threading.Tasks;
 
 public class CharacterCGModel
 {
-    public CharacterExpressionAsset CharacterExpressionAsset { get; private set; }
-    private Dictionary<string, Sprite> _expressionSprites = new Dictionary<string, Sprite>();
+    /****** Public Members ******/
 
-    public async UniTask LoadCharacterExpressionAsset()
+    public CharacterExpressionAsset CharacterExpressionAsset { get; private set; }
+
+    public async UniTask AsyncLoadCharacterExpressionAsset()
     {
-        if (CharacterExpressionAsset == null)
+        if (null == CharacterExpressionAsset)
         {
             var handle = Addressables.LoadAssetAsync<CharacterExpressionAsset>(AssetPath.CharacterExpressionAsset);
             await handle.ToUniTask();
-            if (handle.Status == AsyncOperationStatus.Succeeded)
-            {
-                CharacterExpressionAsset = handle.Result;
-            }
-            else
-            {
-                Debug.LogError("Failed to load CharacterExpressionAsset.");
-            }
+
+            Debug.Assert(handle.Status == AsyncOperationStatus.Succeeded, "Failed to load CharacterExpressionAsset.");
+
+            CharacterExpressionAsset = handle.Result;
         }
     }
 
-    public Sprite GetExpressionSprite(string characterID, StoryCharacterStanding.ExpressionType expression)
+    public Sprite GetExpressionSprite(string characterID, StoryCharacterStanding.FacialExpressionType expression)
     {
+        Debug.Assert(null != CharacterExpressionAsset, "CharacterExpressionAsset is not loaded.");
+
         string key = $"{characterID}_{expression}";
         if (_expressionSprites.TryGetValue(key, out Sprite sprite))
         {
             return sprite;
         }
 
-        if (CharacterExpressionAsset == null)
-        {
-            Debug.LogError("CharacterExpressionAsset is not loaded.");
-            return null;
-        }
-
         List<CharacterExpressionEntry> targetExpressions = null;
-        if (characterID == "나")
+        if (string.Equals(characterID, "나"))
         {
-            targetExpressions = CharacterExpressionAsset.rounExpressions;
+            targetExpressions = CharacterExpressionAsset.HeroExpressions;
         }
-        else if (characterID == "소녀")
+        else if (string.Equals(characterID, "소녀"))
         {
-            targetExpressions = CharacterExpressionAsset.minaExpressions;
-        }
+            targetExpressions = CharacterExpressionAsset.HeroineExpressions;
+        } // *** must refactor ***
 
-        if (targetExpressions != null)
+        Debug.Assert(null != targetExpressions, $"Expression sprite for '{expression}' not found for character '{characterID}'.");
+
+        foreach (var entry in targetExpressions)
         {
-            foreach (var entry in targetExpressions)
+            if (entry.ExpressionType == expression)
             {
-                if (entry.ExpressionType == expression)
-                {
-                    _expressionSprites[key] = entry.Sprite;
-                    return entry.Sprite;
-                }
+                _expressionSprites[key] = entry.Sprite;
+                return entry.Sprite;
             }
         }
-
-        Debug.LogWarning($"Expression sprite for '{expression}' not found for character '{characterID}'.");
+        
         return null;
     }
+
+
+    /****** Private Members ******/
+
+    private Dictionary<string, Sprite> _expressionSprites = new Dictionary<string, Sprite>();
 }
