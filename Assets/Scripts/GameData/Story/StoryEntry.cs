@@ -9,5 +9,5 @@ using System.Xml.Serialization;
 public class StoryEntry
 {
     [XmlIgnore]
-    public bool IsSavePoint = true;
+    public bool IsSavePoint = false;
 }

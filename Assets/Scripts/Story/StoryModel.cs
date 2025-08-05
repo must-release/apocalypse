@@ -65,7 +65,7 @@ public class StoryModel : MonoBehaviour
     {
         storyBlockQueue = new Queue<StoryBlock>(storyBlocks.Skip(ReadBlockCount));
         StoryBlock firstBlock = storyBlockQueue.Dequeue(); // Get first story block
-        CurrentStoryBranch = firstBlock.BranchId; // Set current branch id according to the first story block
+        CurrentStoryBranch = firstBlock.BranchName; // Set current branch name according to the first story block
         storyEntryQueue = new Queue<StoryEntry>(firstBlock.Entries.Skip(ReadEntryCount));
     }
 
@@ -94,7 +94,7 @@ public class StoryModel : MonoBehaviour
             {
                 if (option.Text.Equals(optionText))
                 {
-                    CurrentStoryBranch = option.BranchId;
+                    CurrentStoryBranch = option.BranchName;
                     break;
                 }
             }
@@ -131,9 +131,9 @@ public class StoryModel : MonoBehaviour
                 ReadEntryCount = readEntryCountBuffer = 0;
 
                 // Play next story block when it is common or is same with current story branch
-                if (nextBlock.BranchId == "common" || nextBlock.BranchId == CurrentStoryBranch)
+                if (nextBlock.IsCommon || nextBlock.BranchName == CurrentStoryBranch)
                 {
-                    CurrentStoryBranch = nextBlock.BranchId;
+                    CurrentStoryBranch = nextBlock.BranchName;
                     storyEntryQueue = new Queue<StoryEntry>(nextBlock.Entries);
                     return storyEntryQueue.Dequeue();
                 }

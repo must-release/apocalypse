@@ -15,7 +15,7 @@ MonoBehaviour:
   _eventType: 0
   _isInitialized: 1
   _storyStage: 1
-  _storyNumber: 0
+  _storyNumber: 1
   _readBlockCount: 0
   _readEntryCount: 0
   _isOnMap: 0
