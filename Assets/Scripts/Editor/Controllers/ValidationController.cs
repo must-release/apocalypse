@@ -204,6 +204,30 @@ namespace StoryEditor.Controllers
                     ValidateChoice(choice, blockIndex, entryIndex, entryName, result);
                     break;
 
+                case StoryPlayMode playMode:
+                    ValidatePlayMode(playMode, entryName, result);
+                    break;
+
+                case StoryBGM bgm:
+                    ValidateBGM(bgm, entryName, result);
+                    break;
+
+                case StoryBackgroundCG backgroundCG:
+                    ValidateBackgroundCG(backgroundCG, entryName, result);
+                    break;
+
+                case StoryCameraAction cameraAction:
+                    ValidateCameraAction(cameraAction, entryName, result);
+                    break;
+
+                case StoryCharacterStanding characterStanding:
+                    ValidateCharacterStanding(characterStanding, entryName, result);
+                    break;
+
+                case StorySFX sfx:
+                    ValidateSFX(sfx, entryName, result);
+                    break;
+
                 default:
                     result.AddWarning($"{entryName}: Unknown entry type {entry.StoryEntry.GetType().Name}");
                     break;
@@ -292,6 +316,95 @@ namespace StoryEditor.Controllers
                 {
                     result.AddError($"{optionName}: Option has no BranchName");
                 }
+            }
+        }
+
+        private void ValidatePlayMode(StoryPlayMode playMode, string entryName, ValidationResult result)
+        {
+            Debug.Assert(null != playMode);
+            Debug.Assert(null != result);
+        }
+
+        private void ValidateBGM(StoryBGM bgm, string entryName, ValidationResult result)
+        {
+            Debug.Assert(null != bgm);
+            Debug.Assert(null != result);
+
+            if (bgm.Action == StoryBGM.BGMAction.Start && string.IsNullOrWhiteSpace(bgm.BGMName))
+            {
+                result.AddError($"{entryName}: BGM Start action requires BGMName");
+            }
+
+            if (0 > bgm.FadeDuration)
+            {
+                result.AddWarning($"{entryName}: FadeDuration should not be negative");
+            }
+        }
+
+        private void ValidateBackgroundCG(StoryBackgroundCG backgroundCG, string entryName, ValidationResult result)
+        {
+            Debug.Assert(null != backgroundCG);
+            Debug.Assert(null != result);
+
+            if (string.IsNullOrWhiteSpace(backgroundCG.ImageName))
+            {
+                result.AddError($"{entryName}: BackgroundCG requires ImageName");
+            }
+        }
+
+        private void ValidateCameraAction(StoryCameraAction cameraAction, string entryName, ValidationResult result)
+        {
+            Debug.Assert(null != cameraAction);
+            Debug.Assert(null != result);
+
+            switch (cameraAction.ActionType)
+            {
+                case StoryCameraAction.CameraActionType.SwitchToCamera:
+                case StoryCameraAction.CameraActionType.SetPriority:
+                    if (string.IsNullOrWhiteSpace(cameraAction.TargetCamera))
+                    {
+                        result.AddError($"{entryName}: {cameraAction.ActionType} requires Target Camera");
+                    }
+                    break;
+
+                case StoryCameraAction.CameraActionType.FollowTarget:
+                    if (string.IsNullOrWhiteSpace(cameraAction.TargetName))
+                    {
+                        result.AddError($"{entryName}: FollowTarget requires TargetName");
+                    }
+                    break;
+            }
+
+            if (0 > cameraAction.Duration)
+            {
+                result.AddWarning($"{entryName}: Duration should not be negative");
+            }
+        }
+
+        private void ValidateCharacterStanding(StoryCharacterStanding characterStanding, string entryName, ValidationResult result)
+        {
+            Debug.Assert(null != characterStanding);
+            Debug.Assert(null != result);
+
+            if (string.IsNullOrWhiteSpace(characterStanding.Name))
+            {
+                result.AddError($"{entryName}: CharacterStanding requires Name");
+            }
+
+            if (0 > characterStanding.AnimationSpeed)
+            {
+                result.AddWarning($"{entryName}: AnimationSpeed should not be negative");
+            }
+        }
+
+        private void ValidateSFX(StorySFX sfx, string entryName, ValidationResult result)
+        {
+            Debug.Assert(null != sfx);
+            Debug.Assert(null != result);
+
+            if (string.IsNullOrWhiteSpace(sfx.SFXName))
+            {
+                result.AddError($"{entryName}: SFX requires SFXName");
             }
         }
 

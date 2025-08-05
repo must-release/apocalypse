@@ -22,7 +22,7 @@ public class StageManager : MonoBehaviour
     public SnapPoint        EnterSnapPoint  { get; private set; }
     public SnapPoint        ExitSnapPoint   { get; private set; }
     public BoxCollider2D    StageBoundary   { get; private set; }
-    public FollowCamera     StageCamera     { get; private set; }
+    public FollowCamera     StageCamera     => _stageCamera;
     public ChapterType      ChapterType     => _chapterType;
     public int              StageIndex      => _stageIndex;
 
@@ -95,6 +95,7 @@ public class StageManager : MonoBehaviour
     [SerializeField] private ChapterType    _chapterType;
     [SerializeField] private int            _stageIndex;
     [SerializeField] private bool           _canGoBackToPreviousStage;
+    [SerializeField] private FollowCamera   _stageCamera;
 
     private const int _StageTranisitionTriggerCount = 2;
     private Tilemap                     _tilemap;
@@ -242,12 +243,17 @@ public class StageManager : MonoBehaviour
     {
         Debug.Assert(null != StageBoundary, $"StageBoundary is not set in the {_chapterType}_{_stageIndex}.");
 
-        GameObject cameraObject = new GameObject("FollowCamera");
-        cameraObject.transform.SetParent(transform, false);
-        cameraObject.transform.position = new Vector3(0, 0, -10);
-        
-        StageCamera = cameraObject.AddComponent<FollowCamera>();
-        StageCamera.Initialize(StageBoundary);
+        if (null == _stageCamera)
+        {
+            GameObject cameraObject = new GameObject("FollowCamera");
+            cameraObject.transform.SetParent(transform, false);
+            cameraObject.transform.position = new Vector3(0, 0, -10);
+            _stageCamera = cameraObject.AddComponent<FollowCamera>();
+
+            Logger.Write(LogCategory.GameScene, $"Created new stage camera in the {_chapterType}_{_stageIndex}.");
+        }
+
+        _stageCamera.Initialize(StageBoundary);
     }
 
 

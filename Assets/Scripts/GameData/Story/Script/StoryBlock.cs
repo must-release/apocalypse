@@ -19,6 +19,11 @@ public class StoryBlock
     [XmlElement(typeof(StoryDialogue), ElementName = "Dialogue")]
     [XmlElement(typeof(StoryCharacterStanding), ElementName = "CharacterStanding")]
     [XmlElement(typeof(StoryChoice), ElementName = "Choice")]
+    [XmlElement(typeof(StoryBackgroundCG), ElementName = "BackgroundCG")]
+    [XmlElement(typeof(StoryBGM), ElementName = "BGM")]
+    [XmlElement(typeof(StoryCameraAction), ElementName = "CameraAction")]
+    [XmlElement(typeof(StoryPlayMode), ElementName = "PlayMode")]
+    [XmlElement(typeof(StorySFX), ElementName = "SFX")]
     [XmlElement(typeof(StoryVFX), ElementName = "VFX")]
     public List<StoryEntry> Entries;
 }
