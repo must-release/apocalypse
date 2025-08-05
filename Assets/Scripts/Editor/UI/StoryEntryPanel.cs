@@ -6,15 +6,15 @@ namespace StoryEditor.UI
 {
     public class StoryEntryPanel
     {
-        private EditorStoryScript editorStoryScript;
-        private EntryController entryController;
-        private DragDropHelper.DragState dragState;
-        private Vector2 scrollPosition;
+        /****** Public Members ******/
 
         public StoryEntryPanel(EditorStoryScript storyScript, EntryController controller)
         {
-            editorStoryScript = storyScript;
-            entryController = controller;
+            Debug.Assert(null != storyScript, "Story script cannot be null");
+            Debug.Assert(null != controller, "Controller cannot be null");
+            
+            _editorStoryScript = storyScript;
+            _entryController = controller;
         }
 
         public void Draw(Rect rect)
@@ -24,6 +24,14 @@ namespace StoryEditor.UI
             DrawEntryList();
             GUILayout.EndArea();
         }
+
+
+        /****** Private Members ******/
+
+        private EditorStoryScript _editorStoryScript;
+        private EntryController _entryController;
+        private DragDropHelper.DragState _dragState;
+        private Vector2 _scrollPosition;
 
         private void DrawHeader()
         {
@@ -41,27 +49,33 @@ namespace StoryEditor.UI
             if (GUI.Button(dropdownRect, "+ Add", EditorStyles.miniPullDown))
             {
                 var menu = new GenericMenu();
-                menu.AddItem(new GUIContent("Dialogue"), false, () => entryController.AddEntry(EntryType.Dialogue));
-                menu.AddItem(new GUIContent("VFX"), false, () => entryController.AddEntry(EntryType.VFX));
-                menu.AddItem(new GUIContent("Choice"), false, () => entryController.AddEntry(EntryType.Choice));
+                menu.AddItem(new GUIContent("Dialogue"), false, () => _entryController.AddEntry(EntryType.Dialogue));
+                menu.AddItem(new GUIContent("VFX"), false, () => _entryController.AddEntry(EntryType.VFX));
+                menu.AddItem(new GUIContent("Choice"), false, () => _entryController.AddEntry(EntryType.Choice));
+                menu.AddItem(new GUIContent("CharacterCG"), false, () => _entryController.AddEntry(EntryType.CharacterStanding));
+                menu.AddItem(new GUIContent("PlayMode"), false, () => _entryController.AddEntry(EntryType.PlayMode));
+                menu.AddItem(new GUIContent("BackgroundCG"), false, () => _entryController.AddEntry(EntryType.BackgroundCG));
+                menu.AddItem(new GUIContent("BGM"), false, () => _entryController.AddEntry(EntryType.BGM));
+                menu.AddItem(new GUIContent("SFX"), false, () => _entryController.AddEntry(EntryType.SFX));
+                menu.AddItem(new GUIContent("Camera Action"), false, () => _entryController.AddEntry(EntryType.CameraAction));
                 menu.DropDown(dropdownRect);
             }
         }
 
         private void DrawEntryList()
         {
-            var selectedBlock = editorStoryScript.SelectedBlock;
+            var selectedBlock = _editorStoryScript.SelectedBlock;
             if (null == selectedBlock)
             {
                 EditorGUILayout.HelpBox("Select a block to view its entries", MessageType.Info);
                 return;
             }
 
-            scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
 
             if (Event.current.type == EventType.Repaint)
             {
-                dragState.dropTargetIndex = -1;
+                _dragState.dropTargetIndex = -1;
             }
 
             for (int i = 0; i < selectedBlock.EditorEntries.Count; i++)
@@ -75,7 +89,7 @@ namespace StoryEditor.UI
         private void DrawEntryItem(EditorStoryBlock selectedBlock, int index)
         {
             var entry = selectedBlock.EditorEntries[index];
-            var isSelected = index == editorStoryScript.SelectedEntryIndex;
+            var isSelected = index == _editorStoryScript.SelectedEntryIndex;
 
             EditorGUILayout.BeginHorizontal();
 
@@ -83,17 +97,17 @@ namespace StoryEditor.UI
             var buttonStyle = isSelected ? GetSelectedButtonStyle() : GUI.skin.label;
             var buttonRect = GUILayoutUtility.GetRect(new GUIContent(displayText), buttonStyle);
             
-            var isDraggedItem = dragState.isDragging && dragState.draggedIndex == index;
+            var isDraggedItem = _dragState.isDragging && _dragState.draggedIndex == index;
             
             DragDropHelper.DrawDraggedItemFeedback(isDraggedItem);
-            DragDropHelper.DrawDropIndicator(buttonRect, index, ref dragState);
+            DragDropHelper.DrawDropIndicator(buttonRect, index, ref _dragState);
             
-            DragDropHelper.HandleDragAndDrop<EditorStoryEntry>(buttonRect, index, ref dragState,
-                (fromIndex, toIndex) => entryController.MoveEntry(editorStoryScript.SelectedBlockIndex, fromIndex, toIndex));
+            DragDropHelper.HandleDragAndDrop<EditorStoryEntry>(buttonRect, index, ref _dragState,
+                (fromIndex, toIndex) => _entryController.MoveEntry(_editorStoryScript.SelectedBlockIndex, fromIndex, toIndex));
             
-            if (GUI.Button(buttonRect, displayText, buttonStyle) && false == dragState.isDragging)
+            if (GUI.Button(buttonRect, displayText, buttonStyle) && false == _dragState.isDragging)
             {
-                entryController.SelectEntry(index);
+                _entryController.SelectEntry(index);
             }
             
             DragDropHelper.ResetGUIColor();
@@ -108,7 +122,7 @@ namespace StoryEditor.UI
             {
                 if (EditorUtility.DisplayDialog("Delete Entry", "Are you sure you want to delete this entry?", "Delete", "Cancel"))
                 {
-                    entryController.RemoveEntry(editorStoryScript.SelectedBlockIndex, index);
+                    _entryController.RemoveEntry(_editorStoryScript.SelectedBlockIndex, index);
                 }
             }
             GUI.color = Color.white;
@@ -120,12 +134,5 @@ namespace StoryEditor.UI
             style.alignment = TextAnchor.MiddleLeft;
             return style;
         }
-
-        public void SetDragCursor(Rect windowRect)
-        {
-            DragDropHelper.SetDragCursor(dragState.isDragging, windowRect);
-        }
-
-        public bool IsDragging => dragState.isDragging;
     }
 }

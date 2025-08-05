@@ -60,6 +60,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 387897b1618c4e24da3b48b23ad1c54f
+    m_Address: GameData/Story/BackgroundCGAsset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3ed568ded1c62184db7a6f7f39e4ac25
+    m_Address: GameData/Audio/SFXAsset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 40efd301c201f4313ac1ae1c43a9ae5d
     m_Address: Stage/Test_2
     m_ReadOnly: 0
@@ -147,6 +157,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7b11b4543e950c04fb064ccb2c1ce0f9
     m_Address: AnimationClip/Heroine/Lower/JumpingDown
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7c775d50f4086f143b719aa79576b23a
+    m_Address: GameData/Audio/BGMAsset
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
