@@ -24,7 +24,7 @@ public class CharacterCGView : MonoBehaviour
 
     public Tween AsyncMove(Vector3 targetPosition, float duration)
     {
-        return _rectTransform.DOAnchorPos(targetPosition, duration);
+        return _rectTransform.DOAnchorPos(targetPosition, duration).SetEase(Ease.OutSine);
     }
 
     public void SetPosition(Vector2 position)
