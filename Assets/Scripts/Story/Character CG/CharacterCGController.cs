@@ -1,8 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using Cysharp.Threading.Tasks;
 using System;
+using DG.Tweening;
 
 
 public class CharacterCGController : MonoBehaviour
@@ -10,6 +10,7 @@ public class CharacterCGController : MonoBehaviour
     /****** Public Members ******/
 
     public static CharacterCGController Instance { get; private set; }
+    public StoryCharacterStanding PlayingStandingEntry { get; private set; }
 
     public void RegisterCharacter(CharacterCGView view)
     {
@@ -20,9 +21,57 @@ public class CharacterCGController : MonoBehaviour
         }
     }
 
-    public void HandleCharacterStanding(StoryCharacterStanding standingInfo, Action onComplete)
+    public void HandleCharacterStanding(StoryCharacterStanding standingInfo)
     {
-        AsyncHandleCharacterStanding(standingInfo, onComplete).Forget();
+        PlayingStandingEntry = standingInfo;
+
+        float duration = 5f / standingInfo.AnimationSpeed;
+        Vector2 targetPosition = GetTargetPosition(standingInfo.TargetPosition);
+
+        CharacterCGView characterView = GetCharacterView(standingInfo.Name);
+        Sprite expressionSprite = _model.GetExpressionSprite(standingInfo.Name, standingInfo.Expression);
+
+        Debug.Assert(null != expressionSprite, "expressionSprite is null.");
+
+        characterView.SetSprite(expressionSprite);
+
+        Tween currentTween = null;
+
+        switch (standingInfo.Animation)
+        {
+            case StoryCharacterStanding.AnimationType.Appear:
+                characterView.SetPosition(targetPosition);
+                characterView.SetActive(true);
+                currentTween = characterView.AsyncFade(0f, 1f, duration);
+                break;
+
+            case StoryCharacterStanding.AnimationType.Disappear:
+                currentTween = characterView.AsyncFade(1f, 0f, duration);
+                ReleaseCharacterView(standingInfo.Name);
+                break;
+
+            case StoryCharacterStanding.AnimationType.Move:
+                currentTween = characterView.AsyncMove(targetPosition, duration);
+                break;
+        }
+
+        // If Animation active
+        if (null != currentTween)
+        {
+            _activeStandingAnimationTween = currentTween;
+
+            _activeStandingAnimationTween.onComplete += () =>
+            {
+                PlayingStandingEntry = null;
+                _activeStandingAnimationTween = null;
+            };
+        }
+    }
+
+    public void CompleteStandingAnimation()
+    {
+        _activeStandingAnimationTween?.Complete();
+        _activeStandingAnimationTween = null;
     }
 
 
@@ -31,18 +80,10 @@ public class CharacterCGController : MonoBehaviour
     private CharacterCGModel _model;
     private List<CharacterCGView> _characterViewPool = new List<CharacterCGView>();
     private Dictionary<string, CharacterCGView> _activeCharacterViews = new Dictionary<string, CharacterCGView>();
+    private Tween _activeStandingAnimationTween;
     private Vector2 _leftPosition = new Vector2(-500, -219);
     private Vector2 _rightPosition = new Vector2(500, -219);
     private Vector2 _centerPosition = new Vector2(0, -219);
-
-    private void ReleaseCharacterView(string characterID)
-    {
-        if (_activeCharacterViews.TryGetValue(characterID, out CharacterCGView view))
-        {
-            view.gameObject.SetActive(false);
-            _activeCharacterViews.Remove(characterID);
-        }
-    }
 
     private void Awake()
     {
@@ -62,37 +103,13 @@ public class CharacterCGController : MonoBehaviour
         await _model.AsyncLoadCharacterExpressionAsset();
     }
 
-    private async UniTaskVoid AsyncHandleCharacterStanding(StoryCharacterStanding standingInfo, Action onComplete)
+    private void ReleaseCharacterView(string characterID)
     {
-        float duration = 0.7f / standingInfo.AnimationSpeed;
-        Vector2 targetPosition = GetTargetPosition(standingInfo.TargetPosition);
-
-        CharacterCGView characterView   = GetCharacterView(standingInfo.Name);
-        Sprite expressionSprite         = _model.GetExpressionSprite(standingInfo.Name, standingInfo.Expression);
-
-        Debug.Assert(null != expressionSprite, "expressionSprite is null.");
-
-        characterView.SetSprite(expressionSprite);
-
-        switch (standingInfo.Animation)
+        if (_activeCharacterViews.TryGetValue(characterID, out CharacterCGView view))
         {
-            case StoryCharacterStanding.AnimationType.Appear:
-                characterView.SetPosition(targetPosition);
-                characterView.SetActive(true);
-                await characterView.AsyncFade(0f, 1f, duration);
-                break;
-
-            case StoryCharacterStanding.AnimationType.Disappear:
-                await characterView.AsyncFade(1f, 0f, duration);
-                ReleaseCharacterView(standingInfo.Name);
-                break;
-
-            case StoryCharacterStanding.AnimationType.Move:
-                await characterView.AsyncMove(targetPosition, duration);
-                break;
+            view.gameObject.SetActive(false);
+            _activeCharacterViews.Remove(characterID);
         }
-
-        onComplete?.Invoke();
     }
 
     private CharacterCGView GetCharacterView(string characterID)

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 
 [RequireComponent(typeof(Image))]
 public class CharacterCGView : MonoBehaviour
@@ -15,36 +16,15 @@ public class CharacterCGView : MonoBehaviour
         _characterImage.SetNativeSize();
     }
 
-    public async UniTask AsyncFade(float startAlpha, float endAlpha, float duration)
+    public Tween AsyncFade(float startAlpha, float endAlpha, float duration)
     {
-        float elapsed = 0f;
-        Color color = _characterImage.color;
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            color.a = Mathf.Lerp(startAlpha, endAlpha, elapsed / duration);
-            _characterImage.color = color;
-            await UniTask.Yield();
-        }
-
-        color.a = endAlpha;
-        _characterImage.color = color;
+        _characterImage.color = new Color(_characterImage.color.r, _characterImage.color.g, _characterImage.color.b, startAlpha);
+        return _characterImage.DOFade(endAlpha, duration);
     }
 
-    public async UniTask AsyncMove(Vector3 targetPosition, float duration)
+    public Tween AsyncMove(Vector3 targetPosition, float duration)
     {
-        float elapsed = 0f;
-        Vector3 startPosition = _rectTransform.anchoredPosition;
-
-        while (elapsed < duration)
-        { 
-            elapsed += Time.deltaTime;
-            _rectTransform.anchoredPosition = Vector3.Lerp(startPosition, targetPosition, elapsed / duration);
-            await UniTask.Yield();
-        }
-
-        _rectTransform.anchoredPosition = targetPosition;
+        return _rectTransform.DOAnchorPos(targetPosition, duration);
     }
 
     public void SetPosition(Vector2 position)

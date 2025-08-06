@@ -126,6 +126,15 @@ public class StoryController : MonoBehaviour
     // Play next script on the screen
     public void PlayNextScript()
     {
+        if (CharacterCGController.Instance.PlayingStandingEntry != null)
+        {
+            if (CharacterCGController.Instance.PlayingStandingEntry.IsBlockingAnimation)
+                return;
+
+            // if Standing Animation is unBlockable, Skip Animation.
+            CharacterCGController.Instance.CompleteStandingAnimation();
+        }
+
         if (dialoguePlayer.PlayingDialgoueEntries.Count > 0)
         {
             if (dialoguePlayer.PlayingDialgoueEntries.Count > 1)
@@ -191,7 +200,7 @@ public class StoryController : MonoBehaviour
         }
         else if (entry is StoryCharacterStanding standing)
         {
-            CharacterCGController.Instance.HandleCharacterStanding(standing, PlayNextScript);
+            CharacterCGController.Instance.HandleCharacterStanding(standing);
         }
         else
         {
