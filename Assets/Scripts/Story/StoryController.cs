@@ -70,8 +70,11 @@ public class StoryController : MonoBehaviour
             var view = character.GetComponent<CharacterCGView>();
             if (view != null)
             {
-                CharacterCGController.Instance.RegisterCharacter(character.name, view);
+                CharacterCGController.Instance.RegisterCharacter(view);
             }
+
+            // blinding
+            character.SetActive(false);
         }
     }
 

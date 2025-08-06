@@ -4,17 +4,19 @@ using System.Linq;
 using Cysharp.Threading.Tasks;
 using System;
 
+
 public class CharacterCGController : MonoBehaviour
 {
     /****** Public Members ******/
 
     public static CharacterCGController Instance { get; private set; }
 
-    public void RegisterCharacter(string characterID, CharacterCGView view)
+    public void RegisterCharacter(CharacterCGView view)
     {
-        if (false == _characterViews.ContainsKey(characterID))
+        if (false == _characterViewPool.Contains(view))
         {
-            _characterViews.Add(characterID, view);
+            _characterViewPool.Add(view);
+            view.SetActive(false);
         }
     }
 
@@ -27,10 +29,20 @@ public class CharacterCGController : MonoBehaviour
     /****** Private Members ******/
 
     private CharacterCGModel _model;
-    private Dictionary<string, CharacterCGView> _characterViews = new Dictionary<string, CharacterCGView>();
+    private List<CharacterCGView> _characterViewPool = new List<CharacterCGView>();
+    private Dictionary<string, CharacterCGView> _activeCharacterViews = new Dictionary<string, CharacterCGView>();
     private Vector2 _leftPosition = new Vector2(-500, -219);
     private Vector2 _rightPosition = new Vector2(500, -219);
     private Vector2 _centerPosition = new Vector2(0, -219);
+
+    private void ReleaseCharacterView(string characterID)
+    {
+        if (_activeCharacterViews.TryGetValue(characterID, out CharacterCGView view))
+        {
+            view.gameObject.SetActive(false);
+            _activeCharacterViews.Remove(characterID);
+        }
+    }
 
     private void Awake()
     {
@@ -52,15 +64,14 @@ public class CharacterCGController : MonoBehaviour
 
     private async UniTaskVoid AsyncHandleCharacterStanding(StoryCharacterStanding standingInfo, Action onComplete)
     {
-        float duration = 1f / standingInfo.AnimationSpeed;
+        float duration = 0.7f / standingInfo.AnimationSpeed;
         Vector2 targetPosition = GetTargetPosition(standingInfo.TargetPosition);
 
-        CharacterCGView characterView = GetCharacterView(standingInfo.Name);
-
-        Sprite expressionSprite = _model.GetExpressionSprite(standingInfo.Name, standingInfo.Expression);
+        CharacterCGView characterView   = GetCharacterView(standingInfo.Name);
+        Sprite expressionSprite         = _model.GetExpressionSprite(standingInfo.Name, standingInfo.Expression);
 
         Debug.Assert(null != expressionSprite, "expressionSprite is null.");
-        
+
         characterView.SetSprite(expressionSprite);
 
         switch (standingInfo.Animation)
@@ -73,7 +84,7 @@ public class CharacterCGController : MonoBehaviour
 
             case StoryCharacterStanding.AnimationType.Disappear:
                 await characterView.AsyncFade(1f, 0f, duration);
-                characterView.SetActive(false);
+                ReleaseCharacterView(standingInfo.Name);
                 break;
 
             case StoryCharacterStanding.AnimationType.Move:
@@ -86,17 +97,17 @@ public class CharacterCGController : MonoBehaviour
 
     private CharacterCGView GetCharacterView(string characterID)
     {
-        if (_characterViews.TryGetValue(characterID, out CharacterCGView view) && view.gameObject.activeInHierarchy)
+        if (_activeCharacterViews.TryGetValue(characterID, out CharacterCGView view))
         {
             return view;
         }
 
-        var inactiveView = _characterViews.Values.FirstOrDefault(v => !v.gameObject.activeInHierarchy);
-        Debug.Assert(null == inactiveView, $"No available character GameObject found for '{characterID}'.");
+        // Find an inactive view from the pool
+        CharacterCGView inactiveView = _characterViewPool.FirstOrDefault(v => false == v.gameObject.activeInHierarchy);
+        Debug.Assert(null != inactiveView, $"No available character GameObject found for '{characterID}'.");
 
-        inactiveView.name = characterID;
-        _characterViews.Remove(inactiveView.name);
-        _characterViews[characterID] = inactiveView;
+        // Assign the inactive view to the characterID and activate it
+        _activeCharacterViews[characterID] = inactiveView;
         return inactiveView;
     }
 
