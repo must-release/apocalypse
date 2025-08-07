@@ -1,13 +1,16 @@
 using System.Xml.Serialization;
 
-[System.Serializable]
-public class StoryBackgroundCG : StoryEntry
+namespace AD.Story
 {
-    public StoryBackgroundCG() { }
+    [System.Serializable]
+    public class StoryBackgroundCG : StoryEntry
+    {
+        public StoryBackgroundCG() { }
 
-    [XmlAttribute("Chapter")]
-    public ChapterType Chapter;
+        [XmlAttribute("Chapter")]
+        public ChapterType Chapter;
 
-    [XmlAttribute("ImageName")]
-    public string ImageName;
+        [XmlAttribute("ImageName")]
+        public string ImageName;
+    }
 }

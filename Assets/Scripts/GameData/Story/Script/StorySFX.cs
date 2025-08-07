@@ -1,11 +1,13 @@
 using System.Xml.Serialization;
 
-
-[System.Serializable]
-public class StorySFX : StoryEntry
+namespace AD.Story
 {
-    public StorySFX() { }
+    [System.Serializable]
+    public class StorySFX : StoryEntry
+    {
+        public StorySFX() { }
 
-    [XmlAttribute("SFXName")]
-    public string SFXName;
+        [XmlAttribute("SFXName")]
+        public string SFXName;
+    }
 }

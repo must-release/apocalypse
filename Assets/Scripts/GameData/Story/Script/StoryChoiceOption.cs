@@ -1,12 +1,15 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-[System.Serializable]
-public class StoryChoiceOption
+namespace AD.Story
 {
-    [XmlAttribute("BranchName")]
-    public string BranchName = StoryBlock.CommonBranch;
+    [System.Serializable]
+    public class StoryChoiceOption
+    {
+        [XmlAttribute("BranchName")]
+        public string BranchName = StoryBlock.CommonBranch;
 
-    [XmlText]
-    public string Text;
+        [XmlText]
+        public string Text;
+    }
 }

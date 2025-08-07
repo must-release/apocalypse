@@ -3,19 +3,6 @@ using UnityEngine;
 
 namespace StoryEditor.Controllers
 {
-    public enum EntryType
-    {
-        Dialogue,
-        VFX,
-        Choice,
-        CharacterCG,
-        PlayMode,
-        BackgroundCG,
-        BGM,
-        SFX,
-        CameraAction
-    }
-
     public class EntryController
     {
 
@@ -34,7 +21,7 @@ namespace StoryEditor.Controllers
             this._onSelectionChanged = onSelectionChanged;
         }
 
-        public EditorStoryEntry AddEntry(EntryType entryType, string character = "독백", string text = "", string action = "", float duration = 0f)
+        public EditorStoryEntry AddEntry(StoryEntry.EntryType entryType, string character = "독백", string text = "", string action = "", float duration = 0f)
         {
             var selectedBlock = _editorStoryScript.SelectedBlock;
             if (null == selectedBlock)
@@ -47,31 +34,31 @@ namespace StoryEditor.Controllers
 
             switch (entryType)
             {
-                case EntryType.Dialogue:
+                case StoryEntry.EntryType.Dialogue:
                     newEntry = selectedBlock.AddDialogue(character, text);
                     break;
-                case EntryType.VFX:
+                case StoryEntry.EntryType.VFX:
                     newEntry = selectedBlock.AddVFX(action, duration);
                     break;
-                case EntryType.Choice:
+                case StoryEntry.EntryType.Choice:
                     newEntry = selectedBlock.AddChoice();
                     break;
-                case EntryType.CharacterCG:
+                case StoryEntry.EntryType.CharacterCG:
                     newEntry = selectedBlock.AddCharacterCG();
                     break;
-                case EntryType.PlayMode:
+                case StoryEntry.EntryType.PlayMode:
                     newEntry = selectedBlock.AddPlayMode();
                     break;
-                case EntryType.BackgroundCG:
+                case StoryEntry.EntryType.BackgroundCG:
                     newEntry = selectedBlock.AddBackgroundCG();
                     break;
-                case EntryType.BGM:
+                case StoryEntry.EntryType.BGM:
                     newEntry = selectedBlock.AddBGM();
                     break;
-                case EntryType.SFX:
+                case StoryEntry.EntryType.SFX:
                     newEntry = selectedBlock.AddSFX();
                     break;
-                case EntryType.CameraAction:
+                case StoryEntry.EntryType.CameraAction:
                     newEntry = selectedBlock.AddCameraAction();
                     break;
             }

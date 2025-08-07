@@ -1,36 +1,39 @@
 using System.Xml.Serialization;
 
-[System.Serializable]
-public class StoryDialogue : StoryEntry
+namespace AD.Story
 {
-    public enum TextSpeedType
+    [System.Serializable]
+    public class StoryDialogue : StoryEntry
     {
-        Default = 0,
-        Slow,
-        Fast
+        public enum TextSpeedType
+        {
+            Default = 0,
+            Slow,
+            Fast
+        }
+
+        public StoryDialogue()
+        {
+            IsSavePoint = true;
+            IsAutoSkip = false;
+        }
+
+        public StoryDialogue(string name, string text) : this()
+        {
+            Name = name;
+            Text = text;
+        }
+
+        [XmlAttribute("Name")]
+        public string Name;
+
+        [XmlAttribute("Speed")]
+        public TextSpeedType TextSpeed;
+
+        [XmlAttribute("IsAutoSkip")]
+        public bool IsAutoSkip;
+
+        [XmlText]
+        public string Text;
     }
-
-    public StoryDialogue()
-    {
-        IsSavePoint = true;
-        IsAutoSkip = false;
-    }
-
-    public StoryDialogue(string name, string text) : this()
-    {
-        Name = name;
-        Text = text;
-    }
-
-    [XmlAttribute("Name")]
-    public string Name;
-
-    [XmlAttribute("Speed")]
-    public TextSpeedType TextSpeed;
-
-    [XmlAttribute("IsAutoSkip")]
-    public bool IsAutoSkip;
-
-    [XmlText]
-    public string Text;
 }

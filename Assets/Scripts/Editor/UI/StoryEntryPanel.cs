@@ -49,15 +49,15 @@ namespace StoryEditor.UI
             if (GUI.Button(dropdownRect, "+ Add", EditorStyles.miniPullDown))
             {
                 var menu = new GenericMenu();
-                menu.AddItem(new GUIContent("Dialogue"), false, () => _entryController.AddEntry(EntryType.Dialogue));
-                menu.AddItem(new GUIContent("VFX"), false, () => _entryController.AddEntry(EntryType.VFX));
-                menu.AddItem(new GUIContent("Choice"), false, () => _entryController.AddEntry(EntryType.Choice));
-                menu.AddItem(new GUIContent("CharacterCG"), false, () => _entryController.AddEntry(EntryType.CharacterCG));
-                menu.AddItem(new GUIContent("PlayMode"), false, () => _entryController.AddEntry(EntryType.PlayMode));
-                menu.AddItem(new GUIContent("BackgroundCG"), false, () => _entryController.AddEntry(EntryType.BackgroundCG));
-                menu.AddItem(new GUIContent("BGM"), false, () => _entryController.AddEntry(EntryType.BGM));
-                menu.AddItem(new GUIContent("SFX"), false, () => _entryController.AddEntry(EntryType.SFX));
-                menu.AddItem(new GUIContent("Camera Action"), false, () => _entryController.AddEntry(EntryType.CameraAction));
+                menu.AddItem(new GUIContent("Dialogue"), false, () => _entryController.AddEntry(StoryEntry.EntryType.Dialogue));
+                menu.AddItem(new GUIContent("VFX"), false, () => _entryController.AddEntry(StoryEntry.EntryType.VFX));
+                menu.AddItem(new GUIContent("Choice"), false, () => _entryController.AddEntry(StoryEntry.EntryType.Choice));
+                menu.AddItem(new GUIContent("CharacterCG"), false, () => _entryController.AddEntry(StoryEntry.EntryType.CharacterCG));
+                menu.AddItem(new GUIContent("PlayMode"), false, () => _entryController.AddEntry(StoryEntry.EntryType.PlayMode));
+                menu.AddItem(new GUIContent("BackgroundCG"), false, () => _entryController.AddEntry(StoryEntry.EntryType.BackgroundCG));
+                menu.AddItem(new GUIContent("BGM"), false, () => _entryController.AddEntry(StoryEntry.EntryType.BGM));
+                menu.AddItem(new GUIContent("SFX"), false, () => _entryController.AddEntry(StoryEntry.EntryType.SFX));
+                menu.AddItem(new GUIContent("Camera Action"), false, () => _entryController.AddEntry(StoryEntry.EntryType.CameraAction));
                 menu.DropDown(dropdownRect);
             }
         }

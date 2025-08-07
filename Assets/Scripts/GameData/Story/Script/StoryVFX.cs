@@ -1,20 +1,22 @@
 using System.Xml.Serialization;
 
-
-[System.Serializable]
-public class StoryVFX : StoryEntry
+namespace AD.Story
 {
-    public enum VFXType
+    [System.Serializable]
+    public class StoryVFX : StoryEntry
     {
-        ScreenFadeIn,
-        ScreenFadeOut
+        public enum VFXType
+        {
+            ScreenFadeIn,
+            ScreenFadeOut
+        }
+
+        public StoryVFX() { }
+
+        [XmlAttribute("VFX")]
+        public VFXType VFX;
+
+        [XmlAttribute("Duration")]
+        public float Duration;
     }
-
-    public StoryVFX() { }
-
-    [XmlAttribute("VFX")]
-    public VFXType VFX;
-
-    [XmlAttribute("Duration")]
-    public float Duration;
 }
