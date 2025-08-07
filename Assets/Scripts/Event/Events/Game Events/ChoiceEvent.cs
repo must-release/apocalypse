@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
-using UnityEngine.Assertions;
 
 /*
  * 스토리 진행 중 화면에 선택지를 표시하고, 플레이어가 고른 선택지를 처리하는 ChoiceEvent입니다.
@@ -77,10 +76,9 @@ public class ChoiceEvent : GameEventBase<ChoiceEventInfo>
         }
 
         // Get the selected choice and process it
-        string selectedChoice       = UIController.Instance.GetSelectedChoice();
-        bool shouldGenerateResponse = Info.ChoiceList == null;
+        string selectedChoice = UIController.Instance.GetSelectedChoice();
 
-        StoryController.Instance.ProcessSelectedChoice(selectedChoice, shouldGenerateResponse);
+        StoryController.Instance.ProcessSelectedChoice(selectedChoice);
 
         TerminateEvent();
     }

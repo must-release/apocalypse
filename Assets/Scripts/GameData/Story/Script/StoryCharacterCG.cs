@@ -1,7 +1,7 @@
 using System.Xml.Serialization;
 
 [System.Serializable]
-public class StoryCharacterStanding : StoryEntry
+public class StoryCharacterCG : StoryEntry
 {
     public enum AnimationType
     {
@@ -18,13 +18,22 @@ public class StoryCharacterStanding : StoryEntry
         Right
     }
 
-    public StoryCharacterStanding() { }
+    public enum FacialExpressionType
+    {
+        Default = 0,
+        Smile,
+        Cry,
+        Rage,
+        FacialExpressionTypeCount // Keep this last for count
+    }
+
+    public StoryCharacterCG() { }
 
     [XmlAttribute("Name")]
     public string Name;
 
     [XmlAttribute("Expression")]
-    public string Expression;
+    public FacialExpressionType Expression;
 
     [XmlAttribute("Animation")]
     public AnimationType Animation;
@@ -33,7 +42,7 @@ public class StoryCharacterStanding : StoryEntry
     public bool IsBlockingAnimation = true; // If true, next entry should wait for this animation to be over
 
     [XmlAttribute("AnimationSpeed")]
-    public float AnimationSpeed;
+    public float AnimationSpeed = 1.0f;
 
     [XmlAttribute("TargetPosition")]
     public TargetPositionType TargetPosition;

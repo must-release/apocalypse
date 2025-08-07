@@ -147,18 +147,18 @@ namespace StoryEditor
             return editorEntry;
         }
 
-        public EditorStoryEntry AddCharacterStanding(string name = "나", string expression = "")
+        public EditorStoryEntry AddCharacterCG(string name = "나", StoryCharacterCG.FacialExpressionType expression = StoryCharacterCG.FacialExpressionType.Default)
         {
-            var newStanding = new StoryCharacterStanding
+            var newCharacterCG = new StoryCharacterCG
             {
                 Name = name,
                 Expression = expression,
-                Animation = StoryCharacterStanding.AnimationType.None,
-                TargetPosition = StoryCharacterStanding.TargetPositionType.Center,
+                Animation = StoryCharacterCG.AnimationType.None,
+                TargetPosition = StoryCharacterCG.TargetPositionType.Center,
                 AnimationSpeed = 1.0f,
                 IsBlockingAnimation = true
             };
-            var editorEntry = new EditorStoryEntry(newStanding);
+            var editorEntry = new EditorStoryEntry(newCharacterCG);
             _editorEntries.Add(editorEntry);
             return editorEntry;
         }

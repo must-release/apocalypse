@@ -17,7 +17,7 @@ public class StoryBlock
     public string BranchName = CommonBranch;
 
     [XmlElement(typeof(StoryDialogue), ElementName = "Dialogue")]
-    [XmlElement(typeof(StoryCharacterStanding), ElementName = "CharacterStanding")]
+    [XmlElement(typeof(StoryCharacterCG), ElementName = "CharacterCG")]
     [XmlElement(typeof(StoryChoice), ElementName = "Choice")]
     [XmlElement(typeof(StoryBackgroundCG), ElementName = "BackgroundCG")]
     [XmlElement(typeof(StoryBGM), ElementName = "BGM")]

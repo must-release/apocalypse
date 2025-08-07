@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 
 [XmlInclude(typeof(StoryDialogue))]
-[XmlInclude(typeof(StoryCharacterStanding))]
+[XmlInclude(typeof(StoryCharacterCG))]
 [XmlInclude(typeof(StoryChoice))]
 [XmlInclude(typeof(StoryBackgroundCG))]
 [XmlInclude(typeof(StoryBGM))]

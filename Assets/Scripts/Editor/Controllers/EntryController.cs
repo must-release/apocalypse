@@ -8,7 +8,7 @@ namespace StoryEditor.Controllers
         Dialogue,
         VFX,
         Choice,
-        CharacterStanding,
+        CharacterCG,
         PlayMode,
         BackgroundCG,
         BGM,
@@ -56,8 +56,8 @@ namespace StoryEditor.Controllers
                 case EntryType.Choice:
                     newEntry = selectedBlock.AddChoice();
                     break;
-                case EntryType.CharacterStanding:
-                    newEntry = selectedBlock.AddCharacterStanding();
+                case EntryType.CharacterCG:
+                    newEntry = selectedBlock.AddCharacterCG();
                     break;
                 case EntryType.PlayMode:
                     newEntry = selectedBlock.AddPlayMode();

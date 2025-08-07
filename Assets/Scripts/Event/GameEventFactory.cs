@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.Assertions;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
 public static class GameEventFactory
@@ -207,6 +205,16 @@ public static class GameEventFactory
         return CreateUIChangeEvent(dto.TargetUI);
     }
 
+    public static IGameEvent CreateAudioEvent(bool isBgm, AudioAction action, string clipName = "", float volume = 1.0f)
+    {
+        var info = ScriptableObject.CreateInstance<AudioEventInfo>();
+        info.Initialize(isBgm, action, clipName, volume);
+
+        var evt = GameEventPool<AudioEvent, AudioEventInfo>.Get(EventHost, $"AudioEvent_{action}_{clipName}");
+        evt.Initialize(info);
+        return evt;
+    }
+
     public static IGameEvent CreateSequentialEvent(List<IGameEvent> gameEvents, int startIndex = 0)
     {
         Debug.Assert(null != gameEvents && 0 < gameEvents.Count, "GameEvents list is null or empty");
@@ -259,6 +267,8 @@ public static class GameEventFactory
         return evt;
     }
 
+    
+
     public static IGameEvent CreateFromInfo<TEventInfo>(TEventInfo info)
         where TEventInfo : GameEventInfo
     {
@@ -310,6 +320,7 @@ public static class GameEventFactory
         { GameEventType.StageTransition,    info => CreateFromInfo<StageTransitionEvent, StageTransitionEventInfo>(info as StageTransitionEventInfo) },
         { GameEventType.Story,              info => CreateFromInfo<StoryEvent, StoryEventInfo>(info as StoryEventInfo) },
         { GameEventType.UIChange,           info => CreateFromInfo<UIChangeEvent, UIChangeEventInfo>(info as UIChangeEventInfo) },
+        { GameEventType.Audio,              info => CreateFromInfo<AudioEvent, AudioEventInfo>(info as AudioEventInfo) },
     };
 
     private static readonly Dictionary<GameEventType, Func<GameEventDTO, IGameEvent>> _eventCreatorsFromDTO =

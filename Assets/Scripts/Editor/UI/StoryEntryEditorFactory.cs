@@ -65,7 +65,7 @@ namespace StoryEditor.UI
                 StoryDialogue _ => new DialogueEditor(),
                 StoryVFX _ => new VFXEditor(),
                 StoryChoice _ => new ChoiceEditor(_validationController, _editorStoryScript),
-                StoryCharacterStanding _ => new CharacterStandingEditor(),
+                StoryCharacterCG _ => new CharacterCGEditor(),
                 StoryPlayMode _ => new PlayModeEditor(),
                 StoryBackgroundCG _ => new BackgroundCGEditor(),
                 StoryBGM _ => new BGMEditor(),

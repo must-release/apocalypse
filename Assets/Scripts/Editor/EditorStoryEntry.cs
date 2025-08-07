@@ -33,7 +33,7 @@ namespace StoryEditor
                 nameof(StoryDialogue) => "Dialogue",
                 nameof(StoryVFX) => "VFX",
                 nameof(StoryChoice) => "Choice",
-                nameof(StoryCharacterStanding) => "CharacterCG",
+                nameof(StoryCharacterCG) => "CharacterCG",
                 nameof(StoryPlayMode) => "PlayMode",
                 nameof(StoryBackgroundCG) => "BackgroundCG",
                 nameof(StoryBGM) => "BGM",
@@ -52,7 +52,7 @@ namespace StoryEditor
                 StoryDialogue dialogue => $"Dialogue: {dialogue.Name} - {TruncateText(dialogue.Text, 12)}",
                 StoryVFX vfx => $"VFX: {vfx.VFX} ({vfx.Duration}s)",
                 StoryChoice choice => $"Choice: [{GetChoiceOptionsText(choice)}]",
-                StoryCharacterStanding characterCG => $"CharacterCG: {characterCG.Name} ({characterCG.Animation}, {characterCG.TargetPosition})",
+                StoryCharacterCG characterCG => $"CharacterCG: {characterCG.Name} ({characterCG.Animation}, {characterCG.TargetPosition})",
                 StoryPlayMode playMode => $"PlayMode: {playMode.PlayMode}",
                 StoryBackgroundCG backgroundCG => $"BackgroundCG: {backgroundCG.Chapter} - {(string.IsNullOrEmpty(backgroundCG.ImageName) ? "No Image" : backgroundCG.ImageName)}",
                 StoryBGM bgm => $"BGM {bgm.Action}: {(StoryBGM.BGMAction.Start == bgm.Action ? (string.IsNullOrEmpty(bgm.BGMName) ? "No BGM" : bgm.BGMName) : "")} (Fade: {bgm.FadeDuration}s{(StoryBGM.BGMAction.Start == bgm.Action ? $", Loop: {bgm.IsLoop}" : "")})",
@@ -65,7 +65,7 @@ namespace StoryEditor
         public bool IsDialogue() => _storyEntry is StoryDialogue;
         public bool IsVFX() => _storyEntry is StoryVFX;
         public bool IsChoice() => _storyEntry is StoryChoice;
-        public bool IsCharacterStanding() => _storyEntry is StoryCharacterStanding;
+        public bool IsCharacterCG() => _storyEntry is StoryCharacterCG;
         public bool IsPlayMode() => _storyEntry is StoryPlayMode;
         public bool IsBackgroundCG() => _storyEntry is StoryBackgroundCG;
         public bool IsBGM() => _storyEntry is StoryBGM;
@@ -75,7 +75,7 @@ namespace StoryEditor
         public StoryDialogue AsDialogue() => _storyEntry as StoryDialogue;
         public StoryVFX AsVFX() => _storyEntry as StoryVFX;
         public StoryChoice AsChoice() => _storyEntry as StoryChoice;
-        public StoryCharacterStanding AsCharacterStanding() => _storyEntry as StoryCharacterStanding;
+        public StoryCharacterCG AsCharacterCG() => _storyEntry as StoryCharacterCG;
         public StoryPlayMode AsPlayMode() => _storyEntry as StoryPlayMode;
         public StoryBackgroundCG AsBackgroundCG() => _storyEntry as StoryBackgroundCG;
         public StoryBGM AsBGM() => _storyEntry as StoryBGM;
