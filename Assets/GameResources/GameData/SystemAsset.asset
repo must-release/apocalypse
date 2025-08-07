@@ -31,3 +31,5 @@ MonoBehaviour:
     SystemPrefab: {fileID: 8496555850314821654, guid: 4eaef315aa54f438f82a70261fbb0e21, type: 3}
   - SystemType: 8
     SystemPrefab: {fileID: 8631474860575901702, guid: ea46c061180d64c9694f7bb0677679f2, type: 3}
+  - SystemType: 8
+    SystemPrefab: {fileID: 8631474860575901702, guid: ea46c061180d64c9694f7bb0677679f2, type: 3}
