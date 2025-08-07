@@ -220,8 +220,8 @@ namespace StoryEditor.Controllers
                     ValidateCameraAction(cameraAction, entryName, result);
                     break;
 
-                case StoryCharacterStanding characterStanding:
-                    ValidateCharacterStanding(characterStanding, entryName, result);
+                case StoryCharacterCG characterCG:
+                    ValidateCharacterCG(characterCG, entryName, result);
                     break;
 
                 case StorySFX sfx:
@@ -381,17 +381,17 @@ namespace StoryEditor.Controllers
             }
         }
 
-        private void ValidateCharacterStanding(StoryCharacterStanding characterStanding, string entryName, ValidationResult result)
+        private void ValidateCharacterCG(StoryCharacterCG characterCG, string entryName, ValidationResult result)
         {
-            Debug.Assert(null != characterStanding);
+            Debug.Assert(null != characterCG);
             Debug.Assert(null != result);
 
-            if (string.IsNullOrWhiteSpace(characterStanding.Name))
+            if (string.IsNullOrWhiteSpace(characterCG.Name))
             {
-                result.AddError($"{entryName}: CharacterStanding requires Name");
+                result.AddError($"{entryName}: CharacterCG requires Name");
             }
 
-            if (0 > characterStanding.AnimationSpeed)
+            if (0 > characterCG.AnimationSpeed)
             {
                 result.AddWarning($"{entryName}: AnimationSpeed should not be negative");
             }

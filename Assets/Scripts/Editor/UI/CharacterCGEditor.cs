@@ -3,13 +3,13 @@ using UnityEditor;
 
 namespace StoryEditor.UI
 {
-    public class CharacterStandingEditor : IStoryEntryEditor
+    public class CharacterCGEditor : IStoryEntryEditor
     {
         /****** Public Members ******/
 
         public void Draw(EditorStoryEntry entry)
         {
-            var standing = entry.AsCharacterStanding();
+            var standing = entry.AsCharacterCG();
             if (null == standing) return;
 
             DrawCharacterNameField(standing);
@@ -28,7 +28,7 @@ namespace StoryEditor.UI
 
         /****** Private Members ******/
 
-        private void DrawCharacterNameField(StoryCharacterStanding standing)
+        private void DrawCharacterNameField(StoryCharacterCG standing)
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Character Name:", EditorStyles.boldLabel, GUILayout.Width(120));
@@ -44,31 +44,31 @@ namespace StoryEditor.UI
             EditorGUILayout.EndHorizontal();
         }
 
-        private void DrawExpressionField(StoryCharacterStanding standing)
+        private void DrawExpressionField(StoryCharacterCG standing)
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Expression:", EditorStyles.boldLabel, GUILayout.Width(120));
-            standing.Expression = (StoryCharacterStanding.FacialExpressionType)EditorGUILayout.EnumPopup(standing.Expression, GUILayout.Width(150));
+            standing.Expression = (StoryCharacterCG.FacialExpressionType)EditorGUILayout.EnumPopup(standing.Expression, GUILayout.Width(150));
             EditorGUILayout.EndHorizontal();
         }
 
-        private void DrawAnimationField(StoryCharacterStanding standing)
+        private void DrawAnimationField(StoryCharacterCG standing)
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Animation:", EditorStyles.boldLabel, GUILayout.Width(120));
-            standing.Animation = (StoryCharacterStanding.AnimationType)EditorGUILayout.EnumPopup(standing.Animation, GUILayout.Width(150));
+            standing.Animation = (StoryCharacterCG.AnimationType)EditorGUILayout.EnumPopup(standing.Animation, GUILayout.Width(150));
             EditorGUILayout.EndHorizontal();
         }
 
-        private void DrawTargetPositionField(StoryCharacterStanding standing)
+        private void DrawTargetPositionField(StoryCharacterCG standing)
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Target Position:", EditorStyles.boldLabel, GUILayout.Width(120));
-            standing.TargetPosition = (StoryCharacterStanding.TargetPositionType)EditorGUILayout.EnumPopup(standing.TargetPosition, GUILayout.Width(150));
+            standing.TargetPosition = (StoryCharacterCG.TargetPositionType)EditorGUILayout.EnumPopup(standing.TargetPosition, GUILayout.Width(150));
             EditorGUILayout.EndHorizontal();
         }
 
-        private void DrawAnimationSpeedField(StoryCharacterStanding standing)
+        private void DrawAnimationSpeedField(StoryCharacterCG standing)
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Animation Speed:", EditorStyles.boldLabel, GUILayout.Width(120));
@@ -77,7 +77,7 @@ namespace StoryEditor.UI
             EditorGUILayout.EndHorizontal();
         }
 
-        private void DrawBlockingAnimationField(StoryCharacterStanding standing)
+        private void DrawBlockingAnimationField(StoryCharacterCG standing)
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Is Blocking Animation:", EditorStyles.boldLabel, GUILayout.Width(120));

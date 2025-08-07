@@ -10,7 +10,7 @@ public class CharacterCGController : MonoBehaviour
     /****** Public Members ******/
 
     public static CharacterCGController Instance { get; private set; }
-    public StoryCharacterStanding PlayingStandingEntry { get; private set; }
+    public StoryCharacterCG PlayingStandingEntry { get; private set; }
 
     public void RegisterCharacter(CharacterCGView view)
     {
@@ -21,15 +21,15 @@ public class CharacterCGController : MonoBehaviour
         }
     }
 
-    public void HandleCharacterStanding(StoryCharacterStanding standingInfo)
+    public void HandleCharacterCG(StoryCharacterCG cgInfo)
     {
-        PlayingStandingEntry = standingInfo;
+        PlayingStandingEntry = cgInfo;
 
-        float duration = 5f / standingInfo.AnimationSpeed;
-        Vector2 targetPosition = GetTargetPosition(standingInfo.TargetPosition);
+        float duration = 5f / cgInfo.AnimationSpeed;
+        Vector2 targetPosition = GetTargetPosition(cgInfo.TargetPosition);
 
-        CharacterCGView characterView = GetCharacterView(standingInfo.Name);
-        Sprite expressionSprite = _model.GetExpressionSprite(standingInfo.Name, standingInfo.Expression);
+        CharacterCGView characterView = GetCharacterView(cgInfo.Name);
+        Sprite expressionSprite = _model.GetExpressionSprite(cgInfo.Name, cgInfo.Expression);
 
         Debug.Assert(null != expressionSprite, "expressionSprite is null.");
 
@@ -37,20 +37,20 @@ public class CharacterCGController : MonoBehaviour
 
         Tween currentTween = null;
 
-        switch (standingInfo.Animation)
+        switch (cgInfo.Animation)
         {
-            case StoryCharacterStanding.AnimationType.Appear:
+            case StoryCharacterCG.AnimationType.Appear:
                 characterView.SetPosition(targetPosition);
                 characterView.SetActive(true);
                 currentTween = characterView.AsyncFade(0f, 1f, duration);
                 break;
 
-            case StoryCharacterStanding.AnimationType.Disappear:
+            case StoryCharacterCG.AnimationType.Disappear:
                 currentTween = characterView.AsyncFade(1f, 0f, duration);
-                ReleaseCharacterView(standingInfo.Name);
+                ReleaseCharacterView(cgInfo.Name);
                 break;
 
-            case StoryCharacterStanding.AnimationType.Move:
+            case StoryCharacterCG.AnimationType.Move:
                 currentTween = characterView.AsyncMove(targetPosition, duration);
                 break;
         }
@@ -128,15 +128,15 @@ public class CharacterCGController : MonoBehaviour
         return inactiveView;
     }
 
-    private Vector2 GetTargetPosition(StoryCharacterStanding.TargetPositionType targetPositionType)
+    private Vector2 GetTargetPosition(StoryCharacterCG.TargetPositionType targetPositionType)
     {
         switch (targetPositionType)
         {
-            case StoryCharacterStanding.TargetPositionType.Left:
+            case StoryCharacterCG.TargetPositionType.Left:
                 return _leftPosition;
-            case StoryCharacterStanding.TargetPositionType.Right:
+            case StoryCharacterCG.TargetPositionType.Right:
                 return _rightPosition;
-            case StoryCharacterStanding.TargetPositionType.Center:
+            case StoryCharacterCG.TargetPositionType.Center:
             default:
                 return _centerPosition;
         }

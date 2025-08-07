@@ -33,6 +33,6 @@ public class CharacterExpressionAsset : ScriptableObject
 [System.Serializable]
 public class CharacterExpressionEntry
 {
-    public StoryCharacterStanding.FacialExpressionType ExpressionType;
+    public StoryCharacterCG.FacialExpressionType ExpressionType;
     public Sprite Sprite;
 }

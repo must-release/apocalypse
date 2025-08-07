@@ -24,7 +24,6 @@ namespace AD.Audio
             if (null == Instance)
             {
                 Instance = this;
-                DontDestroyOnLoad(gameObject);
             }
             else
             {

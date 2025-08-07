@@ -198,9 +198,9 @@ public class StoryController : MonoBehaviour
 
 
         }
-        else if (entry is StoryCharacterStanding standing)
+        else if (entry is StoryCharacterCG standing)
         {
-            CharacterCGController.Instance.HandleCharacterStanding(standing);
+            CharacterCGController.Instance.HandleCharacterCG(standing);
         }
         else
         {

@@ -23,7 +23,7 @@ public class CharacterCGModel
         }
     }
 
-    public Sprite GetExpressionSprite(string characterID, StoryCharacterStanding.FacialExpressionType expression)
+    public Sprite GetExpressionSprite(string characterID, StoryCharacterCG.FacialExpressionType expression)
     {
         Debug.Assert(null != CharacterExpressionAsset, "CharacterExpressionAsset is not loaded.");
 

@@ -1,7 +1,7 @@
 using System.Xml.Serialization;
 
 [System.Serializable]
-public class StoryCharacterStanding : StoryEntry
+public class StoryCharacterCG : StoryEntry
 {
     public enum AnimationType
     {
@@ -27,7 +27,7 @@ public class StoryCharacterStanding : StoryEntry
         FacialExpressionTypeCount // Keep this last for count
     }
 
-    public StoryCharacterStanding() { }
+    public StoryCharacterCG() { }
 
     [XmlAttribute("Name")]
     public string Name;
