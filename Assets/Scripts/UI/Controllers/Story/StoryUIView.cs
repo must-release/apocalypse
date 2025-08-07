@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
-/* Part of UIController which manages Story UI logic */
 
-public class StoryUIController : MonoBehaviour, IUIController<BaseUI>
+public class StoryUIView : MonoBehaviour, IUIView<BaseUI>
 {
     /****** Public Members ******/
+
+    public BaseUI UIType => BaseUI.Story;
+    public DialogueBox DialogueBox => _dialogueBox;
 
     public void EnterUI()
     {
@@ -25,19 +27,14 @@ public class StoryUIController : MonoBehaviour, IUIController<BaseUI>
 
     }
 
-    public BaseUI UIType => BaseUI.Story;
-
 
     /****** Private Members ******/
 
-    public void Awake()
+    [SerializeField] private DialogueBox _dialogueBox;
+
+    private void OnValidate()
     {
-
-    }
-
-    public void Start()
-    {
-
+        Debug.Assert(null != _dialogueBox, "DialogueBox is not assigned in StoryUIView.");
     }
 
 }

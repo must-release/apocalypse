@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class TitleUIController : MonoBehaviour, IUIController<BaseUI>
+public class TitleUIController : MonoBehaviour, IUIView<BaseUI>
 {
     /****** Public Members ******/
 

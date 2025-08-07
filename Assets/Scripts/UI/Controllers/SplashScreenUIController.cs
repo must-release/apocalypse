@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SplashScreenUIController : MonoBehaviour, IUIController<BaseUI>
+public class SplashScreenUIController : MonoBehaviour, IUIView<BaseUI>
 {
     /****** Public Members ******/
 

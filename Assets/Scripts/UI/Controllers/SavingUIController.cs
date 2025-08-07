@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SavingUIController : MonoBehaviour, IUIController<SubUI>
+public class SavingUIController : MonoBehaviour, IUIView<SubUI>
 {
     /****** Public Members ******/
 
