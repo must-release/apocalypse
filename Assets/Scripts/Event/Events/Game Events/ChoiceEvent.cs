@@ -76,10 +76,9 @@ public class ChoiceEvent : GameEventBase<ChoiceEventInfo>
         }
 
         // Get the selected choice and process it
-        string selectedChoice       = UIController.Instance.GetSelectedChoice();
-        bool shouldGenerateResponse = Info.ChoiceList == null;
+        string selectedChoice = UIController.Instance.GetSelectedChoice();
 
-        StoryController.Instance.ProcessSelectedChoice(selectedChoice, shouldGenerateResponse);
+        StoryController.Instance.ProcessSelectedChoice(selectedChoice);
 
         TerminateEvent();
     }
