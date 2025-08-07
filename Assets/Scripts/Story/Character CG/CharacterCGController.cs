@@ -25,7 +25,7 @@ public class CharacterCGController : MonoBehaviour
     {
         PlayingStandingEntry = cgInfo;
 
-        float duration = 5f / cgInfo.AnimationSpeed;
+        float duration = _defaultCGAnimationDuration / cgInfo.AnimationSpeed;
         Vector2 targetPosition = GetTargetPosition(cgInfo.TargetPosition);
 
         CharacterCGView characterView = GetCharacterView(cgInfo.Name);
@@ -58,20 +58,20 @@ public class CharacterCGController : MonoBehaviour
         // If Animation active
         if (null != currentTween)
         {
-            _activeStandingAnimationTween = currentTween;
+            _activeCGAnimationTween = currentTween;
 
-            _activeStandingAnimationTween.onComplete += () =>
+            _activeCGAnimationTween.onComplete += () =>
             {
                 PlayingStandingEntry = null;
-                _activeStandingAnimationTween = null;
+                _activeCGAnimationTween = null;
             };
         }
     }
 
     public void CompleteStandingAnimation()
     {
-        _activeStandingAnimationTween?.Complete();
-        _activeStandingAnimationTween = null;
+        _activeCGAnimationTween?.Complete();
+        _activeCGAnimationTween = null;
     }
 
 
@@ -80,7 +80,8 @@ public class CharacterCGController : MonoBehaviour
     private CharacterCGModel _model;
     private List<CharacterCGView> _characterViewPool = new List<CharacterCGView>();
     private Dictionary<string, CharacterCGView> _activeCharacterViews = new Dictionary<string, CharacterCGView>();
-    private Tween _activeStandingAnimationTween;
+    private Tween _activeCGAnimationTween;
+    private float _defaultCGAnimationDuration = 0.7f;
     private Vector2 _leftPosition = new Vector2(-500, -219);
     private Vector2 _rightPosition = new Vector2(500, -219);
     private Vector2 _centerPosition = new Vector2(0, -219);
