@@ -8,7 +8,7 @@ public class DialogueBox : MonoBehaviour
 
     }
 
-    public async UniTask DisplayText(string text, StoryDialogue.TextSpeedType speedType)
+    public async UniTask DisplayText(string text, float textSpeed)
     {
         await UniTask.Delay(1000); // Simulate delay based on speed type
     }

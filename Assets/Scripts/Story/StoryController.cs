@@ -2,187 +2,185 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using System;
 using System.Linq;
 
-public class StoryController : MonoBehaviour
+namespace AD.Story
 {
-    /****** Public Members ******/
-
-    public static StoryController Instance;
-
-    [Header("Parameters")]
-    public bool IsStoryPlaying { get; private set; }
-    public float textSpeed = 0.1f; // Speed of the dialogue text
-    public bool isWaitingResponse = false;
-    public bool isChatting = false;
-    public int responseCount = 0;
-    public const int MAX_RESPONSE_COUNT = 4;
-
-    [Header("Assets")]
-    public Transform storyScreen;
-    public GameObject[] characters;
-    public TextMeshProUGUI nameText;
-    public TextMeshProUGUI dialogueText;
-
-    public Coroutine StartStory(string storyInfo, int readBlockCount, int readEntryCount)
+    public class StoryController : MonoBehaviour
     {
-        return StartCoroutine(StartStoryCoroutine(storyInfo, readBlockCount, readEntryCount));
-    }
+        /****** Public Members ******/
 
-    public void FinishStory()
-    {
-        storyScreen.gameObject.SetActive(false);
+        public static StoryController Instance;
 
-        // Give dialogue player back
-        UtilityManager.Instance.GiveUtilityBack(_dialoguePlayer);
-        _dialoguePlayer = null;
-    }
+        [Header("Parameters")]
+        public bool IsStoryPlaying { get; private set; }
+        public float textSpeed = 0.1f; // Speed of the dialogue text
+        public bool isWaitingResponse = false;
+        public bool isChatting = false;
+        public int responseCount = 0;
+        public const int MAX_RESPONSE_COUNT = 4;
 
+        [Header("Assets")]
+        public Transform storyScreen;
+        public GameObject[] characters;
+        public TextMeshProUGUI nameText;
+        public TextMeshProUGUI dialogueText;
 
-    public void PlayNextScript()
-    {
-        if (CharacterCGController.Instance.PlayingStandingEntry != null)
+        public Coroutine StartStory(string storyInfo, int readBlockCount, int readEntryCount)
         {
-            if (CharacterCGController.Instance.PlayingStandingEntry.IsBlockingAnimation)
-                return;
-
-            // if Standing Animation is unBlockable, Skip Animation.
-            CharacterCGController.Instance.CompleteStandingAnimation();
+            return StartCoroutine(StartStoryCoroutine(storyInfo, readBlockCount, readEntryCount));
         }
 
-        if (_dialoguePlayer.PlayingDialgoueEntries.Count > 0)
+        public void FinishStory()
         {
-            // Complete current playing dialogue entry
-            StoryDialogue dialogue = _dialoguePlayer.PlayingDialgoueEntries[0];
-            _dialoguePlayer.CompleteDialogue(dialogue, nameText, dialogueText);
+            storyScreen.gameObject.SetActive(false);
+
+            // Give dialogue player back
+            // UtilityManager.Instance.GiveUtilityBack(_dialoguePlayer);
+            // _dialoguePlayer = null;
         }
-        else
+
+
+        public void PlayNextScript()
         {
-            // Check if there is available entry
-            StoryEntry entry = StoryModel.Instance.GetNextEntry();
-            if (entry == null)
+            if (CharacterCGCPresentor.Instance.PlayingStandingEntry != null)
             {
-                // Story is over
-                IsStoryPlaying = false;
+                if (CharacterCGCPresentor.Instance.PlayingStandingEntry.IsBlockingAnimation)
+                    return;
+
+                // if Standing Animation is unBlockable, Skip Animation.
+                CharacterCGCPresentor.Instance.CompleteStandingAnimation();
+            }
+
+            if (false)//_dialoguePlayer.PlayingDialgoueEntries.Count > 0)
+            {
+                // Complete current playing dialogue entry
+                //StoryDialogue dialogue = _dialoguePlayer.PlayingDialgoueEntries[0];
+                //_dialoguePlayer.CompleteDialogue(dialogue, nameText, dialogueText);
             }
             else
             {
-                // Show Story Entry
-                ShowStoryEntry(entry);
+                // Check if there is available entry
+                StoryEntry entry = StoryModel.Instance.GetNextEntry();
+                if (entry == null)
+                {
+                    // Story is over
+                    IsStoryPlaying = false;
+                }
+                else
+                {
+                    // Show Story Entry
+                    ShowStoryEntry(entry);
+                }
             }
         }
-    }
 
-    public void ShowStoryEntry(StoryEntry entry)
-    {
-        //
-        if (entry is StoryDialogue dialogue)
+        public void ShowStoryEntry(StoryEntry entry)
         {
-            _dialoguePlayer.PlayDialogue(dialogue, nameText, dialogueText);
-        }
-        else if (entry is StoryChoice choice)
-        {
-            // Save processing choice
-            StoryModel.Instance.ProcessingChoice = choice;
-
-            // Extracting the text values from the options
-            List<string> optionTexts = choice.Options.Select(option => option.Text).ToList();
-
-            // Generate show choice event
-            var choiceEvent = GameEventFactory.CreateChoiceEvent(optionTexts);
-            GameEventManager.Instance.Submit(choiceEvent);
-        }
-        else if (entry is StoryCharacterCG standing)
-        {
-            CharacterCGController.Instance.HandleCharacterCG(standing);
-        }
-        else
-        {
-            Debug.Log("story entry error: no such entry");
-        }
-    }
-
-
-    // Process selected choice
-    public void ProcessSelectedChoice(string optionText)
-    {
-        // Play selected choice option
-        StoryDialogue inputDialogue = new StoryDialogue("나", optionText);
-        StoryModel.Instance.StoryEntryBuffer.Enqueue(inputDialogue);
-        PlayNextScript();
-
-        StoryModel.Instance.SetCurrentBranch(optionText);
-    }
-
-    public void GetStoryProgressInfo(out int readBlockCount, out int readEntryCount)
-    {
-        readBlockCount = StoryModel.Instance.ReadBlockCount;
-        readEntryCount = StoryModel.Instance.ReadEntryCount;
-    }
-
-
-    /****** Private Menbers ******/
-
-    private DialoguePlayer _dialoguePlayer;
-
-    public void Awake()
-    {
-        Debug.Assert(null != storyScreen, "StoryScreen is not assigned in the editor.");
-        Debug.Assert(null != characters, "Character Object is not assigned in the editor.");
-        Debug.Assert(null != nameText, "Name Text is not assigned in the editor.");
-        Debug.Assert(null != dialogueText, "Dialogue Text is not assigned in the editor.");
-
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    private void Start()
-    {
-        var canvas = GetComponent<Canvas>();
-        canvas.worldCamera = Camera.main;
-
-        foreach (var character in characters)
-        {
-            var view = character.GetComponent<CharacterCGView>();
-            if (view != null)
+            if (entry is StoryDialogue dialogue)
             {
-                CharacterCGController.Instance.RegisterCharacter(view);
+                //_dialoguePlayer.PlayDialogue(dialogue, nameText, dialogueText);
             }
+            else if (entry is StoryChoice choice)
+            {
+                // Save processing choice
+                StoryModel.Instance.ProcessingChoice = choice;
 
-            // blinding
-            character.SetActive(false);
+                // Extracting the text values from the options
+                List<string> optionTexts = choice.Options.Select(option => option.Text).ToList();
+
+                // Generate show choice event
+                var choiceEvent = GameEventFactory.CreateChoiceEvent(optionTexts);
+                GameEventManager.Instance.Submit(choiceEvent);
+            }
+            else if (entry is StoryCharacterCG standing)
+            {
+                CharacterCGCPresentor.Instance.HandleCharacterCG(standing);
+            }
+            else
+            {
+                Debug.Log("story entry error: no such entry");
+            }
         }
-    }
 
-    private IEnumerator StartStoryCoroutine(string storyInfo, int readBlockCount, int readEntryCount)
-    {
-        // Set Story Playing true
-        IsStoryPlaying = true;
 
-        // Activate Story Screen
-        storyScreen.gameObject.SetActive(true);
-
-        // Get dialogue player
-        _dialoguePlayer = UtilityManager.Instance.GetUtilityTool<DialoguePlayer>();
-
-        // Load Story Text according to the Info
-        yield return StoryModel.Instance.LoadStoryText(storyInfo, readBlockCount, readEntryCount);
-
-        // Show first story script When new story is loaded
-        StoryEntry entry = StoryModel.Instance.GetFirstEntry();
-        if (entry == null)
+        // Process selected choice
+        public void ProcessSelectedChoice(string optionText)
         {
-            Debug.Log("Story initial load error");
-            yield break;
+            // Play selected choice option
+            StoryDialogue inputDialogue = new StoryDialogue("나", optionText);
+            StoryModel.Instance.StoryEntryBuffer.Enqueue(inputDialogue);
+            PlayNextScript();
+
+            StoryModel.Instance.SetCurrentBranch(optionText);
         }
-        ShowStoryEntry(entry);
+
+        public void GetStoryProgressInfo(out int readBlockCount, out int readEntryCount)
+        {
+            readBlockCount = StoryModel.Instance.ReadBlockCount;
+            readEntryCount = StoryModel.Instance.ReadEntryCount;
+        }
+
+
+        /****** Private Menbers ******/
+
+        public void Awake()
+        {
+            Debug.Assert(null != storyScreen, "StoryScreen is not assigned in the editor.");
+            Debug.Assert(null != characters, "Character Object is not assigned in the editor.");
+            Debug.Assert(null != nameText, "Name Text is not assigned in the editor.");
+            Debug.Assert(null != dialogueText, "Dialogue Text is not assigned in the editor.");
+
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        private void Start()
+        {
+            var canvas = GetComponent<Canvas>();
+            canvas.worldCamera = Camera.main;
+
+            foreach (var character in characters)
+            {
+                var view = character.GetComponent<CharacterCGView>();
+                if (view != null)
+                {
+                    CharacterCGCPresentor.Instance.RegisterCharacter(view);
+                }
+
+                // blinding
+                character.SetActive(false);
+            }
+        }
+
+        private IEnumerator StartStoryCoroutine(string storyInfo, int readBlockCount, int readEntryCount)
+        {
+            // Set Story Playing true
+            IsStoryPlaying = true;
+
+            // Activate Story Screen
+            storyScreen.gameObject.SetActive(true);
+
+            // Get dialogue player
+            //_dialoguePlayer = UtilityManager.Instance.GetUtilityTool<DialoguePlayer>();
+
+            // Load Story Text according to the Info
+            yield return StoryModel.Instance.LoadStoryText(storyInfo, readBlockCount, readEntryCount);
+
+            // Show first story script When new story is loaded
+            StoryEntry entry = StoryModel.Instance.GetFirstEntry();
+            if (entry == null)
+            {
+                Debug.Log("Story initial load error");
+                yield break;
+            }
+            ShowStoryEntry(entry);
+        }
     }
 }
-

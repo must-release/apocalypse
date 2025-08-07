@@ -1,8 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
-using UnityEngine.Assertions;
-using UnityEngine.AddressableAssets;
+using AD.Story;
 
 
 public class StoryEvent : GameEventBase<StoryEventInfo>

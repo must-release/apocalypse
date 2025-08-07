@@ -1,4 +1,5 @@
 using UnityEngine;
+using AD.Story;
 
 namespace StoryEditor
 {
@@ -154,15 +155,15 @@ namespace StoryEditor
         /****** Private Members ******/
 
         [SerializeField] private StoryEntry _storyEntry;
-        
+
         private string TruncateText(string text, int maxLength)
         {
             if (string.IsNullOrEmpty(text))
                 return "";
-            
+
             if (maxLength >= text.Length)
                 return text;
-            
+
             return text.Substring(0, maxLength) + "...";
         }
 
