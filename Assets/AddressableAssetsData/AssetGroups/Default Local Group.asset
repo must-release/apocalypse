@@ -120,6 +120,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5bfd18fe9789b4f75b862ca795db52cb
+    m_Address: GameData/CharacterExpressionAsset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 607d6ad8ed59437489928ce58baa2bd8
     m_Address: AnimationClip/Heroine/Lower/Damaged
     m_ReadOnly: 0

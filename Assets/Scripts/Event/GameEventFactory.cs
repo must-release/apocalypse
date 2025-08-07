@@ -267,6 +267,8 @@ public static class GameEventFactory
         return evt;
     }
 
+    
+
     public static IGameEvent CreateFromInfo<TEventInfo>(TEventInfo info)
         where TEventInfo : GameEventInfo
     {

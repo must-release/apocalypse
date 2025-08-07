@@ -1,0 +1,144 @@
+using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
+using System;
+using DG.Tweening;
+
+
+public class CharacterCGController : MonoBehaviour
+{
+    /****** Public Members ******/
+
+    public static CharacterCGController Instance { get; private set; }
+    public StoryCharacterStanding PlayingStandingEntry { get; private set; }
+
+    public void RegisterCharacter(CharacterCGView view)
+    {
+        if (false == _characterViewPool.Contains(view))
+        {
+            _characterViewPool.Add(view);
+            view.SetActive(false);
+        }
+    }
+
+    public void HandleCharacterStanding(StoryCharacterStanding standingInfo)
+    {
+        PlayingStandingEntry = standingInfo;
+
+        float duration = 5f / standingInfo.AnimationSpeed;
+        Vector2 targetPosition = GetTargetPosition(standingInfo.TargetPosition);
+
+        CharacterCGView characterView = GetCharacterView(standingInfo.Name);
+        Sprite expressionSprite = _model.GetExpressionSprite(standingInfo.Name, standingInfo.Expression);
+
+        Debug.Assert(null != expressionSprite, "expressionSprite is null.");
+
+        characterView.SetSprite(expressionSprite);
+
+        Tween currentTween = null;
+
+        switch (standingInfo.Animation)
+        {
+            case StoryCharacterStanding.AnimationType.Appear:
+                characterView.SetPosition(targetPosition);
+                characterView.SetActive(true);
+                currentTween = characterView.AsyncFade(0f, 1f, duration);
+                break;
+
+            case StoryCharacterStanding.AnimationType.Disappear:
+                currentTween = characterView.AsyncFade(1f, 0f, duration);
+                ReleaseCharacterView(standingInfo.Name);
+                break;
+
+            case StoryCharacterStanding.AnimationType.Move:
+                currentTween = characterView.AsyncMove(targetPosition, duration);
+                break;
+        }
+
+        // If Animation active
+        if (null != currentTween)
+        {
+            _activeStandingAnimationTween = currentTween;
+
+            _activeStandingAnimationTween.onComplete += () =>
+            {
+                PlayingStandingEntry = null;
+                _activeStandingAnimationTween = null;
+            };
+        }
+    }
+
+    public void CompleteStandingAnimation()
+    {
+        _activeStandingAnimationTween?.Complete();
+        _activeStandingAnimationTween = null;
+    }
+
+
+    /****** Private Members ******/
+
+    private CharacterCGModel _model;
+    private List<CharacterCGView> _characterViewPool = new List<CharacterCGView>();
+    private Dictionary<string, CharacterCGView> _activeCharacterViews = new Dictionary<string, CharacterCGView>();
+    private Tween _activeStandingAnimationTween;
+    private Vector2 _leftPosition = new Vector2(-500, -219);
+    private Vector2 _rightPosition = new Vector2(500, -219);
+    private Vector2 _centerPosition = new Vector2(0, -219);
+
+    private void Awake()
+    {
+        if (null == Instance)
+        {
+            Instance = this;
+            _model = new CharacterCGModel();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private async void Start()
+    {
+        await _model.AsyncLoadCharacterExpressionAsset();
+    }
+
+    private void ReleaseCharacterView(string characterID)
+    {
+        if (_activeCharacterViews.TryGetValue(characterID, out CharacterCGView view))
+        {
+            view.gameObject.SetActive(false);
+            _activeCharacterViews.Remove(characterID);
+        }
+    }
+
+    private CharacterCGView GetCharacterView(string characterID)
+    {
+        if (_activeCharacterViews.TryGetValue(characterID, out CharacterCGView view))
+        {
+            return view;
+        }
+
+        // Find an inactive view from the pool
+        CharacterCGView inactiveView = _characterViewPool.FirstOrDefault(v => false == v.gameObject.activeInHierarchy);
+        Debug.Assert(null != inactiveView, $"No available character GameObject found for '{characterID}'.");
+
+        // Assign the inactive view to the characterID and activate it
+        _activeCharacterViews[characterID] = inactiveView;
+        return inactiveView;
+    }
+
+    private Vector2 GetTargetPosition(StoryCharacterStanding.TargetPositionType targetPositionType)
+    {
+        switch (targetPositionType)
+        {
+            case StoryCharacterStanding.TargetPositionType.Left:
+                return _leftPosition;
+            case StoryCharacterStanding.TargetPositionType.Right:
+                return _rightPosition;
+            case StoryCharacterStanding.TargetPositionType.Center:
+            default:
+                return _centerPosition;
+        }
+    }
+}

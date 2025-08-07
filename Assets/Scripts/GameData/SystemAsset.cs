@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using NUnit.Framework;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "SystemAsset", menuName = "GameData/SystemAsset")]

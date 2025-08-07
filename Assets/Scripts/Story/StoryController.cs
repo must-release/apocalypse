@@ -9,6 +9,7 @@ public class StoryController : MonoBehaviour
 {
     public static StoryController Instance;
 
+    [Header("Parameters")]
     public bool IsStoryPlaying { get; private set; }
     public float textSpeed = 0.1f; // Speed of the dialogue text
     public bool isWaitingResponse = false;
@@ -16,45 +17,65 @@ public class StoryController : MonoBehaviour
     public int responseCount = 0;
     public const int MAX_RESPONSE_COUNT = 4;
 
-    private string storyScreenName = "Story Screen";
-    private string characterName = "Character";
-    private string dialogueBoxName = "Dialogue Box";
-    private string nameTextName = "Name Text";
-    private string dialogueTextName = "Dialogue Text";
-    private Transform storyScreen;
-    private GameObject character;
-    private TextMeshProUGUI nameText;
-    private TextMeshProUGUI dialogueText;
+    // private string storyScreenName = "Story Screen";
+    // private string characterName = "Character";
+    // private string dialogueBoxName = "Dialogue Box";
+    // private string nameTextName = "Name Text";
+    // private string dialogueTextName = "Dialogue Text";
+
+    [Header("Assets")]
+    public Transform storyScreen;
+    public GameObject[] characters;
+    public TextMeshProUGUI nameText;
+    public TextMeshProUGUI dialogueText;
+
     private DialoguePlayer dialoguePlayer;
 
     public void Awake()
     {
+        Debug.Assert(null != storyScreen, "StoryScreen is not assigned in the editor.");
+        Debug.Assert(null != characters, "Character Object is not assigned in the editor.");
+        Debug.Assert(null != nameText, "Name Text is not assigned in the editor.");
+        Debug.Assert(null != dialogueText, "Dialogue Text is not assigned in the editor.");
+
         if (Instance == null)
         {
             Instance = this;
 
             // Find Story Screen object
-            storyScreen = transform.Find(storyScreenName);
-            if (storyScreen == null)
-            {
-                Debug.Log("Story UI Initialization Error");
-                return;
-            }
-            character = storyScreen.Find(characterName).gameObject;
-            nameText = storyScreen.Find(dialogueBoxName).Find(nameTextName).GetComponent<TextMeshProUGUI>();
-            dialogueText = storyScreen.Find(dialogueBoxName).Find(dialogueTextName).GetComponent<TextMeshProUGUI>();
+            // storyScreen = transform.Find(storyScreenName);
+            // if (storyScreen == null)
+            // {
+            //     Debug.Log("Story UI Initialization Error");
+            //     return;
+            // }
+
+            // character = storyScreen.Find(characterName).gameObject;
+            // nameText = storyScreen.Find(dialogueBoxName).Find(nameTextName).GetComponent<TextMeshProUGUI>();
+            // dialogueText = storyScreen.Find(dialogueBoxName).Find(dialogueTextName).GetComponent<TextMeshProUGUI>();
         }
         else
         {
             Destroy(gameObject);
         }
-
     }
 
     private void Start()
     {
         var canvas = GetComponent<Canvas>();
         canvas.worldCamera = Camera.main;
+
+        foreach (var character in characters)
+        {
+            var view = character.GetComponent<CharacterCGView>();
+            if (view != null)
+            {
+                CharacterCGController.Instance.RegisterCharacter(view);
+            }
+
+            // blinding
+            character.SetActive(false);
+        }
     }
 
     // Start Story Mode with given info
@@ -62,6 +83,7 @@ public class StoryController : MonoBehaviour
     {
         return StartCoroutine(StartStoryCoroutine(storyInfo, readBlockCount, readEntryCount));
     }
+
     IEnumerator StartStoryCoroutine(string storyInfo, int readBlockCount, int readEntryCount)
     {
         // Set Story Playing true
@@ -104,6 +126,15 @@ public class StoryController : MonoBehaviour
     // Play next script on the screen
     public void PlayNextScript()
     {
+        if (CharacterCGController.Instance.PlayingStandingEntry != null)
+        {
+            if (CharacterCGController.Instance.PlayingStandingEntry.IsBlockingAnimation)
+                return;
+
+            // if Standing Animation is unBlockable, Skip Animation.
+            CharacterCGController.Instance.CompleteStandingAnimation();
+        }
+
         if (dialoguePlayer.PlayingDialgoueEntries.Count > 0)
         {
             if (dialoguePlayer.PlayingDialgoueEntries.Count > 1)
@@ -147,6 +178,7 @@ public class StoryController : MonoBehaviour
     // Show story entry on the screen
     public void ShowStoryEntry(StoryEntry entry)
     {
+        //
         if (entry is StoryDialogue dialogue)
         {
             dialoguePlayer.PlayDialogue(dialogue, nameText, dialogueText);
@@ -163,6 +195,12 @@ public class StoryController : MonoBehaviour
             // Generate show choice event
             var choiceEvent = GameEventFactory.CreateChoiceEvent(optionTexts);
             GameEventManager.Instance.Submit(choiceEvent);
+
+
+        }
+        else if (entry is StoryCharacterStanding standing)
+        {
+            CharacterCGController.Instance.HandleCharacterStanding(standing);
         }
         else
         {

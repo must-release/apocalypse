@@ -147,7 +147,7 @@ namespace StoryEditor
             return editorEntry;
         }
 
-        public EditorStoryEntry AddCharacterStanding(string name = "나", string expression = "")
+        public EditorStoryEntry AddCharacterStanding(string name = "나", StoryCharacterStanding.FacialExpressionType expression = StoryCharacterStanding.FacialExpressionType.Default)
         {
             var newStanding = new StoryCharacterStanding
             {

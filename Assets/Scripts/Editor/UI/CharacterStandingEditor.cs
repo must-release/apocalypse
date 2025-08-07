@@ -48,7 +48,7 @@ namespace StoryEditor.UI
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Expression:", EditorStyles.boldLabel, GUILayout.Width(120));
-            standing.Expression = EditorGUILayout.TextField(standing.Expression ?? "", GUILayout.Width(150));
+            standing.Expression = (StoryCharacterStanding.FacialExpressionType)EditorGUILayout.EnumPopup(standing.Expression, GUILayout.Width(150));
             EditorGUILayout.EndHorizontal();
         }
 
