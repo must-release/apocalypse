@@ -20,8 +20,8 @@ public class StoryCameraAction : StoryEntry
     [XmlAttribute("ActionType")]
     public CameraActionType ActionType;
 
-    [XmlAttribute("CameraName")]
-    public string CameraName;
+    [XmlAttribute("TargetCamera")]
+    public string TargetCamera;
 
     [XmlAttribute("TargetName")]
     public string TargetName;

@@ -32,7 +32,15 @@ namespace StoryEditor.UI
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Character Name:", EditorStyles.boldLabel, GUILayout.Width(120));
-            standing.Name = EditorGUILayout.TextField(standing.Name ?? "", GUILayout.Width(150));
+            var characterOptions = new string[] { "나", "소녀", "중개상" };
+            var currentIndex = System.Array.IndexOf(characterOptions, standing.Name);
+            if (currentIndex == -1) currentIndex = 0;
+
+            var newIndex = EditorGUILayout.Popup(currentIndex, characterOptions, GUILayout.Width(150));
+            if (newIndex != currentIndex)
+            {
+                standing.Name = characterOptions[newIndex];
+            }
             EditorGUILayout.EndHorizontal();
         }
 

@@ -147,7 +147,7 @@ namespace StoryEditor
             return editorEntry;
         }
 
-        public EditorStoryEntry AddCharacterStanding(string name = "", string expression = "")
+        public EditorStoryEntry AddCharacterStanding(string name = "나", string expression = "")
         {
             var newStanding = new StoryCharacterStanding
             {
@@ -217,7 +217,7 @@ namespace StoryEditor
             var newCameraAction = new StoryCameraAction
             {
                 ActionType = StoryCameraAction.CameraActionType.SwitchToCamera,
-                CameraName = "",
+                TargetCamera = "",
                 Duration = 1.0f,
                 Priority = 10,
                 WaitForCompletion = true
