@@ -34,23 +34,6 @@ public static class GameEventFactory
         return CreateFromInfo(eventInfo);
     }
 
-    public static IGameEvent CreateChoiceEvent(List<string> choices)
-    {
-        var info = ScriptableObject.CreateInstance<ChoiceEventInfo>();
-        info.Initialize(choices);
-
-        var evt = GameEventPool<ChoiceEvent, ChoiceEventInfo>.Get(EventHost, $"ChoiceEvent_{string.Join("_", choices)}");
-        evt.Initialize(info);
-        return evt;
-    }
-
-    public static IGameEvent CreateChoiceEvent(ChoiceEventDTO dto)
-    {
-        Debug.Assert(null != dto, "Cannot create ChoiceEvent from null DTO");
-
-        return CreateChoiceEvent(dto.ChoiceList);
-    }
-
     public static IGameEvent CreateCutsceneEvent()
     {
         var info = ScriptableObject.CreateInstance<CutsceneEventInfo>();
@@ -309,7 +292,6 @@ public static class GameEventFactory
     private static readonly Dictionary<GameEventType, Func<GameEventInfo, IGameEvent>> _eventCreatorsFromInfo =
         new Dictionary<GameEventType, Func<GameEventInfo, IGameEvent>>
     {
-        { GameEventType.Choice,             info => CreateFromInfo<ChoiceEvent, ChoiceEventInfo>(info as ChoiceEventInfo) },
         { GameEventType.Cutscene,           info => CreateFromInfo<CutsceneEvent, CutsceneEventInfo>(info as CutsceneEventInfo)},
         { GameEventType.DataLoad,           info => CreateFromInfo<DataLoadEvent, DataLoadEventInfo>(info as DataLoadEventInfo) },
         { GameEventType.DataSave,           info => CreateFromInfo<DataSaveEvent, DataSaveEventInfo>(info as DataSaveEventInfo) },
@@ -326,7 +308,6 @@ public static class GameEventFactory
     private static readonly Dictionary<GameEventType, Func<GameEventDTO, IGameEvent>> _eventCreatorsFromDTO =
         new Dictionary<GameEventType, Func<GameEventDTO, IGameEvent>>
     {
-        { GameEventType.Choice,             dto => CreateChoiceEvent(dto as ChoiceEventDTO) },
         { GameEventType.Cutscene,           dto => CreateCutsceneEvent(dto as CutsceneEventDTO) },
         { GameEventType.DataLoad,           dto => CreateDataLoadEvent(dto as DataLoadEventDTO) },
         { GameEventType.DataSave,           dto => CreateDataSaveEvent(dto as DataSaveEventDTO) },

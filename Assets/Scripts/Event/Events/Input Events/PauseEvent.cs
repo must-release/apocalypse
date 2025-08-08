@@ -19,7 +19,7 @@ public class PauseEvent : InputEvent, KeySettingsObserver
     {
         bool isEventListEmpty = eventList.Count == 0;
         bool isValidBaseUI = baseUI == BaseUI.Control || baseUI == BaseUI.Story;
-        bool isValidSubUI = subUI == SubUI.Choice || subUI == SubUI.None;
+        bool isValidSubUI = subUI == SubUI.None;
 
         return isEventListEmpty && isValidBaseUI && isValidSubUI;
     }

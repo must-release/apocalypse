@@ -29,16 +29,14 @@ MonoBehaviour:
     BaseUIPrefab: {fileID: 1133341190455217051, guid: 18a309f9c56a64b24974c149c771cd4a, type: 3}
   SubUIAssets:
   - SubUIType: 1
-    SubUIPrefab: {fileID: 4610294886931917369, guid: b8d8727eb096e428abf204562586e3b6, type: 3}
-  - SubUIType: 2
     SubUIPrefab: {fileID: 8226638444233040373, guid: f420cb082c1da4a5a96fdc1db78ee2a5, type: 3}
-  - SubUIType: 3
+  - SubUIType: 2
     SubUIPrefab: {fileID: 2224329957305955082, guid: e524141c59110c849aecae0cf40e0a54, type: 3}
-  - SubUIType: 4
+  - SubUIType: 3
     SubUIPrefab: {fileID: 2224329957305955082, guid: a50f8580b7ba1443ca0f0e6156d2b973, type: 3}
-  - SubUIType: 5
+  - SubUIType: 4
     SubUIPrefab: {fileID: 5933391303787302307, guid: b13d9a74265374a0399a155c994cbd40, type: 3}
-  - SubUIType: 6
+  - SubUIType: 5
     SubUIPrefab: {fileID: 1255220752906931467, guid: 951932497f8af4384bf7d08dab86a7cd, type: 3}
-  - SubUIType: 7
+  - SubUIType: 6
     SubUIPrefab: {fileID: 4916531501952696058, guid: 50933c0cf80944f1fa9fcef32662f398, type: 3}
