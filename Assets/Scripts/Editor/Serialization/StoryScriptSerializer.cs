@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 using UnityEngine;
+using AD.Story;
 
 namespace StoryEditor.Serialization
 {

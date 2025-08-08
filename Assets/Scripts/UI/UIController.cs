@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.EventSystems;
-using NUnit.Framework;
 
 public class UIController : MonoBehaviour, IAsyncLoadObject
 {
@@ -15,11 +13,11 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
 
     public bool IsStoryPanelClicked
     {
-        get 
+        get
         {
             bool _clicked = _isStoryPanelClicked;
             _isStoryPanelClicked = false;
-            return _clicked; 
+            return _clicked;
         }
         set { _isStoryPanelClicked = value; }
     }
@@ -27,12 +25,12 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
 
     public void ChangeBaseUI(BaseUI baseUI)
     {
-        _curUIController?.ExitUI();
+        _curUIView?.ExitUI();
 
         UIModel.Instance.CurrentBaseUI = baseUI;
-        SetUIController(baseUI);
+        SetUIView(baseUI);
 
-        _curUIController.EnterUI();
+        _curUIView.EnterUI();
     }
 
     public void TurnSubUIOn(SubUI subUI)
@@ -41,10 +39,10 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
         UIModel.Instance.PushNewSubUI(subUI);
 
         // Set current UI Controller to sub UI
-        SetUIController(subUI);
+        SetUIView(subUI);
 
         // Start Sub UI
-        _curUIController.EnterUI();
+        _curUIView.EnterUI();
     }
 
     public void TurnSubUIOff(SubUI subUI)
@@ -55,52 +53,64 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
             Debug.LogError("Sub UI Mismatch \n" + subUI + '\n' + UIModel.Instance.CurrentSubUI);
             return;
         }
-                    
+
         // End current Sub UI
-        _curUIController.ExitUI();
+        _curUIView.ExitUI();
         UIModel.Instance.PopCurrentSubUI();
 
         // Check what UI comes next
-        if(UIModel.Instance.CurrentSubUI == SubUI.None) // When there is no sub UI left in the stack
+        if (UIModel.Instance.CurrentSubUI == SubUI.None) // When there is no sub UI left in the stack
         {
             // Set curUIController to Base UI
-            SetUIController(UIModel.Instance.CurrentBaseUI);
+            SetUIView(UIModel.Instance.CurrentBaseUI);
         }
         else // If there is sub UI left in the stack
         {
             // Set previous sub UI to current UI controller
-            SetUIController(UIModel.Instance.CurrentSubUI);
+            SetUIView(UIModel.Instance.CurrentSubUI);
 
             // Update Sub UI
-            _curUIController.UpdateUI();
+            _curUIView.UpdateUI();
         }
     }
 
     public void TurnEverySubUIOff()
     {
-        while(UIModel.Instance.CurrentSubUI != SubUI.None)
+        while (UIModel.Instance.CurrentSubUI != SubUI.None)
         {
-            _curUIController.ExitUI();
+            _curUIView.ExitUI();
             UIModel.Instance.PopCurrentSubUI();
 
-            SetUIController(UIModel.Instance.CurrentSubUI);
+            SetUIView(UIModel.Instance.CurrentSubUI);
         }
     }
 
     public void GetCurrentUI(out BaseUI baseUI, out SubUI subUI)
     {
-        baseUI  = UIModel.Instance.CurrentBaseUI;
-        subUI   = UIModel.Instance.CurrentSubUI;
+        baseUI = UIModel.Instance.CurrentBaseUI;
+        subUI = UIModel.Instance.CurrentSubUI;
     }
 
+    public IUIView<BaseUI> GetUIView(BaseUI baseUI)
+    {
+        Debug.Assert(_baseUIDictionary.ContainsKey(baseUI), $"{baseUI} does not exist in the base UI dictionary.");
+        return _baseUIDictionary[baseUI];
+    }
+
+    public IUIView<SubUI> GetUIView(SubUI subUI)
+    {
+        Debug.Assert(_subUIDictionary.ContainsKey(subUI), $"{subUI} does not exist in the sub UI dictionary.");
+        return _subUIDictionary[subUI];
+    }
+    
     public void SetChoiceInfo(List<string> choiceList)
     {
-        UIModel.Instance.ChoiceList     = choiceList;
+        UIModel.Instance.ChoiceList = choiceList;
         UIModel.Instance.SelectedChoice = null;
     }
 
     public string GetSelectedChoice() { return UIModel.Instance.SelectedChoice; }
-    public void CancelCurrentUI() { _curUIController.Cancel(); }
+    public void CancelCurrentUI() { _curUIView.Cancel(); }
 
 
     /***** Private Members ******/
@@ -108,12 +118,12 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
     [SerializeField] private Transform _baseUITransform;
     [SerializeField] private Transform _subUITransform;
 
-    private Dictionary<BaseUI, IUIController>   _baseUIDictionary   = new();
-    private Dictionary<SubUI, IUIController>    _subUIDictionary    = new();
+    private Dictionary<BaseUI, IUIView<BaseUI>> _baseUIDictionary   = new();
+    private Dictionary<SubUI, IUIView<SubUI>>   _subUIDictionary    = new();
 
-    private IUIController   _curUIController;
-    private bool            _isStoryPanelClicked;
-    private bool            _isLoaded;
+    private IUIView _curUIView;
+    private bool    _isStoryPanelClicked;
+    private bool    _isLoaded;
 
     private void Awake()
     {
@@ -136,10 +146,6 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
         StartCoroutine(LoadUIControllers());
     }
 
-    private void Update()
-    {
-    }
-
     private IEnumerator LoadUIControllers()
     {
         var handle = Addressables.LoadAssetAsync<UIAsset>(AssetPath.UIAsset);
@@ -159,7 +165,7 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
             GameObject uiObject = Instantiate(baseUIEntry.BaseUIPrefab, _baseUITransform);
             uiObject.name = baseUIEntry.BaseUIType.ToString() + " UI";
 
-            _baseUIDictionary.Add(baseUIEntry.BaseUIType, uiObject.GetComponent<IUIController<BaseUI>>());
+            _baseUIDictionary.Add(baseUIEntry.BaseUIType, uiObject.GetComponent<IUIView<BaseUI>>());
 
             // Execute Awake, Start method of uiObject
             yield return null;
@@ -177,7 +183,7 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
             GameObject uiObject = Instantiate(subUIEntry.SubUIPrefab, _subUITransform);
             uiObject.name = subUIEntry.SubUIType.ToString() + " UI";
 
-            _subUIDictionary.Add(subUIEntry.SubUIType, uiObject.GetComponent<IUIController<SubUI>>());
+            _subUIDictionary.Add(subUIEntry.SubUIType, uiObject.GetComponent<IUIView<SubUI>>());
 
             // Execute Awake, Start method of uiObject
             yield return null;
@@ -193,11 +199,11 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
         _isLoaded = true;
     }
 
-    private void SetUIController(BaseUI baseUI)
+    private void SetUIView(BaseUI baseUI)
     {
-        if (_baseUIDictionary.TryGetValue(baseUI, out IUIController controller))
+        if (_baseUIDictionary.TryGetValue(baseUI, out IUIView<BaseUI> controller))
         {
-            _curUIController = controller;
+            _curUIView = controller;
         }
         else
         {
@@ -205,15 +211,15 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
         }
     }
 
-    private void SetUIController(SubUI subUI)
+    private void SetUIView(SubUI subUI)
     {
         if(subUI == SubUI.None)
         {
-            SetUIController(UIModel.Instance.CurrentBaseUI);
+            SetUIView(UIModel.Instance.CurrentBaseUI);
         }
-        else if (_subUIDictionary.TryGetValue(subUI, out IUIController controller))
+        else if (_subUIDictionary.TryGetValue(subUI, out IUIView<SubUI> controller))
         {
-            _curUIController = controller;
+            _curUIView = controller;
         }
         else
         {
@@ -222,7 +228,7 @@ public class UIController : MonoBehaviour, IAsyncLoadObject
     }
 }
 
-public interface IUIController
+public interface IUIView
 {
     public void EnterUI();
     public void UpdateUI();
@@ -230,7 +236,7 @@ public interface IUIController
     public void Cancel();
 }
 
-public interface IUIController<TEnum> : IUIController
+public interface IUIView<TEnum> : IUIView
     where TEnum : Enum
 {
     TEnum UIType { get; }

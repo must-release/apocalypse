@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEditor;
+using AD.Story;
 using Unity.Cinemachine;
 
 namespace StoryEditor.UI

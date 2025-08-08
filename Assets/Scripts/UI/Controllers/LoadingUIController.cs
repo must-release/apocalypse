@@ -2,7 +2,7 @@
 
 /* Part of UIController which manages Title UI logic */
 
-public class LoadingUIController : MonoBehaviour, IUIController<BaseUI>
+public class LoadingUIController : MonoBehaviour, IUIView<BaseUI>
 {
     /****** Public Members ******/
 

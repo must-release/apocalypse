@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 
-public class SaveUIController : SaveLoadUIBase, IUIController<SubUI>
+public class SaveUIController : SaveLoadUIBase, IUIView<SubUI>
 {
     /****** Public Methods ******/
 

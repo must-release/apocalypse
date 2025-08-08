@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using AD.Story;
 
 namespace StoryEditor.Controllers
 {
@@ -114,7 +115,7 @@ namespace StoryEditor.Controllers
         /****** Private Members ******/
 
         private EditorStoryScript _editorStoryScript;
-        
+
         private void ValidateBasicStructure(ValidationResult result)
         {
             Debug.Assert(null != result);
@@ -175,12 +176,12 @@ namespace StoryEditor.Controllers
             Debug.Assert(null != result, "ValidationResult cannot be null");
             if (0 > blockIndex || _editorStoryScript.EditorBlocks.Count <= blockIndex)
                 return;
-            
+
             var block = _editorStoryScript.EditorBlocks[blockIndex];
             Debug.Assert(0 <= entryIndex && entryIndex < block.EditorEntries.Count, "Entry index out of range");
             if (0 > entryIndex || block.EditorEntries.Count <= entryIndex)
                 return;
-            
+
             var entry = block.EditorEntries[entryIndex];
             var entryName = $"Block {blockIndex + 1} ({block.BranchName}), Entry {entryIndex + 1}";
 
@@ -433,7 +434,7 @@ namespace StoryEditor.Controllers
                                 var option = choice.Options[optionIndex];
                                 var optionName = $"{entryName}, Option {optionIndex + 1}";
 
-                                if (false == string.IsNullOrWhiteSpace(option.BranchName) && 
+                                if (false == string.IsNullOrWhiteSpace(option.BranchName) &&
                                     false == StoryBlock.IsCommonBranch(option.BranchName))
                                 {
                                     if (false == availableBranches.Contains(option.BranchName))

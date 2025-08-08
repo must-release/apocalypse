@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-public class LoadUIController : SaveLoadUIBase, IUIController<SubUI>
+public class LoadUIController : SaveLoadUIBase, IUIView<SubUI>
 {
     /****** Public Methods ******/
     public SubUI UIType => SubUI.Load;

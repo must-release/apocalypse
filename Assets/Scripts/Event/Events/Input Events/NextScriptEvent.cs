@@ -37,7 +37,7 @@ public class NextScriptEvent : InputEvent, KeySettingsObserver
     public override void PlayEvent()
     {
         // Play next story script
-        StoryController.Instance.PlayNextScript();
+        AD.Story.StoryController.Instance.PlayNextScript();
 
         // Terminate pause event
         InputEventManager.Instance.TerminateInputEvent(this);

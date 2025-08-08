@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 
-public class ChoiceUIController : MonoBehaviour, IUIController<SubUI>
+public class ChoiceUIController : MonoBehaviour, IUIView<SubUI>
 {
     /****** Public Members ******/
 

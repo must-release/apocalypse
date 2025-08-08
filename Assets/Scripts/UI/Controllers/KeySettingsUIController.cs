@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System;
 using System.Reflection;
 
-public class KeySettingsUIController : MonoBehaviour, IUIController<SubUI>
+public class KeySettingsUIController : MonoBehaviour, IUIView<SubUI>
 {
     /****** Public Members ******/
 

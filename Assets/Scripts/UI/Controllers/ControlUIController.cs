@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class ControlUIController : MonoBehaviour, IUIController<BaseUI>
+public class ControlUIController : MonoBehaviour, IUIView<BaseUI>
 {
     /****** Public Members ******/
 

@@ -5,7 +5,7 @@ using System.Collections;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class GameOverUIController : MonoBehaviour, IUIController<BaseUI>
+public class GameOverUIController : MonoBehaviour, IUIView<BaseUI>
 {
     /****** Public Members ******/
 

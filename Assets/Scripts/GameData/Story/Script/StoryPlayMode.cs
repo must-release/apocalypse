@@ -1,17 +1,23 @@
 using System.Xml.Serialization;
 
-[System.Serializable]
-public class StoryPlayMode : StoryEntry
+namespace AD.Story
 {
-    public enum PlayModeType
+    [System.Serializable]
+    public class StoryPlayMode : StoryEntry
     {
-        VisualNovel,
-        SideDialogue,
-        InGameCutScene
+        public enum PlayModeType
+        {
+            VisualNovel,
+            SideDialogue,
+            InGameCutScene
+        }
+
+        public StoryPlayMode() 
+        {
+            Type = EntryType.PlayMode;
+        }
+
+        [XmlAttribute("Mode")]
+        public PlayModeType PlayMode;
     }
-
-    public StoryPlayMode() { }
-
-    [XmlAttribute("Mode")]
-    public PlayModeType PlayMode;
 }
