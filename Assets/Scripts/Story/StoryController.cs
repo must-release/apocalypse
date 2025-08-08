@@ -34,7 +34,6 @@ namespace AD.Story
             {
                 var presentersToComplete = new List<IStoryPresenter>(_activeStoryPresenters);
                 presentersToComplete.ForEach(presenter => presenter.CompleteStoryEntry());
-                _activeStoryPresenters.Clear();
                 return;
             }
 
@@ -70,18 +69,6 @@ namespace AD.Story
                 presenter.ProgressStoryEntry(entry);
                 _activeStoryPresenters.Add(presenter);
             }
-            else if (entry is StoryChoice choice)
-            {
-                // Save processing choice
-                StoryModel.Instance.ProcessingChoice = choice;
-
-                // Extracting the text values from the options
-                List<string> optionTexts = choice.Options.Select(option => option.Text).ToList();
-
-                // Generate show choice event
-                var choiceEvent = GameEventFactory.CreateChoiceEvent(optionTexts);
-                GameEventManager.Instance.Submit(choiceEvent);
-            }
             else if (entry is StoryCharacterCG standing)
             {
                 CharacterCGCPresenter.Instance.HandleCharacterCG(standing);
@@ -93,15 +80,9 @@ namespace AD.Story
         }
 
 
-        // Process selected choice
-        public void ProcessSelectedChoice(string optionText)
+        public void ProcessSelectedChoice(StoryChoiceOption choiceOption)
         {
-            // Play selected choice option
-            StoryDialogue inputDialogue = new StoryDialogue("나", optionText);
-            StoryModel.Instance.StoryEntryBuffer.Enqueue(inputDialogue);
-            PlayNextScript();
-
-            StoryModel.Instance.SetCurrentBranch(optionText);
+            StoryModel.Instance.CurrentStoryBranch = choiceOption.BranchName;
         }
 
         public void GetStoryProgressInfo(out int readBlockCount, out int readEntryCount)

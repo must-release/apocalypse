@@ -17,9 +17,8 @@ namespace AD.Story
 
         public int ReadBlockCount { get; set; } = 0;
         public int ReadEntryCount { get; set; } = 0;
-        public string CurrentStoryBranch { get; private set; }
+        public string CurrentStoryBranch { get; set; }
         public Queue<StoryEntry> StoryEntryBuffer { get; set; }
-        public StoryChoice ProcessingChoice { get; set; }
 
         public Coroutine LoadStoryText(string storyInfo, int readBlockCount, int readEntryCount)
         {
@@ -34,21 +33,6 @@ namespace AD.Story
         public StoryEntry GetFirstEntry()
         {
             return storyEntryQueue.Dequeue();
-        }
-
-        public void SetCurrentBranch(string optionText)
-        {
-            if (ProcessingChoice != null && ProcessingChoice.Options != null)
-            {
-                foreach (var option in ProcessingChoice.Options)
-                {
-                    if (option.Text.Equals(optionText))
-                    {
-                        CurrentStoryBranch = option.BranchName;
-                        break;
-                    }
-                }
-            }
         }
 
         public StoryEntry GetNextEntry()

@@ -6,5 +6,5 @@
 public enum SubUI 
 {
     // Do not change the order of these enums.
-    None, Choice, Pause, Save, Load , Preference, KeySettings, Saving, SubUICount 
+    None, Pause, Save, Load , Preference, KeySettings, Saving, SubUICount 
 }

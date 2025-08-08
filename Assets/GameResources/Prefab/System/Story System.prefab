@@ -386,6 +386,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6826181926050808679}
   - component: {fileID: 3994678090295294252}
+  - component: {fileID: 2563493662287208678}
   m_Layer: 0
   m_Name: StoryPresenters
   m_TagString: Untagged
@@ -418,6 +419,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6ebeb99a86d60f044926b2c79298aa6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2563493662287208678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1716269871853492469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99f686f39da248540a49b90efd4aa2b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2214756886094908786

@@ -17,7 +17,7 @@ public class CancelEvent : InputEvent, KeySettingsObserver
     public override bool CheckCompatibility(List<InputEvent> eventList, BaseUI baseUI, SubUI subUI)
     {
         bool isEventListEmpty = eventList.Count == 0;
-        bool isInvalidSubUI = subUI == SubUI.None || subUI == SubUI.Choice || subUI == SubUI.Saving;
+        bool isInvalidSubUI = subUI == SubUI.None || subUI == SubUI.Saving;
 
         return isEventListEmpty && !isInvalidSubUI;
     }

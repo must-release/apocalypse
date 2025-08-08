@@ -4,13 +4,13 @@ using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
 
-class ChoiceOption
+class ChoiceOptionButton
 {
     public Transform optionObject;
     public Button optionButton;
     public TextMeshProUGUI optionText;
 
-    public ChoiceOption(Transform optionObject)
+    public ChoiceOptionButton(Transform optionObject)
     {
         this.optionObject = optionObject;
         optionButton = optionObject.GetComponent<Button>();

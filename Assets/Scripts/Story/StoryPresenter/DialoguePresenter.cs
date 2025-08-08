@@ -54,9 +54,9 @@ namespace AD.Story
 
         /****** Private Members ******/
 
-        private StoryController      _storyController;
-        private DialogueBox          _dialogueBox;
-        private StoryDialogue        _currentDialogue;
+        private StoryController         _storyController;
+        private DialogueBox             _dialogueBox;
+        private StoryDialogue           _currentDialogue;
         private CancellationTokenSource _cancellationTokenSource;
 
         private float CalculateTextInterval(StoryDialogue.TextSpeedType textSpeed)

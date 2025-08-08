@@ -21,7 +21,7 @@ public class SceneLoadEvent : GameEventBase<SceneLoadEventInfo>
 
         foreach (GameEventType eventType in activeEventTypeCounts.Keys)
         {
-            if (GameEventType.Story == eventType || GameEventType.Choice == eventType || GameEventType.Sequential == eventType)
+            if (GameEventType.Story == eventType || GameEventType.Sequential == eventType)
                 continue;
 
             return false;
