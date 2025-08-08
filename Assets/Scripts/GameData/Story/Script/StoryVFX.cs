@@ -11,7 +11,10 @@ namespace AD.Story
             ScreenFadeOut
         }
 
-        public StoryVFX() { }
+        public StoryVFX() 
+        {
+            Type = EntryType.VFX;
+        }
 
         [XmlAttribute("VFX")]
         public VFXType VFX;

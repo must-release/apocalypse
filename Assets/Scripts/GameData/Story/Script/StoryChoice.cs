@@ -6,10 +6,14 @@ namespace AD.Story
     [System.Serializable]
     public class StoryChoice : StoryEntry
     {
-        public StoryChoice() { }
+        public StoryChoice() 
+        {
+            Type = EntryType.Choice;
+        }
 
         public StoryChoice(StoryDialogue prevDialogue, List<StoryChoiceOption> options)
         {
+            Type = EntryType.Choice;
             PrevDialogue   = prevDialogue;
             Options        = options;
             IsSavePoint    = true;

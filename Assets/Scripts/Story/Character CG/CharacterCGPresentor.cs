@@ -7,12 +7,14 @@ using Cysharp.Threading.Tasks;
 
 namespace AD.Story
 {
-    public class CharacterCGCPresentor : MonoBehaviour, IStoryPresenter
+    public class CharacterCGCPresenter : MonoBehaviour, IStoryPresenter
     {
         /****** Public Members ******/
-
-        public static CharacterCGCPresentor Instance { get; private set; }
+        public static CharacterCGCPresenter Instance { get; private set; }
         public StoryCharacterCG PlayingStandingEntry { get; private set; }
+        
+        public StoryEntry.EntryType PresentingEntryType => StoryEntry.EntryType.CharacterCG;
+        public event Action<IStoryPresenter> OnStoryEntryComplete;
 
         public void Initialize(StoryController storyController, StoryUIView uiView)
         {
@@ -25,6 +27,11 @@ namespace AD.Story
             var cgInfo = storyEntry as StoryCharacterCG;
 
             HandleCharacterCG(cgInfo);
+        }
+
+        public void CompleteStoryEntry()
+        {
+
         }
 
         public void RegisterCharacter(CharacterCGView view)
@@ -80,6 +87,10 @@ namespace AD.Story
                     PlayingStandingEntry = null;
                     _activeCGAnimationTween = null;
                 };
+            }
+            else
+            {
+                PlayingStandingEntry = null;
             }
         }
 

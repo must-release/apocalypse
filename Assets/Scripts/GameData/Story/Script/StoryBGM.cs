@@ -11,7 +11,10 @@ namespace AD.Story
             Stop
         }
 
-        public StoryBGM() { }
+        public StoryBGM() 
+        {
+            Type = EntryType.BGM;
+        }
 
         [XmlAttribute("Action")]
         public BGMAction Action;

@@ -17,7 +17,10 @@ namespace AD.Story
             ResetToDefault
         }
 
-        public StoryCameraAction() { }
+        public StoryCameraAction() 
+        {
+            Type = EntryType.CameraAction;
+        }
 
         [XmlAttribute("ActionType")]
         public CameraActionType ActionType;

@@ -14,6 +14,7 @@ namespace AD.Story
 
         public StoryDialogue()
         {
+            Type = EntryType.Dialogue;
             IsSavePoint = true;
             IsAutoSkip = false;
         }

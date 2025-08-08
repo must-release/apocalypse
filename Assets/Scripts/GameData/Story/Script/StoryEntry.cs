@@ -28,7 +28,7 @@ namespace AD.Story
             CameraAction
         }
 
-        [XmlIgnore]
-        public bool IsSavePoint = false;
+        [XmlIgnore] public bool IsSavePoint = false;
+        [XmlIgnore] public EntryType Type;
     }
 }

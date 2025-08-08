@@ -5,7 +5,10 @@ namespace AD.Story
     [System.Serializable]
     public class StorySFX : StoryEntry
     {
-        public StorySFX() { }
+        public StorySFX() 
+        {
+            Type = EntryType.SFX;
+        }
 
         [XmlAttribute("SFXName")]
         public string SFXName;

@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using System.Linq;
 
 namespace AD.Story
@@ -14,17 +13,10 @@ namespace AD.Story
 
         [Header("Parameters")]
         public bool IsStoryPlaying { get; private set; }
-        public float textSpeed = 0.1f; // Speed of the dialogue text
-        public bool isWaitingResponse = false;
-        public bool isChatting = false;
-        public int responseCount = 0;
-        public const int MAX_RESPONSE_COUNT = 4;
 
         [Header("Assets")]
         public Transform storyScreen;
         public GameObject[] characters;
-        public TextMeshProUGUI nameText;
-        public TextMeshProUGUI dialogueText;
 
         public Coroutine StartStory(string storyInfo, int readBlockCount, int readEntryCount)
         {
@@ -34,52 +26,49 @@ namespace AD.Story
         public void FinishStory()
         {
             storyScreen.gameObject.SetActive(false);
-
-            // Give dialogue player back
-            // UtilityManager.Instance.GiveUtilityBack(_dialoguePlayer);
-            // _dialoguePlayer = null;
         }
-
 
         public void PlayNextScript()
         {
-            if (CharacterCGCPresentor.Instance.PlayingStandingEntry != null)
+            if (0 < _activeStoryPresenters.Count)
             {
-                if (CharacterCGCPresentor.Instance.PlayingStandingEntry.IsBlockingAnimation)
-                    return;
-
-                // if Standing Animation is unBlockable, Skip Animation.
-                CharacterCGCPresentor.Instance.CompleteStandingAnimation();
+                var presentersToComplete = new List<IStoryPresenter>(_activeStoryPresenters);
+                presentersToComplete.ForEach(presenter => presenter.CompleteStoryEntry());
+                _activeStoryPresenters.Clear();
+                return;
             }
 
-            if (false)//_dialoguePlayer.PlayingDialgoueEntries.Count > 0)
+            if (CharacterCGCPresenter.Instance.PlayingStandingEntry != null)
+                {
+                    if (CharacterCGCPresenter.Instance.PlayingStandingEntry.IsBlockingAnimation)
+                        return;
+
+                    // if Standing Animation is unBlockable, Skip Animation.
+                    CharacterCGCPresenter.Instance.CompleteStandingAnimation();
+                }
+
+            // Check if there is available entry
+            StoryEntry entry = StoryModel.Instance.GetNextEntry();
+            if (entry == null)
             {
-                // Complete current playing dialogue entry
-                //StoryDialogue dialogue = _dialoguePlayer.PlayingDialgoueEntries[0];
-                //_dialoguePlayer.CompleteDialogue(dialogue, nameText, dialogueText);
+                // Story is over
+                IsStoryPlaying = false;
             }
             else
             {
-                // Check if there is available entry
-                StoryEntry entry = StoryModel.Instance.GetNextEntry();
-                if (entry == null)
-                {
-                    // Story is over
-                    IsStoryPlaying = false;
-                }
-                else
-                {
-                    // Show Story Entry
-                    ShowStoryEntry(entry);
-                }
+                // Show Story Entry
+                ShowStoryEntry(entry);
             }
         }
 
         public void ShowStoryEntry(StoryEntry entry)
         {
-            if (entry is StoryDialogue dialogue)
+            Debug.Assert(null != entry, "Story Entry cannot be null");
+
+            if (_storyPresenters.TryGetValue(entry.Type, out IStoryPresenter presenter))
             {
-                //_dialoguePlayer.PlayDialogue(dialogue, nameText, dialogueText);
+                presenter.ProgressStoryEntry(entry);
+                _activeStoryPresenters.Add(presenter);
             }
             else if (entry is StoryChoice choice)
             {
@@ -95,11 +84,11 @@ namespace AD.Story
             }
             else if (entry is StoryCharacterCG standing)
             {
-                CharacterCGCPresentor.Instance.HandleCharacterCG(standing);
+                CharacterCGCPresenter.Instance.HandleCharacterCG(standing);
             }
             else
             {
-                Debug.Log("story entry error: no such entry");
+                Debug.Log($"story entry error: no such entry {entry}");
             }
         }
 
@@ -124,12 +113,17 @@ namespace AD.Story
 
         /****** Private Menbers ******/
 
+        [SerializeField] private Transform _storyPresentersTransform;
+
+        private StoryUIView _storyUIView;
+        private Dictionary<StoryEntry.EntryType, IStoryPresenter> _storyPresenters = new();
+        private List<IStoryPresenter> _activeStoryPresenters = new();
+
         public void Awake()
         {
+            Debug.Assert(null != _storyPresentersTransform, "Story Presenters are not assigned in the editor.");
             Debug.Assert(null != storyScreen, "StoryScreen is not assigned in the editor.");
             Debug.Assert(null != characters, "Character Object is not assigned in the editor.");
-            Debug.Assert(null != nameText, "Name Text is not assigned in the editor.");
-            Debug.Assert(null != dialogueText, "Dialogue Text is not assigned in the editor.");
 
             if (Instance == null)
             {
@@ -146,17 +140,43 @@ namespace AD.Story
             var canvas = GetComponent<Canvas>();
             canvas.worldCamera = Camera.main;
 
+            _storyUIView = UIController.Instance.GetUIView(BaseUI.Story) as StoryUIView;
+            Debug.Assert(null != _storyUIView, "StoryUIView is not assigned in StoryController.");
+
+            InitializeStoryPresenters();
+
             foreach (var character in characters)
             {
                 var view = character.GetComponent<CharacterCGView>();
                 if (view != null)
                 {
-                    CharacterCGCPresentor.Instance.RegisterCharacter(view);
+                    CharacterCGCPresenter.Instance.RegisterCharacter(view);
                 }
 
                 // blinding
                 character.SetActive(false);
             }
+        }
+
+        private void InitializeStoryPresenters()
+        {
+            var storyPresenters = _storyPresentersTransform.GetComponents<IStoryPresenter>();
+            Debug.Assert(storyPresenters.Length > 0, "No Story Presenters found in StoryController.");
+
+            foreach (var presenter in storyPresenters)
+            {
+                presenter.Initialize(this, _storyUIView);
+                presenter.OnStoryEntryComplete += DeactivateStoryPresenter;
+                _storyPresenters.Add(presenter.PresentingEntryType, presenter);
+            }
+        }
+
+        private void DeactivateStoryPresenter(IStoryPresenter presenter)
+        {
+            Debug.Assert(null != presenter, "Presenter cannot be null");
+            Debug.Assert(_activeStoryPresenters.Contains(presenter), $"Presenter {presenter} is not active");
+
+            _activeStoryPresenters.Remove(presenter);
         }
 
         private IEnumerator StartStoryCoroutine(string storyInfo, int readBlockCount, int readEntryCount)

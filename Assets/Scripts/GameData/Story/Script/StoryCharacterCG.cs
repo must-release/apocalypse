@@ -29,7 +29,10 @@ namespace AD.Story
             FacialExpressionTypeCount // Keep this last for count
         }
 
-        public StoryCharacterCG() { }
+        public StoryCharacterCG() 
+        {
+            Type = EntryType.CharacterCG;
+        }
 
         [XmlAttribute("Name")]
         public string Name;

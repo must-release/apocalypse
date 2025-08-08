@@ -12,7 +12,10 @@ namespace AD.Story
             InGameCutScene
         }
 
-        public StoryPlayMode() { }
+        public StoryPlayMode() 
+        {
+            Type = EntryType.PlayMode;
+        }
 
         [XmlAttribute("Mode")]
         public PlayModeType PlayMode;
