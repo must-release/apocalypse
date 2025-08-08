@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using Unity.Cinemachine;
 
-[RequireComponent(typeof(CinemachineCamera))]
 public class FollowCamera : MonoBehaviour
 {
     /****** Public Members ******/
@@ -56,10 +55,19 @@ public class FollowCamera : MonoBehaviour
     private void SetupVirtualCamera()
     {
         VirtualCamera = GetComponent<CinemachineCamera>();
+        if (null == VirtualCamera)
+        {
+            VirtualCamera = gameObject.AddComponent<CinemachineCamera>();
+        }
+        
         VirtualCamera.Priority = 0;
         VirtualCamera.Lens.FieldOfView = 60f;
 
-        var positionComposer = VirtualCamera.gameObject.AddComponent<CinemachinePositionComposer>();
+        var positionComposer = GetComponent<CinemachinePositionComposer>();
+        if (null == positionComposer)
+        {
+            positionComposer = VirtualCamera.gameObject.AddComponent<CinemachinePositionComposer>();
+        }
         positionComposer.Damping = new Vector3(0.5f, 0.5f, 0.5f);
     }
 
