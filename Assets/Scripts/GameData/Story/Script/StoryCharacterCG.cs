@@ -41,7 +41,7 @@ namespace AD.Story
         public FacialExpressionType Expression;
 
         [XmlAttribute("Animation")]
-        public AnimationType Animation;
+        public AnimationType Animation = AnimationType.None;
 
         [XmlAttribute("IsBlockingAnimation")]
         public bool IsBlockingAnimation = true; // If true, next entry should wait for this animation to be over
@@ -50,6 +50,6 @@ namespace AD.Story
         public float AnimationSpeed = 1.0f;
 
         [XmlAttribute("TargetPosition")]
-        public TargetPositionType TargetPosition;
+        public TargetPositionType TargetPosition = TargetPositionType.Center;
     }
 }

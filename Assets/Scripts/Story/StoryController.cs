@@ -16,7 +16,6 @@ namespace AD.Story
 
         [Header("Assets")]
         public Transform storyScreen;
-        public GameObject[] characters;
 
         public Coroutine StartStory(string storyInfo, int readBlockCount, int readEntryCount)
         {
@@ -36,15 +35,6 @@ namespace AD.Story
                 presentersToComplete.ForEach(presenter => presenter.CompleteStoryEntry());
                 return;
             }
-
-            if (CharacterCGCPresenter.Instance.PlayingStandingEntry != null)
-                {
-                    if (CharacterCGCPresenter.Instance.PlayingStandingEntry.IsBlockingAnimation)
-                        return;
-
-                    // if Standing Animation is unBlockable, Skip Animation.
-                    CharacterCGCPresenter.Instance.CompleteStandingAnimation();
-                }
 
             // Check if there is available entry
             StoryEntry entry = StoryModel.Instance.GetNextEntry();
@@ -68,10 +58,6 @@ namespace AD.Story
             {
                 presenter.ProgressStoryEntry(entry);
                 _activeStoryPresenters.Add(presenter);
-            }
-            else if (entry is StoryCharacterCG standing)
-            {
-                CharacterCGCPresenter.Instance.HandleCharacterCG(standing);
             }
             else
             {
@@ -104,7 +90,6 @@ namespace AD.Story
         {
             Debug.Assert(null != _storyPresentersTransform, "Story Presenters are not assigned in the editor.");
             Debug.Assert(null != storyScreen, "StoryScreen is not assigned in the editor.");
-            Debug.Assert(null != characters, "Character Object is not assigned in the editor.");
 
             if (Instance == null)
             {
@@ -125,18 +110,6 @@ namespace AD.Story
             Debug.Assert(null != _storyUIView, "StoryUIView is not assigned in StoryController.");
 
             InitializeStoryPresenters();
-
-            foreach (var character in characters)
-            {
-                var view = character.GetComponent<CharacterCGView>();
-                if (view != null)
-                {
-                    CharacterCGCPresenter.Instance.RegisterCharacter(view);
-                }
-
-                // blinding
-                character.SetActive(false);
-            }
         }
 
         private void InitializeStoryPresenters()
