@@ -14,8 +14,6 @@ namespace AD.Story
         [Header("Parameters")]
         public bool IsStoryPlaying { get; private set; }
 
-        [Header("Assets")]
-        public Transform storyScreen;
 
         public Coroutine StartStory(string storyInfo, int readBlockCount, int readEntryCount)
         {
@@ -24,7 +22,7 @@ namespace AD.Story
 
         public void FinishStory()
         {
-            storyScreen.gameObject.SetActive(false);
+
         }
 
         public void PlayNextScript()
@@ -89,7 +87,6 @@ namespace AD.Story
         public void Awake()
         {
             Debug.Assert(null != _storyPresentersTransform, "Story Presenters are not assigned in the editor.");
-            Debug.Assert(null != storyScreen, "StoryScreen is not assigned in the editor.");
 
             if (Instance == null)
             {
@@ -137,12 +134,6 @@ namespace AD.Story
         {
             // Set Story Playing true
             IsStoryPlaying = true;
-
-            // Activate Story Screen
-            storyScreen.gameObject.SetActive(true);
-
-            // Get dialogue player
-            //_dialoguePlayer = UtilityManager.Instance.GetUtilityTool<DialoguePlayer>();
 
             // Load Story Text according to the Info
             yield return StoryModel.Instance.LoadStoryText(storyInfo, readBlockCount, readEntryCount);

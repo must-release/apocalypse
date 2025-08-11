@@ -17,9 +17,9 @@ namespace AD.Story
         public void Initialize(StoryController storyController, StoryUIView uiView)
         {
             _storyController = storyController;
-            //_characterHolder = uiView.CharacterHolder;
+            _characterCGHolder = uiView.CharacterHolder;
 
-            Debug.Assert(null != _characterHolder, "CharacterHolder is not assigned in CharacterCGPresenter.");
+            Debug.Assert(null != _characterCGHolder, "CharacterCGHolder is not assigned in CharacterCGPresenter.");
             Debug.Assert(null != _storyController, "StoryController is not assigned in CharacterCGPresenter.");
         }
 
@@ -37,12 +37,13 @@ namespace AD.Story
             Vector2 targetPosition                          = GetTargetPosition(_currentCharacterCG.TargetPosition);
             StoryCharacterCG.AnimationType animationType    = _currentCharacterCG.Animation;
 
-            _characterHolder.SetSprite(id, expressionSprite);
-            _activeCGAnimationTween = _characterHolder.DisplayCG(id, duration, targetPosition, animationType);
+            _characterCGHolder.SetSprite(id, expressionSprite);
+            _activeCGAnimationTween = _characterCGHolder.DisplayCG(id, duration, targetPosition, animationType);
 
             await _activeCGAnimationTween; // Reverted to direct await
 
-            if (_isCompleted) return; // Flag logic
+            if (_isCompleted)
+                return;
 
             OnStoryEntryComplete.Invoke(this);
         }
@@ -53,7 +54,8 @@ namespace AD.Story
             Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in CharacterCGPresenter.");
 
             // if Animation is Blocker, CANNOT complete this Entry.
-            if (true == _currentCharacterCG.IsBlockingAnimation) return;
+            if (true == _currentCharacterCG.IsBlockingAnimation)
+                return;
 
             _isCompleted = true;
 
@@ -67,12 +69,10 @@ namespace AD.Story
         /****** Private Members ******/
 
         private StoryController         _storyController;
-        // private CharacterHolder         _characterHolder;
+        private CharacterCGHolder       _characterCGHolder;
         private StoryCharacterCG        _currentCharacterCG;
-        // private CancellationTokenSource _cancellationTokenSource; // Removed
 
         private CharacterCGModel _model;
-        [SerializeField] private CharacterHolder  _characterHolder;
 
         private Tween _activeCGAnimationTween;
         private bool _isCompleted;

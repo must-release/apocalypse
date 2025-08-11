@@ -4,7 +4,7 @@ using System.Linq;
 using DG.Tweening;
 using AD.Story;
 
-public class CharacterHolder : MonoBehaviour
+public class CharacterCGHolder : MonoBehaviour
 {
     /****** Public Members ******/
 
@@ -57,7 +57,7 @@ public class CharacterHolder : MonoBehaviour
 
     private void OnValidate()
     {
-        Debug.Assert(0 < _characterViews.Count, "Choice buttons list cannot be empty.");
+        Debug.Assert(0 < _characterViews.Count, "Character view list cannot be empty.");
 
         foreach (var view in _characterViews)
         {
