@@ -7,7 +7,7 @@ namespace AD.Story
     {
         StoryEntry.EntryType PresentingEntryType { get; }
         event Action<IStoryEntryHandler> OnStoryEntryComplete;
-        void Initialize(StoryContext context);
+        void Initialize(StoryHandleContext context);
         UniTask ProgressStoryEntry(StoryEntry storyEntry);
         void CompleteStoryEntry();
     }

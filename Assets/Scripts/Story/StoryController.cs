@@ -83,9 +83,9 @@ namespace AD.Story
         [SerializeField] private Transform _storyPresentersTransform;
 
         private StoryUIView _storyUIView;
-        private StoryContext _storyContext; // New StoryContext field
-        private Dictionary<StoryEntry.EntryType, IStoryEntryHandler> _storyHandlers = new(); // Changed type
-        private List<IStoryEntryHandler> _activeStoryHandlers = new(); // Changed type
+        private StoryHandleContext _storyContext;
+        private Dictionary<StoryEntry.EntryType, IStoryEntryHandler> _storyHandlers = new();
+        private List<IStoryEntryHandler> _activeStoryHandlers = new();
 
         public void Awake()
         {
@@ -110,27 +110,21 @@ namespace AD.Story
             _storyUIView = UIController.Instance.GetUIView(BaseUI.Story) as StoryUIView;
             Debug.Assert(null != _storyUIView, "StoryUIView is not assigned in StoryController.");
 
-            // Initialize StoryContext here
-            _storyContext = new StoryContext(this, _storyUIView);
+            // Initialize StoryHandleContext here
+            _storyContext = new StoryHandleContext(this, _storyUIView);
 
             InitializeStoryHandlers(); // Renamed method
         }
 
         private void InitializeStoryHandlers()
         {
-            var storyHandlers = _storyPresentersTransform.GetComponents<IStoryEntryHandler>(); // Changed to IStoryEntryHandler
+            var storyHandlers = _storyPresentersTransform.GetComponents<IStoryEntryHandler>();
             Debug.Assert(storyHandlers.Length > 0, "No Story Handlers found in StoryController.");
 
             foreach (var handler in storyHandlers)
             {
                 handler.Initialize(_storyContext);
-
-                // if (handler is IStoryPresenter presenter)
-                // {
-                //     presenter.Initialize(this, _storyUIView);
-                // }
-
-                handler.OnStoryEntryComplete += DeactivateStoryHandler; // Changed event handler
+                handler.OnStoryEntryComplete += DeactivateStoryHandler;
                 _storyHandlers.Add(handler.PresentingEntryType, handler);
             }
         }
@@ -150,9 +144,6 @@ namespace AD.Story
 
             // Activate Story Screen
             storyScreen.gameObject.SetActive(true);
-
-            // Get dialogue player
-            //_dialoguePlayer = UtilityManager.Instance.GetUtilityTool<DialoguePlayer>();
 
             // Load Story Text according to the Info
             yield return StoryModel.Instance.LoadStoryText(storyInfo, readBlockCount, readEntryCount);

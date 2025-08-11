@@ -12,9 +12,9 @@ namespace AD.Story
         public StoryEntry.EntryType PresentingEntryType => StoryEntry.EntryType.BGM;
         public event Action<IStoryEntryHandler> OnStoryEntryComplete; // Changed to IStoryEntryHandler
 
-        private StoryContext _context; // Store the context
+        private StoryHandleContext _context; // Store the context
 
-        public void Initialize(StoryContext context) // Changed signature
+        public void Initialize(StoryHandleContext context) // Changed signature
         {
             _context = context;
             Debug.Assert(null != _context.Controller, "StoryController is not assigned in BGMPresenter context.");

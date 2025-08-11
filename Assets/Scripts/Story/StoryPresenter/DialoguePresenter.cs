@@ -13,17 +13,14 @@ namespace AD.Story
         public StoryEntry.EntryType PresentingEntryType => StoryEntry.EntryType.Dialogue;
         public event Action<IStoryEntryHandler> OnStoryEntryComplete;
 
-        private StoryContext _context;
-
-        public void Initialize(StoryContext context)
+        public void Initialize(StoryHandleContext context)
         {
+            Debug.Assert(null != context, "StoryHandleContext cannot be null in DialoguePresenter.");
+            Debug.Assert(context.IsValid, "StoryHandleContext is not valid in DialoguePresenter.");
+
             _context = context;
-            Debug.Assert(null != _context.Controller, "StoryController is not assigned in DialoguePresenter context.");
-            
-            // Access UI elements directly from context
-            Debug.Assert(null != _context.UIView, "StoryUIView is not assigned in DialoguePresenter context.");
-            
             _dialogueBox = _context.UIView.DialogueBox;
+            
             Debug.Assert(null != _dialogueBox, "DialogueBox is not assigned in DialoguePresenter.");
         }
 
@@ -59,7 +56,7 @@ namespace AD.Story
 
         /****** Private Members ******/
 
-        // private StoryController         _storyController; // Now accessed via _context.Controller
+        private StoryHandleContext      _context;
         private DialogueBox             _dialogueBox;
         private StoryDialogue           _currentDialogue;
         private CancellationTokenSource _cancellationTokenSource;

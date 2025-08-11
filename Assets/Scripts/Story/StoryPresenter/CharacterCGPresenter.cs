@@ -14,7 +14,7 @@ namespace AD.Story
         public StoryEntry.EntryType PresentingEntryType => StoryEntry.EntryType.CharacterCG;
         public event Action<IStoryEntryHandler> OnStoryEntryComplete; // Changed to IStoryEntryHandler
 
-        public void Initialize(StoryContext context)
+        public void Initialize(StoryHandleContext context)
         {
             _context = context;
             Debug.Assert(null != _context.Controller, "StoryController is not assigned in CharacterCGPresenter context.");
@@ -69,7 +69,7 @@ namespace AD.Story
         /****** Private Members ******/
 
         // private StoryController         _storyController; // Now accessed via _context.Controller
-        private StoryContext _context; // Store the context
+        private StoryHandleContext _context; // Store the context
         private StoryCharacterCG _currentCharacterCG;
 
         private CharacterCGModel _model;

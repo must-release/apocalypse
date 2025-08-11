@@ -13,13 +13,12 @@ namespace AD.Story
         public StoryEntry.EntryType PresentingEntryType => StoryEntry.EntryType.Choice;
         public event Action<IStoryEntryHandler> OnStoryEntryComplete;
 
-        public void Initialize(StoryContext context)
+        public void Initialize(StoryHandleContext context)
         {
+            Debug.Assert(null != context, "StoryHandleContext cannot be null in ChoicePresenter.");
+            Debug.Assert(context.IsValid, "StoryHandleContext is not valid in ChoicePresenter.");
+
             _context = context;
-            Debug.Assert(null != _context.Controller, "StoryController is not assigned in ChoicePresenter context.");
-            
-            // Access UI elements directly from context
-            Debug.Assert(null != _context.UIView, "StoryUIView is not assigned in ChoicePresenter context.");
             _choicePanel = _context.UIView.ChoicePanel;
             _choicePanel.OnChoiceSelected += ChoiceSelected;
 
@@ -45,18 +44,17 @@ namespace AD.Story
                 return;
 
             _choicePanel.HideChoices();
-            _context.Controller.ProcessSelectedChoice(_selectedOption); // Access via context
+            _context.Controller.ProcessSelectedChoice(_selectedOption);
             _selectedOption = null;
             OnStoryEntryComplete.Invoke(this);
 
-            _context.Controller.PlayNextScript(); // Access via context
+            _context.Controller.PlayNextScript();
         }
 
         /****** Private Members ******/
 
-        // private StoryController     _storyController; // Now accessed via _context.Controller
-        private StoryContext _context;
-        private ChoicePanel _choicePanel;
+        private StoryHandleContext  _context;
+        private ChoicePanel         _choicePanel;
         private StoryChoice         _currentChoice;
         private StoryChoiceOption   _selectedOption;
 
