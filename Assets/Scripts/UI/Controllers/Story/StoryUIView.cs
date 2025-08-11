@@ -7,6 +7,7 @@ public class StoryUIView : MonoBehaviour, IUIView<BaseUI>
     public BaseUI UIType => BaseUI.Story;
     public DialogueBox DialogueBox => _dialogueBox;
     public ChoicePanel ChoicePanel => _choicePanel;
+    public CharacterCGHolder CharacterHolder => _characterHolder;
 
     public void EnterUI()
     {
@@ -33,11 +34,13 @@ public class StoryUIView : MonoBehaviour, IUIView<BaseUI>
 
     [SerializeField] private DialogueBox _dialogueBox;
     [SerializeField] private ChoicePanel _choicePanel;
+    [SerializeField] private CharacterCGHolder _characterHolder;
 
     private void OnValidate()
     {
         Debug.Assert(null != _dialogueBox, "DialogueBox is not assigned in StoryUIView.");
         Debug.Assert(null != _choicePanel, "ChoicePanel is not assigned in StoryUIView.");
+        Debug.Assert(null != _characterHolder, "CharacterCGHolder is not assigned in StoryUIView.");
     }
 
 }
