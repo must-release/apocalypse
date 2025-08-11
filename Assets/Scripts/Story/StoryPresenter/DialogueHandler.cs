@@ -1,12 +1,11 @@
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace AD.Story
 {
-    public class DialoguePresenter : MonoBehaviour, IStoryEntryHandler
+    public class DialogueHandler : MonoBehaviour, IStoryEntryHandler
     {
         /****** Public Members ******/
 
@@ -15,19 +14,19 @@ namespace AD.Story
 
         public void Initialize(StoryHandleContext context)
         {
-            Debug.Assert(null != context, "StoryHandleContext cannot be null in DialoguePresenter.");
-            Debug.Assert(context.IsValid, "StoryHandleContext is not valid in DialoguePresenter.");
+            Debug.Assert(null != context, "StoryHandleContext cannot be null in DialogueHandler.");
+            Debug.Assert(context.IsValid, "StoryHandleContext is not valid in DialogueHandler.");
 
             _context = context;
             _dialogueBox = _context.UIView.DialogueBox;
             
-            Debug.Assert(null != _dialogueBox, "DialogueBox is not assigned in DialoguePresenter.");
+            Debug.Assert(null != _dialogueBox, "DialogueBox is not assigned in DialogueHandler.");
         }
 
         public async UniTask ProgressStoryEntry(StoryEntry storyEntry)
         {
             Debug.Assert(storyEntry is StoryDialogue, $"{storyEntry} is not a StoryDialogue");
-            Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in DialoguePresenter.");
+            Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in DialogueHandler.");
 
             _currentDialogue = storyEntry as StoryDialogue;
             _cancellationTokenSource = new CancellationTokenSource();
@@ -46,7 +45,7 @@ namespace AD.Story
         public void CompleteStoryEntry()
         {
             Debug.Assert(null != _currentDialogue, "Current dialogue is null");
-            Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in DialoguePresenter.");
+            Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in DialogueHandler.");
 
             _cancellationTokenSource?.Cancel();
             _dialogueBox.DisplayText(_currentDialogue.Text);
