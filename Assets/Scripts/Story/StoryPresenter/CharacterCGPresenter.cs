@@ -16,13 +16,13 @@ namespace AD.Story
 
         public void Initialize(StoryHandleContext context)
         {
+            Debug.Assert(null != context, "StoryHandleContext cannot be null in CharacterCGPresenter.");
+            Debug.Assert(context.IsValid, "StoryHandleContext is not valid in CharacterCGPresenter.");
+
             _context = context;
-            Debug.Assert(null != _context.Controller, "StoryController is not assigned in CharacterCGPresenter context.");
-            
-            // Access UI elements directly from context
-            Debug.Assert(null != _context.UIView, "StoryUIView is not assigned in CharacterCGPresenter context.");
-            // _characterHolder = _context.UIView.CharacterHolder;
-            // Debug.Assert(null != _characterHolder, "CharacterHolder is not assigned in CharacterCGPresenter.");
+            _characterCGHolder = _context.UIView.CharacterHolder;
+
+            Debug.Assert(null != _characterCGHolder, "CharacterHolder is not assigned in CharacterCGPresenter.");
         }
 
         public async UniTask ProgressStoryEntry(StoryEntry storyEntry)
@@ -70,16 +70,14 @@ namespace AD.Story
 
         /****** Private Members ******/
 
-        // private StoryController         _storyController; // Now accessed via _context.Controller
-        private StoryHandleContext _context; // Store the context
+        private StoryHandleContext _context;
         private StoryCharacterCG _currentCharacterCG;
-
         private CharacterCGModel _model;
-        [SerializeField] private CharacterHolder  _characterHolder;
+        private CharacterCGHolder  _characterCGHolder;
         
         private Tween _activeCGAnimationTween;
         private bool _isCompleted; // Re-added field
-        private float _defaultCGAnimationDuration = 3f;
+        private float _defaultCGAnimationDuration = 0.7f;
         private Vector2 _leftPosition = new Vector2(-500, -219);
         private Vector2 _rightPosition = new Vector2(500, -219);
         private Vector2 _centerPosition = new Vector2(0, -219);
