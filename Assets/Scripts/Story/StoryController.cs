@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,10 +29,10 @@ namespace AD.Story
 
         public void PlayNextScript()
         {
-            if (0 < _activeStoryPresenters.Count)
+            if (0 < _activeStoryHandlers.Count)
             {
-                var presentersToComplete = new List<IStoryPresenter>(_activeStoryPresenters);
-                presentersToComplete.ForEach(presenter => presenter.CompleteStoryEntry());
+                var handlersToComplete = new List<IStoryEntryHandler>(_activeStoryHandlers);
+                handlersToComplete.ForEach(handler => handler.CompleteStoryEntry());
                 return;
             }
 
@@ -54,10 +54,10 @@ namespace AD.Story
         {
             Debug.Assert(null != entry, "Story Entry cannot be null");
 
-            if (_storyPresenters.TryGetValue(entry.Type, out IStoryPresenter presenter))
+            if (_storyHandlers.TryGetValue(entry.Type, out IStoryEntryHandler handler))
             {
-                presenter.ProgressStoryEntry(entry);
-                _activeStoryPresenters.Add(presenter);
+                handler.ProgressStoryEntry(entry);
+                _activeStoryHandlers.Add(handler);
             }
             else
             {
@@ -83,8 +83,9 @@ namespace AD.Story
         [SerializeField] private Transform _storyPresentersTransform;
 
         private StoryUIView _storyUIView;
-        private Dictionary<StoryEntry.EntryType, IStoryPresenter> _storyPresenters = new();
-        private List<IStoryPresenter> _activeStoryPresenters = new();
+        private StoryContext _storyContext; // New StoryContext field
+        private Dictionary<StoryEntry.EntryType, IStoryEntryHandler> _storyHandlers = new(); // Changed type
+        private List<IStoryEntryHandler> _activeStoryHandlers = new(); // Changed type
 
         public void Awake()
         {
@@ -109,28 +110,37 @@ namespace AD.Story
             _storyUIView = UIController.Instance.GetUIView(BaseUI.Story) as StoryUIView;
             Debug.Assert(null != _storyUIView, "StoryUIView is not assigned in StoryController.");
 
-            InitializeStoryPresenters();
+            // Initialize StoryContext here
+            _storyContext = new StoryContext(this, _storyUIView);
+
+            InitializeStoryHandlers(); // Renamed method
         }
 
-        private void InitializeStoryPresenters()
+        private void InitializeStoryHandlers()
         {
-            var storyPresenters = _storyPresentersTransform.GetComponents<IStoryPresenter>();
-            Debug.Assert(storyPresenters.Length > 0, "No Story Presenters found in StoryController.");
+            var storyHandlers = _storyPresentersTransform.GetComponents<IStoryEntryHandler>(); // Changed to IStoryEntryHandler
+            Debug.Assert(storyHandlers.Length > 0, "No Story Handlers found in StoryController.");
 
-            foreach (var presenter in storyPresenters)
+            foreach (var handler in storyHandlers)
             {
-                presenter.Initialize(this, _storyUIView);
-                presenter.OnStoryEntryComplete += DeactivateStoryPresenter;
-                _storyPresenters.Add(presenter.PresentingEntryType, presenter);
+                handler.Initialize(_storyContext);
+
+                // if (handler is IStoryPresenter presenter)
+                // {
+                //     presenter.Initialize(this, _storyUIView);
+                // }
+
+                handler.OnStoryEntryComplete += DeactivateStoryHandler; // Changed event handler
+                _storyHandlers.Add(handler.PresentingEntryType, handler);
             }
         }
 
-        private void DeactivateStoryPresenter(IStoryPresenter presenter)
+        private void DeactivateStoryHandler(IStoryEntryHandler handler)
         {
-            Debug.Assert(null != presenter, "Presenter cannot be null");
-            Debug.Assert(_activeStoryPresenters.Contains(presenter), $"Presenter {presenter} is not active");
+            Debug.Assert(null != handler, "Handler cannot be null");
+            Debug.Assert(_activeStoryHandlers.Contains(handler), $"Handler {handler} is not active");
 
-            _activeStoryPresenters.Remove(presenter);
+            _activeStoryHandlers.Remove(handler);
         }
 
         private IEnumerator StartStoryCoroutine(string storyInfo, int readBlockCount, int readEntryCount)

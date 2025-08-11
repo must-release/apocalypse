@@ -6,21 +6,24 @@ using UnityEngine;
 
 namespace AD.Story
 {
-    public class ChoicePresenter : MonoBehaviour, IStoryPresenter
+    public class ChoicePresenter : MonoBehaviour, IStoryEntryHandler
     {
         /****** Public Members ******/
 
         public StoryEntry.EntryType PresentingEntryType => StoryEntry.EntryType.Choice;
-        public event Action<IStoryPresenter> OnStoryEntryComplete;
+        public event Action<IStoryEntryHandler> OnStoryEntryComplete;
 
-        public void Initialize(StoryController storyController, StoryUIView uiView)
+        public void Initialize(StoryContext context)
         {
-            _storyController = storyController;
-            _choicePanel = uiView.ChoicePanel;
+            _context = context;
+            Debug.Assert(null != _context.Controller, "StoryController is not assigned in ChoicePresenter context.");
+            
+            // Access UI elements directly from context
+            Debug.Assert(null != _context.UIView, "StoryUIView is not assigned in ChoicePresenter context.");
+            _choicePanel = _context.UIView.ChoicePanel;
             _choicePanel.OnChoiceSelected += ChoiceSelected;
 
             Debug.Assert(null != _choicePanel, "ChoicePanel is not assigned in ChoicePresenter.");
-            Debug.Assert(null != _storyController, "StoryController is not assigned in ChoicePresenter.");
         }
 
         public UniTask ProgressStoryEntry(StoryEntry storyEntry)
@@ -42,17 +45,18 @@ namespace AD.Story
                 return;
 
             _choicePanel.HideChoices();
-            _storyController.ProcessSelectedChoice(_selectedOption);
+            _context.Controller.ProcessSelectedChoice(_selectedOption); // Access via context
             _selectedOption = null;
             OnStoryEntryComplete.Invoke(this);
 
-            _storyController.PlayNextScript();
+            _context.Controller.PlayNextScript(); // Access via context
         }
 
         /****** Private Members ******/
 
-        private StoryController     _storyController;
-        private ChoicePanel         _choicePanel;
+        // private StoryController     _storyController; // Now accessed via _context.Controller
+        private StoryContext _context;
+        private ChoicePanel _choicePanel;
         private StoryChoice         _currentChoice;
         private StoryChoiceOption   _selectedOption;
 

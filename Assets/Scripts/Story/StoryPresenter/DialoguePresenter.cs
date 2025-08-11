@@ -6,20 +6,25 @@ using UnityEngine;
 
 namespace AD.Story
 {
-    public class DialoguePresenter : MonoBehaviour, IStoryPresenter
+    public class DialoguePresenter : MonoBehaviour, IStoryEntryHandler
     {
         /****** Public Members ******/
 
         public StoryEntry.EntryType PresentingEntryType => StoryEntry.EntryType.Dialogue;
-        public event Action<IStoryPresenter> OnStoryEntryComplete;
+        public event Action<IStoryEntryHandler> OnStoryEntryComplete;
 
-        public void Initialize(StoryController storyController, StoryUIView uiView)
+        private StoryContext _context;
+
+        public void Initialize(StoryContext context)
         {
-            _storyController = storyController;
-            _dialogueBox = uiView.DialogueBox;
-
+            _context = context;
+            Debug.Assert(null != _context.Controller, "StoryController is not assigned in DialoguePresenter context.");
+            
+            // Access UI elements directly from context
+            Debug.Assert(null != _context.UIView, "StoryUIView is not assigned in DialoguePresenter context.");
+            
+            _dialogueBox = _context.UIView.DialogueBox;
             Debug.Assert(null != _dialogueBox, "DialogueBox is not assigned in DialoguePresenter.");
-            Debug.Assert(null != _storyController, "StoryController is not assigned in DialoguePresenter.");
         }
 
         public async UniTask ProgressStoryEntry(StoryEntry storyEntry)
@@ -54,7 +59,7 @@ namespace AD.Story
 
         /****** Private Members ******/
 
-        private StoryController         _storyController;
+        // private StoryController         _storyController; // Now accessed via _context.Controller
         private DialogueBox             _dialogueBox;
         private StoryDialogue           _currentDialogue;
         private CancellationTokenSource _cancellationTokenSource;
