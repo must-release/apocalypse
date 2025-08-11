@@ -3,13 +3,11 @@ using Cysharp.Threading.Tasks;
 
 namespace AD.Story
 {
-    public interface IStoryPresenter
+    public interface IStoryEntryHandler
     {
         StoryEntry.EntryType PresentingEntryType { get; }
-
-        event Action<IStoryPresenter> OnStoryEntryComplete;
-
-        void Initialize(StoryController storyController, StoryUIView uiView);
+        event Action<IStoryEntryHandler> OnStoryEntryComplete;
+        void Initialize(StoryHandleContext context);
         UniTask ProgressStoryEntry(StoryEntry storyEntry);
         void CompleteStoryEntry();
     }

@@ -7,20 +7,22 @@ using Cysharp.Threading.Tasks;
 
 namespace AD.Story
 {
-    public class CharacterCGPresenter : MonoBehaviour, IStoryPresenter
+    public class CharacterCGPresenter : MonoBehaviour, IStoryEntryHandler // Changed to IStoryEntryHandler
     {
         /****** Public Members ******/
 
         public StoryEntry.EntryType PresentingEntryType => StoryEntry.EntryType.CharacterCG;
-        public event Action<IStoryPresenter> OnStoryEntryComplete;
+        public event Action<IStoryEntryHandler> OnStoryEntryComplete; // Changed to IStoryEntryHandler
 
-        public void Initialize(StoryController storyController, StoryUIView uiView)
+        public void Initialize(StoryHandleContext context)
         {
-            _storyController = storyController;
-            _characterCGHolder = uiView.CharacterHolder;
-
-            Debug.Assert(null != _characterCGHolder, "CharacterCGHolder is not assigned in CharacterCGPresenter.");
-            Debug.Assert(null != _storyController, "StoryController is not assigned in CharacterCGPresenter.");
+            _context = context;
+            Debug.Assert(null != _context.Controller, "StoryController is not assigned in CharacterCGPresenter context.");
+            
+            // Access UI elements directly from context
+            Debug.Assert(null != _context.UIView, "StoryUIView is not assigned in CharacterCGPresenter context.");
+            // _characterHolder = _context.UIView.CharacterHolder;
+            // Debug.Assert(null != _characterHolder, "CharacterHolder is not assigned in CharacterCGPresenter.");
         }
 
         public async UniTask ProgressStoryEntry(StoryEntry storyEntry)
@@ -59,7 +61,7 @@ namespace AD.Story
 
             _isCompleted = true;
 
-            _activeCGAnimationTween?.Complete(); // use Tween.Complete instead of TokenSource.Cancel
+            _activeCGAnimationTween?.Complete(); // Reverted to Complete()
             _activeCGAnimationTween = null;
             OnStoryEntryComplete.Invoke(this);
             _currentCharacterCG = null;
@@ -68,15 +70,16 @@ namespace AD.Story
 
         /****** Private Members ******/
 
-        private StoryController         _storyController;
-        private CharacterCGHolder       _characterCGHolder;
-        private StoryCharacterCG        _currentCharacterCG;
+        // private StoryController         _storyController; // Now accessed via _context.Controller
+        private StoryHandleContext _context; // Store the context
+        private StoryCharacterCG _currentCharacterCG;
 
         private CharacterCGModel _model;
-
+        [SerializeField] private CharacterHolder  _characterHolder;
+        
         private Tween _activeCGAnimationTween;
-        private bool _isCompleted;
-        private float _defaultCGAnimationDuration = 0.7f;
+        private bool _isCompleted; // Re-added field
+        private float _defaultCGAnimationDuration = 3f;
         private Vector2 _leftPosition = new Vector2(-500, -219);
         private Vector2 _rightPosition = new Vector2(500, -219);
         private Vector2 _centerPosition = new Vector2(0, -219);
