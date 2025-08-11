@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using System;
-using System.Threading;
 using DG.Tweening;
 using Cysharp.Threading.Tasks;
 
@@ -30,7 +29,7 @@ namespace AD.Story
             Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in CharacterCGPresenter.");
 
             _currentCharacterCG = storyEntry as StoryCharacterCG;
-            _cancellationTokenSource = new CancellationTokenSource();
+            _isCompleted = false; // Re-added flag
 
             Sprite expressionSprite                         = _model.GetExpressionSprite(_currentCharacterCG.Name, _currentCharacterCG.Expression);
             string id                                       = _currentCharacterCG.Name;
@@ -39,17 +38,13 @@ namespace AD.Story
             StoryCharacterCG.AnimationType animationType    = _currentCharacterCG.Animation;
 
             _characterHolder.SetSprite(id, expressionSprite);
+            _activeCGAnimationTween = _characterHolder.DisplayCG(id, duration, targetPosition, animationType);
 
-            try
-            {
-                await _characterHolder.DisplayCG(id, duration, targetPosition, animationType)
-                                                .WithCancellation(_cancellationTokenSource.Token);
+            await _activeCGAnimationTween; // Reverted to direct await
 
-                OnStoryEntryComplete.Invoke(this);
-            }
-            catch (OperationCanceledException)
-            {
-            }
+            if (_isCompleted) return; // Flag logic
+
+            OnStoryEntryComplete.Invoke(this);
         }
 
         public void CompleteStoryEntry()
@@ -60,7 +55,9 @@ namespace AD.Story
             // if Animation is Blocker, CANNOT complete this Entry.
             if (true == _currentCharacterCG.IsBlockingAnimation) return;
 
-            _cancellationTokenSource?.Cancel();
+            _isCompleted = true;
+
+            _activeCGAnimationTween?.Complete(); // use Tween.Complete instead of TokenSource.Cancel
             _activeCGAnimationTween = null;
             OnStoryEntryComplete.Invoke(this);
             _currentCharacterCG = null;
@@ -72,13 +69,14 @@ namespace AD.Story
         private StoryController         _storyController;
         // private CharacterHolder         _characterHolder;
         private StoryCharacterCG        _currentCharacterCG;
-        private CancellationTokenSource _cancellationTokenSource;
+        // private CancellationTokenSource _cancellationTokenSource; // Removed
 
         private CharacterCGModel _model;
         [SerializeField] private CharacterHolder  _characterHolder;
-        
+
         private Tween _activeCGAnimationTween;
-        private float _defaultCGAnimationDuration = 3f;
+        private bool _isCompleted;
+        private float _defaultCGAnimationDuration = 0.7f;
         private Vector2 _leftPosition = new Vector2(-500, -219);
         private Vector2 _rightPosition = new Vector2(500, -219);
         private Vector2 _centerPosition = new Vector2(0, -219);
