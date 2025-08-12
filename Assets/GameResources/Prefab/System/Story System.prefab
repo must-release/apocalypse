@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2563493662287208678}
   - component: {fileID: 880290249609419159}
   - component: {fileID: 6801058365254781993}
+  - component: {fileID: 4600305951024760920}
   m_Layer: 0
   m_Name: StoryHandlers
   m_TagString: Untagged
@@ -94,6 +95,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 01e0832cced1841fcbb12e27d3d77e08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4600305951024760920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1716269871853492469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba9b7dcbe8b614e7d9b81083f97ae601, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2946220226567375908
