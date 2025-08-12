@@ -60,6 +60,25 @@ public class StageTransitionEvent : GameEventBase<StageTransitionEventInfo>
 
         await SceneController.Instance.AsyncExecuteStageTransition();
 
+        var newSceneCameras = SceneController.Instance.GetCurrentStageCameras();
+        Transform player = SceneController.Instance.PlayerTransform;
+        
+        if (0 < newSceneCameras.Length)
+        {
+            CameraManager.Instance.ClearCameras();
+            CameraManager.Instance.RegisterCameras(newSceneCameras);
+            
+            if (null != player)
+            {
+                CameraManager.Instance.SetCurrentCamera<FollowCamera>();
+                CameraManager.Instance.ActivateCamera(player);
+            }
+            else
+            {
+                CameraManager.Instance.SetCurrentCamera(newSceneCameras[0]);
+            }
+        }
+
         TerminateEvent();
     }
 }
