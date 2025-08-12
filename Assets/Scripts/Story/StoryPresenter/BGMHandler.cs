@@ -5,25 +5,23 @@ using AD.Audio;
 
 namespace AD.Story
 {
-    public class BGMPresenter : MonoBehaviour, IStoryEntryHandler // Changed to IStoryEntryHandler
+    public class BGMHandler : MonoBehaviour, IStoryEntryHandler
     {
         /****** Public Members ******/
 
         public StoryEntry.EntryType PresentingEntryType => StoryEntry.EntryType.BGM;
-        public event Action<IStoryEntryHandler> OnStoryEntryComplete; // Changed to IStoryEntryHandler
+        public event Action<IStoryEntryHandler> OnStoryEntryComplete;
 
-        private StoryHandleContext _context; // Store the context
-
-        public void Initialize(StoryHandleContext context) // Changed signature
+        public void Initialize(StoryHandleContext context)
         {
             _context = context;
-            Debug.Assert(null != _context.Controller, "StoryController is not assigned in BGMPresenter context.");
+            Debug.Assert(null != _context.Controller, "StoryController is not assigned in BGMHandler context.");
         }
 
         public async UniTask ProgressStoryEntry(StoryEntry storyEntry)
         {
             Debug.Assert(storyEntry is StoryBGM, $"{storyEntry} is not a StoryBGM");
-            Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in BGMPresenter.");
+            Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in BGMHandler.");
 
             StoryBGM currentBGM = storyEntry as StoryBGM;
 
@@ -37,7 +35,7 @@ namespace AD.Story
                     audioAction = AudioAction.Stop;
                     break;
                 default:
-                    Debug.LogError($"Unsupported BGMAction: {currentBGM.Action}");
+                    Logger.Write(LogCategory.GamePlay, $"Unsupported BGMAction: {currentBGM.Action}", LogLevel.Error);
                     OnStoryEntryComplete.Invoke(this);
                     return;
             }
@@ -49,8 +47,11 @@ namespace AD.Story
                 volume: 1.0f
             );
 
-            audioEvent.PlayEvent();
+            GameEventManager.Instance.Submit(audioEvent);
+            
             OnStoryEntryComplete.Invoke(this);
+
+            await UniTask.CompletedTask;
         }
 
         public void CompleteStoryEntry()
@@ -63,6 +64,6 @@ namespace AD.Story
 
         /****** Private Members ******/
 
-        // private StoryController _storyController; // Now accessed via _context.Controller
+        private StoryHandleContext _context;
     }
 }

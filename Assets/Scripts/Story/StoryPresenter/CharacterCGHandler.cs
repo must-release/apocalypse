@@ -7,7 +7,7 @@ using Cysharp.Threading.Tasks;
 
 namespace AD.Story
 {
-    public class CharacterCGPresenter : MonoBehaviour, IStoryEntryHandler // Changed to IStoryEntryHandler
+    public class CharacterCGHandler : MonoBehaviour, IStoryEntryHandler // Changed to IStoryEntryHandler
     {
         /****** Public Members ******/
 
@@ -16,19 +16,19 @@ namespace AD.Story
 
         public void Initialize(StoryHandleContext context)
         {
-            Debug.Assert(null != context, "StoryHandleContext cannot be null in CharacterCGPresenter.");
-            Debug.Assert(context.IsValid, "StoryHandleContext is not valid in CharacterCGPresenter.");
+            Debug.Assert(null != context, "StoryHandleContext cannot be null in CharacterCGHandler.");
+            Debug.Assert(context.IsValid, "StoryHandleContext is not valid in CharacterCGHandler.");
 
             _context = context;
             _characterCGHolder = _context.UIView.CharacterHolder;
 
-            Debug.Assert(null != _characterCGHolder, "CharacterHolder is not assigned in CharacterCGPresenter.");
+            Debug.Assert(null != _characterCGHolder, "CharacterHolder is not assigned in CharacterCGHandler.");
         }
 
         public async UniTask ProgressStoryEntry(StoryEntry storyEntry)
         {
             Debug.Assert(storyEntry is StoryCharacterCG, $"{storyEntry} is not a StoryCharacterCG");
-            Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in CharacterCGPresenter.");
+            Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in CharacterCGHandler.");
 
             _currentCharacterCG = storyEntry as StoryCharacterCG;
             _isCompleted = false; // Re-added flag
@@ -53,7 +53,7 @@ namespace AD.Story
         public void CompleteStoryEntry()
         {
             Debug.Assert(null != _currentCharacterCG, "Current CharacterCG is null");
-            Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in CharacterCGPresenter.");
+            Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in CharacterCGHandler.");
 
             // if Animation is Blocker, CANNOT complete this Entry.
             if (true == _currentCharacterCG.IsBlockingAnimation)

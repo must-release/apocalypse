@@ -19,7 +19,7 @@ public class AudioEvent : GameEventBase<AudioEventInfo>
 
         base.PlayEvent();
 
-        if (Info.IsBGM)
+        if (true == Info.IsBGM)
         {
             switch (Info.Action)
             {
