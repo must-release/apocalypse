@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
@@ -9,6 +8,8 @@ namespace AD.Story
 {
     public class BackgroundCGModel
     {
+        /****** Public Members ******/
+
         public BackgroundCGAsset BackgroundCGAsset { get; private set; }
 
         public async UniTask AsyncLoadBackgroundCGAsset()
@@ -48,6 +49,9 @@ namespace AD.Story
             Debug.LogWarning($"Background sprite for '{bgName}' in chapter '{chapter}' not found.");
             return null;
         }
+
+
+        /****** Private Members ******/
 
         private Dictionary<ChapterType, Dictionary<string, Sprite>> _backgroundSprites = new();
     }

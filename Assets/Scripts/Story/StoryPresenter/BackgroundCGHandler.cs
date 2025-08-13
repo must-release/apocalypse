@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using System;
 using DG.Tweening;
@@ -8,6 +7,8 @@ namespace AD.Story
 {
     public class BackgroundCGHandler : MonoBehaviour, IStoryEntryHandler
     {
+        /****** Public Members ******/
+
         public StoryEntry.EntryType PresentingEntryType => StoryEntry.EntryType.BackgroundCG;
         public event Action<IStoryEntryHandler> OnStoryEntryComplete;
 
@@ -58,6 +59,9 @@ namespace AD.Story
             // OnStoryEntryComplete.Invoke(this);
             // _currentBackgroundCG = null;
         }
+
+
+        /****** Private Members ******/
 
         private StoryHandleContext _context;
         private StoryBackgroundCG _currentBackgroundCG;
