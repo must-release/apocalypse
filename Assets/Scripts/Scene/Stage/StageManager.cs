@@ -22,7 +22,6 @@ public class StageManager : MonoBehaviour
     public SnapPoint        EnterSnapPoint  { get; private set; }
     public SnapPoint        ExitSnapPoint   { get; private set; }
     public BoxCollider2D    StageBoundary   { get; private set; }
-    public FollowCamera     StageCamera     => _stageCamera;
     public ChapterType      ChapterType     => _chapterType;
     public int              StageIndex      => _stageIndex;
 
@@ -32,13 +31,12 @@ public class StageManager : MonoBehaviour
     {
         InitializeTilemap();
         SetStageBoundary();
-        SetupStageCamera();
+        SetupCameras();
         await WaitForAsyncObjects();
 
         Debug.Assert(null != _playerStart, $"PlayerStart component is missing in the {_chapterType}_{_stageIndex}.");
         Debug.Assert(null != EnterSnapPoint, $"EnterSnapPoint component is missing in the {_chapterType}_{_stageIndex}.");
         Debug.Assert(null != ExitSnapPoint, $"ExitSnapPoint component is missing in the {_chapterType}_{_stageIndex}.");
-        Debug.Assert(null != StageCamera, $"StageCamera component is missing in the {_chapterType}_{_stageIndex}.");
     }
 
     public void DestroyStage()
@@ -88,6 +86,13 @@ public class StageManager : MonoBehaviour
         transform.Translate(moveVec);
     }
 
+    public ICamera[] GetStageCameras()
+    {
+        Debug.Assert(null != _camerasContainer, $"GameCameras container is not set in {_chapterType}_{_stageIndex}.");
+        
+        return _camerasContainer.GetComponentsInChildren<ICamera>();
+    }
+
 
     /****** Private Members ******/
 
@@ -95,7 +100,7 @@ public class StageManager : MonoBehaviour
     [SerializeField] private ChapterType    _chapterType;
     [SerializeField] private int            _stageIndex;
     [SerializeField] private bool           _canGoBackToPreviousStage;
-    [SerializeField] private FollowCamera   _stageCamera;
+    [SerializeField] private Transform      _camerasContainer;
 
     private const int _StageTranisitionTriggerCount = 2;
     private Tilemap                     _tilemap;
@@ -103,6 +108,9 @@ public class StageManager : MonoBehaviour
 
     private void OnValidate()
     {
+        Debug.Assert(null != _camerasContainer, $"Cameras container is not set in {_chapterType}_{_stageIndex}.");
+        Debug.Assert(null != _camerasContainer.GetComponentInChildren<FollowCamera>(), $"GameCameras container should have follow camera in {_chapterType}_{_stageIndex}.");
+
         gameObject.name = $"{_chapterType}_{_stageIndex}";
     }
 
@@ -239,21 +247,15 @@ public class StageManager : MonoBehaviour
         Debug.Assert(null != StageBoundary, $"StageBoundary is not set in the {_chapterType}_{_stageIndex}.");
     }
 
-    private void SetupStageCamera()
+    private void SetupCameras()
     {
         Debug.Assert(null != StageBoundary, $"StageBoundary is not set in the {_chapterType}_{_stageIndex}.");
+        Debug.Assert(null != _camerasContainer, $"Cameras container is not set in {_chapterType}_{_stageIndex}.");
 
-        if (null == _stageCamera)
-        {
-            GameObject cameraObject = new GameObject("FollowCamera");
-            cameraObject.transform.SetParent(transform, false);
-            cameraObject.transform.position = new Vector3(0, 0, -10);
-            _stageCamera = cameraObject.AddComponent<FollowCamera>();
+        var cameras = _camerasContainer.GetComponentsInChildren<IGamePlayCamera>();
+        cameras.ToList().ForEach(camera => camera.Initialize(StageBoundary));
 
-            Logger.Write(LogCategory.GameScene, $"Created new stage camera in the {_chapterType}_{_stageIndex}.");
-        }
-
-        _stageCamera.Initialize(StageBoundary);
+        Logger.Write(LogCategory.GameScene, $"Initialized {cameras.Length} cameras from GameCameras container in {_chapterType}_{_stageIndex}.", LogLevel.Log, true);
     }
 
 

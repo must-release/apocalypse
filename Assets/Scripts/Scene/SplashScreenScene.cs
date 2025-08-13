@@ -21,6 +21,11 @@ public class SplashScreenScene : MonoBehaviour, IScene
         // This scene does not require any activation logic.
     }
 
+    public ICamera[] GetSceneCameras()
+    {
+        return new ICamera[0]; // No cameras in splash screen
+    }
+
     /****** Private Members ******/
 
     private IEnumerator Start()

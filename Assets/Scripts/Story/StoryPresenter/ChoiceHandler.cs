@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace AD.Story
 {
-    public class ChoicePresenter : MonoBehaviour, IStoryEntryHandler
+    public class ChoiceHandler : MonoBehaviour, IStoryEntryHandler
     {
         /****** Public Members ******/
 
@@ -15,14 +15,14 @@ namespace AD.Story
 
         public void Initialize(StoryHandleContext context)
         {
-            Debug.Assert(null != context, "StoryHandleContext cannot be null in ChoicePresenter.");
-            Debug.Assert(context.IsValid, "StoryHandleContext is not valid in ChoicePresenter.");
+            Debug.Assert(null != context, "StoryHandleContext cannot be null in ChoiceHandler.");
+            Debug.Assert(context.IsValid, "StoryHandleContext is not valid in ChoiceHandler.");
 
             _context = context;
             _choicePanel = _context.UIView.ChoicePanel;
             _choicePanel.OnChoiceSelected += ChoiceSelected;
 
-            Debug.Assert(null != _choicePanel, "ChoicePanel is not assigned in ChoicePresenter.");
+            Debug.Assert(null != _choicePanel, "ChoicePanel is not assigned in ChoiceHandler.");
         }
 
         public UniTask ProgressStoryEntry(StoryEntry storyEntry)
@@ -38,7 +38,7 @@ namespace AD.Story
 
         public void CompleteStoryEntry()
         {
-            Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in ChoicePresenter.");
+            Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in ChoiceHandler.");
 
             if (null == _selectedOption)
                 return;
@@ -60,7 +60,7 @@ namespace AD.Story
 
         private void ChoiceSelected(string choice)
         {
-            Debug.Assert(null != _currentChoice, "Current choice is not set in ChoicePresenter.");
+            Debug.Assert(null != _currentChoice, "Current choice is not set in ChoiceHandler.");
 
             _selectedOption = _currentChoice.Options.Find(option => option.Text == choice);
             Debug.Assert(null != _selectedOption, $"Selected option '{choice}' not found in current choice options.");

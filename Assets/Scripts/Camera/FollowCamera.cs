@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using Unity.Cinemachine;
 
-public class FollowCamera : MonoBehaviour
+public class FollowCamera : MonoBehaviour, IGamePlayCamera
 {
     /****** Public Members ******/
 
@@ -15,6 +15,8 @@ public class FollowCamera : MonoBehaviour
 
         SetupVirtualCamera();
         SetupConfiner(stageBoundary);
+
+        transform.position = new Vector3(0, 0, -10);
     }
 
     public void ActivateCamera(Transform playerTransform)

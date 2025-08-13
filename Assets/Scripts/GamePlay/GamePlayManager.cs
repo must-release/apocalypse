@@ -16,8 +16,6 @@ public class GamePlayManager : MonoBehaviour, IAsyncLoadObject
     public void InitializePlayerCharacter(Transform player, PlayerAvatarType character)
     {
         CharacterManager.Instance.SetPlayerCharacter(player, character);
-
-        CameraController.Instance.AttachCamera(player, 0.1f);
     }
 
     public void ControlPlayerCharacter(IReadOnlyControlInfo controlInfo)

@@ -57,8 +57,6 @@ public class LoadUIController : SaveLoadUIBase, IUIView<SubUI>
 
         TryClosingConfirmPanel();
 
-        UIController.Instance.TurnEverySubUIOff();
-
         var loadEvent = GameEventFactory.CreateSequentialEvent(new List<IGameEvent>
         {
             GameEventFactory.CreateDataLoadEvent((DataSlotType)slotNum),

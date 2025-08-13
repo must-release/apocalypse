@@ -66,7 +66,6 @@ public class SceneActivateEvent : GameEventBase<SceneActivateEventInfo>
         Debug.Assert(null != Info, "Event info is not set.");
 
 
-        // If scene is still loading
         if (SceneController.Instance.IsSceneLoading)
         {
             if (Info.ShouldTurnOnLoadingUI)
@@ -75,12 +74,27 @@ public class SceneActivateEvent : GameEventBase<SceneActivateEventInfo>
             yield return new WaitWhile(() => SceneController.Instance.IsSceneLoading);
         }
 
-        // Initialize player character for game play
         Transform player = SceneController.Instance.PlayerTransform;
         if (player)
         {
             PlayerAvatarType character = PlayerManager.Instance.CurrentPlayerType;
             GamePlayManager.Instance.InitializePlayerCharacter(player, character);
+        }
+
+        var sceneCameras = SceneController.Instance.GetCurrentStageCameras();
+        if (0 < sceneCameras.Length)
+        {
+            CameraManager.Instance.RegisterCameras(sceneCameras);
+            
+            if (null != player)
+            {
+                CameraManager.Instance.SetCurrentCamera<FollowCamera>();
+                CameraManager.Instance.ActivateCamera(player);
+            }
+            else
+            {
+                CameraManager.Instance.SetCurrentCamera(sceneCameras[0]);
+            }
         }
 
         SceneController.Instance.ActivateGameScene();
