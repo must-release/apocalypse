@@ -1,5 +1,6 @@
 using UnityEngine;
 using Unity.Cinemachine;
+using Cysharp.Threading.Tasks;
 
 namespace AD.Camera
 {
@@ -9,6 +10,7 @@ namespace AD.Camera
 
         public CinemachineCamera VirtualCamera { get; private set; }
         public bool IsActive => VirtualCamera.Priority > 0;
+        public string CameraName => gameObject.name;
 
         public void Initialize(BoxCollider2D stageBoundary)
         {
@@ -23,13 +25,11 @@ namespace AD.Camera
         public void ActivateCamera(Transform playerTransform)
         {
             Debug.Assert(null != VirtualCamera, "VirtualCamera is not initialized.");
-            Debug.Assert(null != playerTransform, "Player transform cannot be null.");
+            Debug.Assert(null != playerTransform, "Player transform cannot be null in follow camera.");
 
             VirtualCamera.Follow = playerTransform;
             VirtualCamera.LookAt = playerTransform;
             VirtualCamera.Priority = 10;
-
-            Logger.Write(LogCategory.GameScene, $"FollowCamera activated for player at {playerTransform.position}", LogLevel.Log, true);
         }
 
         public void DeactivateCamera()

@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
+using Unity.Cinemachine;
 
 namespace AD.Camera
 {
@@ -59,20 +61,28 @@ namespace AD.Camera
             SetCurrentCamera(camera);
         }
 
+        public void SetCurrentCameraByName(string cameraName)
+        {
+            var camera = RegisteredCameras.FirstOrDefault(c => c.CameraName == cameraName);
+            Debug.Assert(null != camera, $"No camera with name {cameraName} is registered.");
+
+            SetCurrentCamera(camera);
+        }
+
         public void ActivateCamera(Transform target = null)
         {
             Debug.Assert(null != CurrentCamera, "No camera is registered.");
 
-            if (null != target)
-            {
-                CurrentCamera.ActivateCamera(target);
-                Logger.Write(LogCategory.GamePlay, $"Camera activated for target: {target.name}", LogLevel.Log, true);
-            }
-            else
-            {
-                CurrentCamera.ActivateCamera(null);
-                Logger.Write(LogCategory.GamePlay, "Camera activated without target", LogLevel.Log, true);
-            }
+            CurrentCamera.ActivateCamera(target);
+        }
+
+        public async UniTask ActivateCameraAsync(Transform target = null)
+        {
+            Debug.Assert(null != CurrentCamera, "No camera is registered.");
+
+            ActivateCamera(target);
+
+            await UniTask.WaitWhile(() => _cinemachineBrain.IsBlending);
         }
 
         public void DeactivateCamera()
@@ -104,6 +114,8 @@ namespace AD.Camera
 
         /****** Private Members ******/
 
+        [SerializeField] private CinemachineBrain _cinemachineBrain;
+
         private void Awake()
         {
             if (null == Instance)
@@ -114,6 +126,11 @@ namespace AD.Camera
             {
                 Destroy(gameObject);
             }
+        }
+
+        private void OnValidate()
+        {
+            Debug.Assert(null != _cinemachineBrain, "CinemachineBrain component is required on CameraManager.");
         }
     }
 }

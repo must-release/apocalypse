@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using Cysharp.Threading.Tasks;
+using AD.Camera;
 
 namespace AD.Story
 {
@@ -11,25 +12,27 @@ namespace AD.Story
         public StoryEntry.EntryType PresentingEntryType => StoryEntry.EntryType.CameraAction;
         public event Action<IStoryEntryHandler> OnStoryEntryComplete;
 
-        public void Initialize(StoryHandleContext context)
-        {
-            Debug.Assert(null != context, "StoryHandleContext cannot be null in CameraActionHandler.");
-            Debug.Assert(context.IsValid, "StoryHandleContext is not valid in CameraActionHandler.");
+        public void Initialize(StoryHandleContext context) { }
 
-            _context = context;
-        }
-
-        public async UniTask ProgressStoryEntry(StoryEntry storyEntry)
+        public UniTask ProgressStoryEntry(StoryEntry storyEntry)
         {
             Debug.Assert(storyEntry is StoryCameraAction, $"{storyEntry} is not a StoryCameraAction");
             Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in CameraActionHandler.");
 
             _currentCameraAction = storyEntry as StoryCameraAction;
 
-            // Implement camera action logic here
-            await ExecuteCameraAction(_currentCameraAction);
+            var actionType = _currentCameraAction.ActionType;
+            var targetName = _currentCameraAction.TargetName;
+            var cameraEvent = GameEventFactory.CreateCameraEvent(actionType, targetName);
+            cameraEvent.OnTerminate += () =>
+            {
+                _currentCameraAction = null;
+                CompleteStoryEntry();
+            };
 
-            OnStoryEntryComplete.Invoke(this);
+            GameEventManager.Instance.Submit(cameraEvent);
+
+            return UniTask.CompletedTask;
         }
 
         public void CompleteStoryEntry()
@@ -37,20 +40,14 @@ namespace AD.Story
             Debug.Assert(null != _currentCameraAction, "Current camera action is null");
             Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in CameraActionHandler.");
 
-            // Logic to finalize the camera action if needed
+            if (null != _currentCameraAction)
+                return;
+
             OnStoryEntryComplete.Invoke(this);
-            _currentCameraAction = null;
         }
 
         /****** Private Members ******/
 
-        private StoryHandleContext _context;
         private StoryCameraAction _currentCameraAction;
-
-        private async UniTask ExecuteCameraAction(StoryCameraAction cameraAction)
-        {
-            // Placeholder for actual camera action execution logic
-            await UniTask.Delay(1000); // Simulate delay for camera action
-        }
     }
 }

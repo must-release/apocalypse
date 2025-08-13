@@ -250,7 +250,16 @@ public static class GameEventFactory
         return evt;
     }
 
-    
+    public static IGameEvent CreateCameraEvent(AD.Camera.CameraActionType actionType, string targetName = null)
+    {
+        var info = ScriptableObject.CreateInstance<CameraEventInfo>();
+        info.Initialize(actionType, targetName);
+
+        var evt = GameEventPool<CameraEvent, CameraEventInfo>.Get(EventHost, $"CameraEvent_{actionType}_{targetName}");
+        evt.Initialize(info);
+        return evt;
+    }
+
 
     public static IGameEvent CreateFromInfo<TEventInfo>(TEventInfo info)
         where TEventInfo : GameEventInfo
@@ -303,6 +312,7 @@ public static class GameEventFactory
         { GameEventType.Story,              info => CreateFromInfo<StoryEvent, StoryEventInfo>(info as StoryEventInfo) },
         { GameEventType.UIChange,           info => CreateFromInfo<UIChangeEvent, UIChangeEventInfo>(info as UIChangeEventInfo) },
         { GameEventType.Audio,              info => CreateFromInfo<AudioEvent, AudioEventInfo>(info as AudioEventInfo) },
+        { GameEventType.Camera,             info => CreateFromInfo<CameraEvent, CameraEventInfo>(info as CameraEventInfo) },
     };
 
     private static readonly Dictionary<GameEventType, Func<GameEventDTO, IGameEvent>> _eventCreatorsFromDTO =

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Assertions;
 using System;
 using AD.Camera;
 
@@ -11,13 +10,11 @@ public class CameraEventInfo : GameEventInfo
 
     public CameraActionType ActionType  => _actionType;
     public string           TargetName  => _targetName;
-    public int              Priority    => _priority;
 
-    public void Initialize(CameraActionType actionType, string targetName = null, int priority = 10)
+    public void Initialize(CameraActionType actionType, string targetName = null)
     {
         _actionType = actionType;
         _targetName = targetName;
-        _priority = priority;
         IsInitialized = true;
         IsRuntimeInstance = true;
     }
@@ -47,7 +44,6 @@ public class CameraEventInfo : GameEventInfo
 
     /****** Private Members ******/
 
-    [SerializeField] private CameraActionType   _actionType         = CameraActionType.SwitchToCamera;
-    [SerializeField] private string             _targetName         = "";
-    [SerializeField] private int                _priority           = 10;
+    [SerializeField] private CameraActionType   _actionType = CameraActionType.SwitchToCamera;
+    [SerializeField] private string             _targetName = "";
 }
