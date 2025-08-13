@@ -17,7 +17,7 @@ namespace AD.Story
             Debug.Assert(null != _context.Controller, "StoryController is not assigned in BGMHandler context.");
         }
 
-        public async UniTask ProgressStoryEntry(StoryEntry storyEntry)
+        public UniTask ProgressStoryEntry(StoryEntry storyEntry)
         {
             Debug.Assert(storyEntry is StoryBGM, $"{storyEntry} is not a StoryBGM");
             Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in BGMHandler.");
@@ -37,14 +37,14 @@ namespace AD.Story
                 default:
                     Logger.Write(LogCategory.GamePlay, $"Unsupported BGMAction: {currentBGM.Action}", LogLevel.Error);
                     OnStoryEntryComplete.Invoke(this);
-                    return;
+                    return UniTask.CompletedTask;
             }
 
             GameEventManager.Instance.Submit(audioEvent);
             
             OnStoryEntryComplete.Invoke(this);
 
-            await UniTask.CompletedTask;
+            return UniTask.CompletedTask;
         }
 
         public void CompleteStoryEntry()

@@ -10,6 +10,8 @@ public class SFXEventInfo : GameEventInfo
     public void Initialize(string clipName)
     {
         ClipName = clipName;
+
+        IsInitialized = true;
     }
 
     public override GameEventInfo Clone()

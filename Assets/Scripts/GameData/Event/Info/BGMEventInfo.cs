@@ -12,6 +12,8 @@ public class BGMEventInfo : GameEventInfo
     {
         ShouldStop = shouldStop;
         ClipName = clipName;
+
+        IsInitialized = true;
     }
 
     public override GameEventInfo Clone()
