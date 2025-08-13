@@ -1,7 +1,6 @@
 using UnityEngine;
 using System;
 using Cysharp.Threading.Tasks;
-using AD.Audio;
 
 namespace AD.Story
 {
@@ -25,12 +24,7 @@ namespace AD.Story
 
             StorySFX currentSFX = storyEntry as StorySFX;
 
-            IGameEvent audioEvent = GameEventFactory.CreateAudioEvent(
-                isBgm: false,
-                action: AudioAction.Play,
-                clipName: currentSFX.SFXName,
-                volume: 1.0f
-            );
+            IGameEvent audioEvent = GameEventFactory.CreateSFXEvent(currentSFX.SFXName);
 
             GameEventManager.Instance.Submit(audioEvent);
             

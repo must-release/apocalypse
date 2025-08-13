@@ -1,7 +1,6 @@
 using UnityEngine;
 using System;
 using Cysharp.Threading.Tasks;
-using AD.Audio;
 
 namespace AD.Story
 {
@@ -25,27 +24,21 @@ namespace AD.Story
 
             StoryBGM currentBGM = storyEntry as StoryBGM;
 
-            AudioAction audioAction;
+            IGameEvent audioEvent;
+
             switch (currentBGM.Action)
             {
                 case StoryBGM.BGMAction.Start:
-                    audioAction = AudioAction.Play;
+                    audioEvent = GameEventFactory.CreateBGMEvent(shouldStop: false, currentBGM.BGMName);
                     break;
                 case StoryBGM.BGMAction.Stop:
-                    audioAction = AudioAction.Stop;
+                    audioEvent = GameEventFactory.CreateBGMEvent(shouldStop: true);
                     break;
                 default:
                     Logger.Write(LogCategory.GamePlay, $"Unsupported BGMAction: {currentBGM.Action}", LogLevel.Error);
                     OnStoryEntryComplete.Invoke(this);
                     return;
             }
-
-            IGameEvent audioEvent = GameEventFactory.CreateAudioEvent(
-                isBgm: true,
-                action: audioAction,
-                clipName: currentBGM.BGMName,
-                volume: 1.0f
-            );
 
             GameEventManager.Instance.Submit(audioEvent);
             
