@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.Assertions;
+using AD.Camera;
 
 /*
  * Activate loaded scene

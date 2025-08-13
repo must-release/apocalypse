@@ -1,22 +1,12 @@
 using System.Xml.Serialization;
 using UnityEngine;
+using AD.Camera;
 
 namespace AD.Story
 {
     [System.Serializable]
     public class StoryCameraAction : StoryEntry
     {
-        public enum CameraActionType
-        {
-            SwitchToCamera,       
-            FollowTarget,         
-            SetPriority,           
-            Zoom,                  
-            MoveTo,                 
-            Shake,                 
-            ResetToDefault
-        }
-
         public StoryCameraAction() 
         {
             Type = EntryType.CameraAction;

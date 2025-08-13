@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using AD.Camera;
 
 using static SnapPoint;
+
 
 public class StageManager : MonoBehaviour
 {

@@ -1,9 +1,12 @@
 using UnityEngine;
 
-public interface ICamera
+namespace AD.Camera
 {
-    bool IsActive { get; }
+    public interface ICamera
+    {
+        bool IsActive { get; }
 
-    void ActivateCamera(Transform target);
-    void DeactivateCamera();
+        void ActivateCamera(Transform target);
+        void DeactivateCamera();
+    }
 }

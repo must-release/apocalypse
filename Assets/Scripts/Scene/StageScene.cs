@@ -96,7 +96,7 @@ public class StageScene : MonoBehaviour, IScene
         Logger.Write(LogCategory.GameScene, $"Respawning player at {_currentStage.PlayerStartPosition}", LogLevel.Log, true);
     }
 
-    public ICamera[] GetSceneCameras()
+    public AD.Camera.ICamera[] GetSceneCameras()
     {
         Debug.Assert(null != _currentStage, "Current stage is not initialized.");
         

@@ -1,7 +1,9 @@
 using UnityEngine;
 using UnityEditor;
 using AD.Story;
+using AD.Camera;
 using Unity.Cinemachine;
+using System.Linq;
 
 namespace StoryEditor.UI
 {
@@ -21,7 +23,7 @@ namespace StoryEditor.UI
         /****** Private Members ******/
 
         private GameObject _stagePrefab;
-        private string[] _virtualCameraNames;
+        private string[] _gameplayCameraNames;
 
         private void DrawCameraActionEditor(StoryCameraAction cameraAction)
         {
@@ -37,37 +39,33 @@ namespace StoryEditor.UI
             // Draw fields based on action type
             switch (cameraAction.ActionType)
             {
-                case StoryCameraAction.CameraActionType.SwitchToCamera:
+                case CameraActionType.SwitchToCamera:
                     DrawTargetCameraField(cameraAction);
                     break;
 
-                case StoryCameraAction.CameraActionType.FollowTarget:
+                case CameraActionType.FollowTarget:
                     DrawTargetNameField(cameraAction);
                     break;
 
-                case StoryCameraAction.CameraActionType.SetPriority:
+                case CameraActionType.SetPriority:
                     DrawTargetCameraField(cameraAction);
                     DrawPriorityField(cameraAction);
                     break;
 
-                case StoryCameraAction.CameraActionType.Zoom:
+                case CameraActionType.Zoom:
                     DrawFieldOfViewField(cameraAction);
                     DrawDurationField(cameraAction);
                     DrawEaseTypeField(cameraAction);
                     break;
 
-                case StoryCameraAction.CameraActionType.MoveTo:
+                case CameraActionType.MoveTo:
                     DrawPositionFields(cameraAction);
                     DrawDurationField(cameraAction);
                     DrawEaseTypeField(cameraAction);
                     break;
 
-                case StoryCameraAction.CameraActionType.Shake:
+                case CameraActionType.Shake:
                     DrawIntensityField(cameraAction);
-                    DrawDurationField(cameraAction);
-                    break;
-
-                case StoryCameraAction.CameraActionType.ResetToDefault:
                     DrawDurationField(cameraAction);
                     break;
             }
@@ -81,7 +79,7 @@ namespace StoryEditor.UI
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Action Type:", EditorStyles.boldLabel, GUILayout.Width(120));
             
-            var newActionType = (StoryCameraAction.CameraActionType)EditorGUILayout.EnumPopup(cameraAction.ActionType, GUILayout.Width(150));
+            var newActionType = (CameraActionType)EditorGUILayout.EnumPopup(cameraAction.ActionType, GUILayout.Width(150));
             if (newActionType != cameraAction.ActionType)
             {
                 cameraAction.ActionType = newActionType;
@@ -95,27 +93,27 @@ namespace StoryEditor.UI
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Target Camera:", EditorStyles.boldLabel, GUILayout.Width(120));
             
-            if (null == _virtualCameraNames || 0 == _virtualCameraNames.Length)
+            if (null == _gameplayCameraNames || 0 == _gameplayCameraNames.Length)
             {
-                EditorGUILayout.LabelField("No Virtual Cameras found", GUILayout.Width(200));
+                EditorGUILayout.LabelField("No GamePlay Cameras found", GUILayout.Width(200));
             }
             else
             {
-                var currentIndex = System.Array.IndexOf(_virtualCameraNames, cameraAction.TargetCamera);
+                var currentIndex = System.Array.IndexOf(_gameplayCameraNames, cameraAction.TargetCamera);
                 if (currentIndex == -1) 
                 {
                     currentIndex = 0;
                     // 초기값이 설정되지 않았다면 첫 번째 카메라로 자동 설정
-                    if (string.IsNullOrEmpty(cameraAction.TargetCamera) && _virtualCameraNames.Length > 0)
+                    if (string.IsNullOrEmpty(cameraAction.TargetCamera) && _gameplayCameraNames.Length > 0)
                     {
-                        cameraAction.TargetCamera = _virtualCameraNames[0];
+                        cameraAction.TargetCamera = _gameplayCameraNames[0];
                     }
                 }
                 
-                var newIndex = EditorGUILayout.Popup(currentIndex, _virtualCameraNames, GUILayout.Width(200));
-                if (newIndex != currentIndex && newIndex >= 0 && newIndex < _virtualCameraNames.Length)
+                var newIndex = EditorGUILayout.Popup(currentIndex, _gameplayCameraNames, GUILayout.Width(200));
+                if (newIndex != currentIndex && newIndex >= 0 && newIndex < _gameplayCameraNames.Length)
                 {
-                    cameraAction.TargetCamera = _virtualCameraNames[newIndex];
+                    cameraAction.TargetCamera = _gameplayCameraNames[newIndex];
                 }
             }
             
@@ -125,14 +123,14 @@ namespace StoryEditor.UI
             {
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField("", GUILayout.Width(120));
-                EditorGUILayout.HelpBox("Select a Stage Prefab first to see available Virtual Cameras", MessageType.Warning);
+                EditorGUILayout.HelpBox("Select a Stage Prefab first to see available GamePlay Cameras", MessageType.Warning);
                 EditorGUILayout.EndHorizontal();
             }
-            else if (null == _virtualCameraNames || 0 == _virtualCameraNames.Length)
+            else if (null == _gameplayCameraNames || 0 == _gameplayCameraNames.Length)
             {
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField("", GUILayout.Width(120));
-                EditorGUILayout.HelpBox("No Virtual Cameras found in the selected Stage Prefab", MessageType.Warning);
+                EditorGUILayout.HelpBox("No GamePlay Cameras found in the selected Stage Prefab", MessageType.Warning);
                 EditorGUILayout.EndHorizontal();
             }
         }
@@ -284,16 +282,20 @@ namespace StoryEditor.UI
         {
             if (null == _stagePrefab)
             {
-                _virtualCameraNames = null;
+                _gameplayCameraNames = null;
                 return;
             }
 
-            var virtualCameras = _stagePrefab.GetComponentsInChildren<CinemachineCamera>(true);
-            _virtualCameraNames = new string[virtualCameras.Length];
+            var gameplayCameras = _stagePrefab.GetComponentsInChildren<MonoBehaviour>(true)
+                .Where(component => component is AD.Camera.IGamePlayCamera)
+                .Cast<AD.Camera.IGamePlayCamera>()
+                .ToArray();
+                
+            _gameplayCameraNames = new string[gameplayCameras.Length];
             
-            for (int i = 0; i < virtualCameras.Length; i++)
+            for (int i = 0; i < gameplayCameras.Length; i++)
             {
-                _virtualCameraNames[i] = virtualCameras[i].name;
+                _gameplayCameraNames[i] = ((MonoBehaviour)gameplayCameras[i]).name;
             }
         }
 

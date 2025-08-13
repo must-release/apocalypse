@@ -14,8 +14,8 @@ public class TitleScene : MonoBehaviour, IScene
 
     public void ActivateScene() { }
     
-    public ICamera[] GetSceneCameras()
+    public AD.Camera.ICamera[] GetSceneCameras()
     {
-        return new ICamera[0]; // No cameras in title scene
+        return new AD.Camera.ICamera[0]; // No cameras in title scene
     }
 }

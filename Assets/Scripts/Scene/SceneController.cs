@@ -72,7 +72,7 @@ public class SceneController : MonoBehaviour
         }
     }
 
-    public ICamera[] GetCurrentStageCameras()
+    public AD.Camera.ICamera[] GetCurrentStageCameras()
     {
         Debug.Assert(null != _currentScene, "Current scene is not initialized.");
 
