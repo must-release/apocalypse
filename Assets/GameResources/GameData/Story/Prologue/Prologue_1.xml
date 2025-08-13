@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" ?>
 <StoryScript>
   <Block BranchName="common">
+    <BackgroundCG Chapter="Prologue" ImageName="Church" />
     <CharacterCG Name="소녀" Animation="Appear" />
     <Dialogue Name="소녀">앞을 봐! 괴물들이 있어!</Dialogue>
     <Dialogue Name="소녀">어떻게 하지? 돌아가야할까?</Dialogue>

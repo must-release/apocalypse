@@ -688,6 +688,7 @@ GameObject:
   - component: {fileID: 1076447538901041581}
   - component: {fileID: 3923369394181860293}
   - component: {fileID: 6547966319841360243}
+  - component: {fileID: 704721008201967708}
   m_Layer: 0
   m_Name: Img_Background
   m_TagString: Untagged
@@ -752,6 +753,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &704721008201967708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5031798108655707547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c20a48e7d787740bdb008ec4c1b46cb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6409685351216517856
 GameObject:
   m_ObjectHideFlags: 0
@@ -955,6 +968,7 @@ MonoBehaviour:
   _dialogueBox: {fileID: 5692646759360808017}
   _choicePanel: {fileID: 2344261922760173344}
   _characterHolder: {fileID: 7159209795280283021}
+  _backgroundImage: {fileID: 704721008201967708}
 --- !u!1 &7111408800993218056
 GameObject:
   m_ObjectHideFlags: 0
