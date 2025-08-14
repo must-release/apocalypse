@@ -5,15 +5,15 @@ public class BGMEventInfo : GameEventInfo
 {
     /****** Public Members ******/
 
-    public bool ShouldStop;
-    public string ClipName;
+    public bool ShouldStop => _shouldStop;
+    public string ClipName => _clipName;
 
     public void Initialize(bool shouldStop, string clipName = "")
     {
-        ShouldStop = shouldStop;
-        ClipName = clipName;
+        _shouldStop     = shouldStop;
+        _clipName       = clipName;
 
-        IsInitialized = true;
+        IsInitialized   = true;
     }
 
     public override GameEventInfo Clone()
@@ -33,4 +33,10 @@ public class BGMEventInfo : GameEventInfo
     }
 
     protected override void OnValidate() { }
+
+
+    /****** Private Members ******/
+
+    [SerializeField] private bool _shouldStop;
+    [SerializeField] private string _clipName;
 }

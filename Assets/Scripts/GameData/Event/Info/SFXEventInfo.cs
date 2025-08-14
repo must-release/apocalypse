@@ -5,13 +5,13 @@ public class SFXEventInfo : GameEventInfo
 {
     /****** Public Members ******/
 
-    public string ClipName;
+    public string ClipName => _clipName;
 
     public void Initialize(string clipName)
     {
-        ClipName = clipName;
+        _clipName       = clipName;
 
-        IsInitialized = true;
+        IsInitialized   = true;
     }
 
     public override GameEventInfo Clone()
@@ -31,4 +31,9 @@ public class SFXEventInfo : GameEventInfo
     }
 
     protected override void OnValidate() { }
+
+
+    /****** Private Members ******/
+
+    [SerializeField] private string _clipName;
 }

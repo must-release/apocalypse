@@ -188,7 +188,7 @@ public static class GameEventFactory
         return CreateUIChangeEvent(dto.TargetUI);
     }
 
-    public static IGameEvent CreateBGMEvent(bool shouldStop, string clipName = "")
+    public static IGameEvent CreateBGMEvent(bool shouldStop, string clipName = "[STOPPED]")
     {
         var info = ScriptableObject.CreateInstance<BGMEventInfo>();
         info.Initialize(shouldStop, clipName);
