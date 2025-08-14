@@ -2,8 +2,10 @@
 <StoryScript>
   <Block BranchName="common">
     <BackgroundCG Chapter="Prologue" ImageName="Church" />
+    <BGM Action="Start" BGMName="Songs_of_the_Soulless" IsLoop="true" />
     <CharacterCG Name="소녀" Animation="Appear" />
     <Dialogue Name="소녀">앞을 봐! 괴물들이 있어!</Dialogue>
+    <SFX SFXName="Gun_Fire" />
     <Dialogue Name="소녀">어떻게 하지? 돌아가야할까?</Dialogue>
     <Choice>
       <PrevDialogue Name="소녀">어떻게 하지? 돌아가야할까?</PrevDialogue>
