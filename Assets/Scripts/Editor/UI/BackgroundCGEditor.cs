@@ -39,7 +39,7 @@ namespace StoryEditor.UI
         {
             if (null == _backgroundCGAsset)
             {
-                _backgroundCGAsset = Addressables.LoadAssetAsync<BackgroundCGAsset>(AD.Story.AssetPath.BackgroundCG).WaitForCompletion();
+                _backgroundCGAsset = Addressables.LoadAssetAsync<BackgroundCGAsset>(AD.Story.AssetPath.BackgroundCGAsset).WaitForCompletion();
             }
         }
 
