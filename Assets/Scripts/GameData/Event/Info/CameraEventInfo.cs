@@ -8,14 +8,16 @@ public class CameraEventInfo : GameEventInfo
 {
     /****** Public Members ******/
 
-    public CameraActionType ActionType  => _actionType;
-    public string           CameraName  => _cameraName;
-    public string           TargetName  => _targetName;
+    public CameraActionType ActionType      => _actionType;
+    public string           CameraName      => _cameraName;
+    public string           TargetName      => _targetName;
+    public bool             IsTargetPlayer  => _isTargetPlayer;
 
-    public void Initialize(CameraActionType actionType, string cameraName, string targetName = null)
+    public void Initialize(CameraActionType actionType, string cameraName, bool isTargetPlayer = false, string targetName = null)
     {
         _actionType         = actionType;
         _cameraName         = cameraName;
+        _isTargetPlayer     = isTargetPlayer;
         _targetName         = targetName;
         IsInitialized       = true;
         IsRuntimeInstance   = true;
@@ -46,7 +48,8 @@ public class CameraEventInfo : GameEventInfo
 
     /****** Private Members ******/
 
-    [SerializeField] private CameraActionType   _actionType = CameraActionType.SwitchToCamera;
-    [SerializeField] private string             _cameraName;
-    [SerializeField] private string             _targetName;
+    [SerializeField] private CameraActionType _actionType = CameraActionType.SwitchToCamera;
+    [SerializeField] private string _cameraName;
+    [SerializeField] private string _targetName;
+    [SerializeField] private bool   _isTargetPlayer;
 }

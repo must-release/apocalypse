@@ -39,6 +39,11 @@ namespace AD.GamePlay
             ActorManager.Instance.RegisterActors(actors);
         }
 
+        public IActor GetStageActorByName(string actorName)
+        {
+            return ActorManager.Instance.GetActorByName(actorName);
+        }
+
 
         /****** Private Members ******/
 

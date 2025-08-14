@@ -8,15 +8,14 @@ public class ActorManager : MonoBehaviour
     /****** Public Members ******/
 
     public static ActorManager Instance { get; private set; }
-    public List<IActor> RegisteredActors { get; private set; } = new List<IActor>();
 
     public void RegisterActor(IActor actor)
     {
         Debug.Assert(null != actor, "Cannot register null actor.");
 
-        if (false == RegisteredActors.Contains(actor))
+        if (false == _registeredActors.Contains(actor))
         {
-            RegisteredActors.Add(actor);
+            _registeredActors.Add(actor);
         }
     }
 
@@ -67,7 +66,7 @@ public class ActorManager : MonoBehaviour
 
     public void ClearActors(bool clearPlayer = false)
     {
-        RegisteredActors.Clear();
+        _registeredActors.Clear();
 
         if (clearPlayer)
         {
@@ -77,11 +76,13 @@ public class ActorManager : MonoBehaviour
 
     public IActor GetActorByName(string actorName)
     {
-        return RegisteredActors.FirstOrDefault(actor => actor.ActorName == actorName);
+        return _registeredActors.FirstOrDefault(actor => actor.ActorName == actorName);
     }
 
 
     /****** Private Members ******/
+
+    private readonly List<IActor> _registeredActors = new List<IActor>();
 
     private PlayerController _playerController;
 

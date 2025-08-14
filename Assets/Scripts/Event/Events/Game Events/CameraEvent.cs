@@ -4,6 +4,7 @@ using AD.Camera;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
+using AD.GamePlay;
 
 /*
  * Camera Control Event
@@ -82,6 +83,27 @@ public class CameraEvent : GameEventBase<CameraEventInfo>
 
         CameraManager.Instance.DeactivateCamera();
         CameraManager.Instance.SetCurrentCameraByName(Info.CameraName);
-        await CameraManager.Instance.ActivateCameraAsync(cancellationToken: cancellationToken);
+
+        Transform target = GetCameraTarget();
+        await CameraManager.Instance.ActivateCameraAsync(target, cancellationToken);
+    }
+
+    private Transform GetCameraTarget()
+    {
+        if (Info.IsTargetPlayer)
+        {
+            var player = SceneController.Instance.PlayerTransform;
+            Debug.Assert(null != player, "Player not found in the current stage.");
+            return player;
+        }
+        
+        if (false == string.IsNullOrEmpty(Info.TargetName))
+        {
+            var target = GamePlayManager.Instance.GetStageActorByName(Info.TargetName);
+            Debug.Assert(null != target, $"Target actor with name {Info.TargetName} not found.");
+            return target.ActorTransform;
+        }
+
+        return null;
     }
 }

@@ -28,7 +28,7 @@ public abstract class CharacterBase : MonoBehaviour, ICharacter, IMotionControll
         } 
     }
     public Vector3              CurrentPosition     { get { return transform.position; } }
-
+    public Transform            ActorTransform      { get { return transform; } }
 
     public virtual float MovingSpeed { get; protected set; }
     public virtual float    JumpingSpeed        { get; protected set; }
@@ -38,6 +38,7 @@ public abstract class CharacterBase : MonoBehaviour, ICharacter, IMotionControll
     public int              CurrentHitPoint     { get; protected set; }
     public float            CharacterHeight     { get; protected set; }
     public string           ActorName => gameObject.name;
+
 
     public abstract bool IsPlayer { get; }
     public abstract void ControlCharacter(IReadOnlyControlInfo controlInfo);

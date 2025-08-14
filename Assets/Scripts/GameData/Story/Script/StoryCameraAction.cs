@@ -18,6 +18,9 @@ namespace AD.Story
         [XmlAttribute("TargetCamera")]
         public string TargetCamera;
 
+        [XmlAttribute("IsTargetPlayer")]
+        public bool IsTargetPlayer;
+
         [XmlAttribute("TargetName")]
         public string TargetName;
 
