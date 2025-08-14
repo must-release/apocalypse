@@ -70,10 +70,10 @@ public class ScreenEffectEvent : GameEventBase<ScreenEffectEventInfo>
         switch (Info.ScreenEffectType)
         {
             case ScreenEffect.FadeIn:
-                _eventCoroutine = screenEffecter.FadeIn();
+                _eventCoroutine = screenEffecter.FadeIn(Info.Duration);
                 break;
             case ScreenEffect.FadeOut:
-                _eventCoroutine = screenEffecter.FadeOut(); 
+                _eventCoroutine = screenEffecter.FadeOut(Info.Duration);
                 break;
         }
 

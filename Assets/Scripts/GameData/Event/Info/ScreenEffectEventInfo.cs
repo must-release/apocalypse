@@ -9,15 +9,18 @@ public class ScreenEffectEventInfo : GameEventInfo
 {
     /****** Public Members ******/
 
-    public ScreenEffect ScreenEffectType { get { return _screenEffectType; } private set { _screenEffectType = value; }}
+    public ScreenEffect ScreenEffectType    => _screenEffectType;
+    public float Duration                   => _duration;
     
-    public void Initialize(ScreenEffect screenEffectType, bool isRuntimeInstance = false)
+    public void Initialize(ScreenEffect screenEffectType, float duration, bool isRuntimeInstance = false)
     {
         Debug.Assert( false == IsInitialized,                              "Duplicate initialization of GameEventInfo is not allowed." );
         Debug.Assert( ScreenEffect.ScreenEffectCount != screenEffectType,  "Screen effect is not set properly." );
 
 
-        ScreenEffectType    = screenEffectType;
+        _screenEffectType   = screenEffectType;
+        _duration           = duration;
+
         IsInitialized       = true;
         IsRuntimeInstance   = true;
     }
@@ -47,4 +50,5 @@ public class ScreenEffectEventInfo : GameEventInfo
 
     /****** Private Members ******/
     [SerializeField] private ScreenEffect _screenEffectType = ScreenEffect.ScreenEffectCount;
+    [SerializeField] private float _duration;
 }

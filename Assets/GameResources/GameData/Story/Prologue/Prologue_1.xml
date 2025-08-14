@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" ?>
 <StoryScript>
   <Block BranchName="common">
+    <VFX VFX="ScreenFadeIn" Duration="0.5">
     <BackgroundCG Chapter="Prologue" ImageName="Church" />
     <BGM Action="Start" BGMName="Songs_of_the_Soulless" IsLoop="true" />
     <CharacterCG Name="소녀" Animation="Appear" />
