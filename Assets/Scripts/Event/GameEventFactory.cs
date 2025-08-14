@@ -188,12 +188,22 @@ public static class GameEventFactory
         return CreateUIChangeEvent(dto.TargetUI);
     }
 
-    public static IGameEvent CreateAudioEvent(bool isBgm, AudioAction action, string clipName = "", float volume = 1.0f)
+    public static IGameEvent CreateBGMEvent(bool shouldStop, string clipName = "[STOPPED]")
     {
-        var info = ScriptableObject.CreateInstance<AudioEventInfo>();
-        info.Initialize(isBgm, action, clipName, volume);
+        var info = ScriptableObject.CreateInstance<BGMEventInfo>();
+        info.Initialize(shouldStop, clipName);
 
-        var evt = GameEventPool<AudioEvent, AudioEventInfo>.Get(EventHost, $"AudioEvent_{action}_{clipName}");
+        var evt = GameEventPool<BGMEvent, BGMEventInfo>.Get(EventHost, $"BGMEvent_{clipName}");
+        evt.Initialize(info);
+        return evt;
+    }
+
+    public static IGameEvent CreateSFXEvent(string clipName)
+    {
+        var info = ScriptableObject.CreateInstance<SFXEventInfo>();
+        info.Initialize(clipName);
+
+        var evt = GameEventPool<SFXEvent, SFXEventInfo>.Get(EventHost, $"SFXEvent_{clipName}");
         evt.Initialize(info);
         return evt;
     }
@@ -302,7 +312,8 @@ public static class GameEventFactory
         { GameEventType.StageTransition,    info => CreateFromInfo<StageTransitionEvent, StageTransitionEventInfo>(info as StageTransitionEventInfo) },
         { GameEventType.Story,              info => CreateFromInfo<StoryEvent, StoryEventInfo>(info as StoryEventInfo) },
         { GameEventType.UIChange,           info => CreateFromInfo<UIChangeEvent, UIChangeEventInfo>(info as UIChangeEventInfo) },
-        { GameEventType.Audio,              info => CreateFromInfo<AudioEvent, AudioEventInfo>(info as AudioEventInfo) },
+        { GameEventType.BGM,                info => CreateFromInfo<BGMEvent, BGMEventInfo>(info as BGMEventInfo) },
+        { GameEventType.SFX,                info => CreateFromInfo<SFXEvent, SFXEventInfo>(info as SFXEventInfo) },
     };
 
     private static readonly Dictionary<GameEventType, Func<GameEventDTO, IGameEvent>> _eventCreatorsFromDTO =

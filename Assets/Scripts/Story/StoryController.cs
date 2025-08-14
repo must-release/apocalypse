@@ -54,8 +54,8 @@ namespace AD.Story
 
             if (_storyHandlers.TryGetValue(entry.Type, out IStoryEntryHandler handler))
             {
-                handler.ProgressStoryEntry(entry);
                 _activeStoryHandlers.Add(handler);
+                handler.ProgressStoryEntry(entry);
             }
             else
             {

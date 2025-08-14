@@ -1,7 +1,6 @@
 using UnityEngine;
 using System;
 using Cysharp.Threading.Tasks;
-using AD.Audio;
 
 namespace AD.Story
 {
@@ -18,40 +17,34 @@ namespace AD.Story
             Debug.Assert(null != _context.Controller, "StoryController is not assigned in BGMHandler context.");
         }
 
-        public async UniTask ProgressStoryEntry(StoryEntry storyEntry)
+        public UniTask ProgressStoryEntry(StoryEntry storyEntry)
         {
             Debug.Assert(storyEntry is StoryBGM, $"{storyEntry} is not a StoryBGM");
             Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in BGMHandler.");
 
             StoryBGM currentBGM = storyEntry as StoryBGM;
 
-            AudioAction audioAction;
+            IGameEvent audioEvent;
+
             switch (currentBGM.Action)
             {
                 case StoryBGM.BGMAction.Start:
-                    audioAction = AudioAction.Play;
+                    audioEvent = GameEventFactory.CreateBGMEvent(shouldStop: false, currentBGM.BGMName);
                     break;
                 case StoryBGM.BGMAction.Stop:
-                    audioAction = AudioAction.Stop;
+                    audioEvent = GameEventFactory.CreateBGMEvent(shouldStop: true);
                     break;
                 default:
                     Logger.Write(LogCategory.GamePlay, $"Unsupported BGMAction: {currentBGM.Action}", LogLevel.Error);
                     OnStoryEntryComplete.Invoke(this);
-                    return;
+                    return UniTask.CompletedTask;
             }
-
-            IGameEvent audioEvent = GameEventFactory.CreateAudioEvent(
-                isBgm: true,
-                action: audioAction,
-                clipName: currentBGM.BGMName,
-                volume: 1.0f
-            );
 
             GameEventManager.Instance.Submit(audioEvent);
             
             OnStoryEntryComplete.Invoke(this);
 
-            await UniTask.CompletedTask;
+            return UniTask.CompletedTask;
         }
 
         public void CompleteStoryEntry()
