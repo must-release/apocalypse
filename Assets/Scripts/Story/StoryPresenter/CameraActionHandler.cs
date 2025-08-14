@@ -22,8 +22,9 @@ namespace AD.Story
             _currentCameraAction = storyEntry as StoryCameraAction;
 
             var actionType = _currentCameraAction.ActionType;
+            var cameraName = _currentCameraAction.TargetCamera;
             var targetName = _currentCameraAction.TargetName;
-            var cameraEvent = GameEventFactory.CreateCameraEvent(actionType, targetName);
+            var cameraEvent = GameEventFactory.CreateCameraEvent(actionType, cameraName, targetName);
             cameraEvent.OnTerminate += () =>
             {
                 _currentCameraAction = null;

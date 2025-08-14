@@ -3,78 +3,75 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GamePlayManager : MonoBehaviour, IAsyncLoadObject
+namespace AD.GamePlay
 {
-    /****** Public Members ******/
-
-    public static GamePlayManager Instance { get; private set; }
-    public bool IsCutscenePlaying { get; private set; }
-    public bool IsLoaded { get; private set; }
-
-    public void PlayCutscene() { StartCoroutine(CutsceneCoroutine()); }
-
-    public void InitializePlayerCharacter(Transform player, PlayerAvatarType character)
+    public class GamePlayManager : MonoBehaviour, IAsyncLoadObject
     {
-        CharacterManager.Instance.SetPlayerCharacter(player, character);
-    }
+        /****** Public Members ******/
 
-    public void ControlPlayerCharacter(IReadOnlyControlInfo controlInfo)
-    {
-        CharacterManager.Instance.ExecutePlayerControl(controlInfo);
-    }
+        public static GamePlayManager Instance { get; private set; }
+        public bool IsCutscenePlaying { get; private set; }
+        public bool IsLoaded { get; private set; }
 
-    public void ProcessGameOver()
-    {
-        GameEventManager.Instance.Submit(GameEventFactory.CreateCommonEvent(CommonEventType.GameOver));
-    }
+        public void PlayCutscene() { }
 
-    public void RegisterGamePlayInitializer(IGamePlayInitializer poolingSystem)
-    {
-        Debug.Assert(false == _initializerList.Contains(poolingSystem), "The pooling system is already Registered.");
-
-        _initializerList.Add(poolingSystem);
-    }
-
-
-    /****** Private Members ******/
-
-    private readonly List<IGamePlayInitializer> _initializerList = new List<IGamePlayInitializer>();
-
-
-    private void Awake()
-    {
-        if(Instance == null)
+        public void InitializePlayerCharacter(Transform player, PlayerAvatarType character)
         {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    private void Start()
-    {
-        StartCoroutine(AsyncWaitForInitialization());
-    }
-
-    private IEnumerator AsyncWaitForInitialization()
-    {
-        yield return null; // Wait for initializers to be registered
-
-        foreach (var initializer in _initializerList)
-        {
-            yield return new WaitUntil(()=> initializer.IsInitialized);
+            ActorManager.Instance.SetPlayerCharacter(player, character);
         }
 
-        IsLoaded = true;
-    }
+        public void ControlPlayerCharacter(IReadOnlyControlInfo controlInfo)
+        {
+            ActorManager.Instance.ExecutePlayerControl(controlInfo);
+        }
 
-    private IEnumerator CutsceneCoroutine()
-    {
-        IsCutscenePlaying = true;
-        Debug.Log("Playing cutscene");
-        yield return new WaitForSeconds(3);
-        IsCutscenePlaying = false;
+        public void RegisterGamePlayInitializer(IGamePlayInitializer poolingSystem)
+        {
+            Debug.Assert(false == _initializerList.Contains(poolingSystem), "The pooling system is already Registered.");
+
+            _initializerList.Add(poolingSystem);
+        }
+
+        public void RegisterStageActors(IActor[] actors)
+        {
+            Debug.Assert(null != actors, "Cannot register null actor array.");
+
+            ActorManager.Instance.RegisterActors(actors);
+        }
+
+
+        /****** Private Members ******/
+
+        private readonly List<IGamePlayInitializer> _initializerList = new List<IGamePlayInitializer>();
+
+
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        private void Start()
+        {
+            StartCoroutine(AsyncWaitForInitialization());
+        }
+
+        private IEnumerator AsyncWaitForInitialization()
+        {
+            yield return null; // Wait for initializers to be registered
+
+            foreach (var initializer in _initializerList)
+            {
+                yield return new WaitUntil(() => initializer.IsInitialized);
+            }
+
+            IsLoaded = true;
+        }
     }
 }

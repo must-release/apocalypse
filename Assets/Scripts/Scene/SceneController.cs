@@ -46,12 +46,12 @@ public class SceneController : MonoBehaviour
         _currentScene.ActivateScene();
     }
 
-    public async UniTask AsyncExecuteStageTransition()
+    public async UniTask ExecuteStageTransitionAsync()
     {
         if (_currentScene is StageScene stageScene)
         {
             stageScene.StopPlayerPositionMonitoring();
-            await stageScene.AsyncUpdateStagesForTransition();
+            await stageScene.UpdateStagesForTransitionAsync();
             stageScene.ActivateScene();
         }
         else
@@ -72,11 +72,26 @@ public class SceneController : MonoBehaviour
         }
     }
 
-    public AD.Camera.ICamera[] GetCurrentStageCameras()
+    public AD.Camera.ICamera[] GetCurrentSceneCameras()
     {
         Debug.Assert(null != _currentScene, "Current scene is not initialized.");
 
         return _currentScene.GetSceneCameras();
+    }
+
+    public AD.GamePlay.IActor[] GetCurrentStageActors()
+    {
+        Debug.Assert(null != _currentScene, "Current scene is not initialized.");
+
+        if (_currentScene is StageScene stageScene)
+        {
+            return stageScene.GetCurrentStageActors();
+        }
+        else
+        {
+            Logger.Write(LogCategory.GameScene, "Current scene is not a StageScene. Cannot get stage actors.", LogLevel.Warning, true);
+            return new AD.GamePlay.IActor[0];
+        }
     }
 
 

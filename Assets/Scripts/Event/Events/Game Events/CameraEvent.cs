@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using AD.Camera;
 using Cysharp.Threading.Tasks;
+using System.Threading;
+using System;
 
 /*
  * Camera Control Event
@@ -25,12 +27,16 @@ public class CameraEvent : GameEventBase<CameraEventInfo>
         Debug.Assert(null != Info, "Event info is not initialized");
 
         base.PlayEvent();
-        PlayEventAsync().Forget();
+
+        _cancellationTokenSource = new CancellationTokenSource();
+        PlayEventAsync(_cancellationTokenSource.Token).Forget();
     }
 
     public override void TerminateEvent()
     {
         Debug.Assert(null != Info, "Event info is not set before termination");
+
+        _cancellationTokenSource.Cancel();
 
         Info.DestroyInfo();
         Info = null;
@@ -43,31 +49,39 @@ public class CameraEvent : GameEventBase<CameraEventInfo>
 
     /****** Private Members ******/
 
-    private async UniTask PlayEventAsync()
+    private CancellationTokenSource _cancellationTokenSource;
+
+    private async UniTask PlayEventAsync(CancellationToken cancellationToken)
     {
         Debug.Assert(null != Info, "Event info is not initialized");
 
-        switch (Info.ActionType)
+        try
         {
-            case CameraActionType.SwitchToCamera:
-                await SwitchToCameraAsync();
-                break;
-            default:
-                Logger.Write(LogCategory.Event, $"Unsupported camera action type: {Info.ActionType}", LogLevel.Error, true);
-                break;
+            switch (Info.ActionType)
+            {
+                case CameraActionType.SwitchToCamera:
+                    await SwitchToCameraAsync(cancellationToken);
+                    break;
+                default:
+                    Logger.Write(LogCategory.Event, $"Unsupported camera action type: {Info.ActionType}", LogLevel.Error, true);
+                    break;
+            }
         }
-
+        catch (OperationCanceledException)
+        {
+            Logger.Write(LogCategory.Event, "Camera event was cancelled", LogLevel.Error, true);
+        }
+        
         TerminateEvent();
     }
 
-    private async UniTask SwitchToCameraAsync()
+    private async UniTask SwitchToCameraAsync(CancellationToken cancellationToken)
     {
         Debug.Assert(null != Info, "Event info is not initialized");
         Debug.Assert(null != CameraManager.Instance, "CameraManager is not initialized");
 
         CameraManager.Instance.DeactivateCamera();
-        CameraManager.Instance.SetCurrentCameraByName(Info.TargetName);
-
-        await CameraManager.Instance.ActivateCameraAsync();
+        CameraManager.Instance.SetCurrentCameraByName(Info.CameraName);
+        await CameraManager.Instance.ActivateCameraAsync(cancellationToken: cancellationToken);
     }
 }

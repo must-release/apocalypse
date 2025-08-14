@@ -57,9 +57,9 @@ public class StageTransitionEvent : GameEventBase<StageTransitionEventInfo>
         PlayerManager.Instance.GetPlayerData(out ChapterType _, out int _, out PlayerAvatarType playerType);
         PlayerManager.Instance.SetPlayerData(Info.TargetChapter, Info.TargetStage, playerType);
 
-        await SceneController.Instance.AsyncExecuteStageTransition();
+        await SceneController.Instance.ExecuteStageTransitionAsync();
 
-        var newSceneCameras = SceneController.Instance.GetCurrentStageCameras();
+        var newSceneCameras = SceneController.Instance.GetCurrentSceneCameras();
         Transform player = SceneController.Instance.PlayerTransform;
 
         if (0 < newSceneCameras.Length)

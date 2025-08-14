@@ -9,14 +9,16 @@ public class CameraEventInfo : GameEventInfo
     /****** Public Members ******/
 
     public CameraActionType ActionType  => _actionType;
+    public string           CameraName  => _cameraName;
     public string           TargetName  => _targetName;
 
-    public void Initialize(CameraActionType actionType, string targetName = null)
+    public void Initialize(CameraActionType actionType, string cameraName, string targetName = null)
     {
-        _actionType = actionType;
-        _targetName = targetName;
-        IsInitialized = true;
-        IsRuntimeInstance = true;
+        _actionType         = actionType;
+        _cameraName         = cameraName;
+        _targetName         = targetName;
+        IsInitialized       = true;
+        IsRuntimeInstance   = true;
     }
 
     public override GameEventInfo Clone()
@@ -45,5 +47,6 @@ public class CameraEventInfo : GameEventInfo
     /****** Private Members ******/
 
     [SerializeField] private CameraActionType   _actionType = CameraActionType.SwitchToCamera;
-    [SerializeField] private string             _targetName = "";
+    [SerializeField] private string             _cameraName;
+    [SerializeField] private string             _targetName;
 }

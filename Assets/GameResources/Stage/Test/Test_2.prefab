@@ -383,6 +383,7 @@ Transform:
   - {fileID: 4428750991085027647}
   - {fileID: 824672402049665793}
   - {fileID: 2259525296612318824}
+  - {fileID: 7905811737268941435}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!156049354 &2281989356205017323
@@ -413,6 +414,7 @@ MonoBehaviour:
   _stageIndex: 2
   _canGoBackToPreviousStage: 1
   _camerasContainer: {fileID: 2259525296612318824}
+  _actorsContainer: {fileID: 7905811737268941435}
 --- !u!1 &3669951038392467804
 GameObject:
   m_ObjectHideFlags: 0
@@ -2230,6 +2232,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _size: {x: 35, y: 15}
   _offset: {x: 18.5, y: 4.5}
+--- !u!1 &7279389492420579485
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7905811737268941435}
+  m_Layer: 0
+  m_Name: Actors
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7905811737268941435
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7279389492420579485}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 300427964589254125}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7886480477600562693
 GameObject:
   m_ObjectHideFlags: 0

@@ -250,10 +250,10 @@ public static class GameEventFactory
         return evt;
     }
 
-    public static IGameEvent CreateCameraEvent(AD.Camera.CameraActionType actionType, string targetName = null)
+    public static IGameEvent CreateCameraEvent(AD.Camera.CameraActionType actionType, string cameraName, string targetName = null)
     {
         var info = ScriptableObject.CreateInstance<CameraEventInfo>();
-        info.Initialize(actionType, targetName);
+        info.Initialize(actionType, cameraName, targetName);
 
         var evt = GameEventPool<CameraEvent, CameraEventInfo>.Get(EventHost, $"CameraEvent_{actionType}_{targetName}");
         evt.Initialize(info);

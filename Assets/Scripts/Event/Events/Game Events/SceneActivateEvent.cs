@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using AD.Camera;
+using AD.GamePlay;
 
 /*
  * Activate loaded scene
@@ -81,7 +82,7 @@ public class SceneActivateEvent : GameEventBase<SceneActivateEventInfo>
             GamePlayManager.Instance.InitializePlayerCharacter(player, character);
         }
 
-        var sceneCameras = SceneController.Instance.GetCurrentStageCameras();
+        var sceneCameras = SceneController.Instance.GetCurrentSceneCameras();
         if (0 < sceneCameras.Length)
         {
             CameraManager.Instance.RegisterCameras(sceneCameras);
@@ -95,6 +96,12 @@ public class SceneActivateEvent : GameEventBase<SceneActivateEventInfo>
             {
                 CameraManager.Instance.SetCurrentCamera(sceneCameras[0]);
             }
+        }
+
+        var actors = SceneController.Instance.GetCurrentStageActors();
+        if (0 < actors.Length)
+        {
+            GamePlayManager.Instance.RegisterStageActors(actors);
         }
 
         SceneController.Instance.ActivateGameScene();

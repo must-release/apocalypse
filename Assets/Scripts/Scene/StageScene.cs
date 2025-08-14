@@ -21,7 +21,7 @@ public class StageScene : MonoBehaviour, IScene
         PlaceStageObjects();
     }
 
-    public async UniTask AsyncUpdateStagesForTransition()
+    public async UniTask UpdateStagesForTransitionAsync()
     {
         Debug.Assert(null != _currentStage, "Current stage is not initialized.");
 
@@ -103,6 +103,12 @@ public class StageScene : MonoBehaviour, IScene
         return _currentStage.GetStageCameras();
     }
 
+    public AD.GamePlay.IActor[] GetCurrentStageActors()
+    {
+        Debug.Assert(null != _currentStage, "Current stage is not initialized.");
+
+        return _currentStage.GetStageActors();
+    }
 
     /****** Private Members ******/
 

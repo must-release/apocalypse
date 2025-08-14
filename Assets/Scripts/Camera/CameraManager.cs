@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using Unity.Cinemachine;
+using System.Threading;
 
 namespace AD.Camera
 {
@@ -76,13 +77,13 @@ namespace AD.Camera
             CurrentCamera.ActivateCamera(target);
         }
 
-        public async UniTask ActivateCameraAsync(Transform target = null)
+        public async UniTask ActivateCameraAsync(Transform target = null, CancellationToken cancellationToken = default)
         {
             Debug.Assert(null != CurrentCamera, "No camera is registered.");
 
             ActivateCamera(target);
 
-            await UniTask.WaitWhile(() => _cinemachineBrain.IsBlending);
+            await UniTask.WaitWhile(() => _cinemachineBrain.IsBlending, cancellationToken: cancellationToken);
         }
 
         public void DeactivateCamera()
