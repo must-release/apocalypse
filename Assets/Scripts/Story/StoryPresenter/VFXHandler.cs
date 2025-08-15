@@ -33,6 +33,9 @@ namespace AD.Story
                 case StoryVFX.VFXType.ScreenFadeOut:
                     screenEffectType = ScreenEffect.FadeOut;
                     break;
+                default:
+                    Debug.Assert(false, "Undefined value assigned in VFXType.");
+                    break;
             }
 
             IGameEvent screenEffectEvent = GameEventFactory.CreateScreenEffectEvent(screenEffectType, currentVFX.Duration);
