@@ -9,6 +9,7 @@ namespace AD.Story
         /****** Public Members ******/
 
         public StoryEntry.EntryType PresentingEntryType => StoryEntry.EntryType.CameraAction;
+        public StoryEntry CurrentEntry => _currentCameraAction;
         public event Action<IStoryEntryHandler> OnStoryEntryComplete;
 
         public void Initialize(StoryHandleContext context)

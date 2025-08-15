@@ -132,6 +132,11 @@ namespace AD.Story
             Debug.Assert(_activeStoryHandlers.Contains(handler), $"Handler {handler} is not active");
 
             _activeStoryHandlers.Remove(handler);
+
+            if (true == handler.CurrentEntry.IsAutoProgress)
+            {
+                PlayNextScript();
+            }
         }
 
         private IEnumerator StartStoryCoroutine(string storyInfo, int readBlockCount, int readEntryCount)

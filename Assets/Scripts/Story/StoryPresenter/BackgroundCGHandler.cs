@@ -10,6 +10,7 @@ namespace AD.Story
         /****** Public Members ******/
 
         public StoryEntry.EntryType PresentingEntryType => StoryEntry.EntryType.BackgroundCG;
+        public StoryEntry CurrentEntry => _currentBackgroundCG;
         public event Action<IStoryEntryHandler> OnStoryEntryComplete;
 
         public void Initialize(StoryHandleContext context)

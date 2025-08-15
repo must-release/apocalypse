@@ -12,6 +12,7 @@ namespace AD.Story
         /****** Public Members ******/
 
         public StoryEntry.EntryType PresentingEntryType => StoryEntry.EntryType.CharacterCG;
+        public StoryEntry CurrentEntry => _currentCharacterCG;
         public event Action<IStoryEntryHandler> OnStoryEntryComplete; // Changed to IStoryEntryHandler
 
         public void Initialize(StoryHandleContext context)
@@ -72,6 +73,7 @@ namespace AD.Story
 
         private StoryHandleContext _context;
         private StoryCharacterCG _currentCharacterCG;
+        
         private CharacterCGModel _model;
         private CharacterCGHolder  _characterCGHolder;
         

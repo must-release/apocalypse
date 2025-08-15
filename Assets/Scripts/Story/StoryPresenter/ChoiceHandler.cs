@@ -11,6 +11,7 @@ namespace AD.Story
         /****** Public Members ******/
 
         public StoryEntry.EntryType PresentingEntryType => StoryEntry.EntryType.Choice;
+        public StoryEntry CurrentEntry => _currentChoice;
         public event Action<IStoryEntryHandler> OnStoryEntryComplete;
 
         public void Initialize(StoryHandleContext context)
@@ -48,7 +49,7 @@ namespace AD.Story
             _selectedOption = null;
             OnStoryEntryComplete.Invoke(this);
 
-            _context.Controller.PlayNextScript();
+            // _context.Controller.PlayNextScript();
         }
 
         /****** Private Members ******/

@@ -10,6 +10,7 @@ namespace AD.Story
         /****** Public Members ******/
 
         public StoryEntry.EntryType PresentingEntryType => StoryEntry.EntryType.Dialogue;
+        public StoryEntry CurrentEntry => _currentDialogue;
         public event Action<IStoryEntryHandler> OnStoryEntryComplete;
 
         public void Initialize(StoryHandleContext context)
@@ -56,8 +57,8 @@ namespace AD.Story
         /****** Private Members ******/
 
         private StoryHandleContext      _context;
-        private DialogueBox             _dialogueBox;
         private StoryDialogue           _currentDialogue;
+        private DialogueBox _dialogueBox;
         private CancellationTokenSource _cancellationTokenSource;
 
         private float CalculateTextInterval(StoryDialogue.TextSpeedType textSpeed)
@@ -67,7 +68,7 @@ namespace AD.Story
                 case StoryDialogue.TextSpeedType.Slow:
                     return 0.05f;
                 case StoryDialogue.TextSpeedType.Default:
-                    return 0.03f;
+                    return 1f;
                 case StoryDialogue.TextSpeedType.Fast:
                     return 0.01f;
                 default:

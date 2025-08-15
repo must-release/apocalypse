@@ -9,6 +9,7 @@ namespace AD.Story
         /****** Public Members ******/
 
         public StoryEntry.EntryType PresentingEntryType => StoryEntry.EntryType.BGM;
+        public StoryEntry CurrentEntry => _currentBGM;
         public event Action<IStoryEntryHandler> OnStoryEntryComplete;
 
         public void Initialize(StoryHandleContext context)
@@ -22,26 +23,26 @@ namespace AD.Story
             Debug.Assert(storyEntry is StoryBGM, $"{storyEntry} is not a StoryBGM");
             Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in BGMHandler.");
 
-            StoryBGM currentBGM = storyEntry as StoryBGM;
+            _currentBGM = storyEntry as StoryBGM;
 
             IGameEvent audioEvent;
 
-            switch (currentBGM.Action)
+            switch (_currentBGM.Action)
             {
                 case StoryBGM.BGMAction.Start:
-                    audioEvent = GameEventFactory.CreateBGMEvent(shouldStop: false, currentBGM.BGMName);
+                    audioEvent = GameEventFactory.CreateBGMEvent(shouldStop: false, _currentBGM.BGMName);
                     break;
                 case StoryBGM.BGMAction.Stop:
                     audioEvent = GameEventFactory.CreateBGMEvent(shouldStop: true);
                     break;
                 default:
-                    Logger.Write(LogCategory.GamePlay, $"Unsupported BGMAction: {currentBGM.Action}", LogLevel.Error);
+                    Logger.Write(LogCategory.GamePlay, $"Unsupported BGMAction: {_currentBGM.Action}", LogLevel.Error);
                     OnStoryEntryComplete.Invoke(this);
                     return UniTask.CompletedTask;
             }
 
             GameEventManager.Instance.Submit(audioEvent);
-            
+
             OnStoryEntryComplete.Invoke(this);
 
             return UniTask.CompletedTask;
@@ -58,5 +59,6 @@ namespace AD.Story
         /****** Private Members ******/
 
         private StoryHandleContext _context;
+        private StoryBGM _currentBGM;
     }
 }
