@@ -363,9 +363,9 @@ namespace StoryEditor.Controllers
             {
                 case CameraActionType.SwitchToCamera:
                 case CameraActionType.SetPriority:
-                    if (string.IsNullOrWhiteSpace(cameraAction.TargetCamera))
+                    if (string.IsNullOrWhiteSpace(cameraAction.CameraName))
                     {
-                        result.AddError($"{entryName}: {cameraAction.ActionType} requires Target Camera");
+                        result.AddError($"{entryName}: {cameraAction.ActionType} requires Camera Name");
                     }
                     break;
 

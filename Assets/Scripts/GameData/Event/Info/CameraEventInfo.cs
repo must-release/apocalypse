@@ -42,7 +42,7 @@ public class CameraEventInfo : GameEventInfo
 
     protected override void OnValidate()
     {
-
+        IsInitialized = true;
     }
 
 

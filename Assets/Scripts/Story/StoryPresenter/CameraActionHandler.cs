@@ -22,7 +22,7 @@ namespace AD.Story
             _currentCameraAction = storyEntry as StoryCameraAction;
 
             var actionType = _currentCameraAction.ActionType;
-            var cameraName = _currentCameraAction.TargetCamera;
+            var cameraName = _currentCameraAction.CameraName;
             var targetName = _currentCameraAction.TargetName;
             var isTargetPlayer = _currentCameraAction.IsTargetPlayer;
             var cameraEvent = GameEventFactory.CreateCameraEvent(actionType, cameraName, isTargetPlayer, targetName);

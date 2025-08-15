@@ -39,8 +39,6 @@ namespace AD.Camera
             VirtualCamera.Priority = 0;
             VirtualCamera.Follow = null;
             VirtualCamera.LookAt = null;
-
-            Logger.Write(LogCategory.GameScene, "FollowCamera deactivated", LogLevel.Log, true);
         }
 
         public void SetCameraTarget(Transform target)

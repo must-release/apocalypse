@@ -219,10 +219,9 @@ namespace StoryEditor
             var newCameraAction = new StoryCameraAction
             {
                 ActionType = CameraActionType.SwitchToCamera,
-                TargetCamera = "",
+                CameraName = "",
                 Duration = 1.0f,
-                Priority = 10,
-                WaitForCompletion = true
+                Priority = 10
             };
             var editorEntry = new EditorStoryEntry(newCameraAction);
             _editorEntries.Add(editorEntry);

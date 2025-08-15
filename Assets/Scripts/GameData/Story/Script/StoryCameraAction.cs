@@ -15,8 +15,8 @@ namespace AD.Story
         [XmlAttribute("ActionType")]
         public CameraActionType ActionType;
 
-        [XmlAttribute("TargetCamera")]
-        public string TargetCamera;
+        [XmlAttribute("CameraName")]
+        public string CameraName;
 
         [XmlAttribute("IsTargetPlayer")]
         public bool IsTargetPlayer;
@@ -48,7 +48,5 @@ namespace AD.Story
         [XmlAttribute("EaseType")]
         public string EaseType = "Linear";
 
-        [XmlAttribute("WaitForCompletion")]
-        public bool WaitForCompletion = true;
     }
 }

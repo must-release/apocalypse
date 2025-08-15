@@ -12,11 +12,9 @@ public class ActorManager : MonoBehaviour
     public void RegisterActor(IActor actor)
     {
         Debug.Assert(null != actor, "Cannot register null actor.");
+        Debug.Assert(false ==_registeredActors.Contains(actor), $"Actor {actor.ActorName} is already registered.");
 
-        if (false == _registeredActors.Contains(actor))
-        {
-            _registeredActors.Add(actor);
-        }
+        _registeredActors.Add(actor);
     }
 
     public void RegisterActors(IActor[] actors)
