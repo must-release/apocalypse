@@ -19,13 +19,13 @@ public class ScreenEffectEvent : GameEventBase<ScreenEffectEventInfo>
     {
         Debug.Assert(null != activeEventTypeCounts, "activeEventTypeCounts is null.");
 
-        foreach (GameEventType eventType in activeEventTypeCounts.Keys)
-        {
-            if (GameEventType.Story == eventType || GameEventType.Cutscene == eventType)
-                continue;
+        // foreach (GameEventType eventType in activeEventTypeCounts.Keys)
+        // {
+        //     if (GameEventType.Story == eventType || GameEventType.Cutscene == eventType)
+        //         continue;
 
-            return false;
-        }
+        //     return false;
+        // }
 
         return true;
     }
@@ -70,10 +70,10 @@ public class ScreenEffectEvent : GameEventBase<ScreenEffectEventInfo>
         switch (Info.ScreenEffectType)
         {
             case ScreenEffect.FadeIn:
-                _eventCoroutine = screenEffecter.FadeIn();
+                _eventCoroutine = screenEffecter.FadeIn(Info.Duration);
                 break;
             case ScreenEffect.FadeOut:
-                _eventCoroutine = screenEffecter.FadeOut(); 
+                _eventCoroutine = screenEffecter.FadeOut(Info.Duration);
                 break;
         }
 

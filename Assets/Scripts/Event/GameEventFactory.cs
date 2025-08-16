@@ -146,10 +146,10 @@ public static class GameEventFactory
         return CreateSceneLoadEvent(dto.LoadingScene);
     }
 
-    public static IGameEvent CreateScreenEffectEvent(ScreenEffect screenEffectType)
+    public static IGameEvent CreateScreenEffectEvent(ScreenEffect screenEffectType, float duration)
     {
         var info = ScriptableObject.CreateInstance<ScreenEffectEventInfo>();
-        info.Initialize(screenEffectType);
+        info.Initialize(screenEffectType, duration);
 
         var evt = GameEventPool<ScreenEffectEvent, ScreenEffectEventInfo>.Get(EventHost, $"ScreenEffectEvent_{screenEffectType}");
         evt.Initialize(info);

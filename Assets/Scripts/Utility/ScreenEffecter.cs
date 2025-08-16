@@ -11,7 +11,6 @@ public class ScreenEffecter : MonoBehaviour, IUtilityTool
     /****** Private fields ******/
     private Canvas effectCanvas;
     private Image fadeImage;
-    private float fadeDuration = 1.0f;
     private Color fadeColor = Color.black;
 
     private void Awake()
@@ -35,26 +34,26 @@ public class ScreenEffecter : MonoBehaviour, IUtilityTool
         StopAllCoroutines();
     }
 
-    public Coroutine FadeIn()
+    public Coroutine FadeIn(float duration)
     {
-        return StartCoroutine(StartFade(1, 0));
+        return StartCoroutine(StartFade(1, 0, duration));
     }
 
-    public Coroutine FadeOut()
+    public Coroutine FadeOut(float duration)
     {
-        return StartCoroutine(StartFade(0, 1));
+        return StartCoroutine(StartFade(0, 1, duration));
     }
 
-    private IEnumerator StartFade(float startAlpha, float endAlpha)
+    private IEnumerator StartFade(float startAlpha, float endAlpha, float duration)
     {
         fadeImage.gameObject.SetActive(true);
         float elapsedTime = 0.0f;
         fadeImage.color = new Color(fadeColor.r, fadeColor.g, fadeColor.b, startAlpha);
 
-        while (elapsedTime < fadeDuration)
+        while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
-            float alpha = Mathf.Lerp(startAlpha, endAlpha, elapsedTime / fadeDuration);
+            float alpha = Mathf.Lerp(startAlpha, endAlpha, elapsedTime / duration);
             fadeImage.color = new Color(fadeColor.r, fadeColor.g, fadeColor.b, alpha);
             yield return null;
         }
