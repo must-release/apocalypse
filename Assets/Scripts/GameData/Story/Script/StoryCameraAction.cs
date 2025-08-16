@@ -1,22 +1,12 @@
 using System.Xml.Serialization;
 using UnityEngine;
+using AD.Camera;
 
 namespace AD.Story
 {
     [System.Serializable]
     public class StoryCameraAction : StoryEntry
     {
-        public enum CameraActionType
-        {
-            SwitchToCamera,       
-            FollowTarget,         
-            SetPriority,           
-            Zoom,                  
-            MoveTo,                 
-            Shake,                 
-            ResetToDefault
-        }
-
         public StoryCameraAction() 
         {
             Type = EntryType.CameraAction;
@@ -25,8 +15,11 @@ namespace AD.Story
         [XmlAttribute("ActionType")]
         public CameraActionType ActionType;
 
-        [XmlAttribute("TargetCamera")]
-        public string TargetCamera;
+        [XmlAttribute("CameraName")]
+        public string CameraName;
+
+        [XmlAttribute("IsTargetPlayer")]
+        public bool IsTargetPlayer;
 
         [XmlAttribute("TargetName")]
         public string TargetName;
@@ -55,7 +48,5 @@ namespace AD.Story
         [XmlAttribute("EaseType")]
         public string EaseType = "Linear";
 
-        [XmlAttribute("WaitForCompletion")]
-        public bool WaitForCompletion = true;
     }
 }

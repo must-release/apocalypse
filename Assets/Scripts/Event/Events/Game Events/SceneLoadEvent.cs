@@ -64,7 +64,7 @@ public class SceneLoadEvent : GameEventBase<SceneLoadEventInfo>
     {
         yield return new WaitUntil(() => SceneController.Instance.CanMoveToNextScene);
 
-        CameraManager.Instance.ClearCameras();
+        AD.Camera.CameraManager.Instance.ClearCameras();
         UIController.Instance.TurnEverySubUIOff();
         SceneController.Instance.LoadGameScene(Info.LoadingScene);
 

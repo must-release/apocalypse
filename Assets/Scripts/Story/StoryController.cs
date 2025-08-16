@@ -101,16 +101,13 @@ namespace AD.Story
 
         private void Start()
         {
-            var canvas = GetComponent<Canvas>();
-            canvas.worldCamera = Camera.main;
-
             _storyUIView = UIController.Instance.GetUIView(BaseUI.Story) as StoryUIView;
             Debug.Assert(null != _storyUIView, "StoryUIView is not assigned in StoryController.");
 
             // Initialize StoryHandleContext here
             _storyContext = new StoryHandleContext(this, _storyUIView);
 
-            InitializeStoryHandlers(); // Renamed method
+            InitializeStoryHandlers();
         }
 
         private void InitializeStoryHandlers()

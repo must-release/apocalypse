@@ -58,7 +58,7 @@ namespace StoryEditor
                 StoryBackgroundCG backgroundCG => $"BackgroundCG: {backgroundCG.Chapter} - {(string.IsNullOrEmpty(backgroundCG.ImageName) ? "No Image" : backgroundCG.ImageName)}",
                 StoryBGM bgm => $"BGM {bgm.Action}: {(StoryBGM.BGMAction.Start == bgm.Action ? (string.IsNullOrEmpty(bgm.BGMName) ? "No BGM" : bgm.BGMName) : "")} (Fade: {bgm.FadeDuration}s{(StoryBGM.BGMAction.Start == bgm.Action ? $", Loop: {bgm.IsLoop}" : "")})",
                 StorySFX sfx => $"SFX: {(string.IsNullOrEmpty(sfx.SFXName) ? "No SFX" : sfx.SFXName)}",
-                StoryCameraAction cameraAction => $"Camera: {cameraAction.ActionType} - {(string.IsNullOrEmpty(cameraAction.TargetCamera) ? "No Camera" : cameraAction.TargetCamera)} ({cameraAction.Duration}s)",
+                StoryCameraAction cameraAction => $"Camera: {cameraAction.ActionType} - {(string.IsNullOrEmpty(cameraAction.CameraName) ? "No Camera" : cameraAction.CameraName)} ({cameraAction.Duration}s)",
                 _ => "Unknown Entry"
             };
         }

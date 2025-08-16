@@ -1,7 +1,10 @@
 using UnityEngine;
 using UnityEditor;
 using AD.Story;
+using AD.Camera;
+using AD.GamePlay;
 using Unity.Cinemachine;
+using System.Linq;
 
 namespace StoryEditor.UI
 {
@@ -21,7 +24,8 @@ namespace StoryEditor.UI
         /****** Private Members ******/
 
         private GameObject _stagePrefab;
-        private string[] _virtualCameraNames;
+        private string[] _gameplayCameraNames;
+        private string[] _actorNames;
 
         private void DrawCameraActionEditor(StoryCameraAction cameraAction)
         {
@@ -37,43 +41,40 @@ namespace StoryEditor.UI
             // Draw fields based on action type
             switch (cameraAction.ActionType)
             {
-                case StoryCameraAction.CameraActionType.SwitchToCamera:
-                    DrawTargetCameraField(cameraAction);
-                    break;
-
-                case StoryCameraAction.CameraActionType.FollowTarget:
+                case CameraActionType.SwitchToCamera:
+                    DrawCameraNameField(cameraAction);
+                    DrawIsTargetPlayerField(cameraAction);
                     DrawTargetNameField(cameraAction);
                     break;
 
-                case StoryCameraAction.CameraActionType.SetPriority:
-                    DrawTargetCameraField(cameraAction);
+                case CameraActionType.FollowTarget:
+                    DrawIsTargetPlayerField(cameraAction);
+                    DrawTargetNameField(cameraAction);
+                    break;
+
+                case CameraActionType.SetPriority:
+                    DrawCameraNameField(cameraAction);
                     DrawPriorityField(cameraAction);
                     break;
 
-                case StoryCameraAction.CameraActionType.Zoom:
+                case CameraActionType.Zoom:
                     DrawFieldOfViewField(cameraAction);
                     DrawDurationField(cameraAction);
                     DrawEaseTypeField(cameraAction);
                     break;
 
-                case StoryCameraAction.CameraActionType.MoveTo:
+                case CameraActionType.MoveTo:
                     DrawPositionFields(cameraAction);
                     DrawDurationField(cameraAction);
                     DrawEaseTypeField(cameraAction);
                     break;
 
-                case StoryCameraAction.CameraActionType.Shake:
+                case CameraActionType.Shake:
                     DrawIntensityField(cameraAction);
-                    DrawDurationField(cameraAction);
-                    break;
-
-                case StoryCameraAction.CameraActionType.ResetToDefault:
                     DrawDurationField(cameraAction);
                     break;
             }
 
-            EditorGUILayout.Space();
-            DrawWaitForCompletionField(cameraAction);
         }
 
         private void DrawActionTypeField(StoryCameraAction cameraAction)
@@ -81,7 +82,7 @@ namespace StoryEditor.UI
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Action Type:", EditorStyles.boldLabel, GUILayout.Width(120));
             
-            var newActionType = (StoryCameraAction.CameraActionType)EditorGUILayout.EnumPopup(cameraAction.ActionType, GUILayout.Width(150));
+            var newActionType = (CameraActionType)EditorGUILayout.EnumPopup(cameraAction.ActionType, GUILayout.Width(150));
             if (newActionType != cameraAction.ActionType)
             {
                 cameraAction.ActionType = newActionType;
@@ -90,32 +91,32 @@ namespace StoryEditor.UI
             EditorGUILayout.EndHorizontal();
         }
 
-        private void DrawTargetCameraField(StoryCameraAction cameraAction)
+        private void DrawCameraNameField(StoryCameraAction cameraAction)
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Target Camera:", EditorStyles.boldLabel, GUILayout.Width(120));
+            EditorGUILayout.LabelField("Camera:", EditorStyles.boldLabel, GUILayout.Width(120));
             
-            if (null == _virtualCameraNames || 0 == _virtualCameraNames.Length)
+            if (null == _gameplayCameraNames || 0 == _gameplayCameraNames.Length)
             {
-                EditorGUILayout.LabelField("No Virtual Cameras found", GUILayout.Width(200));
+                EditorGUILayout.LabelField("No GamePlay Cameras found", GUILayout.Width(200));
             }
             else
             {
-                var currentIndex = System.Array.IndexOf(_virtualCameraNames, cameraAction.TargetCamera);
+                var currentIndex = System.Array.IndexOf(_gameplayCameraNames, cameraAction.CameraName);
                 if (currentIndex == -1) 
                 {
                     currentIndex = 0;
                     // 초기값이 설정되지 않았다면 첫 번째 카메라로 자동 설정
-                    if (string.IsNullOrEmpty(cameraAction.TargetCamera) && _virtualCameraNames.Length > 0)
+                    if (string.IsNullOrEmpty(cameraAction.CameraName) && _gameplayCameraNames.Length > 0)
                     {
-                        cameraAction.TargetCamera = _virtualCameraNames[0];
+                        cameraAction.CameraName = _gameplayCameraNames[0];
                     }
                 }
                 
-                var newIndex = EditorGUILayout.Popup(currentIndex, _virtualCameraNames, GUILayout.Width(200));
-                if (newIndex != currentIndex && newIndex >= 0 && newIndex < _virtualCameraNames.Length)
+                var newIndex = EditorGUILayout.Popup(currentIndex, _gameplayCameraNames, GUILayout.Width(200));
+                if (newIndex != currentIndex && newIndex >= 0 && newIndex < _gameplayCameraNames.Length)
                 {
-                    cameraAction.TargetCamera = _virtualCameraNames[newIndex];
+                    cameraAction.CameraName = _gameplayCameraNames[newIndex];
                 }
             }
             
@@ -125,14 +126,14 @@ namespace StoryEditor.UI
             {
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField("", GUILayout.Width(120));
-                EditorGUILayout.HelpBox("Select a Stage Prefab first to see available Virtual Cameras", MessageType.Warning);
+                EditorGUILayout.HelpBox("Select a Stage Prefab first to see available GamePlay Cameras", MessageType.Warning);
                 EditorGUILayout.EndHorizontal();
             }
-            else if (null == _virtualCameraNames || 0 == _virtualCameraNames.Length)
+            else if (null == _gameplayCameraNames || 0 == _gameplayCameraNames.Length)
             {
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField("", GUILayout.Width(120));
-                EditorGUILayout.HelpBox("No Virtual Cameras found in the selected Stage Prefab", MessageType.Warning);
+                EditorGUILayout.HelpBox("No GamePlay Cameras found in the selected Stage Prefab", MessageType.Warning);
                 EditorGUILayout.EndHorizontal();
             }
         }
@@ -140,14 +141,109 @@ namespace StoryEditor.UI
         private void DrawTargetNameField(StoryCameraAction cameraAction)
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Target Name:", EditorStyles.boldLabel, GUILayout.Width(120));
+            EditorGUILayout.LabelField("Target Actor:", EditorStyles.boldLabel, GUILayout.Width(120));
             
-            var newTargetName = EditorGUILayout.TextField(cameraAction.TargetName ?? "", GUILayout.Width(200));
-            if (newTargetName != cameraAction.TargetName)
+            // IsTargetPlayer가 활성화되면 UI 비활성화
+            bool wasEnabled = GUI.enabled;
+            if (cameraAction.IsTargetPlayer)
             {
-                cameraAction.TargetName = newTargetName;
+                GUI.enabled = false;
+                // IsTargetPlayer가 true일 때 TargetName을 null로 설정
+                cameraAction.TargetName = null;
             }
             
+            if (null == _actorNames || 0 == _actorNames.Length)
+            {
+                // None만 표시
+                var noneOptions = new string[] { "None" };
+                var selectedIndex = EditorGUILayout.Popup(0, noneOptions, GUILayout.Width(200));
+                if (false == cameraAction.IsTargetPlayer)
+                {
+                    cameraAction.TargetName = null;
+                }
+            }
+            else
+            {
+                // None 옵션을 첫 번째에 추가
+                var optionsWithNone = new string[_actorNames.Length + 1];
+                optionsWithNone[0] = "None";
+                System.Array.Copy(_actorNames, 0, optionsWithNone, 1, _actorNames.Length);
+                
+                int currentIndex = 0; // 기본값은 None
+                if (false == cameraAction.IsTargetPlayer && false == string.IsNullOrEmpty(cameraAction.TargetName))
+                {
+                    var actorIndex = System.Array.IndexOf(_actorNames, cameraAction.TargetName);
+                    if (actorIndex >= 0)
+                    {
+                        currentIndex = actorIndex + 1; // None이 0번이므로 +1
+                    }
+                }
+                
+                var newIndex = EditorGUILayout.Popup(currentIndex, optionsWithNone, GUILayout.Width(200));
+                if (false == cameraAction.IsTargetPlayer && newIndex != currentIndex)
+                {
+                    if (0 == newIndex)
+                    {
+                        // None 선택
+                        cameraAction.TargetName = null;
+                    }
+                    else if (newIndex >= 1 && newIndex <= _actorNames.Length)
+                    {
+                        // 액터 선택 (인덱스 조정)
+                        cameraAction.TargetName = _actorNames[newIndex - 1];
+                    }
+                }
+            }
+            
+            // GUI 활성화 상태 복원
+            GUI.enabled = wasEnabled;
+            
+            EditorGUILayout.EndHorizontal();
+            
+            if (cameraAction.IsTargetPlayer)
+            {
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("", GUILayout.Width(120));
+                EditorGUILayout.HelpBox("Target Actor is disabled when Target Player is enabled", MessageType.Info);
+                EditorGUILayout.EndHorizontal();
+            }
+            else if (null == _stagePrefab)
+            {
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("", GUILayout.Width(120));
+                EditorGUILayout.HelpBox("Select a Stage Prefab first to see available Actors", MessageType.Warning);
+                EditorGUILayout.EndHorizontal();
+            }
+            else if (null == _actorNames || 0 == _actorNames.Length)
+            {
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("", GUILayout.Width(120));
+                EditorGUILayout.HelpBox("No Actors found in the selected Stage Prefab", MessageType.Warning);
+                EditorGUILayout.EndHorizontal();
+            }
+        }
+
+        private void DrawIsTargetPlayerField(StoryCameraAction cameraAction)
+        {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Follow Player:", EditorStyles.boldLabel, GUILayout.Width(120));
+            
+            var newIsTargetPlayer = EditorGUILayout.Toggle(cameraAction.IsTargetPlayer, GUILayout.Width(50));
+            if (newIsTargetPlayer != cameraAction.IsTargetPlayer)
+            {
+                cameraAction.IsTargetPlayer = newIsTargetPlayer;
+                // IsTargetPlayer가 활성화되면 TargetName을 null로 설정
+                if (cameraAction.IsTargetPlayer)
+                {
+                    cameraAction.TargetName = null;
+                }
+            }
+            
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("", GUILayout.Width(120));
+            EditorGUILayout.HelpBox("If enabled, camera will target the player instead of a specific actor", MessageType.Info);
             EditorGUILayout.EndHorizontal();
         }
 
@@ -253,9 +349,11 @@ namespace StoryEditor.UI
             if (newStagePrefab != _stagePrefab)
             {
                 _stagePrefab = newStagePrefab;
-                // Stage Prefab이 변경되면 TargetCamera 초기화
-                cameraAction.TargetCamera = "";
+                // Stage Prefab이 변경되면 CameraName과 TargetName 초기화
+                cameraAction.CameraName = "";
+                cameraAction.TargetName = null; // None 상태로 초기화
                 UpdateVirtualCameraList();
+                UpdateActorList();
             }
             
             EditorGUILayout.EndHorizontal();
@@ -284,36 +382,43 @@ namespace StoryEditor.UI
         {
             if (null == _stagePrefab)
             {
-                _virtualCameraNames = null;
+                _gameplayCameraNames = null;
                 return;
             }
 
-            var virtualCameras = _stagePrefab.GetComponentsInChildren<CinemachineCamera>(true);
-            _virtualCameraNames = new string[virtualCameras.Length];
+            var gameplayCameras = _stagePrefab.GetComponentsInChildren<MonoBehaviour>(true)
+                .Where(component => component is AD.Camera.IGamePlayCamera)
+                .Cast<AD.Camera.IGamePlayCamera>()
+                .ToArray();
+                
+            _gameplayCameraNames = new string[gameplayCameras.Length];
             
-            for (int i = 0; i < virtualCameras.Length; i++)
+            for (int i = 0; i < gameplayCameras.Length; i++)
             {
-                _virtualCameraNames[i] = virtualCameras[i].name;
+                _gameplayCameraNames[i] = ((MonoBehaviour)gameplayCameras[i]).name;
             }
         }
 
-        private void DrawWaitForCompletionField(StoryCameraAction cameraAction)
+        private void UpdateActorList()
         {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Wait for Completion:", EditorStyles.boldLabel, GUILayout.Width(120));
-            
-            var newWaitForCompletion = EditorGUILayout.Toggle(cameraAction.WaitForCompletion, GUILayout.Width(50));
-            if (newWaitForCompletion != cameraAction.WaitForCompletion)
+            if (null == _stagePrefab)
             {
-                cameraAction.WaitForCompletion = newWaitForCompletion;
+                _actorNames = null;
+                return;
             }
+
+            var actors = _stagePrefab.GetComponentsInChildren<MonoBehaviour>(true)
+                .Where(component => component is IActor)
+                .Cast<IActor>()
+                .ToArray();
+                
+            _actorNames = new string[actors.Length];
             
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("", GUILayout.Width(120));
-            EditorGUILayout.HelpBox("If enabled, story will wait for camera action to complete before continuing", MessageType.Info);
-            EditorGUILayout.EndHorizontal();
+            for (int i = 0; i < actors.Length; i++)
+            {
+                _actorNames[i] = actors[i].ActorName;
+            }
         }
+
     }
 }

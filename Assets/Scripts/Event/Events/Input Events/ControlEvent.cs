@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
+
 
 public class ControlEvent : InputEvent, KeySettingsObserver
 {
@@ -44,7 +44,7 @@ public class ControlEvent : InputEvent, KeySettingsObserver
     public override void PlayEvent()
     {
         // Control player character according to control info
-        GamePlayManager.Instance.ControlPlayerCharacter(controlInfo);
+        AD.GamePlay.GamePlayManager.Instance.ControlPlayerCharacter(controlInfo);
 
         // Terminate pause event
         InputEventManager.Instance.TerminateInputEvent(this);
