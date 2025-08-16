@@ -51,12 +51,18 @@ namespace AD.Story
             _cancellationTokenSource?.Cancel();
             _dialogueBox.DisplayText(_currentDialogue.Text);
             OnStoryEntryComplete.Invoke(this);
-            _currentDialogue = null;
         }
+
+        public void ResetHandler()
+        {
+            _currentDialogue = null;
+            _dialogueBox = null;
+        }
+
 
         /****** Private Members ******/
 
-        private StoryHandleContext      _context;
+        private StoryHandleContext _context;
         private StoryDialogue           _currentDialogue;
         private DialogueBox _dialogueBox;
         private CancellationTokenSource _cancellationTokenSource;

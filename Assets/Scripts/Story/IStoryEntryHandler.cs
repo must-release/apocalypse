@@ -11,5 +11,6 @@ namespace AD.Story
         void Initialize(StoryHandleContext context);
         UniTask ProgressStoryEntry(StoryEntry storyEntry);
         void CompleteStoryEntry();
+        void ResetHandler();
     }
 }

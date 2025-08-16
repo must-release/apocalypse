@@ -43,6 +43,12 @@ namespace AD.Story
             _currentCameraAction = null;
         }
 
+        public void ResetHandler()
+        {
+            _context = null;
+            _currentCameraAction = null;
+        }
+
         /****** Private Members ******/
 
         private StoryHandleContext _context;

@@ -133,7 +133,10 @@ namespace AD.Story
 
             _activeStoryHandlers.Remove(handler);
 
-            if (true == handler.CurrentEntry.IsAutoProgress)
+            bool isAutoProgress = handler.CurrentEntry.IsAutoProgress;
+            // handler.ResetHandler();
+
+            if (true == isAutoProgress)
             {
                 PlayNextScript();
             }

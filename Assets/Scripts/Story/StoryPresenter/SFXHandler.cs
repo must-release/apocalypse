@@ -41,6 +41,11 @@ namespace AD.Story
             // For now, it will be empty.
         }
 
+        public void ResetHandler()
+        {
+            _currentSFX = null;
+        }
+
 
         /****** Private Members ******/
 

@@ -68,6 +68,13 @@ namespace AD.Story
             _currentCharacterCG = null;
         }
 
+        public void ResetHandler()
+        {
+            _currentCharacterCG = null;
+            _activeCGAnimationTween = null;
+            _isCompleted = false;
+        }
+
 
         /****** Private Members ******/
 

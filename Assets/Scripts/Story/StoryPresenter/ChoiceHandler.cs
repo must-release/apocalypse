@@ -52,6 +52,12 @@ namespace AD.Story
             // _context.Controller.PlayNextScript();
         }
 
+        public void ResetHandler()
+        {
+            _currentChoice = null;
+            _selectedOption = null;
+        }
+
         /****** Private Members ******/
 
         private StoryHandleContext  _context;

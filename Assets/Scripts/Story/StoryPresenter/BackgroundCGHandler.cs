@@ -61,6 +61,13 @@ namespace AD.Story
             // _currentBackgroundCG = null;
         }
 
+        public void ResetHandler()
+        {
+            _currentBackgroundCG = null;
+            _activeCGAnimationTween = null;
+            _isCompleted = false;
+        }
+
 
         /****** Private Members ******/
 

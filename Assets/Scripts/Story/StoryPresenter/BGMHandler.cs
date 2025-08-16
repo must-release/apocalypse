@@ -55,6 +55,11 @@ namespace AD.Story
             // For now, it will be empty.
         }
 
+        public void ResetHandler()
+        {
+            _currentBGM = null;
+        }
+
 
         /****** Private Members ******/
 
