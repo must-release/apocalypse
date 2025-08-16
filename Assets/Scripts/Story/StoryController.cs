@@ -54,8 +54,8 @@ namespace AD.Story
 
             if (_storyHandlers.TryGetValue(entry.Type, out IStoryEntryHandler handler))
             {
-                handler.ProgressStoryEntry(entry);
                 _activeStoryHandlers.Add(handler);
+                handler.ProgressStoryEntry(entry);
             }
             else
             {
@@ -78,7 +78,7 @@ namespace AD.Story
 
         /****** Private Menbers ******/
 
-        [SerializeField] private Transform _storyPresentersTransform;
+        [SerializeField] private Transform _storyHandlersTransform;
 
         private StoryUIView _storyUIView;
         private StoryHandleContext _storyContext;
@@ -87,7 +87,7 @@ namespace AD.Story
 
         public void Awake()
         {
-            Debug.Assert(null != _storyPresentersTransform, "Story Presenters are not assigned in the editor.");
+            Debug.Assert(null != _storyHandlersTransform, "Story Handlers are not assigned in the editor.");
 
             if (Instance == null)
             {
@@ -112,7 +112,7 @@ namespace AD.Story
 
         private void InitializeStoryHandlers()
         {
-            var storyHandlers = _storyPresentersTransform.GetComponents<IStoryEntryHandler>();
+            var storyHandlers = _storyHandlersTransform.GetComponents<IStoryEntryHandler>();
             Debug.Assert(storyHandlers.Length > 0, "No Story Handlers found in StoryController.");
 
             foreach (var handler in storyHandlers)
