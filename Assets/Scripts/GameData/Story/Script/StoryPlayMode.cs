@@ -1,4 +1,5 @@
 using System.Xml.Serialization;
+using UnityEngine;
 
 namespace AD.Story
 {
@@ -9,12 +10,21 @@ namespace AD.Story
         {
             VisualNovel,
             SideDialogue,
-            InGameCutScene
+            InGameCutScene,
+            PlayModeTypeCount
         }
 
         public StoryPlayMode() 
         {
             Type = EntryType.PlayMode;
+        }
+
+        public StoryPlayMode(PlayModeType playMode)
+        {
+            Debug.Assert(playMode != PlayModeType.PlayModeTypeCount, "Invalid PlayMode type: " + playMode);
+
+            Type = EntryType.PlayMode;
+            PlayMode = playMode;
         }
 
         [XmlAttribute("Mode")]

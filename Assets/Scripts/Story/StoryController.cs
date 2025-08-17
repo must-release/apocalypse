@@ -9,9 +9,8 @@ namespace AD.Story
     {
         /****** Public Members ******/
 
-        public static StoryController Instance;
+        public static StoryController Instance { get; private set; }
 
-        [Header("Parameters")]
         public bool IsStoryPlaying { get; private set; }
 
 
@@ -34,18 +33,14 @@ namespace AD.Story
                 return;
             }
 
-            // Check if there is available entry
             StoryEntry entry = StoryModel.Instance.GetNextEntry();
             if (entry == null)
             {
-                // Story is over
                 IsStoryPlaying = false;
+                return;
             }
-            else
-            {
-                // Show Story Entry
-                ShowStoryEntry(entry);
-            }
+
+            ShowStoryEntry(entry);
         }
 
         public void ShowStoryEntry(StoryEntry entry)
@@ -133,20 +128,22 @@ namespace AD.Story
 
         private IEnumerator StartStoryCoroutine(string storyInfo, int readBlockCount, int readEntryCount)
         {
-            // Set Story Playing true
             IsStoryPlaying = true;
 
-            // Load Story Text according to the Info
             yield return StoryModel.Instance.LoadStoryText(storyInfo, readBlockCount, readEntryCount);
 
-            // Show first story script When new story is loaded
-            StoryEntry entry = StoryModel.Instance.GetFirstEntry();
-            if (entry == null)
+            StoryEntry entry = StoryModel.Instance.PeekFirstEntry();
+            Debug.Assert(null != entry, "Story Entry cannot be null");
+
+            if (entry is StoryPlayMode)
             {
-                Debug.Log("Story initial load error");
+                StoryModel.Instance.GetNextEntry();
+                ShowStoryEntry(entry);
                 yield break;
             }
-            ShowStoryEntry(entry);
+            
+            StoryPlayMode storyPlayMode = new StoryPlayMode(StoryPlayMode.PlayModeType.VisualNovel);
+            ShowStoryEntry(storyPlayMode);
         }
     }
 }

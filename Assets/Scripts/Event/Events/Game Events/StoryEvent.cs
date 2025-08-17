@@ -64,19 +64,13 @@ public class StoryEvent : GameEventBase<StoryEventInfo>
     {
         Debug.Assert( null != Info, "Event info should be set" );
 
-        // Change to story UI
-        UIController.Instance.ChangeBaseUI(BaseUI.Story);
-
-        // Start Story
         InputEventProducer.Instance.LockInput(true);
         string story = "StoryScript/" + Info.StoryStage.ToString() + '_' + Info.StoryNumber;
         yield return StoryController.Instance.StartStory(story, Info.ReadBlockCount, Info.ReadEntryCount);
         InputEventProducer.Instance.LockInput(false);
 
-        // Wait for story to end
         yield return new WaitWhile( () => StoryController.Instance.IsStoryPlaying );
 
-        // Terminate story event and play next event
         TerminateEvent();
     }
 }
