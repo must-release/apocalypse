@@ -6,3 +6,10 @@ public enum SystemType
 
     SystemTypeCount
 }
+
+public enum OpResult
+{
+    Success,
+    Aborted,
+    Failed
+}

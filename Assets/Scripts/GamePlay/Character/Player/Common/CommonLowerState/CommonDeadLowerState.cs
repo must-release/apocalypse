@@ -39,7 +39,7 @@ public class CommonDeadLowerState : PlayerLowerState
 
         if (1.0f <= stateInfo.normalizedTime)
         {
-            CharacterManager.Instance.ProcessPlayersDeath();
+            GameEventManager.Instance.Submit(GameEventFactory.CreateCommonEvent(CommonEventType.GameOver));
             _isAnimationPlaying = false;
         }
     }

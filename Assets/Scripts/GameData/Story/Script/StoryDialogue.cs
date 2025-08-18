@@ -9,7 +9,8 @@ namespace AD.Story
         {
             Default = 0,
             Slow,
-            Fast
+            Fast,
+            TextSpeedTypeCount
         }
 
         public StoryDialogue()

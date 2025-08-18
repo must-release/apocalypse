@@ -31,28 +31,34 @@ namespace AD.Story
 
             _currentDialogue = storyEntry as StoryDialogue;
             _cancellationTokenSource = new CancellationTokenSource();
-            _dialogueBox.SetName(_currentDialogue.Name);
 
-            try
+            switch (_context.CurrentPlayMode)
             {
-                await _dialogueBox.DisplayText(_currentDialogue.Text, CalculateTextInterval(_currentDialogue.TextSpeed), _cancellationTokenSource.Token);
-                CompleteStoryEntry();
-            }
-            catch (OperationCanceledException)
-            {
+                case StoryPlayMode.PlayModeType.VisualNovel:
+                    await ProgressVisualNovelDialogue();
+                    break;
+                case StoryPlayMode.PlayModeType.SideDialogue:
+                    ProgressSideDialogue();
+                    break;
+                case StoryPlayMode.PlayModeType.InGameCutScene:
+                    await ProgressCutsceneDialogue();
+                    break;
+                default:
+                    Logger.Write(LogCategory.Story, "Invalid PlayMode type: " + _context.CurrentPlayMode);
+                    break;
             }
         }
 
+        // TODO: Change this method name to InstantlyCompleteStoryEntry
         public void CompleteStoryEntry()
         {
             Debug.Assert(null != _currentDialogue, "Current dialogue is null");
-            Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in DialogueHandler.");
+            Debug.Assert(StoryPlayMode.PlayModeType.SideDialogue != _context.CurrentPlayMode, "Cannot instantly complete dialogue in SideDialogue mode.");
 
             _cancellationTokenSource?.Cancel();
-            _dialogueBox.DisplayText(_currentDialogue.Text);
-            OnStoryEntryComplete.Invoke(this);
+            CompleteDialogueEntry();
         }
-
+        
         public void ResetHandler()
         {
             _currentDialogue = null;
@@ -65,6 +71,44 @@ namespace AD.Story
         private StoryDialogue           _currentDialogue;
         private DialogueBox _dialogueBox;
         private CancellationTokenSource _cancellationTokenSource;
+
+        private async UniTask ProgressVisualNovelDialogue()
+        {
+            Debug.Assert(null != _currentDialogue, "Current dialogue is null in DialogueHandler.");
+            Debug.Assert(null != _cancellationTokenSource, "CancellationTokenSource is not initialized in DialogueHandler.");
+
+            _dialogueBox.SetName(_currentDialogue.Name);
+
+            OpResult result = await _dialogueBox.DisplayText(_currentDialogue.Text, CalculateTextInterval(_currentDialogue.TextSpeed), _cancellationTokenSource.Token);
+            if (result == OpResult.Success)
+            {
+                CompleteDialogueEntry();
+            }
+        }
+
+        private void ProgressSideDialogue()
+        {
+            Debug.Assert(null != _currentDialogue, "Current dialogue is null in DialogueHandler.");
+            Debug.Assert(null != _cancellationTokenSource, "CancellationTokenSource is not initialized in DialogueHandler.");
+            Debug.Assert(StoryPlayMode.PlayModeType.SideDialogue == _context.CurrentPlayMode, $"Current play mode {_context.CurrentPlayMode} is not Side Dialogue.");
+
+            var sideDialogueEvent = GameEventFactory.CreateSideDialogueEvent(_currentDialogue.Name, _currentDialogue.Text, CalculateTextInterval(_currentDialogue.TextSpeed));
+            GameEventManager.Instance.Submit(sideDialogueEvent);
+
+            CompleteDialogueEntry();
+        }
+
+        private UniTask ProgressCutsceneDialogue()
+        {
+            return UniTask.CompletedTask;
+        }
+
+        private void CompleteDialogueEntry()
+        {
+            Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in DialogueHandler.");
+
+            OnStoryEntryComplete.Invoke(this);
+        }
 
         private float CalculateTextInterval(StoryDialogue.TextSpeedType textSpeed)
         {

@@ -20,7 +20,13 @@ public class UIChangeEvent : GameEventBase<UIChangeEventInfo>
         Debug.Assert(null != Info, "Event info is not initialized");
 
         base.PlayEvent();
-        UIController.Instance.ChangeBaseUI(Info.TargetUI); 
+
+        UIController.Instance.GetCurrentUI(out BaseUI baseUI, out SubUI _);
+        if (Info.TargetUI != baseUI)
+        {
+            UIController.Instance.ChangeBaseUI(Info.TargetUI); 
+        }
+
 
         TerminateEvent();
     }

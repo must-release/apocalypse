@@ -7,7 +7,7 @@ public interface IScene
     SceneType   CurrentSceneType    { get; }
     Transform   PlayerTransform     { get; }
     
-    ICamera[] GetSceneCameras();
+    AD.Camera.ICamera[] GetSceneCameras();
     UniTask AsyncInitializeScene();
     void ActivateScene();
 }

@@ -30,6 +30,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 17fc4bedbb3f58247a89f4f168a472cd
+    m_Address: StoryScript/Test_1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 21d804a5df5e78540b501e41c88a45d7
     m_Address: AnimationClip/Heroine/Lower/AimAttacking
     m_ReadOnly: 0
@@ -177,11 +182,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8137445674be14c4ba380fc082acef14
     m_Address: AnimationClip/Heroine/Lower/Tagging
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 84e400e7552ef4ee38aa15db8b4ace23
-    m_Address: GameData/DevConfig
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

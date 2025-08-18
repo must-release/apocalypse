@@ -1,7 +1,10 @@
 using UnityEngine;
 
-interface IGamePlayCamera : ICamera
+namespace AD.Camera
 {
-    void Initialize(BoxCollider2D stageBoundary);
-    void SetCameraTarget(Transform target);
+    public interface IGamePlayCamera : ICamera
+    {
+        void Initialize(BoxCollider2D stageBoundary);
+        void SetCameraTarget(Transform target);
+    }
 }

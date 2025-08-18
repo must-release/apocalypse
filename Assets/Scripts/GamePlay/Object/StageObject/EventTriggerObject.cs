@@ -46,6 +46,11 @@ public class EventTriggerObject : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             GameEventManager.Instance.Submit(_gameEvent);
+
+            if (false == _isReusable)
+            {
+                gameObject.SetActive(false);
+            }
         }
     }
 

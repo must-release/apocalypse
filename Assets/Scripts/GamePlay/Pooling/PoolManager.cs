@@ -67,7 +67,7 @@ public class PoolManager : MonoBehaviour, IGamePlayInitializer
 
     private void Start()
     {
-        GamePlayManager.Instance.RegisterGamePlayInitializer(this);
+        AD.GamePlay.GamePlayManager.Instance.RegisterGamePlayInitializer(this);
         StartCoroutine(AsyncInitializePool());
     }
 

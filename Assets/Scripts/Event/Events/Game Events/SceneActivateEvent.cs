@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.Assertions;
+using AD.Camera;
+using AD.GamePlay;
+using AD.UI;
 
 /*
  * Activate loaded scene
@@ -79,9 +81,18 @@ public class SceneActivateEvent : GameEventBase<SceneActivateEventInfo>
         {
             PlayerAvatarType character = PlayerManager.Instance.CurrentPlayerType;
             GamePlayManager.Instance.InitializePlayerCharacter(player, character);
+
+            var controlUI = UIController.Instance.GetUIView(BaseUI.Control) as ControlUIView;
+            Debug.Assert(null != controlUI, "Cannot find control ui in scene activate event.");
+
+            var playerController = player.GetComponent<PlayerController>();
+            Debug.Assert(null != playerController, "PlayerController is not find in player transform in scene activate event.");
+
+            playerController.OnHPChanged += controlUI.UpdateHPBar;
+            controlUI.UpdateHPBar(playerController.CurrentHitPoint, playerController.MaxHitPoint);
         }
 
-        var sceneCameras = SceneController.Instance.GetCurrentStageCameras();
+        var sceneCameras = SceneController.Instance.GetCurrentSceneCameras();
         if (0 < sceneCameras.Length)
         {
             CameraManager.Instance.RegisterCameras(sceneCameras);
@@ -95,6 +106,12 @@ public class SceneActivateEvent : GameEventBase<SceneActivateEventInfo>
             {
                 CameraManager.Instance.SetCurrentCamera(sceneCameras[0]);
             }
+        }
+
+        var actors = SceneController.Instance.GetCurrentStageActors();
+        if (0 < actors.Length)
+        {
+            GamePlayManager.Instance.RegisterStageActors(actors);
         }
 
         SceneController.Instance.ActivateGameScene();
