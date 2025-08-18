@@ -10,6 +10,7 @@ namespace AD.Story
         /****** Public Members ******/
 
         public StoryEntry.EntryType PresentingEntryType => StoryEntry.EntryType.CameraAction;
+        public StoryEntry CurrentEntry => _currentCameraAction;
         public event Action<IStoryEntryHandler> OnStoryEntryComplete;
 
         public void Initialize(StoryHandleContext context) { }
@@ -46,6 +47,12 @@ namespace AD.Story
                 return;
 
             OnStoryEntryComplete.Invoke(this);
+        }
+
+        public void ResetHandler()
+        {
+            _context = null;
+            _currentCameraAction = null;
         }
 
         /****** Private Members ******/

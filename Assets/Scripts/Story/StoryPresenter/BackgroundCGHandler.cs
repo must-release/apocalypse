@@ -10,6 +10,7 @@ namespace AD.Story
         /****** Public Members ******/
 
         public StoryEntry.EntryType PresentingEntryType => StoryEntry.EntryType.BackgroundCG;
+        public StoryEntry CurrentEntry => _currentBackgroundCG;
         public event Action<IStoryEntryHandler> OnStoryEntryComplete;
 
         public void Initialize(StoryHandleContext context)
@@ -63,6 +64,13 @@ namespace AD.Story
             _activeCGAnimationTween = null;
             OnStoryEntryComplete.Invoke(this);
             _currentBackgroundCG = null;
+        }
+
+        public void ResetHandler()
+        {
+            _currentBackgroundCG = null;
+            _activeCGAnimationTween = null;
+            _isCompleted = false;
         }
 
 

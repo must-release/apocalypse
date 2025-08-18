@@ -9,6 +9,7 @@ namespace AD.Story
         /****** Public Members ******/
 
         public StoryEntry.EntryType PresentingEntryType => StoryEntry.EntryType.SFX;
+        public StoryEntry CurrentEntry => _currentSFX;
         public event Action<IStoryEntryHandler> OnStoryEntryComplete;
 
         public void Initialize(StoryHandleContext context)
@@ -22,12 +23,12 @@ namespace AD.Story
             Debug.Assert(storyEntry is StorySFX, $"{storyEntry} is not a StorySFX");
             Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in SFXHandler.");
 
-            StorySFX currentSFX = storyEntry as StorySFX;
+            _currentSFX = storyEntry as StorySFX;
 
-            IGameEvent audioEvent = GameEventFactory.CreateSFXEvent(currentSFX.SFXName);
+            IGameEvent audioEvent = GameEventFactory.CreateSFXEvent(_currentSFX.SFXName);
 
             GameEventManager.Instance.Submit(audioEvent);
-            
+
             OnStoryEntryComplete.Invoke(this);
 
             await UniTask.CompletedTask;
@@ -40,9 +41,15 @@ namespace AD.Story
             // For now, it will be empty.
         }
 
+        public void ResetHandler()
+        {
+            _currentSFX = null;
+        }
+
 
         /****** Private Members ******/
 
         private StoryHandleContext _context;
+        private StorySFX _currentSFX;
     }
 }

@@ -10,6 +10,7 @@ namespace AD.Story
         /****** Public Members ******/
 
         public StoryEntry.EntryType PresentingEntryType => StoryEntry.EntryType.Dialogue;
+        public StoryEntry CurrentEntry => _currentDialogue;
         public event Action<IStoryEntryHandler> OnStoryEntryComplete;
 
         public void Initialize(StoryHandleContext context)
@@ -57,12 +58,18 @@ namespace AD.Story
             _cancellationTokenSource?.Cancel();
             CompleteDialogueEntry();
         }
+        
+        public void ResetHandler()
+        {
+            _currentDialogue = null;
+        }
+
 
         /****** Private Members ******/
 
-        private StoryHandleContext      _context;
-        private DialogueBox             _dialogueBox;
+        private StoryHandleContext _context;
         private StoryDialogue           _currentDialogue;
+        private DialogueBox _dialogueBox;
         private CancellationTokenSource _cancellationTokenSource;
 
         private async UniTask ProgressVisualNovelDialogue()
@@ -89,8 +96,6 @@ namespace AD.Story
             GameEventManager.Instance.Submit(sideDialogueEvent);
 
             CompleteDialogueEntry();
-
-            _context.Controller.PlayNextScript();
         }
 
         private UniTask ProgressCutsceneDialogue()
@@ -103,7 +108,6 @@ namespace AD.Story
             Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in DialogueHandler.");
 
             OnStoryEntryComplete.Invoke(this);
-            _currentDialogue = null;
         }
 
         private float CalculateTextInterval(StoryDialogue.TextSpeedType textSpeed)

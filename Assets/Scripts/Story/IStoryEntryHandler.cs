@@ -6,9 +6,11 @@ namespace AD.Story
     public interface IStoryEntryHandler
     {
         StoryEntry.EntryType PresentingEntryType { get; }
+        StoryEntry CurrentEntry { get; }
         event Action<IStoryEntryHandler> OnStoryEntryComplete;
         void Initialize(StoryHandleContext context);
         UniTask ProgressStoryEntry(StoryEntry storyEntry);
         void CompleteStoryEntry();
+        void ResetHandler();
     }
 }
