@@ -1,16 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteractor
 {
     /****** Public Members ******/
 
     public IPlayerAvatar        CurrentAvatar           { get; private set; }
-    public PlayerAvatarType           CurrentPlayerType       { get; private set; } = PlayerAvatarType.PlayerAvatarTypeCount;
+    public PlayerAvatarType     CurrentPlayerType       { get; private set; } = PlayerAvatarType.PlayerAvatarTypeCount;
     public IClimbable           CurrentClimbableObject  { get; set; }
     public Collider2D           ClimberCollider         { get; private set; }
+
+    public event Action<int, int> OnHPChanged;
 
     public override bool IsPlayer => true;
     public bool IsLoaded
@@ -63,10 +65,12 @@ public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteract
         if (CurrentHitPoint <= 0)
         {
             CurrentHitPoint = 0;
+            OnHPChanged?.Invoke(CurrentHitPoint, MaxHitPoint);
             CurrentAvatar.OnDead();
             return;
         }
 
+        OnHPChanged?.Invoke(CurrentHitPoint, MaxHitPoint);
         StartCoroutine(StartDamageImmuneState());
 
         CurrentAvatar.OnDamaged(damageInfo);
