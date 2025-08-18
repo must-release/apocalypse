@@ -42,13 +42,20 @@ namespace AD.UI
             return result;
         }
 
+        public void UpdateHPBar(int currentHP, int maxHP)
+        {
+            _statusPanel.UpdateHPBar(currentHP, maxHP);
+        }
+
         /****** Private Members ******/
 
         [SerializeField] private SideDialoguePanel _sideDialoguePanel;
+        [SerializeField] private StatusPanel _statusPanel;
 
         private void OnValidate()
         {
             Debug.Assert(null != _sideDialoguePanel, "SideDialoguePanel is not assigned in ControlUIView.");
+            Debug.Assert(null != _statusPanel, "Status panel is not assigned in ControlUIView");
         }
 
     }

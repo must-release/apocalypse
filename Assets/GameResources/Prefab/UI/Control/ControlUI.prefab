@@ -91,6 +91,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sideDialoguePanel: {fileID: 871132647177016524}
+  _statusPanel: {fileID: 3388294378216666129}
 --- !u!1001 &1666325388976752022
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -184,11 +185,21 @@ PrefabInstance:
       value: Pnl_status
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 724249002050802118, guid: 88a8c234c1f988a4c908a4d25dd801c4, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 88a8c234c1f988a4c908a4d25dd801c4, type: 3}
+--- !u!114 &3388294378216666129 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4042642383159046535, guid: 88a8c234c1f988a4c908a4d25dd801c4, type: 3}
+  m_PrefabInstance: {fileID: 1666325388976752022}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e883ff98d95431e4a9b686fb3681cf77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &4159141380897692276 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3361874518810583010, guid: 88a8c234c1f988a4c908a4d25dd801c4, type: 3}

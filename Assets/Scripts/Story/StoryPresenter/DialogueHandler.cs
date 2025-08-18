@@ -93,9 +93,9 @@ namespace AD.Story
             _context.Controller.PlayNextScript();
         }
 
-        private async UniTask ProgressCutsceneDialogue()
+        private UniTask ProgressCutsceneDialogue()
         {
-
+            return UniTask.CompletedTask;
         }
 
         private void CompleteDialogueEntry()
