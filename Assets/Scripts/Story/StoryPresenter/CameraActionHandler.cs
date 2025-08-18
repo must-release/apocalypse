@@ -51,7 +51,6 @@ namespace AD.Story
 
         public void ResetHandler()
         {
-            _context = null;
             _currentCameraAction = null;
         }
 

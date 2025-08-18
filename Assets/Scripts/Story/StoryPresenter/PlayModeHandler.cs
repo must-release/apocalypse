@@ -9,6 +9,8 @@ namespace AD.Story
         /****** Public Members ******/
 
         public StoryEntry.EntryType PresentingEntryType => StoryEntry.EntryType.PlayMode;
+        public StoryEntry CurrentEntry => _currentPlayMode;
+
         public event Action<IStoryEntryHandler> OnStoryEntryComplete;
 
         public void Initialize(StoryHandleContext context) 
@@ -29,7 +31,6 @@ namespace AD.Story
             var uiChangeEvt = GameEventFactory.CreateUIChangeEvent(baseUI);
             GameEventManager.Instance.Submit(uiChangeEvt);
 
-            _currentPlayMode = null;
             CompleteStoryEntry();
 
             return UniTask.CompletedTask;
@@ -37,13 +38,16 @@ namespace AD.Story
 
         public void CompleteStoryEntry()
         {
-            if (null != _currentPlayMode)
-                return;
+            Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete is not assigned in PlayModeHandler.");
 
             OnStoryEntryComplete.Invoke(this);
-
-            _storyContext.Controller.PlayNextScript();
         }
+
+        public void ResetHandler()
+        {
+    
+        }
+
 
         /****** Private Members ******/
 
