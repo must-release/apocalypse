@@ -15,6 +15,7 @@ namespace AD.Story
             Shake,
             ZoomIn,
             ZoomOut,
+            Reset,
             BackgroundAnimtationTypeCount
         }
 

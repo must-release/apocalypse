@@ -36,6 +36,8 @@ public class BackgroundImage : MonoBehaviour
                 }
             case StoryBackgroundCG.BackgroundAnimationType.Shake:
                 return Shake(strength: 10f, duration); // Default strength
+            case StoryBackgroundCG.BackgroundAnimationType.Reset:
+                return Reset(duration);
             default:
                 return DOTween.Sequence();
         }
@@ -50,9 +52,17 @@ public class BackgroundImage : MonoBehaviour
     private Vector2 _rightPosition = new Vector2(-400, 0);
     private Vector2 _centerPosition = new Vector2(0, 0);
 
+    private Vector3 _originalScale;
+    private Vector3 _originalPosition;
+    private Color   _originalColor;
+
     private void Awake()
     {
         _image = GetComponent<Image>();
+        
+        _originalScale      = _image.transform.localScale;
+        _originalPosition   = _image.transform.localPosition;
+        _originalColor      = _image.color;
     }
 
     private Tween Zoom(float scale, Vector2 targetPosition, float duration = 0f)
@@ -78,6 +88,16 @@ public class BackgroundImage : MonoBehaviour
     private Tween Shake(float strength, float duration)
     {
         return _image.transform.DOShakePosition(duration, strength);
+    }
+
+    private Tween Reset(float duration)
+    {
+        var sequence = DOTween.Sequence();
+        sequence.Join(_image.transform.DOLocalMove(_originalPosition, duration));
+        sequence.Join(_image.transform.DOScale(_originalScale, duration));
+        sequence.Join(_image.DOColor(_originalColor, duration));
+
+        return sequence;
     }
 
     private Vector2 GetTargetPosition(StoryBackgroundCG.BackgroundPositionType targetPositionType)
