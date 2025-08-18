@@ -180,11 +180,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 84e400e7552ef4ee38aa15db8b4ace23
-    m_Address: GameData/DevConfig
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8c32b794842cb495181f167cf4bfd0a8
     m_Address: AnimationClip/Heroine/Upper/Attacking
     m_ReadOnly: 0
