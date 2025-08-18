@@ -36,7 +36,7 @@ namespace AD.Story
             try
             {
                 await _dialogueBox.DisplayText(_currentDialogue.Text, CalculateTextInterval(_currentDialogue.TextSpeed), _cancellationTokenSource.Token);
-                OnStoryEntryComplete.Invoke(this);
+                CompleteStoryEntry();
             }
             catch (OperationCanceledException)
             {
@@ -56,7 +56,6 @@ namespace AD.Story
         public void ResetHandler()
         {
             _currentDialogue = null;
-            _dialogueBox = null;
         }
 
 

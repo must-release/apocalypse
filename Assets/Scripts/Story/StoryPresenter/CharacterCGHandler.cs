@@ -63,9 +63,7 @@ namespace AD.Story
             _isCompleted = true;
 
             _activeCGAnimationTween?.Complete(); // Reverted to Complete()
-            _activeCGAnimationTween = null;
             OnStoryEntryComplete.Invoke(this);
-            _currentCharacterCG = null;
         }
 
         public void ResetHandler()

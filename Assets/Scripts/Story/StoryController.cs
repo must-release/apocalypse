@@ -131,10 +131,10 @@ namespace AD.Story
             Debug.Assert(null != handler, "Handler cannot be null");
             Debug.Assert(_activeStoryHandlers.Contains(handler), $"Handler {handler} is not active");
 
-            _activeStoryHandlers.Remove(handler);
-
             bool isAutoProgress = handler.CurrentEntry.IsAutoProgress;
-            // handler.ResetHandler();
+
+            handler.ResetHandler();
+            _activeStoryHandlers.Remove(handler); // Release Handler
 
             if (true == isAutoProgress)
             {

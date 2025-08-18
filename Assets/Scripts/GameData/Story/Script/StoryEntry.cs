@@ -29,7 +29,7 @@ namespace AD.Story
         }
 
         [XmlAttribute("IsAutoProgress")]
-        public bool IsAutoProgress = true;
+        public bool IsAutoProgress = false;
 
         [XmlIgnore] public bool IsSavePoint = false;
         [XmlIgnore] public EntryType Type;

@@ -46,7 +46,6 @@ namespace AD.Story
 
             _choicePanel.HideChoices();
             _context.Controller.ProcessSelectedChoice(_selectedOption);
-            _selectedOption = null;
             OnStoryEntryComplete.Invoke(this);
 
             // _context.Controller.PlayNextScript();
