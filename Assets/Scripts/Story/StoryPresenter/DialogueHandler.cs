@@ -73,7 +73,7 @@ namespace AD.Story
                 case StoryDialogue.TextSpeedType.Slow:
                     return 0.05f;
                 case StoryDialogue.TextSpeedType.Default:
-                    return 1f;
+                    return 0.03f;
                 case StoryDialogue.TextSpeedType.Fast:
                     return 0.01f;
                 default:

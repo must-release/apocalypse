@@ -28,9 +28,7 @@ namespace AD.Story
             CameraAction
         }
 
-        [XmlAttribute("IsAutoProgress")]
-        public bool IsAutoProgress = false;
-
+        [XmlIgnore] public bool IsAutoProgress = false;
         [XmlIgnore] public bool IsSavePoint = false;
         [XmlIgnore] public EntryType Type;
     }
