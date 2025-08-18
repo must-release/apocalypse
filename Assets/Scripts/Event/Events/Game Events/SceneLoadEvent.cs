@@ -21,7 +21,7 @@ public class SceneLoadEvent : GameEventBase<SceneLoadEventInfo>
 
         foreach (GameEventType eventType in activeEventTypeCounts.Keys)
         {
-            if (GameEventType.Story == eventType || GameEventType.Choice == eventType || GameEventType.Sequential == eventType)
+            if (GameEventType.Story == eventType || GameEventType.Sequential == eventType)
                 continue;
 
             return false;
@@ -64,6 +64,8 @@ public class SceneLoadEvent : GameEventBase<SceneLoadEventInfo>
     {
         yield return new WaitUntil(() => SceneController.Instance.CanMoveToNextScene);
 
+        AD.Camera.CameraManager.Instance.ClearCameras();
+        UIController.Instance.TurnEverySubUIOff();
         SceneController.Instance.LoadGameScene(Info.LoadingScene);
 
         TerminateEvent();

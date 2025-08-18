@@ -5,8 +5,9 @@ public interface IScene
 {
     bool        CanMoveToNextScene  { get; }
     SceneType   CurrentSceneType    { get; }
-    Transform   PlayerTransform { get; }
-
+    Transform   PlayerTransform     { get; }
+    
+    AD.Camera.ICamera[] GetSceneCameras();
     UniTask AsyncInitializeScene();
     void ActivateScene();
 }

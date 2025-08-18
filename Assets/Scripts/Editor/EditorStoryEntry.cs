@@ -1,85 +1,87 @@
 using UnityEngine;
+using AD.Story;
 
 namespace StoryEditor
 {
     [System.Serializable]
     public class EditorStoryEntry
     {
-        [SerializeField] private StoryEntry storyEntry;
 
-        public StoryEntry StoryEntry 
-        { 
-            get => storyEntry;
-            set => storyEntry = value;
+        /****** Public Members ******/
+
+        public StoryEntry StoryEntry
+        {
+            get => _storyEntry;
+            set => _storyEntry = value;
         }
 
         public EditorStoryEntry()
         {
-            storyEntry = null;
+            _storyEntry = null;
         }
 
         public EditorStoryEntry(StoryEntry entry)
         {
-            storyEntry = entry;
+            _storyEntry = entry;
         }
 
         public string GetEntryType()
         {
-            if (null == storyEntry) return "Unknown";
+            if (null == _storyEntry) return "Unknown";
 
-            return storyEntry.GetType().Name switch
+            return _storyEntry.GetType().Name switch
             {
                 nameof(StoryDialogue) => "Dialogue",
                 nameof(StoryVFX) => "VFX",
                 nameof(StoryChoice) => "Choice",
+                nameof(StoryCharacterCG) => "CharacterCG",
+                nameof(StoryPlayMode) => "PlayMode",
+                nameof(StoryBackgroundCG) => "BackgroundCG",
+                nameof(StoryBGM) => "BGM",
+                nameof(StorySFX) => "SFX",
+                nameof(StoryCameraAction) => "CameraAction",
                 _ => "Unknown"
             };
         }
 
         public string GetDisplayText()
         {
-            if (null == storyEntry) return "Empty Entry";
+            if (null == _storyEntry) return "Empty Entry";
 
-            return storyEntry switch
+            return _storyEntry switch
             {
                 StoryDialogue dialogue => $"Dialogue: {dialogue.Name} - {TruncateText(dialogue.Text, 12)}",
-                StoryVFX vfx => $"VFX: {vfx.Action} ({vfx.Duration}s)",
+                StoryVFX vfx => $"VFX: {vfx.VFX} ({vfx.Duration}s)",
                 StoryChoice choice => $"Choice: [{GetChoiceOptionsText(choice)}]",
+                StoryCharacterCG characterCG => $"CharacterCG: {characterCG.Name} ({characterCG.Animation}, {characterCG.TargetPosition})",
+                StoryPlayMode playMode => $"PlayMode: {playMode.PlayMode}",
+                StoryBackgroundCG backgroundCG => $"BackgroundCG: {backgroundCG.Chapter} - {(string.IsNullOrEmpty(backgroundCG.ImageName) ? "No Image" : backgroundCG.ImageName)}",
+                StoryBGM bgm => $"BGM {bgm.Action}: {(StoryBGM.BGMAction.Start == bgm.Action ? (string.IsNullOrEmpty(bgm.BGMName) ? "No BGM" : bgm.BGMName) : "")} (Fade: {bgm.FadeDuration}s{(StoryBGM.BGMAction.Start == bgm.Action ? $", Loop: {bgm.IsLoop}" : "")})",
+                StorySFX sfx => $"SFX: {(string.IsNullOrEmpty(sfx.SFXName) ? "No SFX" : sfx.SFXName)}",
+                StoryCameraAction cameraAction => $"Camera: {cameraAction.ActionType} - {(string.IsNullOrEmpty(cameraAction.CameraName) ? "No Camera" : cameraAction.CameraName)} ({cameraAction.Duration}s)",
                 _ => "Unknown Entry"
             };
         }
 
-        private string TruncateText(string text, int maxLength)
-        {
-            if (string.IsNullOrEmpty(text))
-                return "";
-            
-            if (text.Length <= maxLength)
-                return text;
-            
-            return text.Substring(0, maxLength) + "...";
-        }
+        public bool IsDialogue() => _storyEntry is StoryDialogue;
+        public bool IsVFX() => _storyEntry is StoryVFX;
+        public bool IsChoice() => _storyEntry is StoryChoice;
+        public bool IsCharacterCG() => _storyEntry is StoryCharacterCG;
+        public bool IsPlayMode() => _storyEntry is StoryPlayMode;
+        public bool IsBackgroundCG() => _storyEntry is StoryBackgroundCG;
+        public bool IsBGM() => _storyEntry is StoryBGM;
+        public bool IsSFX() => _storyEntry is StorySFX;
+        public bool IsCameraAction() => _storyEntry is StoryCameraAction;
 
-        private string GetChoiceOptionsText(StoryChoice choice)
-        {
-            if (null == choice.Options || 0 == choice.Options.Count)
-                return "No options";
-
-            var optionTexts = new string[choice.Options.Count];
-            for (int i = 0; i < choice.Options.Count; i++)
-            {
-                optionTexts[i] = choice.Options[i].BranchName ?? "undefined";
-            }
-            return string.Join(", ", optionTexts);
-        }
-
-        public bool IsDialogue() => storyEntry is StoryDialogue;
-        public bool IsVFX() => storyEntry is StoryVFX;
-        public bool IsChoice() => storyEntry is StoryChoice;
-
-        public StoryDialogue AsDialogue() => storyEntry as StoryDialogue;
-        public StoryVFX AsVFX() => storyEntry as StoryVFX;
-        public StoryChoice AsChoice() => storyEntry as StoryChoice;
+        public StoryDialogue AsDialogue() => _storyEntry as StoryDialogue;
+        public StoryVFX AsVFX() => _storyEntry as StoryVFX;
+        public StoryChoice AsChoice() => _storyEntry as StoryChoice;
+        public StoryCharacterCG AsCharacterCG() => _storyEntry as StoryCharacterCG;
+        public StoryPlayMode AsPlayMode() => _storyEntry as StoryPlayMode;
+        public StoryBackgroundCG AsBackgroundCG() => _storyEntry as StoryBackgroundCG;
+        public StoryBGM AsBGM() => _storyEntry as StoryBGM;
+        public StorySFX AsSFX() => _storyEntry as StorySFX;
+        public StoryCameraAction AsCameraAction() => _storyEntry as StoryCameraAction;
 
         public void UpdateChoicePrevDialogue(EditorStoryBlock parentBlock, int entryIndex)
         {
@@ -91,7 +93,7 @@ namespace StoryEditor
             StoryDialogue prevDialogue = null;
 
             // Find the previous dialogue in the same block
-            for (int i = entryIndex - 1; i >= 0; i--)
+            for (int i = entryIndex - 1; 0 <= i; i--)
             {
                 var entry = parentBlock.EditorEntries[i];
                 if (entry.IsDialogue())
@@ -114,13 +116,13 @@ namespace StoryEditor
         {
             Debug.Assert(null != parentBlock, "Parent block cannot be null");
             Debug.Assert(0 <= entryIndex && entryIndex < parentBlock.EditorEntries.Count, "Entry index out of range");
-            
-            if (null == storyEntry) return false;
+
+            if (null == _storyEntry) return false;
 
             if (IsChoice())
             {
                 var choice = AsChoice();
-                
+
                 // Check if there's a dialogue before this choice
                 bool hasDialogueBefore = false;
                 for (int i = entryIndex - 1; 0 <= i; i--)
@@ -134,19 +136,50 @@ namespace StoryEditor
 
                 if (false == hasDialogueBefore)
                 {
-                    Debug.LogWarning($"Choice entry at index {entryIndex} has no dialogue before it");
+                    Logger.Write(LogCategory.StoryScriptEditor, $"Choice entry at index {entryIndex} has no dialogue before it", LogLevel.Warning);
                     return false;
                 }
 
                 // Validate choice options
                 if (null == choice.Options || 0 == choice.Options.Count)
                 {
-                    Debug.LogWarning($"Choice entry at index {entryIndex} has no options");
+                    Logger.Write(LogCategory.StoryScriptEditor, $"Choice entry at index {entryIndex} has no options", LogLevel.Warning);
                     return false;
                 }
             }
 
             return true;
+        }
+
+
+        /****** Private Members ******/
+
+        [SerializeField] private StoryEntry _storyEntry;
+
+        private string TruncateText(string text, int maxLength)
+        {
+            if (string.IsNullOrEmpty(text))
+                return "";
+
+            if (maxLength >= text.Length)
+                return text;
+
+            return text.Substring(0, maxLength) + "...";
+        }
+
+        private string GetChoiceOptionsText(StoryChoice choice)
+        {
+            Debug.Assert(null != choice);
+
+            if (null == choice.Options || 0 == choice.Options.Count)
+                return "No options";
+
+            var optionTexts = new string[choice.Options.Count];
+            for (int i = 0; i < choice.Options.Count; i++)
+            {
+                optionTexts[i] = choice.Options[i].BranchName ?? "undefined";
+            }
+            return string.Join(", ", optionTexts);
         }
     }
 }

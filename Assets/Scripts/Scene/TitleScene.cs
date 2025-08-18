@@ -12,5 +12,10 @@ public class TitleScene : MonoBehaviour, IScene
         await UniTask.CompletedTask;
     }
 
-    public void ActivateScene(){}
+    public void ActivateScene() { }
+    
+    public AD.Camera.ICamera[] GetSceneCameras()
+    {
+        return new AD.Camera.ICamera[0]; // No cameras in title scene
+    }
 }

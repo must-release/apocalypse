@@ -1,236 +1,157 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using System;
 using System.Linq;
 
-public class StoryController : MonoBehaviour
+namespace AD.Story
 {
-    public static StoryController Instance;
-
-    public bool IsStoryPlaying { get; private set; }
-    public float textSpeed = 0.1f; // Speed of the dialogue text
-    public bool isWaitingResponse = false;
-    public bool isChatting = false;
-    public int responseCount = 0;
-    public const int MAX_RESPONSE_COUNT = 4;
-
-    private string storyScreenName = "Story Screen";
-    private string characterName = "Character";
-    private string dialogueBoxName = "Dialogue Box";
-    private string nameTextName = "Name Text";
-    private string dialogueTextName = "Dialogue Text";
-    private Transform storyScreen;
-    private GameObject character;
-    private TextMeshProUGUI nameText;
-    private TextMeshProUGUI dialogueText;
-    private DialoguePlayer dialoguePlayer;
-
-    public void Awake()
+    public class StoryController : MonoBehaviour
     {
-        if (Instance == null)
-        {
-            Instance = this;
+        /****** Public Members ******/
 
-            // Find Story Screen object
-            storyScreen = transform.Find(storyScreenName);
-            if (storyScreen == null)
+        public static StoryController Instance { get; private set; }
+
+        public bool IsStoryPlaying { get; private set; }
+
+
+        public Coroutine StartStory(string storyInfo, int readBlockCount, int readEntryCount)
+        {
+            return StartCoroutine(StartStoryCoroutine(storyInfo, readBlockCount, readEntryCount));
+        }
+
+        public void FinishStory()
+        {
+
+        }
+
+        public void PlayNextScript()
+        {
+            if (0 < _activeStoryHandlers.Count)
             {
-                Debug.Log("Story UI Initialization Error");
+                var handlersToComplete = new List<IStoryEntryHandler>(_activeStoryHandlers);
+                handlersToComplete.ForEach(handler => handler.CompleteStoryEntry());
                 return;
             }
-            character = storyScreen.Find(characterName).gameObject;
-            nameText = storyScreen.Find(dialogueBoxName).Find(nameTextName).GetComponent<TextMeshProUGUI>();
-            dialogueText = storyScreen.Find(dialogueBoxName).Find(dialogueTextName).GetComponent<TextMeshProUGUI>();
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
 
-    }
-
-    private void Start()
-    {
-        var canvas = GetComponent<Canvas>();
-        canvas.worldCamera = Camera.main;
-    }
-
-    // Start Story Mode with given info
-    public Coroutine StartStory(string storyInfo, int readBlockCount, int readEntryCount)
-    {
-        return StartCoroutine(StartStoryCoroutine(storyInfo, readBlockCount, readEntryCount));
-    }
-    IEnumerator StartStoryCoroutine(string storyInfo, int readBlockCount, int readEntryCount)
-    {
-        // Set Story Playing true
-        IsStoryPlaying = true;
-
-        // Activate Story Screen
-        storyScreen.gameObject.SetActive(true);
-
-        // Get dialogue player
-        dialoguePlayer = UtilityManager.Instance.GetUtilityTool<DialoguePlayer>();
-
-        // Load Story Text according to the Info
-        yield return StoryModel.Instance.LoadStoryText(storyInfo, readBlockCount, readEntryCount);
-
-        // Show first story script When new story is loaded
-        StoryEntry entry = StoryModel.Instance.GetFirstEntry();
-        if (entry == null)
-        {
-            Debug.Log("Story initial load error");
-            yield break;
-        }
-        ShowStoryEntry(entry);
-    }
-
-    // Finish Story Mode
-    public void FinishStory()
-    {
-        // Inactivate Story Screen
-        storyScreen.gameObject.SetActive(false);
-
-        // Give dialogue player back
-        UtilityManager.Instance.GiveUtilityBack(dialoguePlayer);
-        dialoguePlayer = null;
-
-        responseCount = 0;
-        //MemoryAPI.Instance.Reflect();
-    }
-
-
-    // Play next script on the screen
-    public void PlayNextScript()
-    {
-        if (dialoguePlayer.PlayingDialgoueEntries.Count > 0)
-        {
-            if (dialoguePlayer.PlayingDialgoueEntries.Count > 1)
+            StoryEntry entry = StoryModel.Instance.GetNextEntry();
+            if (entry == null)
             {
-                Debug.Log("Error: multiple dialogue at the list");
+                IsStoryPlaying = false;
+                return;
             }
 
-            // Complete current playing dialogue entry
-            StoryDialogue dialogue = dialoguePlayer.PlayingDialgoueEntries[0];
-            dialoguePlayer.CompleteDialogue(dialogue, nameText, dialogueText);
+            ShowStoryEntry(entry);
         }
-        else
+
+        public void ShowStoryEntry(StoryEntry entry)
         {
-            if (isWaitingResponse) // Waiting for AI's response
+            Debug.Assert(null != entry, "Story Entry cannot be null");
+
+            if (_storyHandlers.TryGetValue(entry.Type, out IStoryEntryHandler handler))
             {
-                nameText.text = "";
-                dialogueText.text = "Loading";
-            }
-            else if (isChatting && StoryModel.Instance.StoryEntryBuffer.Count == 0) // Continue chating
-            {
-                //GameEventProducer.Instance.GenerateChoiceEventStream();
+                _activeStoryHandlers.Add(handler);
+                handler.ProgressStoryEntry(entry);
             }
             else
             {
-                // Check if there is available entry
-                StoryEntry entry = StoryModel.Instance.GetNextEntry();
-                if (entry == null)
-                {
-                    // Story is over
-                    IsStoryPlaying = false;
-                }
-                else
-                {
-                    // Show Story Entry
-                    ShowStoryEntry(entry);
-                }
+                Debug.Log($"story entry error: no such entry {entry}");
             }
         }
-    }
 
-    // Show story entry on the screen
-    public void ShowStoryEntry(StoryEntry entry)
-    {
-        if (entry is StoryDialogue dialogue)
+
+        public void ProcessSelectedChoice(StoryChoiceOption choiceOption)
         {
-            dialoguePlayer.PlayDialogue(dialogue, nameText, dialogueText);
-            //MemoryAPI.Instance.SaveMemory(dialogue);
-        }
-        else if (entry is StoryChoice choice)
-        {
-            // Save processing choice
-            StoryModel.Instance.ProcessingChoice = choice;
-
-            // Extracting the text values from the options
-            List<string> optionTexts = choice.Options.Select(option => option.Text).ToList();
-
-            // Generate show choice event
-            var choiceEvent = GameEventFactory.CreateChoiceEvent(optionTexts);
-            GameEventManager.Instance.Submit(choiceEvent);
-        }
-        else
-        {
-            Debug.Log("story entry error: no such entry");
-        }
-    }
-
-
-    // Process selected choice
-    public void ProcessSelectedChoice(string optionText, bool generateResponse)
-    {
-        // Play selected choice option
-        StoryDialogue inputDialogue = new StoryDialogue("나", optionText);
-        StoryModel.Instance.StoryEntryBuffer.Enqueue(inputDialogue);
-        PlayNextScript();
-
-        if (generateResponse) // Generate response of AI
-        {
-            StartCoroutine(GetResponse(inputDialogue));
-        }
-        else // Set current branch info
-        {
-            StoryModel.Instance.SetCurrentBranch(optionText);
-        }
-    }
-
-    // Get response of the AI Character
-    IEnumerator GetResponse(StoryDialogue inputDialogue)
-    {
-        // Set response settings
-        isWaitingResponse = true;
-        responseCount++;
-        if (responseCount >= MAX_RESPONSE_COUNT) isChatting = false;
-        else isChatting = true;
-
-        // Get response
-        yield return MemoryAPI.Instance.GenerateResponse(inputDialogue, isChatting);
-        string response = MemoryAPI.Instance.Response;
-        isWaitingResponse = false;
-
-        // Split the string by newline characters and remove empty entries
-        string[] lines = response.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-
-        // Convert the array to a list
-        var linesList = lines.ToList();
-
-        foreach (var line in linesList)
-        {
-            // Skip empty lines, just in case
-            if (string.IsNullOrWhiteSpace(line))
-                continue;
-
-            // Prepare response
-            StoryDialogue responseDialogue = new StoryDialogue("연아", line);
-            StoryModel.Instance.StoryEntryBuffer.Enqueue(responseDialogue);
+            StoryModel.Instance.CurrentStoryBranch = choiceOption.BranchName;
         }
 
-        // If dialogue text is loading, auto play response
-        if (dialogueText.text.Equals("Loading"))
+        public void GetStoryProgressInfo(out int readBlockCount, out int readEntryCount)
         {
-            PlayNextScript();
+            readBlockCount = StoryModel.Instance.ReadBlockCount;
+            readEntryCount = StoryModel.Instance.ReadEntryCount;
         }
-    }
 
-    public void GetStoryProgressInfo(out int readBlockCount, out int readEntryCount)
-    {
-        readBlockCount = StoryModel.Instance.ReadBlockCount;
-        readEntryCount = StoryModel.Instance.ReadEntryCount;
+
+        /****** Private Menbers ******/
+
+        [SerializeField] private Transform _storyHandlersTransform;
+
+        private StoryUIView _storyUIView;
+        private StoryHandleContext _storyContext;
+        private Dictionary<StoryEntry.EntryType, IStoryEntryHandler> _storyHandlers = new();
+        private List<IStoryEntryHandler> _activeStoryHandlers = new();
+
+        public void Awake()
+        {
+            Debug.Assert(null != _storyHandlersTransform, "Story Handlers are not assigned in the editor.");
+
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        private void Start()
+        {
+            _storyUIView = UIController.Instance.GetUIView(BaseUI.Story) as StoryUIView;
+            Debug.Assert(null != _storyUIView, "StoryUIView is not assigned in StoryController.");
+
+            // Initialize StoryHandleContext here
+            _storyContext = new StoryHandleContext(this, _storyUIView);
+
+            InitializeStoryHandlers();
+        }
+
+        private void InitializeStoryHandlers()
+        {
+            var storyHandlers = _storyHandlersTransform.GetComponents<IStoryEntryHandler>();
+            Debug.Assert(storyHandlers.Length > 0, "No Story Handlers found in StoryController.");
+
+            foreach (var handler in storyHandlers)
+            {
+                handler.Initialize(_storyContext);
+                handler.OnStoryEntryComplete += DeactivateStoryHandler;
+                _storyHandlers.Add(handler.PresentingEntryType, handler);
+            }
+        }
+
+        private void DeactivateStoryHandler(IStoryEntryHandler handler)
+        {
+            Debug.Assert(null != handler, "Handler cannot be null");
+            Debug.Assert(_activeStoryHandlers.Contains(handler), $"Handler {handler} is not active");
+
+            bool isAutoProgress = handler.CurrentEntry.IsAutoProgress;
+
+            handler.ResetHandler();
+            _activeStoryHandlers.Remove(handler); // Release Handler
+
+            if (true == isAutoProgress)
+            {
+                PlayNextScript();
+            }
+        }
+
+        private IEnumerator StartStoryCoroutine(string storyInfo, int readBlockCount, int readEntryCount)
+        {
+            IsStoryPlaying = true;
+
+            yield return StoryModel.Instance.LoadStoryText(storyInfo, readBlockCount, readEntryCount);
+
+            StoryEntry entry = StoryModel.Instance.PeekFirstEntry();
+            Debug.Assert(null != entry, "Story Entry cannot be null");
+
+            if (entry is StoryPlayMode)
+            {
+                StoryModel.Instance.GetNextEntry();
+                ShowStoryEntry(entry);
+                yield break;
+            }
+            
+            StoryPlayMode storyPlayMode = new StoryPlayMode(StoryPlayMode.PlayModeType.VisualNovel);
+            ShowStoryEntry(storyPlayMode);
+        }
     }
 }
-

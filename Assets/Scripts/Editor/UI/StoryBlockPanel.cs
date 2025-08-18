@@ -1,25 +1,21 @@
 using UnityEngine;
 using UnityEditor;
+using AD.Story;
 using StoryEditor.Controllers;
 
 namespace StoryEditor.UI
 {
     public class StoryBlockPanel
     {
-        private EditorStoryScript editorStoryScript;
-        private BlockController blockController;
-        private DragDropHelper.DragState dragState;
-        private Vector2 scrollPosition;
-        
-        private string editingBlockName = "";
-        private bool isEditingBlockName = false;
-        private int editingBlockIndex = -1;
-        private const string TextFieldControlName = "BlockNameField";
+        /****** Public Members ******/
 
         public StoryBlockPanel(EditorStoryScript storyScript, BlockController controller)
         {
-            editorStoryScript = storyScript;
-            blockController = controller;
+            Debug.Assert(null != storyScript);
+            Debug.Assert(null != controller);
+
+            _editorStoryScript = storyScript;
+            _blockController = controller;
         }
 
         public void Draw(Rect rect)
@@ -30,6 +26,28 @@ namespace StoryEditor.UI
             GUILayout.EndArea();
         }
 
+        public void HandleGlobalInput()
+        {
+            if (_isEditingBlockName && EventType.MouseDown == Event.current.type && 0 == Event.current.button)
+            {
+                _blockController.RenameBlock(_editingBlockIndex, _editingBlockName);
+                ExitEditMode();
+            }
+        }
+        
+
+        /****** Private Members ******/
+
+        private EditorStoryScript _editorStoryScript;
+        private BlockController _blockController;
+        private DragDropHelper.DragState _dragState;
+        private Vector2 _scrollPosition;
+        
+        private string _editingBlockName = "";
+        private bool _isEditingBlockName = false;
+        private int _editingBlockIndex = -1;
+        private const string _TextFieldControlName = "BlockNameField";
+
         private void DrawHeader()
         {
             EditorGUILayout.Space(3);
@@ -37,7 +55,7 @@ namespace StoryEditor.UI
             GUILayout.Label("Story Blocks", EditorStyles.boldLabel);
             if (GUILayout.Button("+ Add", EditorStyles.miniButton, GUILayout.Width(50), GUILayout.Height(16)))
             {
-                blockController.AddBlock();
+                _blockController.AddBlock();
             }
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.Space(3);
@@ -45,14 +63,14 @@ namespace StoryEditor.UI
 
         private void DrawBlockList()
         {
-            scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
 
-            if (Event.current.type == EventType.Repaint)
+            if (EventType.Repaint == Event.current.type)
             {
-                dragState.dropTargetIndex = -1;
+                _dragState.dropTargetIndex = -1;
             }
 
-            for (int i = 0; i < editorStoryScript.EditorBlocks.Count; i++)
+            for (int i = 0; i < _editorStoryScript.EditorBlocks.Count; i++)
             {
                 DrawBlockItem(i);
             }
@@ -62,12 +80,14 @@ namespace StoryEditor.UI
 
         private void DrawBlockItem(int index)
         {
-            var block = editorStoryScript.EditorBlocks[index];
-            var isSelected = index == editorStoryScript.SelectedBlockIndex;
+            Debug.Assert(0 <= index && index < _editorStoryScript.EditorBlocks.Count);
+
+            var block = _editorStoryScript.EditorBlocks[index];
+            var isSelected = index == _editorStoryScript.SelectedBlockIndex;
 
             EditorGUILayout.BeginHorizontal();
 
-            if (isEditingBlockName && editingBlockIndex == index)
+            if (_isEditingBlockName && _editingBlockIndex == index)
             {
                 DrawBlockNameEditor(index);
             }
@@ -82,12 +102,12 @@ namespace StoryEditor.UI
 
         private void DrawBlockNameEditor(int index)
         {
-            GUI.SetNextControlName(TextFieldControlName);
-            editingBlockName = EditorGUILayout.TextField(editingBlockName);
+            GUI.SetNextControlName(_TextFieldControlName);
+            _editingBlockName = EditorGUILayout.TextField(_editingBlockName);
             
-            if (Event.current.type == EventType.Repaint && GUI.GetNameOfFocusedControl() != TextFieldControlName)
+            if (EventType.Repaint == Event.current.type && _TextFieldControlName != GUI.GetNameOfFocusedControl())
             {
-                EditorGUI.FocusTextInControl(TextFieldControlName);
+                EditorGUI.FocusTextInControl(_TextFieldControlName);
             }
             
             HandleEditingKeys(index);
@@ -95,15 +115,15 @@ namespace StoryEditor.UI
 
         private void HandleEditingKeys(int index)
         {
-            if (Event.current.type == EventType.KeyDown)
+            if (EventType.KeyDown == Event.current.type)
             {
-                if (Event.current.keyCode == KeyCode.Return)
+                if (KeyCode.Return == Event.current.keyCode)
                 {
-                    blockController.RenameBlock(index, editingBlockName);
+                    _blockController.RenameBlock(index, _editingBlockName);
                     ExitEditMode();
                     Event.current.Use();
                 }
-                else if (Event.current.keyCode == KeyCode.Escape)
+                else if (KeyCode.Escape == Event.current.keyCode)
                 {
                     ExitEditMode();
                     Event.current.Use();
@@ -113,23 +133,25 @@ namespace StoryEditor.UI
 
         private void DrawBlockButton(EditorStoryBlock block, int index, bool isSelected)
         {
+            Debug.Assert(null != block);
+
             var displayName = $"{index + 1}. {block.GetDisplayName()}";
             var buttonStyle = isSelected ? GetSelectedButtonStyle() : GUI.skin.label;
             var buttonRect = GUILayoutUtility.GetRect(new GUIContent(displayName), buttonStyle);
             
-            var isDraggedItem = dragState.isDragging && dragState.draggedIndex == index;
+            var isDraggedItem = _dragState.isDragging && _dragState.draggedIndex == index;
             
             DragDropHelper.DrawDraggedItemFeedback(isDraggedItem);
-            DragDropHelper.DrawDropIndicator(buttonRect, index, ref dragState);
+            DragDropHelper.DrawDropIndicator(buttonRect, index, ref _dragState);
             
-            DragDropHelper.HandleDragAndDrop<EditorStoryBlock>(buttonRect, index, ref dragState, 
-                (fromIndex, toIndex) => blockController.MoveBlock(fromIndex, toIndex));
+            DragDropHelper.HandleDragAndDrop<EditorStoryBlock>(buttonRect, index, ref _dragState, 
+                (fromIndex, toIndex) => _blockController.MoveBlock(fromIndex, toIndex));
             
             HandleDoubleClick(buttonRect, block, index);
             
-            if (GUI.Button(buttonRect, displayName, buttonStyle) && false == dragState.isDragging)
+            if (GUI.Button(buttonRect, displayName, buttonStyle) && false == _dragState.isDragging)
             {
-                blockController.SelectBlock(index);
+                _blockController.SelectBlock(index);
             }
             
             DragDropHelper.ResetGUIColor();
@@ -137,13 +159,13 @@ namespace StoryEditor.UI
 
         private void HandleDoubleClick(Rect buttonRect, EditorStoryBlock block, int index)
         {
-            if (Event.current.type == EventType.MouseDown && 
-                Event.current.clickCount == 2 && 
+            if (EventType.MouseDown == Event.current.type && 
+                2 == Event.current.clickCount && 
                 buttonRect.Contains(Event.current.mousePosition))
             {
-                editingBlockName = block.BranchName;
-                isEditingBlockName = true;
-                editingBlockIndex = index;
+                _editingBlockName = block.BranchName;
+                _isEditingBlockName = true;
+                _editingBlockIndex = index;
                 Event.current.Use();
             }
         }
@@ -155,7 +177,7 @@ namespace StoryEditor.UI
             {
                 if (EditorUtility.DisplayDialog("Delete Block", "Are you sure you want to delete this block?", "Delete", "Cancel"))
                 {
-                    blockController.RemoveBlock(index);
+                    _blockController.RemoveBlock(index);
                 }
             }
             GUI.color = Color.white;
@@ -168,27 +190,11 @@ namespace StoryEditor.UI
             return style;
         }
 
-        public void HandleGlobalInput()
-        {
-            if (isEditingBlockName && Event.current.type == EventType.MouseDown && Event.current.button == 0)
-            {
-                blockController.RenameBlock(editingBlockIndex, editingBlockName);
-                ExitEditMode();
-            }
-        }
-
         private void ExitEditMode()
         {
-            isEditingBlockName = false;
-            editingBlockIndex = -1;
+            _isEditingBlockName = false;
+            _editingBlockIndex = -1;
             GUI.FocusControl(null);
         }
-
-        public void SetDragCursor(Rect windowRect)
-        {
-            DragDropHelper.SetDragCursor(dragState.isDragging, windowRect);
-        }
-
-        public bool IsDragging => dragState.isDragging;
     }
 }

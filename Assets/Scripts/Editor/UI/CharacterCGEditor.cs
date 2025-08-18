@@ -1,0 +1,94 @@
+using UnityEngine;
+using UnityEditor;
+using AD.Story;
+
+namespace StoryEditor.UI
+{
+    public class CharacterCGEditor : IStoryEntryEditor
+    {
+        /****** Public Members ******/
+
+        public void Draw(EditorStoryEntry entry)
+        {
+            var standing = entry.AsCharacterCG();
+            if (null == standing) return;
+
+            DrawCharacterNameField(standing);
+            EditorGUILayout.Space();
+            DrawExpressionField(standing);
+            EditorGUILayout.Space();
+            DrawAnimationField(standing);
+            EditorGUILayout.Space();
+            DrawTargetPositionField(standing);
+            EditorGUILayout.Space();
+            DrawAnimationSpeedField(standing);
+            EditorGUILayout.Space();
+            DrawBlockingAnimationField(standing);
+        }
+
+
+        /****** Private Members ******/
+
+        private void DrawCharacterNameField(StoryCharacterCG standing)
+        {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Character Name:", EditorStyles.boldLabel, GUILayout.Width(120));
+            var characterOptions = new string[] { "나", "소녀", "중개상" };
+            var currentIndex = System.Array.IndexOf(characterOptions, standing.Name);
+            if (currentIndex == -1) currentIndex = 0;
+
+            var newIndex = EditorGUILayout.Popup(currentIndex, characterOptions, GUILayout.Width(150));
+            if (newIndex != currentIndex)
+            {
+                standing.Name = characterOptions[newIndex];
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void DrawExpressionField(StoryCharacterCG standing)
+        {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Expression:", EditorStyles.boldLabel, GUILayout.Width(120));
+            standing.Expression = (StoryCharacterCG.FacialExpressionType)EditorGUILayout.EnumPopup(standing.Expression, GUILayout.Width(150));
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void DrawAnimationField(StoryCharacterCG standing)
+        {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Animation:", EditorStyles.boldLabel, GUILayout.Width(120));
+            standing.Animation = (StoryCharacterCG.AnimationType)EditorGUILayout.EnumPopup(standing.Animation, GUILayout.Width(150));
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void DrawTargetPositionField(StoryCharacterCG standing)
+        {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Target Position:", EditorStyles.boldLabel, GUILayout.Width(120));
+            standing.TargetPosition = (StoryCharacterCG.TargetPositionType)EditorGUILayout.EnumPopup(standing.TargetPosition, GUILayout.Width(150));
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void DrawAnimationSpeedField(StoryCharacterCG standing)
+        {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Animation Speed:", EditorStyles.boldLabel, GUILayout.Width(120));
+            standing.AnimationSpeed = EditorGUILayout.FloatField(standing.AnimationSpeed, GUILayout.Width(150));
+            if (standing.AnimationSpeed < 0) standing.AnimationSpeed = 0;
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void DrawBlockingAnimationField(StoryCharacterCG standing)
+        {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Is Blocking Animation:", EditorStyles.boldLabel, GUILayout.Width(120));
+            standing.IsBlockingAnimation = EditorGUILayout.Toggle(standing.IsBlockingAnimation, GUILayout.Width(150));
+            EditorGUILayout.EndHorizontal();
+
+            if (standing.IsBlockingAnimation)
+            {
+                EditorGUILayout.HelpBox("This animation will block the story progression until it completes.", MessageType.Info);
+            }
+        }
+    }
+}

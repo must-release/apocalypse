@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using UnityEngine.Assertions;
 using Cysharp.Threading.Tasks;
-using System.Threading.Tasks;
 using UnityEngine;
+using AD.Camera;
 
 /*
  * Stage Transition Event
@@ -58,7 +57,26 @@ public class StageTransitionEvent : GameEventBase<StageTransitionEventInfo>
         PlayerManager.Instance.GetPlayerData(out ChapterType _, out int _, out PlayerAvatarType playerType);
         PlayerManager.Instance.SetPlayerData(Info.TargetChapter, Info.TargetStage, playerType);
 
-        await SceneController.Instance.AsyncExecuteStageTransition();
+        await SceneController.Instance.ExecuteStageTransitionAsync();
+
+        var newSceneCameras = SceneController.Instance.GetCurrentSceneCameras();
+        Transform player = SceneController.Instance.PlayerTransform;
+
+        if (0 < newSceneCameras.Length)
+        {
+            CameraManager.Instance.ClearCameras();
+            CameraManager.Instance.RegisterCameras(newSceneCameras);
+
+            if (null != player)
+            {
+                CameraManager.Instance.SetCurrentCamera<FollowCamera>();
+                CameraManager.Instance.ActivateCamera(player);
+            }
+            else
+            {
+                CameraManager.Instance.SetCurrentCamera(newSceneCameras[0]);
+            }
+        }
 
         TerminateEvent();
     }

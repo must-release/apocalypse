@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-public class LoadUIController : SaveLoadUIBase, IUIController<SubUI>
+public class LoadUIController : SaveLoadUIBase, IUIView<SubUI>
 {
     /****** Public Methods ******/
     public SubUI UIType => SubUI.Load;
@@ -56,8 +56,6 @@ public class LoadUIController : SaveLoadUIBase, IUIController<SubUI>
         int slotNum = SelectedSlot.slotNumber;
 
         TryClosingConfirmPanel();
-
-        UIController.Instance.TurnEverySubUIOff();
 
         var loadEvent = GameEventFactory.CreateSequentialEvent(new List<IGameEvent>
         {

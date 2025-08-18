@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.Assertions;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
 public static class GameEventFactory
@@ -34,23 +32,6 @@ public static class GameEventFactory
     {
         var eventInfo = _commonEventInfos[commonEventType].Clone();
         return CreateFromInfo(eventInfo);
-    }
-
-    public static IGameEvent CreateChoiceEvent(List<string> choices)
-    {
-        var info = ScriptableObject.CreateInstance<ChoiceEventInfo>();
-        info.Initialize(choices);
-
-        var evt = GameEventPool<ChoiceEvent, ChoiceEventInfo>.Get(EventHost, $"ChoiceEvent_{string.Join("_", choices)}");
-        evt.Initialize(info);
-        return evt;
-    }
-
-    public static IGameEvent CreateChoiceEvent(ChoiceEventDTO dto)
-    {
-        Debug.Assert(null != dto, "Cannot create ChoiceEvent from null DTO");
-
-        return CreateChoiceEvent(dto.ChoiceList);
     }
 
     public static IGameEvent CreateCutsceneEvent()
@@ -207,6 +188,26 @@ public static class GameEventFactory
         return CreateUIChangeEvent(dto.TargetUI);
     }
 
+    public static IGameEvent CreateBGMEvent(bool shouldStop, string clipName = "[STOPPED]")
+    {
+        var info = ScriptableObject.CreateInstance<BGMEventInfo>();
+        info.Initialize(shouldStop, clipName);
+
+        var evt = GameEventPool<BGMEvent, BGMEventInfo>.Get(EventHost, $"BGMEvent_{clipName}");
+        evt.Initialize(info);
+        return evt;
+    }
+
+    public static IGameEvent CreateSFXEvent(string clipName)
+    {
+        var info = ScriptableObject.CreateInstance<SFXEventInfo>();
+        info.Initialize(clipName);
+
+        var evt = GameEventPool<SFXEvent, SFXEventInfo>.Get(EventHost, $"SFXEvent_{clipName}");
+        evt.Initialize(info);
+        return evt;
+    }
+
     public static IGameEvent CreateSequentialEvent(List<IGameEvent> gameEvents, int startIndex = 0)
     {
         Debug.Assert(null != gameEvents && 0 < gameEvents.Count, "GameEvents list is null or empty");
@@ -259,6 +260,27 @@ public static class GameEventFactory
         return evt;
     }
 
+    public static IGameEvent CreateCameraEvent(AD.Camera.CameraActionType actionType, string cameraName, bool isTargetPlayer = false, string targetName = null)
+    {
+        var info = ScriptableObject.CreateInstance<CameraEventInfo>();
+        info.Initialize(actionType, cameraName, isTargetPlayer, targetName);
+
+        var evt = GameEventPool<CameraEvent, CameraEventInfo>.Get(EventHost, $"CameraEvent_{actionType}_{targetName}");
+        evt.Initialize(info);
+        return evt;
+    }
+
+    public static IGameEvent CreateSideDialogueEvent(string characterName, string text, float textInterval)
+    {
+        var info = ScriptableObject.CreateInstance<SideDialogueEventInfo>();
+        info.Initialize(characterName, text, textInterval);
+
+        var evt = GameEventPool<SideDialogueEvent, SideDialogueEventInfo>.Get(EventHost, $"SideDialogueEvent_{text.GetHashCode()}");
+        evt.Initialize(info);
+        return evt;
+    }
+
+
     public static IGameEvent CreateFromInfo<TEventInfo>(TEventInfo info)
         where TEventInfo : GameEventInfo
     {
@@ -299,7 +321,6 @@ public static class GameEventFactory
     private static readonly Dictionary<GameEventType, Func<GameEventInfo, IGameEvent>> _eventCreatorsFromInfo =
         new Dictionary<GameEventType, Func<GameEventInfo, IGameEvent>>
     {
-        { GameEventType.Choice,             info => CreateFromInfo<ChoiceEvent, ChoiceEventInfo>(info as ChoiceEventInfo) },
         { GameEventType.Cutscene,           info => CreateFromInfo<CutsceneEvent, CutsceneEventInfo>(info as CutsceneEventInfo)},
         { GameEventType.DataLoad,           info => CreateFromInfo<DataLoadEvent, DataLoadEventInfo>(info as DataLoadEventInfo) },
         { GameEventType.DataSave,           info => CreateFromInfo<DataSaveEvent, DataSaveEventInfo>(info as DataSaveEventInfo) },
@@ -310,12 +331,15 @@ public static class GameEventFactory
         { GameEventType.StageTransition,    info => CreateFromInfo<StageTransitionEvent, StageTransitionEventInfo>(info as StageTransitionEventInfo) },
         { GameEventType.Story,              info => CreateFromInfo<StoryEvent, StoryEventInfo>(info as StoryEventInfo) },
         { GameEventType.UIChange,           info => CreateFromInfo<UIChangeEvent, UIChangeEventInfo>(info as UIChangeEventInfo) },
+        { GameEventType.Camera,             info => CreateFromInfo<CameraEvent, CameraEventInfo>(info as CameraEventInfo) },
+        { GameEventType.SideDialogue,       info => CreateFromInfo<SideDialogueEvent, SideDialogueEventInfo>(info as SideDialogueEventInfo) },
+        { GameEventType.BGM,                info => CreateFromInfo<BGMEvent, BGMEventInfo>(info as BGMEventInfo) },
+        { GameEventType.SFX,                info => CreateFromInfo<SFXEvent, SFXEventInfo>(info as SFXEventInfo) },
     };
 
     private static readonly Dictionary<GameEventType, Func<GameEventDTO, IGameEvent>> _eventCreatorsFromDTO =
         new Dictionary<GameEventType, Func<GameEventDTO, IGameEvent>>
     {
-        { GameEventType.Choice,             dto => CreateChoiceEvent(dto as ChoiceEventDTO) },
         { GameEventType.Cutscene,           dto => CreateCutsceneEvent(dto as CutsceneEventDTO) },
         { GameEventType.DataLoad,           dto => CreateDataLoadEvent(dto as DataLoadEventDTO) },
         { GameEventType.DataSave,           dto => CreateDataSaveEvent(dto as DataSaveEventDTO) },

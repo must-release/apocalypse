@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-public class PreferenceUIController : MonoBehaviour, IUIController<SubUI>
+public class PreferenceUIController : MonoBehaviour, IUIView<SubUI>
 {
     /****** Public Members ******/
 

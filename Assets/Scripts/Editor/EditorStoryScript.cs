@@ -1,38 +1,37 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using AD.Story;
 
 namespace StoryEditor
 {
     [System.Serializable]
     public class EditorStoryScript
     {
-        [SerializeField] private List<EditorStoryBlock> editorBlocks = new List<EditorStoryBlock>();
-        [SerializeField] private int selectedBlockIndex = -1;
-        [SerializeField] private int selectedEntryIndex = -1;
+        /****** Public Members ******/
 
-        public List<EditorStoryBlock> EditorBlocks => editorBlocks;
-        public int SelectedBlockIndex 
-        { 
-            get => selectedBlockIndex;
-            set => selectedBlockIndex = value;
+        public List<EditorStoryBlock> EditorBlocks => _editorBlocks;
+        public int SelectedBlockIndex
+        {
+            get => _selectedBlockIndex;
+            set => _selectedBlockIndex = value;
         }
-        public int SelectedEntryIndex 
-        { 
-            get => selectedEntryIndex;
-            set => selectedEntryIndex = value;
+        public int SelectedEntryIndex
+        {
+            get => _selectedEntryIndex;
+            set => _selectedEntryIndex = value;
         }
 
-        public EditorStoryBlock SelectedBlock => 
-            0 <= selectedBlockIndex && selectedBlockIndex < editorBlocks.Count ? 
-            editorBlocks[selectedBlockIndex] : null;
+        public EditorStoryBlock SelectedBlock =>
+            0 <= _selectedBlockIndex && _selectedBlockIndex < _editorBlocks.Count ?
+            _editorBlocks[_selectedBlockIndex] : null;
 
         public EditorStoryEntry SelectedEntry =>
             SelectedBlock?.SelectedEntry;
 
         public EditorStoryScript()
         {
-            editorBlocks = new List<EditorStoryBlock>();
+            _editorBlocks = new List<EditorStoryBlock>();
         }
 
         public EditorStoryScript(StoryScript storyScript)
@@ -42,15 +41,15 @@ namespace StoryEditor
 
         public void LoadFromStoryScript(StoryScript storyScript)
         {
-            editorBlocks.Clear();
-            selectedBlockIndex = -1;
-            selectedEntryIndex = -1;
+            _editorBlocks.Clear();
+            _selectedBlockIndex = -1;
+            _selectedEntryIndex = -1;
 
             if (null != storyScript?.Blocks)
             {
                 foreach (var block in storyScript.Blocks)
                 {
-                    editorBlocks.Add(new EditorStoryBlock(block));
+                    _editorBlocks.Add(new EditorStoryBlock(block));
                 }
             }
         }
@@ -59,7 +58,7 @@ namespace StoryEditor
         {
             var storyScript = new StoryScript
             {
-                Blocks = editorBlocks.Select(eb => eb.ToStoryBlock()).ToList()
+                Blocks = _editorBlocks.Select(eb => eb.ToStoryBlock()).ToList()
             };
             return storyScript;
         }
@@ -77,10 +76,105 @@ namespace StoryEditor
             }
 
             var newBlock = new EditorStoryBlock(branchName);
-            editorBlocks.Add(newBlock);
+            _editorBlocks.Add(newBlock);
             return newBlock;
         }
 
+        public bool RemoveBlock(int index)
+        {
+            Debug.Assert(0 <= index && index < _editorBlocks.Count, "Block index out of range");
+            if (index < 0 || _editorBlocks.Count <= index)
+                return false;
+
+            _editorBlocks.RemoveAt(index);
+            if (_selectedBlockIndex == index)
+            {
+                _selectedBlockIndex = -1;
+                _selectedEntryIndex = -1;
+            }
+            else if (_selectedBlockIndex > index)
+            {
+                _selectedBlockIndex--;
+            }
+            return true;
+        }
+
+        public bool MoveBlock(int fromIndex, int toIndex)
+        {
+            Debug.Assert(0 <= fromIndex && fromIndex < _editorBlocks.Count, "From index out of range");
+            Debug.Assert(0 <= toIndex && toIndex < _editorBlocks.Count, "To index out of range");
+            if (fromIndex < 0 || _editorBlocks.Count <= fromIndex || toIndex < 0 || _editorBlocks.Count <= toIndex || fromIndex == toIndex)
+                return false;
+
+            var block = _editorBlocks[fromIndex];
+            _editorBlocks.RemoveAt(fromIndex);
+            _editorBlocks.Insert(toIndex, block);
+
+            // Update selected index if needed
+            if (_selectedBlockIndex == fromIndex)
+            {
+                _selectedBlockIndex = toIndex;
+            }
+            else if (_selectedBlockIndex > fromIndex && _selectedBlockIndex <= toIndex)
+            {
+                _selectedBlockIndex--;
+            }
+            else if (_selectedBlockIndex < fromIndex && _selectedBlockIndex >= toIndex)
+            {
+                _selectedBlockIndex++;
+            }
+
+            return true;
+        }
+
+        public List<string> GetAllBranchNames()
+        {
+            return _editorBlocks.Select(b => b.BranchName).ToList();
+        }
+
+        public List<string> GetAvailableBranchNames(int afterBlockIndex)
+        {
+            return _editorBlocks
+                .Skip(afterBlockIndex + 1)
+                .Select(b => b.BranchName)
+                .ToList();
+        }
+
+        public bool ValidateChoiceReferences()
+        {
+            for (int blockIndex = 0; blockIndex < _editorBlocks.Count; blockIndex++)
+            {
+                var block = _editorBlocks[blockIndex];
+                var availableBranches = GetAvailableBranchNames(blockIndex);
+
+                for (int entryIndex = 0; entryIndex < block.EditorEntries.Count; entryIndex++)
+                {
+                    var entry = block.EditorEntries[entryIndex];
+                    if (entry.StoryEntry is StoryChoice choice)
+                    {
+                        foreach (var option in choice.Options)
+                        {
+                            if (false == string.IsNullOrEmpty(option.BranchName) &&
+                                false == StoryBlock.IsCommonBranch(option.BranchName) &&
+                                false == availableBranches.Contains(option.BranchName))
+                            {
+                                Logger.Write(LogCategory.StoryScriptEditor, $"Invalid branch reference '{option.BranchName}' in block '{block.BranchName}' entry {entryIndex + 1}", LogLevel.Error);
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+
+        /****** Private Members ******/
+
+        [SerializeField] private List<EditorStoryBlock> _editorBlocks = new List<EditorStoryBlock>();
+        [SerializeField] private int _selectedBlockIndex = -1;
+        [SerializeField] private int _selectedEntryIndex = -1;
+        
         private string GenerateUniqueBranchName(string baseName)
         {
             // Common branches are always allowed to have duplicate names
@@ -116,95 +210,7 @@ namespace StoryEditor
                 return true;
             }
             
-            return editorBlocks.All(block => block.BranchName != branchName);
-        }
-
-        public bool RemoveBlock(int index)
-        {
-            Debug.Assert(0 <= index && index < editorBlocks.Count, "Block index out of range");
-            if (index < 0 || editorBlocks.Count <= index)
-                return false;
-            
-            editorBlocks.RemoveAt(index);
-            if (selectedBlockIndex == index)
-            {
-                selectedBlockIndex = -1;
-                selectedEntryIndex = -1;
-            }
-            else if (selectedBlockIndex > index)
-            {
-                selectedBlockIndex--;
-            }
-            return true;
-        }
-
-        public bool MoveBlock(int fromIndex, int toIndex)
-        {
-            Debug.Assert(0 <= fromIndex && fromIndex < editorBlocks.Count, "From index out of range");
-            Debug.Assert(0 <= toIndex && toIndex < editorBlocks.Count, "To index out of range");
-            if (fromIndex < 0 || editorBlocks.Count <= fromIndex || toIndex < 0 || editorBlocks.Count <= toIndex || fromIndex == toIndex)
-                return false;
-            
-            var block = editorBlocks[fromIndex];
-            editorBlocks.RemoveAt(fromIndex);
-            editorBlocks.Insert(toIndex, block);
-
-            // Update selected index if needed
-            if (selectedBlockIndex == fromIndex)
-            {
-                selectedBlockIndex = toIndex;
-            }
-            else if (selectedBlockIndex > fromIndex && selectedBlockIndex <= toIndex)
-            {
-                selectedBlockIndex--;
-            }
-            else if (selectedBlockIndex < fromIndex && selectedBlockIndex >= toIndex)
-            {
-                selectedBlockIndex++;
-            }
-
-            return true;
-        }
-
-        public List<string> GetAllBranchNames()
-        {
-            return editorBlocks.Select(b => b.BranchName).ToList();
-        }
-
-        public List<string> GetAvailableBranchNames(int afterBlockIndex)
-        {
-            return editorBlocks
-                .Skip(afterBlockIndex + 1)
-                .Select(b => b.BranchName)
-                .ToList();
-        }
-
-        public bool ValidateChoiceReferences()
-        {
-            for (int blockIndex = 0; blockIndex < editorBlocks.Count; blockIndex++)
-            {
-                var block = editorBlocks[blockIndex];
-                var availableBranches = GetAvailableBranchNames(blockIndex);
-
-                for (int entryIndex = 0; entryIndex < block.EditorEntries.Count; entryIndex++)
-                {
-                    var entry = block.EditorEntries[entryIndex];
-                    if (entry.StoryEntry is StoryChoice choice)
-                    {
-                        foreach (var option in choice.Options)
-                        {
-                            if (false == string.IsNullOrEmpty(option.BranchName) && 
-                                false == StoryBlock.IsCommonBranch(option.BranchName) &&
-                                false == availableBranches.Contains(option.BranchName))
-                            {
-                                Debug.LogError($"Invalid branch reference '{option.BranchName}' in block '{block.BranchName}' entry {entryIndex + 1}");
-                                return false;
-                            }
-                        }
-                    }
-                }
-            }
-            return true;
+            return _editorBlocks.All(block => block.BranchName != branchName);
         }
     }
 }

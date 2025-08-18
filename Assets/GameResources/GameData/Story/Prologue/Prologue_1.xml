@@ -1,27 +1,44 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<StoryScript xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Block BranchName="Common">
-    <Dialogue Name="소녀" Speed="Default">앞을 봐! 괴물들이 있어!</Dialogue>
-    <Dialogue Name="소녀" Speed="Default">어떻게 하지? 돌아가야할까?</Dialogue>
+﻿<?xml version="1.0" ?>
+<StoryScript>
+  <Block BranchName="common">
+    <BackgroundCG Chapter="Prologue" ImageName="Church" />
+    <BGM Action="Start" BGMName="Songs_of_the_Soulless" IsLoop="true" />
+    <CharacterCG Name="소녀" Animation="Appear" />
+    <Dialogue Name="소녀">앞을 봐! 괴물들이 있어!</Dialogue>
+    <BackgroundCG Chapter="Prologue" ImageName="Church" Animation="Shake" />
+    <BackgroundCG Chapter="Prologue" ImageName="Church" Animation="Move" TargetPosition="Left"/>
+    <BackgroundCG Chapter="Prologue" ImageName="Church" Animation="Move" TargetPosition="Center"/>
+    <BackgroundCG Chapter="Prologue" ImageName="Church" Animation="ZoomIn" TargetPosition="Center"/>
+    <BackgroundCG Chapter="Prologue" ImageName="Church" Animation="ZoomOut" TargetPosition="Center"/>
+    <BackgroundCG Chapter="Prologue" ImageName="Church" Animation="ZoomIn" TargetPosition="Left"/>
+    <BackgroundCG Chapter="Prologue" ImageName="Church" Animation="ZoomOut" TargetPosition="Center"/>
+    <BackgroundCG Chapter="Prologue" ImageName="Church" Animation="Appear" AnimationDuration="5.0"/>
+    <SFX SFXName="Gun_Fire" />
+    <Dialogue Name="소녀">어떻게 하지? 돌아가야할까?</Dialogue>
     <Choice>
-      <PrevDialogue Name="소녀" Speed="Default">어떻게 하지? 돌아가야할까?</PrevDialogue>
+      <PrevDialogue Name="소녀">어떻게 하지? 돌아가야할까?</PrevDialogue>
       <Options>
-        <Option BranchName="Positive">죽이자.</Option>
-        <Option BranchName="Negative">돌아가자.</Option>
-        <Option BranchName="Negative">귀찮다.</Option>
+        <Option BranchName="positive">죽이자.</Option>
+        <Option BranchName="negative">돌아가자.</Option>
+        <Option BranchName="negative">귀찮다.</Option>
       </Options>
     </Choice>
   </Block>
-  <Block BranchName="Positive">
-    <Dialogue Name="나" Speed="Default">내가 처리할게.</Dialogue>
-    <Dialogue Name="소녀" Speed="Default">좋아! 믿고 있을게!</Dialogue>
+  <Block BranchName="positive">
+    <CharacterCG Name="소녀" Animation="Move" TargetPosition="Left" IsBlockingAnimation="false" />
+    <CharacterCG Name="나" Animation="Appear" TargetPosition="Right" />
+    <Dialogue Name="나">내가 처리할게.</Dialogue>
+    <Dialogue Name="소녀">좋아! 믿고 있을게!</Dialogue>
   </Block>
-  <Block BranchName="Negative">
-    <Dialogue Name="나" Speed="Default">별로 싸우고 싶지 않아.</Dialogue>
-    <Dialogue Name="소녀" Speed="Default">하지만 우리의 의지와 상관없이 괴물이 이쪽으로 오고 있어!</Dialogue>
-    <Dialogue Name="소녀" Speed="Default">...화이팅!!</Dialogue>
+  <Block BranchName="negative">
+    <CharacterCG Name="소녀" Animation="Move" TargetPosition="Left" IsBlockingAnimation="false" />
+    <CharacterCG Name="나" Animation="Appear" TargetPosition="Right" />
+    <Dialogue Name="나">별로 싸우고 싶지 않아.</Dialogue>
+    <CharacterCG Name="소녀" Expression="Smile" />
+    <Dialogue Name="소녀">하지만 우리의 의지와 상관없이 괴물이 이쪽으로 오고 있어!</Dialogue>
+    <Dialogue Name="소녀">...화이팅!!</Dialogue>
   </Block>
-  <Block BranchName="Common">
-    <Dialogue Name="나" Speed="Default">...그래.</Dialogue>
+  <Block BranchName="common">
+    <Dialogue Name="나">...그래.</Dialogue>
   </Block>
 </StoryScript>

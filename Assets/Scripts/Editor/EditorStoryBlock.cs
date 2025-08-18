@@ -1,62 +1,69 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using AD.Story;
+using AD.Camera;
 
 namespace StoryEditor
 {
     [System.Serializable]
     public class EditorStoryBlock
     {
-        [SerializeField] private string branchName;
-        [SerializeField] private List<EditorStoryEntry> editorEntries = new List<EditorStoryEntry>();
-        [SerializeField] private int selectedEntryIndex = -1;
+
+        /****** Public Members ******/
 
         public string BranchName 
         { 
-            get => branchName;
-            set => branchName = value;
+            get => _branchName;
+            set => _branchName = value;
         }
 
-        public List<EditorStoryEntry> EditorEntries => editorEntries;
+        public List<EditorStoryEntry> EditorEntries => _editorEntries;
 
         public int SelectedEntryIndex 
         { 
-            get => selectedEntryIndex;
-            set => selectedEntryIndex = value;
+            get => _selectedEntryIndex;
+            set => _selectedEntryIndex = value;
         }
 
         public EditorStoryEntry SelectedEntry => 
-            0 <= selectedEntryIndex && selectedEntryIndex < editorEntries.Count ? 
-            editorEntries[selectedEntryIndex] : null;
+            0 <= _selectedEntryIndex && _selectedEntryIndex < _editorEntries.Count ? 
+            _editorEntries[_selectedEntryIndex] : null;
 
         public EditorStoryBlock()
         {
-            branchName = "";
-            editorEntries = new List<EditorStoryEntry>();
+            _branchName = "";
+            _editorEntries = new List<EditorStoryEntry>();
         }
 
         public EditorStoryBlock(string branchName)
         {
-            this.branchName = branchName;
-            editorEntries = new List<EditorStoryEntry>();
+            Debug.Assert(null != branchName);
+
+            this._branchName = branchName;
+            _editorEntries = new List<EditorStoryEntry>();
         }
 
         public EditorStoryBlock(StoryBlock storyBlock)
         {
+            Debug.Assert(null != storyBlock);
+
             LoadFromStoryBlock(storyBlock);
         }
 
         public void LoadFromStoryBlock(StoryBlock storyBlock)
         {
-            branchName = storyBlock.BranchName ?? "";
-            editorEntries.Clear();
-            selectedEntryIndex = -1;
+            Debug.Assert(null != storyBlock);
 
-            if (storyBlock.Entries != null)
+            _branchName = storyBlock.BranchName ?? "";
+            _editorEntries.Clear();
+            _selectedEntryIndex = -1;
+
+            if (null != storyBlock.Entries)
             {
                 foreach (var entry in storyBlock.Entries)
                 {
-                    editorEntries.Add(new EditorStoryEntry(entry));
+                    _editorEntries.Add(new EditorStoryEntry(entry));
                 }
             }
         }
@@ -65,8 +72,8 @@ namespace StoryEditor
         {
             return new StoryBlock
             {
-                BranchName = branchName,
-                Entries = editorEntries.Select(ee => ee.StoryEntry).ToList()
+                BranchName = _branchName,
+                Entries = _editorEntries.Select(ee => ee.StoryEntry).ToList()
             };
         }
 
@@ -75,12 +82,12 @@ namespace StoryEditor
             // Find the last dialogue to use its character as default
             if (string.IsNullOrEmpty(character) || "독백" == character)
             {
-                var lastDialogue = editorEntries
+                var lastDialogue = _editorEntries
                     .Where(e => e.StoryEntry is StoryDialogue)
                     .Cast<EditorStoryEntry>()
                     .LastOrDefault();
 
-                if (lastDialogue != null)
+                if (null != lastDialogue)
                 {
                     var dialogue = lastDialogue.StoryEntry as StoryDialogue;
                     if (false == string.IsNullOrEmpty(dialogue.Name))
@@ -92,15 +99,19 @@ namespace StoryEditor
 
             var newDialogue = new StoryDialogue(character, text);
             var editorEntry = new EditorStoryEntry(newDialogue);
-            editorEntries.Add(editorEntry);
+            _editorEntries.Add(editorEntry);
             return editorEntry;
         }
 
         public EditorStoryEntry AddVFX(string action = "", float duration = 0f)
         {
-            var newVFX = new StoryVFX(action, duration);
+            var newVFX = new StoryVFX
+            {
+                VFX = StoryVFX.VFXType.ScreenFadeIn,
+                Duration = 0f < duration ? duration : 1.0f
+            };
             var editorEntry = new EditorStoryEntry(newVFX);
-            editorEntries.Add(editorEntry);
+            _editorEntries.Add(editorEntry);
             return editorEntry;
         }
 
@@ -108,9 +119,9 @@ namespace StoryEditor
         {
             // Find the previous dialogue for the choice
             StoryDialogue prevDialogue = null;
-            for (int i = editorEntries.Count - 1; 0 <= i; i--)
+            for (int i = _editorEntries.Count - 1; 0 <= i; i--)
             {
-                if (editorEntries[i].StoryEntry is StoryDialogue dialogue)
+                if (_editorEntries[i].StoryEntry is StoryDialogue dialogue)
                 {
                     prevDialogue = new StoryDialogue(dialogue.Name, dialogue.Text);
                     break;
@@ -134,18 +145,97 @@ namespace StoryEditor
             
             var newChoice = new StoryChoice(prevDialogue, defaultOptions);
             var editorEntry = new EditorStoryEntry(newChoice);
-            editorEntries.Add(editorEntry);
+            _editorEntries.Add(editorEntry);
+            return editorEntry;
+        }
+
+        public EditorStoryEntry AddCharacterCG(string name = "나", StoryCharacterCG.FacialExpressionType expression = StoryCharacterCG.FacialExpressionType.Default)
+        {
+            var newCharacterCG = new StoryCharacterCG
+            {
+                Name = name,
+                Expression = expression,
+                Animation = StoryCharacterCG.AnimationType.None,
+                TargetPosition = StoryCharacterCG.TargetPositionType.Center,
+                AnimationSpeed = 1.0f,
+                IsBlockingAnimation = true
+            };
+            var editorEntry = new EditorStoryEntry(newCharacterCG);
+            _editorEntries.Add(editorEntry);
+            return editorEntry;
+        }
+
+        public EditorStoryEntry AddPlayMode()
+        {
+            var newPlayMode = new StoryPlayMode
+            {
+                PlayMode = StoryPlayMode.PlayModeType.VisualNovel
+            };
+            var editorEntry = new EditorStoryEntry(newPlayMode);
+            _editorEntries.Add(editorEntry);
+            return editorEntry;
+        }
+
+        public EditorStoryEntry AddBackgroundCG()
+        {
+            var newBackgroundCG = new StoryBackgroundCG
+            {
+                Chapter = ChapterType.Test,
+                ImageName = ""
+            };
+            var editorEntry = new EditorStoryEntry(newBackgroundCG);
+            _editorEntries.Add(editorEntry);
+            return editorEntry;
+        }
+
+
+        public EditorStoryEntry AddBGM()
+        {
+            var newBGM = new StoryBGM
+            {
+                Action = StoryBGM.BGMAction.Start,
+                BGMName = "",
+                FadeDuration = 1.0f,
+                IsLoop = true
+            };
+            var editorEntry = new EditorStoryEntry(newBGM);
+            _editorEntries.Add(editorEntry);
+            return editorEntry;
+        }
+
+        public EditorStoryEntry AddSFX()
+        {
+            var newSFX = new StorySFX
+            {
+                SFXName = ""
+            };
+            var editorEntry = new EditorStoryEntry(newSFX);
+            _editorEntries.Add(editorEntry);
+            return editorEntry;
+        }
+
+        public EditorStoryEntry AddCameraAction()
+        {
+            var newCameraAction = new StoryCameraAction
+            {
+                ActionType = CameraActionType.SwitchToCamera,
+                CameraName = "",
+                Duration = 1.0f,
+                Priority = 10
+            };
+            var editorEntry = new EditorStoryEntry(newCameraAction);
+            _editorEntries.Add(editorEntry);
             return editorEntry;
         }
 
         public bool RemoveEntry(int index)
         {
-            Debug.Assert(0 <= index && index < editorEntries.Count, "Entry index out of range");
-            if (index < 0 || editorEntries.Count <= index)
+            Debug.Assert(0 <= index && index < _editorEntries.Count, "Entry index out of range");
+            if (0 > index || _editorEntries.Count <= index)
                 return false;
             
             // Clear text content before removing to prevent Unity GUI cache issues
-            var entry = editorEntries[index];
+            var entry = _editorEntries[index];
             if (entry.IsDialogue())
             {
                 var dialogue = entry.AsDialogue();
@@ -174,41 +264,41 @@ namespace StoryEditor
                 }
             }
             
-            editorEntries.RemoveAt(index);
-            if (selectedEntryIndex == index)
+            _editorEntries.RemoveAt(index);
+            if (index == _selectedEntryIndex)
             {
-                selectedEntryIndex = -1;
+                _selectedEntryIndex = -1;
             }
-            else if (selectedEntryIndex > index)
+            else if (index < _selectedEntryIndex)
             {
-                selectedEntryIndex--;
+                _selectedEntryIndex--;
             }
             return true;
         }
 
         public bool MoveEntry(int fromIndex, int toIndex)
         {
-            Debug.Assert(0 <= fromIndex && fromIndex < editorEntries.Count, "From index out of range");
-            Debug.Assert(0 <= toIndex && toIndex < editorEntries.Count, "To index out of range");
-            if (fromIndex < 0 || editorEntries.Count <= fromIndex || toIndex < 0 || editorEntries.Count <= toIndex || fromIndex == toIndex)
+            Debug.Assert(0 <= fromIndex && fromIndex < _editorEntries.Count, "From index out of range");
+            Debug.Assert(0 <= toIndex && toIndex < _editorEntries.Count, "To index out of range");
+            if (0 > fromIndex || _editorEntries.Count <= fromIndex || 0 > toIndex || _editorEntries.Count <= toIndex || fromIndex == toIndex)
                 return false;
 
-            var entry = editorEntries[fromIndex];
-            editorEntries.RemoveAt(fromIndex);
-            editorEntries.Insert(toIndex, entry);
+            var entry = _editorEntries[fromIndex];
+            _editorEntries.RemoveAt(fromIndex);
+            _editorEntries.Insert(toIndex, entry);
 
             // Update selected index if needed
-            if (selectedEntryIndex == fromIndex)
+            if (fromIndex == _selectedEntryIndex)
             {
-                selectedEntryIndex = toIndex;
+                _selectedEntryIndex = toIndex;
             }
-            else if (selectedEntryIndex > fromIndex && selectedEntryIndex <= toIndex)
+            else if (fromIndex < _selectedEntryIndex && toIndex >= _selectedEntryIndex)
             {
-                selectedEntryIndex--;
+                _selectedEntryIndex--;
             }
-            else if (selectedEntryIndex < fromIndex && selectedEntryIndex >= toIndex)
+            else if (fromIndex > _selectedEntryIndex && toIndex <= _selectedEntryIndex)
             {
-                selectedEntryIndex++;
+                _selectedEntryIndex++;
             }
 
             return true;
@@ -216,12 +306,19 @@ namespace StoryEditor
 
         public string GetDisplayName()
         {
-            return string.IsNullOrEmpty(branchName) ? "Unnamed Block" : branchName;
+            return string.IsNullOrEmpty(_branchName) ? "Unnamed Block" : _branchName;
         }
 
         public int GetEntryCount()
         {
-            return editorEntries.Count;
+            return _editorEntries.Count;
         }
+
+
+        /****** Private Members ******/
+
+        [SerializeField] private string _branchName;
+        [SerializeField] private List<EditorStoryEntry> _editorEntries = new List<EditorStoryEntry>();
+        [SerializeField] private int _selectedEntryIndex = -1;
     }
 }

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -10,16 +9,6 @@ public class ProjectileAsset : ScriptableObject
     public List<ProjectileEntry> ProjectileAssets;
 
     private void OnValidate()
-    {
-        ValidateAsset();
-    }
-
-    private void OnEnable()
-    {
-        ValidateAsset();
-    }
-
-    private void ValidateAsset()
     {
         Debug.Assert(ProjectileAssets.Count == (int)ProjectileType.ProjectileTypeCount, "Projectile count mismatch with ProjectileType enum.");
         Debug.Assert(ProjectileAssets.Count == ProjectileAssets.Distinct().Count(), "There are duplicate items in projectile asset.");

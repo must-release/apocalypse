@@ -11,6 +11,7 @@ public class StageScene : MonoBehaviour, IScene
     public bool CanMoveToNextScene => true;
     public SceneType CurrentSceneType => SceneType.StageScene;
     public Transform PlayerTransform => _playerTransform;
+    public bool HasPlayerSupport => true;
 
     public async UniTask AsyncInitializeScene()
     {
@@ -20,7 +21,7 @@ public class StageScene : MonoBehaviour, IScene
         PlaceStageObjects();
     }
 
-    public async UniTask AsyncUpdateStagesForTransition()
+    public async UniTask UpdateStagesForTransitionAsync()
     {
         Debug.Assert(null != _currentStage, "Current stage is not initialized.");
 
@@ -33,9 +34,6 @@ public class StageScene : MonoBehaviour, IScene
             _prevStage?.DestroyStage();
             _prevStage = _currentStage;
             _currentStage = _nextStage;
-
-            _prevStage.StageCamera.DeactivateCamera();
-            _currentStage.StageCamera.ActivateCamera(_playerTransform);
 
             if (ChapterStageCount.IsStageIndexValid(chapter, stage + 1))
             {
@@ -53,9 +51,6 @@ public class StageScene : MonoBehaviour, IScene
             _nextStage?.DestroyStage();
             _nextStage = _currentStage;
             _currentStage = _prevStage;
-
-            _nextStage.StageCamera.DeactivateCamera();
-            _currentStage.StageCamera.ActivateCamera(_playerTransform);
 
             if (ChapterStageCount.IsStageIndexValid(chapter, stage - 1))
             {
@@ -84,11 +79,6 @@ public class StageScene : MonoBehaviour, IScene
         _nextStage?.gameObject.SetActive(true);
         _playerTransform.gameObject.SetActive(true);
 
-        if (false == _currentStage.StageCamera.IsActive)
-        {
-            _currentStage.StageCamera.ActivateCamera(_playerTransform);
-        }
-
         StartPlayerPositionMonitoring();
     }
 
@@ -106,6 +96,19 @@ public class StageScene : MonoBehaviour, IScene
         Logger.Write(LogCategory.GameScene, $"Respawning player at {_currentStage.PlayerStartPosition}", LogLevel.Log, true);
     }
 
+    public AD.Camera.ICamera[] GetSceneCameras()
+    {
+        Debug.Assert(null != _currentStage, "Current stage is not initialized.");
+        
+        return _currentStage.GetStageCameras();
+    }
+
+    public AD.GamePlay.IActor[] GetCurrentStageActors()
+    {
+        Debug.Assert(null != _currentStage, "Current stage is not initialized.");
+
+        return _currentStage.GetStageActors();
+    }
 
     /****** Private Members ******/
 

@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.Assertions;
+using AD.Camera;
+using AD.GamePlay;
+using AD.UI;
 
 /*
  * Activate loaded scene
@@ -20,7 +22,7 @@ public class SceneActivateEvent : GameEventBase<SceneActivateEventInfo>
 
         foreach (GameEventType eventType in activeEventTypeCounts.Keys)
         {
-            if (GameEventType.Story == eventType || GameEventType.Choice == eventType || GameEventType.Sequential == eventType)
+            if (GameEventType.Story == eventType || GameEventType.Sequential == eventType)
                 continue;
 
             return false;
@@ -66,7 +68,6 @@ public class SceneActivateEvent : GameEventBase<SceneActivateEventInfo>
         Debug.Assert(null != Info, "Event info is not set.");
 
 
-        // If scene is still loading
         if (SceneController.Instance.IsSceneLoading)
         {
             if (Info.ShouldTurnOnLoadingUI)
@@ -75,12 +76,42 @@ public class SceneActivateEvent : GameEventBase<SceneActivateEventInfo>
             yield return new WaitWhile(() => SceneController.Instance.IsSceneLoading);
         }
 
-        // Initialize player character for game play
         Transform player = SceneController.Instance.PlayerTransform;
         if (player)
         {
             PlayerAvatarType character = PlayerManager.Instance.CurrentPlayerType;
             GamePlayManager.Instance.InitializePlayerCharacter(player, character);
+
+            var controlUI = UIController.Instance.GetUIView(BaseUI.Control) as ControlUIView;
+            Debug.Assert(null != controlUI, "Cannot find control ui in scene activate event.");
+
+            var playerController = player.GetComponent<PlayerController>();
+            Debug.Assert(null != playerController, "PlayerController is not find in player transform in scene activate event.");
+
+            playerController.OnHPChanged += controlUI.UpdateHPBar;
+            controlUI.UpdateHPBar(playerController.CurrentHitPoint, playerController.MaxHitPoint);
+        }
+
+        var sceneCameras = SceneController.Instance.GetCurrentSceneCameras();
+        if (0 < sceneCameras.Length)
+        {
+            CameraManager.Instance.RegisterCameras(sceneCameras);
+            
+            if (null != player)
+            {
+                CameraManager.Instance.SetCurrentCamera<FollowCamera>();
+                CameraManager.Instance.ActivateCamera(player);
+            }
+            else
+            {
+                CameraManager.Instance.SetCurrentCamera(sceneCameras[0]);
+            }
+        }
+
+        var actors = SceneController.Instance.GetCurrentStageActors();
+        if (0 < actors.Length)
+        {
+            GamePlayManager.Instance.RegisterStageActors(actors);
         }
 
         SceneController.Instance.ActivateGameScene();

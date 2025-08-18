@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEditor;
+using AD.Story;
 using StoryEditor.Controllers;
 using StoryEditor.Serialization;
 
@@ -7,23 +8,24 @@ namespace StoryEditor.UI
 {
     public class StoryEditorToolbar
     {
-        private EditorStoryScript editorStoryScript;
-        private ValidationController validationController;
-        private string currentFilePath;
-        private System.Action onNewFile;
-        private System.Action onFileLoaded;
+        /****** Public Members ******/
+        
+        public string CurrentFilePath => _currentFilePath;
 
         public StoryEditorToolbar(EditorStoryScript storyScript, ValidationController validation)
         {
-            editorStoryScript = storyScript;
-            validationController = validation;
+            Debug.Assert(null != storyScript, "Story script cannot be null");
+            Debug.Assert(null != validation, "Validation controller cannot be null");
+
+            _editorStoryScript = storyScript;
+            _validationController = validation;
         }
 
         public void SetCallbacks(string filePath, System.Action onNewFile, System.Action onFileLoaded)
         {
-            this.currentFilePath = filePath;
-            this.onNewFile = onNewFile;
-            this.onFileLoaded = onFileLoaded;
+            _currentFilePath = filePath;
+            _onNewFile = onNewFile;
+            _onFileLoaded = onFileLoaded;
         }
 
         public void Draw()
@@ -37,6 +39,16 @@ namespace StoryEditor.UI
 
             EditorGUILayout.EndHorizontal();
         }
+
+
+
+        /****** Private Members ******/
+
+        private EditorStoryScript _editorStoryScript;
+        private ValidationController _validationController;
+        private string _currentFilePath;
+        private System.Action _onNewFile;
+        private System.Action _onFileLoaded;
 
         private void DrawFileButtons()
         {
@@ -63,7 +75,7 @@ namespace StoryEditor.UI
 
         private void DrawValidationStatus()
         {
-            var validation = validationController.ValidateAll();
+            var validation = _validationController.ValidateAll();
             
             if (validation.HasErrors)
             {
@@ -95,8 +107,8 @@ namespace StoryEditor.UI
         {
             if (EditorUtility.DisplayDialog("New File", "Create a new story script? Unsaved changes will be lost.", "New", "Cancel"))
             {
-                currentFilePath = "";
-                onNewFile?.Invoke();
+                _currentFilePath = "";
+                _onNewFile?.Invoke();
             }
         }
 
@@ -107,9 +119,9 @@ namespace StoryEditor.UI
             {
                 if (StoryScriptSerializer.LoadFromXml(path, out var loadedScript, out var errorMessage))
                 {
-                    editorStoryScript.LoadFromStoryScript(loadedScript.ToStoryScript());
-                    currentFilePath = path;
-                    onFileLoaded?.Invoke();
+                    _editorStoryScript.LoadFromStoryScript(loadedScript.ToStoryScript());
+                    _currentFilePath = path;
+                    _onFileLoaded?.Invoke();
                 }
                 else
                 {
@@ -122,13 +134,13 @@ namespace StoryEditor.UI
         {
             UpdateAllChoicesBeforeSave();
             
-            if (string.IsNullOrEmpty(currentFilePath))
+            if (string.IsNullOrEmpty(_currentFilePath))
             {
                 SaveAsFile();
             }
             else
             {
-                if (StoryScriptSerializer.SaveToXml(editorStoryScript, currentFilePath, out var errorMessage))
+                if (StoryScriptSerializer.SaveToXml(_editorStoryScript, _currentFilePath, out var errorMessage))
                 {
                     EditorUtility.DisplayDialog("Save Success", "File saved successfully!", "OK");
                 }
@@ -146,9 +158,9 @@ namespace StoryEditor.UI
             var path = EditorUtility.SaveFilePanel("Save Story Script", "", "StoryScript", "xml");
             if (false == string.IsNullOrEmpty(path))
             {
-                if (StoryScriptSerializer.SaveToXml(editorStoryScript, path, out var errorMessage))
+                if (StoryScriptSerializer.SaveToXml(_editorStoryScript, path, out var errorMessage))
                 {
-                    currentFilePath = path;
+                    _currentFilePath = path;
                     EditorUtility.DisplayDialog("Save Success", "File saved successfully!", "OK");
                 }
                 else
@@ -160,14 +172,14 @@ namespace StoryEditor.UI
 
         private void UpdateAllChoicesBeforeSave()
         {
-            for (int blockIndex = 0; blockIndex < editorStoryScript.EditorBlocks.Count; blockIndex++)
+            for (int blockIndex = 0; blockIndex < _editorStoryScript.EditorBlocks.Count; blockIndex++)
             {
-                for (int entryIndex = 0; entryIndex < editorStoryScript.EditorBlocks[blockIndex].EditorEntries.Count; entryIndex++)
+                for (int entryIndex = 0; entryIndex < _editorStoryScript.EditorBlocks[blockIndex].EditorEntries.Count; entryIndex++)
                 {
-                    var entry = editorStoryScript.EditorBlocks[blockIndex].EditorEntries[entryIndex];
+                    var entry = _editorStoryScript.EditorBlocks[blockIndex].EditorEntries[entryIndex];
                     if (entry.IsChoice())
                     {
-                        entry.UpdateChoicePrevDialogue(editorStoryScript.EditorBlocks[blockIndex], entryIndex);
+                        entry.UpdateChoicePrevDialogue(_editorStoryScript.EditorBlocks[blockIndex], entryIndex);
                     }
                 }
             }
@@ -179,18 +191,16 @@ namespace StoryEditor.UI
             {
                 if ("Errors" == title)
                 {
-                    Debug.LogError($"[Story Editor] {message}");
+                    Logger.Write(LogCategory.StoryScriptEditor, message, LogLevel.Error);
                 }
                 else
                 {
-                    Debug.LogWarning($"[Story Editor] {message}");
+                    Logger.Write(LogCategory.StoryScriptEditor, message, LogLevel.Warning);
                 }
             }
 
             var messageText = string.Join("\n• ", messages);
             EditorUtility.DisplayDialog(title, $"• {messageText}", "OK");
         }
-
-        public string CurrentFilePath => currentFilePath;
     }
 }

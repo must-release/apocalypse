@@ -1,0 +1,31 @@
+using System.Xml.Serialization;
+
+namespace AD.Story
+{
+    [System.Serializable]
+    public class StoryBGM : StoryEntry
+    {
+        public enum BGMAction
+        {
+            Start,
+            Stop
+        }
+
+        public StoryBGM() 
+        {
+            Type = EntryType.BGM;
+        }
+
+        [XmlAttribute("Action")]
+        public BGMAction Action;
+
+        [XmlAttribute("BGMName")]
+        public string BGMName;
+
+        [XmlAttribute("FadeDuration")]
+        public float FadeDuration;
+
+        [XmlAttribute("IsLoop")]
+        public bool IsLoop;
+    }
+}

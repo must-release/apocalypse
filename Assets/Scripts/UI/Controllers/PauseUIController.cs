@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
-public class PauseUIController : MonoBehaviour, IUIController<SubUI>
+public class PauseUIController : MonoBehaviour, IUIView<SubUI>
 {
     /****** Public Members ******/
 

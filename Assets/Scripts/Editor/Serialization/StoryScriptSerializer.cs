@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 using UnityEngine;
+using AD.Story;
 
 namespace StoryEditor.Serialization
 {
@@ -52,13 +53,13 @@ namespace StoryEditor.Serialization
                     serializer.Serialize(xmlWriter, storyScript);
                 }
 
-                Debug.Log($"Story script saved successfully to: {filePath}");
+                Logger.Write(LogCategory.StoryScriptEditor, $"Story script saved successfully to: {filePath}");
                 return true;
             }
             catch (Exception ex)
             {
                 errorMessage = $"Failed to save XML file: {ex.Message}";
-                Debug.LogError(errorMessage);
+                Logger.Write(LogCategory.StoryScriptEditor, errorMessage, LogLevel.Error);
                 return false;
             }
         }
@@ -90,13 +91,13 @@ namespace StoryEditor.Serialization
                 // Convert to EditorStoryScript
                 editorStoryScript = new EditorStoryScript(storyScript);
 
-                Debug.Log($"Story script loaded successfully from: {filePath}");
+                Logger.Write(LogCategory.StoryScriptEditor, $"Story script loaded successfully from: {filePath}");
                 return true;
             }
             catch (Exception ex)
             {
                 errorMessage = $"Failed to load XML file: {ex.Message}";
-                Debug.LogError(errorMessage);
+                Logger.Write(LogCategory.StoryScriptEditor, errorMessage, LogLevel.Error);
                 return false;
             }
         }

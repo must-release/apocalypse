@@ -65,10 +65,10 @@ public class CutsceneEvent : GameEventBase<CutsceneEventInfo>
         UIController.Instance.ChangeBaseUI(BaseUI.Cutscene);
 
         // Play cutscene
-        GamePlayManager.Instance.PlayCutscene();
+        AD.GamePlay.GamePlayManager.Instance.PlayCutscene();
 
         // Wait for cutscene to end
-        yield return new WaitUntil( () => GamePlayManager.Instance.IsCutscenePlaying );
+        yield return new WaitUntil( () => AD.GamePlay.GamePlayManager.Instance.IsCutscenePlaying );
 
         TerminateEvent();
     }
