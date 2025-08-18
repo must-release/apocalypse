@@ -30,6 +30,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 17fc4bedbb3f58247a89f4f168a472cd
+    m_Address: StoryScript/Test_1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 21d804a5df5e78540b501e41c88a45d7
     m_Address: AnimationClip/Heroine/Lower/AimAttacking
     m_ReadOnly: 0
