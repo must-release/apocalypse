@@ -1,7 +1,31 @@
 fileFormatVersion: 2
 guid: 59d615f4d47fb4a40a3c32701e2376db
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: -137157880078205032
+    second: Heroine_Lower_Attacking_0
+  - first:
+      213: 5936490628831346002
+    second: Heroine_Lower_Attacking_1
+  - first:
+      213: -8014834468471526168
+    second: Heroine_Lower_Attacking_2
+  - first:
+      213: 9174410261959204832
+    second: Heroine_Lower_Attacking_3
+  - first:
+      213: 8346456332156549403
+    second: Heroine_Lower_Attacking_4
+  - first:
+      213: -5582396631879700965
+    second: Heroine_Lower_Attacking_5
+  - first:
+      213: 2801210841877543705
+    second: Heroine_Lower_Attacking_6
+  - first:
+      213: 5497155145433448337
+    second: Heroine_Lower_Attacking_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -48,7 +72,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 128
+  spritePixelsToUnits: 1280
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -115,18 +139,18 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 45d16e8c402336f498e664af1ac18584
-      internalID: 219785492
+      spriteID: 89ffacf72a7b81ef0800000000000000
+      internalID: -137157880078205032
       vertices: []
       indices: 
       edges: []
@@ -135,20 +159,20 @@ TextureImporter:
       name: Heroine_Lower_Attacking_1
       rect:
         serializedVersion: 2
-        x: 128
+        x: 1280
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: ea9c179b6f44445459b1ce6cb70f2226
-      internalID: -417130934
+      spriteID: 25d7de726c6a26250800000000000000
+      internalID: 5936490628831346002
       vertices: []
       indices: 
       edges: []
@@ -157,20 +181,20 @@ TextureImporter:
       name: Heroine_Lower_Attacking_2
       rect:
         serializedVersion: 2
-        x: 256
+        x: 2560
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: e1eacb182922c6742b2b65e96568748f
-      internalID: 1821100904
+      spriteID: 8eca23de38695c090800000000000000
+      internalID: -8014834468471526168
       vertices: []
       indices: 
       edges: []
@@ -179,64 +203,20 @@ TextureImporter:
       name: Heroine_Lower_Attacking_3
       rect:
         serializedVersion: 2
-        x: 384
+        x: 3840
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 7a6935973d1defc4c9a5c573c98e9032
-      internalID: -2050950632
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Heroine_Lower_Attacking_4
-      rect:
-        serializedVersion: 2
-        x: 512
-        y: 0
-        width: 128
-        height: 128
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7c42af425744a224ba2420015e54a85d
-      internalID: 984362492
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Heroine_Lower_Attacking_5
-      rect:
-        serializedVersion: 2
-        x: 640
-        y: 0
-        width: 128
-        height: 128
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 40b013a3958b3d947898eb319b63304e
-      internalID: -1736594033
+      spriteID: 0efd6cf668d025f70800000000000000
+      internalID: 9174410261959204832
       vertices: []
       indices: 
       edges: []
@@ -245,7 +225,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 0996cd37ba610bf4689726ab746368a9
     internalID: 0
     vertices: []
     indices: 
@@ -253,14 +233,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":1280.0,"y":1280.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Heroine_Lower_Attacking_0: 219785492
-      Heroine_Lower_Attacking_1: -417130934
-      Heroine_Lower_Attacking_2: 1821100904
-      Heroine_Lower_Attacking_3: -2050950632
-      Heroine_Lower_Attacking_4: 984362492
-      Heroine_Lower_Attacking_5: -1736594033
+      Heroine_Lower_Attacking_0: -137157880078205032
+      Heroine_Lower_Attacking_1: 5936490628831346002
+      Heroine_Lower_Attacking_2: -8014834468471526168
+      Heroine_Lower_Attacking_3: 9174410261959204832
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

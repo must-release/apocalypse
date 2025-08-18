@@ -12,9 +12,9 @@ public class HeroIdleUpperState : CommonIdleUpperState
 
     public override void Aim(Vector3 aim)
     {
-        if (Vector3.zero == aim) 
+        if (Vector3.zero == aim)
             return;
-        
+
         StateController.ChangeState(HeroUpperStateType.Aiming);
     }
 
@@ -22,4 +22,10 @@ public class HeroIdleUpperState : CommonIdleUpperState
     {
         StateController.ChangeState(HeroUpperStateType.Jumping);
     }
+
+    public override void Jump()
+    {
+        StateController.ChangeState(HeroUpperStateType.Jumping);
+    }
+
 }

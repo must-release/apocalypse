@@ -15,6 +15,6 @@ public class HeroLookingUpUpperState : CommonLookingUpUpperState
 
     public override void Attack()
     {
-        StateController.ChangeState(HeroUpperStateType.TopAttacking);
+        StateController.ChangeState(HeroUpperStateType.RunningTopAttack);
     }
 }

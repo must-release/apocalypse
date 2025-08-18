@@ -76,7 +76,7 @@ public class HeroAimingUpperState : PlayerUpperState
 
     /****** Private Members ******/
 
-    private readonly int _AimingStateHash = AnimatorState.GetHash(PlayerAvatarType.Hero, HeroUpperStateType.Attacking);
+    private readonly int _AimingStateHash = AnimatorState.GetHash(PlayerAvatarType.Hero, HeroUpperStateType.Aiming);
 
     private Vector3 _aimingPosition;
 

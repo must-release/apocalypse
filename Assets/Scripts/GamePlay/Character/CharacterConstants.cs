@@ -56,19 +56,28 @@ public class HeroineLowerStateType : LowerStateType
 {
     private HeroineLowerStateType(string name) : base(name) { }
 
-    public static readonly HeroineLowerStateType Attacking      = new HeroineLowerStateType("Attacking");
-    public static readonly HeroineLowerStateType AimAttacking   = new HeroineLowerStateType("AimAttacking");
+    public static readonly HeroineLowerStateType Attacking = new HeroineLowerStateType("Attacking");
+    public static readonly HeroineLowerStateType AimAttacking = new HeroineLowerStateType("AimAttacking");
+}
+
+public class HeroLowerStateType : LowerStateType
+{
+    private HeroLowerStateType(string name) : base(name) { }
+
+    public static readonly HeroLowerStateType StandingAttack = new HeroLowerStateType("StandingAttack");
+    public static readonly HeroLowerStateType IdleLookingUp = new HeroLowerStateType("IdleLookingUp");
+    public static readonly HeroLowerStateType IdleTopAttacking = new HeroLowerStateType("IdleTopAttacking");
 }
 
 public class HeroUpperStateType : UpperStateType
 {
     private HeroUpperStateType(string name) : base(name) { }
 
-    public static readonly HeroUpperStateType Jumping       = new HeroUpperStateType("Jumping");
-    public static readonly HeroUpperStateType Aiming        = new HeroUpperStateType("Aiming");
-    public static readonly HeroUpperStateType Attacking     = new HeroUpperStateType("Attacking");
-    public static readonly HeroUpperStateType TopAttacking  = new HeroUpperStateType("TopAttacking");
-    public static readonly HeroUpperStateType AimAttacking  = new HeroUpperStateType("AimAttacking");
+    public static readonly HeroUpperStateType Jumping           = new HeroUpperStateType("Jumping");
+    public static readonly HeroUpperStateType Aiming            = new HeroUpperStateType("Aiming");
+    public static readonly HeroUpperStateType Attacking         = new HeroUpperStateType("Attacking");
+    public static readonly HeroUpperStateType RunningTopAttack  = new HeroUpperStateType("RunningTopAttack");
+    public static readonly HeroUpperStateType AimAttacking      = new HeroUpperStateType("AimAttacking");
 }
 
 public static class AnimatorState

@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Cysharp.Threading.Tasks;
+using NUnit.Framework;
 using UnityEngine;
 
 public class HeroJumpingUpperState : PlayerUpperState
@@ -26,8 +27,31 @@ public class HeroJumpingUpperState : PlayerUpperState
         StateAnimator.Play(_JumpingStateHash);
     }
 
+    public override void Disable()
+    {
+        StateController.ChangeState(UpperStateType.Disabled);
+    }
+
+    public override void OnGround()
+    {
+        ChangeToIdleAsync().Forget();
+    }
+
+    public override void Attack()
+    {
+        StateController.ChangeState(HeroUpperStateType.Attacking);
+    }
+
+
 
     /****** Private Members ******/
 
     private readonly int _JumpingStateHash = AnimatorState.GetHash(PlayerAvatarType.Hero, HeroUpperStateType.Jumping);
+
+    private async UniTask ChangeToIdleAsync()
+    {
+        await UniTask.WaitWhile(() => LowerStateInfo.AnimationNormalizedTime < 1);
+
+        StateController.ChangeState(HeroUpperStateType.Idle);
+    }
 }
