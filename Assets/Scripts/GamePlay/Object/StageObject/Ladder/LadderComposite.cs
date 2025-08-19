@@ -34,16 +34,12 @@ public class LadderComposite : MonoBehaviour, IStageObject, ICompositeObject, IC
     {
         Debug.Assert(_climberCounts.ContainsKey(climber), "Unknown climber is trying to climb the ladder");
 
-        Debug.Log(1);
-
         _topPart.IgnoreCollisionWithClimber(climber, true);
     }
 
     public void OnClimbEnd(IClimber climber)
     {
         Debug.Assert(_climberCounts.ContainsKey(climber), "Unknown climber is trying to stop climbing the ladder");
-
-        Debug.Log(2);
 
         _topPart.IgnoreCollisionWithClimber(climber, false);
     }

@@ -8,6 +8,7 @@ public interface IPlayerUpperState : IPlayerState<UpperStateType>
     void OnExit(UpperStateType nextState);
     void OnFixedUpdate();
     void OnAir();
+    void OnGround();
     void Enable();
     void Disable();
     void Move(HorizontalDirection horizontalInput);

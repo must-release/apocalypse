@@ -6,9 +6,9 @@ public class Bullet : ProjectileBase
 
     public override ProjectileType  CurrentPojectileType    => ProjectileType.Bullet;
     public override bool            CanDamagePlayer         => false;
-    public override float           FireSpeed               => 15f;
+    public override float           FireSpeed               => 20f;
     public override float           GravityScale            => _GravityScale;
-    public override float           FireDuration            => 5f;
+    public override float           FireDuration            => 3f;
     public override float           PostFireDelay           => 0.5f;
 
     public override void Fire(Vector3 direction)

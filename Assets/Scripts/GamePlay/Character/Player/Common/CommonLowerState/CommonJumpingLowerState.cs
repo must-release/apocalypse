@@ -42,6 +42,8 @@ public class CommonJumpingLowerState : PlayerLowerState
             _isStartingJump = false;
             _isJumping = false;
         }
+
+        StateAnimator.Update(0);
     }
 
     public override void OnUpdate()

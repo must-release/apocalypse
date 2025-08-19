@@ -83,6 +83,7 @@ public abstract class PlayerAvatarBase : MonoBehaviour, IPlayerAvatar, ILowerSta
     public void OnGround()
     {
         LowerState.OnGround();
+        UpperState.OnGround();
     }
 
     public void OnDamaged(DamageInfo damageInfo)
@@ -101,8 +102,6 @@ public abstract class PlayerAvatarBase : MonoBehaviour, IPlayerAvatar, ILowerSta
     {
         Debug.Assert(_lowerStateTable.ContainsKey(state), "Invalid Lower State");
 
-        Logger.Write(LogCategory.GamePlay, $"{LowerState.CurrentState} -> {state}");
-
         LowerState.OnExit(state);
         LowerState = _lowerStateTable[state];
         LowerState.OnEnter();
@@ -118,6 +117,8 @@ public abstract class PlayerAvatarBase : MonoBehaviour, IPlayerAvatar, ILowerSta
     public void ChangeState(UpperStateType state)
     {
         Debug.Assert(_upperStateTable.ContainsKey(state), "Invalid Upper State");
+
+        Logger.Write(LogCategory.GamePlay, $"{UpperState.CurrentState} => {state}");
 
         UpperState.OnExit(state);
         UpperState = _upperStateTable[state];

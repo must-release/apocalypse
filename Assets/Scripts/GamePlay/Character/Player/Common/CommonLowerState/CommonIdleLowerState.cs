@@ -61,7 +61,8 @@ public class CommonIdleLowerState : PlayerLowerState
 
     public override void UpDown(VerticalDirection verticalInput)
     {
-        if (null == ObjectInteractor.CurrentClimbableObject || VerticalDirection.None == verticalInput) return;
+        if (null == ObjectInteractor.CurrentClimbableObject || VerticalDirection.None == verticalInput)
+            return;
 
         var refPos = ObjectInteractor.CurrentClimbableObject.GetClimbReferencePoint();
         var curPos = PlayerInfo.CurrentPosition;

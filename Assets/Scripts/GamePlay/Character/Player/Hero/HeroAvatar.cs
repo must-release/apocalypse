@@ -19,6 +19,7 @@ public class HeroAvatar : PlayerAvatarBase
         LowerState.Move(controlInfo.HorizontalInput);
         if (controlInfo.IsJumpStarted) LowerState.StartJump();
         LowerState.CheckJumping(controlInfo.IsJumping);
+        if (controlInfo.IsAttacking) LowerState.Attack();
         if (controlInfo.IsTagging) LowerState.Tag();
         LowerState.Aim(controlInfo.AimingPosition);
         LowerState.UpDown(controlInfo.VerticalInput);

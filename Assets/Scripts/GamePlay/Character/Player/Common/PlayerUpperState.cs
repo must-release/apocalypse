@@ -64,4 +64,9 @@ public abstract class PlayerUpperState : PlayerStateBase<UpperStateType>, IPlaye
     {
         // Do not call base.Attack() in overriding methods.
     }
+
+    public virtual void OnGround()
+    {
+        // Do not call base.OnGround() in overriding methods.
+    }
 }

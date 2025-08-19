@@ -3,20 +3,23 @@ guid: d04f119a237581b4a94f63b134a474b3
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7534827156490925123
-    second: aiming_0
+      213: 8602042048644796017
+    second: Heroine_Lower_Aiming_0
   - first:
-      213: -4724818350459525573
-    second: aiming_1
+      213: -4887169672936024944
+    second: Heroine_Lower_Aiming_1
   - first:
-      213: 3728325323134399113
-    second: aiming_2
+      213: -376714626598055241
+    second: Heroine_Lower_Aiming_2
   - first:
-      213: -7026095692817915096
-    second: aiming_3
+      213: 5857218697580948496
+    second: Heroine_Lower_Aiming_3
   - first:
-      213: 1435977368576944247
-    second: aiming_4
+      213: 788754806916274884
+    second: Heroine_Lower_Aiming_4
+  - first:
+      213: -4611340783727109952
+    second: Heroine_Lower_Aiming_5
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -49,7 +52,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -63,7 +66,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 128
+  spritePixelsToUnits: 1280
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -130,18 +133,18 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 091e54f155d5d1446b4a41d91c22e556
-      internalID: 482662986
+      spriteID: 17e427ceaa7906770800000000000000
+      internalID: 8602042048644796017
       vertices: []
       indices: 
       edges: []
@@ -150,20 +153,20 @@ TextureImporter:
       name: Heroine_Lower_Aiming_1
       rect:
         serializedVersion: 2
-        x: 128
+        x: 1280
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: c834a7d62f7f0d543bd1d2ceb547fe38
-      internalID: -758851398
+      spriteID: 094169763194d2cb0800000000000000
+      internalID: -4887169672936024944
       vertices: []
       indices: 
       edges: []
@@ -172,20 +175,20 @@ TextureImporter:
       name: Heroine_Lower_Aiming_2
       rect:
         serializedVersion: 2
-        x: 256
+        x: 2560
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: b26af9573053a5a47b3aa3e3e34d7cd8
-      internalID: 933039409
+      spriteID: 7b2dde30b04a5caf0800000000000000
+      internalID: -376714626598055241
       vertices: []
       indices: 
       edges: []
@@ -194,20 +197,20 @@ TextureImporter:
       name: Heroine_Lower_Aiming_3
       rect:
         serializedVersion: 2
-        x: 384
+        x: 3840
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: da5d43e3dfb29614488702d1a0d49fce
-      internalID: 367086634
+      spriteID: 01ca6116f55094150800000000000000
+      internalID: 5857218697580948496
       vertices: []
       indices: 
       edges: []
@@ -216,20 +219,42 @@ TextureImporter:
       name: Heroine_Lower_Aiming_4
       rect:
         serializedVersion: 2
-        x: 512
+        x: 5120
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: c1e365cc93ef95d42bf327c4dc7c73f1
-      internalID: 1679743306
+      spriteID: 4ca5021615832fa00800000000000000
+      internalID: 788754806916274884
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Heroine_Lower_Aiming_5
+      rect:
+        serializedVersion: 2
+        x: 6400
+        y: 0
+        width: 1280
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c89ca73df93100c0800000000000000
+      internalID: -4611340783727109952
       vertices: []
       indices: 
       edges: []
@@ -248,13 +273,14 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":128.0,"y":128.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":1280.0,"y":1280.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Heroine_Lower_Aiming_0: 482662986
-      Heroine_Lower_Aiming_1: -758851398
-      Heroine_Lower_Aiming_2: 933039409
-      Heroine_Lower_Aiming_3: 367086634
-      Heroine_Lower_Aiming_4: 1679743306
+      Heroine_Lower_Aiming_0: 8602042048644796017
+      Heroine_Lower_Aiming_1: -4887169672936024944
+      Heroine_Lower_Aiming_2: -376714626598055241
+      Heroine_Lower_Aiming_3: 5857218697580948496
+      Heroine_Lower_Aiming_4: 788754806916274884
+      Heroine_Lower_Aiming_5: -4611340783727109952
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

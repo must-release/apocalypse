@@ -1,7 +1,28 @@
 fileFormatVersion: 2
 guid: 8aeae6d8746fd4de89aa5bd2670ea8fe
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 2709839431789951202
+    second: Heroine_Lower_Jumping_0
+  - first:
+      213: -7164544082509278112
+    second: Heroine_Lower_Jumping_1
+  - first:
+      213: 2100439174090841061
+    second: Heroine_Lower_Jumping_2
+  - first:
+      213: -702811916117841412
+    second: Heroine_Lower_Jumping_3
+  - first:
+      213: -1472016202070633862
+    second: Heroine_Lower_Jumping_4
+  - first:
+      213: 8973514961055015390
+    second: Heroine_Lower_Jumping_5
+  - first:
+      213: 720875736895320138
+    second: Heroine_Lower_Jumping_6
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -34,7 +55,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -48,7 +69,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 128
+  spritePixelsToUnits: 1280
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -81,33 +102,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
     buildTarget: Standalone
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: iOS
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -141,18 +136,18 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 9774524a273c21d4da4628f8c8ec5137
-      internalID: -1114870910
+      spriteID: 2e8bf2a1b984b9520800000000000000
+      internalID: 2709839431789951202
       vertices: []
       indices: 
       edges: []
@@ -161,20 +156,20 @@ TextureImporter:
       name: Heroine_Lower_Jumping_1
       rect:
         serializedVersion: 2
-        x: 128
+        x: 1280
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 975b37c56c3f3fb4ba513216229424ca
-      internalID: 2008277022
+      spriteID: 0645868cd1d629c90800000000000000
+      internalID: -7164544082509278112
       vertices: []
       indices: 
       edges: []
@@ -183,20 +178,20 @@ TextureImporter:
       name: Heroine_Lower_Jumping_2
       rect:
         serializedVersion: 2
-        x: 256
+        x: 2560
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: d71c62aec3302c243b4c9523dcbe6d37
-      internalID: 1147298215
+      spriteID: 5ebdffbdc42462d10800000000000000
+      internalID: 2100439174090841061
       vertices: []
       indices: 
       edges: []
@@ -205,20 +200,20 @@ TextureImporter:
       name: Heroine_Lower_Jumping_3
       rect:
         serializedVersion: 2
-        x: 384
+        x: 3840
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 6b747e0708c18ab45911afc5a584bc14
-      internalID: -1729316531
+      spriteID: cf962e3394c1f36f0800000000000000
+      internalID: -702811916117841412
       vertices: []
       indices: 
       edges: []
@@ -227,20 +222,20 @@ TextureImporter:
       name: Heroine_Lower_Jumping_4
       rect:
         serializedVersion: 2
-        x: 512
+        x: 5120
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 0eaf4036224c5f84295b26c44847b530
-      internalID: 1851160748
+      spriteID: a72d5f33019529be0800000000000000
+      internalID: -1472016202070633862
       vertices: []
       indices: 
       edges: []
@@ -249,20 +244,20 @@ TextureImporter:
       name: Heroine_Lower_Jumping_5
       rect:
         serializedVersion: 2
-        x: 640
+        x: 6400
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 74aa82612cc2a6745a6fa156803ac174
-      internalID: 2115334312
+      spriteID: ed166583054588c70800000000000000
+      internalID: 8973514961055015390
       vertices: []
       indices: 
       edges: []
@@ -271,20 +266,20 @@ TextureImporter:
       name: Heroine_Lower_Jumping_6
       rect:
         serializedVersion: 2
-        x: 768
+        x: 7680
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 67e375a2f986c154c88b2adfeaa97228
-      internalID: 520350787
+      spriteID: a40f7d0d9a0110a00800000000000000
+      internalID: 720875736895320138
       vertices: []
       indices: 
       edges: []
@@ -293,7 +288,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 2391f4a4286c60c4bac082ba73655c44
     internalID: 0
     vertices: []
     indices: 
@@ -301,15 +296,17 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":1280.0,"y":1280.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Heroine_Lower_Jumping_0: -1114870910
-      Heroine_Lower_Jumping_1: 2008277022
-      Heroine_Lower_Jumping_2: 1147298215
-      Heroine_Lower_Jumping_3: -1729316531
-      Heroine_Lower_Jumping_4: 1851160748
-      Heroine_Lower_Jumping_5: 2115334312
-      Heroine_Lower_Jumping_6: 520350787
+      Heroine_Lower_Jumping_0: 2709839431789951202
+      Heroine_Lower_Jumping_1: -7164544082509278112
+      Heroine_Lower_Jumping_2: 2100439174090841061
+      Heroine_Lower_Jumping_3: -702811916117841412
+      Heroine_Lower_Jumping_4: -1472016202070633862
+      Heroine_Lower_Jumping_5: 8973514961055015390
+      Heroine_Lower_Jumping_6: 720875736895320138
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

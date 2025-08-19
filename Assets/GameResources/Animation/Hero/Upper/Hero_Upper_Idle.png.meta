@@ -3,29 +3,29 @@ guid: 304cbf33362fd694590638cc79b6b9cf
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4243202301302345925
-    second: Hero_Upper_Standing_0
+      213: 4746557910113174501
+    second: Hero_Upper_Idle_0
   - first:
-      213: -8093703950815477844
-    second: Hero_Upper_Standing_1
+      213: -1402750668186104209
+    second: Hero_Upper_Idle_1
   - first:
-      213: 9027680256218210788
-    second: Hero_Upper_Standing_2
+      213: -358253558217335264
+    second: Hero_Upper_Idle_2
   - first:
-      213: -8673875102733874412
-    second: Hero_Upper_Standing_3
+      213: 5350554597508286244
+    second: Hero_Upper_Idle_3
   - first:
-      213: -3411851235797660791
-    second: Hero_Upper_Standing_4
+      213: 4389888703038745881
+    second: Hero_Upper_Idle_4
   - first:
-      213: 7293544730038329648
-    second: Hero_Upper_Standing_5
+      213: 4812108545493145360
+    second: Hero_Upper_Idle_5
   - first:
-      213: 6276857701370456380
-    second: Hero_Upper_Standing_6
+      213: -1518424230568035681
+    second: Hero_Upper_Idle_6
   - first:
-      213: 7208341268016395845
-    second: Hero_Upper_Standing_7
+      213: -6979908377648302549
+    second: Hero_Upper_Idle_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -58,7 +58,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -72,7 +72,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 128
+  spritePixelsToUnits: 1280
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -139,18 +139,18 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: a19b2166aacd82a48adb966ab6820965
-      internalID: -1283407333
+      spriteID: 5e3cd1a55492fd140800000000000000
+      internalID: 4746557910113174501
       vertices: []
       indices: 
       edges: []
@@ -159,20 +159,20 @@ TextureImporter:
       name: Hero_Upper_Idle_1
       rect:
         serializedVersion: 2
-        x: 128
+        x: 1280
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: ed3e68807b6a0b343a650813c1e8c107
-      internalID: -1194982246
+      spriteID: f6e435a03bd688ce0800000000000000
+      internalID: -1402750668186104209
       vertices: []
       indices: 
       edges: []
@@ -181,20 +181,20 @@ TextureImporter:
       name: Hero_Upper_Idle_2
       rect:
         serializedVersion: 2
-        x: 256
+        x: 2560
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: b7c7d243710bd8d4d9b9d905ab99eb31
-      internalID: -429772757
+      spriteID: 02e9fe2794a370bf0800000000000000
+      internalID: -358253558217335264
       vertices: []
       indices: 
       edges: []
@@ -203,20 +203,20 @@ TextureImporter:
       name: Hero_Upper_Idle_3
       rect:
         serializedVersion: 2
-        x: 384
+        x: 3840
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 90972d08383518748af1256a20ade663
-      internalID: -2071606436
+      spriteID: 42780d7de0df04a40800000000000000
+      internalID: 5350554597508286244
       vertices: []
       indices: 
       edges: []
@@ -225,20 +225,20 @@ TextureImporter:
       name: Hero_Upper_Idle_4
       rect:
         serializedVersion: 2
-        x: 512
+        x: 5120
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 689d566afabe8f14e99e6b401cc83ebe
-      internalID: -495152106
+      spriteID: 91def1c44840cec30800000000000000
+      internalID: 4389888703038745881
       vertices: []
       indices: 
       edges: []
@@ -247,20 +247,20 @@ TextureImporter:
       name: Hero_Upper_Idle_5
       rect:
         serializedVersion: 2
-        x: 640
+        x: 6400
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 212d27026e6f4c34da531bd96cf271cf
-      internalID: 748263483
+      spriteID: 0179dbaf93b08c240800000000000000
+      internalID: 4812108545493145360
       vertices: []
       indices: 
       edges: []
@@ -269,20 +269,20 @@ TextureImporter:
       name: Hero_Upper_Idle_6
       rect:
         serializedVersion: 2
-        x: 768
+        x: 7680
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 60714351565daa8429ce79cdd366fff3
-      internalID: 959390628
+      spriteID: f9a75ae05397deae0800000000000000
+      internalID: -1518424230568035681
       vertices: []
       indices: 
       edges: []
@@ -291,20 +291,20 @@ TextureImporter:
       name: Hero_Upper_Idle_7
       rect:
         serializedVersion: 2
-        x: 896
+        x: 8960
         y: 0
-        width: 128
-        height: 128
+        width: 1280
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 9b3e5cce28a07e547a07055c471ed05b
-      internalID: -1576758248
+      spriteID: b26ff79cf42622f90800000000000000
+      internalID: -6979908377648302549
       vertices: []
       indices: 
       edges: []
@@ -313,7 +313,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 1af18ba5f0cf42149b44ceae20128fd2
+    spriteID: 578f4679c71d4d94aa97d9836a11a0f1
     internalID: 0
     vertices: []
     indices: 
@@ -323,16 +323,16 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":128.0,"y":128.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":1280.0,"y":1280.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Hero_Upper_Idle_0: -1283407333
-      Hero_Upper_Idle_1: -1194982246
-      Hero_Upper_Idle_2: -429772757
-      Hero_Upper_Idle_3: -2071606436
-      Hero_Upper_Idle_4: -495152106
-      Hero_Upper_Idle_5: 748263483
-      Hero_Upper_Idle_6: 959390628
-      Hero_Upper_Idle_7: -1576758248
+      Hero_Upper_Idle_0: 4746557910113174501
+      Hero_Upper_Idle_1: -1402750668186104209
+      Hero_Upper_Idle_2: -358253558217335264
+      Hero_Upper_Idle_3: 5350554597508286244
+      Hero_Upper_Idle_4: 4389888703038745881
+      Hero_Upper_Idle_5: 4812108545493145360
+      Hero_Upper_Idle_6: -1518424230568035681
+      Hero_Upper_Idle_7: -6979908377648302549
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
