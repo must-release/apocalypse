@@ -72,7 +72,7 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 # Ignore DevConfig files
-Assets/GameResources/GameData/DevConfig*
+# Assets/GameResources/GameData/DevConfig*
 
 # Ignore Resoureces for Edit
-Assets/GameResources/Res_Edit/*
+# Assets/GameResources/Res_Edit/*

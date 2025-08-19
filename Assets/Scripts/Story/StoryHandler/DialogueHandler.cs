@@ -67,9 +67,9 @@ namespace AD.Story
 
         /****** Private Members ******/
 
-        private StoryHandleContext _context;
+        private StoryHandleContext      _context;
         private StoryDialogue           _currentDialogue;
-        private DialogueBox _dialogueBox;
+        private DialogueBox             _dialogueBox;
         private CancellationTokenSource _cancellationTokenSource;
 
         private async UniTask ProgressVisualNovelDialogue()
