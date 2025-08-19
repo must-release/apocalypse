@@ -9,6 +9,8 @@ namespace AD.Story
         /****** Public Members ******/
 
         public StoryEntry.EntryType PresentingEntryType => StoryEntry.EntryType.VFX;
+        public StoryEntry CurrentEntry => _currentVFX;
+
         public event Action<IStoryEntryHandler> OnStoryEntryComplete;
 
         public void Initialize(StoryHandleContext context)
@@ -22,10 +24,10 @@ namespace AD.Story
             Debug.Assert(storyEntry is StoryVFX, $"{storyEntry} is not a StoryVFX");
             Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in VFXHandler.");
 
-            StoryVFX currentVFX = storyEntry as StoryVFX;
+            _currentVFX = storyEntry as StoryVFX;
 
             ScreenEffect screenEffectType = ScreenEffect.ScreenEffectCount;
-            switch (currentVFX.VFX)
+            switch (_currentVFX.VFX)
             {
                 case StoryVFX.VFXType.ScreenFadeIn:
                     screenEffectType = ScreenEffect.FadeIn;
@@ -38,25 +40,31 @@ namespace AD.Story
                     break;
             }
 
-            IGameEvent screenEffectEvent = GameEventFactory.CreateScreenEffectEvent(screenEffectType, currentVFX.Duration);
-            
+            IGameEvent screenEffectEvent = GameEventFactory.CreateScreenEffectEvent(screenEffectType, _currentVFX.Duration);
+
             GameEventManager.Instance.Submit(screenEffectEvent);
-            
+
             OnStoryEntryComplete.Invoke(this);
 
             await UniTask.CompletedTask;
         }
 
-        public void CompleteStoryEntry()
+        public void InstantlyCompleteStoryEntry()
         {
             // VFX actions are non-blocking and ProgressStoryEntry completes immediately.
             // So, this method might not be called or might not need specific logic.
             // For now, it will be empty.
         }
 
+        public void ResetHandler()
+        {
+            _currentVFX = null;
+        }
+
 
         /****** Private Members ******/
 
         private StoryHandleContext _context;
+        private StoryVFX _currentVFX;
     }
 }

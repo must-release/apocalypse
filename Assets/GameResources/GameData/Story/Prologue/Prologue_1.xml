@@ -2,19 +2,9 @@
 <StoryScript>
   <Block BranchName="common">
     <BackgroundCG Chapter="Prologue" ImageName="Church" />
-    <VFX VFX="ScreenFadeIn" Duration="2.0" />
     <BGM Action="Start" BGMName="Songs_of_the_Soulless" IsLoop="true" />
     <CharacterCG Name="소녀" Animation="Appear" />
     <Dialogue Name="소녀">앞을 봐! 괴물들이 있어!</Dialogue>
-    <VFX VFX="ScreenFadeOut" Duration="2.0" />
-    <BackgroundCG Chapter="Prologue" ImageName="Church" Animation="Shake" />
-    <BackgroundCG Chapter="Prologue" ImageName="Church" Animation="Move" TargetPosition="Left"/>
-    <BackgroundCG Chapter="Prologue" ImageName="Church" Animation="Move" TargetPosition="Center"/>
-    <BackgroundCG Chapter="Prologue" ImageName="Church" Animation="ZoomIn" TargetPosition="Center"/>
-    <BackgroundCG Chapter="Prologue" ImageName="Church" Animation="ZoomOut" TargetPosition="Center"/>
-    <BackgroundCG Chapter="Prologue" ImageName="Church" Animation="ZoomIn" TargetPosition="Left"/>
-    <BackgroundCG Chapter="Prologue" ImageName="Church" Animation="ZoomOut" TargetPosition="Center"/>
-    <BackgroundCG Chapter="Prologue" ImageName="Church" Animation="Appear" AnimationDuration="5.0"/>
     <SFX SFXName="Gun_Fire" />
     <Dialogue Name="소녀">어떻게 하지? 돌아가야할까?</Dialogue>
     <Choice>

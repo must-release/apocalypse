@@ -31,12 +31,12 @@ namespace AD.Story
             var uiChangeEvt = GameEventFactory.CreateUIChangeEvent(baseUI);
             GameEventManager.Instance.Submit(uiChangeEvt);
 
-            CompleteStoryEntry();
+            InstantlyCompleteStoryEntry();
 
             return UniTask.CompletedTask;
         }
 
-        public void CompleteStoryEntry()
+        public void InstantlyCompleteStoryEntry()
         {
             Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete is not assigned in PlayModeHandler.");
 

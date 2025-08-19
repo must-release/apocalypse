@@ -37,7 +37,7 @@ namespace AD.Story
             return UniTask.CompletedTask;
         }
 
-        public void CompleteStoryEntry()
+        public void InstantlyCompleteStoryEntry()
         {
             Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in ChoiceHandler.");
 
@@ -71,7 +71,7 @@ namespace AD.Story
             _selectedOption = _currentChoice.Options.Find(option => option.Text == choice);
             Debug.Assert(null != _selectedOption, $"Selected option '{choice}' not found in current choice options.");
 
-            CompleteStoryEntry();
+            InstantlyCompleteStoryEntry();
         }
     }
 }

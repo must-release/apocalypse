@@ -50,7 +50,7 @@ namespace AD.Story
         }
 
         // TODO: Change this method name to InstantlyCompleteStoryEntry
-        public void CompleteStoryEntry()
+        public void InstantlyCompleteStoryEntry()
         {
             Debug.Assert(null != _currentDialogue, "Current dialogue is null");
             Debug.Assert(StoryPlayMode.PlayModeType.SideDialogue != _context.CurrentPlayMode, "Cannot instantly complete dialogue in SideDialogue mode.");

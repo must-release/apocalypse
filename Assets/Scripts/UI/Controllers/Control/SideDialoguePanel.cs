@@ -22,7 +22,7 @@ namespace AD.UI
 
             _hideCts = new CancellationTokenSource();
 
-            await UniTask.Delay(_HidePanelWaitTime, cancellationToken: _hideCts.Token);
+            await UniTask.Delay(_HidePanelWaitTime, cancellationToken: _hideCts.Token).SuppressCancellationThrow();
             if (false == _hideCts.IsCancellationRequested)
             {
                 gameObject.SetActive(false);
@@ -42,10 +42,10 @@ namespace AD.UI
                 }
 
                 _dialogueText.text += letter;
-                await UniTask.Delay((int)(textInterval * 1000), cancellationToken: cancellationToken);
+                await UniTask.Delay((int)(textInterval * 1000), cancellationToken: cancellationToken).SuppressCancellationThrow();
             }
 
-            await UniTask.Delay(text.Length * _TextReadDelay, cancellationToken: cancellationToken);
+            await UniTask.Delay(text.Length * _TextReadDelay, cancellationToken: cancellationToken).SuppressCancellationThrow();
 
             return cancellationToken.IsCancellationRequested ? OpResult.Aborted : OpResult.Success;
         }

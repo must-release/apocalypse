@@ -34,7 +34,7 @@ namespace AD.Story
             await UniTask.CompletedTask;
         }
 
-        public void CompleteStoryEntry()
+        public void InstantlyCompleteStoryEntry()
         {
             // SFX actions are non-blocking and ProgressStoryEntry completes immediately.
             // So, this method might not be called or might not need specific logic.

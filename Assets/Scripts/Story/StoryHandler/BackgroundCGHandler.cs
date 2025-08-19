@@ -49,7 +49,7 @@ namespace AD.Story
             OnStoryEntryComplete.Invoke(this);
         }
 
-        public void CompleteStoryEntry()
+        public void InstantlyCompleteStoryEntry()
         {
             Debug.Assert(null != _currentBackgroundCG, "Current BackgroundCG is null");
             Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in BackgroundCGHandler.");

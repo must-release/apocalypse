@@ -30,7 +30,7 @@ namespace AD.Story
             cameraEvent.OnTerminate += () =>
             {
                 _currentCameraAction = null;
-                CompleteStoryEntry();
+                InstantlyCompleteStoryEntry();
             };
 
             GameEventManager.Instance.Submit(cameraEvent);
@@ -38,7 +38,7 @@ namespace AD.Story
             return UniTask.CompletedTask;
         }
 
-        public void CompleteStoryEntry()
+        public void InstantlyCompleteStoryEntry()
         {
             Debug.Assert(null != _currentCameraAction, "Current camera action is null");
             Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in CameraActionHandler.");

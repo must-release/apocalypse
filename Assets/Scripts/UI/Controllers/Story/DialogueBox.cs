@@ -12,7 +12,7 @@ public class DialogueBox : MonoBehaviour
     {
         _dialogueText.text = "";
         
-        foreach (char letter in text.ToCharArray())
+        foreach (char letter in text)
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -21,15 +21,10 @@ public class DialogueBox : MonoBehaviour
             }
             
             _dialogueText.text += letter;
-            await UniTask.Delay((int)(textInterval * 1000), cancellationToken: cancellationToken);
+            await UniTask.WaitForSeconds(textInterval, cancellationToken: cancellationToken).SuppressCancellationThrow();
         }
         
         return OpResult.Success;
-    }
-
-    public void DisplayText(string text)
-    {
-        _dialogueText.text = text;
     }
 
     /****** Private Members ******/

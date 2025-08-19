@@ -29,7 +29,7 @@ namespace AD.Story
             if (0 < _activeStoryHandlers.Count)
             {
                 var handlersToComplete = new List<IStoryEntryHandler>(_activeStoryHandlers);
-                handlersToComplete.ForEach(handler => handler.CompleteStoryEntry());
+                handlersToComplete.ForEach(handler => handler.InstantlyCompleteStoryEntry());
                 return;
             }
 
