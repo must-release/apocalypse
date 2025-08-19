@@ -118,6 +118,11 @@ public class Pigeon : EnemyController
         return true;
     }
 
+    public override void OnDead()
+    {
+    }
+
+
     public override void ControlCharacter(IReadOnlyControlInfo controlInfo) { }
 
 

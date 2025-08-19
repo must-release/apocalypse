@@ -8,8 +8,10 @@ public class NormalInfectee : EnemyController
 
     public override void StartPatrol()
     {
-        patrolRightEnd  = transform.position.x + PATROL_RANGE_MAX / 2;
-        patrolLeftEnd   = transform.position.x - PATROL_RANGE_MAX / 2;
+        EnemyAnimator.Play("Normal_Infectee_Patrolling");
+
+        patrolRightEnd  = transform.position.x + _MaxPatrolRange / 2;
+        patrolLeftEnd   = transform.position.x - _MaxPatrolRange / 2;
         waitingTime = 0;
         wait = false;
     }
@@ -20,7 +22,7 @@ public class NormalInfectee : EnemyController
         if (wait)
         {
             waitingTime += Time.deltaTime;
-            if (waitingTime > STANDING_TIME)
+            if (waitingTime > _StandingTime)
             {
                 wait = false;
                 waitingTime = 0;
@@ -32,19 +34,19 @@ public class NormalInfectee : EnemyController
         }
 
         // Decide where to patrol : left or right side
-        PatrolDirection(transform.localScale.x > 0);
+        PatrolDirection(transform.localScale.x < 0);
     }
 
     public override void StartChasing()
     {
-        
+        EnemyAnimator.Play("Normal_Infectee_Patrolling");
     }
 
     public override void Chase()
     {
         // Look at the player
         int direction = ChasingTarget.position.x > transform.position.x ? 1: -1;
-        if(transform.localScale.x * direction < 0) Flip();
+        if(0 < transform.localScale.x * direction) Flip();
 
         if (CanMoveAhead && math.abs(ChasingTarget.position.x - transform.position.x) > 0.1f) 
             enemyRigid.linearVelocity = new Vector2(direction * MovingSpeed, enemyRigid.linearVelocity.y);
@@ -54,12 +56,11 @@ public class NormalInfectee : EnemyController
 
     public override void StartAttack()
     {
+        EnemyAnimator.Play("Normal_Infectee_Attacking");
+
         waitingTime     = 0;
         wait            = true;
         enemyRigid.linearVelocity = Vector2.zero;
-
-        _scratch.gameObject.SetActive(true);
-        ActiveDamageArea();
     }
 
     public override bool Attack()
@@ -73,13 +74,31 @@ public class NormalInfectee : EnemyController
             return false;
         }
 
-        _scratch.gameObject.SetActive(false);
-
         return true;
     }
 
+    public override void OnDead()
+    {
+        EnemyAnimator.Play("Normal_Infectee_Dead");
+    }
+
+
     public override void ControlCharacter(IReadOnlyControlInfo controlInfo) { }
 
+
+    public void ActiveDamageArea()
+    {
+        Collider2D[] hits = Physics2D.OverlapBoxAll(_AttackPoint.position, new Vector2(2,2), 0f, 1 << LayerMask.NameToLayer(Layer.Character));
+
+        foreach (var hit in hits)
+        {
+            var player = hit.GetComponent<ICharacter>();
+            if (true == player?.IsPlayer)
+            {
+                player.OnDamaged(_attackDamageInfo);
+            }
+        }
+    }
 
     /****** Protected Members ******/
 
@@ -94,8 +113,8 @@ public class NormalInfectee : EnemyController
     {
         base.Start();
 
-        MovingSpeed = 3f;
-        CurrentHitPoint = MAX_HIT_POINT;
+        MovingSpeed = 2f;
+        CurrentHitPoint = _MaxHitPoint;
 
         _attackDamageInfo.Attacker = gameObject;
 
@@ -131,23 +150,27 @@ public class NormalInfectee : EnemyController
 
     /****** Private Members ******/
 
-    //TODO: scratch should be controlled in animator
-    [SerializeField] Transform _scratch;
+    [SerializeField] private Transform _AttackPoint;
 
+    private const int _MaxHitPoint      = 3;
+    private const float _MaxPatrolRange = 30;
+    private const float _MinPatrolRange = 5;
+    private const float _StandingTime   = 5f;
+
+    
     private DamageInfo _attackDamageInfo = new DamageInfo();
-
-    private const int MAX_HIT_POINT = 3;
-    private const float PATROL_RANGE_MAX = 30;
-    private const float PATROL_RANGE_MIN = 5;
-    private const float STANDING_TIME = 5f;
 
     private float patrolLeftEnd, patrolRightEnd; // Each end side of the patrol range
     private bool wait;
     private float waitingTime;
 
+    private void OnValidate()
+    {
+        Debug.Assert(null != _AttackPoint, $"Attacking point is no assigned in {ActorName}");
+    }
+
     private void PatrolDirection(bool isPatrollingRight)
     {
-        // There is no ground ahead, or there is obstacle ahead
         if (false == CanMoveAhead)
         {
             // Update patrol end
@@ -155,12 +178,12 @@ public class NormalInfectee : EnemyController
             else patrolLeftEnd = transform.position.x;
 
             // Check if patrol area is too small
-            if (patrolRightEnd - patrolLeftEnd < PATROL_RANGE_MIN) wait = true;
+            if (patrolRightEnd - patrolLeftEnd < _MinPatrolRange) wait = true;
             else Flip();
 
             // Update other end
-            if (isPatrollingRight) patrolLeftEnd = patrolRightEnd - PATROL_RANGE_MAX;
-            else patrolRightEnd = patrolLeftEnd + PATROL_RANGE_MAX;
+            if (isPatrollingRight) patrolLeftEnd = patrolRightEnd - _MaxPatrolRange;
+            else patrolRightEnd = patrolLeftEnd + _MaxPatrolRange;
 
             enemyRigid.linearVelocity = Vector2.zero;
         }
@@ -183,19 +206,5 @@ public class NormalInfectee : EnemyController
     {
         transform.localScale = new Vector3(-transform.localScale.x, 
             transform.localScale.y, transform.localScale.z);
-    }
-
-    private void ActiveDamageArea()
-    {
-        Collider2D[] hits = Physics2D.OverlapBoxAll(_scratch.position, new Vector2(2,2), 0f, 1 << LayerMask.NameToLayer(Layer.Character));
-
-        foreach (var hit in hits)
-        {
-            var player = hit.GetComponent<ICharacter>();
-            if (true == player?.IsPlayer)
-            {
-                player.OnDamaged(_attackDamageInfo);
-            }
-        }
     }
 }

@@ -4,14 +4,15 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
-using NUnit.Framework;
 
+
+[RequireComponent(typeof(Animator))]
 public abstract class EnemyController : CharacterBase, IAsyncLoadObject
 {
     /****** Public Members ******/
 
-    public GameObject   DetectedPlayer  { get; set; }
-    public Transform    ChasingTarget   { get; set; }
+    public GameObject DetectedPlayer { get; set; }
+    public Transform ChasingTarget { get; set; }
     public override bool IsPlayer => false;
     public virtual bool IsPlayerInAttackRange
     {
@@ -42,7 +43,15 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
         RecentDamagedInfo = damageInfo;
         CurrentHitPoint -= RecentDamagedInfo.DamageValue;
 
-        _currentState.OnDamaged();
+        if (CurrentHitPoint <= 0)
+        {
+            OnDead();
+            ChangeState(EnemyState.Dead);
+        }
+        else
+        {
+            _currentState.OnDamaged();
+        }
     }
 
     public abstract void StartPatrol();
@@ -52,10 +61,13 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
     public abstract void StartAttack();
     public abstract bool Attack(); // return if IsAttacking is over
 
+    public abstract void OnDead();
+
 
     /****** Protected Members ******/
 
     protected bool CanMoveAhead => _terrainChecker.CanMoveAhead();
+    protected Animator EnemyAnimator    => _enemyAnimator;
     protected ProjectilePoolHandler WeaponPool
     {
         get
@@ -64,6 +76,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
             return _weaponPoolHandler;
         }
     }
+
 
     // Common variables
     protected Rigidbody2D enemyRigid;
@@ -89,13 +102,14 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
 
 
     // Awake ememy character. Activated on Awake()
-    protected override void Awake() 
-    { 
+    protected override void Awake()
+    {
         base.Awake();
 
         enemyRigid      = GetComponent<Rigidbody2D>();
         _enemyCollider  = GetComponent<Collider2D>();
-    
+        _enemyAnimator  = GetComponent<Animator>();
+
         InitializeTerrainChecker();
         InitializePlayerDetector();
         InitializeDamageAndWeapon();
@@ -126,20 +140,22 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
 
     /****** Private Memvers ******/
 
+
     private Dictionary<EnemyState, EnemyStateBase> enemyStateDictionary;
 
-    private EnemyStateBase      _currentState;
-    private ProjectilePoolHandler   _weaponPoolHandler;
-    private TerrainChecker      _terrainChecker;
-    private PlayerDetector      _playerDetector;
-    private DamageArea          _defalutDamageArea;
-    private Collider2D          _enemyCollider;
+    private EnemyStateBase _currentState;
+    private ProjectilePoolHandler _weaponPoolHandler;
+    private TerrainChecker _terrainChecker;
+    private PlayerDetector _playerDetector;
+    private DamageArea _defalutDamageArea;
+    private Collider2D _enemyCollider;
+    private Animator _enemyAnimator;
 
     private bool _isLoaded;
 
-    private void OnEnable() 
+    private void OnEnable()
     {
-        if(_isLoaded)
+        if (_isLoaded)
         {
             // Start current state when enabled
             _currentState.OnEnter();
@@ -153,7 +169,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
         await SetPlayerDetector().ToUniTask();
         await LoadWeapons();
         SetDamageArea();
-        
+
         _isLoaded = true;
     }
 
@@ -170,7 +186,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
             Transform enemyStateTrans = enemyState.Result.transform;
             foreach (var state in enemyStateTrans.GetComponents<EnemyStateBase>())
             {
-                if (!enemyStateDictionary.ContainsKey(state.GetState())) 
+                if (!enemyStateDictionary.ContainsKey(state.GetState()))
                     enemyStateDictionary[state.GetState()] = state;
             }
             _currentState = enemyStateDictionary[EnemyState.Patrolling];
@@ -187,7 +203,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
         AsyncOperationHandle<GameObject> checker = Addressables.InstantiateAsync("Terrain Checker", transform);
         yield return checker;
 
-        if(checker.Status == AsyncOperationStatus.Succeeded)
+        if (checker.Status == AsyncOperationStatus.Succeeded)
         {
             _terrainChecker = checker.Result.GetComponent<TerrainChecker>();
             _terrainChecker.SetTerrainChecker(groundCheckingDistance, groundCheckingVector,
@@ -218,7 +234,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
 
     private async UniTask LoadWeapons()
     {
-        if ( ProjectileType.ProjectileTypeCount != weaponType )
+        if (ProjectileType.ProjectileTypeCount != weaponType)
             _weaponPoolHandler = await ProjectileFactory.Instance.AsyncLoadPoolHandler(weaponType);
     }
 

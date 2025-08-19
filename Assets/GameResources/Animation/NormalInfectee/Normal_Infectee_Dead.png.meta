@@ -1,0 +1,524 @@
+fileFormatVersion: 2
+guid: ef81f7ebdc1f82445bc1811528ebb21e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8126649246256491677
+    second: Normal_Infectee_Dead_0
+  - first:
+      213: -3273803559203256846
+    second: Normal_Infectee_Dead_1
+  - first:
+      213: 6261311967365612173
+    second: Normal_Infectee_Dead_2
+  - first:
+      213: -3818832797336326086
+    second: Normal_Infectee_Dead_3
+  - first:
+      213: -713083040438922818
+    second: Normal_Infectee_Dead_4
+  - first:
+      213: 140186099714545194
+    second: Normal_Infectee_Dead_5
+  - first:
+      213: -7395106755707525881
+    second: Normal_Infectee_Dead_6
+  - first:
+      213: 3943935676869781334
+    second: Normal_Infectee_Dead_7
+  - first:
+      213: 312623318907913510
+    second: Normal_Infectee_Dead_8
+  - first:
+      213: -6333693126267448405
+    second: Normal_Infectee_Dead_9
+  - first:
+      213: 2695948714314621789
+    second: Normal_Infectee_Dead_10
+  - first:
+      213: -7019424157989123679
+    second: Normal_Infectee_Dead_11
+  - first:
+      213: -1221313023014799958
+    second: Normal_Infectee_Dead_12
+  - first:
+      213: -698375076140633885
+    second: Normal_Infectee_Dead_13
+  - first:
+      213: -3305740965197128568
+    second: Normal_Infectee_Dead_14
+  - first:
+      213: -348001122349852780
+    second: Normal_Infectee_Dead_15
+  - first:
+      213: 174025935419924118
+    second: Normal_Infectee_Dead_16
+  - first:
+      213: 4657727238905426710
+    second: Normal_Infectee_Dead_17
+  - first:
+      213: -7464209342746380858
+    second: Normal_Infectee_Dead_18
+  - first:
+      213: -6825125366245210388
+    second: Normal_Infectee_Dead_19
+  - first:
+      213: -1675071591555862770
+    second: Normal_Infectee_Dead_20
+  - first:
+      213: -2670740792423668832
+    second: Normal_Infectee_Dead_21
+  - first:
+      213: -4038006261198776949
+    second: Normal_Infectee_Dead_22
+  - first:
+      213: -1510457164321934135
+    second: Normal_Infectee_Dead_23
+  - first:
+      213: 112723525009638716
+    second: Normal_Infectee_Dead_24
+  - first:
+      213: 1145680364716336619
+    second: Normal_Infectee_Dead_25
+  - first:
+      213: 210149950411731994
+    second: Normal_Infectee_Dead_26
+  - first:
+      213: -8862140556848492744
+    second: Normal_Infectee_Dead_27
+  - first:
+      213: 5456118210395910128
+    second: Normal_Infectee_Dead_28
+  - first:
+      213: -5631829522478142824
+    second: Normal_Infectee_Dead_29
+  - first:
+      213: -8886106568227160460
+    second: Normal_Infectee_Dead_30
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 960
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Normal_Infectee_Dead_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9c6051ce68a7c070800000000000000
+      internalID: 8126649246256491677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Normal_Infectee_Dead_1
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 0
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f5c74d120d1192d0800000000000000
+      internalID: -3273803559203256846
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Normal_Infectee_Dead_2
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 0
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d82caba7f06a4e650800000000000000
+      internalID: 6261311967365612173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Normal_Infectee_Dead_3
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 0
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a30382acdc7c00bc0800000000000000
+      internalID: -3818832797336326086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Normal_Infectee_Dead_4
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 0
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eb15847b0ce9a16f0800000000000000
+      internalID: -713083040438922818
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Normal_Infectee_Dead_5
+      rect:
+        serializedVersion: 2
+        x: 4800
+        y: 0
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a26dee3d38a02f100800000000000000
+      internalID: 140186099714545194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Normal_Infectee_Dead_6
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 0
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70526fd269d4f5990800000000000000
+      internalID: -7395106755707525881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Normal_Infectee_Dead_7
+      rect:
+        serializedVersion: 2
+        x: 6720
+        y: 0
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65720dc2a9cabb630800000000000000
+      internalID: 3943935676869781334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Normal_Infectee_Dead_8
+      rect:
+        serializedVersion: 2
+        x: 7680
+        y: 0
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 62582009049a65400800000000000000
+      internalID: 312623318907913510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Normal_Infectee_Dead_9
+      rect:
+        serializedVersion: 2
+        x: 8640
+        y: 0
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba3de74b8a33a18a0800000000000000
+      internalID: -6333693126267448405
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Normal_Infectee_Dead_10
+      rect:
+        serializedVersion: 2
+        x: 9600
+        y: 0
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d53e469621fe96520800000000000000
+      internalID: 2695948714314621789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Normal_Infectee_Dead_11
+      rect:
+        serializedVersion: 2
+        x: 10560
+        y: 0
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a943473beef59e90800000000000000
+      internalID: -7019424157989123679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Normal_Infectee_Dead_12
+      rect:
+        serializedVersion: 2
+        x: 11520
+        y: 0
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa5f4afb6460d0fe0800000000000000
+      internalID: -1221313023014799958
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: aa38215a69f43374e8b899572dac6353
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":960.0,"y":960.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      Normal_Infectee_Dead_0: 8126649246256491677
+      Normal_Infectee_Dead_1: -3273803559203256846
+      Normal_Infectee_Dead_10: 2695948714314621789
+      Normal_Infectee_Dead_11: -7019424157989123679
+      Normal_Infectee_Dead_12: -1221313023014799958
+      Normal_Infectee_Dead_2: 6261311967365612173
+      Normal_Infectee_Dead_3: -3818832797336326086
+      Normal_Infectee_Dead_4: -713083040438922818
+      Normal_Infectee_Dead_5: 140186099714545194
+      Normal_Infectee_Dead_6: -7395106755707525881
+      Normal_Infectee_Dead_7: 3943935676869781334
+      Normal_Infectee_Dead_8: 312623318907913510
+      Normal_Infectee_Dead_9: -6333693126267448405
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

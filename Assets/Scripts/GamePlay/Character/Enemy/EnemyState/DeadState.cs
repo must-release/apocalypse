@@ -3,7 +3,7 @@ using UnityEngine;
 public class DeadState : EnemyStateBase
 {
     private Color enemyColor;
-    private const float FADE_OUT_TIME = 1f;
+    private const float FADE_OUT_TIME = 2f;
 
     protected override void Awake()
     {
@@ -18,16 +18,17 @@ public class DeadState : EnemyStateBase
     {
         enemyColor = enemySprite.color;
         enemyRigid.linearVelocity = Vector2.zero;
-    
+
         enemyController.SetDefaultDamageArea(false);
+
+        _time = FADE_OUT_TIME;
     }
 
     public override void OnUpdate()
     {
         // Fade out when dead
-        enemyColor.a -= Time.deltaTime / FADE_OUT_TIME;
-        enemySprite.color = enemyColor;
-        if ( enemyColor.a <= 0 )
+        _time -= Time.deltaTime / FADE_OUT_TIME;
+        if (_time <= 0)
             enemyController.gameObject.SetActive(false);
     }
 
@@ -38,4 +39,7 @@ public class DeadState : EnemyStateBase
 
     public override void DetectedPlayer() { return; }
     public override void OnDamaged() { return; }
+
+
+    private float _time;
 }
