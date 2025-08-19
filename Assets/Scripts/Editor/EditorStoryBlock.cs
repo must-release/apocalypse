@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using AD.Story;
+using AD.Camera;
 
 namespace StoryEditor
 {
@@ -217,11 +218,10 @@ namespace StoryEditor
         {
             var newCameraAction = new StoryCameraAction
             {
-                ActionType = StoryCameraAction.CameraActionType.SwitchToCamera,
-                TargetCamera = "",
+                ActionType = CameraActionType.SwitchToCamera,
+                CameraName = "",
                 Duration = 1.0f,
-                Priority = 10,
-                WaitForCompletion = true
+                Priority = 10
             };
             var editorEntry = new EditorStoryEntry(newCameraAction);
             _editorEntries.Add(editorEntry);

@@ -27,6 +27,8 @@ namespace StoryEditor.UI
             EditorGUILayout.Space();
             DrawImageNameSelection(backgroundCG);
             EditorGUILayout.Space();
+            DrawAnimationSettings(backgroundCG);
+            EditorGUILayout.Space();
             DrawImagePreview(backgroundCG);
         }
 
@@ -126,6 +128,58 @@ namespace StoryEditor.UI
                 var rect = GUILayoutUtility.GetRect(200, 150, GUILayout.ExpandWidth(false));
                 EditorGUI.DrawPreviewTexture(rect, selectedSprite.texture);
             }
+        }
+
+        private void DrawAnimationSettings(StoryBackgroundCG backgroundCG)
+        {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Animation:", EditorStyles.boldLabel, GUILayout.Width(120));
+            
+            var animationTypes = System.Enum.GetValues(typeof(StoryBackgroundCG.BackgroundAnimationType))
+                .Cast<StoryBackgroundCG.BackgroundAnimationType>()
+                .Where(type => type != StoryBackgroundCG.BackgroundAnimationType.BackgroundAnimtationTypeCount)
+                .ToArray();
+            var animationNames = animationTypes.Select(type => type.ToString()).ToArray();
+            
+            var currentIndex = System.Array.IndexOf(animationTypes, backgroundCG.Animation);
+            var newIndex = EditorGUILayout.Popup(currentIndex, animationNames, GUILayout.Width(150));
+            
+            if (newIndex != currentIndex && 0 <= newIndex && newIndex < animationTypes.Length)
+            {
+                backgroundCG.Animation = animationTypes[newIndex];
+            }
+            
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Duration:", EditorStyles.boldLabel, GUILayout.Width(120));
+            
+            var newDuration = EditorGUILayout.FloatField(backgroundCG.AnimationDuration, GUILayout.Width(80));
+            if (newDuration != backgroundCG.AnimationDuration && 0 < newDuration)
+            {
+                backgroundCG.AnimationDuration = newDuration;
+            }
+            
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Target Position:", EditorStyles.boldLabel, GUILayout.Width(120));
+            
+            var positionTypes = System.Enum.GetValues(typeof(StoryBackgroundCG.BackgroundPositionType))
+                .Cast<StoryBackgroundCG.BackgroundPositionType>()
+                .Where(type => type != StoryBackgroundCG.BackgroundPositionType.BackgroundPositionTypeCount)
+                .ToArray();
+            var positionNames = positionTypes.Select(type => type.ToString()).ToArray();
+            
+            var currentPosIndex = System.Array.IndexOf(positionTypes, backgroundCG.TargetPosition);
+            var newPosIndex = EditorGUILayout.Popup(currentPosIndex, positionNames, GUILayout.Width(100));
+            
+            if (newPosIndex != currentPosIndex && 0 <= newPosIndex && newPosIndex < positionTypes.Length)
+            {
+                backgroundCG.TargetPosition = positionTypes[newPosIndex];
+            }
+            
+            EditorGUILayout.EndHorizontal();
         }
     }
 }

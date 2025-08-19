@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using AD.Story;
+using AD.Camera;
 
 namespace StoryEditor.Controllers
 {
@@ -360,15 +361,15 @@ namespace StoryEditor.Controllers
 
             switch (cameraAction.ActionType)
             {
-                case StoryCameraAction.CameraActionType.SwitchToCamera:
-                case StoryCameraAction.CameraActionType.SetPriority:
-                    if (string.IsNullOrWhiteSpace(cameraAction.TargetCamera))
+                case CameraActionType.SwitchToCamera:
+                case CameraActionType.SetPriority:
+                    if (string.IsNullOrWhiteSpace(cameraAction.CameraName))
                     {
-                        result.AddError($"{entryName}: {cameraAction.ActionType} requires Target Camera");
+                        result.AddError($"{entryName}: {cameraAction.ActionType} requires Camera Name");
                     }
                     break;
 
-                case StoryCameraAction.CameraActionType.FollowTarget:
+                case CameraActionType.FollowTarget:
                     if (string.IsNullOrWhiteSpace(cameraAction.TargetName))
                     {
                         result.AddError($"{entryName}: FollowTarget requires TargetName");

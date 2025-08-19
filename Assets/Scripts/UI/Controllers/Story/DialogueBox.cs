@@ -8,14 +8,23 @@ public class DialogueBox : MonoBehaviour
 
     public void SetName(string name) { _nameText.text = name; }
 
-    public async UniTask DisplayText(string text, float textInterval, CancellationToken cancellationToken = default)
+    public async UniTask<OpResult> DisplayText(string text, float textInterval, CancellationToken cancellationToken = default)
     {
         _dialogueText.text = "";
+        
         foreach (char letter in text.ToCharArray())
         {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                _dialogueText.text = text;
+                return OpResult.Aborted;
+            }
+            
             _dialogueText.text += letter;
-            await UniTask.WaitForSeconds(textInterval, cancellationToken: cancellationToken);
+            await UniTask.Delay((int)(textInterval * 1000), cancellationToken: cancellationToken);
         }
+        
+        return OpResult.Success;
     }
 
     public void DisplayText(string text)

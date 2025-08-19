@@ -10,6 +10,7 @@ namespace AD.Story
         /****** Public Members ******/
 
         public StoryEntry.EntryType PresentingEntryType => StoryEntry.EntryType.BackgroundCG;
+        public StoryEntry CurrentEntry => _currentBackgroundCG;
         public event Action<IStoryEntryHandler> OnStoryEntryComplete;
 
         public void Initialize(StoryHandleContext context)
@@ -32,11 +33,15 @@ namespace AD.Story
             _isCompleted = false;
 
             Sprite bgSprite = _model.GetBackgroundSprite(_currentBackgroundCG.Chapter, _currentBackgroundCG.ImageName);
-            // float duration = _defaultCGAnimationDuration / _currentBackgroundCG.AnimationSpeed;
-
             _backgroundImage.SetSprite(bgSprite);
 
-            await UniTask.Yield();
+            _activeCGAnimationTween = _backgroundImage.PlayAnimation(
+                _currentBackgroundCG.Animation,
+                _currentBackgroundCG.AnimationDuration,
+                _currentBackgroundCG.TargetPosition
+            );
+
+            await _activeCGAnimationTween;
 
             if (_isCompleted)
                 return;
@@ -46,18 +51,26 @@ namespace AD.Story
 
         public void CompleteStoryEntry()
         {
-            // Debug.Assert(null != _currentBackgroundCG, "Current BackgroundCG is null");
-            // Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in BackgroundCGHandler.");
+            Debug.Assert(null != _currentBackgroundCG, "Current BackgroundCG is null");
+            Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in BackgroundCGHandler.");
 
+            // if Animation is Blocker, CANNOT complete this Entry.
             // if (true == _currentBackgroundCG.IsBlockingAnimation)
             //     return;
 
-            // _isCompleted = true;
+            _isCompleted = true;
 
-            // _activeCGAnimationTween?.Complete();
-            // _activeCGAnimationTween = null;
-            // OnStoryEntryComplete.Invoke(this);
-            // _currentBackgroundCG = null;
+            _activeCGAnimationTween?.Complete();
+            _activeCGAnimationTween = null;
+            OnStoryEntryComplete.Invoke(this);
+            _currentBackgroundCG = null;
+        }
+
+        public void ResetHandler()
+        {
+            _currentBackgroundCG = null;
+            _activeCGAnimationTween = null;
+            _isCompleted = false;
         }
 
 

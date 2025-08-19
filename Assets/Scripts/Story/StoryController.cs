@@ -9,9 +9,8 @@ namespace AD.Story
     {
         /****** Public Members ******/
 
-        public static StoryController Instance;
+        public static StoryController Instance { get; private set; }
 
-        [Header("Parameters")]
         public bool IsStoryPlaying { get; private set; }
 
 
@@ -34,18 +33,14 @@ namespace AD.Story
                 return;
             }
 
-            // Check if there is available entry
             StoryEntry entry = StoryModel.Instance.GetNextEntry();
             if (entry == null)
             {
-                // Story is over
                 IsStoryPlaying = false;
+                return;
             }
-            else
-            {
-                // Show Story Entry
-                ShowStoryEntry(entry);
-            }
+
+            ShowStoryEntry(entry);
         }
 
         public void ShowStoryEntry(StoryEntry entry)
@@ -101,16 +96,13 @@ namespace AD.Story
 
         private void Start()
         {
-            var canvas = GetComponent<Canvas>();
-            canvas.worldCamera = Camera.main;
-
             _storyUIView = UIController.Instance.GetUIView(BaseUI.Story) as StoryUIView;
             Debug.Assert(null != _storyUIView, "StoryUIView is not assigned in StoryController.");
 
             // Initialize StoryHandleContext here
             _storyContext = new StoryHandleContext(this, _storyUIView);
 
-            InitializeStoryHandlers(); // Renamed method
+            InitializeStoryHandlers();
         }
 
         private void InitializeStoryHandlers()
@@ -131,25 +123,35 @@ namespace AD.Story
             Debug.Assert(null != handler, "Handler cannot be null");
             Debug.Assert(_activeStoryHandlers.Contains(handler), $"Handler {handler} is not active");
 
-            _activeStoryHandlers.Remove(handler);
+            bool isAutoProgress = handler.CurrentEntry.IsAutoProgress;
+
+            handler.ResetHandler();
+            _activeStoryHandlers.Remove(handler); // Release Handler
+
+            if (true == isAutoProgress)
+            {
+                PlayNextScript();
+            }
         }
 
         private IEnumerator StartStoryCoroutine(string storyInfo, int readBlockCount, int readEntryCount)
         {
-            // Set Story Playing true
             IsStoryPlaying = true;
 
-            // Load Story Text according to the Info
             yield return StoryModel.Instance.LoadStoryText(storyInfo, readBlockCount, readEntryCount);
 
-            // Show first story script When new story is loaded
-            StoryEntry entry = StoryModel.Instance.GetFirstEntry();
-            if (entry == null)
+            StoryEntry entry = StoryModel.Instance.PeekFirstEntry();
+            Debug.Assert(null != entry, "Story Entry cannot be null");
+
+            if (entry is StoryPlayMode)
             {
-                Debug.Log("Story initial load error");
+                StoryModel.Instance.GetNextEntry();
+                ShowStoryEntry(entry);
                 yield break;
             }
-            ShowStoryEntry(entry);
+            
+            StoryPlayMode storyPlayMode = new StoryPlayMode(StoryPlayMode.PlayModeType.VisualNovel);
+            ShowStoryEntry(storyPlayMode);
         }
     }
 }

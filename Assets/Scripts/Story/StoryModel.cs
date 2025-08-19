@@ -35,6 +35,12 @@ namespace AD.Story
             return storyEntryQueue.Dequeue();
         }
 
+        public StoryEntry PeekFirstEntry()
+        {
+            return (0 < storyEntryQueue.Count) ? storyEntryQueue.Peek() : null;
+        }
+        
+
         public StoryEntry GetNextEntry()
         {
             if (StoryEntryBuffer.Count > 0) // return buffered entry

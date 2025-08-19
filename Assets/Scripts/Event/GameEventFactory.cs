@@ -260,7 +260,26 @@ public static class GameEventFactory
         return evt;
     }
 
-    
+    public static IGameEvent CreateCameraEvent(AD.Camera.CameraActionType actionType, string cameraName, bool isTargetPlayer = false, string targetName = null)
+    {
+        var info = ScriptableObject.CreateInstance<CameraEventInfo>();
+        info.Initialize(actionType, cameraName, isTargetPlayer, targetName);
+
+        var evt = GameEventPool<CameraEvent, CameraEventInfo>.Get(EventHost, $"CameraEvent_{actionType}_{targetName}");
+        evt.Initialize(info);
+        return evt;
+    }
+
+    public static IGameEvent CreateSideDialogueEvent(string characterName, string text, float textInterval)
+    {
+        var info = ScriptableObject.CreateInstance<SideDialogueEventInfo>();
+        info.Initialize(characterName, text, textInterval);
+
+        var evt = GameEventPool<SideDialogueEvent, SideDialogueEventInfo>.Get(EventHost, $"SideDialogueEvent_{text.GetHashCode()}");
+        evt.Initialize(info);
+        return evt;
+    }
+
 
     public static IGameEvent CreateFromInfo<TEventInfo>(TEventInfo info)
         where TEventInfo : GameEventInfo
@@ -312,6 +331,8 @@ public static class GameEventFactory
         { GameEventType.StageTransition,    info => CreateFromInfo<StageTransitionEvent, StageTransitionEventInfo>(info as StageTransitionEventInfo) },
         { GameEventType.Story,              info => CreateFromInfo<StoryEvent, StoryEventInfo>(info as StoryEventInfo) },
         { GameEventType.UIChange,           info => CreateFromInfo<UIChangeEvent, UIChangeEventInfo>(info as UIChangeEventInfo) },
+        { GameEventType.Camera,             info => CreateFromInfo<CameraEvent, CameraEventInfo>(info as CameraEventInfo) },
+        { GameEventType.SideDialogue,       info => CreateFromInfo<SideDialogueEvent, SideDialogueEventInfo>(info as SideDialogueEventInfo) },
         { GameEventType.BGM,                info => CreateFromInfo<BGMEvent, BGMEventInfo>(info as BGMEventInfo) },
         { GameEventType.SFX,                info => CreateFromInfo<SFXEvent, SFXEventInfo>(info as SFXEventInfo) },
     };
