@@ -7,6 +7,8 @@ public static class ChapterStageCount
         {
             case ChapterType.Test:
                 return 3;
+            case ChapterType.Prologue:
+                return 2;
             default:
                 return 0;
         }
