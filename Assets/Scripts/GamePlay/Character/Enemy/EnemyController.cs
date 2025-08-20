@@ -178,7 +178,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
     {
         enemyStateDictionary = new Dictionary<EnemyState, EnemyStateBase>();
 
-        AsyncOperationHandle<GameObject> enemyState = Addressables.InstantiateAsync("Enemy State", transform);
+        AsyncOperationHandle<GameObject> enemyState = Addressables.InstantiateAsync("EnemyUtility/EnemyState", transform);
         yield return enemyState;
 
         if (enemyState.Status == AsyncOperationStatus.Succeeded)
@@ -200,7 +200,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
     // Get terrain checker prefab and set ray checking settings
     IEnumerator SetTerrainChecker()
     {
-        AsyncOperationHandle<GameObject> checker = Addressables.InstantiateAsync("Terrain Checker", transform);
+        AsyncOperationHandle<GameObject> checker = Addressables.InstantiateAsync("EnemyUtility/TerrainChecker", transform);
         yield return checker;
 
         if (checker.Status == AsyncOperationStatus.Succeeded)
@@ -218,7 +218,7 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
     // Get player detector prefab and set detecting settings
     IEnumerator SetPlayerDetector()
     {
-        AsyncOperationHandle<GameObject> detector = Addressables.InstantiateAsync("Player Detector", transform);
+        AsyncOperationHandle<GameObject> detector = Addressables.InstantiateAsync("EnemyUtility/PlayerDetector", transform);
         yield return detector;
 
         if (detector.Status == AsyncOperationStatus.Succeeded)

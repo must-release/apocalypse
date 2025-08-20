@@ -150,11 +150,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6795b9326aaad4deabbf2a9c3c8d0353
-    m_Address: Assets/GameResources/Prefab/Projectile/Scratch.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 67d9aa8ec88a248c487b0b675a9e6846
     m_Address: StoryScript/Prologue_1
     m_ReadOnly: 0
@@ -227,6 +222,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: edf8312b33a594cb3847f0772a0c9e38
     m_Address: Character/Player
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: edfbd213f830a4402b23082a89f027a5
+    m_Address: EnemyUtility/EnemyState
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

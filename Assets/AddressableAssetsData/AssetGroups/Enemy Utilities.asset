@@ -13,22 +13,15 @@ MonoBehaviour:
   m_Name: Enemy Utilities
   m_EditorClassIdentifier: 
   m_GroupName: Enemy Utilities
-  m_Data:
-    m_SerializedData: []
   m_GUID: f3dc55e6f873246f2b51eac4d657f9c6
   m_SerializeEntries:
-  - m_GUID: edfbd213f830a4402b23082a89f027a5
-    m_Address: Enemy State
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2f81613de6b7b4d88be2d0ca9d3264ba
-    m_Address: Terrain Checker
+    m_Address: EnemyUtility/TerrainChecker
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cd16bd0c700ae49ef87ce71322415599
-    m_Address: Player Detector
+    m_Address: EnemyUtility/EnemyDetector
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

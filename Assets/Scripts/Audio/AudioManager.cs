@@ -84,7 +84,7 @@ namespace AD.Audio
             Debug.Assert(_bgmClips.TryGetValue(clipName, out AudioClip clip), $"BGM clip not found: {clipName}.");
             Debug.Assert(null != clip, "BGM clip cannot be null.");
 
-            _bgmSource.clip = clip;
+            _bgmSource.clip = _bgmClips[clipName];
             _bgmSource.Play();
         }
 
@@ -107,7 +107,7 @@ namespace AD.Audio
             Debug.Assert(_sfxClips.TryGetValue(clipName, out AudioClip clip), $"SFX clip not found: {clipName}.");
             Debug.Assert(null != clip, "SFX clip cannot be null.");
 
-            _sfxSource.PlayOneShot(clip);
+            _sfxSource.PlayOneShot(_sfxClips[clipName]);
         }
 
         public void SetSFXVolume(float volume)
