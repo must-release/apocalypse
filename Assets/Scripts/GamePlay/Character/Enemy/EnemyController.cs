@@ -244,6 +244,6 @@ public abstract class EnemyController : CharacterBase, IAsyncLoadObject
         GameObject dmgAreaObj = new GameObject("Default Damage Area");
         dmgAreaObj.transform.SetParent(transform, false);
         _defalutDamageArea = dmgAreaObj.AddComponent<DamageArea>();
-        _defalutDamageArea.SetDamageArea(transform.GetComponent<Collider2D>(), defaultDamageInfo, true, gameObject.layer);
+        _defalutDamageArea.SetDamageArea(transform.GetComponent<Collider2D>(), defaultDamageInfo, true, 0);
     }
 }

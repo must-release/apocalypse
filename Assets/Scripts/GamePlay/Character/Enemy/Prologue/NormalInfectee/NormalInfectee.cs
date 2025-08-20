@@ -1,5 +1,4 @@
 using Unity.Mathematics;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class NormalInfectee : EnemyController
@@ -24,6 +23,8 @@ public class NormalInfectee : EnemyController
             waitingTime += Time.deltaTime;
             if (waitingTime > _StandingTime)
             {
+                EnemyAnimator.Play("Normal_Infectee_Patrolling");
+
                 wait = false;
                 waitingTime = 0;
 
@@ -32,7 +33,6 @@ public class NormalInfectee : EnemyController
             }
             return;
         }
-
         // Decide where to patrol : left or right side
         PatrolDirection(transform.localScale.x < 0);
     }
@@ -48,10 +48,16 @@ public class NormalInfectee : EnemyController
         int direction = ChasingTarget.position.x > transform.position.x ? 1: -1;
         if(0 < transform.localScale.x * direction) Flip();
 
-        if (CanMoveAhead && math.abs(ChasingTarget.position.x - transform.position.x) > 0.1f) 
+        if (CanMoveAhead && math.abs(ChasingTarget.position.x - transform.position.x) > 0.1f)
+        {
             enemyRigid.linearVelocity = new Vector2(direction * MovingSpeed, enemyRigid.linearVelocity.y);
+            EnemyAnimator.Play("Normal_Infectee_Patrolling");
+        }
         else
+        {
+            EnemyAnimator.Play("Normal_Infectee_Idle");
             enemyRigid.linearVelocity = Vector2.zero;
+        }
     }
 
     public override void StartAttack()
@@ -122,26 +128,26 @@ public class NormalInfectee : EnemyController
 
     protected override void InitializeTerrainChecker()
     {
-        groundCheckingDistance = 3f;
+        groundCheckingDistance = 2f;
         groundCheckingVector = new Vector3(1, -1, 0);
-        ObstacleCheckingDistance = 2f;
+        ObstacleCheckingDistance = 1f;
         checkTerrain = true;
     }
 
     protected override void InitializePlayerDetector()
     {
-        detectRange = new Vector2(10, 2);
-        rangeOffset = new Vector2(3, 0);
+        detectRange = new Vector2(5, 1);
+        rangeOffset = new Vector2(-1, 0);
     }
 
     protected override void InitializeDamageAndWeapon()
     {
-        defaultDamageInfo = new DamageInfo(gameObject, 1);
+        defaultDamageInfo = new DamageInfo(gameObject, 1, true);
         weaponOffset = new Vector3(2.5f, 0, 0);
         useShortRangeWeapon = true;
         weaponType = ProjectileType.ProjectileTypeCount;
 
-        attackRange = 1.5f;
+        attackRange = 2f;
     }
 
     protected override void OnAir() { }
@@ -152,10 +158,10 @@ public class NormalInfectee : EnemyController
 
     [SerializeField] private Transform _AttackPoint;
 
-    private const int _MaxHitPoint      = 3;
-    private const float _MaxPatrolRange = 30;
-    private const float _MinPatrolRange = 5;
-    private const float _StandingTime   = 5f;
+    private const int   _MaxHitPoint    = 3;
+    private const float _MaxPatrolRange = 10f;
+    private const float _MinPatrolRange = 3f;
+    private const float _StandingTime   = 2f;
 
     
     private DamageInfo _attackDamageInfo = new DamageInfo();
@@ -178,7 +184,11 @@ public class NormalInfectee : EnemyController
             else patrolLeftEnd = transform.position.x;
 
             // Check if patrol area is too small
-            if (patrolRightEnd - patrolLeftEnd < _MinPatrolRange) wait = true;
+            if (patrolRightEnd - patrolLeftEnd < _MinPatrolRange)
+            {
+                wait = true;
+                EnemyAnimator.Play("Normal_Infectee_Idle");
+            }
             else Flip();
 
             // Update other end

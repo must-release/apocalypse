@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class DamagedState : EnemyStateBase
 {
-    private const float FLICKER_TIME = 0.1f;
-    private const float COLOR_FILTER = 0.7f; // Must be in range of (0, 1)
+    private const float _FlickerTime = 0.1f;
+    private const float _ColorFilter = 0.7f; // Must be in range of (0, 1)
     private Color initialColor;
     private float flickeredTime;
 
@@ -19,14 +19,14 @@ public class DamagedState : EnemyStateBase
 
     public override void OnEnter()
     {
-        enemySprite.color = initialColor * COLOR_FILTER;
+        enemySprite.color = initialColor * _ColorFilter;
         flickeredTime = 0;
     }
 
     public override void OnUpdate()
     {
         flickeredTime += Time.deltaTime;
-        if( FLICKER_TIME < flickeredTime )
+        if( _FlickerTime < flickeredTime )
             enemyController.ChangeState(EnemyState.Chasing);
     }
 

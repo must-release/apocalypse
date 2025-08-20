@@ -37,7 +37,7 @@ public class TerrainChecker : MonoBehaviour
     {
         if (_checker == null) return false;
 
-        _groundCheckingVector.x = _checker.localScale.x > 0 ? math.abs(_groundCheckingVector.x) : -math.abs(_groundCheckingVector.x);
+        _groundCheckingVector.x = _checker.localScale.x < 0 ? math.abs(_groundCheckingVector.x) : -math.abs(_groundCheckingVector.x);
 
         var groundHit = Physics2D.Raycast(_checker.position, _groundCheckingVector, _groundCheckingDistance, LayerMask.GetMask(Layer.Ground));
 
@@ -46,8 +46,8 @@ public class TerrainChecker : MonoBehaviour
 
     private bool CheckIsObstacleAhead()
     {
-        int direction = _checker.localScale.x > 0 ? 1 : -1;
-         _groundCheckingVector.x = _checker.localScale.x > 0 ? math.abs(_groundCheckingVector.x) : -math.abs(_groundCheckingVector.x);
+        int direction = _checker.localScale.x < 0 ? 1 : -1;
+         _groundCheckingVector.x = _checker.localScale.x < 0 ? math.abs(_groundCheckingVector.x) : -math.abs(_groundCheckingVector.x);
 
 
         var frontHit = Physics2D.Raycast(_checker.position, Vector3.right * direction, _obstacleCheckingDistance, LayerMask.GetMask(Layer.Obstacle, Layer.Ground));
@@ -61,8 +61,8 @@ public class TerrainChecker : MonoBehaviour
     {
         if (_checker == null) return;
 
-        _groundCheckingVector.x = _checker.localScale.x > 0 ? math.abs(_groundCheckingVector.x) : -math.abs(_groundCheckingVector.x);
-        int direction = _checker.localScale.x > 0 ? 1 : -1;
+        _groundCheckingVector.x = _checker.localScale.x < 0 ? math.abs(_groundCheckingVector.x) : -math.abs(_groundCheckingVector.x);
+        int direction = _checker.localScale.x < 0 ? 1 : -1;
 
         Gizmos.color = Color.red;
         Vector3 start = _checker.position;
