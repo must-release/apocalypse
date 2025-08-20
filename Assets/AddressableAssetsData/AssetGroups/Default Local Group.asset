@@ -25,6 +25,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0f8f948ab22d7584ab2bf552087cf62f
+    m_Address: StoryScript/Prologue_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 10932c516ffe242458e9ab51eb011f7c
     m_Address: Stage/Test_1
     m_ReadOnly: 0
@@ -222,6 +227,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: edf8312b33a594cb3847f0772a0c9e38
     m_Address: Character/Player
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f4a3ef1801e954048bb183f73634185d
+    m_Address: StoryScript/Prologue_2
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

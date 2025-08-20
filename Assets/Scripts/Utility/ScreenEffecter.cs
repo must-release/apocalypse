@@ -46,9 +46,9 @@ public class ScreenEffecter : MonoBehaviour, IUtilityTool
 
     private IEnumerator StartFade(float startAlpha, float endAlpha, float duration)
     {
-        fadeImage.gameObject.SetActive(true);
         float elapsedTime = 0.0f;
         fadeImage.color = new Color(fadeColor.r, fadeColor.g, fadeColor.b, startAlpha);
+        fadeImage.gameObject.SetActive(true);
 
         while (elapsedTime < duration)
         {

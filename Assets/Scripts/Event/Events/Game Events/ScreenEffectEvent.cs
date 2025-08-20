@@ -19,13 +19,10 @@ public class ScreenEffectEvent : GameEventBase<ScreenEffectEventInfo>
     {
         Debug.Assert(null != activeEventTypeCounts, "activeEventTypeCounts is null.");
 
-        // foreach (GameEventType eventType in activeEventTypeCounts.Keys)
-        // {
-        //     if (GameEventType.Story == eventType || GameEventType.Cutscene == eventType)
-        //         continue;
-
-        //     return false;
-        // }
+        if (activeEventTypeCounts.ContainsKey(GameEventType.ScreenEffect))
+        {
+            return false;
+        }
 
         return true;
     }

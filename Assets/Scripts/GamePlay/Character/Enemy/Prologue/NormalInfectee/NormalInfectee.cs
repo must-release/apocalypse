@@ -159,7 +159,7 @@ public class NormalInfectee : EnemyController
     [SerializeField] private Transform _AttackPoint;
 
     private const int   _MaxHitPoint    = 3;
-    private const float _MaxPatrolRange = 10f;
+    private const float _MaxPatrolRange = 30f;
     private const float _MinPatrolRange = 3f;
     private const float _StandingTime   = 2f;
 

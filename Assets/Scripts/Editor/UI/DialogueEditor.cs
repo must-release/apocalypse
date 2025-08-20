@@ -36,7 +36,7 @@ namespace StoryEditor.UI
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Character:", EditorStyles.boldLabel, GUILayout.Width(80));
-            var characterOptions = new string[] { "독백", "나", "소녀", "중개상" };
+            var characterOptions = new string[] { "독백", "나", "소녀", "중개상", "?" };
             var currentIndex = System.Array.IndexOf(characterOptions, dialogue.Name);
             if (currentIndex == -1) currentIndex = 0;
 

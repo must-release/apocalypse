@@ -12,12 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b894d79f237ceeb4c9f6c146282d41ac, type: 3}
   m_Name: NewGameEventInfo
   m_EditorClassIdentifier: 
-  _eventType: 11
+  _eventType: 10
   _isInitialized: 1
   _eventInfos:
   - {fileID: 11400000, guid: 489bc970eea7ee54388629412caba933, type: 2}
+  - {fileID: 11400000, guid: 3f4b7ea45769de54d9a076f4504a0e51, type: 2}
   - {fileID: 11400000, guid: e6676c48a9951ea4b8973538776b9a54, type: 2}
   - {fileID: 11400000, guid: 65c26692d7f89d146b722469e7e6c24a, type: 2}
   - {fileID: 11400000, guid: 8711976ba4c7a2745b1b7f0fadd55cf0, type: 2}
   - {fileID: 11400000, guid: fa50ac8cdfd937e429d1811294ca1d5b, type: 2}
+  - {fileID: 11400000, guid: 36febd0039c75554087d218420f977ca, type: 2}
+  - {fileID: 11400000, guid: 80caf06ad86c95b4ea3ea7decb97066c, type: 2}
   _startIndex: 0

@@ -9,13 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c9dff8cf5529f348b6655bfbc6d00e5, type: 3}
-  m_Name: 2_StoryEventInfo
+  m_Script: {fileID: 11500000, guid: b836476968c498f4986ffdef15cca63b, type: 3}
+  m_Name: 0_ScrenEffectEventInfo
   m_EditorClassIdentifier: 
-  _eventType: 0
+  _eventType: 9
   _isInitialized: 1
-  _storyStage: 1
-  _storyNumber: 1
-  _readBlockCount: 0
-  _readEntryCount: 0
-  _isOnMap: 0
+  _screenEffectType: 1
+  _duration: 1

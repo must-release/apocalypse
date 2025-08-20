@@ -14,7 +14,6 @@ public class CharacterCGView : MonoBehaviour
         Debug.Assert(null != sprite, "Sprite to set is null.");
 
         CharacterImage.sprite = sprite;
-        CharacterImage.SetNativeSize();
     }
 
     public void SetPosition(Vector2 position)
@@ -31,5 +30,6 @@ public class CharacterCGView : MonoBehaviour
     {
         CharacterImage = GetComponent<Image>();
         RectTransform = GetComponent<RectTransform>();
+        CharacterImage.preserveAspect = true;
     }
 }

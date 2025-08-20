@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d1fde2698931d5740978ce3d592ea8c5, type: 3}
-  m_Name: 4_UIChangeEventInfo
+  m_Name: 5_UIChangeEventInfo
   m_EditorClassIdentifier: 
   _eventType: 4
   _isInitialized: 1

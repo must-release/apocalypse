@@ -29,9 +29,10 @@ namespace AD.Story
             FacialExpressionTypeCount // Keep this last for count
         }
 
-        public StoryCharacterCG() 
+        public StoryCharacterCG()
         {
             Type = EntryType.CharacterCG;
+            IsAutoProgress = true;
         }
 
         [XmlAttribute("Name")]

@@ -9,9 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b85836807d686874c895502e1d3e2061, type: 3}
-  m_Name: 1_SceneActivateEventInfo
+  m_Script: {fileID: 11500000, guid: 8e0f6abd0f23fca4385901cdd0745275, type: 3}
+  m_Name: 0_CameraEventInfo
   m_EditorClassIdentifier: 
-  _eventType: 8
+  _eventType: 15
   _isInitialized: 1
-  _shouldTurnOnLoadingUI: 0
+  _actionType: 0
+  _cameraName: ZoomOutCamera
+  _targetName: 
+  _isTargetPlayer: 0

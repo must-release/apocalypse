@@ -6,7 +6,7 @@ namespace AD.Story
     [System.Serializable]
     public class StoryChoice : StoryEntry
     {
-        public StoryChoice() 
+        public StoryChoice()
         {
             Type = EntryType.Choice;
         }

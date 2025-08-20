@@ -35,7 +35,8 @@ public class TerrainChecker : MonoBehaviour
 
     private bool CheckIsGroundAhead()
     {
-        if (_checker == null) return false;
+        if (_checker == null)
+            return false;
 
         _groundCheckingVector.x = _checker.localScale.x < 0 ? math.abs(_groundCheckingVector.x) : -math.abs(_groundCheckingVector.x);
 

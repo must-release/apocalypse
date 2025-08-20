@@ -56,8 +56,8 @@ namespace AD.UI
         [SerializeField] private TextMeshProUGUI _dialogueText;
 
         private CancellationTokenSource _hideCts;
-        private const int _HidePanelWaitTime = 2000;
-        private const int _TextReadDelay = 100;
+        private const int _HidePanelWaitTime = 1000;
+        private const int _TextReadDelay = 50;
 
         private void OnValidate()
         {

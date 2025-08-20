@@ -245,11 +245,6 @@ namespace StoryEditor.Controllers
             {
                 result.AddWarning($"{entryName}: Dialogue has no character name");
             }
-
-            if (string.IsNullOrWhiteSpace(dialogue.Text))
-            {
-                result.AddWarning($"{entryName}: Dialogue has no text");
-            }
         }
 
         private void ValidateVFX(StoryVFX vfx, string entryName, ValidationResult result)

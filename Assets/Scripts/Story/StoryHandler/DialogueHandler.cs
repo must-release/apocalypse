@@ -77,7 +77,10 @@ namespace AD.Story
             Debug.Assert(null != _currentDialogue, "Current dialogue is null in DialogueHandler.");
             Debug.Assert(null != _cancellationTokenSource, "CancellationTokenSource is not initialized in DialogueHandler.");
 
-            _dialogueBox.SetName(_currentDialogue.Name);
+            _currentDialogue.IsAutoProgress = _currentDialogue.IsAutoSkip;
+
+            // MUST BE FIXED
+            _dialogueBox.SetName( (_currentDialogue.Name == "독백") ? "" : _currentDialogue.Name);
 
             OpResult result = await _dialogueBox.DisplayText(_currentDialogue.Text, CalculateTextInterval(_currentDialogue.TextSpeed), _cancellationTokenSource.Token);
             if (result == OpResult.Success)
@@ -92,10 +95,11 @@ namespace AD.Story
             Debug.Assert(null != _cancellationTokenSource, "CancellationTokenSource is not initialized in DialogueHandler.");
             Debug.Assert(StoryPlayMode.PlayModeType.SideDialogue == _context.CurrentPlayMode, $"Current play mode {_context.CurrentPlayMode} is not Side Dialogue.");
 
-            var sideDialogueEvent = GameEventFactory.CreateSideDialogueEvent(_currentDialogue.Name, _currentDialogue.Text, CalculateTextInterval(_currentDialogue.TextSpeed));
-            GameEventManager.Instance.Submit(sideDialogueEvent);
+            _currentDialogue.IsAutoProgress = true;
 
-            CompleteDialogueEntry();
+            var sideDialogueEvent = GameEventFactory.CreateSideDialogueEvent(_currentDialogue.Name, _currentDialogue.Text, CalculateTextInterval(_currentDialogue.TextSpeed));
+            sideDialogueEvent.OnTerminate += CompleteDialogueEntry;
+            GameEventManager.Instance.Submit(sideDialogueEvent);
         }
 
         private UniTask ProgressCutsceneDialogue()

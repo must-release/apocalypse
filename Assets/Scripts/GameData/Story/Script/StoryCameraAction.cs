@@ -7,9 +7,10 @@ namespace AD.Story
     [System.Serializable]
     public class StoryCameraAction : StoryEntry
     {
-        public StoryCameraAction() 
+        public StoryCameraAction()
         {
             Type = EntryType.CameraAction;
+            IsAutoProgress = true;
         }
 
         [XmlAttribute("ActionType")]

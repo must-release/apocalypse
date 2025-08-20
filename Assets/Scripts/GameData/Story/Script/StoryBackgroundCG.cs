@@ -30,6 +30,7 @@ namespace AD.Story
         public StoryBackgroundCG()
         {
             Type = EntryType.BackgroundCG;
+            IsAutoProgress = true;
         }
 
         [XmlAttribute("Chapter")]

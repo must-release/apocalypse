@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b85836807d686874c895502e1d3e2061, type: 3}
-  m_Name: 3_SceneActivateEventInfo
+  m_Name: 2_SceneActivateEventInfo
   m_EditorClassIdentifier: 
   _eventType: 8
-  _isInitialized: 0
-  _shouldTurnOnLoadingUI: 1
+  _isInitialized: 1
+  _shouldTurnOnLoadingUI: 0

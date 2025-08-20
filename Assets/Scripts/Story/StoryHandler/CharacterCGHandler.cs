@@ -85,9 +85,9 @@ namespace AD.Story
         private Tween _activeCGAnimationTween;
         private bool _isCompleted; // Re-added field
         private float _defaultCGAnimationDuration = 0.7f;
-        private Vector2 _leftPosition = new Vector2(-500, -219);
-        private Vector2 _rightPosition = new Vector2(500, -219);
-        private Vector2 _centerPosition = new Vector2(0, -219);
+        private Vector2 _leftPosition = new Vector2(-500, -100);
+        private Vector2 _rightPosition = new Vector2(500, -100);
+        private Vector2 _centerPosition = new Vector2(0, -100);
 
 
         private async void Start()

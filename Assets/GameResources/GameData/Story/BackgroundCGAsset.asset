@@ -15,4 +15,5 @@ MonoBehaviour:
   BackgroundCGAEntries:
   - Chapter: 1
     BackgroundSprites:
+    - {fileID: 21300000, guid: 9077201f72bbdc44987cbed780b7c047, type: 3}
     - {fileID: 21300000, guid: e4e764a49fac64d4ab4756d729cc126d, type: 3}

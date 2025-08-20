@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b894d79f237ceeb4c9f6c146282d41ac, type: 3}
   m_Name: SplashScreenEventInfo
   m_EditorClassIdentifier: 
-  _eventType: 11
+  _eventType: 10
   _isInitialized: 1
   _eventInfos:
+  - {fileID: 11400000, guid: dc0d25cec43cdd148bc7888b366ad22e, type: 2}
   - {fileID: 11400000, guid: 4661ef8ca7bcb6f4493e96b9c989a067, type: 2}
   - {fileID: 11400000, guid: 588f0925cf61a924ca6d7972588bacec, type: 2}
   - {fileID: 11400000, guid: 7ee17882b8161e443b6a0e8fbd90271c, type: 2}
+  - {fileID: 11400000, guid: 60a2e336539c8674ab8489e8725c11d4, type: 2}
   _startIndex: 0

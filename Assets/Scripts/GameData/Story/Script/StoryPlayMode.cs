@@ -14,16 +14,16 @@ namespace AD.Story
             PlayModeTypeCount
         }
 
-        public StoryPlayMode() 
+        public StoryPlayMode()
         {
             Type = EntryType.PlayMode;
+            IsAutoProgress = true;
         }
 
-        public StoryPlayMode(PlayModeType playMode)
+        public StoryPlayMode(PlayModeType playMode) : this()
         {
             Debug.Assert(playMode != PlayModeType.PlayModeTypeCount, "Invalid PlayMode type: " + playMode);
 
-            Type = EntryType.PlayMode;
             PlayMode = playMode;
         }
 

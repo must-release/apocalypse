@@ -49,6 +49,8 @@ namespace AD.Story
 
             if (_storyHandlers.TryGetValue(entry.Type, out IStoryEntryHandler handler))
             {
+                Logger.Write(LogCategory.Story, $"Progressing {entry.Type} entry");
+
                 _activeStoryHandlers.Add(handler);
                 handler.ProgressStoryEntry(entry);
             }

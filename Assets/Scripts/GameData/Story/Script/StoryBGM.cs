@@ -11,9 +11,10 @@ namespace AD.Story
             Stop
         }
 
-        public StoryBGM() 
+        public StoryBGM()
         {
             Type = EntryType.BGM;
+            IsAutoProgress = true;
         }
 
         [XmlAttribute("Action")]

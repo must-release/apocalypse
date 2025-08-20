@@ -1,36 +1,73 @@
-﻿<?xml version="1.0" ?>
-<StoryScript>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<StoryScript xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Block BranchName="common">
-    <BackgroundCG Chapter="Prologue" ImageName="Church" />
-    <BGM Action="Start" BGMName="Songs_of_the_Soulless" IsLoop="true" />
-    <CharacterCG Name="소녀" Animation="Appear" />
-    <Dialogue Name="소녀">앞을 봐! 괴물들이 있어!</Dialogue>
+    <BackgroundCG Chapter="Prologue" ImageName="BG_Black" Animation="Appear" AnimationDuration="1" TargetPosition="Center" />
+    <BGM Action="Start" BGMName="Songs_of_the_Soulless" FadeDuration="1" IsLoop="true" />
+    <VFX VFX="ScreenFadeIn" Duration="1" />
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">목이 뜯긴 곰인형.</Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">반쯤 타버린 성경책.</Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">무기로 쓰기에는 영 부실한 각목.</Dialogue>
+    <BackgroundCG Chapter="Prologue" ImageName="BG_Church" Animation="Appear" AnimationDuration="1" TargetPosition="Center" />
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">영 쓸모없는 잡동사니만 널브러져 있다.</Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">이곳에서 머물던 난민들은 유독 빈곤한 편이었던 것 같다.</Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">그래서 고작 괴물 몇 마리를 감당하지 못하고 다 도망가버린 건가?</Dialogue>
+    <CharacterCG Name="나" Expression="Default" Animation="Appear" IsBlockingAnimation="true" AnimationSpeed="1" TargetPosition="Center" />
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">결국 쓸만한 물자는 발견하지 못했다.</Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">방금 막 빈 집이 된 난민 캠프를 털었는데도 얻은 게 하나도 없다니. </Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">조금 아쉽지만, 그래도 이제 슬슬 출발해봐야 한다.</Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">약속 시간이 다 되어 간다.</Dialogue>
+    <CharacterCG Name="나" Expression="Default" Animation="Move" IsBlockingAnimation="true" AnimationSpeed="1" TargetPosition="Right" />
+    <CharacterCG Name="나" Expression="Default" Animation="Move" IsBlockingAnimation="true" AnimationSpeed="1" TargetPosition="Center" />
+    <Dialogue Name="나" Speed="Default" IsAutoSkip="false">......</Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">정말 마지막으로 잠깐 정도만 더 살펴보는 거다.</Dialogue>
+    <CharacterCG Name="나" Expression="Default" Animation="Disappear" IsBlockingAnimation="true" AnimationSpeed="0.5" TargetPosition="Center" />
+    <VFX VFX="ScreenFadeOut" Duration="0.5" />
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="true"></Dialogue>
+    <VFX VFX="ScreenFadeIn" Duration="0.5" />
+    <Dialogue Name="?" Speed="Default" IsAutoSkip="false">…여줘…</Dialogue>
+    <Dialogue Name="?" Speed="Default" IsAutoSkip="false">……..으그…그극…</Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">남자가 잔해 틈에 깔려 있었다.</Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">아까는 발견하지 못했는데, 건물이 추가적으로 무너져 내리면서 내부가 드러난 모양이다.</Dialogue>
+    <Dialogue Name="?" Speed="Default" IsAutoSkip="false">그에에….에에에엑…</Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">남자의 신체는 기괴하게 뒤틀려 있었고, 피부 내부에서도 뭔가 계속 꿈틀거리고 있었다.</Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">아무래도 병에 걸린 것 같은데.</Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">신체 변형은 이미 대부분 진행된 상황이었다.</Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">괴물에게 공격받아서 감염당하고, 도망치던 와중에 무너져 내리는 잔해에 깔린 건가?</Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">참 재수가 없네.</Dialogue>
+    <Dialogue Name="?" Speed="Default" IsAutoSkip="false">죽…여줘… 죽여…주세요…</Dialogue>
+    <Dialogue Name="?" Speed="Default" IsAutoSkip="false">으그…그에에엑…</Dialogue>
+    <BackgroundCG Chapter="Prologue" ImageName="BG_Church" Animation="ZoomIn" AnimationDuration="1" TargetPosition="Right" />
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">끔찍한 고통이 느껴지는 것인지, 남성은 온몸을 버르적대고 있었다.</Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">하지만 무거운 잔해가 그 몸을 짓누르고 있어 빠져나오기는 쉽지 않아 보인다.</Dialogue>
+    <CharacterCG Name="나" Expression="Default" Animation="Appear" IsBlockingAnimation="true" AnimationSpeed="0.5" TargetPosition="Center" />
+    <Dialogue Name="나" Speed="Default" IsAutoSkip="false">......</Dialogue>
+    <Dialogue Name="?" Speed="Default" IsAutoSkip="false">감사…감사…합니다…으그..겍…</Dialogue>
+    <Dialogue Name="?" Speed="Default" IsAutoSkip="false">…죽여..주세….너…너무…괴로…워…</Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">남자의 얼굴은 본래의 색을 잃어 창백했고, 눈동자는 검게 퍼져 주변의 흰자를 물들이고 있었다.</Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">사실상 이제 사람이라고 부를 수 없는 모습이다.</Dialogue>
+    <CharacterCG Name="나" Expression="Default" Animation="Disappear" IsBlockingAnimation="false" AnimationSpeed="0.5" TargetPosition="Center" />
+    <VFX VFX="ScreenFadeOut" Duration="0.5" />
+    <BackgroundCG Chapter="Prologue" ImageName="BG_Black" Animation="Appear" AnimationDuration="0.1" TargetPosition="Center" />
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="true"></Dialogue>
+    <VFX VFX="ScreenFadeIn" Duration="0.1" />
+    <Dialogue Name="?" Speed="Default" IsAutoSkip="false">…으…으..? 죽여…죽여,주세요…으그극…</Dialogue>
+    <Dialogue Name="?" Speed="Default" IsAutoSkip="false">…죽여줘…그그극…주…죽여..달라고..!!!</Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">아직은 조금 더 기다려야 했다.</Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">나는 남자의 미간에 총구를 겨눈 채 대기했다.</Dialogue>
+    <Dialogue Name="?" Speed="Default" IsAutoSkip="false">그에엑….게게게게게게게겍….주…주겨…</Dialogue>
+    <Dialogue Name="?" Speed="Default" IsAutoSkip="false">............</Dialogue>
+    <Dialogue Name="?" Speed="Fast" IsAutoSkip="true">죽여버릴거야까가각</Dialogue>
     <SFX SFXName="Gun_Fire" />
-    <Dialogue Name="소녀">어떻게 하지? 돌아가야할까?</Dialogue>
-    <Choice>
-      <PrevDialogue Name="소녀">어떻게 하지? 돌아가야할까?</PrevDialogue>
-      <Options>
-        <Option BranchName="positive">죽이자.</Option>
-        <Option BranchName="negative">돌아가자.</Option>
-        <Option BranchName="negative">귀찮다.</Option>
-      </Options>
-    </Choice>
-  </Block>
-  <Block BranchName="positive">
-    <CharacterCG Name="소녀" Animation="Move" TargetPosition="Left" IsBlockingAnimation="false" />
-    <CharacterCG Name="나" Animation="Appear" TargetPosition="Right" />
-    <Dialogue Name="나">내가 처리할게.</Dialogue>
-    <Dialogue Name="소녀">좋아! 믿고 있을게!</Dialogue>
-  </Block>
-  <Block BranchName="negative">
-    <CharacterCG Name="소녀" Animation="Move" TargetPosition="Left" IsBlockingAnimation="false" />
-    <CharacterCG Name="나" Animation="Appear" TargetPosition="Right" />
-    <Dialogue Name="나">별로 싸우고 싶지 않아.</Dialogue>
-    <CharacterCG Name="소녀" Expression="Smile" />
-    <Dialogue Name="소녀">하지만 우리의 의지와 상관없이 괴물이 이쪽으로 오고 있어!</Dialogue>
-    <Dialogue Name="소녀">...화이팅!!</Dialogue>
-  </Block>
-  <Block BranchName="common">
-    <Dialogue Name="나">...그래.</Dialogue>
+    <BGM Action="Stop" BGMName="Songs_of_the_Soulless" FadeDuration="1" IsLoop="true" />
+    <BackgroundCG Chapter="Prologue" ImageName="BG_Church" Animation="Appear" AnimationDuration="0.01" TargetPosition="Center" />
+    <CharacterCG Name="나" Expression="Default" Animation="Appear" IsBlockingAnimation="true" AnimationSpeed="0.5" TargetPosition="Center" />
+    <Dialogue Name="나" Speed="Default" IsAutoSkip="false">됐다.</Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">괴물로 완전히 변했을 때, 제대로 숨을 끊었다. </Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">몸 내부 생체 조직도 확실히 변형되었을 것이다.</Dialogue>
+    <CharacterCG Name="나" Expression="Default" Animation="Move" IsBlockingAnimation="true" AnimationSpeed="0.5" TargetPosition="Right" />
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">손쉽게 괴물을 잡고, 생체 조직 샘플까지 안전하고 확실하게 추출했으니.</Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">이곳에서 아주 수확이 없지는 않았던 셈이다. 여전히 아쉽기는 하지만.</Dialogue>
+    <CharacterCG Name="나" Expression="Default" Animation="Move" IsBlockingAnimation="true" AnimationSpeed="0.5" TargetPosition="Center" />
+    <VFX VFX="ScreenFadeOut" Duration="1" />
   </Block>
 </StoryScript>

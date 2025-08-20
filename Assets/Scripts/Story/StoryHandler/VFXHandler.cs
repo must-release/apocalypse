@@ -41,10 +41,8 @@ namespace AD.Story
             }
 
             IGameEvent screenEffectEvent = GameEventFactory.CreateScreenEffectEvent(screenEffectType, _currentVFX.Duration);
-
+            screenEffectEvent.OnTerminate += CompleteVFXEntry;
             GameEventManager.Instance.Submit(screenEffectEvent);
-
-            OnStoryEntryComplete.Invoke(this);
 
             await UniTask.CompletedTask;
         }
@@ -66,5 +64,12 @@ namespace AD.Story
 
         private StoryHandleContext _context;
         private StoryVFX _currentVFX;
+
+        private void CompleteVFXEntry()
+        {
+            Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete event is not subscribed in VFXHandler.");
+
+            OnStoryEntryComplete.Invoke(this);
+        }
     }
 }

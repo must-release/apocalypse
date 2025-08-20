@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<StoryScript xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Block BranchName="Common">
+    <PlayMode Mode="SideDialogue" />
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">(지금까지 모은 샘플의 양이 꽤 되네.)</Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">(전부 매각하면 보급품을 꽤나 받을 수 있을 것 같다.)</Dialogue>
+  </Block>
+</StoryScript>

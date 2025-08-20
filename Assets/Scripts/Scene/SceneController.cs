@@ -89,7 +89,7 @@ public class SceneController : MonoBehaviour
         }
         else
         {
-            Logger.Write(LogCategory.GameScene, "Current scene is not a StageScene. Cannot get stage actors.", LogLevel.Warning, true);
+            Logger.Write(LogCategory.GameScene, "Current scene is not a StageScene. Cannot get stage actors.", LogLevel.Log, true);
             return new AD.GamePlay.IActor[0];
         }
     }

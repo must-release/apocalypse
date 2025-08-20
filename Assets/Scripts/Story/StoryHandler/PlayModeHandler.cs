@@ -13,7 +13,7 @@ namespace AD.Story
 
         public event Action<IStoryEntryHandler> OnStoryEntryComplete;
 
-        public void Initialize(StoryHandleContext context) 
+        public void Initialize(StoryHandleContext context)
         {
             _storyContext = context;
         }
@@ -24,28 +24,27 @@ namespace AD.Story
 
             _currentPlayMode = entry as StoryPlayMode;
             _storyContext.SetCurrentPlayMode(_currentPlayMode.PlayMode);
-            
+
             BaseUI baseUI = GetPlayModeUI(_currentPlayMode.PlayMode);
             Debug.Assert(baseUI != BaseUI.BaseUICount, "Invalid PlayMode type: " + _currentPlayMode.PlayMode);
 
             var uiChangeEvt = GameEventFactory.CreateUIChangeEvent(baseUI);
+            uiChangeEvt.OnTerminate += CompletePlayModeEntry;
             GameEventManager.Instance.Submit(uiChangeEvt);
-
-            InstantlyCompleteStoryEntry();
 
             return UniTask.CompletedTask;
         }
 
         public void InstantlyCompleteStoryEntry()
         {
-            Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete is not assigned in PlayModeHandler.");
-
-            OnStoryEntryComplete.Invoke(this);
+            // VFX actions are non-blocking and ProgressStoryEntry completes immediately.
+            // So, this method might not be called or might not need specific logic.
+            // For now, it will be empty.
         }
 
         public void ResetHandler()
         {
-    
+            _currentPlayMode = null;
         }
 
 
@@ -70,6 +69,13 @@ namespace AD.Story
                     Logger.Write(LogCategory.Story, "Unsupported PlayMode type: " + playMode, LogLevel.Error);
                     return BaseUI.BaseUICount;
             }
+        }
+
+        private void CompletePlayModeEntry()
+        {
+            Debug.Assert(null != OnStoryEntryComplete, "OnStoryEntryComplete is not assigned in PlayModeHandler.");
+
+            OnStoryEntryComplete.Invoke(this);
         }
     }
 }

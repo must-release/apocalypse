@@ -27,7 +27,7 @@ public class BackgroundImage : MonoBehaviour
             case StoryBackgroundCG.BackgroundAnimationType.ZoomIn:
                 {
                     Vector2 targetPosition = GetTargetPosition(targetPositionType);
-                    return Zoom(scale: 1.2f, targetPosition, duration);
+                    return Zoom(scale: 1.3f, targetPosition, duration);
                 }
             case StoryBackgroundCG.BackgroundAnimationType.ZoomOut:
                 {
@@ -48,8 +48,8 @@ public class BackgroundImage : MonoBehaviour
 
     private Image _image;
 
-    private Vector2 _leftPosition = new Vector2(400, 0);
-    private Vector2 _rightPosition = new Vector2(-400, 0);
+    private Vector2 _leftPosition = new Vector2(150, 0);
+    private Vector2 _rightPosition = new Vector2(-150, 0);
     private Vector2 _centerPosition = new Vector2(0, 0);
 
     private Vector3 _originalScale;

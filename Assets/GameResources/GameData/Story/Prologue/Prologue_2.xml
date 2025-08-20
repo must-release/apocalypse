@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<StoryScript xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Block BranchName="Common">
+    <PlayMode Mode="SideDialogue" />
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">(이제 슬슬 약속 장소로 출발해야 해.)</Dialogue>
+    <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">(더 늑장 부리다가는 거래에 늦을지도 몰라.)</Dialogue>
+  </Block>
+</StoryScript>

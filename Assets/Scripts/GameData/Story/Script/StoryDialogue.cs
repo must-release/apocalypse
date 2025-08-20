@@ -36,6 +36,6 @@ namespace AD.Story
         public bool IsAutoSkip;
 
         [XmlText]
-        public string Text;
+        public string Text = "";
     }
 }

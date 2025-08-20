@@ -5,9 +5,10 @@ namespace AD.Story
     [System.Serializable]
     public class StorySFX : StoryEntry
     {
-        public StorySFX() 
+        public StorySFX()
         {
             Type = EntryType.SFX;
+            IsAutoProgress = true;
         }
 
         [XmlAttribute("SFXName")]
