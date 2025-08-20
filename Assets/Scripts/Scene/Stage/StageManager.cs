@@ -27,8 +27,6 @@ public class StageManager : MonoBehaviour
     public ChapterType      ChapterType     => _chapterType;
     public int              StageIndex      => _stageIndex;
 
-    public bool CanGoBackToPreviousStage => _canGoBackToPreviousStage;
-
     public async UniTask AsyncInitializeStage()
     {
         InitializeTilemap();

@@ -27,46 +27,21 @@ public class StageScene : MonoBehaviour, IScene
 
         PlayerManager.Instance.GetPlayerData(out ChapterType chapter, out int stage, out PlayerAvatarType _);
 
-        bool movingToNextStage = stage > _currentStage.StageIndex;
+        _prevStage?.DestroyStage();
+        _prevStage = _currentStage;
+        _currentStage = _nextStage;
 
-        if (movingToNextStage)
+        if (ChapterStageCount.IsStageIndexValid(chapter, stage + 1))
         {
-            _prevStage?.DestroyStage();
-            _prevStage = _currentStage;
-            _currentStage = _nextStage;
-
-            if (ChapterStageCount.IsStageIndexValid(chapter, stage + 1))
-            {
-                string nextStagePath = $"Stage/{chapter}_{stage + 1}";
-                _nextStage = await AsyncLoadStage(nextStagePath);
-                _nextStage.gameObject.SetActive(false);
-            }
-            else
-            {
-                _nextStage = null;
-            }
+            string nextStagePath = $"Stage/{chapter}_{stage + 1}";
+            _nextStage = await AsyncLoadStage(nextStagePath);
+            _nextStage.gameObject.SetActive(false);
+            _nextStage.SnapToPoint(_currentStage.ExitSnapPoint);
         }
         else
         {
-            _nextStage?.DestroyStage();
-            _nextStage = _currentStage;
-            _currentStage = _prevStage;
-
-            if (ChapterStageCount.IsStageIndexValid(chapter, stage - 1))
-            {
-                string prevStagePath = $"Stage/{chapter}_{stage - 1}";
-                _prevStage = await AsyncLoadStage(prevStagePath);
-                _prevStage.gameObject.SetActive(false);
-            }
-            else
-            {
-                _prevStage = null;
-            }
+            _nextStage = null;
         }
-
-        // Reposition stages relative to new current stage
-        _prevStage?.SnapToPoint(_currentStage.EnterSnapPoint);
-        _nextStage?.SnapToPoint(_currentStage.ExitSnapPoint);
     }
 
     public void ActivateScene()
@@ -75,7 +50,7 @@ public class StageScene : MonoBehaviour, IScene
         Debug.Assert(null != _playerTransform, "Player transform is not initialized.");
 
         _currentStage.gameObject.SetActive(true);
-        _prevStage?.gameObject.SetActive(_currentStage.CanGoBackToPreviousStage);
+        _currentStage.BlockReturnToPreviousStage();
         _nextStage?.gameObject.SetActive(true);
         _playerTransform.gameObject.SetActive(true);
 
@@ -123,17 +98,6 @@ public class StageScene : MonoBehaviour, IScene
         string currentStagePath = $"Stage/{chapter}_{stage}";
         _currentStage = await AsyncLoadStage(currentStagePath);
         _currentStage.gameObject.SetActive(false);
-
-        if (_currentStage.CanGoBackToPreviousStage && ChapterStageCount.IsStageIndexValid(chapter, stage - 1))
-        {
-            string prevStagePath = $"Stage/{chapter}_{stage - 1}";
-            _prevStage = await AsyncLoadStage(prevStagePath);
-            _prevStage.gameObject.SetActive(false);
-        }
-        else
-        {
-            _currentStage.BlockReturnToPreviousStage();
-        }
 
         if (ChapterStageCount.IsStageIndexValid(chapter, stage + 1))
         {
