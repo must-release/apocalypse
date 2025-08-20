@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
+using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
 public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteractor
@@ -57,7 +60,8 @@ public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteract
 
     public override void OnDamaged(DamageInfo damageInfo) 
     {
-        if (_isDamageImmune) return;
+        if (CurrentAvatar.IsDamageImmune)
+            return;
 
         RecentDamagedInfo = damageInfo;
         CurrentHitPoint -= RecentDamagedInfo.DamageValue;
@@ -71,8 +75,6 @@ public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteract
         }
 
         OnHPChanged?.Invoke(CurrentHitPoint, MaxHitPoint);
-        StartCoroutine(StartDamageImmuneState());
-
         CurrentAvatar.OnDamaged(damageInfo);
     }
 
@@ -123,8 +125,6 @@ public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteract
 
     protected override void OnGround()
     {
-        Debug.Log($"PlayerController.OnGround() called for {CurrentPlayerType}");
-
         CurrentAvatar.OnGround();
     }
 
@@ -132,7 +132,9 @@ public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteract
     {
         base.FixedUpdate();
 
-        if (false == _isInitilized) return;
+        if (false == _isInitilized)
+            return;
+
         CurrentAvatar.OnFixedUpdate();
     }
 
@@ -141,8 +143,7 @@ public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteract
     [SerializeField] private Transform _heroTransform;
     [SerializeField] private Transform _heroineTransform;
 
-    private const int   _MaxHitPoint        = 3;
-    private const float _DamageImmuneTime   = 2f;
+    private const int   _MaxHitPoint        = 4;
 
     private Dictionary<PlayerAvatarType, IPlayerAvatar> _avatarDictionary;
 
@@ -155,15 +156,6 @@ public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteract
         if (false == _isInitilized) return;
 
         CurrentAvatar.OnUpdate();
-    }
-
-    private IEnumerator StartDamageImmuneState()
-    {
-        _isDamageImmune = true;
-
-        yield return new WaitForSeconds(_DamageImmuneTime);
-
-        _isDamageImmune = false;
     }
 
     private void RegisterAvatar(PlayerAvatarType type, Transform root)
@@ -181,6 +173,8 @@ public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteract
 
 public interface IPlayerAvatar : IAsyncLoadObject
 {
+    bool IsDamageImmune { get; }
+
     void InitializeAvatar(IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo);
     void ControlAvatar(IReadOnlyControlInfo controlInfo);
     void ActivateAvatar(bool value);

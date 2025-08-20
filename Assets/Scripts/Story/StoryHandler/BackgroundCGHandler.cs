@@ -83,7 +83,6 @@ namespace AD.Story
         
         private Tween _activeCGAnimationTween;
         private bool _isCompleted;
-        private float _defaultCGAnimationDuration = 0.7f;
 
         private async void Start()
         {

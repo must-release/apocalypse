@@ -11,9 +11,19 @@ public class HeroIdleLowerState : CommonIdleLowerState
 
     public override void UpDown(VerticalDirection verticalInput)
     {
-        base.UpDown(verticalInput);
+        // Do not call base.UpDown function
 
-        if (VerticalDirection.Up == verticalInput)
+        if (null != ObjectInteractor.CurrentClimbableObject && VerticalDirection.None != verticalInput)
+        {
+            var refPos = ObjectInteractor.CurrentClimbableObject.GetClimbReferencePoint();
+            var curPos = PlayerInfo.CurrentPosition;
+
+            if ((curPos.y < refPos.y && VerticalDirection.Up == verticalInput) || (refPos.y < curPos.y && VerticalDirection.Down == verticalInput))
+            {
+                StateController.ChangeState(LowerStateType.Climbing);
+            }   
+        }
+        else if (VerticalDirection.Up == verticalInput)
         {
             StateController.ChangeState(HeroLowerStateType.IdleLookingUp);
         }

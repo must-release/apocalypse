@@ -37,7 +37,7 @@ public class BackgroundImage : MonoBehaviour
             case StoryBackgroundCG.BackgroundAnimationType.Shake:
                 return Shake(strength: 10f, duration); // Default strength
             case StoryBackgroundCG.BackgroundAnimationType.Reset:
-                return Reset(duration);
+                return ResetBackground(duration);
             default:
                 return DOTween.Sequence();
         }
@@ -90,7 +90,7 @@ public class BackgroundImage : MonoBehaviour
         return _image.transform.DOShakePosition(duration, strength);
     }
 
-    private Tween Reset(float duration)
+    private Tween ResetBackground(float duration)
     {
         var sequence = DOTween.Sequence();
         sequence.Join(_image.transform.DOLocalMove(_originalPosition, duration));

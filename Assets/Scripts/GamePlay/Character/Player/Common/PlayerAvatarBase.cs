@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -18,6 +20,7 @@ public abstract class PlayerAvatarBase : MonoBehaviour, IPlayerAvatar, ILowerSta
             return true;
         }
     }
+    public bool IsDamageImmune { get; private set; }
 
     public void InitializeAvatar(IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo)
     {
@@ -25,9 +28,9 @@ public abstract class PlayerAvatarBase : MonoBehaviour, IPlayerAvatar, ILowerSta
         Debug.Assert(null != playerMotion, "Player motion is null");
         Debug.Assert(null != playerInfo, "Player info is null");
 
-        _objectInteractor   = objectInteractor;
-        _playerMotion       = playerMotion;
-        _playerInfo         = playerInfo;
+        _objectInteractor = objectInteractor;
+        _playerMotion = playerMotion;
+        _playerInfo = playerInfo;
 
         RegisterStates();
     }
@@ -38,7 +41,7 @@ public abstract class PlayerAvatarBase : MonoBehaviour, IPlayerAvatar, ILowerSta
 
         ControlLowerBody(controlInfo);
         ControlUpperBody(controlInfo);
-    }    
+    }
 
     public void ActivateAvatar(bool value)
     {
@@ -88,6 +91,8 @@ public abstract class PlayerAvatarBase : MonoBehaviour, IPlayerAvatar, ILowerSta
 
     public void OnDamaged(DamageInfo damageInfo)
     {
+        StartDamageImmuneStateAsync().Forget();
+
         LowerState.OnDamaged();
         UpperState.Disable();
     }
@@ -137,23 +142,43 @@ public abstract class PlayerAvatarBase : MonoBehaviour, IPlayerAvatar, ILowerSta
 
     /****** Private Members ******/
 
-    [SerializeField] private Animator _lowerAnimator;
-    [SerializeField] private Animator _upperAnimator;
+    [SerializeField] private Transform _lowerBodyTransfrom;
+    [SerializeField] private Transform _upperBodyTransfrom;
+
+    private const float _DamageImmuneTime           = 2f;
+    private const float _AlphaColorValueOnDamage    = 0.5f; // Must be between 0 ~ 1.0
+    private const int   _FlickerCountOnDamage       = 4;
 
     private Dictionary<LowerStateType, IPlayerLowerState> _lowerStateTable = new();
     private Dictionary<UpperStateType, IPlayerUpperState> _upperStateTable = new();
 
-    private IObjectInteractor   _objectInteractor;
-    private IMotionController   _playerMotion;
-    private ICharacterInfo      _playerInfo;
-    private PlayerWeaponBase    _weapon;
+    private IObjectInteractor           _objectInteractor;
+    private IMotionController           _playerMotion;
+    private ICharacterInfo              _playerInfo;
+    private PlayerWeaponBase            _weapon;
+    private Animator                    _lowerAnimator;
+    private SpriteRenderer              _lowerSprite;
+    private Animator                    _upperAnimator;
+    private SpriteRenderer              _upperSprite;
+
+    private void OnValidate()
+    {
+        Debug.Assert(null != _lowerBodyTransfrom, $"Lower body transform is not assigned for {CurrentAvatar}.");
+        Debug.Assert(null != _lowerBodyTransfrom, $"Upper body transform is not assigned for {CurrentAvatar}.");
+        Debug.Assert(null != _lowerBodyTransfrom.GetComponent<Animator>(), $"Lower body does not have Animator component in {CurrentAvatar}.");
+        Debug.Assert(null != _lowerBodyTransfrom.GetComponent<SpriteRenderer>(), $"Lower body does not have SpriteRenderer component in {CurrentAvatar}.");
+        Debug.Assert(null != _upperBodyTransfrom.GetComponent<Animator>(), $"Upper body does not have Animator component in {CurrentAvatar}.");
+        Debug.Assert(null != _upperBodyTransfrom.GetComponent<SpriteRenderer>(), $"Upper body does not have SpriteRenderer component in {CurrentAvatar}.");
+        Debug.Assert(null != GetComponent<PlayerWeaponBase>(), $"Weapon is not assigned for {CurrentAvatar}.");
+    }
 
     private void Awake()
     {
-        Debug.Assert(null != _lowerAnimator, $"Lower Animator is not assigned for {CurrentAvatar}.");
-        Debug.Assert(null != _upperAnimator, $"Upper Animator is not assigned for {CurrentAvatar}.");
-        _weapon = GetComponent<PlayerWeaponBase>();
-        Debug.Assert(null != _weapon, $"Weapon is not assigned for {CurrentAvatar}.");
+        _lowerAnimator  = _lowerBodyTransfrom.GetComponent<Animator>();
+        _lowerSprite    = _lowerBodyTransfrom.GetComponent<SpriteRenderer>();
+        _upperAnimator  = _upperBodyTransfrom.GetComponent<Animator>();
+        _upperSprite    = _upperBodyTransfrom.GetComponent<SpriteRenderer>();
+        _weapon         = GetComponent<PlayerWeaponBase>();
     }
 
     private void OnEnable()
@@ -163,6 +188,7 @@ public abstract class PlayerAvatarBase : MonoBehaviour, IPlayerAvatar, ILowerSta
         LowerState.OnEnter();
         UpperState.OnEnter();
     }
+
 
     private void RegisterStates()
     {
@@ -190,5 +216,33 @@ public abstract class PlayerAvatarBase : MonoBehaviour, IPlayerAvatar, ILowerSta
             Debug.Assert(false == _upperStateTable.ContainsKey(state), $"UpperState {state} already registered for {CurrentAvatar}");
             _upperStateTable.Add(state, upper);
         }
+    }
+
+    private async UniTask StartDamageImmuneStateAsync()
+    {
+        Debug.Assert(false == IsDamageImmune, $"Already in damage immune state in {CurrentAvatar}");
+
+        IsDamageImmune = true;
+        await PlayFlickerEffect();
+        IsDamageImmune = false;
+    }
+
+    private Tween PlayFlickerEffect()
+    {
+        Debug.Assert(0 < _FlickerCountOnDamage, $"Flicker count must be greater than 0 in {CurrentAvatar}");
+
+        float flickerDuration = _DamageImmuneTime / (_FlickerCountOnDamage * 2);
+        var sequence = DOTween.Sequence().SetLink(gameObject, LinkBehaviour.KillOnDestroy);
+
+        for (int i = 0; i < _FlickerCountOnDamage; ++i)
+        {
+            sequence.Append(_lowerSprite.DOFade(_AlphaColorValueOnDamage, flickerDuration));
+            sequence.Join(_upperSprite.DOFade(_AlphaColorValueOnDamage, flickerDuration));
+
+            sequence.Append(_lowerSprite.DOFade(1.0f, flickerDuration));
+            sequence.Join(_upperSprite.DOFade(1.0f, flickerDuration));
+        }
+
+        return sequence;
     }
 }
