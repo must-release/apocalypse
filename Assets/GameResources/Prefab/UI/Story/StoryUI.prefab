@@ -1746,38 +1746,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6889143824972410138, guid: f97915835bc86b749b13fe9f29dd6192, type: 3}
-      propertyPath: m_Pivot.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6889143824972410138, guid: f97915835bc86b749b13fe9f29dd6192, type: 3}
-      propertyPath: m_Pivot.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6889143824972410138, guid: f97915835bc86b749b13fe9f29dd6192, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6889143824972410138, guid: f97915835bc86b749b13fe9f29dd6192, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6889143824972410138, guid: f97915835bc86b749b13fe9f29dd6192, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6889143824972410138, guid: f97915835bc86b749b13fe9f29dd6192, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6889143824972410138, guid: f97915835bc86b749b13fe9f29dd6192, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6889143824972410138, guid: f97915835bc86b749b13fe9f29dd6192, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 30
-      objectReference: {fileID: 0}
     - target: {fileID: 7644084321292910779, guid: f97915835bc86b749b13fe9f29dd6192, type: 3}
       propertyPath: m_Name
       value: Pnl_DialogueBox

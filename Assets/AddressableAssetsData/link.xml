@@ -100,6 +100,7 @@
     <type fullname="PauseUIController" preserve="all" />
     <type fullname="PigeonPoop" preserve="all" />
     <type fullname="PlayerController" preserve="all" />
+    <type fullname="PlayerDetector" preserve="all" />
     <type fullname="PlayerManager" preserve="all" />
     <type fullname="PlayerStart" preserve="all" />
     <type fullname="PoolManager" preserve="all" />
@@ -124,6 +125,7 @@
     <type fullname="StoryEventInfo" preserve="all" />
     <type fullname="StoryUIView" preserve="all" />
     <type fullname="SystemAsset" preserve="all" />
+    <type fullname="TerrainChecker" preserve="all" />
     <type fullname="TitleUIController" preserve="all" />
     <type fullname="UIAsset" preserve="all" />
     <type fullname="UIChangeEventInfo" preserve="all" />
