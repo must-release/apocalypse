@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public abstract class PlayerLowerState : PlayerStateBase<LowerStateType>, IPlayerLowerState
 {
@@ -80,5 +80,9 @@ public abstract class PlayerLowerState : PlayerStateBase<LowerStateType>, IPlaye
     {
         // Do not call base.Attack() in overriding methods.
     }
-}
+    
 
+    /****** Protected Members ******/
+    protected static float _jumpBufferTimer; // Timer for jump buffering
+    protected const float JUMP_BUFFER_DURATION = 0.2f; // Duration for jump buffering
+}

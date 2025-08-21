@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.Assertions;
 using System.Collections;
 
@@ -54,6 +54,11 @@ public class CommonJumpingLowerState : PlayerLowerState
         if (_isStartingJump)
             ChangeToJumpingLoopAnimation();
 
+        // Decrement jump buffer timer
+        if (_jumpBufferTimer > 0)
+        {
+            _jumpBufferTimer -= Time.deltaTime;
+        }
     }
 
     public override void OnExit(LowerStateType _)
@@ -110,6 +115,11 @@ public class CommonJumpingLowerState : PlayerLowerState
     public override void OnDamaged()
     {
         StateController.ChangeState(LowerStateType.Damaged);
+    }
+
+    public override void StartJump()
+    {
+        _jumpBufferTimer = JUMP_BUFFER_DURATION;
     }
 
 
