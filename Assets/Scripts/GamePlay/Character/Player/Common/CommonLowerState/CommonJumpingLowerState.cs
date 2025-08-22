@@ -54,11 +54,8 @@ public class CommonJumpingLowerState : PlayerLowerState
         if (_isStartingJump)
             ChangeToJumpingLoopAnimation();
 
-        // Decrement jump buffer timer
-        if (_jumpBufferTimer > 0)
-        {
-            _jumpBufferTimer -= Time.deltaTime;
-        }
+        if (0.0f < _jumpBufferTimer)
+            _jumpBufferTimer -= Time.deltaTime; // Decrement jump buffer timer
     }
 
     public override void OnExit(LowerStateType _)
@@ -156,10 +153,13 @@ public class CommonJumpingLowerState : PlayerLowerState
 
     private IEnumerator LandOnGround()
     {
-        StateAnimator.Play(_jumpingEndStateHash);
-        StateAnimator.Update(0.0f);
+        if (0.0f > _jumpBufferTimer) // if there is no jump buffer, play idle animation
+        {
+            StateAnimator.Play(_jumpingEndStateHash);
+            StateAnimator.Update(0.0f);
 
-        yield return new WaitWhile(() => StateAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+            yield return new WaitWhile(() => StateAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+        }
 
         StateController.ChangeState(LowerStateType.Idle);
     }
