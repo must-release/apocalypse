@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 public class CommonIdleLowerState : PlayerLowerState
@@ -26,6 +26,13 @@ public class CommonIdleLowerState : PlayerLowerState
         StateAnimator.Play(_idleStateHash);
         StateAnimator.Update(0.0f);
         PlayerMotion.SetVelocity(Vector2.zero);
+
+        // Check for buffered jump
+        if (_jumpBufferTimer > 0f)
+        {
+            StartJump();
+            _jumpBufferTimer = 0f; // Consume the buffer
+        }
     }
 
     public override void StartJump()
