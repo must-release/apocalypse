@@ -13,9 +13,10 @@ public class CommonLookingUpUpperState : PlayerUpperState
                                         , IMotionController playerMotion
                                         , ICharacterInfo playerInfo
                                         , Animator stateAnimator
-                                        , PlayerWeaponBase playerWeapon)
+                                        , PlayerWeaponBase playerWeapon
+                                        , ControlInputBuffer inputBuffer)
     {
-        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon, inputBuffer);
 
         _IdleLookingUpStateHash     = AnimatorState.GetHash(owningAvatar, UpperStateType.Idle, "LookingUp");
         _RunningLookingUpStateHash  = AnimatorState.GetHash(owningAvatar, UpperStateType.Running, "LookingUp");

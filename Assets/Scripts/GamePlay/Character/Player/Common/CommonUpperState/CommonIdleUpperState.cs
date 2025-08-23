@@ -11,9 +11,10 @@ public class CommonIdleUpperState : PlayerUpperState
                                         , IMotionController playerMotion
                                         , ICharacterInfo playerInfo
                                         , Animator stateAnimator
-                                        , PlayerWeaponBase playerWeapon)
+                                        , PlayerWeaponBase playerWeapon
+                                        , ControlInputBuffer inputBuffer)
     {
-        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon, inputBuffer);
 
         _IdleStateHash = AnimatorState.GetHash(owningAvatar, CurrentState);
         Debug.Assert(StateAnimator.HasState(0, _IdleStateHash), $"Animator of {owningAvatar} does not have {CurrentState} upper state.");
