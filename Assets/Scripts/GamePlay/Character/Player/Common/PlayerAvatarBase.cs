@@ -22,15 +22,17 @@ public abstract class PlayerAvatarBase : MonoBehaviour, IPlayerAvatar, ILowerSta
     }
     public bool IsDamageImmune { get; private set; }
 
-    public void InitializeAvatar(IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo)
+    public void InitializeAvatar(IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, ControlInputBuffer inputBuffer)
     {
         Debug.Assert(null != objectInteractor, "Object interactor is null");
         Debug.Assert(null != playerMotion, "Player motion is null");
         Debug.Assert(null != playerInfo, "Player info is null");
+        Debug.Assert(null != inputBuffer, "Input buffer is null");
 
-        _objectInteractor = objectInteractor;
-        _playerMotion = playerMotion;
-        _playerInfo = playerInfo;
+        _objectInteractor   = objectInteractor;
+        _playerMotion       = playerMotion;
+        _playerInfo         = playerInfo;
+        _inputBuffer        = inputBuffer;
 
         RegisterStates();
     }
@@ -155,6 +157,7 @@ public abstract class PlayerAvatarBase : MonoBehaviour, IPlayerAvatar, ILowerSta
     private IObjectInteractor           _objectInteractor;
     private IMotionController           _playerMotion;
     private ICharacterInfo              _playerInfo;
+    private ControlInputBuffer          _inputBuffer;
     private PlayerWeaponBase            _weapon;
     private Animator                    _lowerAnimator;
     private SpriteRenderer              _lowerSprite;
@@ -199,7 +202,7 @@ public abstract class PlayerAvatarBase : MonoBehaviour, IPlayerAvatar, ILowerSta
         Debug.Assert(0 < lowers.Length, $"No LowerState components found in children for {CurrentAvatar}");
         foreach (var lower in lowers)
         {
-            lower.InitializeState(CurrentAvatar, this, _objectInteractor, _playerMotion, _playerInfo, _lowerAnimator, _weapon);
+            lower.InitializeState(CurrentAvatar, this, _objectInteractor, _playerMotion, _playerInfo, _lowerAnimator, _weapon, _inputBuffer);
             LowerStateType state = lower.CurrentState;
 
             Debug.Assert(false == _lowerStateTable.ContainsKey(state), $"LowerState {state} already registered for {CurrentAvatar}");
@@ -210,7 +213,7 @@ public abstract class PlayerAvatarBase : MonoBehaviour, IPlayerAvatar, ILowerSta
         Debug.Assert(0 < uppers.Length, $"No UpperState components found in children for {CurrentAvatar}");
         foreach (var upper in uppers)
         {
-            upper.InitializeState(CurrentAvatar, this, _objectInteractor, _playerMotion, _playerInfo, _upperAnimator, _weapon);
+            upper.InitializeState(CurrentAvatar, this, _objectInteractor, _playerMotion, _playerInfo, _upperAnimator, _weapon, _inputBuffer);
             UpperStateType state = upper.CurrentState;
 
             Debug.Assert(false == _upperStateTable.ContainsKey(state), $"UpperState {state} already registered for {CurrentAvatar}");

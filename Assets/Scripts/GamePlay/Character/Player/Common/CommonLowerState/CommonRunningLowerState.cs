@@ -14,9 +14,10 @@ public class CommonRunningLowerState : PlayerLowerState
                         , IMotionController playerMotion
                         , ICharacterInfo playerInfo
                         , Animator stateAnimator
-                        , PlayerWeaponBase playerWeapon)
+                        , PlayerWeaponBase playerWeapon
+                        , ControlInputBuffer inputBuffer)
     {
-        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon, inputBuffer);
 
         _runningStateHash = AnimatorState.GetHash(OwningAvatar, CurrentState);
         Debug.Assert(StateAnimator.HasState(0, _runningStateHash), $"Animator of {owningAvatar} does not have {CurrentState} lower state.");

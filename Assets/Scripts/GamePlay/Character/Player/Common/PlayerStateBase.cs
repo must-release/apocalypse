@@ -14,6 +14,7 @@ public abstract class PlayerStateBase<TState> : MonoBehaviour, IPlayerState<TSta
                                         , ICharacterInfo playerInfo
                                         , Animator stateAnimator
                                         , PlayerWeaponBase playerWeapon
+                                        , ControlInputBuffer inputBuffer
     )
     {
         Debug.Assert(null != stateController, $"StateController in {CurrentState} is not assigned.");
@@ -22,6 +23,7 @@ public abstract class PlayerStateBase<TState> : MonoBehaviour, IPlayerState<TSta
         Debug.Assert(null != playerInfo, $"PlayerInfo in {CurrentState} is not assigned.");
         Debug.Assert(null != stateAnimator, $"StateAnimator in {CurrentState} is not assigned.");
         Debug.Assert(null != playerWeapon, $"PlayerWeapon in {CurrentState} is not assigned.");
+        Debug.Assert(null != inputBuffer, $"InputBuffer in {CurrentState} is not assigned");
 
         OwningAvatar        = owningAvatar;
         StateController     = stateController;
@@ -30,6 +32,7 @@ public abstract class PlayerStateBase<TState> : MonoBehaviour, IPlayerState<TSta
         PlayerInfo          = playerInfo;
         PlayerWeapon        = playerWeapon;
         StateAnimator       = stateAnimator;
+        InputBuffer         = inputBuffer;
     }
 
     /****** Protected Members ******/
@@ -40,4 +43,5 @@ public abstract class PlayerStateBase<TState> : MonoBehaviour, IPlayerState<TSta
     protected ICharacterInfo                PlayerInfo          { get; private set; }
     protected PlayerWeaponBase              PlayerWeapon        { get; private set; }
     protected Animator                      StateAnimator       { get; private set; }
+    protected ControlInputBuffer            InputBuffer         { get; private set; }
 }

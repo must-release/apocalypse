@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.Assertions;
 using System.Collections;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 
 public class CommonJumpingLowerState : PlayerLowerState
 {
@@ -15,9 +17,10 @@ public class CommonJumpingLowerState : PlayerLowerState
                                         , IMotionController playerMotion
                                         , ICharacterInfo playerInfo
                                         , Animator stateAnimator
-                                        , PlayerWeaponBase playerWeapon)
+                                        , PlayerWeaponBase playerWeapon
+                                        , ControlInputBuffer inputBuffer)
     {
-        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon, inputBuffer);
 
         _jumpingStartStateHash  = AnimatorState.GetHash(owningAvatar, LowerStateType.Jumping, "Start");
         _jumpingLoopStateHash   = AnimatorState.GetHash(owningAvatar, LowerStateType.Jumping, "Loop");
@@ -54,16 +57,15 @@ public class CommonJumpingLowerState : PlayerLowerState
         if (_isStartingJump)
             ChangeToJumpingLoopAnimation();
 
-        if (0.0f < _jumpBufferTimer)
-            _jumpBufferTimer -= Time.deltaTime; // Decrement jump buffer timer
     }
 
     public override void OnExit(LowerStateType _)
     {
-        if (null != _landCoroutine)
+        if (null != _landOnGroundCTS)
         {
-            StopCoroutine(_landCoroutine);
-            _landCoroutine = null;
+            _landOnGroundCTS.Cancel();
+            _landOnGroundCTS.Dispose();
+            _landOnGroundCTS = null;
         }
     }
 
@@ -88,7 +90,17 @@ public class CommonJumpingLowerState : PlayerLowerState
 
     public override void OnGround()
     {
-        _landCoroutine = StartCoroutine(LandOnGround());
+        if (InputBuffer.HasBufferedJump)
+        {
+            InputBuffer.ConsumeJumpBuffer();
+            PlayerMotion.SetVelocity(new Vector2(PlayerInfo.CurrentVelocity.x, PlayerInfo.JumpingSpeed));
+            StateController.ChangeState(LowerStateType.Jumping);
+        }
+        else
+        {
+            _landOnGroundCTS = new CancellationTokenSource();
+            LandOnGroundAsync(_landOnGroundCTS.Token).Forget();
+        }
     }
 
     public override void UpDown(VerticalDirection verticalInput)
@@ -116,15 +128,26 @@ public class CommonJumpingLowerState : PlayerLowerState
 
     public override void StartJump()
     {
-        _jumpBufferTimer = JUMP_BUFFER_DURATION;
+        if (null != _landOnGroundCTS)
+        {
+            _landOnGroundCTS.Cancel();
+            
+            InputBuffer.BufferJump();
+            InputBuffer.ConsumeJumpBuffer();
+            PlayerMotion.SetVelocity(new Vector2(PlayerInfo.CurrentVelocity.x, PlayerInfo.JumpingSpeed));
+            StateController.ChangeState(LowerStateType.Jumping);
+        }
+        else
+        {
+            InputBuffer.BufferJump();
+        }
     }
-
 
     /****** Private Members ******/
 
     private const float _JumpFallSpeed = 10f;
 
-    private Coroutine _landCoroutine;
+    private CancellationTokenSource _landOnGroundCTS;
 
     private int     _jumpingStartStateHash;
     private int     _jumpingLoopStateHash;
@@ -151,15 +174,12 @@ public class CommonJumpingLowerState : PlayerLowerState
         _isStartingJump = false;
     }
 
-    private IEnumerator LandOnGround()
+    private async UniTaskVoid LandOnGroundAsync(CancellationToken cancellationToken)
     {
-        if (0.0f > _jumpBufferTimer) // if there is no jump buffer, play idle animation
-        {
-            StateAnimator.Play(_jumpingEndStateHash);
-            StateAnimator.Update(0.0f);
+        StateAnimator.Play(_jumpingEndStateHash);
+        StateAnimator.Update(0.0f);
 
-            yield return new WaitWhile(() => StateAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
-        }
+        await UniTask.WaitWhile(() => StateAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f, cancellationToken: cancellationToken);
 
         StateController.ChangeState(LowerStateType.Idle);
     }

@@ -14,9 +14,10 @@ public class CommonDeadLowerState : PlayerLowerState
                                          , IMotionController playerMotion
                                          , ICharacterInfo playerInfo
                                          , Animator stateAnimator
-                                         , PlayerWeaponBase playerWeapon)
+                                         , PlayerWeaponBase playerWeapon
+                                         , ControlInputBuffer inputBuffer)
     {
-        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon, inputBuffer);
 
         _deadStateHash = AnimatorState.GetHash(owningAvatar, CurrentState);
         Debug.Assert(StateAnimator.HasState(0, AnimatorState.GetHash(owningAvatar, CurrentState)), $"Animator of {owningAvatar} does not have {CurrentState} lower state.");

@@ -12,9 +12,10 @@ public class HeroineAimAttackingLowerState : PlayerLowerState
                                      , IMotionController playerMotion
                                      , ICharacterInfo playerInfo
                                      , Animator stateAnimator
-                                     , PlayerWeaponBase playerWeapon)
+                                     , PlayerWeaponBase playerWeapon
+                                     , ControlInputBuffer inputBuffer)
     {
-        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon, inputBuffer);
 
         Debug.Assert(PlayerAvatarType.Heroine == owningAvatar, "HeroineAttackingLowerState can only be used by Heroine avatar.");
         _aimAttackingStateHash = AnimatorState.GetHash(owningAvatar, CurrentState);

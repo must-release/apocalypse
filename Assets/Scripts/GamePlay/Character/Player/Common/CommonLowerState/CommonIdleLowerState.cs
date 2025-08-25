@@ -13,9 +13,10 @@ public class CommonIdleLowerState : PlayerLowerState
                     , IMotionController playerMotion
                     , ICharacterInfo playerInfo
                     , Animator stateAnimator
-                    , PlayerWeaponBase playerWeapon)
+                    , PlayerWeaponBase playerWeapon
+                    , ControlInputBuffer inputBuffer)
     {
-        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon, inputBuffer);
 
         _idleStateHash = AnimatorState.GetHash(OwningAvatar, CurrentState);
         Debug.Assert(StateAnimator.HasState(0, _idleStateHash), $"Animator of {owningAvatar} does not have {CurrentState} lower state.");
@@ -26,13 +27,6 @@ public class CommonIdleLowerState : PlayerLowerState
         StateAnimator.Play(_idleStateHash);
         StateAnimator.Update(0.0f);
         PlayerMotion.SetVelocity(Vector2.zero);
-
-        // Check for buffered jump
-        if (_jumpBufferTimer > 0f)
-        {
-            StartJump();
-            _jumpBufferTimer = 0f; // Consume the buffer
-        }
     }
 
     public override void StartJump()

@@ -14,9 +14,10 @@ public class HeroAttackingUpperState : PlayerUpperState
                                         , IMotionController playerMotion
                                         , ICharacterInfo playerInfo
                                         , Animator stateAnimator
-                                        , PlayerWeaponBase playerWeapon)
+                                        , PlayerWeaponBase playerWeapon
+                                        , ControlInputBuffer inputBuffer)
     {
-        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon, inputBuffer);
 
         Debug.Assert(PlayerAvatarType.Hero == owningAvatar, $"State {CurrentState} can only be used by Hero avatar.");
         Debug.Assert(StateAnimator.HasState(0, _AttackingStateHash), $"Animator of {owningAvatar} does not have {CurrentState} upper state.");
@@ -27,20 +28,18 @@ public class HeroAttackingUpperState : PlayerUpperState
         StateAnimator.Play(_AttackingStateHash);
         StateAnimator.Update(0.0f);
 
-        _attackCoolTime = PlayerWeapon.Attack();
-        _shouldContinueAttack = false;
+        var attackCooldown = PlayerWeapon.Attack();
+        InputBuffer.StartAttackCooldown(attackCooldown);
     }
 
     public override void OnUpdate()
     {
-        _attackCoolTime -= Time.deltaTime;
-
-        if (0 < _attackCoolTime)
+        if (InputBuffer.IsAttackInCooldown)
             return;
 
-
-        if (_shouldContinueAttack)
+        if (InputBuffer.HasBufferedAttack)
         {
+            InputBuffer.ConsumeAttackBuffer();
             StateController.ChangeState(HeroUpperStateType.Attacking);
         }
         else if (null != PlayerInfo.StandingGround)
@@ -63,7 +62,7 @@ public class HeroAttackingUpperState : PlayerUpperState
 
     public override void Attack()
     {
-        _shouldContinueAttack = true;
+        InputBuffer.BufferAttack();
     }
 
     public override void OnGround()
@@ -90,8 +89,6 @@ public class HeroAttackingUpperState : PlayerUpperState
 
     private readonly int _AttackingStateHash = AnimatorState.GetHash(PlayerAvatarType.Hero, HeroUpperStateType.Attacking);
 
-    private float _attackCoolTime;
-    private bool _shouldContinueAttack;
     
     private async UniTask ChangeToIdleAsync()
     {
