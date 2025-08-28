@@ -27,6 +27,7 @@ namespace AD.Story
         [XmlElement(typeof(StoryPlayMode), ElementName = "PlayMode")]
         [XmlElement(typeof(StorySFX), ElementName = "SFX")]
         [XmlElement(typeof(StoryVFX), ElementName = "VFX")]
+        [XmlElement(typeof(StoryDelay), ElementName = "Delay")]
         public List<StoryEntry> Entries;
     }
 }
