@@ -1,4 +1,4 @@
-public interface IStateController<in TState> where TState : StateType
+public interface IStateController<in TState>
 {
     void ChangeState(TState newState);
 }

@@ -1,11 +1,14 @@
 using UnityEngine;
 
-public class HeroineRunningLowerState : CommonRunningLowerState
+namespace AD.GamePlay
 {
-    /****** Public Members ******/
-
-    public override void Attack()
+    public class HeroineRunningLowerState : CommonRunningLowerState
     {
-        StateController.ChangeState(HeroineLowerStateType.Attacking);
+        /****** Public Members ******/
+
+        public override void Attack()
+        {
+            StateController.ChangeState(HeroineLowerStateType.Attacking);
+        }
     }
 }

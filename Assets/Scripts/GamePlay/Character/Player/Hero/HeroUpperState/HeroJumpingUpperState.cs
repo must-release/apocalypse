@@ -1,57 +1,59 @@
 ﻿using Cysharp.Threading.Tasks;
-using NUnit.Framework;
 using UnityEngine;
 
-public class HeroJumpingUpperState : PlayerUpperState
+namespace AD.GamePlay
 {
-    /****** Public Members ******/
-
-    public override UpperStateType CurrentState => HeroUpperStateType.Jumping;
-
-    public override void InitializeState(PlayerAvatarType owningAvatar
-                                        , IStateController<UpperStateType> stateController
-                                        , IObjectInteractor objectInteractor
-                                        , IMotionController playerMotion
-                                        , ICharacterInfo playerInfo
-                                        , Animator stateAnimator
-                                        , PlayerWeaponBase playerWeapon)
+    public class HeroJumpingUpperState : PlayerUpperState
     {
-        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        /****** Public Members ******/
 
-        Debug.Assert(PlayerAvatarType.Hero == owningAvatar, $"State {CurrentState} can only be used by Hero avatar.");
-        Debug.Assert(StateAnimator.HasState(0, _JumpingStateHash), $"Animator of {owningAvatar} does not have {CurrentState} upper state.");
-    }
+        public override UpperStateType CurrentState => HeroUpperStateType.Jumping;
 
-    public override void OnEnter()
-    {
-        StateAnimator.Play(_JumpingStateHash);
-    }
+        public override void InitializeState(PlayerAvatarType owningAvatar
+                                            , IStateController<UpperStateType> stateController
+                                            , IObjectInteractor objectInteractor
+                                            , CharacterMovement playerMovement
+                                            , CharacterStats playerStats
+                                            , Animator stateAnimator
+                                            , PlayerWeaponBase playerWeapon)
+        {
+            base.InitializeState(owningAvatar, stateController, objectInteractor, playerMovement, playerStats, stateAnimator, playerWeapon);
 
-    public override void Disable()
-    {
-        StateController.ChangeState(UpperStateType.Disabled);
-    }
+            Debug.Assert(PlayerAvatarType.Hero == owningAvatar, $"State {CurrentState} can only be used by Hero avatar.");
+            Debug.Assert(StateAnimator.HasState(0, _JumpingStateHash), $"Animator of {owningAvatar} does not have {CurrentState} upper state.");
+        }
 
-    public override void OnGround()
-    {
-        ChangeToIdleAsync().Forget();
-    }
+        public override void OnEnter()
+        {
+            StateAnimator.Play(_JumpingStateHash);
+        }
 
-    public override void Attack()
-    {
-        StateController.ChangeState(HeroUpperStateType.Attacking);
-    }
+        public override void Disable()
+        {
+            StateController.ChangeState(UpperStateType.Disabled);
+        }
+
+        public override void OnGround()
+        {
+            ChangeToIdleAsync().Forget();
+        }
+
+        public override void Attack()
+        {
+            StateController.ChangeState(HeroUpperStateType.Attacking);
+        }
 
 
 
-    /****** Private Members ******/
+        /****** Private Members ******/
 
-    private readonly int _JumpingStateHash = AnimatorState.GetHash(PlayerAvatarType.Hero, HeroUpperStateType.Jumping);
+        private readonly int _JumpingStateHash = AnimatorState.GetHash(PlayerAvatarType.Hero, HeroUpperStateType.Jumping);
 
-    private async UniTask ChangeToIdleAsync()
-    {
-        await UniTask.WaitWhile(() => LowerStateInfo.AnimationNormalizedTime < 1);
+        private async UniTask ChangeToIdleAsync()
+        {
+            await UniTask.WaitWhile(() => LowerStateInfo.AnimationNormalizedTime < 1);
 
-        StateController.ChangeState(HeroUpperStateType.Idle);
+            StateController.ChangeState(HeroUpperStateType.Idle);
+        }
     }
 }

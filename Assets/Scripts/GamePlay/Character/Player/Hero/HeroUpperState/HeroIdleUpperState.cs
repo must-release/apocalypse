@@ -1,31 +1,33 @@
 using NUnit.Framework;
 using UnityEngine;
 
-public class HeroIdleUpperState : CommonIdleUpperState
+namespace AD.GamePlay
 {
-    /****** Public Members ******/
-
-    public override void Attack()
+    public class HeroIdleUpperState : CommonIdleUpperState
     {
-        StateController.ChangeState(HeroUpperStateType.Attacking);
+        /****** Public Members ******/
+
+        public override void Attack()
+        {
+            StateController.ChangeState(HeroUpperStateType.Attacking);
+        }
+
+        public override void Aim(Vector3 aim)
+        {
+            if (Vector3.zero == aim)
+                return;
+
+            StateController.ChangeState(HeroUpperStateType.Aiming);
+        }
+
+        public override void OnAir()
+        {
+            StateController.ChangeState(HeroUpperStateType.Jumping);
+        }
+
+        public override void Jump()
+        {
+            StateController.ChangeState(HeroUpperStateType.Jumping);
+        }
     }
-
-    public override void Aim(Vector3 aim)
-    {
-        if (Vector3.zero == aim)
-            return;
-
-        StateController.ChangeState(HeroUpperStateType.Aiming);
-    }
-
-    public override void OnAir()
-    {
-        StateController.ChangeState(HeroUpperStateType.Jumping);
-    }
-
-    public override void Jump()
-    {
-        StateController.ChangeState(HeroUpperStateType.Jumping);
-    }
-
 }

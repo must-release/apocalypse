@@ -1,7 +1,9 @@
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class CommonDamagedLowerState : PlayerLowerState
+namespace AD.GamePlay
+{
+    public class CommonDamagedLowerState : PlayerLowerState
 {
     /****** Public Members ******/
 
@@ -11,12 +13,12 @@ public class CommonDamagedLowerState : PlayerLowerState
     public override void InitializeState(PlayerAvatarType owningAvatar
                                          , IStateController<LowerStateType> stateController
                                          , IObjectInteractor objectInteractor
-                                         , IMotionController playerMotion
-                                         , ICharacterInfo playerInfo
+                                         , CharacterMovement playerMovement
+                                         , CharacterStats playerStats
                                          , Animator stateAnimator
                                          , PlayerWeaponBase playerWeapon)
     {
-        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMovement, playerStats, stateAnimator, playerWeapon);
 
         _damagedStateHash = AnimatorState.GetHash(owningAvatar, CurrentState);
         Debug.Assert(StateAnimator.HasState(0, _damagedStateHash), $"Animator of {owningAvatar} does not have {CurrentState} lower state.");
@@ -38,11 +40,11 @@ public class CommonDamagedLowerState : PlayerLowerState
         if (_sternedTime < _SternTime) 
             return;
 
-        if (null == PlayerInfo.StandingGround)
+        if (null == PlayerMovement.StandingGround)
             return;
 
         StateController.ChangeState(LowerStateType.Idle);
-        PlayerMotion.SetVelocity(Vector2.zero);
+        PlayerMovement.SetVelocity(Vector2.zero);
     }
 
 
@@ -56,9 +58,10 @@ public class CommonDamagedLowerState : PlayerLowerState
 
     private void KnockBack()
     {
-        Vector3 attackerPos = PlayerInfo.RecentDamagedInfo.Attacker.transform.position;
-        int direction       = PlayerInfo.CurrentPosition.x > attackerPos.x ? 1 : -1;
+        Vector3 attackerPos = PlayerStats.RecentDamagedInfo.Attacker.transform.position;
+        int direction       = PlayerMovement.CurrentPosition.x > attackerPos.x ? 1 : -1;
 
-        PlayerMotion.SetVelocity(new Vector2(direction * _KnockBackSpeed, _KnockBackSpeed));
+        PlayerMovement.SetVelocity(new Vector2(direction * _KnockBackSpeed, _KnockBackSpeed));
+    }
     }
 }

@@ -1,4 +1,7 @@
-public class HeroJumpingLowerState : CommonJumpingLowerState
+namespace AD.GamePlay
 {
-    public override bool ShouldDisableUpperBody => false;
+    public class HeroJumpingLowerState : CommonJumpingLowerState
+    {
+        public override bool ShouldDisableUpperBody => false;
+    }
 }

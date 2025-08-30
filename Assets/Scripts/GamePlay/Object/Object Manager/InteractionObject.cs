@@ -1,83 +1,86 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class InteractionObject : MonoBehaviour
+namespace AD.GamePlay
 {
-    protected List<CharacterBase> interactableCharacters = new List<CharacterBase>();
-    protected List<CharacterBase> interactingCharacters = new List<CharacterBase>();
-
-    // Check if object can be interacted, and set object control info
-    public virtual bool CheckInteractableControl(CharacterBase character, ControlInfo controlInfo)
+    public abstract class InteractionObject : MonoBehaviour
     {
-        if (!interactableCharacters.Contains(character))
-        {
-            Debug.LogError("Checking unknown interactable character");
-            return false;
-        }
-        else return true;
-    }
+        protected List<CharacterBase> interactableCharacters = new List<CharacterBase>();
+        protected List<CharacterBase> interactingCharacters = new List<CharacterBase>();
 
-    // Start interaction with target
-    public virtual void StartInteraction(CharacterBase target, ControlInfo controlInfo)
-    {
-        // Change target to interacting object
-        interactableCharacters.Remove(target);
-        interactingCharacters.Add(target);
-    }
-
-    // Check if interaction can be maintained, and set object control info
-    public virtual bool CheckInteractingControl(CharacterBase character, ControlInfo controlInfo)
-    {
-        if (!interactingCharacters.Contains(character))
+        // Check if object can be interacted, and set object control info
+        public virtual bool CheckInteractableControl(CharacterBase character, ControlInfo controlInfo)
         {
-            Debug.LogError("Checking unknown interacting character");
-            return false;
+            if (!interactableCharacters.Contains(character))
+            {
+                Debug.LogError("Checking unknown interactable character");
+                return false;
+            }
+            else return true;
         }
-        else return true;
-    }
 
-    // End interaction with target
-    public virtual void EndInteraction(CharacterBase target, ControlInfo controlInfo)
-    {
-        if(interactingCharacters.Contains(target))
+        // Start interaction with target
+        public virtual void StartInteraction(CharacterBase target, ControlInfo controlInfo)
         {
-            // Change target to interactable object
-            interactingCharacters.Remove(target);
-            interactableCharacters.Add(target);
+            // Change target to interacting object
+            interactableCharacters.Remove(target);
+            interactingCharacters.Add(target);
         }
-    }
 
-    // Detect interacting character and recognize each other
-    public void DetectCharacterEnter(CharacterBase character)
-    {
-        bool notInteractable = !interactableCharacters.Contains(character);
-        bool notInteracting = !interactingCharacters.Contains(character);
-    
-        if(notInteractable && notInteracting)
+        // Check if interaction can be maintained, and set object control info
+        public virtual bool CheckInteractingControl(CharacterBase character, ControlInfo controlInfo)
         {
-            interactableCharacters.Add(character);
-            character.RecognizeInteractionObject(this);
+            if (!interactingCharacters.Contains(character))
+            {
+                Debug.LogError("Checking unknown interacting character");
+                return false;
+            }
+            else return true;
         }
-        else
-        {
-            Debug.LogError("Detecting duplicate character");
-        }
-    }
 
-    // Detect escaping character and forget each other
-    public void DetectCharacterExit(CharacterBase character)   
-    {
-        bool removedFromInteractable = interactableCharacters.Remove(character);
-        bool removedFromInteracting = interactingCharacters.Remove(character);
-
-        if (removedFromInteractable || removedFromInteracting)
+        // End interaction with target
+        public virtual void EndInteraction(CharacterBase target, ControlInfo controlInfo)
         {
-            character.ForgetInteractionObject(this);
-            EndInteraction(character, null);
+            if (interactingCharacters.Contains(target))
+            {
+                // Change target to interactable object
+                interactingCharacters.Remove(target);
+                interactableCharacters.Add(target);
+            }
         }
-        else
+
+        // Detect interacting character and recognize each other
+        public void DetectCharacterEnter(CharacterBase character)
         {
-            Debug.LogError("Attempted to remove an unknown character.");
+            bool notInteractable = !interactableCharacters.Contains(character);
+            bool notInteracting = !interactingCharacters.Contains(character);
+
+            if (notInteractable && notInteracting)
+            {
+                interactableCharacters.Add(character);
+                character.RecognizeInteractionObject(this);
+            }
+            else
+            {
+                Debug.LogError("Detecting duplicate character");
+            }
+        }
+
+        // Detect escaping character and forget each other
+        public void DetectCharacterExit(CharacterBase character)
+        {
+            bool removedFromInteractable = interactableCharacters.Remove(character);
+            bool removedFromInteracting = interactingCharacters.Remove(character);
+
+            if (removedFromInteractable || removedFromInteracting)
+            {
+                character.ForgetInteractionObject(this);
+                EndInteraction(character, null);
+            }
+            else
+            {
+                Debug.LogError("Attempted to remove an unknown character.");
+            }
         }
     }
 }

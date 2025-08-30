@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using NUnit.Framework;
 
-public class Pigeon : EnemyController
+public class Pigeon : EnemyAIController
 {
     /****** Public Members ******/
 

@@ -1,20 +1,21 @@
-﻿using NUnit.Framework;
-using UnityEngine;
-
-public class HeroLookingUpUpperState : CommonLookingUpUpperState
+﻿namespace AD.GamePlay
 {
-    /****** Public Members ******/
-
-    public override void LookUp(bool lookUp)
+    public class HeroLookingUpUpperState : CommonLookingUpUpperState
     {
-        if (lookUp) return;
+        /****** Public Members ******/
 
-        var nextState = PlayerInfo.StandingGround == null ? HeroUpperStateType.Jumping : UpperStateType.Idle;
-        StateController.ChangeState(nextState);
-    }
+        public override void LookUp(bool lookUp)
+        {
+            if (lookUp)
+                return;
 
-    public override void Attack()
-    {
-        StateController.ChangeState(HeroUpperStateType.RunningTopAttack);
+            var nextState = PlayerMovement.StandingGround == null ? HeroUpperStateType.Jumping : UpperStateType.Idle;
+            StateController.ChangeState(nextState);
+        }
+
+        public override void Attack()
+        {
+            StateController.ChangeState(HeroUpperStateType.RunningTopAttack);
+        }
     }
 }

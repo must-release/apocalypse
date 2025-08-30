@@ -1,9 +1,14 @@
-using UnityEngine;
 
-public interface ICharacter : AD.GamePlay.IActor
+namespace AD.GamePlay
 {
-    bool IsPlayer { get; }
-
-    void ControlCharacter(IReadOnlyControlInfo controlInfo);
-    void OnDamaged(DamageInfo damageInfo);
+    public interface ICharacter : IActor
+    {
+        CharacterStats      Stats       { get; }
+        CharacterMovement   Movement    { get; }
+        
+        bool IsPlayer { get; }
+        
+        void ControlCharacter(IReadOnlyControlInfo controlInfo);
+        void OnDamaged(DamageInfo damageInfo);
+    }
 }

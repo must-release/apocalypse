@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using AD.GamePlay;
+using UnityEngine;
 
 public interface IPlayerState<TState> where TState : StateType
 {
@@ -7,8 +8,8 @@ public interface IPlayerState<TState> where TState : StateType
     void InitializeState(PlayerAvatarType owningAvatar
                         , IStateController<TState> stateController
                         , IObjectInteractor objectInteractor
-                        , IMotionController playerMotion
-                        , ICharacterInfo playerInfo     
+                        , CharacterMovement playerMovement
+                        , CharacterStats playerStats     
                         , Animator stateAnimator
                         , PlayerWeaponBase playerWeapon);
 }
