@@ -31,7 +31,7 @@ public class ControlEvent : InputEvent, KeySettingsObserver
     {
         bool buttonClicked  = SetControlInfo();
         bool aimed          = SetAimControlInfo();
-        return buttonClicked || aimed;
+        return true;
     }
     public override bool CheckCompatibility(List<InputEvent> eventList, BaseUI baseUI, SubUI subUI)
     {

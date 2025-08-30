@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(ControlInputBuffer))]
 public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteractor
 {
     /****** Public Members ******/
@@ -54,7 +55,7 @@ public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteract
         }
     }
 
-    public override void OnDamaged(DamageInfo damageInfo) 
+    public override void OnDamaged(DamageInfo damageInfo)
     {
         if (CurrentAvatar.IsDamageImmune)
             return;
@@ -93,11 +94,13 @@ public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteract
         Debug.Assert(null != _heroineTransform, "Heroine Transform is not assigned in the editor.");
 
         base.Awake();
-        
+
         _avatarDictionary   = new Dictionary<PlayerAvatarType, IPlayerAvatar>();
         _playerRigid        = GetComponent<Rigidbody2D>();
+        _inputBuffer        = GetComponent<ControlInputBuffer>();
         CharacterHeight     = GetComponent<BoxCollider2D>().size.y * transform.localScale.y;
         ClimberCollider     = GetComponent<Collider2D>();
+
         MovingSpeed         = 8f;
         JumpingSpeed        = 14f;
         Gravity             = 4f;
@@ -139,11 +142,13 @@ public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteract
     [SerializeField] private Transform _heroTransform;
     [SerializeField] private Transform _heroineTransform;
 
-    private const int   _MaxHitPoint        = 4;
+    private const int _MaxHitPoint = 4;
 
     private Dictionary<PlayerAvatarType, IPlayerAvatar> _avatarDictionary;
 
-    private Rigidbody2D _playerRigid;
+    private Rigidbody2D         _playerRigid;
+    private ControlInputBuffer  _inputBuffer;
+
     private bool _isInitilized;
     private bool _isDamageImmune;
 
@@ -162,7 +167,7 @@ public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteract
         IPlayerAvatar avatar = root.GetComponent<IPlayerAvatar>();
         Debug.Assert(null != avatar, $"{type} avatar (IPlayerAvatar) not found in {root.name}");
         _avatarDictionary.Add(type, avatar);
-        avatar.InitializeAvatar(this, this, this);
+        avatar.InitializeAvatar(this, this, this, _inputBuffer);
     }
 }
 
@@ -171,7 +176,7 @@ public interface IPlayerAvatar : IAsyncLoadObject
 {
     bool IsDamageImmune { get; }
 
-    void InitializeAvatar(IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo);
+    void InitializeAvatar(IObjectInteractor objectInteractor, IMotionController playerMotion, ICharacterInfo playerInfo, ControlInputBuffer inputBuffer);
     void ControlAvatar(IReadOnlyControlInfo controlInfo);
     void ActivateAvatar(bool value);
     void OnUpdate();

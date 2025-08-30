@@ -11,9 +11,10 @@ public class HeroStandingAttackLowerState : PlayerLowerState
                                          , IMotionController playerMotion
                                          , ICharacterInfo playerInfo
                                          , Animator stateAnimator
-                                         , PlayerWeaponBase playerWeapon)
+                                         , PlayerWeaponBase playerWeapon
+                                         , ControlInputBuffer inputBuffer)
     {
-        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon, inputBuffer);
 
         Debug.Assert(PlayerAvatarType.Hero == owningAvatar, "HeroStandingAttackLowerState can only be used by Hero avatar.");
         _standingAttackStateHash = AnimatorState.GetHash(owningAvatar, CurrentState);

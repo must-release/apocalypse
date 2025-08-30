@@ -14,9 +14,10 @@ public class CommonClimbingLowerState : PlayerLowerState
                                         , IMotionController playerMotion
                                         , ICharacterInfo playerInfo
                                         , Animator stateAnimator
-                                        , PlayerWeaponBase playerWeapon)
+                                        , PlayerWeaponBase playerWeapon
+                                        , ControlInputBuffer inputBuffer)
     {
-        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon);
+        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon, inputBuffer);
 
         _climbingSpeed      = playerInfo.MovingSpeed * 2.0f / 3.0f;
         _climbUpHeight      = 0.1f;

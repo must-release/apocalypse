@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public abstract class PlayerLowerState : PlayerStateBase<LowerStateType>, IPlayerLowerState
 {
@@ -81,4 +81,3 @@ public abstract class PlayerLowerState : PlayerStateBase<LowerStateType>, IPlaye
         // Do not call base.Attack() in overriding methods.
     }
 }
-
