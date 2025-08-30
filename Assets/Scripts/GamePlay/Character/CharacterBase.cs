@@ -10,15 +10,16 @@ namespace AD.GamePlay
         /****** Public Members ******/
         public CharacterStats      Stats       { get; private set; }
         public CharacterMovement   Movement    { get; private set; }
-
+        public Transform ActorTransform => transform;
         public string ActorName => gameObject.name;
+        
 
         public void RecognizeInteractionObject(InteractionObject obj)
         {
             bool notInteractable = !_interactableObjects.Contains(obj);
             bool notInteracting = !_interactingObjects.Contains(obj);
 
-            if(notInteractable && notInteracting)
+            if (notInteractable && notInteracting)
             {
                 _interactableObjects.Add(obj);
             }

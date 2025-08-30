@@ -14,8 +14,8 @@ namespace AD.GamePlay
             Debug.Assert(null != enemyPerception, $"Enemy perception cannot be null in {StateType}");
 
             StateController = stateController;
-            EnemyPerception = enemyPerception;
-            EnemyCharacter  = enemyCharacter;
+            Perception = enemyPerception;
+            OwningCharacter  = enemyCharacter;
 
             IsInitialized = true;
         }
@@ -29,8 +29,8 @@ namespace AD.GamePlay
         /****** Protected Members ******/
 
         protected EnemyStateController  StateController { get; private set; }
-        protected EnemyPerception       EnemyPerception { get; private set; }
-        protected IEnemyCharacter       EnemyCharacter  { get; private set; }
+        protected EnemyPerception       Perception      { get; private set; }
+        protected IEnemyCharacter       OwningCharacter { get; private set; }
         protected bool                  IsInitialized   { get; private set; }
     }
 }

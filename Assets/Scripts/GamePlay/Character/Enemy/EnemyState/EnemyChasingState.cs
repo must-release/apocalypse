@@ -15,11 +15,12 @@ namespace AD.GamePlay
             base.OnEnter();
 
             SetChasingTarget();
-            Debug.Assert(null != _chasingTarget, "Cannot find player character to chase.");
+            Debug.Assert(null != _chasingTarget, $"Cannot find player character to chase in {OwningCharacter.ActorName}.");
 
             _chaseCTS = new CancellationTokenSource();
             ProgressChaseAsync().Forget();
-            forgettingTime = 0;
+
+            _forgettingTimePassed = 0;
         }
 
         public override void OnUpdate()
@@ -28,26 +29,20 @@ namespace AD.GamePlay
 
             base.OnUpdate();
 
-            if (null == _chasingTarget)
-            {
-                StateController.ChangeState(EnemyStateType.Patrolling);
-                return;
-            }
-
-            if (EnemyPerception.IsPlayerInAttackRange)
+            if (Perception.IsPlayerInAttackRange)
             {
                 StateController.ChangeState(EnemyStateType.Attacking);
                 return;
             }
 
-            if (EnemyPerception.HasDetectedPlayer)
+            if (Perception.HasDetectedPlayer)
             {
-                forgettingTime = 0;
+                _forgettingTimePassed = 0;
             }
             else
             {
-                forgettingTime += Time.deltaTime;
-                if (_ForgetTime < forgettingTime)
+                _forgettingTimePassed += Time.deltaTime;
+                if (OwningCharacter.Stats.ForgettingTime < _forgettingTimePassed)
                 {
                     StateController.ChangeState(EnemyStateType.Patrolling);
                 }
@@ -57,54 +52,47 @@ namespace AD.GamePlay
         public override void OnExit(EnemyStateType nextState)
         {
             Debug.Assert(IsInitialized, $"{StateType} is not initialized.");
-            Debug.Assert(null != _chaseCTS, $"Chase cancellation token should be set when exiting chasing state in {EnemyCharacter.ActorName}.");
+            Debug.Assert(null != _chaseCTS, $"Chase cancellation token should be set when exiting chasing state in {OwningCharacter.ActorName}.");
 
             base.OnExit(nextState);
 
             _chaseCTS.Cancel();
             _chaseCTS.Dispose();
             _chaseCTS = null;
-
-            if (EnemyStateType.Attacking != nextState)
-            {
-                _chasingTarget = null;
-            }
         }
 
 
         /****** Private Members ******/
 
-        private const float _ForgetTime = 3f;
-
         private ICharacter _chasingTarget;
         private CancellationTokenSource _chaseCTS;
 
-        private float forgettingTime;
+        private float _forgettingTimePassed;
 
         private void SetChasingTarget()
         {
             Debug.Assert(IsInitialized, $"{StateType} is not initialized.");
 
-            if (EnemyPerception.HasDetectedPlayer)
+            if (Perception.HasDetectedPlayer)
             {
-                _chasingTarget = EnemyPerception.DetectedPlayer;
+                _chasingTarget = Perception.DetectedPlayer;
             }
-            else if (null != EnemyCharacter.Stats.RecentDamagedInfo)
+            else if (null != OwningCharacter.Stats.RecentDamagedInfo)
             {
-                _chasingTarget = EnemyCharacter.Stats.RecentDamagedInfo.Attacker.GetComponent<ICharacter>();
+                _chasingTarget = OwningCharacter.Stats.RecentDamagedInfo.Attacker.GetComponent<ICharacter>();
                 Debug.Assert(null != _chasingTarget, "Cannot find player character from recent damage info.");
             }
 
-            Debug.Assert(null != _chasingTarget, "Cannot find player character to chase.");
+            Debug.Assert(null != _chasingTarget, $"Cannot find player character to chase in {OwningCharacter.ActorName}.");
         }
 
         private async UniTask ProgressChaseAsync()
         {
             Debug.Assert(IsInitialized, $"{StateType} is not initialized.");
-            Debug.Assert(null != _chaseCTS, $"Chase cancellation token is not set in {EnemyCharacter.ActorName}.");
+            Debug.Assert(null != _chaseCTS, $"Chase cancellation token is not set in {OwningCharacter.ActorName}.");
 
-            OpResult result = await EnemyCharacter.ChaseAsync(_chasingTarget, _chaseCTS.Token);
-            Debug.Assert(OpResult.Failed != result, $"Chase failed in {EnemyCharacter.ActorName}.");
+            OpResult result = await OwningCharacter.ChaseAsync(_chasingTarget, _chaseCTS.Token);
+            Debug.Assert(OpResult.Failed != result, $"Chase failed.");
         }
 
         private void OnDestroy()

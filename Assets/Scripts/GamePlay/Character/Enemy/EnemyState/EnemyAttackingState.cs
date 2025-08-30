@@ -26,7 +26,7 @@ namespace AD.GamePlay
         {
             Debug.Assert(IsInitialized, $"{StateType} is not initialized.");
 
-            OpResult result = await EnemyCharacter.AttackAsync(this.GetCancellationTokenOnDestroy());
+            OpResult result = await OwningCharacter.AttackAsync(this.GetCancellationTokenOnDestroy());
             if (result == OpResult.Success)
             {
                 StateController.ChangeState(EnemyStateType.Chasing);

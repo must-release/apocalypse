@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b6bbe1393b60ef43a049d9d803f00c3, type: 3}
+  m_Name: NormalInfecteeCharacterData
+  m_EditorClassIdentifier: 
+  _movingSpeed: 1.5
+  _jumpingSpeed: 1
+  _gravity: 3
+  _maxHitPoint: 3
+  _detectRange: {x: 4, y: 1}
+  _rangeOffset: {x: 0.5, y: 0}
+  _attackRange: 2
+  _maxPatrolRange: 10
+  _minPatrolRange: 3
+  _waitingTime: 2
+  _groundCheckingDistance: 1.3
+  _obstacleCheckingDistance: 1
+  _groundCheckingVector: {x: 1, y: -1, z: 0}

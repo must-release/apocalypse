@@ -58,7 +58,9 @@ namespace AD.GamePlay
             Debug.Assert(_isInitialized, "Enemy perception is not initialized.");
 
             int direction = (FacingDirection.Right == _enemyMovement.CurrentFacingDirection) ? 1 : -1;
-            _groundCheckingVector.x *= direction;
+            _groundCheckingVector.x = (FacingDirection.Right == _enemyMovement.CurrentFacingDirection)
+                ? math.abs(_groundCheckingVector.x)
+                : -math.abs(_groundCheckingVector.x);
 
             var frontHit = Physics2D.Raycast(_enemyMovement.CurrentPosition, Vector3.right * direction, _obstacleCheckingDistance, LayerMask.GetMask(Layer.Obstacle, Layer.Ground));
             var bottomHit = Physics2D.Raycast(_enemyMovement.CurrentPosition, _groundCheckingVector, _groundCheckingDistance, LayerMask.GetMask(Layer.Obstacle));
@@ -121,11 +123,13 @@ namespace AD.GamePlay
                 return;
 
             int direction = (FacingDirection.Right == _enemyMovement.CurrentFacingDirection) ? 1 : -1;
-            _groundCheckingVector.x *= direction;
+            _groundCheckingVector.x = (FacingDirection.Right == _enemyMovement.CurrentFacingDirection)
+                ? math.abs(_groundCheckingVector.x)
+                : -math.abs(_groundCheckingVector.x);
 
             Gizmos.color = Color.red;
             Vector3 start = _enemyMovement.CurrentPosition;
-            Vector3 end = start + _groundCheckingVector * _groundCheckingDistance;
+            Vector3 end = start + _groundCheckingVector.normalized * _groundCheckingDistance;
             Gizmos.DrawLine(start, end);
 
             end = start + Vector3.right * direction * _obstacleCheckingDistance;

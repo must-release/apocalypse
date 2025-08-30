@@ -2,7 +2,7 @@ using UnityEngine;
 
 public enum PlayerAvatarType { Hero, Heroine, PlayerAvatarTypeCount }
 
-public enum EnemyStateType { Patrolling, Chasing, Attacking, Damaged, Dead, EnemyStateCount }
+public enum EnemyStateType { Idle, Patrolling, Chasing, Attacking, Damaged, Dead, EnemyStateCount }
 
 public abstract class StateType
 {

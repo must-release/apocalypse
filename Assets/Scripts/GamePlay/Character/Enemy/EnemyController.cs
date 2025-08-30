@@ -12,6 +12,8 @@ namespace AD.GamePlay
         {
             Debug.Assert(enemyAIStates.ContainsKey(enemyState), $"Enemy state {enemyState} is not registered.");
 
+            Logger.Write(LogCategory.GamePlay, $"Changing to state: {enemyState}.");
+
             _currentState?.OnExit(enemyState);
             _currentState = enemyAIStates[enemyState];
             _currentState.OnEnter();
@@ -22,28 +24,32 @@ namespace AD.GamePlay
 
         [SerializeField] private Transform              _enemyAIStateContainer;
         [SerializeField] private EnemyPerception        _enemyPerception;
-        [SerializeField] private IEnemyCharacter        _enemyCharacter;
+        [SerializeField] private Transform              _enemyCharacterTransform;
 
         private Dictionary<EnemyStateType, EnemyStateBase> enemyAIStates = new();
 
         private EnemyStateBase    _currentState;
+        private IEnemyCharacter   _enemyCharacter;
 
 
         private void OnValidate()
         {
             Debug.Assert(null != _enemyAIStateContainer, $"Enemy state container is not assigned in {gameObject.name}.");
             Debug.Assert(null != _enemyPerception, $"Enemy perception is not assigned in {gameObject.name}.");
-            Debug.Assert(null != _enemyCharacter, $"Enemy Character is not assigned in {gameObject.name}");
+            Debug.Assert(null != _enemyCharacterTransform.GetComponent<IEnemyCharacter>(), $"Enemy Character is not assigned in {gameObject.name}");
         }
 
         private void Awake()
         {
-            _enemyPerception.InitializePerception(_enemyCharacter);
+            _enemyCharacter = _enemyCharacterTransform.GetComponent<IEnemyCharacter>();
+
             RegisterStates();
         }
 
         private void Start()
         {
+            _enemyPerception.InitializePerception(_enemyCharacter);
+
             ChangeState(EnemyStateType.Patrolling);
         }
 

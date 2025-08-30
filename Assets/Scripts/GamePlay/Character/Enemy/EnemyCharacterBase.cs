@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace AD.GamePlay
 {
+    [RequireComponent(typeof(Animator))]
     public class EnemyCharacterBase : CharacterBase
     {
         /****** Public Members ******/
@@ -21,6 +22,15 @@ namespace AD.GamePlay
 
         /****** Protected Members ******/
 
+        protected Animator EnemyAnimator => _enemyAnimtaor;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            _enemyAnimtaor = GetComponent<Animator>();
+        }
+
         protected override CharacterStats CreateStats(CharacterData data)
         {
             Debug.Assert(data is EnemyCharacterData, $"data is not a enemy character data in {ActorName}.");
@@ -36,8 +46,15 @@ namespace AD.GamePlay
         }
 
         protected override void OnGround()
-        { 
+        {
 
         }
+
+
+        /****** Private Members *******/
+
+        private Animator _enemyAnimtaor;
+
+
     }
 }

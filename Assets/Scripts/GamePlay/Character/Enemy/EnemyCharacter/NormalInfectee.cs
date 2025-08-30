@@ -1,5 +1,5 @@
 using System.Threading;
-using AD.GamePlay;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
@@ -12,49 +12,60 @@ namespace AD.GamePlay
 
         public new EnemyCharacterStats Stats => base.Stats as EnemyCharacterStats;
 
-
         public UniTask<OpResult> AttackAsync(CancellationToken cancellationToken)
         {
-            // Implement attack logic here
             return UniTask.FromResult(OpResult.Success);
         }
 
-
-        public override void StartPatrol()
+        public async UniTask<OpResult> ChaseAsync(IActor chasingTarget, CancellationToken cancellationToken)
         {
+            Debug.Assert(null != chasingTarget, $"Chasing target can't be null in ChaseAsync of {ActorName}.");
+            Debug.Assert(null != cancellationToken, $"CancellationToken is null in ChaseAsync of {ActorName}.");
+
             EnemyAnimator.Play("Normal_Infectee_Patrolling");
 
-            patrolRightEnd = transform.position.x + _MaxPatrolRange / 2;
-            patrolLeftEnd = transform.position.x - _MaxPatrolRange / 2;
-            waitingTime = 0;
-            wait = false;
-        }
-
-        public override void Patrol()
-        {
-            // Wait a little if patrol area is too small
-            if (wait)
+            while (false == cancellationToken.IsCancellationRequested)
             {
-                waitingTime += Time.deltaTime;
-                if (waitingTime > _StandingTime)
+                int direction = chasingTarget. > transform.position.x ? 1 : -1;
+                if (0 < transform.localScale.x * direction) Flip();
+
+                if (CanMoveAhead && math.abs(ChasingTarget.position.x - transform.position.x) > 0.1f)
                 {
+                    enemyRigid.linearVelocity = new Vector2(direction * MovingSpeed, enemyRigid.linearVelocity.y);
                     EnemyAnimator.Play("Normal_Infectee_Patrolling");
-
-                    wait = false;
-                    waitingTime = 0;
-
-                    // Flip body
-                    Flip();
                 }
-                return;
+                else
+                {
+                    EnemyAnimator.Play("Normal_Infectee_Idle");
+                    enemyRigid.linearVelocity = Vector2.zero;
+                }
             }
-            // Decide where to patrol : left or right side
-            PatrolDirection(transform.localScale.x < 0);
+
+            return UniTask.FromResult(OpResult.Success);
         }
 
-        public override void StartChasing()
+        public async UniTask<OpResult> PatrolAsync(CancellationToken cancellationToken)
         {
+            Debug.Assert(null != cancellationToken, $"CancellationToken is null in PatrolAsync of {ActorName}.");
+
             EnemyAnimator.Play("Normal_Infectee_Patrolling");
+
+            while (false == cancellationToken.IsCancellationRequested)
+            {
+                int direction = (FacingDirection.Left == Movement.CurrentFacingDirection) ? -1 : 1;
+                Movement.SetVelocity(Vector2.right * direction * Stats.MovingSpeed);
+
+                await UniTask.Yield();
+            }
+
+            return OpResult.Success;
+        }
+
+        public UniTask<OpResult> DieAsync(CancellationToken cancellationToken)
+        {
+            EnemyAnimator.Play("Normal_Infectee_Dead");
+
+            return UniTask.FromResult(OpResult.Success);
         }
 
         public override void Chase()
@@ -75,33 +86,28 @@ namespace AD.GamePlay
             }
         }
 
-        public override void StartAttack()
-        {
-            EnemyAnimator.Play("Normal_Infectee_Attacking");
+        // public override void StartAttack()
+        // {
+        //     EnemyAnimator.Play("Normal_Infectee_Attacking");
 
-            waitingTime = 0;
-            wait = true;
-            enemyRigid.linearVelocity = Vector2.zero;
-        }
+        //     _waitingTime = 0;
+        //     _isWaiting = true;
+        //     enemyRigid.linearVelocity = Vector2.zero;
+        // }
 
-        public override bool Attack()
-        {
-            if (wait)
-            {
-                waitingTime += Time.deltaTime;
-                if (2 < waitingTime)
-                    wait = false;
+        // public override bool Attack()
+        // {
+        //     if (_isWaiting)
+        //     {
+        //         _waitingTime += Time.deltaTime;
+        //         if (2 < _waitingTime)
+        //             _isWaiting = false;
 
-                return false;
-            }
+        //         return false;
+        //     }
 
-            return true;
-        }
-
-        public override void OnDead()
-        {
-            EnemyAnimator.Play("Normal_Infectee_Dead");
-        }
+        //     return true;
+        // }
 
 
         public override void ControlCharacter(IReadOnlyControlInfo controlInfo)
@@ -128,6 +134,7 @@ namespace AD.GamePlay
                 }
             }
         }
+        
 
         /****** Protected Members ******/
 
@@ -135,42 +142,14 @@ namespace AD.GamePlay
         {
             base.Awake();
 
-            CharacterHeight = GetComponent<BoxCollider2D>().size.y * transform.localScale.y;
+            Stats.CharacterHeight = GetComponent<BoxCollider2D>().size.y * transform.localScale.y;
         }
 
         protected override void Start()
         {
             base.Start();
 
-            MovingSpeed = 2f;
-            CurrentHitPoint = _MaxHitPoint;
-
             _attackDamageInfo.Attacker = gameObject;
-
-        }
-
-        protected override void InitializeTerrainChecker()
-        {
-            groundCheckingDistance = 2f;
-            groundCheckingVector = new Vector3(1, -1, 0);
-            ObstacleCheckingDistance = 1f;
-            checkTerrain = true;
-        }
-
-        protected override void InitializePlayerDetector()
-        {
-            detectRange = new Vector2(5, 1);
-            rangeOffset = new Vector2(-1, 0);
-        }
-
-        protected override void InitializeDamageAndWeapon()
-        {
-            defaultDamageInfo = new DamageInfo(gameObject, 1, true);
-            weaponOffset = new Vector3(2.5f, 0, 0);
-            useShortRangeWeapon = true;
-            weaponType = ProjectileType.ProjectileTypeCount;
-
-            attackRange = 2f;
         }
 
         protected override void OnAir() { }
@@ -189,56 +168,9 @@ namespace AD.GamePlay
 
         private DamageInfo _attackDamageInfo = new DamageInfo();
 
-        private float patrolLeftEnd, patrolRightEnd; // Each end side of the patrol range
-        private bool wait;
-        private float waitingTime;
-
         private void OnValidate()
         {
             Debug.Assert(null != _AttackPoint, $"Attacking point is no assigned in {ActorName}");
-        }
-
-        private void PatrolDirection(bool isPatrollingRight)
-        {
-            if (false == CanMoveAhead)
-            {
-                // Update patrol end
-                if (isPatrollingRight) patrolRightEnd = transform.position.x;
-                else patrolLeftEnd = transform.position.x;
-
-                // Check if patrol area is too small
-                if (patrolRightEnd - patrolLeftEnd < _MinPatrolRange)
-                {
-                    wait = true;
-                    EnemyAnimator.Play("Normal_Infectee_Idle");
-                }
-                else Flip();
-
-                // Update other end
-                if (isPatrollingRight) patrolLeftEnd = patrolRightEnd - _MaxPatrolRange;
-                else patrolRightEnd = patrolLeftEnd + _MaxPatrolRange;
-
-                enemyRigid.linearVelocity = Vector2.zero;
-            }
-            // Patrolling the area
-            else if ((isPatrollingRight && transform.position.x < patrolRightEnd) ||
-                    (!isPatrollingRight && transform.position.x > patrolLeftEnd))
-            {
-                float direction = isPatrollingRight ? 1 : -1;
-                enemyRigid.linearVelocity = new Vector2(direction * MovingSpeed, enemyRigid.linearVelocity.y);
-            }
-            // Reached one of the end side of the patrol range
-            else
-            {
-                Flip();
-                enemyRigid.linearVelocity = Vector2.zero;
-            }
-        }
-
-        private void Flip()
-        {
-            transform.localScale = new Vector3(-transform.localScale.x,
-                transform.localScale.y, transform.localScale.z);
         }
     }
 }
