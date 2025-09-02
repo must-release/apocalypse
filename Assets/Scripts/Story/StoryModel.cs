@@ -31,16 +31,14 @@ namespace AD.Story
 
         public StoryEntry GetFirstEntry()
         {
-            StoryEntry firstEntry = storyEntryQueue.First.Value;
-            storyEntryQueue.RemoveFirst();
-            return firstEntry;
+            return storyEntryQueue.Dequeue();
         }
 
         public StoryEntry PeekFirstEntry()
         {
             if (storyEntryQueue.Count > 0)
             {
-                return storyEntryQueue.First.Value;
+                return storyEntryQueue.Peek();
             }
 
             if (storyBlockQueue.Count > 0) // EntryQueue is empty <=> Block has completed.
@@ -64,8 +62,7 @@ namespace AD.Story
         {
             if (storyEntryQueue.Count > 0) // Get next entry from the storyEntryQueue
             {
-                StoryEntry nextEntry = storyEntryQueue.First.Value;
-                storyEntryQueue.RemoveFirst();
+                StoryEntry nextEntry = storyEntryQueue.Dequeue();
                 readEntryCountBuffer++;
 
                 if (nextEntry.IsSavePoint) // If next entry is save point, update ReadEntryCount
@@ -89,10 +86,8 @@ namespace AD.Story
                     if (nextBlock.IsCommon || nextBlock.BranchName == CurrentStoryBranch)
                     {
                         CurrentStoryBranch = nextBlock.BranchName;
-                        storyEntryQueue = new LinkedList<StoryEntry>(nextBlock.Entries); // Changed to LinkedList
-                        StoryEntry nextEntry = storyEntryQueue.First.Value; // Get first entry from new block
-                        storyEntryQueue.RemoveFirst(); // Remove it
-                        return nextEntry;
+                        storyEntryQueue = new Queue<StoryEntry>(nextBlock.Entries);
+                        return storyEntryQueue.Dequeue();
                     }
                     else // Skip to next block
                     {
@@ -114,7 +109,7 @@ namespace AD.Story
         /****** Private Members ******/
 
         private Queue<StoryBlock> storyBlockQueue = null;
-        private LinkedList<StoryEntry> storyEntryQueue = null; // Changed to LinkedList
+        private Queue<StoryEntry> storyEntryQueue = null;
         private int readEntryCountBuffer = 0;
 
         private void Awake()
@@ -154,7 +149,7 @@ namespace AD.Story
             storyBlockQueue = new Queue<StoryBlock>(storyBlocks.Skip(ReadBlockCount));
             StoryBlock firstBlock = storyBlockQueue.Dequeue(); // Get first story block
             CurrentStoryBranch = firstBlock.BranchName; // Set current branch name according to the first story block
-            storyEntryQueue = new LinkedList<StoryEntry>(firstBlock.Entries.Skip(ReadEntryCount)); // Changed to LinkedList
+            storyEntryQueue = new Queue<StoryEntry>(firstBlock.Entries.Skip(ReadEntryCount));
         }
 
         // Deserialize XML string to object
