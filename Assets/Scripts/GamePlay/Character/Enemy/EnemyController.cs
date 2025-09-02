@@ -4,7 +4,7 @@ using AD.GamePlay;
 
 namespace AD.GamePlay
 {
-    public class EnemyAIController : MonoBehaviour, IStateController<EnemyStateType>
+    public class EnemyController : MonoBehaviour, IStateController<EnemyStateType>
     {
         /****** Public Members ******/
 
