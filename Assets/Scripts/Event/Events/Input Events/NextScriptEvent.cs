@@ -19,7 +19,7 @@ public class NextScriptEvent : InputEvent, KeySettingsObserver
     // Detect if event button is pressed or panel is clicked
     public override bool DetectInput()
     {
-        bool buttonClicked = Input.GetKeyDown(eventButton);
+        bool buttonClicked = Input.GetKeyDown(eventButton) || Input.GetKeyDown(KeyCode.Space);
         bool panelClicked = UIController.Instance.IsStoryPanelClicked;
         return buttonClicked || panelClicked;
     }
