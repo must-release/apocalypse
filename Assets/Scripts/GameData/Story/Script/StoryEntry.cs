@@ -12,6 +12,7 @@ namespace AD.Story
     [XmlInclude(typeof(StoryPlayMode))]
     [XmlInclude(typeof(StorySFX))]
     [XmlInclude(typeof(StoryVFX))]
+    [XmlInclude(typeof(StoryDelay))]
     [System.Serializable]
     public class StoryEntry
     {
@@ -25,7 +26,8 @@ namespace AD.Story
             BackgroundCG,
             BGM,
             SFX,
-            CameraAction
+            CameraAction,
+            Delay
         }
 
         [XmlIgnore] public bool IsAutoProgress = false;

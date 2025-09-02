@@ -61,6 +61,8 @@ namespace AD.Story
         
         public void ResetHandler()
         {
+            _cancellationTokenSource?.Dispose();
+            _cancellationTokenSource = null;
             _currentDialogue = null;
         }
 

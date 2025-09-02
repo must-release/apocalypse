@@ -6,6 +6,7 @@
     <VFX VFX="ScreenFadeIn" Duration="1" />
     <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">목이 뜯긴 곰인형.</Dialogue>
     <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">반쯤 타버린 성경책.</Dialogue>
+    <Delay Duration="2.0" />
     <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">무기로 쓰기에는 영 부실한 각목.</Dialogue>
     <BackgroundCG Chapter="Prologue" ImageName="BG_Church" Animation="Appear" AnimationDuration="1" TargetPosition="Center" />
     <Dialogue Name="독백" Speed="Default" IsAutoSkip="false">영 쓸모없는 잡동사니만 널브러져 있다.</Dialogue>
