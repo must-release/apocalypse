@@ -26,20 +26,30 @@ namespace AD.Story
 
         public void PlayNextScript()
         {
-            if (0 < _activeStoryHandlers.Count)
+            StoryEntry nextEntry = StoryModel.Instance.PeekFirstEntry();
+
+            if (null == nextEntry)
+            {
+                IsStoryPlaying = false;
+                return;
+            }
+
+            var handlerToComplete = _activeStoryHandlers.FirstOrDefault(h => h.CurrentEntry.IsSingleExecuted || h.PresentingEntryType == nextEntry.Type);
+            if (null != handlerToComplete)
+            {
+                handlerToComplete.InstantlyCompleteStoryEntry();
+                return;
+            }
+
+            if (nextEntry.IsSingleExecuted && 0 < _activeStoryHandlers.Count)
             {
                 var handlersToComplete = new List<IStoryEntryHandler>(_activeStoryHandlers);
                 handlersToComplete.ForEach(handler => handler.InstantlyCompleteStoryEntry());
                 return;
             }
 
+            // If all checks pass, consume and show the entry.
             StoryEntry entry = StoryModel.Instance.GetNextEntry();
-            if (entry == null)
-            {
-                IsStoryPlaying = false;
-                return;
-            }
-
             ShowStoryEntry(entry);
         }
 
@@ -81,6 +91,7 @@ namespace AD.Story
         private StoryHandleContext _storyContext;
         private Dictionary<StoryEntry.EntryType, IStoryEntryHandler> _storyHandlers = new();
         private List<IStoryEntryHandler> _activeStoryHandlers = new();
+        // Removed _bufferedEntry
 
         public void Awake()
         {

@@ -18,7 +18,6 @@ namespace AD.Story
         public int ReadBlockCount { get; set; } = 0;
         public int ReadEntryCount { get; set; } = 0;
         public string CurrentStoryBranch { get; set; }
-        public Queue<StoryEntry> StoryEntryBuffer { get; set; }
 
         public Coroutine LoadStoryText(string storyInfo, int readBlockCount, int readEntryCount)
         {
@@ -37,17 +36,31 @@ namespace AD.Story
 
         public StoryEntry PeekFirstEntry()
         {
-            return (0 < storyEntryQueue.Count) ? storyEntryQueue.Peek() : null;
+            if (storyEntryQueue.Count > 0)
+            {
+                return storyEntryQueue.Peek();
+            }
+
+            if (storyBlockQueue.Count > 0) // EntryQueue is empty <=> Block has completed.
+            {
+                foreach (var block in storyBlockQueue)
+                {
+                    if (block.IsCommon || block.BranchName == CurrentStoryBranch)
+                    {
+                        if (block.Entries.Count > 0)
+                        {
+                            return block.Entries[0];
+                        }
+                    }
+                }
+            }
+
+            return null;
         }
-        
 
         public StoryEntry GetNextEntry()
         {
-            if (StoryEntryBuffer.Count > 0) // return buffered entry
-            {
-                return StoryEntryBuffer.Dequeue();
-            }
-            else if (storyEntryQueue.Count > 0) // Get next entry from the storyEntryQueue
+            if (storyEntryQueue.Count > 0) // Get next entry from the storyEntryQueue
             {
                 StoryEntry nextEntry = storyEntryQueue.Dequeue();
                 readEntryCountBuffer++;
@@ -104,7 +117,6 @@ namespace AD.Story
             if (Instance == null)
             {
                 Instance = this;
-                StoryEntryBuffer = new Queue<StoryEntry>();
             }
             else
             {

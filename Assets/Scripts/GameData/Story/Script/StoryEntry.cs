@@ -29,6 +29,7 @@ namespace AD.Story
         }
 
         [XmlIgnore] public bool IsAutoProgress = false;
+        [XmlIgnore] public bool IsSingleExecuted = false;
         [XmlIgnore] public bool IsSavePoint = false;
         [XmlIgnore] public EntryType Type;
     }
