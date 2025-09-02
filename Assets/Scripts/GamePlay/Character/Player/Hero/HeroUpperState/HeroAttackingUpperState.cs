@@ -1,4 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace AD.GamePlay
@@ -15,9 +15,10 @@ namespace AD.GamePlay
                                             , CharacterMovement playerMovement
                                             , CharacterStats playerStats
                                             , Animator stateAnimator
-                                            , PlayerWeaponBase playerWeapon)
+                                            , PlayerWeaponBase playerWeapon
+                                            , ControlInputBuffer inputBuffer)
         {
-            base.InitializeState(owningAvatar, stateController, objectInteractor, playerMovement, playerStats, stateAnimator, playerWeapon);
+            base.InitializeState(owningAvatar, stateController, objectInteractor, playerMovement, playerStats, stateAnimator, playerWeapon, inputBuffer);
 
             Debug.Assert(PlayerAvatarType.Hero == owningAvatar, $"State {CurrentState} can only be used by Hero avatar.");
             Debug.Assert(StateAnimator.HasState(0, _AttackingStateHash), $"Animator of {owningAvatar} does not have {CurrentState} upper state.");
@@ -28,29 +29,30 @@ namespace AD.GamePlay
             StateAnimator.Play(_AttackingStateHash);
             StateAnimator.Update(0.0f);
 
-            _attackCoolTime = PlayerWeapon.Attack();
-            _shouldContinueAttack = false;
+            var attackCooldown = PlayerWeapon.Attack();
+            InputBuffer.StartAttackCooldown(attackCooldown);
         }
 
         public override void OnUpdate()
         {
-            _attackCoolTime -= Time.deltaTime;
-
-            if (0 < _attackCoolTime)
+            if (InputBuffer.IsAttackInCooldown)
                 return;
 
-
-            if (_shouldContinueAttack)
+            if (InputBuffer.HasBufferedAttack)
             {
+                InputBuffer.ConsumeAttackBuffer();
                 StateController.ChangeState(HeroUpperStateType.Attacking);
-            }
-            else if (null != PlayerMovement.StandingGround)
-            {
-                StateController.ChangeState(HeroUpperStateType.Idle);
             }
             else
             {
-                StateController.ChangeState(HeroUpperStateType.Jumping);
+                if (null != PlayerMovement.StandingGround)
+                {
+                    StateController.ChangeState(HeroUpperStateType.Idle);
+                }
+                else
+                {
+                    StateController.ChangeState(HeroUpperStateType.Jumping);
+                }
             }
         }
 
@@ -64,14 +66,13 @@ namespace AD.GamePlay
 
         public override void Attack()
         {
-            _shouldContinueAttack = true;
+            InputBuffer.BufferAttack();
         }
 
         public override void OnGround()
         {
             ChangeToIdleAsync().Forget();
         }
-
 
         public override void LookUp(bool lookUp)
         {
@@ -90,9 +91,6 @@ namespace AD.GamePlay
         /****** Private Members ******/
 
         private readonly int _AttackingStateHash = AnimatorState.GetHash(PlayerAvatarType.Hero, HeroUpperStateType.Attacking);
-
-        private float _attackCoolTime;
-        private bool _shouldContinueAttack;
         
         private async UniTask ChangeToIdleAsync()
         {

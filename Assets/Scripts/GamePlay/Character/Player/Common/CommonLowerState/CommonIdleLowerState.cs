@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace AD.GamePlay
 {
     public class CommonIdleLowerState : PlayerLowerState
     {
+        /****** Public Members ******/
+
         public override LowerStateType CurrentState => LowerStateType.Idle;
         public override bool ShouldDisableUpperBody => false;
 
@@ -13,9 +16,10 @@ namespace AD.GamePlay
                         , CharacterMovement playerMovement
                         , CharacterStats playerStats
                         , Animator stateAnimator
-                        , PlayerWeaponBase playerWeapon)
+                        , PlayerWeaponBase playerWeapon
+                        , ControlInputBuffer inputBuffer)
         {
-            base.InitializeState(owningAvatar, stateController, objectInteractor, playerMovement, playerStats, stateAnimator, playerWeapon);
+            base.InitializeState(owningAvatar, stateController, objectInteractor, playerMovement, playerStats, stateAnimator, playerWeapon, inputBuffer);
 
             _idleStateHash = AnimatorState.GetHash(OwningAvatar, CurrentState);
             Debug.Assert(StateAnimator.HasState(0, _idleStateHash), $"Animator of {owningAvatar} does not have {CurrentState} lower state.");

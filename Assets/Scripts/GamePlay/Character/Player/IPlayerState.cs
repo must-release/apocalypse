@@ -11,5 +11,6 @@ public interface IPlayerState<TState> where TState : StateType
                         , CharacterMovement playerMovement
                         , CharacterStats playerStats     
                         , Animator stateAnimator
-                        , PlayerWeaponBase playerWeapon);
+                        , PlayerWeaponBase playerWeapon
+                        , ControlInputBuffer inputBuffer);
 }

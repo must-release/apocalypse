@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace AD.GamePlay
 {
+    [RequireComponent(typeof(ControlInputBuffer))]
     public class PlayerController : CharacterBase, IAsyncLoadObject, IObjectInteractor
     {
         /****** Public Members ******/
@@ -88,6 +87,7 @@ namespace AD.GamePlay
             CurrentAvatar.ActivateAvatar(true);
         }
 
+
         /****** Protected Members ******/
 
         protected override void Awake()
@@ -99,6 +99,7 @@ namespace AD.GamePlay
 
             _avatarDictionary = new Dictionary<PlayerAvatarType, IPlayerAvatar>();
             _playerRigid = GetComponent<Rigidbody2D>();
+            _inputBuffer = GetComponent<ControlInputBuffer>();
             Stats.CharacterHeight = GetComponent<BoxCollider2D>().size.y * transform.localScale.y;
             ClimberCollider = GetComponent<Collider2D>();
             _playerRigid.gravityScale = Stats.Gravity;
@@ -137,13 +138,12 @@ namespace AD.GamePlay
         [SerializeField] private Transform _heroTransform;
         [SerializeField] private Transform _heroineTransform;
 
-        private const int _MaxHitPoint = 4;
-
         private Dictionary<PlayerAvatarType, IPlayerAvatar> _avatarDictionary;
 
-        private Rigidbody2D _playerRigid;
+        private Rigidbody2D         _playerRigid;
+        private ControlInputBuffer  _inputBuffer;
+
         private bool _isInitilized;
-        private bool _isDamageImmune;
 
         private void Update()
         {
@@ -160,7 +160,7 @@ namespace AD.GamePlay
             IPlayerAvatar avatar = root.GetComponent<IPlayerAvatar>();
             Debug.Assert(null != avatar, $"{type} avatar (IPlayerAvatar) not found in {root.name}");
             _avatarDictionary.Add(type, avatar);
-            avatar.InitializeAvatar(this, Movement, Stats);
+            avatar.InitializeAvatar(this, Movement, Stats, _inputBuffer);
         }
     }
 
@@ -169,7 +169,7 @@ namespace AD.GamePlay
     {
         bool IsDamageImmune { get; }
 
-        void InitializeAvatar(IObjectInteractor objectInteractor, CharacterMovement playerMovement, CharacterStats playerStats);
+        void InitializeAvatar(IObjectInteractor objectInteractor, CharacterMovement playerMovement, CharacterStats playerStats, ControlInputBuffer inputBuffer);
         void ControlAvatar(IReadOnlyControlInfo controlInfo);
         void ActivateAvatar(bool value);
         void OnUpdate();

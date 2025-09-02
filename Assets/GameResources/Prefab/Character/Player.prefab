@@ -827,6 +827,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8497535858361422018}
   - component: {fileID: 3689683781182022486}
+  - component: {fileID: 7976368795532827370}
   - component: {fileID: 6248926791922391508}
   - component: {fileID: 6066651523544202854}
   - component: {fileID: 6866941608920404372}
@@ -869,6 +870,19 @@ MonoBehaviour:
   _characterData: {fileID: 11400000, guid: 71afe8a13ca85344983da391d6773b87, type: 2}
   _heroTransform: {fileID: 2078760139792449367}
   _heroineTransform: {fileID: 1377288265050663595}
+--- !u!114 &7976368795532827370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3836751109032054554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45bdf8fa322f8e3459786413a1eb28ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _config: {fileID: 11400000, guid: db08dd5cd4d63a14ea5434c015867b04, type: 2}
 --- !u!50 &6248926791922391508
 Rigidbody2D:
   serializedVersion: 5

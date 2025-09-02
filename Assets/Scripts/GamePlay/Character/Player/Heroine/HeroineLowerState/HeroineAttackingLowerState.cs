@@ -5,18 +5,21 @@ namespace AD.GamePlay
 {
     public class HeroineAttackingLowerState : PlayerLowerState
     {
+        /****** Public Members ******/
+
         public override LowerStateType CurrentState => HeroineLowerStateType.Attacking;
         public override bool ShouldDisableUpperBody => true;
 
         public override void InitializeState(PlayerAvatarType owningAvatar
-                                            , IStateController<LowerStateType> stateController
-                                            , IObjectInteractor objectInteractor
-                                            , CharacterMovement playerMovement
-                                            , CharacterStats playerStats
-                                            , Animator stateAnimator
-                                            , PlayerWeaponBase playerWeapon)
+                                             , IStateController<LowerStateType> stateController
+                                             , IObjectInteractor objectInteractor
+                                             , CharacterMovement playerMovement
+                                             , CharacterStats playerStats
+                                             , Animator stateAnimator
+                                             , PlayerWeaponBase playerWeapon
+                                             , ControlInputBuffer inputBuffer)
         {
-            base.InitializeState(owningAvatar, stateController, objectInteractor, playerMovement, playerStats, stateAnimator, playerWeapon);
+            base.InitializeState(owningAvatar, stateController, objectInteractor, playerMovement, playerStats, stateAnimator, playerWeapon, inputBuffer);
 
             Debug.Assert(PlayerAvatarType.Heroine == owningAvatar, "HeroineAttackingLowerState can only be used by Heroine avatar.");
             _attackingStateHash = AnimatorState.GetHash(owningAvatar, CurrentState);

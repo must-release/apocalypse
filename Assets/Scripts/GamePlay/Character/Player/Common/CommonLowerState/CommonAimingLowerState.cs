@@ -14,9 +14,10 @@ namespace AD.GamePlay
                                             , CharacterMovement playerMovement
                                             , CharacterStats playerStats
                                             , Animator stateAnimator
-                                            , PlayerWeaponBase playerWeapon)
+                                            , PlayerWeaponBase playerWeapon
+                                            , ControlInputBuffer inputBuffer)
         {
-            base.InitializeState(owningAvatar, stateController, objectInteractor, playerMovement, playerStats, stateAnimator, playerWeapon);
+            base.InitializeState(owningAvatar, stateController, objectInteractor, playerMovement, playerStats, stateAnimator, playerWeapon, inputBuffer);
 
             _aimingStateHash = AnimatorState.GetHash(owningAvatar, CurrentState);
             Debug.Assert(StateAnimator.HasState(0, _aimingStateHash), $"Animator of {owningAvatar} does not have {CurrentState} lower state.");

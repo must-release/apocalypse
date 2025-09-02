@@ -1,5 +1,8 @@
-﻿using UnityEngine;
+using UnityEngine;
+using UnityEngine.Assertions;
 using System.Collections;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 
 namespace AD.GamePlay
 {
@@ -16,9 +19,10 @@ namespace AD.GamePlay
                                             , CharacterMovement playerMovement
                                             , CharacterStats playerStats
                                             , Animator stateAnimator
-                                            , PlayerWeaponBase playerWeapon)
+                                            , PlayerWeaponBase playerWeapon
+                                            , ControlInputBuffer inputBuffer)
         {
-            base.InitializeState(owningAvatar, stateController, objectInteractor, playerMovement, playerStats, stateAnimator, playerWeapon);
+            base.InitializeState(owningAvatar, stateController, objectInteractor, playerMovement, playerStats, stateAnimator, playerWeapon, inputBuffer);
 
             _jumpingStartStateHash  = AnimatorState.GetHash(owningAvatar, LowerStateType.Jumping, "Start");
             _jumpingLoopStateHash   = AnimatorState.GetHash(owningAvatar, LowerStateType.Jumping, "Loop");
@@ -59,10 +63,11 @@ namespace AD.GamePlay
 
         public override void OnExit(LowerStateType _)
         {
-            if (null != _landCoroutine)
+            if (null != _landOnGroundCTS)
             {
-                StopCoroutine(_landCoroutine);
-                _landCoroutine = null;
+                _landOnGroundCTS.Cancel();
+                _landOnGroundCTS.Dispose();
+                _landOnGroundCTS = null;
             }
         }
 
@@ -87,7 +92,17 @@ namespace AD.GamePlay
 
         public override void OnGround()
         {
-            _landCoroutine = StartCoroutine(LandOnGround());
+            if (InputBuffer.HasBufferedJump)
+            {
+                InputBuffer.ConsumeJumpBuffer();
+                PlayerMovement.SetVelocity(new Vector2(PlayerMovement.CurrentVelocity.x, PlayerStats.JumpingSpeed));
+                StateController.ChangeState(LowerStateType.Jumping);
+            }
+            else
+            {
+                _landOnGroundCTS = new CancellationTokenSource();
+                LandOnGroundAsync(_landOnGroundCTS.Token).Forget();
+            }
         }
 
         public override void UpDown(VerticalDirection verticalInput)
@@ -113,12 +128,29 @@ namespace AD.GamePlay
             StateController.ChangeState(LowerStateType.Damaged);
         }
 
+        public override void StartJump()
+        {
+            if (null != _landOnGroundCTS)
+            {
+                _landOnGroundCTS.Cancel();
+                
+                InputBuffer.BufferJump();
+                InputBuffer.ConsumeJumpBuffer();
+                PlayerMovement.SetVelocity(new Vector2(PlayerMovement.CurrentVelocity.x, PlayerStats.JumpingSpeed));
+                StateController.ChangeState(LowerStateType.Jumping);
+            }
+            else
+            {
+                InputBuffer.BufferJump();
+            }
+        }
+
 
         /****** Private Members ******/
 
         private const float _JumpFallSpeed = 10f;
 
-        private Coroutine _landCoroutine;
+        private CancellationTokenSource _landOnGroundCTS;
 
         private int     _jumpingStartStateHash;
         private int     _jumpingLoopStateHash;
@@ -145,12 +177,12 @@ namespace AD.GamePlay
             _isStartingJump = false;
         }
 
-        private IEnumerator LandOnGround()
+        private async UniTaskVoid LandOnGroundAsync(CancellationToken cancellationToken)
         {
             StateAnimator.Play(_jumpingEndStateHash);
             StateAnimator.Update(0.0f);
 
-            yield return new WaitWhile(() => StateAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+            await UniTask.WaitWhile(() => StateAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f, cancellationToken: cancellationToken);
 
             StateController.ChangeState(LowerStateType.Idle);
         }

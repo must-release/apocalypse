@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using UnityEngine;
 
 namespace AD.GamePlay
@@ -13,11 +13,12 @@ namespace AD.GamePlay
                                             , IStateController<UpperStateType> stateController
                                             , IObjectInteractor objectInteractor
                                             , CharacterMovement playerMovement
-                                            , CharacterStats playerStats
-                                            , Animator stateAnimator
-                                            , PlayerWeaponBase playerWeapon)
+                                            , CharacterStats playerStats 
+                                            , Animator stateAnimator    
+                                            , PlayerWeaponBase playerWeapon
+                                            , ControlInputBuffer inputBuffer)
         {
-            base.InitializeState(owningAvatar, stateController, objectInteractor, playerMovement, playerStats, stateAnimator, playerWeapon);
+            base.InitializeState(owningAvatar, stateController, objectInteractor, playerMovement, playerStats, stateAnimator, playerWeapon, inputBuffer);
 
             Debug.Assert(PlayerAvatarType.Hero == owningAvatar, $"State {CurrentState} can only be used by Hero avatar.");
             Debug.Assert(StateAnimator.HasState(0, _TopAttackingStateHash), $"Animator of {owningAvatar} does not have {CurrentState} upper state.");

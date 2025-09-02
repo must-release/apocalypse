@@ -5,6 +5,8 @@ namespace AD.GamePlay
 {
     public class CommonIdleUpperState : PlayerUpperState
     {
+        /****** Public Members ******/
+
         public override UpperStateType CurrentState => UpperStateType.Idle;
 
         public override void InitializeState(PlayerAvatarType owningAvatar
@@ -13,9 +15,10 @@ namespace AD.GamePlay
                                             , CharacterMovement playerMovement
                                             , CharacterStats playerStats
                                             , Animator stateAnimator
-                                            , PlayerWeaponBase playerWeapon)
+                                            , PlayerWeaponBase playerWeapon
+                                            , ControlInputBuffer inputBuffer)
         {
-            base.InitializeState(owningAvatar, stateController, objectInteractor, playerMovement, playerStats, stateAnimator, playerWeapon);
+            base.InitializeState(owningAvatar, stateController, objectInteractor, playerMovement, playerStats, stateAnimator, playerWeapon, inputBuffer);
 
             _IdleStateHash = AnimatorState.GetHash(owningAvatar, CurrentState);
             Debug.Assert(StateAnimator.HasState(0, _IdleStateHash), $"Animator of {owningAvatar} does not have {CurrentState} upper state.");

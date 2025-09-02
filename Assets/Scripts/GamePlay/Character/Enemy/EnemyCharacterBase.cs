@@ -9,8 +9,21 @@ namespace AD.GamePlay
     {
         /****** Public Members ******/
 
-        public new EnemyCharacterStats Stats => base.Stats as EnemyCharacterStats;
-        public override bool IsPlayer => false;
+        public new EnemyCharacterStats  Stats       => base.Stats as EnemyCharacterStats;
+        public override bool            IsPlayer    => false;
+
+        public async UniTask<OpResult> DieAsync(CancellationToken cancellationToken)
+        {
+            Debug.Assert(null != cancellationToken, $"CancellationToken is null in DieAsync of {ActorName}.");
+
+            gameObject.layer = LayerMask.NameToLayer(Layer.Dead);
+            _enemyHitbox.gameObject.layer = LayerMask.NameToLayer(Layer.Dead);
+            Movement.SetVelocity(Vector2.zero);
+            OpResult result = await OwningAnimator.PlayDeathAsync(cancellationToken);
+            gameObject.SetActive(false);
+
+            return result;
+        }
 
         public override void ControlCharacter(IReadOnlyControlInfo controlInfo)
         {
@@ -25,7 +38,6 @@ namespace AD.GamePlay
         public abstract UniTask<OpResult> AttackAsync(CancellationToken cancellationToken);
         public abstract UniTask<OpResult> ChaseAsync(IActor chasingTarget, CancellationToken cancellationToken);
         public abstract UniTask<OpResult> PatrolAsync(CancellationToken cancellationToken);
-        public abstract UniTask<OpResult> DieAsync(CancellationToken cancellationToken);
 
 
         /****** Protected Members ******/

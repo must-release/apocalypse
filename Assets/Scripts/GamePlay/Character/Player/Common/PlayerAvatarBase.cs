@@ -23,15 +23,17 @@ namespace AD.GamePlay
         }
         public bool IsDamageImmune { get; private set; }
 
-        public void InitializeAvatar(IObjectInteractor objectInteractor, CharacterMovement playerMovement, CharacterStats playerStats)
+        public void InitializeAvatar(IObjectInteractor objectInteractor, CharacterMovement playerMovement, CharacterStats playerStats, ControlInputBuffer inputBuffer)
         {
             Debug.Assert(null != objectInteractor, "Object interactor is null");
             Debug.Assert(null != playerMovement, "Player movement is null");
             Debug.Assert(null != playerStats, "Player stats are null");
+            Debug.Assert(null != inputBuffer, "Input buffer is null");
 
-            _objectInteractor = objectInteractor;
-            _playerMovement = playerMovement;
-            _playerStats = playerStats;
+            _objectInteractor   = objectInteractor;
+            _playerMovement     = playerMovement;
+            _playerStats        = playerStats;
+            _inputBuffer        = inputBuffer;
 
             RegisterStates();
         }
@@ -146,19 +148,20 @@ namespace AD.GamePlay
 
         private const float _DamageImmuneTime = 2f;
         private const float _AlphaColorValueOnDamage = 0.5f; // Must be between 0 ~ 1.0
-        private const int _FlickerCountOnDamage = 4;
+        private const int   _FlickerCountOnDamage = 4;
 
         private Dictionary<LowerStateType, IPlayerLowerState> _lowerStateTable = new();
         private Dictionary<UpperStateType, IPlayerUpperState> _upperStateTable = new();
 
-        private IObjectInteractor _objectInteractor;
-        private CharacterMovement _playerMovement;
-        private CharacterStats _playerStats;
-        private PlayerWeaponBase _weapon;
-        private Animator _lowerAnimator;
-        private SpriteRenderer _lowerSprite;
-        private Animator _upperAnimator;
-        private SpriteRenderer _upperSprite;
+        private IObjectInteractor   _objectInteractor;
+        private CharacterMovement   _playerMovement;
+        private CharacterStats      _playerStats;
+        private ControlInputBuffer  _inputBuffer;
+        private PlayerWeaponBase    _weapon;
+        private Animator            _lowerAnimator;
+        private SpriteRenderer      _lowerSprite;
+        private Animator            _upperAnimator;
+        private SpriteRenderer      _upperSprite;
 
         private void OnValidate()
         {
@@ -198,7 +201,7 @@ namespace AD.GamePlay
             Debug.Assert(0 < lowers.Length, $"No LowerState components found in children for {CurrentAvatar}");
             foreach (var lower in lowers)
             {
-                lower.InitializeState(CurrentAvatar, this, _objectInteractor, _playerMovement, _playerStats, _lowerAnimator, _weapon);
+                lower.InitializeState(CurrentAvatar, this, _objectInteractor, _playerMovement, _playerStats, _lowerAnimator, _weapon, _inputBuffer);
                 LowerStateType state = lower.CurrentState;
 
                 Debug.Assert(false == _lowerStateTable.ContainsKey(state), $"LowerState {state} already registered for {CurrentAvatar}");
@@ -209,7 +212,7 @@ namespace AD.GamePlay
             Debug.Assert(0 < uppers.Length, $"No UpperState components found in children for {CurrentAvatar}");
             foreach (var upper in uppers)
             {
-                upper.InitializeState(CurrentAvatar, this, _objectInteractor, _playerMovement, _playerStats, _upperAnimator, _weapon);
+                upper.InitializeState(CurrentAvatar, this, _objectInteractor, _playerMovement, _playerStats, _upperAnimator, _weapon, _inputBuffer);
                 UpperStateType state = upper.CurrentState;
 
                 Debug.Assert(false == _upperStateTable.ContainsKey(state), $"UpperState {state} already registered for {CurrentAvatar}");

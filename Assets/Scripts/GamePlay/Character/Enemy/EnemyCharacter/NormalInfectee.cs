@@ -67,18 +67,6 @@ namespace AD.GamePlay
             return cancellationToken.IsCancellationRequested ? OpResult.Aborted : OpResult.Success;
         }
 
-        public override async UniTask<OpResult> DieAsync(CancellationToken cancellationToken)
-        {
-            Debug.Assert(null != cancellationToken, $"CancellationToken is null in DieAsync of {ActorName}.");
-
-            gameObject.layer = LayerMask.NameToLayer(Layer.Dead);
-            Movement.SetVelocity(Vector2.zero);
-            OpResult result = await OwningAnimator.PlayDeathAsync(cancellationToken);
-            gameObject.SetActive(false);
-
-            return result;
-        }
-
         public override void ControlCharacter(IReadOnlyControlInfo controlInfo)
         { 
             
