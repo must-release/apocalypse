@@ -54,7 +54,6 @@ namespace AD.Story
         public void ResetHandler()
         {
             _currentChoice = null;
-            _selectedOption = null;
         }
 
         /****** Private Members ******/
