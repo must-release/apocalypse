@@ -12,13 +12,10 @@ namespace AD.GamePlay
         {
             Debug.Assert(null != cancellationToken, $"CancellationToken is null in AttackAsync of {ActorName}.");
 
-            EnemyAnimator.Play("Normal_Infectee_Attacking");
-            EnemyAnimator.Update(0.0f);
-            Movement.SetVelocity(Vector2.zero);
+            Movement.SetVelocity(Vector2.zero);  
+            OpResult result = await OwningAnimator.PlayAttackAsync(cancellationToken);
 
-            bool isCanceled = await UniTask.WaitUntil(() => 1.0f < EnemyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime, cancellationToken: cancellationToken).SuppressCancellationThrow();
-
-            return isCanceled ? OpResult.Aborted : OpResult.Success;
+            return result;
         }
 
         public override async UniTask<OpResult> ChaseAsync(IActor chasingTarget, CancellationToken cancellationToken)
@@ -26,8 +23,7 @@ namespace AD.GamePlay
             Debug.Assert(null != chasingTarget, $"Chasing target can't be null in ChaseAsync of {ActorName}.");
             Debug.Assert(null != cancellationToken, $"CancellationToken is null in ChaseAsync of {ActorName}.");
 
-            EnemyAnimator.Play("Normal_Infectee_Patrolling");
-            EnemyAnimator.Update(0.0f);
+            OwningAnimator.IsPlayerDetected = true;
 
             while (false == cancellationToken.IsCancellationRequested)
             {
@@ -58,7 +54,7 @@ namespace AD.GamePlay
         {
             Debug.Assert(null != cancellationToken, $"CancellationToken is null in PatrolAsync of {ActorName}.");
 
-            EnemyAnimator.Play("Normal_Infectee_Patrolling");
+            OwningAnimator.IsPlayerDetected = false;
 
             while (false == cancellationToken.IsCancellationRequested)
             {
@@ -76,13 +72,11 @@ namespace AD.GamePlay
             Debug.Assert(null != cancellationToken, $"CancellationToken is null in DieAsync of {ActorName}.");
 
             gameObject.layer = LayerMask.NameToLayer(Layer.Dead);
-            EnemyAnimator.Play("Normal_Infectee_Dead");
-            EnemyAnimator.Update(0.0f);
             Movement.SetVelocity(Vector2.zero);
-            bool isCanceled = await UniTask.WaitUntil(() => 1.0f < EnemyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime, cancellationToken: cancellationToken).SuppressCancellationThrow();
+            OpResult result = await OwningAnimator.PlayDeathAsync(cancellationToken);
             gameObject.SetActive(false);
 
-            return isCanceled ? OpResult.Aborted : OpResult.Success;
+            return result;
         }
 
         public override void ControlCharacter(IReadOnlyControlInfo controlInfo)

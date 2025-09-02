@@ -181,12 +181,13 @@ GameObject:
   m_Component:
   - component: {fileID: 7838891282714086886}
   - component: {fileID: 4766047435719861166}
+  - component: {fileID: 6164503809092184317}
   - component: {fileID: 2887760670096911436}
-  - component: {fileID: -2767554079743659344}
   - component: {fileID: 1811672580667897619}
   - component: {fileID: 7950177232978445459}
   - component: {fileID: 4133005707102989004}
   - component: {fileID: 5296588806062340251}
+  - component: {fileID: 1168158716281881325}
   m_Layer: 8
   m_Name: NormalInfectee
   m_TagString: Untagged
@@ -268,6 +269,28 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &6164503809092184317
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4058898675561586481}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 995f95e2d22c8584aaf050222d86f6d8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!50 &2887760670096911436
 Rigidbody2D:
   serializedVersion: 5
@@ -295,28 +318,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!95 &-2767554079743659344
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4058898675561586481}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 995f95e2d22c8584aaf050222d86f6d8, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!61 &1811672580667897619
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -405,6 +406,18 @@ MonoBehaviour:
   _characterData: {fileID: 11400000, guid: bec0b5fea8f642f4b9611ab8a4e382a9, type: 2}
   _enemyHitbox: {fileID: 7750948442007554051}
   _AttackPoint: {fileID: 6271834972799468179}
+--- !u!114 &1168158716281881325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4058898675561586481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ef98d4a17b92244db9c2bfe981df207, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5086355847455201188
 GameObject:
   m_ObjectHideFlags: 0

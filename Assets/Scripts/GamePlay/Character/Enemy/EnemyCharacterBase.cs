@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AD.GamePlay
 {
-    [RequireComponent(typeof(Animator))]
+    [RequireComponent(typeof(EnemyAnimator))]
     public abstract class EnemyCharacterBase : CharacterBase, IEnemyCharacter
     {
         /****** Public Members ******/
@@ -30,7 +30,7 @@ namespace AD.GamePlay
 
         /****** Protected Members ******/
 
-        protected Animator EnemyAnimator => _enemyAnimtaor;
+        protected EnemyAnimator OwningAnimator => _owningAnimtaor;
 
         protected override void OnValidate()
         {
@@ -43,7 +43,7 @@ namespace AD.GamePlay
         {
             base.Awake();
 
-            _enemyAnimtaor = GetComponent<Animator>();
+            _owningAnimtaor = GetComponent<EnemyAnimator>();
 
             DamageInfo defaultDamage = new DamageInfo(gameObject, 1, true);
             _enemyHitbox.SetDamageArea(GetComponent<Collider2D>(), defaultDamage, true, LayerMask.NameToLayer(Layer.Default));
@@ -73,6 +73,6 @@ namespace AD.GamePlay
 
         [SerializeField] private DamageArea _enemyHitbox;
 
-        private Animator _enemyAnimtaor;
+        private EnemyAnimator _owningAnimtaor;
     }
 }
