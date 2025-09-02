@@ -10,6 +10,8 @@ namespace AD.GamePlay
         public Vector2 DetectRange              => _detectRange;
         public Vector2 RangeOffset              => _rangeOffset;
         public float AttackRange                => _attackRange;
+        public int AttackDamage                 => _attackDamage;
+        public bool IsContinuousAttack          => _isContinuousAttack;
         public float MaxPatrolRange             => _maxPatrolRange;
         public float MinPatrolRange             => _minPatrolRange;
         public float WaitingTime                => _waitingTime;
@@ -27,6 +29,7 @@ namespace AD.GamePlay
 
             Debug.Assert(0f < _detectRange.x && 0f < _detectRange.y, "Detect range must be positive values");
             Debug.Assert(0f < _attackRange, "Attack range must be positive");
+            Debug.Assert(0f < _attackDamage, "Attack damage must be greater than 0.");
             Debug.Assert(0f < _maxPatrolRange, "Max patrol range must be positive");
             Debug.Assert(_minPatrolRange < _maxPatrolRange, "Min patrol range must be larger than min patrol range.");
             Debug.Assert(0 < _waitingTime, "Waiting time must be positive");
@@ -40,6 +43,8 @@ namespace AD.GamePlay
         [SerializeField] private Vector2 _detectRange = new Vector2(5f, 1f);
         [SerializeField] private Vector2 _rangeOffset = Vector2.zero;
         [SerializeField] private float _attackRange = 2f;
+        [SerializeField] private int _attackDamage = 1;
+        [SerializeField] private bool _isContinuousAttack = false;
         [SerializeField] private float _maxPatrolRange = 10f;
         [SerializeField] private float _minPatrolRange = 3f;
         [SerializeField] private float _waitingTime = 2f;

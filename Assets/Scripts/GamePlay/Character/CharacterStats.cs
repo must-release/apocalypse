@@ -25,7 +25,7 @@ namespace AD.GamePlay
             Gravity = characterData.Gravity;
             MaxHitPoint = characterData.MaxHitPoint;
             CurrentHitPoint = MaxHitPoint;
-            RecentDamagedInfo = null;
+            RecentDamagedInfo = new DamageInfo();
             CharacterHeight = 0f;
         }
     }

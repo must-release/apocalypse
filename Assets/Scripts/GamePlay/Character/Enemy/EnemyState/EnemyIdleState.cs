@@ -6,6 +6,8 @@ namespace AD.GamePlay
 {
     public class EnemyIdleState : EnemyStateBase
     {
+        /****** Public Members ******/
+
         public override EnemyStateType StateType => EnemyStateType.Idle;
 
         public override void OnEnter()
@@ -24,7 +26,7 @@ namespace AD.GamePlay
 
             base.OnUpdate();
 
-            if (Perception.HasDetectedPlayer)
+            if (CanChaseDetectedPlayer())
             {
                 StateController.ChangeState(EnemyStateType.Chasing);
             }
@@ -47,8 +49,6 @@ namespace AD.GamePlay
 
         private CancellationTokenSource _idleCTS;
 
-        private float _waitingTimePassed;
-
         private async UniTask ProgressIdleAsync()
         {
             Debug.Assert(IsInitialized, $"{StateType} is not initialized.");
@@ -56,12 +56,24 @@ namespace AD.GamePlay
 
             OwningCharacter.Movement.SetVelocity(Vector2.zero);
 
-            bool result = await UniTask.WaitForSeconds(OwningCharacter.Stats.WaitingTime, cancellationToken: _idleCTS.Token).SuppressCancellationThrow();
-            if (result)
+            bool cancelled = await UniTask.WaitForSeconds(OwningCharacter.Stats.WaitingTime, cancellationToken: _idleCTS.Token).SuppressCancellationThrow();
+            if (false == cancelled)
             {
                 OwningCharacter.Movement.FlipFacingDirection();
                 StateController.ChangeState(EnemyStateType.Patrolling);
             }
+        }
+
+        private bool CanChaseDetectedPlayer()
+        {
+            if (false == Perception.HasDetectedPlayer)
+                return false;
+
+            FacingDirection chasingDirection = (OwningCharacter.Movement.CurrentPosition.x < Perception.DetectedPlayer.Movement.CurrentPosition.x) ? FacingDirection.Right : FacingDirection.Left;
+            if (OwningCharacter.Movement.CurrentFacingDirection == chasingDirection && false == Perception.CanMoveAhead)
+                return false;
+
+            return true;
         }
 
         private void OnDestroy()

@@ -84,6 +84,7 @@ namespace AD.GamePlay
             Debug.Assert(_isInitialized == false, "SetupDetectionCollider should be called during initialization.");
 
             var collider2D = GetComponent<Collider2D>();
+            collider2D.gameObject.layer = LayerMask.NameToLayer(Layer.Default);
 
             if (collider2D is BoxCollider2D boxCollider)
             {

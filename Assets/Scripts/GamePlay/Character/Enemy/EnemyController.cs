@@ -22,14 +22,14 @@ namespace AD.GamePlay
 
         /****** Private Members ******/
 
-        [SerializeField] private Transform              _enemyAIStateContainer;
-        [SerializeField] private EnemyPerception        _enemyPerception;
-        [SerializeField] private Transform              _enemyCharacterTransform;
+        [SerializeField] private Transform          _enemyAIStateContainer;
+        [SerializeField] private EnemyPerception    _enemyPerception;
+        [SerializeField] private Transform          _enemyCharacterTransform;
 
         private Dictionary<EnemyStateType, EnemyStateBase> enemyAIStates = new();
 
-        private EnemyStateBase    _currentState;
-        private IEnemyCharacter   _enemyCharacter;
+        private EnemyStateBase _currentState;
+        private IEnemyCharacter _enemyCharacter;
 
 
         private void OnValidate()
@@ -42,6 +42,9 @@ namespace AD.GamePlay
         private void Awake()
         {
             _enemyCharacter = _enemyCharacterTransform.GetComponent<IEnemyCharacter>();
+            
+            _enemyCharacter.OnCharacterDeath    += () => ChangeState(EnemyStateType.Dead);
+            _enemyCharacter.OnCharacterDamaged  += () => ChangeState(EnemyStateType.Chasing);
 
             RegisterStates();
         }

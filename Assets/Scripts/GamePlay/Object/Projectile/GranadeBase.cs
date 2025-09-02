@@ -142,7 +142,7 @@ namespace AD.GamePlay
                 var enemy = hit.GetComponent<ICharacter>();
                 if (false == enemy?.IsPlayer)
                 {
-                    enemy.OnDamaged(ProjectileDamageInfo);
+                    enemy.ApplyDamage(ProjectileDamageInfo);
                 }
             }
         }

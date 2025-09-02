@@ -47,7 +47,7 @@ namespace AD.GamePlay
             {
                 if (character.IsPlayer)
                 {
-                    character.OnDamaged(ProjectileDamageInfo);
+                    character.ApplyDamage(ProjectileDamageInfo);
                     return;
                 }
             }

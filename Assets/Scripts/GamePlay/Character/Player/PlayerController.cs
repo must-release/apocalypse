@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace AD.GamePlay
@@ -56,7 +58,7 @@ namespace AD.GamePlay
             }
         }
 
-        public override void OnDamaged(DamageInfo damageInfo)
+        public override void ApplyDamage(DamageInfo damageInfo)
         {
             if (CurrentAvatar.IsDamageImmune)
                 return;
@@ -85,7 +87,6 @@ namespace AD.GamePlay
 
             CurrentAvatar.ActivateAvatar(true);
         }
-
 
         /****** Protected Members ******/
 

@@ -35,6 +35,12 @@ namespace AD.GamePlay
                 return;
             }
 
+            if (false == Perception.CanMoveAhead)
+            {
+                StateController.ChangeState(EnemyStateType.Idle);
+                return;
+            }
+
             if (Perception.HasDetectedPlayer)
             {
                 _forgettingTimePassed = 0;
@@ -77,7 +83,7 @@ namespace AD.GamePlay
             {
                 _chasingTarget = Perception.DetectedPlayer;
             }
-            else if (null != OwningCharacter.Stats.RecentDamagedInfo)
+            else if (null != OwningCharacter.Stats.RecentDamagedInfo.Attacker)
             {
                 _chasingTarget = OwningCharacter.Stats.RecentDamagedInfo.Attacker.GetComponent<ICharacter>();
                 Debug.Assert(null != _chasingTarget, "Cannot find player character from recent damage info.");

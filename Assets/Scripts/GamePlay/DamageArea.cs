@@ -45,7 +45,7 @@ namespace AD.GamePlay
             if (other.TryGetComponent(out ICharacter character))
             {
                 if (character.IsPlayer == _isDamagingPlayer)
-                    character.OnDamaged(_damageInfo);
+                    character.ApplyDamage(_damageInfo);
             }
         }
 
@@ -57,7 +57,7 @@ namespace AD.GamePlay
             if (other.TryGetComponent(out ICharacter character))
             {
                 if (character.IsPlayer == _isDamagingPlayer)
-                    character.OnDamaged(_damageInfo);
+                    character.ApplyDamage(_damageInfo);
             }
         }
 

@@ -1,18 +1,22 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using System;
+using Cysharp.Threading.Tasks;
+using System.Threading;
 
 namespace AD.GamePlay
 {
-    [RequireComponent(typeof(BoxCollider2D), typeof(Rigidbody2D), typeof(CharacterMovement))]
-    public abstract class CharacterBase : MonoBehaviour
+    [RequireComponent(typeof(BoxCollider2D), typeof(Rigidbody2D))]
+    public abstract class CharacterBase : ActorBase, ICharacter
     {
         /****** Public Members ******/
-        public CharacterStats      Stats       { get; private set; }
-        public CharacterMovement   Movement    { get; private set; }
-        public Transform ActorTransform => transform;
-        public string ActorName => gameObject.name;
-        
+        public CharacterStats Stats { get; private set; }
+        public new CharacterMovement Movement { get; private set; }
+
+        public event Action OnCharacterDeath;
+        public event Action OnCharacterDamaged;
+
 
         public void RecognizeInteractionObject(InteractionObject obj)
         {
@@ -28,7 +32,7 @@ namespace AD.GamePlay
                 Debug.LogError("Detecting duplicate Object");
             }
         }
-        
+
         public void ForgetInteractionObject(InteractionObject obj)
         {
             bool removedFromInteractable = _interactableObjects.Remove(obj);
@@ -40,24 +44,50 @@ namespace AD.GamePlay
             }
         }
 
+        public virtual void ApplyDamage(DamageInfo damageInfo)
+        {
+            Debug.Assert(null != OnCharacterDeath, $"OnCharacterDeath event is not assigned in {ActorName}.");
+            Debug.Assert(null != OnCharacterDamaged, $"OnCharacterDamaged event is not assigned in {ActorName}.");
+
+            Stats.RecentDamagedInfo.Attacker = damageInfo.Attacker;
+            Stats.CurrentHitPoint -= damageInfo.DamageValue;
+
+            if (Stats.CurrentHitPoint <= 0)
+            {
+                OnCharacterDeath.Invoke();
+            }
+            else
+            {
+                OnCharacterDamaged.Invoke();
+            }
+        }
+
         public abstract bool IsPlayer { get; }
         public abstract void ControlCharacter(IReadOnlyControlInfo controlInfo);
-        public abstract void OnDamaged(DamageInfo damageInfo);
 
 
         /****** Protected Members ******/
 
-        protected virtual void Awake() 
-        { 
+        protected override void OnValidate()
+        {
+            base.OnValidate();
+
+            Debug.Assert(null != _characterData, $"CharacterData must be set in {ActorName}.");
+            Debug.Assert(null != GetComponent<CharacterMovement>(), $"{ActorName} does not have CharacterMovement component.");
+        }
+
+        protected override void Awake()
+        {
+            base.Awake();
+
             _bodyCollider   = GetComponent<BoxCollider2D>();
             Movement        = GetComponent<CharacterMovement>();
             Stats           = CreateStats(_characterData);
 
-            gameObject.layer = LayerMask.NameToLayer(Layer.Character); 
-
+            gameObject.layer = LayerMask.NameToLayer(Layer.Character);
         }
 
-        protected virtual void Start() 
+        protected virtual void Start()
         {
             CreateGroundSensor();
         }
@@ -80,17 +110,12 @@ namespace AD.GamePlay
 
         [SerializeField] private CharacterData _characterData;
 
-        private List<InteractionObject> _interactableObjects = new List<InteractionObject>();
-        private List<InteractionObject> _interactingObjects    = new List<InteractionObject>();
+        private List<InteractionObject> _interactableObjects    = new List<InteractionObject>();
+        private List<InteractionObject> _interactingObjects     = new List<InteractionObject>();
         private BoxCollider2D _bodyCollider;
         private Transform _groundCheckPoint;
         private Vector2 _groundCheckSize;
         private bool _wasGrounded;
-
-        private void OnValidate()
-        {
-            Debug.Assert(null != _characterData, $"CharacterData must be set in {ActorName}.");
-        }
 
         private void CreateGroundSensor()
         {
@@ -102,7 +127,7 @@ namespace AD.GamePlay
             _groundCheckPoint.Translate(Vector3.down * Stats.CharacterHeight / 2f, Space.Self);
 
             _groundCheckSize = new Vector2(_bodyCollider.size.x * 0.9f, 0.1f);
-        }    
+        }
 
         private void GroundCheck()
         {
@@ -124,11 +149,11 @@ namespace AD.GamePlay
 
             _wasGrounded = isGrounded;
         }
-    
+
         private IEnumerator OnAirDelay()
         {
             yield return new WaitForSeconds(0.1f);
-            if(Movement.StandingGround == null) OnAir();
+            if (Movement.StandingGround == null) OnAir();
         }
     }
 }

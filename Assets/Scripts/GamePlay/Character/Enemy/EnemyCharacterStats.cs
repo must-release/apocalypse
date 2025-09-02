@@ -9,6 +9,8 @@ namespace AD.GamePlay
         public Vector2 DetectRange { get; private set; }
         public Vector2 RangeOffset { get; private set; }
         public float AttackRange { get; private set; }
+        public int AttackDamage { get; private set; }
+        public bool IsContinuousAttack { get; private set; }
         public float MaxPatrolRange { get; private set; }
         public float MinPatrolRange { get; private set; }
         public float WaitingTime { get; private set; }
@@ -24,16 +26,18 @@ namespace AD.GamePlay
         {
             Debug.Assert(null != enemyData, "EnemyCharacterData cannot be null");
 
-            DetectRange = enemyData.DetectRange;
-            RangeOffset = enemyData.RangeOffset;
-            AttackRange = enemyData.AttackRange;
-            MaxPatrolRange = enemyData.MaxPatrolRange;
-            MinPatrolRange = enemyData.MinPatrolRange;
-            WaitingTime = enemyData.WaitingTime;
-            ForgettingTime = enemyData.ForgettingTime;
-            GroundCheckingDistance = enemyData.GroundCheckingDistance;
-            ObstacleCheckingDistance = enemyData.ObstacleCheckingDistance;
-            GroundCheckingVector = enemyData.GroundCheckingVector;
+            DetectRange                 = enemyData.DetectRange;
+            RangeOffset                 = enemyData.RangeOffset;
+            AttackRange                 = enemyData.AttackRange;
+            AttackDamage                = enemyData.AttackDamage;
+            IsContinuousAttack          = enemyData.IsContinuousAttack;
+            MaxPatrolRange              = enemyData.MaxPatrolRange;
+            MinPatrolRange              = enemyData.MinPatrolRange;
+            WaitingTime                 = enemyData.WaitingTime;
+            ForgettingTime              = enemyData.ForgettingTime;
+            GroundCheckingDistance      = enemyData.GroundCheckingDistance;
+            ObstacleCheckingDistance    = enemyData.ObstacleCheckingDistance;
+            GroundCheckingVector        = enemyData.GroundCheckingVector;
         }
     }
 }

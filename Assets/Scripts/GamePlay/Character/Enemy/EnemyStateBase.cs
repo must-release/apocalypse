@@ -13,9 +13,9 @@ namespace AD.GamePlay
             Debug.Assert(null != stateController, $"Enemy state controller cannot be null in {StateType}");
             Debug.Assert(null != enemyPerception, $"Enemy perception cannot be null in {StateType}");
 
-            StateController = stateController;
-            Perception = enemyPerception;
-            OwningCharacter  = enemyCharacter;
+            StateController     = stateController;
+            Perception          = enemyPerception;
+            OwningCharacter     = enemyCharacter;
 
             IsInitialized = true;
         }

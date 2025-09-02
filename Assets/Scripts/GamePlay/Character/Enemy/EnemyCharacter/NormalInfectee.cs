@@ -1,50 +1,60 @@
 using System.Threading;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace AD.GamePlay
 {
-    public class NormalInfectee : EnemyCharacterBase, IEnemyCharacter
+    public class NormalInfectee : EnemyCharacterBase
     {
         /****** Public Members ******/
 
-        public new EnemyCharacterStats Stats => base.Stats as EnemyCharacterStats;
-
-        public UniTask<OpResult> AttackAsync(CancellationToken cancellationToken)
+        public override async UniTask<OpResult> AttackAsync(CancellationToken cancellationToken)
         {
-            return UniTask.FromResult(OpResult.Success);
+            Debug.Assert(null != cancellationToken, $"CancellationToken is null in AttackAsync of {ActorName}.");
+
+            EnemyAnimator.Play("Normal_Infectee_Attacking");
+            EnemyAnimator.Update(0.0f);
+            Movement.SetVelocity(Vector2.zero);
+
+            bool isCanceled = await UniTask.WaitUntil(() => 1.0f < EnemyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime, cancellationToken: cancellationToken).SuppressCancellationThrow();
+
+            return isCanceled ? OpResult.Aborted : OpResult.Success;
         }
 
-        public async UniTask<OpResult> ChaseAsync(IActor chasingTarget, CancellationToken cancellationToken)
+        public override async UniTask<OpResult> ChaseAsync(IActor chasingTarget, CancellationToken cancellationToken)
         {
             Debug.Assert(null != chasingTarget, $"Chasing target can't be null in ChaseAsync of {ActorName}.");
             Debug.Assert(null != cancellationToken, $"CancellationToken is null in ChaseAsync of {ActorName}.");
 
             EnemyAnimator.Play("Normal_Infectee_Patrolling");
+            EnemyAnimator.Update(0.0f);
 
             while (false == cancellationToken.IsCancellationRequested)
             {
-                int direction = chasingTarget. > transform.position.x ? 1 : -1;
-                if (0 < transform.localScale.x * direction) Flip();
+                // Prevent oscillating near player
+                if (Mathf.Abs(chasingTarget.Movement.CurrentPosition.x - Movement.CurrentPosition.x) < 0.1f)
+                {
+                    Movement.SetVelocity(Vector2.zero);
+                    await UniTask.Yield();
+                    continue;
+                }
 
-                if (CanMoveAhead && math.abs(ChasingTarget.position.x - transform.position.x) > 0.1f)
+                FacingDirection chasingDirection = (Movement.CurrentPosition.x < chasingTarget.Movement.CurrentPosition.x) ? FacingDirection.Right : FacingDirection.Left;
+                if (Movement.CurrentFacingDirection != chasingDirection)
                 {
-                    enemyRigid.linearVelocity = new Vector2(direction * MovingSpeed, enemyRigid.linearVelocity.y);
-                    EnemyAnimator.Play("Normal_Infectee_Patrolling");
+                    Movement.FlipFacingDirection();
                 }
-                else
-                {
-                    EnemyAnimator.Play("Normal_Infectee_Idle");
-                    enemyRigid.linearVelocity = Vector2.zero;
-                }
+
+                int direction = (FacingDirection.Right == chasingDirection) ? 1 : -1;
+                Movement.SetVelocity(Vector2.right * direction * Stats.MovingSpeed);
+
+                await UniTask.Yield();
             }
 
-            return UniTask.FromResult(OpResult.Success);
+            return cancellationToken.IsCancellationRequested ? OpResult.Aborted : OpResult.Success;
         }
 
-        public async UniTask<OpResult> PatrolAsync(CancellationToken cancellationToken)
+        public override async UniTask<OpResult> PatrolAsync(CancellationToken cancellationToken)
         {
             Debug.Assert(null != cancellationToken, $"CancellationToken is null in PatrolAsync of {ActorName}.");
 
@@ -58,91 +68,59 @@ namespace AD.GamePlay
                 await UniTask.Yield();
             }
 
-            return OpResult.Success;
+            return cancellationToken.IsCancellationRequested ? OpResult.Aborted : OpResult.Success;
         }
 
-        public UniTask<OpResult> DieAsync(CancellationToken cancellationToken)
+        public override async UniTask<OpResult> DieAsync(CancellationToken cancellationToken)
         {
+            Debug.Assert(null != cancellationToken, $"CancellationToken is null in DieAsync of {ActorName}.");
+
+            gameObject.layer = LayerMask.NameToLayer(Layer.Dead);
             EnemyAnimator.Play("Normal_Infectee_Dead");
+            EnemyAnimator.Update(0.0f);
+            Movement.SetVelocity(Vector2.zero);
+            bool isCanceled = await UniTask.WaitUntil(() => 1.0f < EnemyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime, cancellationToken: cancellationToken).SuppressCancellationThrow();
+            gameObject.SetActive(false);
 
-            return UniTask.FromResult(OpResult.Success);
+            return isCanceled ? OpResult.Aborted : OpResult.Success;
         }
-
-        public override void Chase()
-        {
-            // Look at the player
-            int direction = ChasingTarget.position.x > transform.position.x ? 1 : -1;
-            if (0 < transform.localScale.x * direction) Flip();
-
-            if (CanMoveAhead && math.abs(ChasingTarget.position.x - transform.position.x) > 0.1f)
-            {
-                enemyRigid.linearVelocity = new Vector2(direction * MovingSpeed, enemyRigid.linearVelocity.y);
-                EnemyAnimator.Play("Normal_Infectee_Patrolling");
-            }
-            else
-            {
-                EnemyAnimator.Play("Normal_Infectee_Idle");
-                enemyRigid.linearVelocity = Vector2.zero;
-            }
-        }
-
-        // public override void StartAttack()
-        // {
-        //     EnemyAnimator.Play("Normal_Infectee_Attacking");
-
-        //     _waitingTime = 0;
-        //     _isWaiting = true;
-        //     enemyRigid.linearVelocity = Vector2.zero;
-        // }
-
-        // public override bool Attack()
-        // {
-        //     if (_isWaiting)
-        //     {
-        //         _waitingTime += Time.deltaTime;
-        //         if (2 < _waitingTime)
-        //             _isWaiting = false;
-
-        //         return false;
-        //     }
-
-        //     return true;
-        // }
-
 
         public override void ControlCharacter(IReadOnlyControlInfo controlInfo)
         { 
             
         }
 
-
-        public override void OnDamaged(DamageInfo damageInfo)
-        {
-            
-        }
-
         public void ActiveDamageArea()
         {
-            Collider2D[] hits = Physics2D.OverlapBoxAll(_AttackPoint.position, new Vector2(2, 2), 0f, 1 << LayerMask.NameToLayer(Layer.Character));
+            Collider2D[] hits = Physics2D.OverlapBoxAll(_AttackPoint.position, new Vector2(2, 2), 0f, LayerMask.GetMask(Layer.Character));
 
             foreach (var hit in hits)
             {
                 var player = hit.GetComponent<ICharacter>();
                 if (true == player?.IsPlayer)
                 {
-                    player.OnDamaged(_attackDamageInfo);
+                    player.ApplyDamage(_attackDamageInfo);
                 }
             }
         }
-        
+
 
         /****** Protected Members ******/
+
+        protected override void OnValidate()
+        {
+            base.OnValidate();
+
+            Debug.Assert(null != _AttackPoint, $"Attacking point is not assigned in {ActorName}");
+        }
 
         protected override void Awake()
         {
             base.Awake();
 
             Stats.CharacterHeight = GetComponent<BoxCollider2D>().size.y * transform.localScale.y;
+
+            _attackDamageInfo = new DamageInfo(gameObject, Stats.AttackDamage, Stats.IsContinuousAttack);
         }
 
         protected override void Start()
@@ -160,17 +138,6 @@ namespace AD.GamePlay
 
         [SerializeField] private Transform _AttackPoint;
 
-        private const int _MaxHitPoint = 3;
-        private const float _MaxPatrolRange = 30f;
-        private const float _MinPatrolRange = 3f;
-        private const float _StandingTime = 2f;
-
-
-        private DamageInfo _attackDamageInfo = new DamageInfo();
-
-        private void OnValidate()
-        {
-            Debug.Assert(null != _AttackPoint, $"Attacking point is no assigned in {ActorName}");
-        }
+        private DamageInfo _attackDamageInfo;
     }
 }

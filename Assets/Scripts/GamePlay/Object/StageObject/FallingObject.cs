@@ -32,7 +32,7 @@ namespace AD.GamePlay
             else if (otherLayer == LayerMask.NameToLayer(Layer.Character) && false == other.CompareTag("Player"))
             {
                 DamageInfo damageInfo = new DamageInfo(gameObject, _damageValue, false);
-                other.gameObject.GetComponent<ICharacter>()?.OnDamaged(damageInfo);
+                other.gameObject.GetComponent<ICharacter>()?.ApplyDamage(damageInfo);
             }
             else if (otherLayer == LayerMask.NameToLayer(Layer.Ground) && _rb.linearVelocityY < 0)
             {
