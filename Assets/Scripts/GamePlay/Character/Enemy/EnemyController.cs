@@ -12,8 +12,6 @@ namespace AD.GamePlay
         {
             Debug.Assert(enemyAIStates.ContainsKey(enemyState), $"Enemy state {enemyState} is not registered.");
 
-            Logger.Write(LogCategory.GamePlay, $"Changing to state: {enemyState}.");
-
             _currentState?.OnExit(enemyState);
             _currentState = enemyAIStates[enemyState];
             _currentState.OnEnter();

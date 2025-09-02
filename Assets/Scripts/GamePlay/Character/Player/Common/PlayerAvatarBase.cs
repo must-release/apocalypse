@@ -124,8 +124,6 @@ namespace AD.GamePlay
         {
             Debug.Assert(_upperStateTable.ContainsKey(state), "Invalid Upper State");
 
-            Logger.Write(LogCategory.GamePlay, $"{UpperState.CurrentState} => {state}");
-
             UpperState.OnExit(state);
             UpperState = _upperStateTable[state];
             UpperState.LowerStateInfo = LowerState;
