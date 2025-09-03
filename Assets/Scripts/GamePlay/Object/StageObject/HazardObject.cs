@@ -3,7 +3,7 @@ using UnityEngine;
 namespace AD.GamePlay
 {
     [RequireComponent(typeof(Collider2D))]
-    public class HazardObject : MonoBehaviour, IStageObject
+    public class HazardObject : MonoBehaviour
     {
         /****** Private Members ******/
 

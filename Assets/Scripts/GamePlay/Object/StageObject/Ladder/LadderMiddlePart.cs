@@ -9,7 +9,7 @@ public class LadderMiddlePart : LadderPart
     {
         Debug.Assert(null != OnClimberEnter, "On Climber Enter action is not assigned in the LadderTopPart");
 
-        if (collision.gameObject.TryGetComponent(out IClimber climber))
+        if (collision.gameObject.TryGetComponent(out IObjectClimber climber))
         {
             OnClimberEnter.Invoke(climber);
         }
@@ -19,7 +19,7 @@ public class LadderMiddlePart : LadderPart
     {
         Debug.Assert(null != OnClimberExit, "On Climber exit action is not assigned in the LadderTopPart");
 
-        if (collision.gameObject.TryGetComponent(out IClimber climber))
+        if (collision.gameObject.TryGetComponent(out IObjectClimber climber))
         {
             OnClimberExit.Invoke(climber);
         }

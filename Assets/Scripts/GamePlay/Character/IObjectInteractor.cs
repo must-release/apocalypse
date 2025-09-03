@@ -1,4 +1,4 @@
-public interface IObjectInteractor : IClimber, IObjectPusher
+public interface IObjectInteractor : IObjectClimber, IObjectPusher
 {
 
 }

@@ -11,7 +11,7 @@ namespace AD.GamePlay
 
         public IPlayerAvatar CurrentAvatar { get; private set; }
         public PlayerAvatarType CurrentPlayerType { get; private set; } = PlayerAvatarType.PlayerAvatarTypeCount;
-        public IClimbable CurrentClimbableObject { get; set; }
+        public IClimbableObject CurrentClimbableObject { get; set; }
         public Collider2D ClimberCollider { get; private set; }
 
         public event Action<int, int> OnHPChanged;

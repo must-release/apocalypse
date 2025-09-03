@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public interface IClimbable
+public interface IClimbableObject
 {
     Vector3 GetClimbReferencePoint();
-    void OnClimbStart(IClimber climber);
-    void OnClimbEnd(IClimber climber);
+    void OnClimbStart(IObjectClimber climber);
+    void OnClimbEnd(IObjectClimber climber);
     bool CanClimbFurther(Vector3 climberPosition, VerticalDirection direction);
 }

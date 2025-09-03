@@ -1,8 +1,7 @@
 using UnityEngine;
-using UnityEngine.Assertions;
 using System.Collections.Generic;
 
-public class LadderComposite : MonoBehaviour, IStageObject, ICompositeObject, IClimbable
+public class LadderComposite : MonoBehaviour, ICompositeObject, IClimbableObject
 {
     /****** Public Members ******/
 
@@ -30,14 +29,14 @@ public class LadderComposite : MonoBehaviour, IStageObject, ICompositeObject, IC
         return _topPart.transform.position;
     }
 
-    public void OnClimbStart(IClimber climber)
+    public void OnClimbStart(IObjectClimber climber)
     {
         Debug.Assert(_climberCounts.ContainsKey(climber), "Unknown climber is trying to climb the ladder");
 
         _topPart.IgnoreCollisionWithClimber(climber, true);
     }
 
-    public void OnClimbEnd(IClimber climber)
+    public void OnClimbEnd(IObjectClimber climber)
     {
         Debug.Assert(_climberCounts.ContainsKey(climber), "Unknown climber is trying to stop climbing the ladder");
 
@@ -54,12 +53,12 @@ public class LadderComposite : MonoBehaviour, IStageObject, ICompositeObject, IC
 
     /****** Private Members ******/
 
-    private readonly Dictionary<IClimber, int> _climberCounts = new Dictionary<IClimber, int>();
+    private readonly Dictionary<IObjectClimber, int> _climberCounts = new Dictionary<IObjectClimber, int>();
 
     private LadderTopPart _topPart;
     private LadderDownPart _downPart;
 
-    private void HandleClimberEnter(IClimber climber)
+    private void HandleClimberEnter(IObjectClimber climber)
     {
         Debug.Assert(null != climber, "Climber is null in the ladderComposite.");
 
@@ -74,7 +73,7 @@ public class LadderComposite : MonoBehaviour, IStageObject, ICompositeObject, IC
         }
     }
 
-    private void HandleClimberExit(IClimber climber)
+    private void HandleClimberExit(IObjectClimber climber)
     {
         Debug.Assert(null != climber, "Climber is null in the ladderComposite.");
         Debug.Assert(_climberCounts.ContainsKey(climber), "Unknown climber is trying to exit the ladder.");
