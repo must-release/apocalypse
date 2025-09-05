@@ -9,10 +9,11 @@ namespace AD.GamePlay
     {
         /****** Public Members ******/
 
-        public IPlayerAvatar CurrentAvatar { get; private set; }
-        public PlayerAvatarType CurrentPlayerType { get; private set; } = PlayerAvatarType.PlayerAvatarTypeCount;
-        public IClimbableObject CurrentClimbableObject { get; set; }
-        public Collider2D ClimberCollider { get; private set; }
+        public IPlayerAvatar    CurrentAvatar           { get; private set; }
+        public PlayerAvatarType CurrentPlayerType       { get; private set; } = PlayerAvatarType.PlayerAvatarTypeCount;
+        public IClimbableObject CurrentClimbableObject  { get; set; }
+        public Collider2D       ClimberCollider         { get; private set; }
+        public PushableObject   CurrentPushingObject    { get; set; }
 
         public event Action<int, int> OnHPChanged;
 
@@ -147,7 +148,8 @@ namespace AD.GamePlay
 
         private void Update()
         {
-            if (false == _isInitilized) return;
+            if (false == _isInitilized)
+                return;
 
             CurrentAvatar.OnUpdate();
         }
