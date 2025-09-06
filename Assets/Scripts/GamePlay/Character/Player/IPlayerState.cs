@@ -9,7 +9,7 @@ public interface IPlayerState<TState> where TState : StateType
                         , IStateController<TState> stateController
                         , IObjectInteractor objectInteractor
                         , CharacterMovement playerMovement
-                        , CharacterStats playerStats     
+                        , PlayerCharacterStats playerStats     
                         , Animator stateAnimator
                         , PlayerWeaponBase playerWeapon
                         , ControlInputBuffer inputBuffer);

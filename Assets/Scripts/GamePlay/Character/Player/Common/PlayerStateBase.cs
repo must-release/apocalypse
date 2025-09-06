@@ -12,7 +12,7 @@ namespace AD.GamePlay
                                             , IStateController<TState> stateController
                                             , IObjectInteractor objectInteractor
                                             , CharacterMovement playerMovement
-                                            , CharacterStats playerStats
+                                            , PlayerCharacterStats playerStats
                                             , Animator stateAnimator
                                             , PlayerWeaponBase playerWeapon
                                             , ControlInputBuffer inputBuffer
@@ -41,7 +41,7 @@ namespace AD.GamePlay
         protected IStateController<TState>  StateController     { get; private set; }
         protected IObjectInteractor         ObjectInteractor    { get; private set; }
         protected CharacterMovement         PlayerMovement      { get; private set; }
-        protected CharacterStats            PlayerStats         { get; private set; }
+        protected PlayerCharacterStats      PlayerStats         { get; private set; }
         protected PlayerWeaponBase          PlayerWeapon        { get; private set; }
         protected Animator                  StateAnimator       { get; private set; }
         protected ControlInputBuffer        InputBuffer         { get; private set; }

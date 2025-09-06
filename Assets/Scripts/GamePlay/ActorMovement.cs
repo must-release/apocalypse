@@ -3,7 +3,7 @@ using UnityEngine;
 namespace AD.GamePlay
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public abstract class ActorMovement : MonoBehaviour
+    public class ActorMovement : MonoBehaviour
     {
         /****** Public Members ******/
 

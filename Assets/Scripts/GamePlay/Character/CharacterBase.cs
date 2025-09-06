@@ -100,7 +100,7 @@ namespace AD.GamePlay
 
         private void GroundCheck()
         {
-            Collider2D hit = Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, 0, LayerMask.GetMask(Layer.Ground));
+            Collider2D hit = Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, 0, LayerMask.GetMask(Layer.Ground, Layer.Obstacle));
 
             bool isGrounded = hit != null;
 

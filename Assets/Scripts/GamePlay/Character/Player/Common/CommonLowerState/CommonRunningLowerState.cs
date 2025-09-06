@@ -14,7 +14,7 @@ namespace AD.GamePlay
                             , IStateController<LowerStateType> stateController
                             , IObjectInteractor objectInteractor
                             , CharacterMovement playerMovement
-                            , CharacterStats playerStats
+                            , PlayerCharacterStats playerStats
                             , Animator stateAnimator
                             , PlayerWeaponBase playerWeapon
                             , ControlInputBuffer inputBuffer)
@@ -38,16 +38,26 @@ namespace AD.GamePlay
                 StateController.ChangeState(LowerStateType.Idle);
                 return;
             }
-
-            // Movement player
-            PlayerMovement.SetVelocity(new Vector2((int)horizontalInput * PlayerStats.MovingSpeed, PlayerMovement.CurrentVelocity.y));
-
-            // set direction
+            
             FacingDirection direction = (HorizontalDirection.Left == horizontalInput) ? FacingDirection.Left : FacingDirection.Right;
             if (direction != PlayerMovement.CurrentFacingDirection)
             {
                 PlayerMovement.SetFacingDirection(direction);
             }
+
+            if (ObjectInteractor.CurrentPushingObject)
+            {
+                bool isObjectOnRightSide = PlayerMovement.CurrentPosition.x < ObjectInteractor.CurrentPushingObject.CurrentPosition.x;
+                bool isPlayerLookingRightSide = direction == FacingDirection.Right;
+
+                if ((isObjectOnRightSide && isPlayerLookingRightSide) || (false == isObjectOnRightSide && false == isPlayerLookingRightSide))
+                {
+                    StateController.ChangeState(LowerStateType.Pushing);
+                    return;
+                }
+            }
+
+            PlayerMovement.SetVelocity(new Vector2((int)horizontalInput * PlayerStats.MovingSpeed, PlayerMovement.CurrentVelocity.y));
         }
 
         public override void StartJump()

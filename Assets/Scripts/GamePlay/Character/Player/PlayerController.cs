@@ -15,6 +15,8 @@ namespace AD.GamePlay
         public Collider2D       ClimberCollider         { get; private set; }
         public PushableObject   CurrentPushingObject    { get; set; }
 
+        public new PlayerCharacterStats Stats => base.Stats as PlayerCharacterStats;
+
         public event Action<int, int> OnHPChanged;
 
         public override bool IsPlayer => true;
@@ -43,6 +45,16 @@ namespace AD.GamePlay
             turningOffAvatar.ActivateAvatar(false);
 
             _isInitilized = true;
+        }
+
+        public void ChangePlayer()
+        {
+            CurrentAvatar.ActivateAvatar(false);
+
+            CurrentPlayerType = (CurrentPlayerType == PlayerAvatarType.Hero) ? PlayerAvatarType.Heroine : PlayerAvatarType.Hero;
+            CurrentAvatar = _avatarDictionary[CurrentPlayerType];
+
+            CurrentAvatar.ActivateAvatar(true);
         }
 
         public override void ControlCharacter(IReadOnlyControlInfo controlInfo)
@@ -76,17 +88,7 @@ namespace AD.GamePlay
 
             OnHPChanged?.Invoke(Stats.CurrentHitPoint, Stats.MaxHitPoint);
             CurrentAvatar.OnDamaged(damageInfo);
-        }
-
-        public void ChangePlayer()
-        {
-            CurrentAvatar.ActivateAvatar(false);
-
-            CurrentPlayerType = (CurrentPlayerType == PlayerAvatarType.Hero) ? PlayerAvatarType.Heroine : PlayerAvatarType.Hero;
-            CurrentAvatar = _avatarDictionary[CurrentPlayerType];
-
-            CurrentAvatar.ActivateAvatar(true);
-        }
+        } 
 
 
         /****** Protected Members ******/
@@ -134,6 +136,15 @@ namespace AD.GamePlay
             CurrentAvatar.OnFixedUpdate();
         }
 
+        protected override CharacterStats CreateStats(CharacterData data)
+        {
+            Debug.Assert(data is PlayerCharacterData, $"data is not a player character data in {ActorName}.");
+
+            // Do not call base function, because it will create a CharacterStats instance.
+
+            return new PlayerCharacterStats(data as PlayerCharacterData);
+        }
+
         /****** Private Members ******/
 
         [SerializeField] private Transform _heroTransform;
@@ -171,7 +182,7 @@ namespace AD.GamePlay
     {
         bool IsDamageImmune { get; }
 
-        void InitializeAvatar(IObjectInteractor objectInteractor, CharacterMovement playerMovement, CharacterStats playerStats, ControlInputBuffer inputBuffer);
+        void InitializeAvatar(IObjectInteractor objectInteractor, CharacterMovement playerMovement, PlayerCharacterStats playerStats, ControlInputBuffer inputBuffer);
         void ControlAvatar(IReadOnlyControlInfo controlInfo);
         void ActivateAvatar(bool value);
         void OnUpdate();
