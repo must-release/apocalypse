@@ -27,13 +27,17 @@ namespace AD.GamePlay
 
         public override void OnEnter()
         {
+            Debug.Assert(null != ObjectInteractor.CurrentPushableObject, $"Pushing object can't be null in pushing state in {CurrentState} of {OwningAvatar}");
+
             StateAnimator.Play(_pushingStateHash);
             StateAnimator.Update(0.0f);
+
+            ObjectInteractor.CurrentPushableObject.Movement.SetBodyType(RigidbodyType2D.Dynamic);
         }
 
         public override void OnUpdate()
         {
-            if (null == ObjectInteractor.CurrentPushingObject)
+            if (null == ObjectInteractor.CurrentPushableObject)
             {
                 StateController.ChangeState(LowerStateType.Idle);
                 return;
@@ -43,6 +47,8 @@ namespace AD.GamePlay
         public override void OnExit(LowerStateType nextState)
         {
             StateAnimator.speed = 1.0f;
+
+            ObjectInteractor.CurrentPushableObject.Movement.SetBodyType(RigidbodyType2D.Static);
         }
 
         public override void Move(HorizontalDirection horizontalInput)
@@ -51,11 +57,21 @@ namespace AD.GamePlay
             {
                 StateAnimator.speed = 0.0f;
                 PlayerMovement.SetVelocity(Vector2.zero);
+                ObjectInteractor.CurrentPushableObject.Movement.SetVelocity(Vector2.zero);
+                return;
+            }
+
+            var objectLocatedDirection = PlayerMovement.CurrentPosition.x < ObjectInteractor.CurrentPushableObject.CurrentPosition.x ? HorizontalDirection.Right : HorizontalDirection.Left;
+            if (horizontalInput != objectLocatedDirection)
+            {
+                StateController.ChangeState(LowerStateType.Idle);
                 return;
             }
 
             StateAnimator.speed = 1.0f;
-            PlayerMovement.SetVelocity(new Vector2((int)horizontalInput * PlayerStats.MovingSpeed, PlayerMovement.CurrentVelocity.y));
+            var pushingVelocity = new Vector2((int)horizontalInput * PlayerStats.PushingSpeed, PlayerMovement.CurrentVelocity.y);
+            PlayerMovement.SetVelocity(pushingVelocity);
+            ObjectInteractor.CurrentPushableObject.Movement.SetVelocity(pushingVelocity);
         }
 
         public override void StartJump()

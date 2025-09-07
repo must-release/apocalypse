@@ -38,23 +38,17 @@ namespace AD.GamePlay
                 StateController.ChangeState(LowerStateType.Idle);
                 return;
             }
-            
+
             FacingDirection direction = (HorizontalDirection.Left == horizontalInput) ? FacingDirection.Left : FacingDirection.Right;
             if (direction != PlayerMovement.CurrentFacingDirection)
             {
                 PlayerMovement.SetFacingDirection(direction);
             }
 
-            if (ObjectInteractor.CurrentPushingObject)
+            if (CanPushObject(horizontalInput))
             {
-                bool isObjectOnRightSide = PlayerMovement.CurrentPosition.x < ObjectInteractor.CurrentPushingObject.CurrentPosition.x;
-                bool isPlayerLookingRightSide = direction == FacingDirection.Right;
-
-                if ((isObjectOnRightSide && isPlayerLookingRightSide) || (false == isObjectOnRightSide && false == isPlayerLookingRightSide))
-                {
-                    StateController.ChangeState(LowerStateType.Pushing);
-                    return;
-                }
+                StateController.ChangeState(LowerStateType.Pushing);
+                return;
             }
 
             PlayerMovement.SetVelocity(new Vector2((int)horizontalInput * PlayerStats.MovingSpeed, PlayerMovement.CurrentVelocity.y));
@@ -106,5 +100,25 @@ namespace AD.GamePlay
         /******* Private Members ******/
 
         private int _runningStateHash;
+
+        private bool CanPushObject(HorizontalDirection horizontalInput)
+        {
+            if (null == ObjectInteractor.CurrentPushableObject)
+                return false;
+
+            var playerPos = PlayerMovement.CurrentPosition;
+            var objectPos = ObjectInteractor.CurrentPushableObject.CurrentPosition;
+            
+            // Check horizontal direction alignment
+            var objectLocatedDirection = (playerPos.x < objectPos.x) ? HorizontalDirection.Right : HorizontalDirection.Left;
+            if (horizontalInput != objectLocatedDirection)
+                return false;
+
+            // Check vertical position within character height range
+            var halfCharacterHeight = PlayerStats.CharacterHeight * 0.5f;
+            var verticalDistance = Mathf.Abs(playerPos.y - objectPos.y);
+            
+            return verticalDistance <= halfCharacterHeight;
+        }
     }
 }

@@ -2039,11 +2039,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7223594438282042499, guid: c566f6ea7e281fa40acd95dc0e22eb51, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.99
+      value: -3.94
       objectReference: {fileID: 0}
     - target: {fileID: 7223594438282042499, guid: c566f6ea7e281fa40acd95dc0e22eb51, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.84
+      value: 0.57
       objectReference: {fileID: 0}
     - target: {fileID: 7223594438282042499, guid: c566f6ea7e281fa40acd95dc0e22eb51, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2080,22 +2080,6 @@ PrefabInstance:
     - target: {fileID: 7633181797728315735, guid: c566f6ea7e281fa40acd95dc0e22eb51, type: 3}
       propertyPath: m_Name
       value: VendingMachine
-      objectReference: {fileID: 0}
-    - target: {fileID: 7633181797728315735, guid: c566f6ea7e281fa40acd95dc0e22eb51, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 7957601106722347911, guid: c566f6ea7e281fa40acd95dc0e22eb51, type: 3}
-      propertyPath: m_Mass
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7957601106722347911, guid: c566f6ea7e281fa40acd95dc0e22eb51, type: 3}
-      propertyPath: m_BodyType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7957601106722347911, guid: c566f6ea7e281fa40acd95dc0e22eb51, type: 3}
-      propertyPath: m_LinearDamping
-      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

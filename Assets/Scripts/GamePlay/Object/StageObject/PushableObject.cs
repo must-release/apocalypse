@@ -16,7 +16,7 @@ namespace AD.GamePlay
         {
             if (collision.transform.TryGetComponent(out IObjectPusher pusher))
             {
-                pusher.CurrentPushingObject = this;
+                pusher.CurrentPushableObject = this;
             }
         }
 
@@ -24,9 +24,9 @@ namespace AD.GamePlay
         {
             if (collision.transform.TryGetComponent(out IObjectPusher pusher))
             {
-                if (pusher.CurrentPushingObject == this)
+                if (pusher.CurrentPushableObject == this)
                 {
-                    pusher.CurrentPushingObject = null;
+                    pusher.CurrentPushableObject = null;
                 }
             }
         }

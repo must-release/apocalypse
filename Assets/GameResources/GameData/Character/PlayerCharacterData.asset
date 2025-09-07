@@ -15,5 +15,5 @@ MonoBehaviour:
   _movingSpeed: 6
   _maxHitPoint: 4
   _jumpingSpeed: 12
-  _pushingSpeed: 3
+  _pushingSpeed: 2
   _gravity: 3

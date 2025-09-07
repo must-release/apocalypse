@@ -68,6 +68,12 @@ namespace AD.GamePlay
             SetFacingDirection(nextFacing);
         }
 
+        public void SetBodyType(RigidbodyType2D bodyType)
+        {
+            _rigidbody.bodyType = bodyType;
+        }
+
+
 
         /****** Protected Members ******/
 

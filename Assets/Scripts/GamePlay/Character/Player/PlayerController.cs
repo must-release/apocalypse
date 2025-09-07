@@ -13,7 +13,7 @@ namespace AD.GamePlay
         public PlayerAvatarType CurrentPlayerType       { get; private set; } = PlayerAvatarType.PlayerAvatarTypeCount;
         public IClimbableObject CurrentClimbableObject  { get; set; }
         public Collider2D       ClimberCollider         { get; private set; }
-        public PushableObject   CurrentPushingObject    { get; set; }
+        public PushableObject   CurrentPushableObject    { get; set; }
 
         public new PlayerCharacterStats Stats => base.Stats as PlayerCharacterStats;
 
