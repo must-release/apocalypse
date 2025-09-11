@@ -14,7 +14,7 @@ namespace AD.GamePlay
                                             , IStateController<LowerStateType> stateController
                                             , IObjectInteractor objectInteractor
                                             , CharacterMovement playerMovement
-                                            , CharacterStats playerStats
+                                            , PlayerCharacterStats playerStats
                                             , Animator stateAnimator
                                             , PlayerWeaponBase playerWeapon
                                             , ControlInputBuffer inputBuffer)
@@ -85,7 +85,7 @@ namespace AD.GamePlay
         /****** Private Members ******/
 
         private VerticalDirection   _recentMoveDirection;
-        private IClimbable          _climbingObject;
+        private IClimbableObject          _climbingObject;
 
         private int     _climbingUpStateHash;
         private int     _climbingDownStateHash;

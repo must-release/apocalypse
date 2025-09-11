@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using System;
-using Cysharp.Threading.Tasks;
-using System.Threading;
 
 namespace AD.GamePlay
 {
@@ -16,33 +14,6 @@ namespace AD.GamePlay
 
         public event Action OnCharacterDeath;
         public event Action OnCharacterDamaged;
-
-
-        public void RecognizeInteractionObject(InteractionObject obj)
-        {
-            bool notInteractable = !_interactableObjects.Contains(obj);
-            bool notInteracting = !_interactingObjects.Contains(obj);
-
-            if (notInteractable && notInteracting)
-            {
-                _interactableObjects.Add(obj);
-            }
-            else
-            {
-                Debug.LogError("Detecting duplicate Object");
-            }
-        }
-
-        public void ForgetInteractionObject(InteractionObject obj)
-        {
-            bool removedFromInteractable = _interactableObjects.Remove(obj);
-            bool removedFromInteracting = _interactingObjects.Remove(obj);
-
-            if (!removedFromInteractable && !removedFromInteracting)
-            {
-                Debug.LogError("Removing unknown Object");
-            }
-        }
 
         public virtual void ApplyDamage(DamageInfo damageInfo)
         {
@@ -110,8 +81,6 @@ namespace AD.GamePlay
 
         [SerializeField] private CharacterData _characterData;
 
-        private List<InteractionObject> _interactableObjects    = new List<InteractionObject>();
-        private List<InteractionObject> _interactingObjects     = new List<InteractionObject>();
         private BoxCollider2D _bodyCollider;
         private Transform _groundCheckPoint;
         private Vector2 _groundCheckSize;
@@ -131,7 +100,7 @@ namespace AD.GamePlay
 
         private void GroundCheck()
         {
-            Collider2D hit = Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, 0, LayerMask.GetMask(Layer.Ground));
+            Collider2D hit = Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, 0, LayerMask.GetMask(Layer.Ground, Layer.Obstacle));
 
             bool isGrounded = hit != null;
 

@@ -23,7 +23,7 @@ namespace AD.GamePlay
         }
         public bool IsDamageImmune { get; private set; }
 
-        public void InitializeAvatar(IObjectInteractor objectInteractor, CharacterMovement playerMovement, CharacterStats playerStats, ControlInputBuffer inputBuffer)
+        public void InitializeAvatar(IObjectInteractor objectInteractor, CharacterMovement playerMovement, PlayerCharacterStats playerStats, ControlInputBuffer inputBuffer)
         {
             Debug.Assert(null != objectInteractor, "Object interactor is null");
             Debug.Assert(null != playerMovement, "Player movement is null");
@@ -153,15 +153,15 @@ namespace AD.GamePlay
         private Dictionary<LowerStateType, IPlayerLowerState> _lowerStateTable = new();
         private Dictionary<UpperStateType, IPlayerUpperState> _upperStateTable = new();
 
-        private IObjectInteractor   _objectInteractor;
-        private CharacterMovement   _playerMovement;
-        private CharacterStats      _playerStats;
-        private ControlInputBuffer  _inputBuffer;
-        private PlayerWeaponBase    _weapon;
-        private Animator            _lowerAnimator;
-        private SpriteRenderer      _lowerSprite;
-        private Animator            _upperAnimator;
-        private SpriteRenderer      _upperSprite;
+        private IObjectInteractor       _objectInteractor;
+        private CharacterMovement       _playerMovement;
+        private PlayerCharacterStats    _playerStats;
+        private ControlInputBuffer      _inputBuffer;
+        private PlayerWeaponBase        _weapon;
+        private Animator                _lowerAnimator;
+        private SpriteRenderer          _lowerSprite;
+        private Animator                _upperAnimator;
+        private SpriteRenderer          _upperSprite;
 
         private void OnValidate()
         {

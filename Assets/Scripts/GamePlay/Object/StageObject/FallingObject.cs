@@ -6,7 +6,7 @@ using UnityEngine;
 namespace AD.GamePlay
 {
     [RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
-    public class FallingObject : MonoBehaviour, IStageObject
+    public class FallingObject : MonoBehaviour
     {
         /****** Private Members ******/
 

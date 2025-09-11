@@ -14,7 +14,7 @@ namespace AD.GamePlay
                                          , IStateController<LowerStateType> stateController
                                          , IObjectInteractor objectInteractor
                                          , CharacterMovement playerMovement
-                                         , CharacterStats playerStats
+                                         , PlayerCharacterStats playerStats
                                          , Animator stateAnimator
                                          , PlayerWeaponBase playerWeapon
                                          , ControlInputBuffer inputBuffer)

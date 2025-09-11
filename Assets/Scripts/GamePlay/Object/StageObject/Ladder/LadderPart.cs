@@ -7,8 +7,8 @@ public abstract class LadderPart : MonoBehaviour, IPartObject
 {
     /****** Public Members ******/
 
-    public Action<IClimber> OnClimberEnter;
-    public Action<IClimber> OnClimberExit;
+    public Action<IObjectClimber> OnClimberEnter;
+    public Action<IObjectClimber> OnClimberExit;
 
     public ICompositeObject CreateCompositeObjectFrame()
     {

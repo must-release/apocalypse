@@ -3,7 +3,7 @@ using UnityEngine;
 namespace AD.GamePlay
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public abstract class ActorMovement : MonoBehaviour
+    public class ActorMovement : MonoBehaviour
     {
         /****** Public Members ******/
 
@@ -67,6 +67,12 @@ namespace AD.GamePlay
             FacingDirection nextFacing = (FacingDirection.Left == CurrentFacingDirection) ? FacingDirection.Right : FacingDirection.Left;
             SetFacingDirection(nextFacing);
         }
+
+        public void SetBodyType(RigidbodyType2D bodyType)
+        {
+            _rigidbody.bodyType = bodyType;
+        }
+
 
 
         /****** Protected Members ******/
