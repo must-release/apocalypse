@@ -1,11 +1,12 @@
-using UnityEngine;
-
-public class HeroineIdleLowerState : CommonIdleLowerState
+namespace AD.GamePlay
 {
-    /****** Public Members ******/
-
-    public override void Attack()
+    public class HeroineIdleLowerState : CommonIdleLowerState
     {
-        StateController.ChangeState(HeroineLowerStateType.Attacking);
+        /****** Public Members ******/
+
+        public override void Attack()
+        {
+            StateController.ChangeState(HeroineLowerStateType.Attacking);
+        }
     }
 }

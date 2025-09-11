@@ -2,14 +2,17 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using System.Collections;
 
-public class HeroineJumpingLowerState : CommonJumpingLowerState
+namespace AD.GamePlay
 {
-    /****** Public Members ******/
-
-    public override bool ShouldDisableUpperBody => true;
-
-    public override void Attack()
+    public class HeroineJumpingLowerState : CommonJumpingLowerState
     {
-        StateController.ChangeState(HeroineLowerStateType.Attacking);
+        /****** Public Members ******/
+
+        public override bool ShouldDisableUpperBody => true;
+
+        public override void Attack()
+        {
+            StateController.ChangeState(HeroineLowerStateType.Attacking);
+        }
     }
 }

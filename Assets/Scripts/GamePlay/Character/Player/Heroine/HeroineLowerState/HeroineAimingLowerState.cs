@@ -1,60 +1,62 @@
-﻿using UnityEngine;
+using UnityEngine;
 
-
-public class HeroineAimingLowerState : CommonAimingLowerState
+namespace AD.GamePlay
 {
-    /******* Public Members ******/
-
-    public override bool ShouldDisableUpperBody => true;
-
-    public override void OnEnter()
+    public class HeroineAimingLowerState : CommonAimingLowerState
     {
-        base.OnEnter(); // For playing animation and setting velocity
+        /******* Public Members ******/
 
-        _aimingPosition = Vector3.zero;
-    }
+        public override bool ShouldDisableUpperBody => true;
 
-    public override void OnUpdate()
-    {
-        SetDirection();
+        public override void OnEnter()
+        {
+            base.OnEnter(); // For playing animation and setting velocity
 
-        PlayerWeapon.RotateWeaponPivot(_aimingPosition);
-    }
+            _aimingPosition = Vector3.zero;
+        }
 
-    public override void OnFixedUpdate()
-    {
-        PlayerWeapon.Aim(true);
-    }
+        public override void OnUpdate()
+        {
+            SetDirection();
 
-    public override void OnExit(LowerStateType nextState)
-    {
-        PlayerWeapon.Aim(false);
+            PlayerWeapon.RotateWeaponPivot(_aimingPosition);
+        }
 
-        if (HeroineLowerStateType.AimAttacking != nextState)
-            PlayerWeapon.SetWeaponPivotRotation(0);
-    }
+        public override void OnFixedUpdate()
+        {
+            PlayerWeapon.Aim(true);
+        }
 
-    public override void Aim(Vector3 aim)
-    {
-        if (Vector3.zero == aim)
-            StateController.ChangeState(LowerStateType.Idle);
+        public override void OnExit(LowerStateType nextState)
+        {
+            PlayerWeapon.Aim(false);
 
-        _aimingPosition = aim;
-    }
+            if (HeroineLowerStateType.AimAttacking != nextState)
+                PlayerWeapon.SetWeaponPivotRotation(0);
+        }
 
-    public override void Attack()
-    {
-        StateController.ChangeState(HeroineLowerStateType.AimAttacking);
-    }
+        public override void Aim(Vector3 aim)
+        {
+            if (Vector3.zero == aim)
+                StateController.ChangeState(LowerStateType.Idle);
+
+            _aimingPosition = aim;
+        }
+
+        public override void Attack()
+        {
+            StateController.ChangeState(HeroineLowerStateType.AimAttacking);
+        }
 
 
-    /******* Private Members ******/
+        /******* Private Members ******/
 
-    private Vector3 _aimingPosition;
-    private void SetDirection()
-    {
-        var direction = PlayerInfo.CurrentPosition.x < _aimingPosition.x ? FacingDirection.Right : FacingDirection.Left;
-        if (direction != PlayerInfo.CurrentFacingDirection)
-            PlayerMotion.SetFacingDirection(direction);
+        private Vector3 _aimingPosition;
+        private void SetDirection()
+        {
+            var direction = PlayerMovement.CurrentPosition.x < _aimingPosition.x ? FacingDirection.Right : FacingDirection.Left;
+            if (direction != PlayerMovement.CurrentFacingDirection)
+                PlayerMovement.SetFacingDirection(direction);
+        }
     }
 }

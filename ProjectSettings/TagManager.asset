@@ -17,9 +17,9 @@ TagManager:
   - Ground
   - Projectile
   - Character
-  - Range
   - Obstacle
-  - Bullet
+  - Dead
+  - 
   - 
   - 
   - 

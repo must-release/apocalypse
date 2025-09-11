@@ -1,31 +1,34 @@
 using UnityEngine;
 
-public class HeroIdleLowerState : CommonIdleLowerState
+namespace AD.GamePlay
 {
-    /****** Public Members ******/
-
-    public override void Attack()
+    public class HeroIdleLowerState : CommonIdleLowerState
     {
-        StateController.ChangeState(HeroLowerStateType.StandingAttack);
-    }
+        /****** Public Members ******/
 
-    public override void UpDown(VerticalDirection verticalInput)
-    {
-        // Do not call base.UpDown function
-
-        if (null != ObjectInteractor.CurrentClimbableObject && VerticalDirection.None != verticalInput)
+        public override void Attack()
         {
-            var refPos = ObjectInteractor.CurrentClimbableObject.GetClimbReferencePoint();
-            var curPos = PlayerInfo.CurrentPosition;
-
-            if ((curPos.y < refPos.y && VerticalDirection.Up == verticalInput) || (refPos.y < curPos.y && VerticalDirection.Down == verticalInput))
-            {
-                StateController.ChangeState(LowerStateType.Climbing);
-            }   
+            StateController.ChangeState(HeroLowerStateType.StandingAttack);
         }
-        else if (VerticalDirection.Up == verticalInput)
+
+        public override void UpDown(VerticalDirection verticalInput)
         {
-            StateController.ChangeState(HeroLowerStateType.IdleLookingUp);
+            // Do not call base.UpDown function
+
+            if (null != ObjectInteractor.CurrentClimbableObject && VerticalDirection.None != verticalInput)
+            {
+                var refPos = ObjectInteractor.CurrentClimbableObject.GetClimbReferencePoint();
+                var curPos = PlayerMovement.CurrentPosition;
+
+                if ((curPos.y < refPos.y && VerticalDirection.Up == verticalInput) || (refPos.y < curPos.y && VerticalDirection.Down == verticalInput))
+                {
+                    StateController.ChangeState(LowerStateType.Climbing);
+                }   
+            }
+            else if (VerticalDirection.Up == verticalInput)
+            {
+                StateController.ChangeState(HeroLowerStateType.IdleLookingUp);
+            }
         }
     }
 }

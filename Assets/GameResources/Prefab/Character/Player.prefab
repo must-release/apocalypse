@@ -830,6 +830,7 @@ GameObject:
   - component: {fileID: 7976368795532827370}
   - component: {fileID: 6248926791922391508}
   - component: {fileID: 6066651523544202854}
+  - component: {fileID: 6866941608920404372}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -866,6 +867,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 771c5eeadb55e45ed8b4f135a4cae560, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _characterData: {fileID: 11400000, guid: 71afe8a13ca85344983da391d6773b87, type: 2}
   _heroTransform: {fileID: 2078760139792449367}
   _heroineTransform: {fileID: 1377288265050663595}
 --- !u!114 &7976368795532827370
@@ -952,8 +954,20 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.7, y: 1.4}
-  m_EdgeRadius: 0
+  m_Size: {x: 0.5, y: 1.36}
+  m_EdgeRadius: 0.02
+--- !u!114 &6866941608920404372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3836751109032054554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1c510760677e964da41f088f95932dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4117885887960782248
 GameObject:
   m_ObjectHideFlags: 0

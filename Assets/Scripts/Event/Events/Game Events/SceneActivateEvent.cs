@@ -89,7 +89,7 @@ public class SceneActivateEvent : GameEventBase<SceneActivateEventInfo>
             Debug.Assert(null != playerController, "PlayerController is not find in player transform in scene activate event.");
 
             playerController.OnHPChanged += controlUI.UpdateHPBar;
-            controlUI.UpdateHPBar(playerController.CurrentHitPoint, playerController.MaxHitPoint);
+            controlUI.UpdateHPBar(playerController.Stats.CurrentHitPoint, playerController.Stats.MaxHitPoint);
         }
 
         var sceneCameras = SceneController.Instance.GetCurrentSceneCameras();

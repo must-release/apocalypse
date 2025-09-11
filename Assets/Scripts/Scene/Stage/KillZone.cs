@@ -7,7 +7,7 @@ public class KillZone : MonoBehaviour
 
     private async void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent(out ICharacter character))
+        if (collision.TryGetComponent(out AD.GamePlay.ICharacter character))
         {
             if (character.IsPlayer)
             {

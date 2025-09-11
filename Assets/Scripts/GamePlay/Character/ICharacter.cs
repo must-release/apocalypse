@@ -1,9 +1,20 @@
-using UnityEngine;
+using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 
-public interface ICharacter : AD.GamePlay.IActor
+namespace AD.GamePlay
 {
-    bool IsPlayer { get; }
+    public interface ICharacter : IActor
+    {
+        CharacterStats          Stats       { get; }
+        new CharacterMovement   Movement    { get; }
+        
+        bool IsPlayer { get; }
 
-    void ControlCharacter(IReadOnlyControlInfo controlInfo);
-    void OnDamaged(DamageInfo damageInfo);
+        event Action OnCharacterDeath;
+        event Action OnCharacterDamaged;
+        
+        void ControlCharacter(IReadOnlyControlInfo controlInfo);
+        void ApplyDamage(DamageInfo damageInfo);
+    }
 }

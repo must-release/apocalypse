@@ -1,90 +1,91 @@
-﻿using NUnit.Framework;
-using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class HeroAimingUpperState : PlayerUpperState
+namespace AD.GamePlay
 {
-    /****** Public Members ******/
-
-    public override UpperStateType CurrentState => HeroUpperStateType.Aiming;
-
-    public override void InitializeState(PlayerAvatarType owningAvatar
-                                        , IStateController<UpperStateType> stateController
-                                        , IObjectInteractor objectInteractor
-                                        , IMotionController playerMotion
-                                        , ICharacterInfo playerInfo
-                                        , Animator stateAnimator
-                                        , PlayerWeaponBase playerWeapon
-                                        , ControlInputBuffer inputBuffer)
+    public class HeroAimingUpperState : PlayerUpperState
     {
-        base.InitializeState(owningAvatar, stateController, objectInteractor, playerMotion, playerInfo, stateAnimator, playerWeapon, inputBuffer);
+        /****** Public Members ******/
 
-        Debug.Assert(PlayerAvatarType.Hero == owningAvatar, $"State {CurrentState} can only be used by Hero avatar.");
-        Debug.Assert(StateAnimator.HasState(0, _AimingStateHash), $"Animator of {owningAvatar} does not have {CurrentState} upper state.");
-    }
+        public override UpperStateType CurrentState => HeroUpperStateType.Aiming;
 
-    public override void OnEnter()
-    {
-        StateAnimator.Play(_AimingStateHash);
-        StateAnimator.Update(0.0f);
+        public override void InitializeState(PlayerAvatarType owningAvatar
+                                            , IStateController<UpperStateType> stateController
+                                            , IObjectInteractor objectInteractor
+                                            , CharacterMovement playerMovement
+                                            , CharacterStats playerStats
+                                            , Animator stateAnimator
+                                            , PlayerWeaponBase playerWeapon
+                                            , ControlInputBuffer inputBuffer)
+        {
+            base.InitializeState(owningAvatar, stateController, objectInteractor, playerMovement, playerStats, stateAnimator, playerWeapon, inputBuffer);
 
-        _aimingPosition = Vector3.zero;
-    }
+            Debug.Assert(PlayerAvatarType.Hero == owningAvatar, $"State {CurrentState} can only be used by Hero avatar.");
+            Debug.Assert(StateAnimator.HasState(0, _AimingStateHash), $"Animator of {owningAvatar} does not have {CurrentState} upper state.");
+        }
 
-    public override void OnUpdate()
-    {
-        SetDirection();
+        public override void OnEnter()
+        {
+            StateAnimator.Play(_AimingStateHash);
+            StateAnimator.Update(0.0f);
 
-        PlayerWeapon.RotateWeaponPivot(_aimingPosition);
-    }
+            _aimingPosition = Vector3.zero;
+        }
 
-    public override void OnFixedUpdate()
-    {
-        PlayerWeapon.Aim(true);
-    }
+        public override void OnUpdate()
+        {
+            SetDirection();
 
-    public override void OnExit(UpperStateType nextState)
-    {
-        PlayerWeapon.Aim(false);
+            PlayerWeapon.RotateWeaponPivot(_aimingPosition);
+        }
 
-        if (HeroUpperStateType.AimAttacking != nextState)
-            PlayerWeapon.SetWeaponPivotRotation(0);
-    }
+        public override void OnFixedUpdate()
+        {
+            PlayerWeapon.Aim(true);
+        }
 
-    public override void Aim(Vector3 aim)
-    {
-        if (Vector3.zero == aim)
-            StateController.ChangeState(HeroUpperStateType.Idle);
+        public override void OnExit(UpperStateType nextState)
+        {
+            PlayerWeapon.Aim(false);
 
-        _aimingPosition = aim;
-    }
+            if (HeroUpperStateType.AimAttacking != nextState)
+                PlayerWeapon.SetWeaponPivotRotation(0);
+        }
 
-    public override void Attack()
-    {
-        StateController.ChangeState(HeroUpperStateType.AimAttacking);
-    }
+        public override void Aim(Vector3 aim)
+        {
+            if (Vector3.zero == aim)
+                StateController.ChangeState(HeroUpperStateType.Idle);
 
-    public override void OnAir()
-    {
-        StateController.ChangeState(HeroUpperStateType.Jumping);
-    }
+            _aimingPosition = aim;
+        }
 
-    public override void Disable()
-    {
-        StateController.ChangeState(UpperStateType.Disabled);
-    }
+        public override void Attack()
+        {
+            StateController.ChangeState(HeroUpperStateType.AimAttacking);
+        }
+
+        public override void OnAir()
+        {
+            StateController.ChangeState(HeroUpperStateType.Jumping);
+        }
+
+        public override void Disable()
+        {
+            StateController.ChangeState(UpperStateType.Disabled);
+        }
 
 
-    /****** Private Members ******/
+        /****** Private Members ******/
 
-    private readonly int _AimingStateHash = AnimatorState.GetHash(PlayerAvatarType.Hero, HeroUpperStateType.Aiming);
+        private readonly int _AimingStateHash = AnimatorState.GetHash(PlayerAvatarType.Hero, HeroUpperStateType.Aiming);
 
-    private Vector3 _aimingPosition;
+        private Vector3 _aimingPosition;
 
-    private void SetDirection()
-    {
-        var direction = PlayerInfo.CurrentPosition.x < _aimingPosition.x ? FacingDirection.Right : FacingDirection.Left;
-        if (direction != PlayerInfo.CurrentFacingDirection)
-            PlayerMotion.SetFacingDirection(direction);
+        private void SetDirection()
+        {
+            var direction = PlayerMovement.CurrentPosition.x < _aimingPosition.x ? FacingDirection.Right : FacingDirection.Left;
+            if (direction != PlayerMovement.CurrentFacingDirection)
+                PlayerMovement.SetFacingDirection(direction);
+        }
     }
 }

@@ -1,8 +1,6 @@
-
-using UnityEngine.Assertions;
-
 public enum HorizontalDirection { None = 0, Right = 1, Left = -1 }
 public enum VerticalDirection   { None = 0, Up = 1, Down = -1 }
+public enum FacingDirection     { Left, Right, FacingDirectionCount }
 public enum ProjectileType : byte
 {
     // Player
@@ -24,8 +22,10 @@ public enum EffectType : byte
 
 public static class Layer
 {
-    public const string Ground = "Ground";
-    public const string Character = "Character";
-    public const string Projectile = "Projectile";
-    public const string Obstacle = "Obstacle";
+    public const string Default     = "Default";
+    public const string Ground      = "Ground";
+    public const string Character   = "Character";
+    public const string Projectile  = "Projectile";
+    public const string Obstacle    = "Obstacle";
+    public const string Dead        = "Dead";
 }

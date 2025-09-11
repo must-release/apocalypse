@@ -1,40 +1,36 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine;
 
-public abstract class EnemyStateBase : MonoBehaviour
+using EnemyStateController = IStateController<EnemyStateType>;
+
+namespace AD.GamePlay
 {
-    protected Transform enemyTransform;
-    protected EnemyController enemyController;
-    protected SpriteRenderer enemySprite;
-    protected Rigidbody2D enemyRigid;
-
-
-    /*** Abstract Funtions ***/
-    public abstract EnemyState GetState();
-    public abstract void OnEnter();
-    public abstract void OnUpdate();
-    public abstract void OnExit(EnemyState nextState);
-    public abstract void DetectedPlayer();
-
-
-    /*** Virtual Functions ***/
-    public virtual void OnDamaged() 
-    { 
-        if( 0 < enemyController.CurrentHitPoint )
-            enemyController.ChangeState(EnemyState.Damaged);
-        else
-            enemyController.ChangeState(EnemyState.Dead);
-    }
-
-
-    protected virtual void Awake()
+    public abstract class EnemyStateBase : MonoBehaviour
     {
-        enemyTransform  =   transform.parent;
-        enemyController =   enemyTransform.GetComponent<EnemyController>();
-        enemySprite     =   enemyTransform.GetComponent<SpriteRenderer>();
-        enemyRigid      =   enemyTransform.GetComponent<Rigidbody2D>();
+        /****** Public Members ******/
+
+        public void InitializeState(EnemyStateController stateController, EnemyPerception enemyPerception, IEnemyCharacter enemyCharacter)
+        {
+            Debug.Assert(null != stateController, $"Enemy state controller cannot be null in {StateType}");
+            Debug.Assert(null != enemyPerception, $"Enemy perception cannot be null in {StateType}");
+
+            StateController     = stateController;
+            Perception          = enemyPerception;
+            OwningCharacter     = enemyCharacter;
+
+            IsInitialized = true;
+        }
+
+        public abstract EnemyStateType StateType { get; }
+        public virtual void OnEnter() { }
+        public virtual void OnUpdate() { }
+        public virtual void OnExit(EnemyStateType nextState) { }
+        
+
+        /****** Protected Members ******/
+
+        protected EnemyStateController  StateController { get; private set; }
+        protected EnemyPerception       Perception      { get; private set; }
+        protected IEnemyCharacter       OwningCharacter { get; private set; }
+        protected bool                  IsInitialized   { get; private set; }
     }
 }
