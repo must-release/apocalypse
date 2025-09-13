@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using UnityEngine.Assertions;
+﻿using System.Threading;
+using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace AD.GamePlay
 {
@@ -29,6 +30,15 @@ namespace AD.GamePlay
         {
             StateAnimator.Play(_runningStateHash);
             StateAnimator.Update(0.0f);
+            
+            _stateExitCTS = new CancellationTokenSource();
+        }
+
+        public override void OnExit(LowerStateType nextState)
+        {
+            _stateExitCTS?.Cancel();
+            _stateExitCTS?.Dispose();
+            _stateExitCTS = null;
         }
 
         public override void Move(HorizontalDirection horizontalInput)
@@ -62,7 +72,9 @@ namespace AD.GamePlay
 
         public override void OnAir()
         {
-            StateController.ChangeState(LowerStateType.Jumping);
+            Debug.Assert(null != _stateExitCTS, $"State exit cancellation token source is null in {CurrentState}");
+
+            WaitForCoyoteJump(_stateExitCTS.Token).Forget();
         }
 
         public override void Aim(Vector3 aim)
@@ -99,7 +111,14 @@ namespace AD.GamePlay
 
         /******* Private Members ******/
 
+        private CancellationTokenSource _stateExitCTS;
         private int _runningStateHash;
+
+        private void OnDestroy()
+        {
+            _stateExitCTS?.Cancel();
+            _stateExitCTS?.Dispose();
+        }
 
         private bool CanPushObject(HorizontalDirection horizontalInput)
         {
@@ -108,7 +127,7 @@ namespace AD.GamePlay
 
             var playerPos = PlayerMovement.CurrentPosition;
             var objectPos = ObjectInteractor.CurrentPushableObject.CurrentPosition;
-            
+
             // Check horizontal direction alignment
             var objectLocatedDirection = (playerPos.x < objectPos.x) ? HorizontalDirection.Right : HorizontalDirection.Left;
             if (horizontalInput != objectLocatedDirection)
@@ -117,8 +136,19 @@ namespace AD.GamePlay
             // Check vertical position within character height range
             var halfCharacterHeight = PlayerStats.CharacterHeight * 0.5f;
             var verticalDistance = Mathf.Abs(playerPos.y - objectPos.y);
-            
+
             return verticalDistance <= halfCharacterHeight;
+        }
+
+        private async UniTask WaitForCoyoteJump(CancellationToken cancellationToken)
+        {
+            InputBuffer.StartCoyoteJump();
+
+            bool isCanceled = await UniTask.WaitWhile(() => InputBuffer.CanCoyoteJump, cancellationToken: cancellationToken).SuppressCancellationThrow();
+            if (false == isCanceled)
+            {
+                StateController.ChangeState(LowerStateType.Jumping);
+            }
         }
     }
 }
