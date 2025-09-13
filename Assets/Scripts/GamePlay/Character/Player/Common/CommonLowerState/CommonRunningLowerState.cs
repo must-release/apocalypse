@@ -66,6 +66,11 @@ namespace AD.GamePlay
 
         public override void StartJump()
         {
+            if (InputBuffer.CanCoyoteJump)
+            {
+                InputBuffer.ConsumeCoyoteJump();
+            }
+
             PlayerMovement.SetVelocity(new Vector2(PlayerMovement.CurrentVelocity.x, PlayerStats.JumpingSpeed));
             StateController.ChangeState(LowerStateType.Jumping);
         }
