@@ -9,6 +9,7 @@ public class ControlInputBuffer : MonoBehaviour
     public bool HasBufferedJump     => 0f < _jumpBufferTimer;
     public bool HasBufferedAttack   => 0f < _attackBufferTimer;
     public bool IsAttackInCooldown  => 0f < _attackCooldownTimer;
+    public bool CanCoyoteJump       => 0f < _coyoteJumpTimer;
     
     public void BufferJump()
     {
@@ -35,6 +36,16 @@ public class ControlInputBuffer : MonoBehaviour
     {
         _attackCooldownTimer = cooldownTime;
     }
+    
+    public void StartCoyoteJump()
+    {
+        _coyoteJumpTimer = _config.CoyoteJumpDuration;
+    }
+    
+    public void ConsumeCoyoteJump()
+    {
+        _coyoteJumpTimer = 0f;
+    }
 
 
     /****** Private Members ******/
@@ -44,6 +55,7 @@ public class ControlInputBuffer : MonoBehaviour
     private float _jumpBufferTimer;
     private float _attackBufferTimer;
     private float _attackCooldownTimer;
+    private float _coyoteJumpTimer;
 
     private void OnValidate()
     {
@@ -60,5 +72,8 @@ public class ControlInputBuffer : MonoBehaviour
             
         if (_attackCooldownTimer > 0f)
             _attackCooldownTimer -= Time.deltaTime;
+            
+        if (_coyoteJumpTimer > 0f)
+            _coyoteJumpTimer -= Time.deltaTime;
     }
 }
